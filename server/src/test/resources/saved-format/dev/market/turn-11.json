@@ -1,0 +1,24 @@
+{
+  "findings" : {
+    "aa312e1bb90c0c0ef" : [ ],
+    "a2f196a5f94045a7" : [ ],
+    "ac820bb6c58a9a923" : [ ]
+  },
+  "board" : [ {
+    "id" : "c11-1",
+    "lineId" : "earth-orbit-satellites",
+    "nasaClientId" : "sat-n-relay",
+    "sovietClientId" : "sat-s-physics",
+    "postedTurn" : 12,
+    "lastTurn" : 14
+  }, {
+    "id" : "c11-2",
+    "lineId" : "earth-orbit-satellites",
+    "nasaClientId" : "sat-n-geodesy",
+    "sovietClientId" : "sat-s-geodesy",
+    "postedTurn" : 12,
+    "lastTurn" : 14
+  } ],
+  "usedClientIds" : [ "sat-n-radiation", "sat-s-weather", "sat-n-navigation", "sat-s-relay", "sat-n-relay", "sat-s-physics", "sat-n-geodesy", "sat-s-geodesy" ],
+  "posted" : 2
+}

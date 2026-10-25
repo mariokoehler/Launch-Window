@@ -1,6 +1,8 @@
 package de.mkoehler.launchwindow.persistence;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import de.mkoehler.launchwindow.model.PlayerSnapshot;
 
 import java.io.IOException;
@@ -175,7 +177,8 @@ public class PlayerSnapshotStore {
     }
 
     /**
-     * Loads the raw on-disk envelope for a specific turn.
+     * Loads the raw on-disk envelope for a specific turn, brought up to the current format first
+     * ({@link SnapshotMigrations}).
      *
      * @param turn the turn number to load
      * @return the envelope for that turn, or {@link Optional#empty()} if no
@@ -187,6 +190,10 @@ public class PlayerSnapshotStore {
         if (!Files.exists(file)) {
             return Optional.empty();
         }
-        return Optional.of(mapper.readValue(file.toFile(), ResolvedSnapshot.class));
+        JsonNode tree = mapper.readTree(file.toFile());
+        if (!(tree instanceof ObjectNode envelope)) {
+            throw new IOException("Not a saved snapshot: " + file);
+        }
+        return Optional.of(mapper.treeToValue(SnapshotMigrations.migrate(envelope), ResolvedSnapshot.class));
     }
 }

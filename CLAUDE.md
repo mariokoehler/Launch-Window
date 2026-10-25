@@ -83,7 +83,7 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
   its art is in, the last rocket programs (Juno II, Atlas) on 2026-10-09.
 - **R&D decisions are built** (2026-10-10, `ui-spec.md` component 26, `design.md` §5): choices about a
   component under R&D, offered mostly in lulls, decided at once (`DecideAction`, `rules.RdDecisions`), ten
-  types in `assets/content/decisions.json`. Rebuild client and server together before the play test.
+  types in each pack's `decisions.json` (`assets/content/standard/`). Rebuild client and server together before the play test.
   The pools were grown on 2026-10-25 to 185 decisions, about 20 first steps a type (pairing 12, hands-on 7);
   `-Dshots=decisions` renders every banner. Only one option a decision may take an overseer (the banner lists
   the engineers, not the option), and no negative funds effect. Rebuild client and server together; no reset.
@@ -93,7 +93,7 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
   the seasons to each (`ResearchPlanning.project`), mission readiness and earliest launch, program staffing,
   training and retirement dates, the funds runway (`BudgetProgress.runway`), where a locked goal is earned.
 - **PR duty for astronauts is built** (`design.md` §2.2(c)), with 39 press stories
-  (`assets/content/pr-press.json`), no repeats, and effects beyond prestige. Next is the next
+  (each pack's `pr-press.json`), no repeats, and effects beyond prestige. Next is the next
   play test.
 - **Undoing a bad turn is built** (the user's idea, 2026-10-11, `design.md` §3.7): a zip of the data
   root before every turn, and `TurnRollback` to undo turns and redo them with a fixed build.
@@ -108,7 +108,7 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
   §4.17 and component 27, from the canvas `Launch Window — Contracts`): a shared marketplace settled
   once a turn (`rules.ContractMarket`, `market/turn-N.json`), tiers by track record, money instead of
   prestige. Unlock sets in each pack's own hashed `commercial.json`, clients in
-  `assets/content/commercial-clients.json` (`CommercialClientsTest`). Every number is unconfirmed; the
+  each pack's `commercial-clients.json` (`CommercialClientsTest`). Every number is unconfirmed; the
   first measurement says they fill the lulls but don't speed the race. The pack hash changed and
   saved classes gained fields: reset the dev data root, and rebuild client and server together (a new
   action).
@@ -283,6 +283,15 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
   with **a goal counts only if the crew comes home** (`design.md` §2.6, `GoalsWithheld`). Rebuild client and server
   together; no reset.
 
+- **The code review's launch items** (2026-10-25, `review.md`, finished with six area reviews the same
+  day): a rules failure in an action is logged and refused (3.1); the server jar carries only
+  `assets/content/` (8.6 MB, was 1.6 GB; the client jar still carries the clips, 2.5); a handler's exception
+  no longer kills the server (2.6); a rollback rewinds the bots' `bot.json` (D2); the decisions, press
+  stories and clients are pack files (2.2); accounts are made only on purpose, hashed with PBKDF2 and
+  written at once (2.3); saved snapshots carry a format version, and a fixture game pins every saved
+  format (2.1). The pack hash changed and a message was added: reset the dev data root, rebuild client and
+  server together. Next in `review.md` §9: the hidden seeds (2.7) and the client's stale dialog and
+  per-game marks (2.8).
 - **Filler bots are built** (the user's idea, 2026-10-25, `design.md` §5, Backlog): `"bots"` in `game-meta.json`
   (`BotPlayer`), agencies the server plays itself just before each turn resolves (`BotPlayers`, `bot.FillerBot`
   through the players' own validation and journal; `bot.json` keeps the last turn played). They can win, and the
@@ -516,6 +525,15 @@ cd assets && java --enable-native-access=ALL-UNNAMED -cp "../lwjgl3/target/class
   `${project.basedir}/../assets` for the shared assets folder.
 
 **Network and saved formats**
+- **Saved formats are pinned by a fixture** (2026-10-25, review.md 2.1): `SavedFormatTest` opens every game
+  under `server/src/test/resources/saved-format/` the way the server does and resolves its next turn. Saved
+  state is read strictly (never `ignoreUnknown`), so a saved field renamed, removed or retyped, or an enum
+  constant renamed, fails there. Before the first live game, `dev` may be written again when a format
+  changes (say so in the commit): `mvn -q install -pl core -am -DskipTests`, `mvn -q -pl server
+  test-compile`, then `mvn -q -pl server exec:java -Dexec.classpathScope=test
+  -DmainClass=de.mkoehler.launchwindow.server.SavedFormatFixture -Dexec.args=dev`. At the release that
+  starts the first live game, write `v1` and never write it again: from then on a breaking change needs a
+  step in `SnapshotMigrations` (the snapshot carries `formatVersion`). Adding a field needs nothing.
 - **A changed message shape** (a field added to an existing message, as `SubmitActionRequest.gameTurn`
   on 2026-10-09) needs client and server rebuilt together; the handshake's version check refuses
   the old side, so rebuild the client zip before a play test.
@@ -534,18 +552,23 @@ cd assets && java --enable-native-access=ALL-UNNAMED -cp "../lwjgl3/target/class
 **Content and rules**
 - `strings.json` is deliberately outside `ContentPackLoader.FILES` (not hashed, not frozen).
   Never add it there. `ContentStringsTest` fails until every new id has text. The same goes for
-  `assets/content/space-race-news.json` (`SpaceRaceNewsTest`), `pr-press.json` (`PrDutyTest`) and
-  `event-stories.json` (`EventStoriesTest`, which holds each event to its sized count), and
-  `decisions.json` (`DecisionsTest`; saved state keeps its ids too), `agency-names.json` (`AgencyNamesTest`),
+  `assets/content/space-race-news.json` (`SpaceRaceNewsTest`),
+  `event-stories.json` (`EventStoriesTest`, which holds each event to its sized count),
+  `agency-names.json` (`AgencyNamesTest`),
   `front-page-reactions.json` (`FrontPageReactionsTest`, which also holds the fullest article to its columns; printed
   pages store its ids), `theories.json` (`TheoriesTest`; science pages store its ids), `memorial-pages.json` (`MemorialPagesTest`; memorial
   pages store its story and line ids), `replay-sounds.json`
   (`ReplaySoundsTest`: every take there, listed and credited; loops OGG or WAV, never MP3), `replay-clips.json`
   (`ReplayClipsTest`, which holds every rule to its three clips and sidecars), and `front-pages.json`
-  (`FrontPagesTest`, which also holds every article to its columns; printed pages store story ids). Core's tests have no assets on the
-  classpath, so `Decisions.standard()` is empty there: tests and tools set it with `Decisions.setStandard`
-  (and put `EMPTY` back after);
-  turn reports store their story ids, so never rename or reuse one.
+  (`FrontPagesTest`, which also holds every article to its columns; printed pages store story ids).
+  Turn reports store their story ids, so never rename or reuse one.
+- **`decisions.json`, `pr-press.json` and `commercial-clients.json` are pack files** (2026-10-25, review.md
+  2.2): in `ContentPackLoader.FILES`, hashed and frozen, in both packs and identical (`RulesContentTest`:
+  edit standard's, copy it to early-era). A text fix in them is a pack change: it reaches new games only, and
+  changes the pack hash. The rules read them through `catalog.rules()`, never `Decisions.standard()` and
+  friends, which are the client's copies (installed by `ClientSession.start`). The playouts play without the
+  press stories and clients, and with the decisions only when asked (`ContentPackPlayouts`' constructor), as
+  they always measured; ids are kept in saved state, never renamed or reused.
 - Help's `handsOn.*` tokens quote the first hands-on level in `decisions.json` (rounds, slots, the
   expert's cost): a later level with a different shape needs the help text reworded.
 - `findings.json` is a rules file in `ContentPackLoader.FILES` (hashed, frozen), unlike the text files above:

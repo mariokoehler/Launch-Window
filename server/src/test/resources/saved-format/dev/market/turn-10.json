@@ -1,0 +1,24 @@
+{
+  "findings" : {
+    "aa312e1bb90c0c0ef" : [ ],
+    "a2f196a5f94045a7" : [ ],
+    "ac820bb6c58a9a923" : [ ]
+  },
+  "board" : [ {
+    "id" : "c8-1",
+    "lineId" : "earth-orbit-satellites",
+    "nasaClientId" : "sat-n-radiation",
+    "sovietClientId" : "sat-s-weather",
+    "postedTurn" : 9,
+    "lastTurn" : 11
+  }, {
+    "id" : "c8-2",
+    "lineId" : "earth-orbit-satellites",
+    "nasaClientId" : "sat-n-navigation",
+    "sovietClientId" : "sat-s-relay",
+    "postedTurn" : 9,
+    "lastTurn" : 11
+  } ],
+  "usedClientIds" : [ "sat-n-radiation", "sat-s-weather", "sat-n-navigation", "sat-s-relay" ],
+  "posted" : 0
+}

@@ -12,10 +12,14 @@ import de.mkoehler.launchwindow.model.PlayerSnapshot;
  * were actually applied, never a later action submitted during the crash
  * window (see {@link PlayerStateService#resolveTurn(long)}).</p>
  *
+ * <p>It carries the format it was written in ({@link SnapshotMigrations}), so a later build can bring
+ * it up to date before it binds.</p>
+ *
  * @author Mario Koehler
  */
 public class ResolvedSnapshot {
 
+    private int formatVersion = SnapshotMigrations.CURRENT;
     private PlayerSnapshot snapshot;
     private String lastAppliedActionFile;
 
@@ -36,6 +40,24 @@ public class ResolvedSnapshot {
     public ResolvedSnapshot(PlayerSnapshot snapshot, String lastAppliedActionFile) {
         this.snapshot = snapshot;
         this.lastAppliedActionFile = lastAppliedActionFile;
+    }
+
+    /**
+     * Returns the format this envelope is in.
+     *
+     * @return the format version
+     */
+    public int getFormatVersion() {
+        return formatVersion;
+    }
+
+    /**
+     * Sets the format this envelope is in.
+     *
+     * @param formatVersion the format version
+     */
+    public void setFormatVersion(int formatVersion) {
+        this.formatVersion = formatVersion;
     }
 
     /**

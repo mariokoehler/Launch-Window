@@ -1,0 +1,294 @@
+[
+  {
+    "id": "sputnik-1-satellite",
+    "associatedSkill": "SPACE_PROBES",
+    "baselineReliability": 3.0,
+    "maxReliability": 92.25,
+    "maxRdReliability": 89.59,
+    "rdSlotBandMaxAmounts": [
+      9.0,
+      17.0,
+      22.0,
+      33.0
+    ],
+    "maxReliabilityTransfer": 60.0,
+    "reliabilityTransferSources": [
+      {
+        "sourceComponentId": "sputnik-2-satellite",
+        "transferPercent": 50
+      }
+    ],
+    "maintenanceCost": 75,
+    "creationCost": 750,
+    "unitCost": 488,
+    "mass": 86.0,
+    "agency": "SOVIET",
+    "rocket": null
+  },
+  {
+    "id": "sputnik-2-satellite",
+    "associatedSkill": "SPACE_PROBES",
+    "baselineReliability": 3.0,
+    "maxReliability": 93.75,
+    "maxRdReliability": 90.99,
+    "rdSlotBandMaxAmounts": [
+      6.0,
+      11.0,
+      15.0,
+      22.0
+    ],
+    "maxReliabilityTransfer": 60.0,
+    "reliabilityTransferSources": [
+      {
+        "sourceComponentId": "sputnik-1-satellite",
+        "transferPercent": 30
+      }
+    ],
+    "maintenanceCost": 210,
+    "creationCost": 2100,
+    "unitCost": 1365,
+    "mass": 133.0,
+    "agency": "SOVIET",
+    "rocket": null
+  },
+  {
+    "id": "vostok-capsule",
+    "associatedSkill": "CREWED_SPACECRAFT",
+    "baselineReliability": 3.0,
+    "maxReliability": 97.25,
+    "maxRdReliability": 91.4,
+    "rdSlotBandMaxAmounts": [
+      5.0,
+      9.0,
+      12.0,
+      17.0
+    ],
+    "maxReliabilityTransfer": 60.0,
+    "reliabilityTransferSources": [
+      {
+        "sourceComponentId": "sputnik-2-satellite",
+        "transferPercent": 10
+      }
+    ],
+    "maintenanceCost": 147,
+    "creationCost": 1470,
+    "unitCost": 956,
+    "mass": 4700.0,
+    "agency": "SOVIET",
+    "rocket": null
+  },
+  {
+    "id": "explorer-1-satellite",
+    "associatedSkill": "SPACE_PROBES",
+    "baselineReliability": 3.0,
+    "maxReliability": 92.0,
+    "maxRdReliability": 89.36,
+    "rdSlotBandMaxAmounts": [
+      8.0,
+      15.0,
+      20.0,
+      29.0
+    ],
+    "maxReliabilityTransfer": 60.0,
+    "reliabilityTransferSources": [],
+    "maintenanceCost": 90,
+    "creationCost": 900,
+    "unitCost": 585,
+    "mass": 11.0,
+    "agency": "NASA",
+    "rocket": null
+  },
+  {
+    "id": "mercury-capsule",
+    "associatedSkill": "CREWED_SPACECRAFT",
+    "baselineReliability": 3.0,
+    "maxReliability": 97.1,
+    "maxRdReliability": 91.24,
+    "rdSlotBandMaxAmounts": [
+      5.0,
+      9.0,
+      12.0,
+      18.0
+    ],
+    "maxReliabilityTransfer": 60.0,
+    "reliabilityTransferSources": [],
+    "maintenanceCost": 158,
+    "creationCost": 1575,
+    "unitCost": 1024,
+    "mass": 1355.0,
+    "agency": "NASA",
+    "rocket": null
+  },
+  {
+    "id": "r7-sputnik",
+    "associatedSkill": "ROCKETS",
+    "baselineReliability": 3.0,
+    "maxReliability": 95.03,
+    "maxRdReliability": 85.16,
+    "rdSlotBandMaxAmounts": [
+      8.0,
+      13.0,
+      18.0,
+      26.0
+    ],
+    "maxReliabilityTransfer": 60.0,
+    "reliabilityTransferSources": [
+      {
+        "sourceComponentId": "r7-vostok",
+        "transferPercent": 50
+      }
+    ],
+    "maintenanceCost": 250,
+    "creationCost": 2500,
+    "unitCost": 1625,
+    "mass": 0.0,
+    "agency": "SOVIET",
+    "rocket": {
+      "rocketClass": "LIGHT",
+      "payloadToSuborbital": 5370.0,
+      "payloadToLeo": 508.0,
+      "payloadToTli": 0.0,
+      "payloadToTpi": 0.0
+    }
+  },
+  {
+    "id": "r7-vostok",
+    "associatedSkill": "HUMAN_RATED_ROCKETS",
+    "baselineReliability": 3.0,
+    "maxReliability": 97.45,
+    "maxRdReliability": 89.74,
+    "rdSlotBandMaxAmounts": [
+      6.0,
+      9.0,
+      12.0,
+      17.0
+    ],
+    "maxReliabilityTransfer": 60.0,
+    "reliabilityTransferSources": [
+      {
+        "sourceComponentId": "r7-sputnik",
+        "transferPercent": 30
+      }
+    ],
+    "maintenanceCost": 525,
+    "creationCost": 5250,
+    "unitCost": 3413,
+    "mass": 0.0,
+    "agency": "SOVIET",
+    "rocket": {
+      "rocketClass": "LIGHT",
+      "payloadToSuborbital": 11000.0,
+      "payloadToLeo": 4730.0,
+      "payloadToTli": 0.0,
+      "payloadToTpi": 0.0
+    }
+  },
+  {
+    "id": "jupiter-c",
+    "associatedSkill": "ROCKETS",
+    "baselineReliability": 3.0,
+    "maxReliability": 95.05,
+    "maxRdReliability": 85.16,
+    "rdSlotBandMaxAmounts": [
+      9.0,
+      14.0,
+      19.0,
+      28.0
+    ],
+    "maxReliabilityTransfer": 60.0,
+    "reliabilityTransferSources": [
+      {
+        "sourceComponentId": "redstone",
+        "transferPercent": 50
+      },
+      {
+        "sourceComponentId": "atlas",
+        "transferPercent": 40
+      }
+    ],
+    "maintenanceCost": 180,
+    "creationCost": 1800,
+    "unitCost": 1170,
+    "mass": 0.0,
+    "agency": "NASA",
+    "rocket": {
+      "rocketClass": "LIGHT",
+      "payloadToSuborbital": 50.0,
+      "payloadToLeo": 11.0,
+      "payloadToTli": 0.0,
+      "payloadToTpi": 0.0
+    }
+  },
+  {
+    "id": "redstone",
+    "associatedSkill": "HUMAN_RATED_ROCKETS",
+    "baselineReliability": 3.0,
+    "maxReliability": 97.4,
+    "maxRdReliability": 89.74,
+    "rdSlotBandMaxAmounts": [
+      7.0,
+      12.0,
+      16.0,
+      23.0
+    ],
+    "maxReliabilityTransfer": 60.0,
+    "reliabilityTransferSources": [
+      {
+        "sourceComponentId": "jupiter-c",
+        "transferPercent": 35
+      },
+      {
+        "sourceComponentId": "atlas",
+        "transferPercent": 45
+      }
+    ],
+    "maintenanceCost": 188,
+    "creationCost": 1875,
+    "unitCost": 1219,
+    "mass": 0.0,
+    "agency": "NASA",
+    "rocket": {
+      "rocketClass": "LIGHT",
+      "payloadToSuborbital": 3580.0,
+      "payloadToLeo": 0.0,
+      "payloadToTli": 0.0,
+      "payloadToTpi": 0.0
+    }
+  },
+  {
+    "id": "atlas",
+    "associatedSkill": "HUMAN_RATED_ROCKETS",
+    "baselineReliability": 3.0,
+    "maxReliability": 97.5,
+    "maxRdReliability": 90.3,
+    "rdSlotBandMaxAmounts": [
+      6.0,
+      10.0,
+      13.0,
+      19.0
+    ],
+    "maxReliabilityTransfer": 60.0,
+    "reliabilityTransferSources": [
+      {
+        "sourceComponentId": "jupiter-c",
+        "transferPercent": 20
+      },
+      {
+        "sourceComponentId": "redstone",
+        "transferPercent": 35
+      }
+    ],
+    "maintenanceCost": 500,
+    "creationCost": 5000,
+    "unitCost": 3250,
+    "mass": 0.0,
+    "agency": "NASA",
+    "rocket": {
+      "rocketClass": "LIGHT",
+      "payloadToSuborbital": 4000.0,
+      "payloadToLeo": 1360.0,
+      "payloadToTli": 0.0,
+      "payloadToTpi": 0.0
+    }
+  }
+]

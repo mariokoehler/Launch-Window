@@ -1172,8 +1172,8 @@ season unchanged. Tiger Teams' live per-step choice doesn't fit, so it was redes
     Expert keeps the trait even below 80.
   - **Press stories:** each season on tour has a 10 % chance of making the papers, 70 % of them
     good. A good story adds half the season's yield, a bad one turns the season into a loss of
-    half of it. Stories live in `assets/content/pr-press.json` (outside the frozen pack, ids never
-    reused). No randomness is drawn while nobody is on tour.
+    half of it. Stories live in each pack's `pr-press.json` (ids never reused); since 2026-10-25 it is
+    one of the pack's hashed, frozen files (review.md 2.2). No randomness is drawn while nobody is on tour.
   - **No repeats** (user, 2026-10-06): `PlayerSnapshot.usedPressStoryIds` records the stories a
     player has seen; a draw picks only unseen ones of its tone, and once every story of a tone has
     run that tone starts over. Per player, not per astronaut: the player reads them all.
@@ -1216,9 +1216,10 @@ season unchanged. Tiger Teams' live per-step choice doesn't fit, so it was redes
       When the only unseen stories of a tone can't run, the usable one seen longest ago runs
       again and moves to the back of the record, so the usable ones keep cycling without repeats
       and the others keep their turn.
-    - **Effects live in the JSON** (user, 2026-10-06), outside the frozen pack: editing one in a
-      running game changes the rules for stories drawn afterwards. Applied effects are stored in
-      the turn report (`PrDutyPerformed.pressEffects`), so old reports still read right.
+    - **Effects live in the JSON** (user, 2026-10-06). Until 2026-10-25 the file sat outside the frozen
+      pack, so an edit changed the rules of a running game; now each game keeps its own copy (review.md
+      2.2), and an edit reaches new games only. Applied effects are stored in the turn report
+      (`PrDutyPerformed.pressEffects`), so old reports still read right.
   - **The stories** (written 2026-10-06; user: a good variety, mostly fictional, some real events
     with the player's astronaut in the historical person's place as an easter egg): 27 good and
     12 bad, about the same 70/30 split as the draw, so each story turns up about as often. That
@@ -2388,8 +2389,9 @@ ours, a default and **unconfirmed** unless a line says otherwise.
   its own file so the BASPM converter, which writes `programs.json`, never touches it): per program,
   the unlock set and the contract configuration. The margins and record weights are rules constants
   (read by help's tokens, never written into text). Clients and their stories by line and side go in
-  `assets/content/commercial-clients.json` (31, at least two per line a side flies), outside
-  `ContentPackLoader.FILES` like the press stories, no repeats until a line's have all run. A listing
+  each pack's `commercial-clients.json` (31, at least two per line a side flies), one of
+  `ContentPackLoader.FILES` since 2026-10-25 (the market draws from them; review.md 2.2), no repeats until
+  a line's have all run. A listing
   names one client per side, so each side reads its own.
 - **Storage** (as built): `market/turn-N.json`, written once at the resolution before the season
   passes, like intelligence, and re-read on a retry: the awards from the turn's applications, the
@@ -2883,12 +2885,16 @@ projects and BASPM's own XML save, which maps almost 1:1 onto its object graph.
 **Decided (user, 2026-09-27), reusing StarWars' account code** (`PlayerAccount`,
 `AccountStore`, `PasswordHasher`, `AuthResult`):
 - **An account is identity only:** a server-assigned id, a unique login (`[A-Za-z0-9_-]{1,32}`,
-  `core`'s `LoginNames`), and a salted SHA-256 password hash (good enough for an invite-only hobby
-  server). **No display name** (user, 2026-10-04): players know each other by their per-game
+  `core`'s `LoginNames`), and a salted password hash: PBKDF2-HMAC-SHA-256, 210,000 rounds, since
+  2026-10-25 (review.md 2.3; an account on the earlier single SHA-256 round is rehashed when it logs in). **No display name** (user, 2026-10-04): players know each other by their per-game
   Director name. Everything about a game lives in that game's state.
 - **Storage:** one JSON file, an in-memory map flushed on a background cadence with rolling
   backups and a final flush on shutdown.
-- **Login:** an unknown login creates the account; a known one needs the right password.
+- **Login:** a known login needs the right password. An unknown one is refused
+  (`HandshakeResponse.NO_SUCH_ACCOUNT`), and the Connect screen offers to create it
+  (`CreateAccountRequest`, review.md 2.3, 2026-10-25): until then a typo silently made a second, empty
+  account. A new account is written to disk at once. (`DevClient` always sends a create, which logs in
+  when the account exists and the password is its own.)
 - **Player data is keyed by account id,** never by login (case-insensitive file systems, and
   logins can be renamed).
 - **Joining is open for the whole game, with no player cap** (user, 2026-09-27): late joiners
@@ -3374,7 +3380,12 @@ replace step):
 - **Frozen per game:** at creation the server copies its pack into
   `<dataRoot>/content/<packId>/` (`FrozenContentPack`, staged and renamed) and only loads it from
   there. `ContentPackHash` (SHA-256 over `ContentPackLoader.FILES`, line endings and BOM
-  ignored) identifies it; the game info sends id and hash. Freezing keeps the open turn's
+  ignored) identifies it; the game info sends id and hash. Since 2026-10-25 the R&D decisions, the PR
+  press stories and the commercial clients are pack files too (review.md 2.2): their effects and draws
+  change the rules, so a server update must not change them under a running game. They are in both
+  packs, identical (`RulesContentTest`); the rules read them through `ContentCatalog.rules()`, the client's
+  screens through the copies its session installs. Still outside: the building table, the budget schedule
+  and the random-event odds, compiled in (review.md 2.9). Freezing keeps the open turn's
   actions, in-flight state and every player's numbers consistent.
 - **When the client's pack differs** it warns and uses its own copy. The download (G1) is
   deferred (user, 2026-10-06): content changes ship as a new server version, and the login

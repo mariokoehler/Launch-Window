@@ -1,0 +1,15 @@
+{
+  "pilot" : {
+    "id" : "df7f04f0-3075-4e25-ac50-ced7c182f25d",
+    "login" : "pilot",
+    "passwordHash" : "ac901bbae2e309eb526464c791a8f8237d70485ec59caee2a2165c1a89e966bd",
+    "passwordSalt" : "f74f41fe8bded89155505288ac9be3e1",
+    "passwordScheme" : "pbkdf2-sha256"
+  },
+  "veteran" : {
+    "id" : "legacy-account",
+    "login" : "veteran",
+    "passwordHash" : "058d8adf96d954035aaa40c731258f0270fdb5beb9ad3beb7c7ad306fc2971cc",
+    "passwordSalt" : "00112233445566778899aabbccddeeff"
+  }
+}

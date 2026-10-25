@@ -1,0 +1,31 @@
+{
+  "a2f196a5f94045a7" : [ {
+    "kind" : "DOSSIER",
+    "operationId" : "op0",
+    "operationKind" : "ASSESSMENT",
+    "rivalId" : "aa312e1bb90c0c0ef",
+    "rivalAgency" : "Fixture Agency",
+    "area" : "RND",
+    "dossier" : {
+      "area" : "RND",
+      "turn" : 6,
+      "facts" : [ {
+        "kind" : "COMPONENT_RELIABILITY",
+        "ref" : "explorer-1-satellite",
+        "low" : 64,
+        "high" : 74,
+        "count" : 0
+      }, {
+        "kind" : "COMPONENT_RELIABILITY",
+        "ref" : "jupiter-c",
+        "low" : 68,
+        "high" : 78,
+        "count" : 0
+      } ]
+    },
+    "file" : null,
+    "tidbit" : null,
+    "level" : -1,
+    "offer" : null
+  } ]
+}

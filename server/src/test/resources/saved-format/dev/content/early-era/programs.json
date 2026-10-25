@@ -1,0 +1,74 @@
+[
+  {
+    "id": "sputnik-1",
+    "categoryId": "earth-orbit-satellites",
+    "openingCost": 126,
+    "maintenanceCost": 13,
+    "requiredMissionComponentIds": [
+      "sputnik-1-satellite"
+    ],
+    "openingCostDiscounts": [],
+    "requiredGoalIds": [],
+    "agency": "SOVIET"
+  },
+  {
+    "id": "sputnik-2",
+    "categoryId": "earth-orbit-satellites",
+    "openingCost": 316,
+    "maintenanceCost": 32,
+    "requiredMissionComponentIds": [
+      "sputnik-2-satellite"
+    ],
+    "openingCostDiscounts": [],
+    "requiredGoalIds": [],
+    "agency": "SOVIET"
+  },
+  {
+    "id": "korabl-sputnik-2",
+    "categoryId": "earth-orbit-satellites",
+    "openingCost": 449,
+    "maintenanceCost": 45,
+    "requiredMissionComponentIds": [
+      "vostok-capsule"
+    ],
+    "openingCostDiscounts": [],
+    "requiredGoalIds": [],
+    "agency": "SOVIET"
+  },
+  {
+    "id": "vostok",
+    "categoryId": "one-crew-capsules",
+    "openingCost": 1345,
+    "maintenanceCost": 135,
+    "requiredMissionComponentIds": [
+      "vostok-capsule"
+    ],
+    "openingCostDiscounts": [],
+    "requiredGoalIds": [],
+    "agency": "SOVIET"
+  },
+  {
+    "id": "explorer-1",
+    "categoryId": "earth-orbit-satellites",
+    "openingCost": 126,
+    "maintenanceCost": 13,
+    "requiredMissionComponentIds": [
+      "explorer-1-satellite"
+    ],
+    "openingCostDiscounts": [],
+    "requiredGoalIds": [],
+    "agency": "NASA"
+  },
+  {
+    "id": "mercury",
+    "categoryId": "one-crew-capsules",
+    "openingCost": 1345,
+    "maintenanceCost": 135,
+    "requiredMissionComponentIds": [
+      "mercury-capsule"
+    ],
+    "openingCostDiscounts": [],
+    "requiredGoalIds": [],
+    "agency": "NASA"
+  }
+]

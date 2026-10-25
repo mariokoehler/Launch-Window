@@ -1,0 +1,76 @@
+{
+  "a2f196a5f94045a7" : [ {
+    "kind" : "DOSSIER",
+    "operationId" : "op3",
+    "operationKind" : "ASSESSMENT",
+    "rivalId" : "aa312e1bb90c0c0ef",
+    "rivalAgency" : "Fixture Agency",
+    "area" : "PLANS",
+    "dossier" : {
+      "area" : "PLANS",
+      "turn" : 12,
+      "facts" : [ {
+        "kind" : "OPEN_PROGRAM",
+        "ref" : "explorer-1",
+        "low" : 0,
+        "high" : 0,
+        "count" : 0
+      }, {
+        "kind" : "OPEN_PROGRAM",
+        "ref" : "mercury",
+        "low" : 0,
+        "high" : 0,
+        "count" : 0
+      }, {
+        "kind" : "RD_FOCUS",
+        "ref" : "explorer-1-satellite",
+        "low" : 0,
+        "high" : 0,
+        "count" : 4
+      }, {
+        "kind" : "RD_FOCUS",
+        "ref" : "jupiter-c",
+        "low" : 0,
+        "high" : 0,
+        "count" : 2
+      }, {
+        "kind" : "SHELF",
+        "ref" : "mercury-capsule",
+        "low" : 0,
+        "high" : 0,
+        "count" : 0
+      }, {
+        "kind" : "INTEL_LEVEL",
+        "ref" : "",
+        "low" : 0,
+        "high" : 0,
+        "count" : 0
+      } ]
+    },
+    "file" : null,
+    "tidbit" : null,
+    "level" : 0,
+    "offer" : null
+  }, {
+    "kind" : "TIDBIT",
+    "operationId" : null,
+    "operationKind" : null,
+    "rivalId" : "aa312e1bb90c0c0ef",
+    "rivalAgency" : "Fixture Agency",
+    "area" : "PLANS",
+    "dossier" : null,
+    "file" : null,
+    "tidbit" : {
+      "turn" : 12,
+      "fact" : {
+        "kind" : "INTEL_LEVEL",
+        "ref" : "",
+        "low" : 0,
+        "high" : 0,
+        "count" : 0
+      }
+    },
+    "level" : -1,
+    "offer" : null
+  } ]
+}

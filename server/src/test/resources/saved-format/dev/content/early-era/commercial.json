@@ -1,0 +1,46 @@
+[
+  {
+    "programId": "sputnik-1",
+    "unlockConfigurationIds": [
+      "sputnik-1-orbit"
+    ],
+    "contractConfigurationId": "sputnik-1-orbit"
+  },
+  {
+    "programId": "explorer-1",
+    "unlockConfigurationIds": [
+      "explorer-1-orbit"
+    ],
+    "contractConfigurationId": "explorer-1-orbit"
+  },
+  {
+    "programId": "korabl-sputnik-2",
+    "unlockConfigurationIds": [
+      "korabl-sputnik-2-orbit"
+    ],
+    "contractConfigurationId": "korabl-sputnik-2-orbit"
+  },
+  {
+    "programId": "sputnik-2",
+    "unlockConfigurationIds": [
+      "sputnik-2-orbit"
+    ],
+    "contractConfigurationId": "sputnik-2-orbit"
+  },
+  {
+    "programId": "mercury",
+    "unlockConfigurationIds": [
+      "mercury-uncrewed-orbital",
+      "mercury-orbital"
+    ],
+    "contractConfigurationId": "mercury-orbital"
+  },
+  {
+    "programId": "vostok",
+    "unlockConfigurationIds": [
+      "vostok-uncrewed-orbital",
+      "vostok-orbital"
+    ],
+    "contractConfigurationId": "vostok-orbital"
+  }
+]

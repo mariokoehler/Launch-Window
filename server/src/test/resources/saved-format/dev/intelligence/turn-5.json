@@ -1,0 +1,15 @@
+{
+  "ac820bb6c58a9a923" : [ {
+    "kind" : "FAILED",
+    "operationId" : "op0",
+    "operationKind" : "ASSESSMENT",
+    "rivalId" : "a2f196a5f94045a7",
+    "rivalAgency" : "Tsiolkovsky Experimental Works",
+    "area" : "PERSONNEL",
+    "dossier" : null,
+    "file" : null,
+    "tidbit" : null,
+    "level" : -1,
+    "offer" : null
+  } ]
+}

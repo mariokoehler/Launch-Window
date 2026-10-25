@@ -1,0 +1,70 @@
+{
+  "pages" : [ {
+    "id" : "7-earth-orbit-satellite",
+    "goalId" : "earth-orbit-satellite",
+    "gameTurn" : 7,
+    "storyId" : "sat-signal",
+    "weather" : "Clear skies, warm night",
+    "foldedGoalIds" : [ ],
+    "achievers" : [ {
+      "agencyName" : "Fixture Agency",
+      "directorName" : "Pat Fixture",
+      "crewNames" : [ ]
+    } ],
+    "rivals" : [ "Tsiolkovsky Experimental Works", "Cape Horizon Space Center" ],
+    "kind" : "FIRST",
+    "reactsTo" : null,
+    "reactions" : [ ],
+    "memorial" : null
+  }, {
+    "id" : "7-science-radiation-belts",
+    "goalId" : "magnetic-field-study",
+    "gameTurn" : 7,
+    "storyId" : "radiation-belts",
+    "weather" : "Hot and humid",
+    "foldedGoalIds" : [ ],
+    "achievers" : [ {
+      "agencyName" : "Fixture Agency",
+      "directorName" : "Pat Fixture",
+      "crewNames" : [ ]
+    } ],
+    "rivals" : [ ],
+    "kind" : "SCIENCE",
+    "reactsTo" : null,
+    "reactions" : [ ],
+    "memorial" : null
+  }, {
+    "id" : "7-earth-orbit-satellite-reactions",
+    "goalId" : "earth-orbit-satellite",
+    "gameTurn" : 8,
+    "storyId" : "r-sat-gracious",
+    "weather" : "Windy with rain at times",
+    "foldedGoalIds" : [ ],
+    "achievers" : [ {
+      "agencyName" : "Fixture Agency",
+      "directorName" : "Pat Fixture",
+      "crewNames" : [ ]
+    } ],
+    "rivals" : [ ],
+    "kind" : "REACTIONS",
+    "reactsTo" : "7-earth-orbit-satellite",
+    "reactions" : [ {
+      "agencyName" : "Cape Horizon Space Center",
+      "directorName" : "Alonzo Banks",
+      "stance" : "ENTHUSIASTIC",
+      "quote" : "",
+      "lineId" : "r-enth-p-3",
+      "linkId" : null,
+      "detailId" : "r-sat-matched-1"
+    }, {
+      "agencyName" : "Tsiolkovsky Experimental Works",
+      "directorName" : "Vera Shubina",
+      "stance" : "POLITE",
+      "quote" : "",
+      "lineId" : "r-pol-p-1",
+      "linkId" : "r-link-enth-pol-1",
+      "detailId" : null
+    } ],
+    "memorial" : null
+  } ]
+}
