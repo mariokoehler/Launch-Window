@@ -98,6 +98,23 @@
               </arguments>
             </configuration>
           </execution>
+          <execution>
+            <!-- The HandsOnPlayground: any hands-on level's puzzle on its own, with the client's own
+                 screen, its levels read fresh from assets/content/decisions.json. assets/ on its own
+                 class loader, as the replayer's:
+                 mvn -pl dev-tools compile exec:exec@handson -->
+            <id>handson</id>
+            <configuration>
+              <executable>java</executable>
+              <workingDirectory>${project.basedir}/../assets</workingDirectory>
+              <arguments>
+                <argument>--enable-native-access=ALL-UNNAMED</argument>
+                <argument>-classpath</argument>
+                <classpath/>
+                <argument>de.mkoehler.launchwindow.devtools.handson.HandsOnPlayground</argument>
+              </arguments>
+            </configuration>
+          </execution>
         </executions>
       </plugin>
     </plugins>

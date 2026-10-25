@@ -589,6 +589,17 @@ public final class HandsOnScreen extends ChromeScreen {
     }
 
     /**
+     * Takes a step as its button or row would, for the offscreen tools (the hands-on playground's smoke
+     * test).
+     *
+     * @param step    the step
+     * @param command the command, for {@link RdDecisions.HandsOnStep#QUEUE}, else {@code null}
+     */
+    public void take(RdDecisions.HandsOnStep step, String command) {
+        step(step, command);
+    }
+
+    /**
      * Shows a round's results as just executed, for the offscreen screenshot tool.
      *
      * @param round the round

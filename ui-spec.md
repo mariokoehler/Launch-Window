@@ -1078,6 +1078,15 @@ Writing them turned up two things for the rules, recorded in `design.md` §2.2(d
           Reset grey out; the payload's campaign (*A week in the vacuum chamber*, *Chamber runs*) reuses the
           firing icon for its runs until it has its own. Shots `handson-*.png` (`ScreenSnapshot
           -Dshots=handson`).
+        - **Playing a level on its own (the user's idea, 2026-10-25):** dev-tools' `HandsOnPlayground`
+          (`start_handson.cmd`, or `mvn -pl dev-tools compile exec:exec@handson`) plays any hands-on level in
+          this screen without a server or a game to wait in for one: a list of the levels, then the component
+          it runs on (both for one that fits any), the lead's skill (0 to 100 in steps of 20, the fail chance
+          shown) and a seed. Steps are applied by the server's rules (`RdDecisions.handsOn`), so the rolls are
+          the game's. The levels are read from `assets/content/decisions.json` before every run, so an edited
+          level plays without a restart; on the puzzle, R plays the same seed again, N a new one, Esc goes
+          back to the list. One engineer on the team, so never the good-chemistry odds. `-Dhandson.smoke=<folder>` (run with
+          `java` from `assets/`) plays a winning random run through the screen and saves five frames.
 
     **Help:** a "Decisions" topic, linked from the banner's eyebrow.
 
