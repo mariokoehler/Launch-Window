@@ -19,6 +19,19 @@ cut from the variable fonts), for the Firsts' front pages, under the SIL Open Fo
 - `audio/moon-speech.mp3`: President John F. Kennedy at Rice University, Houston, 12 September
   1962, "We choose to go to the Moon". NASA, https://www.nasa.gov/historical-sounds/. Public domain.
   Plays when the Join screen opens.
+- `audio/handson/`: the hands-on puzzle's sounds, published by `assets-raw/audio/make_handson_sounds.py`.
+- `audio/handson/tense-loop.ogg`: "Thrilling and tense sound effect-01" by bbb2588, Pixabay,
+  https://pixabay.com/sound-effects/horror-thrilling-and-tense-sound-effect-01-194450/. Pixabay Content License, https://pixabay.com/service/license-summary/.
+  Level raised 6 dB.
+- `audio/handson/failure.ogg`: "Failure Drum Sound Effect 1" by freesound_community, Pixabay,
+  https://pixabay.com/sound-effects/musical-failure-drum-sound-effect-1-46093/. Pixabay Content License, https://pixabay.com/service/license-summary/.
+- `audio/handson/success.ogg`: "Short Success Sound Glockenspiel Treasure Video Game" by
+  freesound_community, Pixabay,
+  https://pixabay.com/sound-effects/film-special-effects-short-success-sound-glockenspiel-treasure-video-game-6346/.
+  Pixabay Content License, https://pixabay.com/service/license-summary/. Level raised 10 dB.
+- `audio/handson/exceptional.ogg`: "Success Notification" by Universfield, Pixabay,
+  https://pixabay.com/sound-effects/film-special-effects-success-notification-132473/. Pixabay Content License, https://pixabay.com/service/license-summary/.
+  Level lowered 1 dB.
 - `audio/replay/`: the replay's sounds (`content/replay-sounds.json`). Sounds made for Launch Window
   need no credit here; any that weren't are credited below, one bullet per file, and marked
   `"credit": true` in the catalog. Generated music names its model and the model's terms here.

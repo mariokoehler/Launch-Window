@@ -1,5 +1,6 @@
 package de.mkoehler.launchwindow.client.screen;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -47,6 +48,44 @@ public final class HandsOnScreen extends ChromeScreen {
     /** The round whose results the player is still looking at, or 0. */
     private int showingRound;
 
+    // A round's commands resolve one by one: a needle on the odds bar swings, wobbles and settles on each
+    // slot's roll, then its badge shows. The rules have already rolled; this only shows it slowly.
+    /** The needle's swing up to its first peak, in seconds. */
+    private static final float NEEDLE_RISE = 0.9f;
+    /** Its damped swing from the peak onto the result, in seconds. */
+    private static final float NEEDLE_SETTLE = 3.1f;
+    /** The damped swing's frequency, in Hz, and its damping, per second. */
+    private static final double SWING_HZ = 0.75;
+    private static final double SWING_DAMPING = 1.7;
+    /** How long a settled result stays up before the next slot rolls. */
+    private static final float NEEDLE_HOLD = 0.9f;
+    /** A slot that doesn't roll shows after this long. */
+    private static final float NO_ROLL_STEP = 0.3f;
+    /** Whether slots are being revealed. */
+    private boolean revealing;
+    /** How many of the results' slots show; the next one is rolling. */
+    private int revealed;
+    /** The results' slots revealed up to (exclusive). */
+    private int revealTo;
+    /** Whether the last slot shown holds before the next one runs. */
+    private boolean holding;
+    /** Seconds into the current slot's motion or hold. */
+    private float revealClock;
+
+    // The reveal's sound: a tense loop under it, a sting on each result (assets/audio/handson/, made by
+    // assets-raw/audio/make_handson_sounds.py, credited in CREDITS.md).
+    private static final String TENSE_LOOP = "audio/handson/tense-loop.ogg";
+    /** The loop's level under the music volume. */
+    private static final float TENSE_LEVEL = 0.55f;
+    /** The stings' level under the effects volume. */
+    private static final float STING_LEVEL = 0.9f;
+    /** How long the loop fades out once the round has shown. */
+    private static final float TENSE_FADE = 1.2f;
+    private com.badlogic.gdx.audio.Music tense;
+    private float tenseFade = -1f;
+    private final Map<HandsOnState.Roll, com.badlogic.gdx.audio.Sound> stings =
+        new java.util.EnumMap<>(HandsOnState.Roll.class);
+
     /**
      * Opens the screen on the hands-on decision in progress.
      *
@@ -60,6 +99,16 @@ public final class HandsOnScreen extends ChromeScreen {
         Decisions.Decision decision = HandsOnView.decision(session.state()).orElseThrow();
         setTitles("Hands-on · " + ContentNames.of(componentId), decision.headline());
         titleActions.add(roundChip);
+        stage().addListener(new com.badlogic.gdx.scenes.scene2d.InputListener() {
+            @Override
+            public boolean keyDown(com.badlogic.gdx.scenes.scene2d.InputEvent event, int keycode) {
+                if (keycode == com.badlogic.gdx.Input.Keys.SPACE && revealing) {
+                    skipReveal();
+                    return true;
+                }
+                return false;
+            }
+        });
         rebuild();
     }
 
@@ -96,14 +145,19 @@ public final class HandsOnScreen extends ChromeScreen {
         }
         HandsOnLevel level = decision.handsOn();
         HandsOnState state = pending.handsOn();
-        boolean finished = state.phase() == HandsOnState.Phase.FINISHED;
+        if (revealing && state.results().size() < revealTo) {
+            // The state moved on under the reveal (a refresh, a resolved turn): show it as it is.
+            revealing = false;
+        }
+        boolean finished = state.phase() == HandsOnState.Phase.FINISHED && !revealing;
         roundChip.clearChildren();
         roundChip.setBackground(ui.solid(Theme.SURFACE_CARD));
         roundChip.pad(9f, 16f, 9f, 16f);
         roundChip.add(ui.label(finished ? "CAMPAIGN OVER" : ("Round " + state.round() + " of " + level.rounds())
             .toUpperCase(Locale.ROOT), Theme.TextStyle.LABEL, Theme.NAVY));
 
-        content.add(objectiveBar(level, decision, state)).padBottom(Theme.SPACE_4).row();
+        content.add(objectiveBar(level, decision, revealing ? beforeHidden(state) : state)).padBottom(Theme.SPACE_4)
+            .row();
         Table grid = new Table();
         grid.top();
         grid.add(commandTable(level, state)).width(0f).expandX().fillX().fillY().top().padRight(Theme.SPACE_4);
@@ -284,7 +338,7 @@ public final class HandsOnScreen extends ChromeScreen {
         card.pad(0f, 0f, 0f, 0f);
         card.top();
         card.defaults().growX();
-        boolean busy = state.phase() != HandsOnState.Phase.PLANNING || showingRound > 0;
+        boolean busy = state.phase() != HandsOnState.Phase.PLANNING || showingRound > 0 || revealing;
         Table head = new Table();
         head.pad(10f, 0f, 8f, 16f);
         head.add().width(84f);
@@ -398,7 +452,7 @@ public final class HandsOnScreen extends ChromeScreen {
         card.top();
         card.defaults().growX().padBottom(12f);
         boolean awaiting = state.phase() == HandsOnState.Phase.AWAITING_RESIST;
-        boolean results = awaiting || showingRound > 0;
+        boolean results = awaiting || showingRound > 0 || revealing;
         List<String> queue = results ? state.results().stream().map(HandsOnState.Slot::command).toList()
             : state.queue();
         List<String> shown = awaiting ? state.queue() : queue;
@@ -422,11 +476,13 @@ public final class HandsOnScreen extends ChromeScreen {
         Table foot = new Table();
 
         foot.add(new Image(ui.solid(Theme.NAVY))).colspan(2).height(Theme.BORDER_THIN).growX().padBottom(12f).row();
-        String round = showingRound > 0 ? "Round " + showingRound + " done" : "Round " + state.round() + " of "
-            + level.rounds();
+        String round = revealing ? "Round " + state.resultsRound() + " running" : showingRound > 0
+            ? "Round " + showingRound + " done" : "Round " + state.round() + " of " + level.rounds();
         foot.add(ui.label(round.toUpperCase(Locale.ROOT), Theme.TextStyle.EYEBROW, Theme.INK)).expandX().left();
         TextButton confirm;
-        if (showingRound > 0) {
+        if (revealing) {
+            confirm = actionButton("Skip · Space", Theme.ButtonKind.SECONDARY, this::skipReveal);
+        } else if (showingRound > 0) {
             confirm = actionButton("Plan round " + state.round(), Theme.ButtonKind.PRIMARY, () -> {
                 showingRound = 0;
                 rebuild();
@@ -453,12 +509,16 @@ public final class HandsOnScreen extends ChromeScreen {
             return slot;
         }
         HandsOnLevel.Command command = level.command(shown.get(index)).orElseThrow();
-        HandsOnState.Slot result = results && index < state.results().size() ? state.results().get(index) : null;
-        boolean waitingFail = awaiting && index == state.slot();
-        boolean waitsBehind = awaiting && index > state.slot();
+        // While the round is revealed, a slot not yet shown is still queued, and the next one rolls.
+        int shownUpTo = revealing ? revealed : Integer.MAX_VALUE;
+        boolean rolling = revealing && !holding && index == revealed;
+        HandsOnState.Slot result = results && index < state.results().size() && index < shownUpTo
+            ? state.results().get(index) : null;
+        boolean waitingFail = awaiting && index == state.slot() && index < shownUpTo;
+        boolean waitsBehind = awaiting && index > state.slot() && !revealing;
         Color border = waitingFail || result != null && result.rolled() == HandsOnState.Roll.FAIL && !result.resisted()
             ? Theme.DANGER : result != null && result.rolled() == HandsOnState.Roll.EXCEPTIONAL ? Theme.SUCCESS
-            : result != null ? Theme.NAVY : Theme.NAVY_BORDER;
+            : result != null || rolling ? Theme.NAVY : Theme.NAVY_BORDER;
         slot.setBackground(ui.rect(Theme.SURFACE_CARD, border, border == Theme.NAVY_BORDER ? Theme.BORDER_THIN
             : Theme.BORDER_EMPHASIS));
         slot.pad(12f, 14f, 12f, 14f);
@@ -485,7 +545,7 @@ public final class HandsOnScreen extends ChromeScreen {
         }
         words.add(ui.label(line, Theme.TextStyle.CAPTION, Theme.INK_MUTED));
         slot.add(words).expandX().fillX().left();
-        String badge = waitingFail ? "Failed −1" : HandsOnView.badge(result, waitsBehind);
+        String badge = waitingFail ? "Failed −1" : rolling ? "Running…" : HandsOnView.badge(result, waitsBehind);
         slot.add(badge(badge)).right().top();
         if (waitingFail) {
             slot.row();
@@ -541,7 +601,12 @@ public final class HandsOnScreen extends ChromeScreen {
             .percentWidth(done / 100f, bar));
         bar.add(new Image(ui.solid(Theme.SUCCESS))).height(8f).width(com.badlogic.gdx.scenes.scene2d.ui.Value
             .percentWidth(exceptional / 100f, bar));
-        odds.add(bar).padBottom(6f).row();
+        // The bar sits in a taller strip, so the needle can stand above and below it.
+        Table strip = new Table();
+        strip.add(bar).growX().height(8f);
+        com.badlogic.gdx.scenes.scene2d.ui.Stack gauge = new com.badlogic.gdx.scenes.scene2d.ui.Stack(strip,
+            new Needle(state, fail / 100f, exceptional / 100f));
+        odds.add(gauge).height(24f).padBottom(6f).row();
         MissionComponent component = session.catalog().missionComponent(componentId).orElseThrow();
         SetSpecialist lead = HandsOnView.lead(session.state(), component);
         odds.add(ui.paragraph("Each command rolls: " + fail + " % fail (−1 underlined output) · " + done + " % done · "
@@ -616,17 +681,260 @@ public final class HandsOnScreen extends ChromeScreen {
     // ---- Steps
 
     private void step(RdDecisions.HandsOnStep step, String command) {
-        int roundBefore = session.state().getPendingDecision() == null ? 0
-            : session.state().getPendingDecision().handsOn().round();
+        skipReveal();
+        HandsOnState before = session.state().getPendingDecision() == null ? null
+            : session.state().getPendingDecision().handsOn();
+        int roundBefore = before == null ? 0 : before.round();
         submit(new HandsOnAction(step, command), result -> {
             PendingDecision pending = session.state().getPendingDecision();
-            if (pending != null && pending.handsOn() != null && pending.handsOn().phase()
-                    == HandsOnState.Phase.PLANNING && pending.handsOn().round() > roundBefore) {
+            HandsOnState after = pending == null ? null : pending.handsOn();
+            if (after == null || before == null) {
+                return;
+            }
+            if (after.phase() == HandsOnState.Phase.PLANNING && after.round() > roundBefore) {
                 // A round ran: show its results until the player moves on.
                 showingRound = roundBefore;
-                rebuild();
+            }
+            // Confirm runs the round from its first slot, an answer to a fail from the slot after it.
+            int from = step == RdDecisions.HandsOnStep.CONFIRM ? 0
+                : step == RdDecisions.HandsOnStep.ACCEPT || step == RdDecisions.HandsOnStep.RESIST ? before.slot() + 1
+                : -1;
+            if (from >= 0 && after.results().size() > from) {
+                revealing = true;
+                holding = false;
+                revealed = from;
+                revealTo = after.results().size();
+                revealClock = 0f;
+                startTense();
+            }
+            rebuild();
+        });
+    }
+
+    /** Shows the rest of the round at once. */
+    private void skipReveal() {
+        if (revealing) {
+            revealing = false;
+            fadeTense();
+            rebuild();
+        }
+    }
+
+    /**
+     * Moves the reveal on by a frame: a slot's motion, then its result held a moment, then the next.
+     *
+     * @param delta the frame's seconds
+     */
+    private void advanceReveal(float delta) {
+        if (!revealing) {
+            return;
+        }
+        HandsOnState state = session.state().getPendingDecision().handsOn();
+        revealClock += delta;
+        if (!holding && revealClock >= motion(state, revealed)) {
+            if (rolls(state, revealed)) {
+                sting(state.results().get(revealed).rolled());
+            }
+            revealed++;
+            holding = true;
+            revealClock = 0f;
+            Gdx.app.postRunnable(this::rebuild);
+        } else if (holding && revealClock >= (rolls(state, revealed - 1) ? NEEDLE_HOLD : NO_ROLL_STEP)) {
+            holding = false;
+            revealClock = 0f;
+            if (revealed >= revealTo) {
+                revealing = false;
+                fadeTense();
+                Gdx.app.postRunnable(this::rebuild);
+            }
+        }
+    }
+
+    /** Whether a result's slot rolled at all. */
+    private static boolean rolls(HandsOnState state, int index) {
+        return index >= 0 && index < state.results().size()
+            && state.results().get(index).rolled() != HandsOnState.Roll.NONE;
+    }
+
+    /** How long a slot's motion runs before its result shows. */
+    private static float motion(HandsOnState state, int index) {
+        return rolls(state, index) ? NEEDLE_RISE + NEEDLE_SETTLE : NO_ROLL_STEP;
+    }
+
+    /** The puzzle as the objective bar shows it mid-reveal: without what the slots not yet shown made. */
+    private HandsOnState beforeHidden(HandsOnState state) {
+        Map<String, Integer> held = new java.util.LinkedHashMap<>(state.held());
+        for (int i = revealed; i < revealTo && i < state.results().size(); i++) {
+            state.results().get(i).gained().forEach((resource, amount) -> held.merge(resource, -amount,
+                Integer::sum));
+        }
+        return new HandsOnState(held, state.round(), List.of(), state.results(), state.resultsRound(),
+            HandsOnState.Phase.PLANNING, 0, state.rolls(), state.failChance(), state.exceptionalChance(), null);
+    }
+
+    @Override
+    public void render(float delta) {
+        super.render(delta);
+        if (tense != null && tenseFade >= 0f) {
+            tenseFade -= delta;
+            if (tenseFade <= 0f) {
+                stopTense();
+            } else {
+                tense.setVolume(TENSE_LEVEL * LaunchWindowGame.musicVolume() * tenseFade / TENSE_FADE);
+            }
+        }
+    }
+
+    @Override
+    public void hide() {
+        revealing = false;
+        stopTense();
+        stings.values().forEach(com.badlogic.gdx.audio.Sound::dispose);
+        stings.clear();
+        super.hide();
+    }
+
+    @Override
+    public void dispose() {
+        stopTense();
+        stings.values().forEach(com.badlogic.gdx.audio.Sound::dispose);
+        stings.clear();
+        super.dispose();
+    }
+
+    /** Starts the tense loop under a reveal, or keeps it going if it's still fading from the last. */
+    private void startTense() {
+        if (!LaunchWindowGame.soundOn()) {
+            return;
+        }
+        if (tense == null) {
+            try {
+                tense = Gdx.audio.newMusic(Gdx.files.internal(TENSE_LOOP));
+                tense.setLooping(true);
+                tense.play();
+            } catch (RuntimeException e) {
+                Gdx.app.error("Audio", "can't play " + TENSE_LOOP, e);
+                tense = null;
+                return;
+            }
+        }
+        tenseFade = -1f;
+        tense.setVolume(TENSE_LEVEL * LaunchWindowGame.musicVolume());
+    }
+
+    private void fadeTense() {
+        if (tense != null && tenseFade < 0f) {
+            tenseFade = TENSE_FADE;
+        }
+    }
+
+    private void stopTense() {
+        if (tense != null) {
+            tense.stop();
+            tense.dispose();
+            tense = null;
+        }
+        tenseFade = -1f;
+    }
+
+    /** Plays the sting for a settled roll: failure, success (a normal result) or exceptional. */
+    private void sting(HandsOnState.Roll roll) {
+        if (!LaunchWindowGame.soundOn()) {
+            return;
+        }
+        com.badlogic.gdx.audio.Sound sound = stings.computeIfAbsent(roll, r -> {
+            String file = "audio/handson/" + switch (r) {
+                case FAIL -> "failure";
+                case EXCEPTIONAL -> "exceptional";
+                default -> "success";
+            } + ".ogg";
+            try {
+                return Gdx.audio.newSound(Gdx.files.internal(file));
+            } catch (RuntimeException e) {
+                Gdx.app.error("Audio", "can't play " + file, e);
+                return null;
             }
         });
+        if (sound != null) {
+            sound.play(STING_LEVEL * LaunchWindowGame.effectsVolume());
+        }
+    }
+
+    /**
+     * The needle over the odds bar while a round's slots resolve: from rest at the left it swings up past
+     * the middle, then rings down onto the slot's roll with a little noise, like a measuring instrument.
+     * The client never sees the drawn number, only the roll, so where in its segment it settles is made up
+     * from the round and the slot. Hidden when nothing rolls.
+     */
+    private final class Needle extends com.badlogic.gdx.scenes.scene2d.ui.Widget {
+
+        private final HandsOnState state;
+        private final float fail;
+        private final float exceptional;
+
+        Needle(HandsOnState state, float fail, float exceptional) {
+            this.state = state;
+            this.fail = fail;
+            this.exceptional = exceptional;
+            setTouchable(Touchable.disabled);
+        }
+
+        @Override
+        public void act(float delta) {
+            super.act(delta);
+            advanceReveal(delta);
+        }
+
+        @Override
+        public void draw(com.badlogic.gdx.graphics.g2d.Batch batch, float parentAlpha) {
+            int index = holding ? revealed - 1 : revealed;
+            if (!revealing || !rolls(state, index)) {
+                return;
+            }
+            HandsOnState.Roll roll = state.results().get(index).rolled();
+            java.util.Random random = new java.util.Random(state.resultsRound() * 7919L + index * 31L + 17L);
+            float target = target(roll, 0.2f + 0.6f * random.nextFloat());
+            float peak = 0.55f + 0.4f * random.nextFloat();
+            float phase = random.nextFloat() * 6.283f;
+            float at = holding ? target : position(revealClock, target, peak, phase);
+            Color color = !holding ? Theme.INK : roll == HandsOnState.Roll.FAIL ? Theme.DANGER
+                : roll == HandsOnState.Roll.EXCEPTIONAL ? Theme.SUCCESS : Theme.NAVY;
+            float x = getX() + getWidth() * at;
+            batch.setColor(1f, 1f, 1f, parentAlpha);
+            // A light outline keeps it readable over a segment of its own colour.
+            com.badlogic.gdx.scenes.scene2d.utils.Drawable halo = ui.solid(Theme.SURFACE_CARD);
+            com.badlogic.gdx.scenes.scene2d.utils.Drawable ink = ui.solid(color);
+            float left = Math.round(x);
+            halo.draw(batch, left - 2f, getY(), 4f, getHeight());
+            halo.draw(batch, left - 6f, getY() + getHeight() - 7f, 12f, 7f);
+            ink.draw(batch, left - 1f, getY(), 2f, getHeight());
+            ink.draw(batch, left - 5f, getY() + getHeight() - 6f, 10f, 5f);
+        }
+
+        /** Where in its roll's segment the needle settles, {@code within} from 0 to 1 across it. */
+        private float target(HandsOnState.Roll roll, float within) {
+            return switch (roll) {
+                case FAIL -> fail * within;
+                case EXCEPTIONAL -> 1f - exceptional + exceptional * within;
+                default -> fail + (1f - fail - exceptional) * within;
+            };
+        }
+
+        /** The needle at a moment: an eased rise to the peak, then a damped swing onto the target, plus noise. */
+        private float position(float t, float target, float peak, float phase) {
+            float x;
+            if (t < NEEDLE_RISE) {
+                float u = t / NEEDLE_RISE;
+                x = peak * (1f - (1f - u) * (1f - u));
+            } else {
+                float tau = t - NEEDLE_RISE;
+                x = target + (peak - target) * (float) (Math.exp(-SWING_DAMPING * tau)
+                    * Math.cos(2 * Math.PI * SWING_HZ * tau));
+            }
+            float fade = Math.max(0f, 1f - t / (NEEDLE_RISE + NEEDLE_SETTLE));
+            x += 0.025f * fade * (float) (Math.sin(t * 11 + phase) + 0.6 * Math.sin(t * 19 + 2 * phase));
+            return Math.max(0f, Math.min(1f, x));
+        }
     }
 
     /**
@@ -646,6 +954,7 @@ public final class HandsOnScreen extends ChromeScreen {
      * @param round the round
      */
     public void showRound(int round) {
+        revealing = false;
         showingRound = round;
         rebuild();
     }

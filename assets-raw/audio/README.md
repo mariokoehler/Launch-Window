@@ -36,6 +36,17 @@ best; the kept takes are renamed into this folder ("(n)" for a second take of a 
 voice runs to its last sample). A line that opens with "Flight," needs more seeds: the word is often
 swallowed.
 
+## The hands-on puzzle's sounds (2026-10-25)
+
+The user's Pixabay finds, each with a `.txt` beside it naming its page and uploader (credited in
+`assets/CREDITS.md`), for a round of the hands-on puzzle resolving command by command (`ui-spec.md` component 26):
+
+- `tense_loop.ogg`: under the round while its commands resolve, looping; fades out after the last.
+- `failure.ogg`, `success.ogg`, `exceptional.ogg`: on each command's result as its needle settles (a normal
+  result plays `success`).
+
+`make_handson_sounds.py` publishes them (level raised, as OGG at 44.1 kHz) into `assets/audio/handson/`.
+
 ## Sound effects: not generated
 
 Tried on 2026-10-15 with the user's Stable Audio 3 workflow (`Sound_Effects.json` in ComfyUI): 59 sounds of

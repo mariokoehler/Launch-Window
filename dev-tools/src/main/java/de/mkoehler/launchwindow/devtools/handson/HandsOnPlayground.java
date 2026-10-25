@@ -155,6 +155,10 @@ public final class HandsOnPlayground extends LaunchWindowGame {
         setScreen(chooser);
         String smoke = System.getProperty("handson.smoke");
         if (smoke != null) {
+            // Silent, but the sounds still load and play, so a missing file shows in the log.
+            LaunchWindowGame.useSoundInMemory(true);
+            LaunchWindowGame.setMusicVolume(0f);
+            LaunchWindowGame.setEffectsVolume(0f);
             smokeTest(Path.of(smoke));
         }
     }
@@ -280,8 +284,9 @@ public final class HandsOnPlayground extends LaunchWindowGame {
     /**
      * A check that the puzzle plays, for {@code -Dhandson.smoke=<folder>}: finds a seed on which random
      * play meets the first level's objective, then plays that run on the screen step by step as clicks
-     * would (through the gateway and back), saving the chooser, the first command queued, the first
-     * round's results, the result and the chooser again, then exits.
+     * would (through the gateway and back), saving the chooser, the first command queued, twelve frames of
+     * the first round resolving up to a fail, three of the rest after the fail is accepted, the round's
+     * results, the result and the chooser again, then exits.
      */
     private void smokeTest(Path folder) {
         Decisions.Decision first = decisions.decisions().stream().filter(d -> d.handsOn() != null).findFirst()
@@ -292,7 +297,8 @@ public final class HandsOnPlayground extends LaunchWindowGame {
         for (long seed = 1; seed < 2_000 && run == null; seed++) {
             Run tried = new Run(first.id(), component, 60, seed);
             plan = randomPlay(tried, first.handsOn(), new java.util.SplittableRandom(seed));
-            if (puzzle().result() != HandsOnState.Result.FAILURE) {
+            // A run that meets the objective, and whose first round stops at a fail to answer.
+            if (puzzle().result() != HandsOnState.Result.FAILURE && firstRoundFails(plan)) {
                 run = tried;
             }
         }
@@ -302,6 +308,8 @@ public final class HandsOnPlayground extends LaunchWindowGame {
         shots.add(() -> play(winning));
         boolean queuedOne = false;
         boolean roundShown = false;
+        boolean confirmedOne = false;
+        boolean answeredOne = false;
         RdDecisions.HandsOnStep previous = null;
         for (HandsOnAction action : plan) {
             if (action.getStep() == RdDecisions.HandsOnStep.QUEUE && previous != null
@@ -318,6 +326,15 @@ public final class HandsOnPlayground extends LaunchWindowGame {
                 shots.add(() -> grab(folder.resolve("smoke-planning.png")));
                 queuedOne = true;
             }
+            if (action.getStep() == RdDecisions.HandsOnStep.CONFIRM && !confirmedOne) {
+                // The first round resolves slot by slot up to its fail: frames of the needle, then time to finish.
+                confirmedOne = true;
+                waitAndGrab(shots, folder, "smoke-reveal-", 12, 30);
+            } else if (action.getStep() == RdDecisions.HandsOnStep.ACCEPT && !answeredOne) {
+                // The answer runs the rest of the round from the slot after the fail.
+                answeredOne = true;
+                waitAndGrab(shots, folder, "smoke-answer-", 3, 20);
+            }
             previous = action.getStep();
         }
         shots.add(() -> grab(folder.resolve("smoke-finished.png")));
@@ -332,6 +349,24 @@ public final class HandsOnPlayground extends LaunchWindowGame {
                     shot.run();
                 }
             }, 1.5f + i * 0.4f);
+        }
+    }
+
+    /** Whether a plan's first confirm stops at a fail the player answers. */
+    private static boolean firstRoundFails(List<HandsOnAction> plan) {
+        for (int i = 0; i + 1 < plan.size(); i++) {
+            if (plan.get(i).getStep() == RdDecisions.HandsOnStep.CONFIRM) {
+                return plan.get(i + 1).getStep() == RdDecisions.HandsOnStep.ACCEPT;
+            }
+        }
+        return false;
+    }
+
+    /** Waits {@code waits} shots of the smoke test, grabbing the first {@code frames} of them. */
+    private static void waitAndGrab(List<Runnable> shots, Path folder, String prefix, int frames, int waits) {
+        for (int wait = 1; wait <= waits; wait++) {
+            int frame = wait;
+            shots.add(frame <= frames ? () -> grab(folder.resolve(prefix + frame + ".png")) : () -> { });
         }
     }
 

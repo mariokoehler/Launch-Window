@@ -1086,7 +1086,26 @@ Writing them turned up two things for the rules, recorded in `design.md` §2.2(d
           the game's. The levels are read from `assets/content/decisions.json` before every run, so an edited
           level plays without a restart; on the puzzle, R plays the same seed again, N a new one, Esc goes
           back to the list. One engineer on the team, so never the good-chemistry odds. `-Dhandson.smoke=<folder>` (run with
-          `java` from `assets/`) plays a winning random run through the screen and saves five frames.
+          `java` from `assets/`) plays a winning random run through the screen and saves the chooser, six
+          frames of the first round resolving up to a fail, three after it's accepted, the round's results, the
+          result and the chooser again; silent, though the sounds load and play.
+        - **A round resolves slot by slot (the user's idea, 2026-10-25):** after Confirm, or an answer to a fail,
+          the round's commands show one at a time instead of all at once. The running slot has a navy border and
+          a "Running…" badge; a needle over the odds bar (now in a 24 px strip) rises from the left to a peak,
+          then rings down onto the slot's roll with fading noise, overshooting into the neighbouring segments on
+          the way (about 4 s, slowed at the user's word the same day: a 0.9 s rise, then a 0.75 Hz swing damped
+          over 3.1 s), and settles in the roll's colour (danger, navy, success) with a light outline.
+          The badge then shows, the objective and counters count that slot in, and 0.9 s later the next slot runs
+          (a slot that doesn't roll, Overtime, takes 0.3 s with no needle). The foot reads "Round 2 running" with
+          **Skip · Space**, which shows the rest at once; any step taken skips it too. A fail that waits for an
+          answer asks once its needle has settled; the result panel waits for the last slot. The rules have
+          already rolled and the client never sees the drawn number, only the roll, so where in its segment the
+          needle settles is made up from the round and the slot. **Sound** (the user's Pixabay finds, the same day):
+          a tense loop under the round from Confirm (music volume), fading out over 1.2 s after the last slot or
+          on Skip, and a sting as each needle settles, failure, success (a normal result) or exceptional
+          (effects volume); Overtime has none. Files in `assets/audio/handson/`, published by
+          `assets-raw/audio/make_handson_sounds.py`. Client only, in `HandsOnScreen`; unconfirmed: the timings,
+          the motion and the levels.
 
     **Help:** a "Decisions" topic, linked from the banner's eyebrow.
 
