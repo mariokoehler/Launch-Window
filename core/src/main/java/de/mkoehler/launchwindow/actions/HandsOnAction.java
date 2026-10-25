@@ -1,6 +1,5 @@
 package de.mkoehler.launchwindow.actions;
 
-import de.mkoehler.launchwindow.content.Decisions;
 import de.mkoehler.launchwindow.model.PlayerSnapshot;
 import de.mkoehler.launchwindow.persistence.ActionContext;
 import de.mkoehler.launchwindow.persistence.ActionResult;
@@ -78,7 +77,7 @@ public class HandsOnAction extends PlayerAction {
         if (step == null) {
             return new ActionResult(false, HandsOn.Outcome.WRONG_PHASE.name());
         }
-        String outcome = RdDecisions.handsOn(snapshot, context.catalog(), Decisions.standard(), step, commandId);
+        String outcome = RdDecisions.handsOn(snapshot, context.catalog(), context.catalog().rules().decisions(), step, commandId);
         return new ActionResult(outcome.equals(HandsOn.Outcome.DONE.name()), outcome);
     }
 }

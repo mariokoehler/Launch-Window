@@ -287,7 +287,7 @@ final class HandsOnChooser extends ScreenAdapter {
         play.addListener(clicked(this::playPicked));
         actions.add(play).height(38f).padRight(Theme.SPACE_4);
         actions.add(ui.paragraph("On the puzzle: R plays the same seed again, N a new seed, Esc or Back comes "
-            + "back here. The levels are read from assets/content/decisions.json before every run.",
+            + "back here. The levels are read from assets/content/standard/decisions.json before every run.",
             Theme.TextStyle.CAPTION, Theme.INK_MUTED)).expandX().fillX().left();
         card.add(actions);
         return card;

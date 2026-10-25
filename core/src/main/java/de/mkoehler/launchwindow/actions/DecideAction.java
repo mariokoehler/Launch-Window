@@ -1,6 +1,5 @@
 package de.mkoehler.launchwindow.actions;
 
-import de.mkoehler.launchwindow.content.Decisions;
 import de.mkoehler.launchwindow.model.PlayerSnapshot;
 import de.mkoehler.launchwindow.persistence.ActionContext;
 import de.mkoehler.launchwindow.persistence.ActionResult;
@@ -97,7 +96,7 @@ public class DecideAction extends PlayerAction {
 
     @Override
     public ActionResult apply(PlayerSnapshot snapshot, ActionContext context) {
-        RdDecisions.Outcome outcome = RdDecisions.decide(snapshot, context.catalog(), Decisions.standard(), optionId,
+        RdDecisions.Outcome outcome = RdDecisions.decide(snapshot, context.catalog(), context.catalog().rules().decisions(), optionId,
             personId, secondPersonId);
         // Starting a hands-on puzzle is a decision taken too.
         return new de.mkoehler.launchwindow.persistence.ActionResult(outcome == RdDecisions.Outcome.DECIDED

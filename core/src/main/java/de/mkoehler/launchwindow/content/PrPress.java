@@ -17,9 +17,9 @@ import java.util.random.RandomGenerator;
 
 /**
  * Press stories about an astronaut on PR duty ({@code design.md} &sect;2.2(c), user decision
- * 2026-10-06): now and then a tour makes the papers, for better or worse. The stories live in
- * {@code assets/content/pr-press.json}, outside the frozen content pack, so they can be rewritten
- * without touching a running game. A few are nods to real events ({@code design.md} &sect;1.1). A
+ * 2026-10-06): now and then a tour makes the papers, for better or worse. Their effects change the
+ * rules, so they are one of each pack's rules files in {@link ContentPackLoader#FILES}: hashed and frozen with each game's pack (review.md 2.2), read
+ * through the game's {@link ContentCatalog#rules()}. A few are nods to real events ({@code design.md} &sect;1.1). A
  * turn report stores a story's id; the client fills in the astronaut's name.
  *
  * @param stories every story
@@ -28,7 +28,7 @@ import java.util.random.RandomGenerator;
 @JsonIgnoreProperties({"_comment"})
 public record PrPress(List<Story> stories) {
 
-    /** The file's name, under the assets' {@code content/} folder. */
+    /** The file's name, in each pack's folder. */
     public static final String FILE = "pr-press.json";
 
     /** No stories: what a missing file reads as. */
@@ -173,15 +173,18 @@ public record PrPress(List<Story> stories) {
     }
 
     /**
-     * Returns the stories bundled with the game, read once from the classpath ({@code content/}).
+     * Returns the client's stories, for its turn report: the game's pack's, once a session installed
+     * them ({@link #setStandard}), else the standard pack's on the classpath, read once. The rules never
+     * read these: they go by the game's {@link ContentCatalog#rules()}.
      *
      * @return the stories, or {@link #EMPTY} if the file isn't on the classpath
      */
     public static PrPress standard() {
         PrPress loaded = standard;
         if (loaded == null) {
-            try (InputStream in = PrPress.class.getClassLoader().getResourceAsStream("content/" + FILE)) {
-                loaded = in == null ? EMPTY : new ObjectMapper().readValue(in, PrPress.class);
+            try (InputStream in = PrPress.class.getClassLoader().getResourceAsStream(
+                    "content/" + ContentPackLoader.CLIENT_DEFAULT_PACK + "/" + FILE)) {
+                loaded = in == null ? EMPTY : read(in);
             } catch (IOException e) {
                 throw new UncheckedIOException("Could not read " + FILE, e);
             }
@@ -198,11 +201,32 @@ public record PrPress(List<Story> stories) {
      * @throws UncheckedIOException if the file can't be read
      */
     public static PrPress load(Path file) {
-        try {
-            return new ObjectMapper().readValue(Files.readString(file), PrPress.class);
+        try (InputStream in = Files.newInputStream(file)) {
+            return read(in);
         } catch (IOException e) {
             throw new UncheckedIOException("Could not read " + file, e);
         }
+    }
+
+    /**
+     * Replaces the stories {@link #standard()} returns: the game's pack's, installed by the client's
+     * session, or a tool's own.
+     *
+     * @param press the stories
+     */
+    public static void setStandard(PrPress press) {
+        standard = Objects.requireNonNull(press, "press must not be null");
+    }
+
+    /**
+     * Reads the stories from a stream, as a pack's file.
+     *
+     * @param in the stream, left open
+     * @return the stories
+     * @throws IOException if it can't be read or isn't valid
+     */
+    public static PrPress read(InputStream in) throws IOException {
+        return new ObjectMapper().readValue(in, PrPress.class);
     }
 
     /**

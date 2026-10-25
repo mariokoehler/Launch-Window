@@ -38,8 +38,8 @@ public final class ContentCatalog {
     private final BuildingSchedule buildings;
     private final Map<String, Commercial> commercialsByProgramId;
     private final Map<String, Finding> findingsByGoalId;
-    private final Map<Archetype, java.util.Set<String>> reachableGoals =
-        new java.util.concurrent.ConcurrentHashMap<>();
+    private final RulesContent rules;
+    private final Map<Archetype, java.util.Set<String>> reachableGoals;
 
     /**
      * Builds and validates a catalog from the given content definitions.
@@ -140,6 +140,33 @@ public final class ContentCatalog {
     public ContentCatalog(List<ProgramCategory> categories, List<Program> programs,
             List<MissionConfiguration> missionConfigurations, List<MissionComponent> missionComponents,
             List<Goal> goals, BuildingSchedule buildings, List<Commercial> commercials, List<Finding> findings) {
+        this(categories, programs, missionConfigurations, missionComponents, goals, buildings, commercials, findings,
+            RulesContent.EMPTY);
+    }
+
+    /**
+     * Builds and validates a whole pack's catalog: the program tree, the building table, the commercial
+     * blocks, the findings, and the decisions, press stories and clients (review.md 2.2).
+     *
+     * @param categories            every program category
+     * @param programs              every program
+     * @param missionConfigurations every mission configuration
+     * @param missionComponents     every mission component
+     * @param goals                 every goal a step or modifier can reference
+     * @param buildings             the building table
+     * @param commercials           every program's commercial block, at most one per program
+     * @param findings              every finding, at most one per goal
+     * @param rules                 the decisions, press stories and clients
+     * @throws NullPointerException     if any argument is {@code null}
+     * @throws IllegalArgumentException if any list contains a duplicate id, or
+     *                                   any reference doesn't resolve
+     */
+    public ContentCatalog(List<ProgramCategory> categories, List<Program> programs,
+            List<MissionConfiguration> missionConfigurations, List<MissionComponent> missionComponents,
+            List<Goal> goals, BuildingSchedule buildings, List<Commercial> commercials, List<Finding> findings,
+            RulesContent rules) {
+        this.rules = Objects.requireNonNull(rules, "rules must not be null");
+        this.reachableGoals = new java.util.concurrent.ConcurrentHashMap<>();
         this.buildings = Objects.requireNonNull(buildings, "buildings must not be null");
         Objects.requireNonNull(findings, "findings must not be null");
         Objects.requireNonNull(commercials, "commercials must not be null");
@@ -159,6 +186,41 @@ public final class ContentCatalog {
         this.findingsByGoalId = indexById(findings, Finding::goalId, "Finding");
 
         validateReferences();
+    }
+
+    /** A copy of {@code from} with other rules content; the program tree is shared, already validated. */
+    private ContentCatalog(ContentCatalog from, RulesContent rules) {
+        this.categoriesById = from.categoriesById;
+        this.programsById = from.programsById;
+        this.missionConfigurationsById = from.missionConfigurationsById;
+        this.missionComponentsById = from.missionComponentsById;
+        this.goalsById = from.goalsById;
+        this.buildings = from.buildings;
+        this.commercialsByProgramId = from.commercialsByProgramId;
+        this.findingsByGoalId = from.findingsByGoalId;
+        this.reachableGoals = from.reachableGoals;
+        this.rules = Objects.requireNonNull(rules, "rules must not be null");
+    }
+
+    /**
+     * Returns the pack's decisions, press stories and commercial clients: what the rules read, never the
+     * classpath's copies.
+     *
+     * @return the rules content, {@link RulesContent#EMPTY} for a catalog built in code without any
+     */
+    public RulesContent rules() {
+        return rules;
+    }
+
+    /**
+     * Returns this catalog with other rules content, for tests and tools (a playout without the R&amp;D
+     * decisions, a test's own decisions).
+     *
+     * @param replacement the rules content
+     * @return the catalog
+     */
+    public ContentCatalog withRules(RulesContent replacement) {
+        return new ContentCatalog(this, replacement);
     }
 
     /**

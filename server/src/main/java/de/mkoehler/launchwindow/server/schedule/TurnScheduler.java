@@ -5,7 +5,6 @@ import de.mkoehler.launchwindow.content.FrontPageReactions;
 import de.mkoehler.launchwindow.rules.ReactionPrinter;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import de.mkoehler.launchwindow.content.CommercialClients;
 import de.mkoehler.launchwindow.content.FrontPages;
 import de.mkoehler.launchwindow.content.RandomEventRoster;
 import de.mkoehler.launchwindow.model.FrontPage;
@@ -410,7 +409,7 @@ public class TurnScheduler {
             ? mapper.readValue(previous.toFile(), ContractMarket.Settlement.class) : null;
         ContractMarket.Settlement settlement = ContractMarket.settle(withActions, startOfTurn,
             last == null ? List.of() : last.board(), last == null ? List.of() : last.usedClientIds(),
-            context.catalog(), CommercialClients.standard(), meta.getGameSeed(), Math.toIntExact(gameTurn));
+            context.catalog(), context.catalog().rules().clients(), meta.getGameSeed(), Math.toIntExact(gameTurn));
         Files.createDirectories(file.getParent());
         Path temp = Files.createTempFile(file.getParent(), "turn-", ".json.tmp");
         mapper.writerWithDefaultPrettyPrinter().writeValue(temp.toFile(), settlement);

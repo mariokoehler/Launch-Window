@@ -16,8 +16,9 @@ import java.util.random.RandomGenerator;
 
 /**
  * <p>The contract board's clients ({@code design.md} &sect;2.11): who orders a flight in each line,
- * per side, with a title and a short story. Flavour only, so it lives outside the hashed pack in
- * {@code content/commercial-clients.json}, like the press stories. Listings store client ids, so an
+ * per side, with a title and a short story. The market draws its listings from them, so they are one
+ * of each pack's rules files in {@link ContentPackLoader#FILES}: hashed and frozen with each game's pack (review.md 2.2), read
+ * through the game's {@link ContentCatalog#rules()}. Listings store client ids, so an
  * id is never renamed or reused.</p>
  *
  * <p>The Soviet side has no commercial market; its clients are ministries and institutes ordering a
@@ -28,7 +29,7 @@ import java.util.random.RandomGenerator;
  */
 public record CommercialClients(List<Client> clients) {
 
-    /** The file's name, under the assets' {@code content/} folder. */
+    /** The file's name, in each pack's folder. */
     public static final String FILE = "commercial-clients.json";
 
     /** No clients: what a missing file reads as. */
@@ -73,16 +74,18 @@ public record CommercialClients(List<Client> clients) {
     }
 
     /**
-     * Returns the clients bundled with the game, read once from the classpath ({@code content/}).
-     * Core's tests have none on the classpath; they set them with {@link #setStandard}.
+     * Returns the client's clients, for its screens: the game's pack's, once a session installed them
+     * ({@link #setStandard}), else the standard pack's on the classpath, read once. The rules never read
+     * these: they go by the game's {@link ContentCatalog#rules()}.
      *
      * @return the clients, or {@link #EMPTY} if the file isn't on the classpath
      */
     public static CommercialClients standard() {
         CommercialClients loaded = standard;
         if (loaded == null) {
-            try (InputStream in = CommercialClients.class.getClassLoader().getResourceAsStream("content/" + FILE)) {
-                loaded = in == null ? EMPTY : new ObjectMapper().readValue(in, CommercialClients.class);
+            try (InputStream in = CommercialClients.class.getClassLoader().getResourceAsStream(
+                    "content/" + ContentPackLoader.CLIENT_DEFAULT_PACK + "/" + FILE)) {
+                loaded = in == null ? EMPTY : read(in);
             } catch (IOException e) {
                 throw new UncheckedIOException("Could not read " + FILE, e);
             }
@@ -92,7 +95,8 @@ public record CommercialClients(List<Client> clients) {
     }
 
     /**
-     * Replaces the bundled clients, for tests and tools.
+     * Replaces the clients {@link #standard()} returns: the game's pack's, installed by the client's
+     * session, or a tool's own.
      *
      * @param clients the clients
      */
@@ -108,11 +112,22 @@ public record CommercialClients(List<Client> clients) {
      * @throws UncheckedIOException if the file can't be read
      */
     public static CommercialClients load(Path file) {
-        try {
-            return new ObjectMapper().readValue(Files.readString(file), CommercialClients.class);
+        try (InputStream in = Files.newInputStream(file)) {
+            return read(in);
         } catch (IOException e) {
             throw new UncheckedIOException("Could not read " + file, e);
         }
+    }
+
+    /**
+     * Reads the clients from a stream, as a pack's file.
+     *
+     * @param in the stream, left open
+     * @return the clients
+     * @throws IOException if it can't be read or isn't valid
+     */
+    public static CommercialClients read(InputStream in) throws IOException {
+        return new ObjectMapper().readValue(in, CommercialClients.class);
     }
 
     /**

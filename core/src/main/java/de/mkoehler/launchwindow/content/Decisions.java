@@ -19,9 +19,9 @@ import java.util.Optional;
 /**
  * The R&amp;D decisions the game can put to a player ({@code ui-spec.md} component 26, the user's
  * idea, 2026-10-10): each a story about one component, two to four options, what each shows in
- * advance, a default, and outcomes the rules draw from when the player decides. Read from
- * {@code content/decisions.json} on the classpath; outside {@link ContentPackLoader#FILES} (not hashed,
- * not frozen), like the stories. Ids are stored in saved state and turn reports: never renamed or
+ * advance, a default, and outcomes the rules draw from when the player decides. One of each pack's
+ * rules files in {@link ContentPackLoader#FILES}: hashed and frozen with each game's pack (review.md 2.2), read
+ * through the game's {@link ContentCatalog#rules()}. Ids are stored in saved state and turn reports: never renamed or
  * reused.
  *
  * <p>Sizes are relative so a decision weighs the same on any component: a reliability effect is in
@@ -33,7 +33,7 @@ import java.util.Optional;
 @JsonIgnoreProperties({"_comment"})
 public record Decisions(List<Decision> decisions) {
 
-    /** The decisions' file, under {@code content/}. */
+    /** The decisions' file, in each pack's folder. */
     public static final String FILE = "decisions.json";
 
     /** No decisions. */
@@ -301,7 +301,9 @@ public record Decisions(List<Decision> decisions) {
     }
 
     /**
-     * Returns the decisions shipped on the classpath, read once.
+     * Returns the client's decisions, for its screens: the game's pack's, once a session installed them
+     * ({@link #setStandard}), else the standard pack's on the classpath, read once. The rules never read
+     * these: they go by the game's {@link ContentCatalog#rules()}.
      *
      * @return the decisions, {@link #EMPTY} if the file is missing
      * @throws UncheckedIOException if the file can't be read
@@ -309,8 +311,9 @@ public record Decisions(List<Decision> decisions) {
     public static Decisions standard() {
         Decisions loaded = standard;
         if (loaded == null) {
-            try (InputStream in = Decisions.class.getClassLoader().getResourceAsStream("content/" + FILE)) {
-                loaded = in == null ? EMPTY : new ObjectMapper().readValue(in, Decisions.class);
+            try (InputStream in = Decisions.class.getClassLoader().getResourceAsStream(
+                    "content/" + ContentPackLoader.CLIENT_DEFAULT_PACK + "/" + FILE)) {
+                loaded = in == null ? EMPTY : read(in);
             } catch (IOException e) {
                 throw new UncheckedIOException("Could not read " + FILE, e);
             }
@@ -320,8 +323,8 @@ public record Decisions(List<Decision> decisions) {
     }
 
     /**
-     * Replaces the decisions {@link #standard()} returns, for tests and tools that run without the
-     * assets on the classpath (core's tests, the playout bots).
+     * Replaces the decisions {@link #standard()} returns: the game's pack's, installed by the client's
+     * session, or a tool's own.
      *
      * @param decisions the decisions
      */
@@ -338,10 +341,21 @@ public record Decisions(List<Decision> decisions) {
      */
     public static Decisions load(Path file) {
         try (InputStream in = Files.newInputStream(file)) {
-            return new ObjectMapper().readValue(in, Decisions.class);
+            return read(in);
         } catch (IOException e) {
             throw new UncheckedIOException("Could not read " + file, e);
         }
+    }
+
+    /**
+     * Reads the decisions from a stream, as a pack's file.
+     *
+     * @param in the stream, left open
+     * @return the decisions
+     * @throws IOException if it can't be read or isn't valid
+     */
+    public static Decisions read(InputStream in) throws IOException {
+        return new ObjectMapper().readValue(in, Decisions.class);
     }
 
     /**

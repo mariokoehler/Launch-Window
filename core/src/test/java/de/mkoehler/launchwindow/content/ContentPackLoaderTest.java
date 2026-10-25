@@ -144,6 +144,9 @@ class ContentPackLoaderTest {
         write(ContentPackLoader.GOALS_FILE, goals);
         write(ContentPackLoader.COMMERCIAL_FILE, List.of());
         write(ContentPackLoader.FINDINGS_FILE, List.of());
+        write(ContentPackLoader.DECISIONS_FILE, Decisions.EMPTY);
+        write(ContentPackLoader.PR_PRESS_FILE, PrPress.EMPTY);
+        write(ContentPackLoader.COMMERCIAL_CLIENTS_FILE, CommercialClients.EMPTY);
     }
 
     private void write(String fileName, Object value) throws IOException {

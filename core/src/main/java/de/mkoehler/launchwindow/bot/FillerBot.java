@@ -206,7 +206,7 @@ public final class FillerBot {
             if (pending == null || pending.decided()) {
                 return;
             }
-            Decisions.Decision decision = Decisions.standard().byId(pending.decisionId()).orElse(null);
+            Decisions.Decision decision = catalog.rules().decisions().byId(pending.decisionId()).orElse(null);
             MissionComponent component = catalog.missionComponent(pending.componentId()).orElse(null);
             if (decision == null || component == null) {
                 return;

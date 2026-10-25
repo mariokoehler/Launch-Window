@@ -226,12 +226,29 @@ public final class ContentPackPlayouts {
     }
 
     /**
-     * Creates a harness for one content pack.
+     * Creates a harness for one content pack, playing without the R&amp;D decisions.
      *
      * @param catalog the pack
      * @param bot     how the bot plays
      */
     public ContentPackPlayouts(ContentCatalog catalog, Bot bot) {
+        this(catalog, bot, false);
+    }
+
+    /**
+     * Creates a harness for one content pack. It plays as every measurement so far has: no press stories
+     * on PR duty and no commercial clients (the market here is simulated), and the R&amp;D decisions only
+     * when asked for. They came off the classpath, which dev-tools doesn't have, until they joined the
+     * pack (review.md 2.2).
+     *
+     * @param catalog   the pack
+     * @param bot       how the bot plays
+     * @param decisions whether the pack's R&amp;D decisions come up
+     */
+    public ContentPackPlayouts(ContentCatalog catalog, Bot bot, boolean decisions) {
+        catalog = catalog.withRules(decisions
+            ? de.mkoehler.launchwindow.content.RulesContent.EMPTY.withDecisions(catalog.rules().decisions())
+            : de.mkoehler.launchwindow.content.RulesContent.EMPTY);
         this.bot = bot;
         this.ahead = bot != Bot.PLAIN;
         this.sides = bot == Bot.SIDE_MISSIONS || bot == Bot.SMART && Boolean.parseBoolean(System.getProperty("bot.sides", "true"));
@@ -680,7 +697,7 @@ public final class ContentPackPlayouts {
         if (pending == null || pending.decided()) {
             return;
         }
-        var decision = de.mkoehler.launchwindow.content.Decisions.standard().byId(pending.decisionId()).orElse(null);
+        var decision = catalog.rules().decisions().byId(pending.decisionId()).orElse(null);
         var component = catalog.missionComponent(pending.componentId()).orElse(null);
         if (decision == null || component == null) {
             return;
@@ -700,14 +717,14 @@ public final class ContentPackPlayouts {
             default -> { }
         }
         var outcome = de.mkoehler.launchwindow.rules.RdDecisions.decide(snapshot, catalog,
-            de.mkoehler.launchwindow.content.Decisions.standard(), option.id(), person, second);
+            catalog.rules().decisions(), option.id(), person, second);
         if (outcome == de.mkoehler.launchwindow.rules.RdDecisions.Outcome.STARTED) {
             playHandsOn(snapshot, decision);
             return;
         }
         if (outcome != de.mkoehler.launchwindow.rules.RdDecisions.Outcome.DECIDED) {
             de.mkoehler.launchwindow.rules.RdDecisions.decide(snapshot, catalog,
-                de.mkoehler.launchwindow.content.Decisions.standard(), decision.defaultOption(), null, null);
+                catalog.rules().decisions(), decision.defaultOption(), null, null);
         }
     }
 
@@ -717,7 +734,7 @@ public final class ContentPackPlayouts {
      * shifts last. Counts the results in {@link #handsOnResults}.
      */
     private void playHandsOn(PlayerSnapshot snapshot, de.mkoehler.launchwindow.content.Decisions.Decision decision) {
-        var decisions = de.mkoehler.launchwindow.content.Decisions.standard();
+        var decisions = catalog.rules().decisions();
         for (int guard = 0; guard < 100 && snapshot.getPendingDecision().handsOnInProgress(); guard++) {
             var state = snapshot.getPendingDecision().handsOn();
             if (state.phase() == de.mkoehler.launchwindow.model.HandsOnState.Phase.AWAITING_RESIST) {
@@ -2452,11 +2469,7 @@ public final class ContentPackPlayouts {
         // "decisions" as a third argument plays with the R&D decisions (ui-spec.md component 26); without
         // it there are none, so the earlier numbers stay comparable.
         boolean withDecisions = args.length > 2 && args[2].equals("decisions");
-        if (withDecisions) {
-            de.mkoehler.launchwindow.content.Decisions.setStandard(de.mkoehler.launchwindow.content.Decisions.load(
-                Path.of("assets", "content", de.mkoehler.launchwindow.content.Decisions.FILE)));
-        }
-        ContentPackPlayouts harness = new ContentPackPlayouts(catalog, bot);
+        ContentPackPlayouts harness = new ContentPackPlayouts(catalog, bot, withDecisions);
         int seasons = harness.declaredGoals().equals(MOON_DECLARED_GOALS) ? 240 : 80;
         Report report = harness.run(200, seasons, Long.getLong("bot.seed", 42L));
         System.out.println(report.games() + " games, " + report.seasons() + " seasons max, declared goals "

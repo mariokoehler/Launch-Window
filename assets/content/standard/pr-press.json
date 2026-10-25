@@ -1,0 +1,356 @@
+{
+  "_comment": "Press stories about astronauts on PR duty (design.md 2.2(c)). '{name}' is the astronaut's name. 'tone' GOOD pays a bonus, BAD costs prestige. Optional 'effects' do more: each has a 'kind' (PrPress.EffectKind says what 'target', 'amount' and 'seasons' mean for it). Stories must read for either agency and any astronaut: no pronouns, no country-specific terms, nothing the rules don't model, and nothing that can't happen twice. A few are nods to real events, listed in design.md 1.1. Ids are stored in turn reports: never rename or reuse one.",
+  "stories": [
+    {
+      "id": "do-good-work",
+      "tone": "GOOD",
+      "headline": "{name}'s three-word speech",
+      "text": "Asked for a few words at the rocket plant, {name} says only \"Do good work.\" By the end of the week the workers have painted it on banners above the assembly line.",
+      "effects": [
+        {
+          "kind": "RD_RESULTS",
+          "amount": 1.1,
+          "seasons": 2
+        }
+      ]
+    },
+    {
+      "id": "both-hands",
+      "tone": "GOOD",
+      "headline": "{name} raises both hands",
+      "text": "Asked at a press conference who expects to come back from space, every astronaut raises a hand. {name} raises two, and that photo makes every front page.",
+      "effects": [
+        {
+          "kind": "GROUP_MORALE",
+          "target": "ASTRONAUT",
+          "amount": 3
+        }
+      ]
+    },
+    {
+      "id": "open-car-in-the-rain",
+      "tone": "GOOD",
+      "headline": "{name} rides through the rain",
+      "text": "Offered a closed car in a downpour, {name} insists on the open one: if the crowds can stand in the rain, so can their guest. The soaked photos win the city over."
+    },
+    {
+      "id": "loose-at-the-ankle",
+      "tone": "GOOD",
+      "headline": "The walk the whole country watched",
+      "text": "Newsreels of {name}'s long walk down the red carpet show something flapping loose at one ankle the whole way. Viewers love it: their hero is one of them."
+    },
+    {
+      "id": "puppy-for-the-children",
+      "tone": "GOOD",
+      "headline": "A puppy from {name}",
+      "text": "{name} presents a puppy to a visiting leader's children. The agency's post room is buried under thousands of letters asking for one from the next litter."
+    },
+    {
+      "id": "family-on-the-cover",
+      "tone": "GOOD",
+      "headline": "{name}'s family on the cover",
+      "text": "A glossy magazine puts {name}'s family on its cover, with a long story about life at home. The issue sells out, and the editors ask for more.",
+      "effects": [
+        {
+          "kind": "FUNDS",
+          "amount": 0.1
+        }
+      ]
+    },
+    {
+      "id": "paintings-on-stamps",
+      "tone": "GOOD",
+      "headline": "{name}'s paintings on stamps",
+      "text": "{name} paints space scenes in spare hours, and the post office prints a set of them as stamps. Collectors queue round the block."
+    },
+    {
+      "id": "village-school",
+      "tone": "GOOD",
+      "headline": "{name} visits a village school",
+      "text": "{name} spends an afternoon answering children's questions, the best being whether the Moon smells of anything. The teachers report a rush to join the science club."
+    },
+    {
+      "id": "every-letter-answered",
+      "tone": "GOOD",
+      "headline": "{name} answers every letter",
+      "text": "Word gets out that {name} replies to fan mail by hand, often late into the night. Sacks of new letters arrive on the next train.",
+      "effects": [
+        {
+          "kind": "ASTRONAUT_MORALE",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "id": "newborns-named",
+      "tone": "GOOD",
+      "headline": "Newborns named after {name}",
+      "text": "Registry offices report a run of babies named after {name}. One proud father brings twins to the next public appearance."
+    },
+    {
+      "id": "night-shift",
+      "tone": "GOOD",
+      "headline": "{name} on the night shift",
+      "text": "At a steelworks, {name} swaps the dress uniform for a hard hat and spends an hour with the night shift. The workers' newspaper prints the whole visit.",
+      "effects": [
+        {
+          "kind": "RUNNING_COSTS",
+          "amount": 0.95,
+          "seasons": 2
+        }
+      ]
+    },
+    {
+      "id": "quiz-for-charity",
+      "tone": "GOOD",
+      "headline": "{name} wins a quiz for charity",
+      "text": "On a television quiz, {name} sweeps the science round and gives the prize money to a children's hospital."
+    },
+    {
+      "id": "runway-closed",
+      "tone": "GOOD",
+      "headline": "Crowds close a runway for {name}",
+      "text": "So many people come to meet {name}'s plane that the airport closes a runway for an hour. The pictures run for days.",
+      "effects": [
+        {
+          "kind": "PRESTIGE_SHARE",
+          "amount": 1.0
+        }
+      ]
+    },
+    {
+      "id": "harvest-festival",
+      "tone": "GOOD",
+      "headline": "{name} drives a harvester",
+      "text": "At a harvest festival, {name} takes a turn on a combine harvester and cuts a dead straight row. Farmers who never cared about rockets now do."
+    },
+    {
+      "id": "old-pilots",
+      "tone": "GOOD",
+      "headline": "{name} salutes the old pilots",
+      "text": "{name} spends a day with veteran wartime aviators, listening far more than talking. Their association writes to the papers in praise.",
+      "effects": [
+        {
+          "kind": "HIRING_POOL",
+          "target": "ASTRONAUT",
+          "amount": 3,
+          "seasons": 2
+        }
+      ]
+    },
+    {
+      "id": "stuck-lift",
+      "tone": "GOOD",
+      "headline": "Stuck in a lift with {name}",
+      "text": "A hotel lift stalls for forty minutes with {name} and six strangers inside. All six give glowing interviews the next morning."
+    },
+    {
+      "id": "night-under-the-stars",
+      "tone": "GOOD",
+      "headline": "A night under the stars",
+      "text": "{name} leads a public evening at an observatory, pointing out the planets one by one. Thousands come, and the queue reaches the car park."
+    },
+    {
+      "id": "childrens-ward",
+      "tone": "GOOD",
+      "headline": "{name} at the children's ward",
+      "text": "{name} quietly visits a children's hospital, with no cameras invited. A nurse's letter to the paper tells the story anyway."
+    },
+    {
+      "id": "model-rockets",
+      "tone": "GOOD",
+      "headline": "Model rockets with {name}",
+      "text": "{name} judges a model rocket contest and launches the winning entry. Toy shops sell out of kits within the week."
+    },
+    {
+      "id": "in-their-own-language",
+      "tone": "GOOD",
+      "headline": "A warm welcome abroad",
+      "text": "On a tour abroad, {name} greets the crowd in its own language: a few practised sentences that bring the house down."
+    },
+    {
+      "id": "first-kick",
+      "tone": "GOOD",
+      "headline": "{name} kicks off the cup final",
+      "text": "{name} takes the ceremonial first kick at a packed stadium and gets a standing ovation from both ends."
+    },
+    {
+      "id": "credits-the-engineers",
+      "tone": "GOOD",
+      "headline": "{name} credits the engineers",
+      "text": "Asked about courage, {name} talks for ten minutes about the engineers and technicians instead. Their families cut the article out and pin it up at home.",
+      "effects": [
+        {
+          "kind": "GROUP_MORALE",
+          "target": "SET",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "id": "applications-soar",
+      "tone": "GOOD",
+      "headline": "Applications soar after {name}'s tour",
+      "text": "Engineering colleges report a jump in applications from every town {name} visited this season.",
+      "effects": [
+        {
+          "kind": "HIRING_POOL",
+          "target": "SET",
+          "amount": 3,
+          "seasons": 2
+        }
+      ]
+    },
+    {
+      "id": "radio-call-in",
+      "tone": "GOOD",
+      "headline": "{name} takes the listeners' calls",
+      "text": "A late-night radio call-in with {name} runs two hours over time. The switchboard never stops lighting up."
+    },
+    {
+      "id": "budget-delegation",
+      "tone": "GOOD",
+      "headline": "{name} charms the budget committee",
+      "text": "The people who set the agency's budget spend a day touring with {name}. They leave asking what the agency could do with a little more money.",
+      "effects": [
+        {
+          "kind": "FUNDING_RATE",
+          "amount": 0.05
+        }
+      ]
+    },
+    {
+      "id": "engineer-writes-in",
+      "tone": "GOOD",
+      "headline": "An engineer writes to {name}",
+      "text": "A fan letter to {name} from a brilliant engineer ends with a job application, and the SET Centre wants to meet them at once.",
+      "effects": [
+        {
+          "kind": "STANDOUT_CANDIDATE",
+          "target": "SET",
+          "amount": 1,
+          "seasons": 1
+        }
+      ]
+    },
+    {
+      "id": "supplier-adverts",
+      "tone": "GOOD",
+      "headline": "{name} stars in a supplier's adverts",
+      "text": "A supplier pays the agency well to put {name} in its adverts. The money is welcome; {name} hates every minute of the shoot.",
+      "effects": [
+        {
+          "kind": "FUNDS",
+          "amount": 0.05
+        },
+        {
+          "kind": "ASTRONAUT_MORALE",
+          "amount": -3
+        }
+      ]
+    },
+    {
+      "id": "fall-from-a-balcony",
+      "tone": "BAD",
+      "headline": "{name}'s holiday mishap",
+      "text": "{name} turns up after a seaside holiday with stitches over one eyebrow and a story about a balcony that nobody believes. The rumours do the rest."
+    },
+    {
+      "id": "bathroom-mirror",
+      "tone": "BAD",
+      "headline": "{name} slips at home",
+      "text": "Fixing a bathroom mirror, {name} slips and hits the tub, and spends the season's appearances dizzy and unsteady. The papers have fun with the astronaut who can't stand up straight.",
+      "effects": [
+        {
+          "kind": "ASTRONAUT_SKILL",
+          "target": "FITNESS",
+          "amount": -2
+        }
+      ]
+    },
+    {
+      "id": "station-patrol",
+      "tone": "BAD",
+      "headline": "{name} argues with a patrol",
+      "text": "A late evening ends with {name} arguing with a military patrol at a railway station, then refusing to apologise. The report travels up the chain of command.",
+      "effects": [
+        {
+          "kind": "ASTRONAUT_MORALE",
+          "amount": -5
+        }
+      ]
+    },
+    {
+      "id": "empty-hall",
+      "tone": "BAD",
+      "headline": "{name} never arrives",
+      "text": "A delayed train leaves a full hall waiting for {name}, who never shows up. The local paper's headline is not kind."
+    },
+    {
+      "id": "sports-car",
+      "tone": "BAD",
+      "headline": "{name}'s shiny new car",
+      "text": "{name} is photographed in a gleaming sports car, a gift from a dealer. Readers start asking what astronauts are paid, and why so much.",
+      "effects": [
+        {
+          "kind": "GROUP_MORALE",
+          "target": "SET",
+          "amount": -3
+        },
+        {
+          "kind": "GROUP_MORALE",
+          "target": "MISSION_CONTROL",
+          "amount": -3
+        }
+      ]
+    },
+    {
+      "id": "speeding",
+      "tone": "BAD",
+      "headline": "{name} stopped for speeding",
+      "text": "A police officer pulls {name} over at twice the limit on a country road. The officer is not impressed by the offer of an autograph."
+    },
+    {
+      "id": "says-too-much",
+      "tone": "BAD",
+      "headline": "{name} says too much",
+      "text": "In an unguarded moment, {name} tells reporters about a test that hasn't happened yet. The agency spends the week denying it."
+    },
+    {
+      "id": "asleep-on-stage",
+      "tone": "BAD",
+      "headline": "{name} nods off on stage",
+      "text": "Worn out by the tour, {name} falls asleep during a mayor's long speech, and a photographer catches the moment."
+    },
+    {
+      "id": "walks-out",
+      "tone": "BAD",
+      "headline": "{name} walks out",
+      "text": "Asked once too often about the dangers, {name} walks out of a press conference. The empty chair makes the front page."
+    },
+    {
+      "id": "souvenir-badges",
+      "tone": "BAD",
+      "headline": "{name} cashing in",
+      "text": "Badges and mugs with {name}'s face turn up in every kiosk, licensed without the agency's say. The papers call it cashing in."
+    },
+    {
+      "id": "wrong-town",
+      "tone": "BAD",
+      "headline": "{name} thanks the wrong town",
+      "text": "{name} warmly thanks the people of the next town over, to a crowd that does not laugh."
+    },
+    {
+      "id": "photographer-at-the-plant",
+      "tone": "BAD",
+      "headline": "A photographer follows {name} in",
+      "text": "A press photographer slips into the plant behind {name}'s party and snaps a component on the test bench. The team loses a season to security checks and paperwork.",
+      "effects": [
+        {
+          "kind": "RESEARCH_SETBACK",
+          "amount": 1
+        }
+      ]
+    }
+  ]
+}

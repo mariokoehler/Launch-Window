@@ -15,8 +15,6 @@ import de.mkoehler.launchwindow.model.PlayerSnapshot;
 import de.mkoehler.launchwindow.model.SetSkill;
 import de.mkoehler.launchwindow.model.SetSpecialist;
 import de.mkoehler.launchwindow.persistence.ActionContext;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.nio.file.Path;
@@ -39,19 +37,9 @@ class HandsOnDecisionTest {
 
     private static final ContentCatalog PACK = ContentPackLoader.load(Path.of("..", "assets", "content",
         "early-era"));
-    private static final Decisions DECISIONS = Decisions.load(Path.of("..", "assets", "content", Decisions.FILE));
+    private static final Decisions DECISIONS = Decisions.load(Path.of("..", "assets", "content", "standard", Decisions.FILE));
     private static final ActionContext CONTEXT = new ActionContext(PACK, BudgetSchedule.baspmClose());
     private static final String ROCKET = "r7-vostok";
-
-    @BeforeEach
-    void install() {
-        Decisions.setStandard(DECISIONS);
-    }
-
-    @AfterEach
-    void uninstall() {
-        Decisions.setStandard(Decisions.EMPTY);
-    }
 
     private static PlayerSnapshot agency() {
         PlayerSnapshot snapshot = new PlayerSnapshot("Vega Bureau", Archetype.SOVIET, 50_000, 250, 3_000, 1);

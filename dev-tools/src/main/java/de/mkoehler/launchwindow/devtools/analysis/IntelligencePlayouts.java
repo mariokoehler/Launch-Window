@@ -189,7 +189,9 @@ public final class IntelligencePlayouts {
      * @param args ignored
      */
     public static void main(String[] args) {
-        ContentCatalog catalog = ContentPackLoader.load(Path.of("assets", "content", "early-era"));
+        // As measured before the decisions and press stories joined the pack (review.md 2.2): without them.
+        ContentCatalog catalog = ContentPackLoader.load(Path.of("assets", "content", "early-era"))
+            .withRules(de.mkoehler.launchwindow.content.RulesContent.EMPTY);
         IntelligencePlayouts playouts = new IntelligencePlayouts(catalog);
         print("Four agencies at targets 0, 1, 2 and 3:", playouts.run(new int[] {0, 1, 2, 3}, 7L));
         print("Four agencies, all at target 3 (an arms race):", playouts.run(new int[] {3, 3, 3, 3}, 7L));

@@ -22,6 +22,7 @@ import de.mkoehler.launchwindow.client.connect.TurnReportResult;
 import de.mkoehler.launchwindow.client.screen.HandsOnScreen;
 import de.mkoehler.launchwindow.content.ContentCatalog;
 import de.mkoehler.launchwindow.content.ContentPackHash;
+import de.mkoehler.launchwindow.content.ContentPackLoader;
 import de.mkoehler.launchwindow.content.Decisions;
 import de.mkoehler.launchwindow.content.MissionComponent;
 import de.mkoehler.launchwindow.model.Archetype;
@@ -47,7 +48,7 @@ import java.util.function.Consumer;
  * server or a game to wait in for the decision to come up: pick a level, the component it runs on, the
  * lead engineer's skill and a seed, and the client's own {@link HandsOnScreen} plays it, every step
  * applied here by the rules the server runs ({@link RdDecisions#handsOn}). The levels are read from
- * {@code assets/content/decisions.json} before every run, so a level edited a minute ago plays without a
+ * {@code assets/content/standard/decisions.json} before every run, so a level edited a minute ago plays without a
  * restart. On the puzzle's screen, R plays the same seed again, N a new one, and Esc returns to the list.
  *
  * <p>Run it with {@code mvn -pl dev-tools compile exec:exec@handson} (core installed first), which runs it
@@ -97,7 +98,7 @@ public final class HandsOnPlayground extends LaunchWindowGame {
      * @param args none
      */
     public static void main(String[] args) throws ReflectiveOperationException, java.io.IOException {
-        if (HandsOnPlayground.class.getClassLoader().getResource("content/" + Decisions.FILE) != null) {
+        if (HandsOnPlayground.class.getClassLoader().getResource("content/" + ContentPackLoader.CLIENT_DEFAULT_PACK + "/" + Decisions.FILE) != null) {
             launch();
             return;
         }
@@ -127,12 +128,12 @@ public final class HandsOnPlayground extends LaunchWindowGame {
     private static Path findAssets() {
         for (String candidate : List.of(".", "assets", "../assets")) {
             Path path = Path.of(candidate).toAbsolutePath().normalize();
-            if (Files.exists(path.resolve("content").resolve(Decisions.FILE))) {
+            if (Files.exists(path.resolve("content").resolve(ContentPackLoader.CLIENT_DEFAULT_PACK).resolve(Decisions.FILE))) {
                 return path;
             }
         }
         throw new IllegalStateException("Run it from the repository or its assets folder: no "
-            + "content/" + Decisions.FILE + " found.");
+            + "content/" + ContentPackLoader.CLIENT_DEFAULT_PACK + "/" + Decisions.FILE + " found.");
     }
 
     @Override
@@ -169,7 +170,8 @@ public final class HandsOnPlayground extends LaunchWindowGame {
      * @return the decisions
      */
     Decisions reloadDecisions() {
-        decisions = Decisions.load(assets.resolve("content").resolve(Decisions.FILE));
+        decisions = Decisions.load(assets.resolve("content").resolve(ContentPackLoader.CLIENT_DEFAULT_PACK)
+            .resolve(Decisions.FILE));
         // The screen and its view read the levels through the standard decisions.
         Decisions.setStandard(decisions);
         return decisions;

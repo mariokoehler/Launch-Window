@@ -5,11 +5,14 @@ import de.mkoehler.launchwindow.client.connect.GameInfo;
 import de.mkoehler.launchwindow.client.connect.ServerResult;
 import de.mkoehler.launchwindow.client.view.ContentNames;
 import de.mkoehler.launchwindow.client.view.MissionDraft;
+import de.mkoehler.launchwindow.content.CommercialClients;
 import de.mkoehler.launchwindow.content.ContentCatalog;
 import de.mkoehler.launchwindow.content.ContentPackHash;
 import de.mkoehler.launchwindow.content.ContentPackLoader;
 import de.mkoehler.launchwindow.content.ContentStrings;
+import de.mkoehler.launchwindow.content.Decisions;
 import de.mkoehler.launchwindow.content.MissionConfiguration;
+import de.mkoehler.launchwindow.content.PrPress;
 import de.mkoehler.launchwindow.model.FrontPage;
 import de.mkoehler.launchwindow.net.messages.ArchiveUnlock;
 import de.mkoehler.launchwindow.model.PlayerSnapshot;
@@ -95,6 +98,10 @@ public final class ClientSession {
         PackStatus status = hash.equals(gameInfo.response().contentPackHash()) ? PackStatus.MATCH : PackStatus.DIFFERENT;
         // The display text is the client's own bundled copy, never part of the frozen pack (ContentStrings).
         ContentNames.install(ContentStrings.loadFromClasspath(prefix, classLoader), catalog);
+        // The screens read the decisions, press stories and clients of the pack the game plays.
+        Decisions.setStandard(catalog.rules().decisions());
+        PrPress.setStandard(catalog.rules().press());
+        CommercialClients.setStandard(catalog.rules().clients());
         return new ClientSession(credentials, catalog, status, state, gameInfo);
     }
 

@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class CommercialClientsTest {
 
     private static final CommercialClients CLIENTS =
-        CommercialClients.load(Path.of("..", "assets", "content", CommercialClients.FILE));
+        CommercialClients.load(Path.of("..", "assets", "content", "standard", CommercialClients.FILE));
 
     @Test
     void everyLineASideFliesHasClientsForIt() {

@@ -206,7 +206,7 @@ class PrDutyTest {
      */
     @Test
     void theBundledPressStoriesAreWellFormed() {
-        PrPress press = PrPress.load(Path.of("..", "assets", "content", PrPress.FILE));
+        PrPress press = PrPress.load(Path.of("..", "assets", "content", "standard", PrPress.FILE));
         Set<String> ids = new HashSet<>();
         press.stories().forEach(story -> assertTrue(ids.add(story.id()), story.id()));
         assertFalse(press.stories().stream().noneMatch(story -> story.tone() == PrPress.Tone.GOOD));

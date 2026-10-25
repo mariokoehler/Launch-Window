@@ -50,16 +50,29 @@ public final class ContentPackLoader {
     public static final String COMMERCIAL_FILE = "commercial.json";
     /** The findings and the steps they make safer ({@code design.md} &sect;2.13). */
     public static final String FINDINGS_FILE = "findings.json";
+    /** The R&amp;D decisions ({@link Decisions}). */
+    public static final String DECISIONS_FILE = Decisions.FILE;
+    /** The PR press stories ({@link PrPress}). */
+    public static final String PR_PRESS_FILE = PrPress.FILE;
+    /** The commercial clients ({@link CommercialClients}). */
+    public static final String COMMERCIAL_CLIENTS_FILE = CommercialClients.FILE;
+    /**
+     * The pack the client's screens read the decisions, press stories and clients from before a session
+     * installs the game's own ({@link Decisions#standard()}).
+     */
+    public static final String CLIENT_DEFAULT_PACK = "standard";
     /**
      * Every rules file a pack consists of, in a fixed order. The one list the loader, the server's
      * freezing step and {@link ContentPackHash} all go by, so a rules file added to packs later
      * joins all three at once. The display text ({@link ContentStrings#FILE}, gap G4) is
      * deliberately <b>not</b> in here: it changes no rule, so it isn't hashed or frozen, and the
      * client reads its own bundled copy (see {@link ContentStrings}). Adding it would change every
-     * bundled pack's hash.
+     * bundled pack's hash. The decisions, press stories and clients are in here, though much of
+     * them is text: their effects and draws change the rules (review.md 2.2).
      */
     public static final List<String> FILES = List.of(CATEGORIES_FILE, PROGRAMS_FILE, MISSION_COMPONENTS_FILE,
-        MISSION_CONFIGURATIONS_FILE, GOALS_FILE, COMMERCIAL_FILE, FINDINGS_FILE);
+        MISSION_CONFIGURATIONS_FILE, GOALS_FILE, COMMERCIAL_FILE, FINDINGS_FILE, DECISIONS_FILE, PR_PRESS_FILE,
+        COMMERCIAL_CLIENTS_FILE);
 
     private static final ObjectMapper MAPPER = createMapper();
 
@@ -130,8 +143,23 @@ public final class ContentPackLoader {
         List<Goal> goals = read(source, label, GOALS_FILE, new TypeReference<>() { });
         List<Commercial> commercials = read(source, label, COMMERCIAL_FILE, new TypeReference<>() { });
         List<Finding> findings = read(source, label, FINDINGS_FILE, new TypeReference<>() { });
+        RulesContent rules = new RulesContent(readOne(source, label, DECISIONS_FILE, Decisions::read),
+            readOne(source, label, PR_PRESS_FILE, PrPress::read),
+            readOne(source, label, COMMERCIAL_CLIENTS_FILE, CommercialClients::read));
         return new ContentCatalog(categories, programs, configurations, components, goals,
-            BuildingSchedule.baspmClose(), commercials, findings);
+            BuildingSchedule.baspmClose(), commercials, findings, rules);
+    }
+
+    /** Reads one of the files that keep their own mapping (an object, not a list). */
+    private static <T> T readOne(Source source, String label, String fileName, Reader<T> reader) {
+        try (InputStream in = source.open(fileName)) {
+            return reader.read(in);
+        } catch (com.fasterxml.jackson.core.JacksonException e) {
+            throw new IllegalArgumentException("invalid content in " + label + "/" + fileName + ": "
+                + e.getOriginalMessage(), e);
+        } catch (IOException e) {
+            throw new UncheckedIOException("cannot read " + label + "/" + fileName, e);
+        }
     }
 
     private static <T> List<T> read(Source source, String label, String fileName, TypeReference<List<T>> type) {
@@ -162,5 +190,13 @@ public final class ContentPackLoader {
     @FunctionalInterface
     private interface Source {
         InputStream open(String fileName) throws IOException;
+    }
+
+    /**
+     * Reads a file that keeps its own mapping.
+     */
+    @FunctionalInterface
+    private interface Reader<T> {
+        T read(InputStream in) throws IOException;
     }
 }

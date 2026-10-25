@@ -42,6 +42,8 @@ public final class RaceShock {
 
     private static final int GAMES = 200;
     private static final int SEASONS = 240;
+    /** Whether the races play with the R&D decisions ({@code decisions} as an argument). */
+    private static boolean withDecisions;
 
     private RaceShock() {
     }
@@ -77,10 +79,7 @@ public final class RaceShock {
         if (findingBonus != null) {
             de.mkoehler.launchwindow.rules.Findings.setBonusPoints(Double.parseDouble(findingBonus));
         }
-        if (args.length > 1 && args[1].equals("decisions")) {
-            de.mkoehler.launchwindow.content.Decisions.setStandard(de.mkoehler.launchwindow.content.Decisions.load(
-                Path.of("assets", "content", de.mkoehler.launchwindow.content.Decisions.FILE)));
-        }
+        withDecisions = args.length > 1 && args[1].equals("decisions");
         long seed = Long.getLong("bot.seed", 42L);
         // -Drace.publish=never,always compares agencies that never publish their findings with agencies that
         // publish each one the season after they earn it (design.md 2.13), at the rule's default share.
@@ -102,8 +101,8 @@ public final class RaceShock {
     }
 
     private static List<Race> play(ContentCatalog catalog, long seed, boolean publish) {
-        ContentPackPlayouts nasaHarness = new ContentPackPlayouts(catalog, ContentPackPlayouts.Bot.SMART);
-        ContentPackPlayouts sovietHarness = new ContentPackPlayouts(catalog, ContentPackPlayouts.Bot.SMART);
+        ContentPackPlayouts nasaHarness = new ContentPackPlayouts(catalog, ContentPackPlayouts.Bot.SMART, withDecisions);
+        ContentPackPlayouts sovietHarness = new ContentPackPlayouts(catalog, ContentPackPlayouts.Bot.SMART, withDecisions);
         List<Race> races = new ArrayList<>();
         for (int game = 0; game < GAMES; game++) {
             Random nasaRandom = new Random(seed * 1_000_003L + 2L * game);

@@ -1,6 +1,5 @@
 package de.mkoehler.launchwindow.rules;
 
-import de.mkoehler.launchwindow.content.PrPress;
 import de.mkoehler.launchwindow.content.BudgetSchedule;
 import de.mkoehler.launchwindow.content.ContentCatalog;
 import de.mkoehler.launchwindow.content.RandomEventRoster;
@@ -276,7 +275,7 @@ public final class SeasonResolver {
             case MISSIONS -> MissionProgress.advanceSeason(snapshot, context.catalog(), random, context.goalTally(),
                 context.gameTurn());
             case BUILDINGS -> BuildingUpgrades.advanceSeason(snapshot, context.catalog().buildings());
-            case PR_DUTY -> PrDuty.advanceSeason(snapshot, PrPress.standard(), random, context.catalog(),
+            case PR_DUTY -> PrDuty.advanceSeason(snapshot, context.catalog().rules().press(), random, context.catalog(),
                 context.seasonsElapsed());
             case INTELLIGENCE -> Intelligence.advanceSeason(snapshot, context.intelligence(), context.gameTurn());
             case CONTRACTS -> Contracts.advanceSeason(snapshot, context.contracts(), context.gameTurn());
@@ -289,7 +288,7 @@ public final class SeasonResolver {
             case TRAINING -> TrainingProgress.advanceSeason(snapshot, random);
             case RESEARCH -> ResearchProgress.advanceSeason(snapshot, context.catalog(), random);
             case DECISIONS -> RdDecisions.advanceSeason(snapshot, context.catalog(),
-                de.mkoehler.launchwindow.content.Decisions.standard(), context.gameTurn());
+                context.catalog().rules().decisions(), context.gameTurn());
             case TEAMS -> throw new IllegalStateException("teams run with their captured teams");
             case CAREERS -> throw new IllegalStateException("careers run with the season's flights and events");
             case HIRING_POOL -> {

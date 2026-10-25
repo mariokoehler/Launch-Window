@@ -23,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 class DecisionsTest {
 
-    private static final Decisions DECISIONS = Decisions.load(Path.of("..", "assets", "content", Decisions.FILE));
+    private static final Decisions DECISIONS = Decisions.load(Path.of("..", "assets", "content", "standard", Decisions.FILE));
 
     /**
      * Every type has a pool for each kind of component: at least {@link #POOL_FLOOR} first steps a rocket

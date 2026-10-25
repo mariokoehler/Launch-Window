@@ -38,7 +38,7 @@ class RdDecisionsTest {
 
     private static final ContentCatalog PACK = ContentPackLoader.load(Path.of("..", "assets", "content",
         "early-era"));
-    private static final Decisions DECISIONS = Decisions.load(Path.of("..", "assets", "content", Decisions.FILE));
+    private static final Decisions DECISIONS = Decisions.load(Path.of("..", "assets", "content", "standard", Decisions.FILE));
     private static final String CAPSULE = "vostok-capsule";
 
     /** A Soviet agency with Vostok's capsule at 30 % and two engineers on it, one idle. */
@@ -149,14 +149,10 @@ class RdDecisionsTest {
     void decideAction() {
         PlayerSnapshot snapshot = agency();
         offer(snapshot, "freeze-design");
-        Decisions.setStandard(DECISIONS);
-        try {
-            ActionContext context = new ActionContext(PACK, BudgetSchedule.baspmClose());
-            assertTrue(SnapshotReplay.applySafely(new DecideAction("freeze", null, null), snapshot, context).applied());
-        } finally {
-            // Other tests in this JVM expect core's classpath: no decisions.
-            Decisions.setStandard(Decisions.EMPTY);
-        }
+        // The action reads the decisions of the pack the game plays, never a global copy.
+        ActionContext context = new ActionContext(PACK.withRules(PACK.rules().withDecisions(DECISIONS)),
+            BudgetSchedule.baspmClose());
+        assertTrue(SnapshotReplay.applySafely(new DecideAction("freeze", null, null), snapshot, context).applied());
         OwnedMissionComponent owned = snapshot.getMissionComponents().get(CAPSULE);
         assertEquals(1.3, owned.getRdFactor(), 1e-9);
         assertEquals(4, owned.getRdFactorSeasons());
