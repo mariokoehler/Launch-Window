@@ -75,4 +75,27 @@ class SnapshotReplayTest {
         assertEquals(3_000, replayed.state().getFunds());
         assertEquals(List.of(), replayed.state().getOpenedProgramIds());
     }
+
+    /**
+     * Verifies that an action the rules fail on (a bug, not a refusal) is refused and logged, never
+     * stopping the replay, so one broken action can't stall a turn for everyone (review.md 3.1).
+     */
+    @Test
+    void anActionTheRulesFailOnIsRefusedAndTheReplayGoesOn() {
+        PlayerSnapshot base = new PlayerSnapshot("Agency", Archetype.SOVIET, 500, 0, 0, 1);
+        PlayerAction broken = new PlayerAction() {
+            @Override
+            public ActionResult apply(PlayerSnapshot snapshot, ActionContext context) {
+                snapshot.setFunds(0);
+                throw new IllegalStateException("a rules bug");
+            }
+        };
+
+        SnapshotReplay.Replayed replayed = replay.replay(base, List.of(broken, new SetFundsAction(3_000)),
+            TestContexts.EARLY_ERA);
+
+        assertEquals(List.of(new ActionResult(false, SnapshotReplay.INVALID_ACTION),
+            new ActionResult(true, "FUNDS_SET")), replayed.results());
+        assertEquals(3_000, replayed.state().getFunds(), "the broken action's half-done change is dropped");
+    }
 }

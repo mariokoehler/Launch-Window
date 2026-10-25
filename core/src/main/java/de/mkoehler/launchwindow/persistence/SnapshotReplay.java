@@ -20,6 +20,11 @@ import java.util.Objects;
  */
 public class SnapshotReplay {
 
+    /** The refusal reason of an action that is malformed or that the rules failed on. */
+    public static final String INVALID_ACTION = "INVALID_ACTION";
+
+    private static final System.Logger LOG = System.getLogger(SnapshotReplay.class.getName());
+
     private final ObjectMapper mapper;
 
     /**
@@ -71,7 +76,8 @@ public class SnapshotReplay {
      * Applies one action, treating a malformed one (a missing id, an unknown
      * enum) as an action that simply doesn't take effect. The rules methods
      * change nothing before they reject, so a rejected action leaves the state as
-     * it was.
+     * it was. Any other exception is a rules bug: it is logged with the action and
+     * refused too, so one broken action never stops a turn resolving for everyone.
      *
      * @param action   the action
      * @param snapshot the state; mutated only if the action takes effect
@@ -86,8 +92,13 @@ public class SnapshotReplay {
                 snapshot.setDecisionPaused(false);
             }
             return result;
-        } catch (NullPointerException | IllegalArgumentException e) {
-            return new ActionResult(false, "INVALID_ACTION");
+        } catch (IllegalArgumentException e) {
+            return new ActionResult(false, INVALID_ACTION);
+        } catch (RuntimeException e) {
+            // A malformed action can throw this too, but so can a genuine rules bug: say which.
+            LOG.log(System.Logger.Level.WARNING, "Action " + action.getClass().getSimpleName() + " failed in season "
+                + snapshot.getSeason() + " for " + snapshot.getAgencyName() + "; refused", e);
+            return new ActionResult(false, INVALID_ACTION);
         }
     }
 
