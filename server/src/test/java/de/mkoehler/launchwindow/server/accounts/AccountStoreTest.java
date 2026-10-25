@@ -1,5 +1,6 @@
 package de.mkoehler.launchwindow.server.accounts;
 
+import de.mkoehler.launchwindow.net.messages.HandshakeResponse;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -60,7 +61,7 @@ class AccountStoreTest {
     void newLoginIsAssignedAnId(@TempDir Path tempDir) {
         AccountStore store = createStore(tempDir.resolve("accounts.json"));
 
-        AuthResult result = store.login("mario", "hunter2");
+        AuthResult result = store.create("mario", "hunter2");
 
         assertFalse(result.account().getId() == null || result.account().getId().isBlank());
     }
@@ -71,7 +72,7 @@ class AccountStoreTest {
     @Test
     void idIsStableAcrossRepeatedLogins(@TempDir Path tempDir) {
         AccountStore store = createStore(tempDir.resolve("accounts.json"));
-        String firstId = store.login("mario", "hunter2").account().getId();
+        String firstId = store.create("mario", "hunter2").account().getId();
 
         String secondId = store.login("mario", "hunter2").account().getId();
 
@@ -79,18 +80,63 @@ class AccountStoreTest {
     }
 
     /**
-     * Verifies that logging in with a login name that doesn't exist yet
-     * auto-creates the account.
+     * Verifies that logging in with a login nobody has is refused and makes no account: a typo must
+     * never become a second account (review.md 2.3).
      */
     @Test
-    void newLoginAutoCreatesAccount(@TempDir Path tempDir) {
+    void anUnknownLoginIsRefusedAndMakesNoAccount(@TempDir Path tempDir) {
         AccountStore store = createStore(tempDir.resolve("accounts.json"));
 
         AuthResult result = store.login("mario", "hunter2");
 
+        assertFalse(result.success());
+        assertEquals(HandshakeResponse.NO_SUCH_ACCOUNT, result.message());
+        assertTrue(store.findByLogin("mario").isEmpty());
+    }
+
+    /**
+     * Verifies that creating an account makes it, and that it then logs in.
+     */
+    @Test
+    void createMakesTheAccount(@TempDir Path tempDir) {
+        AccountStore store = createStore(tempDir.resolve("accounts.json"));
+
+        AuthResult result = store.create("mario", "hunter2");
+
         assertTrue(result.success());
         assertEquals("mario", result.account().getLogin());
-        assertTrue(store.findByLogin("mario").isPresent());
+        assertTrue(store.login("mario", "hunter2").success());
+    }
+
+    /**
+     * Verifies that creating a login that exists is refused with another password and logs in with its
+     * own, so a create whose answer was lost can be sent again.
+     */
+    @Test
+    void createOnATakenLoginLogsInOnlyWithItsPassword(@TempDir Path tempDir) {
+        AccountStore store = createStore(tempDir.resolve("accounts.json"));
+        String id = store.create("mario", "hunter2").account().getId();
+
+        assertFalse(store.create("mario", "something else").success());
+        assertEquals(id, store.create("mario", "hunter2").account().getId());
+    }
+
+    /**
+     * Verifies that an account still on the single SHA-256 round logs in and is rehashed with PBKDF2.
+     */
+    @Test
+    void aLegacyHashLogsInAndIsRehashed(@TempDir Path tempDir) throws IOException {
+        Path file = tempDir.resolve("accounts.json");
+        String salt = PasswordHasher.generateSalt();
+        Files.writeString(file, "{\"mario\": {\"id\": \"acct-1\", \"login\": \"mario\", \"passwordHash\": \""
+            + PasswordHasher.legacyHash("hunter2", salt) + "\", \"passwordSalt\": \"" + salt + "\"}}");
+        AccountStore store = createStore(file);
+
+        assertTrue(store.login("mario", "hunter2").success());
+        PlayerAccount account = store.findByLogin("mario").orElseThrow();
+        assertEquals(PasswordHasher.SCHEME, account.getPasswordScheme());
+        assertTrue(PasswordHasher.matches("hunter2", account.getPasswordSalt(), account.getPasswordHash()));
+        assertFalse(store.login("mario", "wrong").success());
     }
 
     /**
@@ -99,7 +145,7 @@ class AccountStoreTest {
     @Test
     void existingLoginWithCorrectPasswordSucceeds(@TempDir Path tempDir) {
         AccountStore store = createStore(tempDir.resolve("accounts.json"));
-        store.login("mario", "hunter2");
+        store.create("mario", "hunter2");
 
         AuthResult result = store.login("mario", "hunter2");
 
@@ -113,7 +159,7 @@ class AccountStoreTest {
     @Test
     void existingLoginWithWrongPasswordIsRejected(@TempDir Path tempDir) {
         AccountStore store = createStore(tempDir.resolve("accounts.json"));
-        store.login("mario", "hunter2");
+        store.create("mario", "hunter2");
 
         AuthResult result = store.login("mario", "wrong password");
 
@@ -164,6 +210,7 @@ class AccountStoreTest {
         AccountStore store = createStore(tempDir.resolve("accounts.json"));
 
         assertFalse(store.login("mario", null).success());
+        assertFalse(store.create("mario", null).success());
         assertTrue(store.findByLogin("mario").isEmpty());
     }
 
@@ -175,7 +222,7 @@ class AccountStoreTest {
     void rejectedLoginForAnExistingAccountLeavesItIntactAndFlushStillSucceeds(@TempDir Path tempDir) {
         Path file = tempDir.resolve("accounts.json");
         AccountStore store = createStore(file);
-        String id = store.login("mario", "hunter2").account().getId();
+        String id = store.create("mario", "hunter2").account().getId();
 
         assertFalse(store.login("mario", "wrong password").success());
         assertEquals(id, store.findByLogin("mario").orElseThrow().getId());
@@ -194,7 +241,7 @@ class AccountStoreTest {
     void accountSurvivesReloadFromDisk(@TempDir Path tempDir) {
         Path file = tempDir.resolve("accounts.json");
         AccountStore first = createStore(file);
-        first.login("mario", "hunter2");
+        first.create("mario", "hunter2");
         first.flush();
 
         AccountStore reloaded = createStore(file);
@@ -212,7 +259,7 @@ class AccountStoreTest {
     void reloadRejectsWrongPasswordForPersistedAccount(@TempDir Path tempDir) {
         Path file = tempDir.resolve("accounts.json");
         AccountStore first = createStore(file);
-        first.login("mario", "hunter2");
+        first.create("mario", "hunter2");
         first.flush();
 
         AccountStore reloaded = createStore(file);
@@ -232,19 +279,18 @@ class AccountStoreTest {
     }
 
     /**
-     * Verifies that {@code login} does not write through to disk on its
-     * own, and that {@code flush} does.
+     * Verifies that a new account is on disk at once, so a crash right after can't leave an agency whose
+     * account was never saved (review.md, appendix D, 4.S3).
      */
     @Test
-    void mutationsAreNotOnDiskUntilFlushed(@TempDir Path tempDir) {
+    void aCreatedAccountIsOnDiskAtOnce(@TempDir Path tempDir) {
         Path file = tempDir.resolve("accounts.json");
         AccountStore store = createStore(file);
+        assertFalse(Files.exists(file));
 
-        store.login("mario", "hunter2");
-        assertFalse(Files.exists(file), "login() must not write through to disk on its own");
+        store.create("mario", "hunter2");
 
-        store.flush();
-        assertTrue(Files.exists(file), "flush() must write out whatever changed since the last flush");
+        assertTrue(Files.exists(file), "create() writes the new account through to disk");
     }
 
     /**
@@ -255,7 +301,7 @@ class AccountStoreTest {
     void flushWithNothingChangedDoesNotRewriteTheFile(@TempDir Path tempDir) throws IOException {
         Path file = tempDir.resolve("accounts.json");
         AccountStore store = createStore(file);
-        store.login("mario", "hunter2");
+        store.create("mario", "hunter2");
         store.flush();
         long firstWriteTime = Files.getLastModifiedTime(file).toMillis();
 
@@ -269,16 +315,20 @@ class AccountStoreTest {
      * twice without throwing.
      */
     @Test
-    void closeFlushesOnceMoreAndIsSafeToCallTwice(@TempDir Path tempDir) {
+    void closeFlushesOnceMoreAndIsSafeToCallTwice(@TempDir Path tempDir) throws IOException {
         Path file = tempDir.resolve("accounts.json");
+        String salt = PasswordHasher.generateSalt();
+        Files.writeString(file, "{\"mario\": {\"id\": \"acct-1\", \"login\": \"mario\", \"passwordHash\": \""
+            + PasswordHasher.legacyHash("hunter2", salt) + "\", \"passwordSalt\": \"" + salt + "\"}}");
         AccountStore store = createStore(file);
-        store.login("mario", "hunter2");
+        // A rehash on login is a change only a flush writes (a new account is written at once).
+        assertTrue(store.login("mario", "hunter2").success());
 
         store.close();
         store.close(); // must not throw, e.g. from double-removing the shutdown hook
 
         AccountStore reloaded = createStore(file);
-        assertTrue(reloaded.findByLogin("mario").isPresent());
+        assertEquals(PasswordHasher.SCHEME, reloaded.findByLogin("mario").orElseThrow().getPasswordScheme());
     }
 
     /**

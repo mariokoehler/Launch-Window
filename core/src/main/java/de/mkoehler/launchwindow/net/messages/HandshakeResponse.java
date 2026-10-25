@@ -24,6 +24,13 @@ package de.mkoehler.launchwindow.net.messages;
 public record HandshakeResponse(boolean accepted, String message, String serverVersion) {
 
     /**
+     * The whole message of a handshake refused because no account has its login: the client offers to
+     * create one ({@link CreateAccountRequest}) instead of showing it. A constant, not a field, since this
+     * record's shape is pinned.
+     */
+    public static final String NO_SUCH_ACCOUNT = "NO_SUCH_ACCOUNT";
+
+    /**
      * Creates an accepting response.
      *
      * @param message       a human-readable welcome

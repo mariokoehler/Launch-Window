@@ -133,18 +133,61 @@ public class AccountStore {
     }
 
     /**
-     * Authenticates (or, for a new login, creates) an account - see
-     * {@code design.md} &sect;3.8's account creation flow. Synchronized
-     * against concurrent logins (the network layer may invoke this from its
-     * own thread for multiple simultaneously-connecting clients) so two
-     * connections racing on the same brand-new login can't both "win"
-     * account creation.
+     * Authenticates an account. A login nobody has is refused with
+     * {@link de.mkoehler.launchwindow.net.messages.HandshakeResponse#NO_SUCH_ACCOUNT}: accounts are made
+     * only on purpose ({@link #create}), so a typo never makes a second one (review.md 2.3). An account
+     * still on the old hash is rehashed in the current scheme as it logs in. Synchronized against
+     * concurrent logins (the network layer may invoke this from its own thread for multiple
+     * simultaneously-connecting clients).
      *
      * @param login       the login name
-     * @param password    the plain-text password to create/verify with
+     * @param password    the plain-text password to verify
      * @return the login result
      */
     public synchronized AuthResult login(String login, String password) {
+        AuthResult invalid = checkInput(login, password);
+        if (invalid != null) {
+            return invalid;
+        }
+        PlayerAccount existing = accountsByLogin.get(login);
+        if (existing == null) {
+            return AuthResult.failure(de.mkoehler.launchwindow.net.messages.HandshakeResponse.NO_SUCH_ACCOUNT);
+        }
+        return verify(existing, password);
+    }
+
+    /**
+     * Creates an account - see {@code design.md} &sect;3.8's account creation flow - and writes it to disk
+     * at once, so a crash right after can't leave an agency whose account was never saved. A login that
+     * exists is refused, unless the password is its own: then this logs in, so a create whose answer was
+     * lost can be sent again. Synchronized so two connections racing on the same new login can't both
+     * "win".
+     *
+     * @param login    the login name
+     * @param password the plain-text password
+     * @return the result
+     */
+    public synchronized AuthResult create(String login, String password) {
+        AuthResult invalid = checkInput(login, password);
+        if (invalid != null) {
+            return invalid;
+        }
+        PlayerAccount existing = accountsByLogin.get(login);
+        if (existing != null) {
+            AuthResult again = verify(existing, password);
+            return again.success() ? again : AuthResult.failure("The login '" + login + "' is taken.");
+        }
+        String salt = PasswordHasher.generateSalt();
+        PlayerAccount created = new PlayerAccount(UUID.randomUUID().toString(), login,
+            PasswordHasher.hash(password, salt), salt);
+        accountsByLogin.put(login, created);
+        dirty.set(true);
+        flush();
+        return AuthResult.success(created, "Welcome, " + login + "! Account created.");
+    }
+
+    /** The login's and password's own checks; {@code null} if they pass. */
+    private static AuthResult checkInput(String login, String password) {
         if (login == null || login.isBlank()) {
             return AuthResult.failure("Login is required.");
         }
@@ -155,21 +198,23 @@ public class AccountStore {
         if (password == null || password.isEmpty()) {
             return AuthResult.failure("Password is required.");
         }
+        return null;
+    }
 
-        PlayerAccount existing = accountsByLogin.get(login);
-        if (existing == null) {
+    /** Checks the password, rehashing an account still on the old scheme. */
+    private AuthResult verify(PlayerAccount existing, String password) {
+        if (!PasswordHasher.matches(password, existing.getPasswordSalt(), existing.getPasswordHash(),
+                existing.getPasswordScheme())) {
+            return AuthResult.failure("Incorrect password for '" + existing.getLogin() + "'.");
+        }
+        if (!PasswordHasher.SCHEME.equals(existing.getPasswordScheme())) {
             String salt = PasswordHasher.generateSalt();
-            String hash = PasswordHasher.hash(password, salt);
-            PlayerAccount created = new PlayerAccount(UUID.randomUUID().toString(), login, hash, salt);
-            accountsByLogin.put(login, created);
+            existing.setPasswordSalt(salt);
+            existing.setPasswordHash(PasswordHasher.hash(password, salt));
+            existing.setPasswordScheme(PasswordHasher.SCHEME);
             dirty.set(true);
-            return AuthResult.success(created, "Welcome, " + login + "! Account created.");
         }
-
-        if (!PasswordHasher.matches(password, existing.getPasswordSalt(), existing.getPasswordHash())) {
-            return AuthResult.failure("Incorrect password for '" + login + "'.");
-        }
-        return AuthResult.success(existing, "Welcome back, " + login + ".");
+        return AuthResult.success(existing, "Welcome back, " + existing.getLogin() + ".");
     }
 
     /**

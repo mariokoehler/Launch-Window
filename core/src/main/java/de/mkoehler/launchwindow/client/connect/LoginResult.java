@@ -14,7 +14,8 @@ import java.util.Optional;
  * <p>The handshake's shape is pinned ({@code HandshakeRequest}'s own doc), so it carries no
  * reason code. The cases are told apart without one: a version mismatch is the server reporting
  * a different version than ours, a bad login is caught on the client before sending
- * ({@code LoginNames}), and any other refusal is shown with the server's own words.</p>
+ * ({@code LoginNames}), an unknown login is the message {@link HandshakeResponse#NO_SUCH_ACCOUNT},
+ * and any other refusal is shown with the server's own words.</p>
  *
  * @param kind          what happened
  * @param message       the server's or the network's words, for {@link Kind#REJECTED},
@@ -41,6 +42,8 @@ public record LoginResult(Kind kind, String message, String clientVersion, Strin
         VERSION_MISMATCH,
         /** The server refused the login, normally a wrong password. */
         REJECTED,
+        /** No account has this login on the server: the player may create it. */
+        NO_ACCOUNT,
         /** No connection could be made. */
         UNREACHABLE,
         /** Connected, but the exchange broke off (timeout, dropped connection, unexpected reply). */
@@ -61,6 +64,9 @@ public record LoginResult(Kind kind, String message, String clientVersion, Strin
         if (!clientVersion.equals(response.serverVersion())) {
             return Optional.of(new LoginResult(Kind.VERSION_MISMATCH, "", clientVersion, response.serverVersion(),
                 null, null));
+        }
+        if (HandshakeResponse.NO_SUCH_ACCOUNT.equals(response.message())) {
+            return Optional.of(failure(Kind.NO_ACCOUNT, ""));
         }
         return Optional.of(failure(Kind.REJECTED, response.message()));
     }

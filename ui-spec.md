@@ -1083,7 +1083,7 @@ Writing them turned up two things for the rules, recorded in `design.md` §2.2(d
           this screen without a server or a game to wait in for one: a list of the levels, then the component
           it runs on (both for one that fits any), the lead's skill (0 to 100 in steps of 20, the fail chance
           shown) and a seed. Steps are applied by the server's rules (`RdDecisions.handsOn`), so the rolls are
-          the game's. The levels are read from `assets/content/decisions.json` before every run, so an edited
+          the game's. The levels are read from `assets/content/standard/decisions.json` before every run, so an edited
           level plays without a restart; on the puzzle, R plays the same seed again, N a new one, Esc goes
           back to the list. One engineer on the team, so never the good-chemistry odds. `-Dhandson.smoke=<folder>` (run with
           `java` from `assets/`) plays a winning random run through the screen and saves the chooser, six
@@ -1167,7 +1167,8 @@ Writing them turned up two things for the rules, recorded in `design.md` §2.2(d
     - **Deferred:** the trade-off's lower cap (the mockup's "cap 3 points lower"): the trade-offs use an
       R&D factor on the component for some seasons (`OwnedMissionComponent.rdFactor`, read by the season
       pass and the projection) and a reliability change now instead.
-    - **Content:** `assets/content/decisions.json`, 23 decisions in the first build: 6 resource (two arcs, the
+    - **Content:** each pack's `decisions.json` (`assets/content/standard/` and `early-era/`, identical, hashed
+      and frozen since 2026-10-25), 23 decisions in the first build: 6 resource (two arcs, the
       test firings of three steps and the vacuum chamber of two), 3 knowledge (balloon tanks, the odds
       multiply, blunt heat shields, each linking its explainer), 2 of every other type. Outside the hashed
       pack; ids are kept in saved state and reports, never reused. `DecisionsTest` holds it to its rules.
@@ -1446,11 +1447,17 @@ docstring). `ScreenSnapshot` builds `LaunchWindowGame` directly and never shows 
 
 ### 4.1 Connect
 **Purpose:** connect and authenticate. One form: server (host:port), login,
-password. A new login creates the account. There's no display name: other
+password. There's no display name: other
 players see you by your agency and director name, chosen per game (§4.2).
 **States:** connecting;
 wrong password; login has invalid characters (`[A-Za-z0-9_-]`, up to 32); client
-and server versions don't match (show both versions); server unreachable.
+and server versions don't match (show both versions); server unreachable; **no such account**
+(2026-10-25, review.md 2.3; built straight in libGDX, unconfirmed): a login the server doesn't
+know is never made into an account by itself, so a typo can't start a second, empty one. An info
+notice above the card says "No account named *login* on this server. Check the spelling, or create
+it with the password you typed.", with a primary **Create account *login*** button under it, which
+creates the account (`CreateAccountRequest`) and logs in. The card's hint says "New here? Connect
+with the login you want, then create the account." `-Dshots=connect` renders the state.
 **Remembered between runs (user decision, 2026-10-05):** the server, login and
 password of the last successful login are kept in
 `~/.launch-window/client-settings.json` (`client.settings.SettingsStore`, as in the
@@ -3991,7 +3998,7 @@ current state alone. Each is an M5 task.
   is no board message (`design.md` §2.11, Storage), and the unlock sets are their own hashed file,
   `commercial.json`. As specified: Content: per program a
   `commercial` block (unlock set, contract configuration) in the hashed pack; clients and stories in
-  `commercial-clients.json` outside it. Rules: unlocking lines, the score, the award, the fee and the
+  `commercial-clients.json` outside it (in it since 2026-10-25, review.md 2.2). Rules: unlocking lines, the score, the award, the fee and the
   insurer, the window and lapses, the board's seating and extras; the contract flight's own payout
   path in `MissionProgress` (no prestige, no repeat count). State: unlocked lines, records, the
   active contract, the application. Server: the market settled once a turn in `market/turn-N.json`

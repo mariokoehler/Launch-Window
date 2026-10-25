@@ -17,6 +17,7 @@ import de.mkoehler.launchwindow.net.messages.FrontPagesResponse;
 import de.mkoehler.launchwindow.net.messages.FetchStateResponse;
 import de.mkoehler.launchwindow.net.messages.GameInfoRequest;
 import de.mkoehler.launchwindow.net.messages.GameInfoResponse;
+import de.mkoehler.launchwindow.net.messages.CreateAccountRequest;
 import de.mkoehler.launchwindow.net.messages.HandshakeRequest;
 import de.mkoehler.launchwindow.net.messages.HandshakeResponse;
 import de.mkoehler.launchwindow.net.messages.SubmitActionRequest;
@@ -106,10 +107,19 @@ public final class NetworkGateway implements ServerGateway {
 
     @Override
     public void logIn(Credentials credentials, Consumer<LoginResult> done) {
+        logIn(credentials, false, done);
+    }
+
+    @Override
+    public void createAccount(Credentials credentials, Consumer<LoginResult> done) {
+        logIn(credentials, true, done);
+    }
+
+    private void logIn(Credentials credentials, boolean create, Consumer<LoginResult> done) {
         run(() -> {
             // Pressing Connect is always a fresh login, even with the same credentials.
             dropConnection();
-            Optional<LoginResult> refusal = openSession(credentials);
+            Optional<LoginResult> refusal = openSession(credentials, create);
             if (refusal.isPresent()) {
                 return refusal.get();
             }
@@ -390,16 +400,18 @@ public final class NetworkGateway implements ServerGateway {
             return Optional.empty();
         }
         dropConnection();
-        return openSession(credentials);
+        return openSession(credentials, false);
     }
 
     /**
-     * Opens a connection and logs in. On success it becomes the session's connection.
+     * Opens a connection and logs in, or first creates the account. On success it becomes the session's
+     * connection; a reconnect later logs in as usual.
      *
      * @param credentials who and where
+     * @param create      whether to create the account ({@link CreateAccountRequest})
      * @return the refusal, or empty on success
      */
-    private Optional<LoginResult> openSession(Credentials credentials) {
+    private Optional<LoginResult> openSession(Credentials credentials, boolean create) {
         NetworkClient fresh = new NetworkClient();
         fresh.setNoticeListener(notice -> {
             if (notice instanceof TurnResolvedNotice resolved) {
@@ -413,9 +425,10 @@ public final class NetworkGateway implements ServerGateway {
             return Optional.of(LoginResult.failure(LoginResult.Kind.UNREACHABLE, e.getMessage()));
         }
         try {
-            HandshakeResponse response = fresh.sendAndReceive(
-                new HandshakeRequest(AppVersion.getVersion(), credentials.login(), credentials.password()),
-                HandshakeResponse.class);
+            Object hello = create
+                ? new CreateAccountRequest(AppVersion.getVersion(), credentials.login(), credentials.password())
+                : new HandshakeRequest(AppVersion.getVersion(), credentials.login(), credentials.password());
+            HandshakeResponse response = fresh.sendAndReceive(hello, HandshakeResponse.class);
             Optional<LoginResult> refusal = LoginResult.fromHandshake(response, AppVersion.getVersion());
             if (refusal.isPresent()) {
                 closeLater(fresh);

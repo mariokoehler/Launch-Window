@@ -7,6 +7,7 @@ import de.mkoehler.launchwindow.model.PlayerSnapshot;
 import de.mkoehler.launchwindow.net.AppVersion;
 import de.mkoehler.launchwindow.net.NetworkConstants;
 import de.mkoehler.launchwindow.net.messages.ClaimSlotRequest;
+import de.mkoehler.launchwindow.net.messages.CreateAccountRequest;
 import de.mkoehler.launchwindow.net.messages.ClaimSlotResponse;
 import de.mkoehler.launchwindow.net.messages.FetchStateRequest;
 import de.mkoehler.launchwindow.net.messages.FetchStateResponse;
@@ -158,6 +159,10 @@ public class RequestDispatcher {
             HandshakeResponse response = handleHandshake(connectionId, request);
             return new DispatchResult(response, !response.accepted());
         }
+        if (message instanceof CreateAccountRequest request) {
+            HandshakeResponse response = handleCreateAccount(connectionId, request);
+            return new DispatchResult(response, !response.accepted());
+        }
         if (message instanceof ClaimSlotRequest request) {
             return new DispatchResult(handleClaimSlot(connectionId, request), false);
         }
@@ -213,7 +218,29 @@ public class RequestDispatcher {
                 serverVersion);
         }
 
-        AuthResult authResult = accountStore.login(request.login(), request.password());
+        return authenticate(connectionId, accountStore.login(request.login(), request.password()));
+    }
+
+    /**
+     * Handles a {@link CreateAccountRequest}: checks the version as a handshake does, then makes the
+     * account (review.md 2.3) and authenticates the connection as it.
+     *
+     * @param connectionId the connection the request arrived on
+     * @param request      the request
+     * @return the response
+     */
+    public HandshakeResponse handleCreateAccount(int connectionId, CreateAccountRequest request) {
+        String serverVersion = AppVersion.getVersion();
+        if (!serverVersion.equals(request.clientVersion())) {
+            return HandshakeResponse.reject(
+                "Version mismatch: server is " + serverVersion + ", client is " + request.clientVersion() + ".",
+                serverVersion);
+        }
+        return authenticate(connectionId, accountStore.create(request.login(), request.password()));
+    }
+
+    private HandshakeResponse authenticate(int connectionId, AuthResult authResult) {
+        String serverVersion = AppVersion.getVersion();
         if (!authResult.success()) {
             return HandshakeResponse.reject(authResult.message(), serverVersion);
         }

@@ -33,6 +33,7 @@ import de.mkoehler.launchwindow.model.GameDate;
 import de.mkoehler.launchwindow.model.Season;
 import de.mkoehler.launchwindow.net.NetworkServer;
 import de.mkoehler.launchwindow.net.messages.ClaimSlotResponse;
+import de.mkoehler.launchwindow.net.messages.CreateAccountRequest;
 import de.mkoehler.launchwindow.net.messages.GameInfoResponse;
 import de.mkoehler.launchwindow.net.messages.HandshakeRequest;
 import de.mkoehler.launchwindow.net.messages.TurnResolvedNotice;
@@ -113,7 +114,7 @@ class ClientGatewayIntegrationTest {
         ServerAddress address = new ServerAddress("localhost", port);
         Credentials mario = new Credentials(address, "mario", "hunter2");
 
-        LoginResult first = logIn(mario);
+        LoginResult first = createAccount(mario);
         assertEquals(LoginResult.Kind.NEEDS_SLOT, first.kind());
         GameInfoResponse info = first.gameInfo().response();
         assertEquals(1, info.gameTurn());
@@ -157,7 +158,8 @@ class ClientGatewayIntegrationTest {
         assertEquals(LoginResult.Kind.REJECTED, logIn(new Credentials(address, "mario", "wrong")).kind());
 
         Credentials anna = new Credentials(address, "anna", "secret");
-        assertEquals(LoginResult.Kind.NEEDS_SLOT, logIn(anna).kind());
+        assertEquals(LoginResult.Kind.NO_ACCOUNT, logIn(anna).kind(), "a login nobody has is never made by itself");
+        assertEquals(LoginResult.Kind.NEEDS_SLOT, createAccount(anna).kind());
         ClaimResult taken = claim(anna, "Orion Spaceworks", "a. reyes");
         assertEquals(ClaimResult.Kind.REFUSED, taken.kind());
         assertEquals(ClaimSlotResponse.Reason.DIRECTOR_NAME_TAKEN, taken.reason());
@@ -183,7 +185,7 @@ class ClientGatewayIntegrationTest {
         gateway = new NetworkGateway();
         Credentials mario = new Credentials(new ServerAddress("localhost", port), "mario", "hunter2");
 
-        assertEquals(LoginResult.Kind.NEEDS_SLOT, logIn(mario).kind());
+        assertEquals(LoginResult.Kind.NEEDS_SLOT, createAccount(mario).kind());
         Thread.sleep(15_000);
         assertEquals(ClaimResult.Kind.JOINED, claim(mario, "Baltic Star Agency", "A. Reyes").kind());
         assertEquals(1, handshakes.get(), "no reconnect after 15 s idle");
@@ -216,7 +218,7 @@ class ClientGatewayIntegrationTest {
         });
         gateway = new NetworkGateway();
         Credentials mario = new Credentials(new ServerAddress("localhost", port), "mario", "hunter2");
-        logIn(mario);
+        createAccount(mario);
         ClaimResult joined = claim(mario, "Baltic Star Agency", "A. Reyes");
         assertEquals(ClaimResult.Kind.JOINED, joined.kind());
         String candidate = joined.state().getSetSpecialistCandidates().get(0).getId();
@@ -265,7 +267,7 @@ class ClientGatewayIntegrationTest {
         });
         gateway = new NetworkGateway();
         Credentials mario = new Credentials(new ServerAddress("localhost", port), "mario", "hunter2");
-        logIn(mario);
+        createAccount(mario);
         assertEquals(ClaimResult.Kind.JOINED, claim(mario, "Baltic Star Agency", "A. Reyes").kind());
         TurnReportResult none = await(done -> gateway.fetchTurnReport(mario, -1, done));
         assertEquals(TurnReportResult.Kind.NONE, none.kind(), none.message());
@@ -301,7 +303,7 @@ class ClientGatewayIntegrationTest {
         });
         gateway = new NetworkGateway();
         Credentials mario = new Credentials(new ServerAddress("localhost", port), "mario", "hunter2");
-        logIn(mario);
+        createAccount(mario);
         assertEquals(ClaimResult.Kind.JOINED, claim(mario, "Baltic Star Agency", "A. Reyes").kind());
         Path playerDir;
         try (var players = Files.list(dataRoot.resolve("players"))) {
@@ -340,10 +342,10 @@ class ClientGatewayIntegrationTest {
         gateway = new NetworkGateway();
         ServerAddress address = new ServerAddress("localhost", port);
         Credentials anna = new Credentials(address, "anna", "secret");
-        logIn(anna);
+        createAccount(anna);
         assertEquals(ClaimResult.Kind.JOINED, claim(anna, "Orion Spaceworks", "Ana Reyes").kind());
         Credentials mario = new Credentials(address, "mario", "hunter2");
-        logIn(mario);
+        createAccount(mario);
         assertEquals(ClaimResult.Kind.JOINED, claim(mario, "Baltic Star Agency", "A. Okafor").kind());
 
         String declared = ServerTestGames.meta(false).getDeclaredGoalIds().get(0);
@@ -367,6 +369,10 @@ class ClientGatewayIntegrationTest {
 
     private LoginResult logIn(Credentials credentials) throws Exception {
         return await(done -> gateway.logIn(credentials, done));
+    }
+
+    private LoginResult createAccount(Credentials credentials) throws Exception {
+        return await(done -> gateway.createAccount(credentials, done));
     }
 
     private ClaimResult claim(Credentials credentials, String agency, String director) throws Exception {
@@ -413,7 +419,7 @@ class ClientGatewayIntegrationTest {
         pollingThread.scheduleWithFixedDelay(() -> capturedServer.poll(new NetworkServer.Handler() {
             @Override
             public void onMessage(int connectionId, Object message) {
-                if (message instanceof HandshakeRequest) {
+                if (message instanceof HandshakeRequest || message instanceof CreateAccountRequest) {
                     handshakes.incrementAndGet();
                 }
                 RequestDispatcher.DispatchResult result = capturedDispatcher.handle(connectionId, message);

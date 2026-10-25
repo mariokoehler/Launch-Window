@@ -31,6 +31,8 @@ public class PlayerAccount {
     private String login;
     private String passwordHash;
     private String passwordSalt;
+    /** The hash's scheme ({@link PasswordHasher#SCHEME}); {@code null} for an account made before PBKDF2. */
+    private String passwordScheme;
 
     /**
      * No-argument constructor required for Jackson deserialization.
@@ -44,14 +46,29 @@ public class PlayerAccount {
      * @param id           the server-assigned id, stable even if the login
      *                     later changes
      * @param login        the unique login name
-     * @param passwordHash the salted password hash (never the raw password)
+     * @param passwordHash the salted password hash (never the raw password), in
+     *                     {@link PasswordHasher#SCHEME}
      * @param passwordSalt the per-account random salt the hash was computed with
      */
     public PlayerAccount(String id, String login, String passwordHash, String passwordSalt) {
+        this(id, login, passwordHash, passwordSalt, PasswordHasher.SCHEME);
+    }
+
+    /**
+     * Creates a player account whose hash is in a given scheme.
+     *
+     * @param id             the server-assigned id
+     * @param login          the unique login name
+     * @param passwordHash   the salted password hash
+     * @param passwordSalt   the salt the hash was computed with
+     * @param passwordScheme the hash's scheme, {@code null} for one made before PBKDF2
+     */
+    public PlayerAccount(String id, String login, String passwordHash, String passwordSalt, String passwordScheme) {
         this.id = Objects.requireNonNull(id, "id must not be null");
         this.login = Objects.requireNonNull(login, "login must not be null");
         this.passwordHash = Objects.requireNonNull(passwordHash, "passwordHash must not be null");
         this.passwordSalt = Objects.requireNonNull(passwordSalt, "passwordSalt must not be null");
+        this.passwordScheme = passwordScheme;
     }
 
     /**
@@ -129,6 +146,24 @@ public class PlayerAccount {
     }
 
     /**
+     * Returns the scheme {@link #getPasswordHash()} is in.
+     *
+     * @return the scheme, or {@code null} for an account made before PBKDF2 (one SHA-256 round)
+     */
+    public String getPasswordScheme() {
+        return passwordScheme;
+    }
+
+    /**
+     * Sets the scheme {@link #getPasswordHash()} is in.
+     *
+     * @param passwordScheme the scheme
+     */
+    public void setPasswordScheme(String passwordScheme) {
+        this.passwordScheme = passwordScheme;
+    }
+
+    /**
      * Returns an independent copy of this account - safe to hand to
      * {@link AccountStore}'s background flush thread without racing further
      * mutations made to the original. Every field here is an immutable
@@ -137,6 +172,6 @@ public class PlayerAccount {
      * @return an independent copy of this account
      */
     public PlayerAccount copy() {
-        return new PlayerAccount(id, login, passwordHash, passwordSalt);
+        return new PlayerAccount(id, login, passwordHash, passwordSalt, passwordScheme);
     }
 }

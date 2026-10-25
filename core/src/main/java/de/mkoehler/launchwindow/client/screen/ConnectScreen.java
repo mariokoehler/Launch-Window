@@ -16,9 +16,12 @@ import de.mkoehler.launchwindow.client.ui.FormField;
 import de.mkoehler.launchwindow.client.ui.Theme;
 import de.mkoehler.launchwindow.net.LoginNames;
 
+import java.util.function.Consumer;
+
 /**
  * The Connect screen ({@code ui-spec.md} &sect;4.1): server, login and password, one Connect
- * button. A new login creates the account. There's no display name; other players see the
+ * button. A login the server doesn't know is offered as a new account, never made by itself
+ * (review.md 2.3). There's no display name; other players see the
  * agency and director chosen per game on the Join Game screen.
  *
  * @author Mario Koehler
@@ -65,8 +68,9 @@ public final class ConnectScreen extends StageScreen {
         card.add(login).row();
         card.add(password).row();
         card.add(connect).row();
-        card.add(ui.paragraph("A new login creates the account. Logins use letters, numbers, underscore or hyphen "
-            + "only, up to " + LoginNames.MAX_LENGTH + " characters.", Theme.TextStyle.CAPTION, Theme.INK_MUTED)).row();
+        card.add(ui.paragraph("New here? Connect with the login you want, then create the account. Logins use "
+            + "letters, numbers, underscore or hyphen only, up to " + LoginNames.MAX_LENGTH + " characters.",
+            Theme.TextStyle.CAPTION, Theme.INK_MUTED)).row();
         card.add(ui.paragraph("There's no display name here. Other players see your agency name and director's name, "
             + "chosen per game after you connect.", Theme.TextStyle.CAPTION, Theme.INK_MUTED)).padBottom(0f);
 
@@ -140,17 +144,31 @@ public final class ConnectScreen extends StageScreen {
         if (address == null || !login.error().isEmpty() || !password.error().isEmpty()) {
             return;
         }
-        Credentials credentials = new Credentials(address, login.text(), password.input().getText());
+        connect(new Credentials(address, login.text(), password.input().getText()), false);
+    }
+
+    /**
+     * Logs in, or creates the account first, and shows the outcome.
+     *
+     * @param credentials who and where
+     * @param create      whether to create the account
+     */
+    private void connect(Credentials credentials, boolean create) {
         String serverText = server.text();
         setBusy(true);
-        game.gateway().logIn(credentials, result -> {
+        Consumer<LoginResult> done = result -> {
             if (result.kind() == LoginResult.Kind.IN_GAME || result.kind() == LoginResult.Kind.NEEDS_SLOT) {
                 game.rememberConnect(serverText, credentials.login(), credentials.password());
             }
             if (isShowing()) {
                 applyLoginResult(credentials, result);
             }
-        });
+        };
+        if (create) {
+            game.gateway().createAccount(credentials, done);
+        } else {
+            game.gateway().logIn(credentials, done);
+        }
     }
 
     /**
@@ -177,6 +195,7 @@ public final class ConnectScreen extends StageScreen {
                 stage.setKeyboardFocus(password.input());
                 password.input().selectAll();
             }
+            case NO_ACCOUNT -> showNoAccount(credentials);
             case UNREACHABLE -> showBanner(Theme.NoticeKind.DANGER, "Can't reach the server.",
                 "Check the address and try again.");
             case FAILED -> showBanner(Theme.NoticeKind.DANGER, "The connection broke off.",
@@ -206,6 +225,28 @@ public final class ConnectScreen extends StageScreen {
         password.setError(null);
         bannerCell.clearActor();
         bannerCell.padBottom(0f);
+    }
+
+    /**
+     * A login the server doesn't know: a typo, or a new player. Offers to create the account with the
+     * password as typed, never on its own (review.md 2.3).
+     */
+    private void showNoAccount(Credentials credentials) {
+        Table offer = new Table();
+        offer.add(ui.notice(Theme.NoticeKind.INFO, "No account named " + credentials.login() + " on this server.",
+            "Check the spelling, or create it with the password you typed.")).growX().row();
+        TextButton create = ui.button("Create account " + credentials.login(), Theme.ButtonKind.PRIMARY);
+        create.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                clearMessages();
+                connect(credentials, true);
+            }
+        });
+        offer.add(create).right().padTop(Theme.SPACE_2);
+        bannerCell.setActor(offer);
+        bannerCell.padBottom(Theme.SPACE_4);
+        root.invalidateHierarchy();
     }
 
     private void showBanner(Theme.NoticeKind kind, String lead, String text) {

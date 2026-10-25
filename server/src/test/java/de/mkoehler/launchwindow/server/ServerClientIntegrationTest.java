@@ -6,6 +6,7 @@ import de.mkoehler.launchwindow.model.Archetype;
 import de.mkoehler.launchwindow.net.AppVersion;
 import de.mkoehler.launchwindow.net.messages.ClaimSlotRequest;
 import de.mkoehler.launchwindow.net.messages.ClaimSlotResponse;
+import de.mkoehler.launchwindow.net.messages.CreateAccountRequest;
 import de.mkoehler.launchwindow.net.NetworkClient;
 import de.mkoehler.launchwindow.net.NetworkServer;
 import de.mkoehler.launchwindow.net.messages.FetchStateRequest;
@@ -160,7 +161,7 @@ class ServerClientIntegrationTest {
         client.connect("localhost", port);
 
         HandshakeResponse handshake = client.sendAndReceive(
-            new HandshakeRequest(AppVersion.getVersion(), "mario", "hunter2"),
+            new CreateAccountRequest(AppVersion.getVersion(), "mario", "hunter2"),
             HandshakeResponse.class);
         assertTrue(handshake.accepted());
 

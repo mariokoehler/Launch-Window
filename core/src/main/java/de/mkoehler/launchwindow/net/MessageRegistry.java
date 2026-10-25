@@ -329,5 +329,8 @@ public final class MessageRegistry {
         kryo.register(de.mkoehler.launchwindow.model.FrontPage.Lost.class);
         kryo.register(de.mkoehler.launchwindow.model.FrontPage.Loss.class);
         kryo.register(de.mkoehler.launchwindow.model.FrontPage.Memorial.class);
+
+        // Accounts made on purpose (review.md 2.3, 2026-10-25). Never move this line.
+        kryo.register(de.mkoehler.launchwindow.net.messages.CreateAccountRequest.class);
     }
 }

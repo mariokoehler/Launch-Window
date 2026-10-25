@@ -8,13 +8,13 @@ import de.mkoehler.launchwindow.net.NetworkClient;
 import de.mkoehler.launchwindow.net.NetworkConstants;
 import de.mkoehler.launchwindow.net.messages.ClaimSlotRequest;
 import de.mkoehler.launchwindow.net.messages.ClaimSlotResponse;
+import de.mkoehler.launchwindow.net.messages.CreateAccountRequest;
 import de.mkoehler.launchwindow.net.messages.FetchStateRequest;
 import de.mkoehler.launchwindow.net.messages.FetchStateResponse;
 import de.mkoehler.launchwindow.net.messages.FrontPagesRequest;
 import de.mkoehler.launchwindow.net.messages.FrontPagesResponse;
 import de.mkoehler.launchwindow.net.messages.GameInfoRequest;
 import de.mkoehler.launchwindow.net.messages.GameInfoResponse;
-import de.mkoehler.launchwindow.net.messages.HandshakeRequest;
 import de.mkoehler.launchwindow.net.messages.HandshakeResponse;
 import de.mkoehler.launchwindow.net.messages.SubmitActionRequest;
 import de.mkoehler.launchwindow.net.messages.SubmitActionResponse;
@@ -90,8 +90,10 @@ public final class DevClient {
         System.out.print("Password: ");
         String password = console.readLine();
 
+        // A create logs in when the account exists and the password is its own, so the dev client
+        // keeps making accounts on first use, as the handshake once did (review.md 2.3).
         HandshakeResponse response = client.sendAndReceive(
-            new HandshakeRequest(AppVersion.getVersion(), login, password), HandshakeResponse.class);
+            new CreateAccountRequest(AppVersion.getVersion(), login, password), HandshakeResponse.class);
         System.out.println(response.message());
         return response.accepted();
     }

@@ -25,6 +25,17 @@ public interface ServerGateway {
     void logIn(Credentials credentials, Consumer<LoginResult> done);
 
     /**
+     * Creates the account and logs in with it, as {@link #logIn} does: for a login the server didn't know
+     * ({@link LoginResult.Kind#NO_ACCOUNT}). A gateway with no server to make accounts on refuses.
+     *
+     * @param credentials who and where, the new account's login and password
+     * @param done        receives the result on the render thread
+     */
+    default void createAccount(Credentials credentials, Consumer<LoginResult> done) {
+        done.accept(LoginResult.failure(LoginResult.Kind.FAILED, "No server to create an account on."));
+    }
+
+    /**
      * Claims this account's slot in the game over the session's connection (reconnecting and
      * logging in again first if it has dropped), and fetches the game info and the new state.
      *

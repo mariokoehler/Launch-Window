@@ -341,6 +341,11 @@ public final class ScreenSnapshot {
                 6 * 3_600_000L + 12 * 60_000L + 30_000L, 0L, null, List.of(), List.of(), 0));
             return;
         }
+        if ("connect".equals(System.getProperty("shots"))) {
+            write(folder, "connect-no-account.png", filledConnect(game), screen -> screen.applyLoginResult(
+                CREDENTIALS, LoginResult.failure(LoginResult.Kind.NO_ACCOUNT, "")));
+            return;
+        }
         write(folder, "connect-default.png", new ConnectScreen(game), null);
         write(folder, "connect-connecting.png", filledConnect(game), screen -> screen.setBusy(true));
         write(folder, "connect-wrong-password.png", filledConnect(game), screen -> screen.applyLoginResult(
@@ -353,6 +358,8 @@ public final class ScreenSnapshot {
             CREDENTIALS, new LoginResult(LoginResult.Kind.VERSION_MISMATCH, "", "0.4.0", "0.5.0", null, null)));
         write(folder, "connect-unreachable.png", filledConnect(game), screen -> screen.applyLoginResult(
             CREDENTIALS, LoginResult.failure(LoginResult.Kind.UNREACHABLE, "Connection refused")));
+        write(folder, "connect-no-account.png", filledConnect(game), screen -> screen.applyLoginResult(
+            CREDENTIALS, LoginResult.failure(LoginResult.Kind.NO_ACCOUNT, "")));
 
         write(folder, "join-default.png", new JoinScreen(game, CREDENTIALS), null);
         write(folder, "join-selected.png", new JoinScreen(game, CREDENTIALS), screen -> {
