@@ -243,6 +243,14 @@ public final class HandsOnScreen extends ChromeScreen {
 
     /** Amounts as icons in their colours, a number before the icon when above 1. */
     private Table amounts(HandsOnLevel level, Map<String, Integer> amounts) {
+        return amounts(level, amounts, null);
+    }
+
+    /**
+     * Amounts as icons in their colours, a number before the icon when above 1, and the main output
+     * (the one the roll moves) underlined in its colour.
+     */
+    private Table amounts(HandsOnLevel level, Map<String, Integer> amounts, String main) {
         Table row = new Table();
         row.left();
         if (amounts.isEmpty()) {
@@ -250,14 +258,21 @@ public final class HandsOnScreen extends ChromeScreen {
             return row;
         }
         amounts.forEach((resource, amount) -> {
+            boolean isMain = resource.equals(main);
+            Table group = new Table();
             if (amount > 1) {
-                row.add(ui.label(String.valueOf(amount), Theme.TextStyle.BODY_STRONG, ink(level, resource)))
+                group.add(ui.label(String.valueOf(amount), Theme.TextStyle.BODY_STRONG, ink(level, resource)))
                     .padRight(2f);
             }
             Image icon = new Image(ui.icon(level.resource(resource).orElseThrow().icon()), Scaling.fit);
             icon.setColor(ink(level, resource));
-            row.add(icon).size(16f).padRight(10f);
-            ui.tooltip(icon, HandsOnView.amount(level, resource, amount), null);
+            group.add(icon).size(16f).row();
+            // The main output underlined in its colour; the others keep the line's room, so all sit level.
+            group.add(new Image(ui.solid(isMain ? ink(level, resource) : Color.CLEAR))).colspan(amount > 1 ? 2 : 1)
+                .height(2f).growX().padTop(2f);
+            row.add(group).padRight(10f);
+            ui.tooltip(group, HandsOnView.amount(level, resource, amount), isMain ? "The main output: a fail makes "
+                + "1 less of it, an exceptional result 1 more." : null);
         });
         return row;
     }
@@ -277,7 +292,10 @@ public final class HandsOnScreen extends ChromeScreen {
             .padLeft(12f);
         head.add(ui.label("IN", Theme.TextStyle.LABEL, Theme.INK_MUTED)).width(150f).left();
         head.add().width(22f);
-        head.add(ui.label("OUT · MAIN FIRST", Theme.TextStyle.LABEL, Theme.INK_MUTED)).width(170f).left();
+        com.badlogic.gdx.scenes.scene2d.ui.Label out = ui.label("OUT", Theme.TextStyle.LABEL, Theme.INK_MUTED);
+        ui.tooltip(out, "What a command makes", "Credited when the round runs. The underlined output is the main "
+            + "one: a fail makes 1 less of it, an exceptional result 1 more. The others always come in full.");
+        head.add(out).width(170f).left();
         card.add(head).row();
         card.add(new Image(ui.solid(Theme.NAVY))).height(Theme.BORDER_THIN).row();
         List<String> groups = new java.util.ArrayList<>();
@@ -312,8 +330,8 @@ public final class HandsOnScreen extends ChromeScreen {
             card.add(new Image(ui.solid(Theme.NAVY_BORDER))).height(Theme.BORDER_THIN).row();
         }
         card.add(ui.paragraph("Inputs are paid when you queue a command, outputs come at execution, so what a "
-            + "command makes can't pay for another this round. A fail costs 1 of the main output; an exceptional "
-            + "result adds 1.", Theme.TextStyle.CAPTION, Theme.INK_MUTED)).pad(8f, 16f, 12f, 16f).row();
+            + "command makes can't pay for another this round. A fail costs 1 of the underlined output; an "
+            + "exceptional result adds 1.", Theme.TextStyle.CAPTION, Theme.INK_MUTED)).pad(8f, 16f, 12f, 16f).row();
         return card;
     }
 
@@ -342,10 +360,33 @@ public final class HandsOnScreen extends ChromeScreen {
         }
         row.add(in).width(150f).left();
         row.add(ui.label("›", Theme.TextStyle.BODY_STRONG, Theme.INK_MUTED)).width(22f);
-        row.add(amounts(level, command.output())).width(170f).left();
+        row.add(amounts(level, command.output(), command.rolls() ? command.primary() : null)).width(170f).left();
         if (can) {
+            // A navy tint on hover says the row is a button.
+            Color tint = new Color(Theme.SURFACE_CARD).lerp(Theme.NAVY, 0.07f);
+            com.badlogic.gdx.scenes.scene2d.utils.Drawable hover = ui.rect(tint, tint, Theme.BORDER_THIN);
             row.setTouchable(Touchable.enabled);
-            row.addListener(clicked(() -> step(RdDecisions.HandsOnStep.QUEUE, command.id())));
+            row.addListener(new com.badlogic.gdx.scenes.scene2d.utils.ClickListener() {
+                @Override
+                public void enter(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y, int pointer,
+                                  com.badlogic.gdx.scenes.scene2d.Actor fromActor) {
+                    row.setBackground(hover);
+                }
+
+                @Override
+                public void exit(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y, int pointer,
+                                 com.badlogic.gdx.scenes.scene2d.Actor toActor) {
+                    // Onto one of its own labels is still over the row.
+                    if (toActor == null || !toActor.isDescendantOf(row)) {
+                        row.setBackground((com.badlogic.gdx.scenes.scene2d.utils.Drawable) null);
+                    }
+                }
+
+                @Override
+                public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
+                    step(RdDecisions.HandsOnStep.QUEUE, command.id());
+                }
+            });
         }
         return row;
     }
@@ -503,7 +544,7 @@ public final class HandsOnScreen extends ChromeScreen {
         odds.add(bar).padBottom(6f).row();
         MissionComponent component = session.catalog().missionComponent(componentId).orElseThrow();
         SetSpecialist lead = HandsOnView.lead(session.state(), component);
-        odds.add(ui.paragraph("Each command rolls: " + fail + " % fail (−1 main output) · " + done + " % done · "
+        odds.add(ui.paragraph("Each command rolls: " + fail + " % fail (−1 underlined output) · " + done + " % done · "
             + exceptional + " % exceptional (+1)." + (lead == null ? "" : " " + People.surname(lead.getName())
             + " leads (" + SetSkills.label(component.associatedSkill()) + " "
             + Math.round(lead.getSkill(component.associatedSkill())) + ")."), Theme.TextStyle.CAPTION, Theme.INK))

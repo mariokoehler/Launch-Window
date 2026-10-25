@@ -1074,7 +1074,7 @@ Writing them turned up two things for the rules, recorded in `design.md` §2.2(d
           progress ... Continue the campaign") and the hub hover ("Hands-on in progress: R-7 (Vostok)").
           Icons in `make_ui_icons.py`. As built, against the mockup: the objective chip reads "2 › 3" (the
           font has no "▸"); a round's results stay up with "Round 1 done" and **Plan round 2** until the
-          player moves on, and the outcome shows at once (no animation yet); during execution Undo and
+          player moves on, and the outcome shows at once (no animation yet); a command row the player can queue takes a light navy tint on hover (2026-10-25, the user: the rows didn't read as buttons), and the output the roll moves is underlined in its colour, the column headed plain "OUT" with a tooltip (it read "OUT · MAIN FIRST", which didn't say what it meant); during execution Undo and
           Reset grey out; the payload's campaign (*A week in the vacuum chamber*, *Chamber runs*) reuses the
           firing icon for its runs until it has its own. Shots `handson-*.png` (`ScreenSnapshot
           -Dshots=handson`).
