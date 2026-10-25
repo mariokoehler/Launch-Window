@@ -107,6 +107,12 @@ public class GameServer extends ApplicationAdapter {
         // A bad declared goal id must fail here, at startup, not stall every turn's win check mid-game.
         WinCondition.evaluate(java.util.Map.of(), meta.getDeclaredGoalIds(), catalog);
         ActionContext context = new ActionContext(catalog, BudgetSchedule.baspmClose());
+        // The filler bots' slots, so they're in the race before the first turn (design.md section 5).
+        try {
+            de.mkoehler.launchwindow.server.schedule.BotPlayers.ensureSlots(dataRoot, mapper, context, meta);
+        } catch (IOException e) {
+            throw new IllegalStateException("Could not make the bots' slots", e);
+        }
         GameInfoService gameInfo = new GameInfoService(dataRoot, mapper, pack.packId(), pack.hash(), meta,
             Clock.systemDefaultZone(), context.schedule());
         dispatcher = new RequestDispatcher(accountStore, dataRoot, mapper, context, meta, gameInfo);

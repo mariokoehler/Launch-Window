@@ -704,7 +704,7 @@ public final class IntelligenceOfficeScreen extends ChromeScreen {
         option.add(radio).size(14f).top().padRight(Theme.SPACE_3);
         Table text = new Table();
         text.defaults().left();
-        text.add(ui.label(rival.agencyName(), Theme.TextStyle.BODY_STRONG, Theme.INK)).row();
+        text.add(ui.label(Museum.name(rival), Theme.TextStyle.BODY_STRONG, Theme.INK)).row();
         text.add(ui.label("Dir. " + rival.directorName() + " · " + Museum.archetype(rival.archetype()) + " · "
             + goals(rival) + " reached", Theme.TextStyle.CAPTION, Theme.INK_MUTED)).row();
         text.add(ui.paragraph(IntelTexts.oddsSource(folder), Theme.TextStyle.CAPTION, Theme.INK_MUTED)).growX();

@@ -224,12 +224,15 @@ public class TurnScheduler {
      * @throws IOException if a player's files can't be read or written
      */
     private void resolveAllPlayers(long gameTurn, GameMeta meta) throws IOException {
+        BotPlayers.ensureSlots(dataRoot, mapper, context, meta);
         Path playersDir = dataRoot.resolve("players");
         if (!Files.exists(playersDir)) {
             return;
         }
         // Before anything is written, so a bad resolution can be undone (design.md section 3.7).
         TurnBackups.beforeTurn(dataRoot, gameTurn);
+        // The filler bots play their turn last thing before it resolves, after the backup (design.md section 5).
+        BotPlayers.play(dataRoot, mapper, context, meta, gameTurn);
         Map<String, PlayerStateService> services = new LinkedHashMap<>();
         List<PlayerSnapshot> startOfTurn = new ArrayList<>();
         Map<String, PlayerSnapshot> startByKey = new LinkedHashMap<>();

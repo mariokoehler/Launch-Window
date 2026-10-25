@@ -1,5 +1,6 @@
 package de.mkoehler.launchwindow.devtools.analysis;
 
+import de.mkoehler.launchwindow.bot.BotPlans;
 import de.mkoehler.launchwindow.rules.MissionStaffing;
 import de.mkoehler.launchwindow.content.StaffingSlot;
 import de.mkoehler.launchwindow.content.BudgetSchedule;
@@ -91,34 +92,14 @@ public final class ContentPackPlayouts {
         List.of("earth-orbit-satellite", "human-in-space", "human-in-orbit");
 
     /** Each agency's plan, in order; the bot flies the first one with a goal still open. */
-    static final Map<Archetype, List<String>> PLANS = Map.of(
-        Archetype.SOVIET, List.of("sputnik-1-orbit", "vostok-uncrewed-suborbital", "vostok-suborbital",
-            "vostok-uncrewed-orbital", "vostok-orbital"),
-        Archetype.NASA, List.of("explorer-1-orbit", "mercury-uncrewed-suborbital", "mercury-suborbital",
-            "mercury-uncrewed-orbital", "mercury-orbital"));
+    static final Map<Archetype, List<String>> PLANS = BotPlans.EARLY_ERA;
 
     /** The Moon race, the standard pack's (the server's {@code GameMeta.STANDARD_DECLARED_GOALS}, design.md 2.6). */
     public static final List<String> MOON_DECLARED_GOALS =
         List.of("earth-orbit-satellite", "human-in-orbit", "crewed-lunar-landing");
 
-    /**
-     * The plans to the Moon: the early race, one lunar probe (it gates the lunar programs), the lunar
-     * craft's tests in Earth orbit, then out to the Moon step by step. Each flight clears reliability
-     * penalties of the ones after it, as a careful player would fly them.
-     */
-    static final Map<Archetype, List<String>> MOON_PLANS = Map.of(
-        Archetype.SOVIET, List.of("sputnik-1-orbit", "vostok-uncrewed-suborbital", "vostok-suborbital",
-            "vostok-uncrewed-orbital", "vostok-orbital", "luna-2-impact",
-            "soyuz-7k-l3-uncrewed-suborbital", "soyuz-7k-l3-uncrewed-orbital", "soyuz-7k-l3-orbital-duration-1",
-            "soyuz-7k-l3-spacewalk", "soyuz-7k-l3-uncrewed-lander-test", "soyuz-7k-l3-lander-test",
-            "soyuz-7k-l3-uncrewed-flyby", "soyuz-7k-l3-flyby", "soyuz-7k-l3-uncrewed-lunar-orbit",
-            "soyuz-7k-l3-lunar-orbit", "soyuz-7k-l3-lander-test-lunar-orbit", "soyuz-7k-l3-landing"),
-        Archetype.NASA, List.of("explorer-1-orbit", "mercury-uncrewed-suborbital", "mercury-suborbital",
-            "mercury-uncrewed-orbital", "mercury-orbital", "ranger-3-impact",
-            "apollo-uncrewed-suborbital", "apollo-uncrewed-orbital", "apollo-orbital-duration-1",
-            "apollo-uncrewed-lunar-module-test", "apollo-lunar-module-test-low-orbit",
-            "apollo-uncrewed-flyby", "apollo-flyby", "apollo-uncrewed-lunar-orbit", "apollo-lunar-orbit",
-            "apollo-lander-test", "apollo-landing"));
+    /** The plans to the Moon ({@link BotPlans#MOON}). */
+    static final Map<Archetype, List<String>> MOON_PLANS = BotPlans.MOON;
 
     /** The bot launches once every component it flies is at least this reliable (or at its R&D ceiling). */
     static final double LAUNCH_RELIABILITY = 70;

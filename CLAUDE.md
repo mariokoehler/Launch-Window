@@ -283,6 +283,12 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
   with **a goal counts only if the crew comes home** (`design.md` §2.6, `GoalsWithheld`). Rebuild client and server
   together; no reset.
 
+- **Filler bots are built** (the user's idea, 2026-10-25, `design.md` §5, Backlog): `"bots"` in `game-meta.json`
+  (`BotPlayer`), agencies the server plays itself just before each turn resolves (`BotPlayers`, `bot.FillerBot`
+  through the players' own validation and journal; `bot.json` keeps the last turn played). They can win, and the
+  race, Intelligence Office and result mark them "(bot)" (`RivalSummary.bot`). The bots' plans moved to `core`
+  (`bot.BotPlans`). Every number is unconfirmed. A changed message: rebuild client and server together; no reset.
+
 ## How we work
 
 - **Screens:** Claude writes the spec in `ui-spec.md`, the user mocks it up in Claude Design,

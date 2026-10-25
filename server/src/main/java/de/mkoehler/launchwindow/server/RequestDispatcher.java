@@ -3,7 +3,6 @@ package de.mkoehler.launchwindow.server;
 import de.mkoehler.launchwindow.rules.ReactionPrinter;
 import de.mkoehler.launchwindow.model.FrontPage;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import de.mkoehler.launchwindow.content.BudgetSchedule;
 import de.mkoehler.launchwindow.model.PlayerSnapshot;
 import de.mkoehler.launchwindow.net.AppVersion;
 import de.mkoehler.launchwindow.net.NetworkConstants;
@@ -42,7 +41,6 @@ import de.mkoehler.launchwindow.persistence.PlayerStateService;
 import de.mkoehler.launchwindow.persistence.SetFundsAction;
 import de.mkoehler.launchwindow.rules.FindingPublications;
 import de.mkoehler.launchwindow.rules.Findings;
-import de.mkoehler.launchwindow.rules.HiringPool;
 import de.mkoehler.launchwindow.rules.Personality;
 import de.mkoehler.launchwindow.rules.TurnReport;
 import de.mkoehler.launchwindow.rules.WinCondition;
@@ -64,7 +62,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.SplittableRandom;
 import java.util.stream.Stream;
 
 /**
@@ -249,32 +246,8 @@ public class RequestDispatcher {
                 "Names can be at most " + ClaimSlotRequest.MAX_NAME_LENGTH + " characters long.");
         }
         try {
-            PlayerSnapshotStore store = new PlayerSnapshotStore(playerRoot(accountId), mapper);
-            if (store.load().isPresent()) {
-                return ClaimSlotResponse.failure(ClaimSlotResponse.Reason.ALREADY_CLAIMED, "This account already has a slot in this game.");
-            }
-            String agencyName = request.agencyName().strip();
-            String directorName = request.directorName().strip();
-            Map<String, Integer> publicFindings = new LinkedHashMap<>();
-            for (PlayerSnapshot other : everyPlayer()) {
-                // A late joiner knows what was published before it joined (design.md section 2.13).
-                other.getPublicFindings().forEach((goal, turn) -> publicFindings.merge(goal, turn, Math::min));
-                if (agencyName.equalsIgnoreCase(other.getAgencyName())) {
-                    return ClaimSlotResponse.failure(ClaimSlotResponse.Reason.AGENCY_NAME_TAKEN, "The agency name \"" + agencyName + "\" is already taken.");
-                }
-                if (directorName.equalsIgnoreCase(other.getDirectorName())) {
-                    return ClaimSlotResponse.failure(ClaimSlotResponse.Reason.DIRECTOR_NAME_TAKEN, "The director name \"" + directorName + "\" is already taken.");
-                }
-            }
-            BudgetSchedule schedule = context.schedule();
-            PlayerSnapshot start = new PlayerSnapshot(agencyName, request.archetype(), schedule.initialFunds(),
-                schedule.initialPrestige(), schedule.initialFundingRate(), 1);
-            start.setDirectorName(directorName);
-            start.setPublicFindings(publicFindings);
-            HiringPool.refreshCandidates(start, new SplittableRandom(GameSeeds.forNewPlayer(meta.getGameSeed(),
-                accountId)));
-            store.save(0, start, null);
-            return ClaimSlotResponse.success("Welcome, Director " + directorName + " of " + agencyName + ".");
+            return PlayerSlots.claim(dataRoot, mapper, context.schedule(), meta.getGameSeed(), accountId,
+                request.archetype(), request.agencyName().strip(), request.directorName().strip());
         } catch (IOException e) {
             return ClaimSlotResponse.failure(ClaimSlotResponse.Reason.SERVER_ERROR, "Failed to create the slot: " + e.getMessage());
         }
@@ -480,65 +453,14 @@ public class RequestDispatcher {
             if (request.gameTurn() != open) {
                 return SubmitStatementResponse.failure(SubmitStatementResponse.TURN_RESOLVED);
             }
-            String key = rivalKey(accountId);
-            // A crew lost in the turn before: its agency's statement, or another's condolences (ui-spec.md 4.18.3).
-            Optional<FrontPage.Loss> loss = LossStore.load(dataRoot, mapper, open - 1).stream()
-                .filter(l -> l.id().equals(request.pageId())).findFirst();
-            if (loss.isPresent()) {
-                boolean own = loss.get().rivalKey().equals(key);
-                return keepStatement(request, open, key, stance -> own ? stance.tone() : stance.condolence());
-            }
-            Optional<FrontPage> page = FrontPageStore.load(dataRoot, mapper).stream()
-                .filter(p -> p.id().equals(request.pageId()) && p.firstPage()).findFirst();
-            if (page.isEmpty()) {
-                return SubmitStatementResponse.failure(SubmitStatementResponse.UNKNOWN_PAGE);
-            }
-            if (page.get().gameTurn() != open - 1) {
-                return SubmitStatementResponse.failure(SubmitStatementResponse.REACTION_WINDOW_CLOSED);
-            }
-            PlayerSnapshot state = playerStateService(accountId).currentState();
-            if (!ReactionPrinter.mayReact(page.get(), Math.toIntExact(open), state.getAgencyName(),
-                    ReactionPrinter.firstTurn(open, state.getSeason()))) {
-                return SubmitStatementResponse.failure(SubmitStatementResponse.NOT_A_RIVAL);
-            }
-            return keepStatement(request, open, key, FrontPage.Stance::givable);
+            return Statements.give(dataRoot, mapper, open, rivalKey(accountId),
+                playerStateService(accountId).currentState(), request);
         } catch (ReactionStore.SealedException e) {
             // The turn is resolving and has read its statements: this one would never be printed.
             return SubmitStatementResponse.failure(SubmitStatementResponse.TURN_RESOLVED);
         } catch (IOException | RuntimeException e) {
             return SubmitStatementResponse.failure("Failed to keep the statement: " + e.getMessage());
         }
-    }
-
-    /**
-     * Keeps or withdraws a statement once the page or loss it answers checked out: the stance must be one this
-     * agency may give there, and the quote is cleaned and checked.
-     *
-     * @param request the request
-     * @param open    the open turn
-     * @param key     the agency's key
-     * @param allowed the stances it may give
-     * @return the response, with its statements for the open turn
-     * @throws IOException if the statements can't be read or written
-     */
-    private SubmitStatementResponse keepStatement(SubmitStatementRequest request, long open, String key,
-            java.util.function.Predicate<FrontPage.Stance> allowed) throws IOException {
-        if (request.stance() == null) {
-            return SubmitStatementResponse.success(ReactionStore.remove(dataRoot, mapper, open, key,
-                request.pageId()));
-        }
-        if (!allowed.test(request.stance())) {
-            return SubmitStatementResponse.failure(SubmitStatementResponse.INVALID_STANCE);
-        }
-        String quote = request.stance().quotable() ? FrontPage.Statement.clean(request.quote()) : "";
-        if (quote.length() > FrontPage.Statement.MAX_QUOTE_LENGTH) {
-            return SubmitStatementResponse.failure(SubmitStatementResponse.QUOTE_TOO_LONG);
-        }
-        if (!FrontPage.Statement.allowed(quote)) {
-            return SubmitStatementResponse.failure(SubmitStatementResponse.QUOTE_BAD_CHARACTERS);
-        }
-        return SubmitStatementResponse.success(ReactionStore.put(dataRoot, mapper, open, key,
-            new FrontPage.Statement(request.pageId(), request.stance(), quote)));
     }
 
     private String rivalKey(String accountId) {
@@ -689,7 +611,8 @@ public class RequestDispatcher {
                     rivals.add(RivalSummary.of(player.getAgencyName(), player.getDirectorName(),
                         player.getArchetype(), playerDir.getFileName().toString().equals(accountId),
                         WinCondition.goalTimes(player, declared, context.catalog()),
-                        GameSeeds.rivalKey(meta.getGameSeed(), playerDir.getFileName().toString())));
+                        GameSeeds.rivalKey(meta.getGameSeed(), playerDir.getFileName().toString()),
+                        meta.isBot(playerDir.getFileName().toString())));
                 }
             }
             return RivalsResponse.of(rivals);
@@ -725,12 +648,6 @@ public class RequestDispatcher {
     }
 
     /**
-     * Loads every claimed player's latest snapshot, for the uniqueness checks.
-     *
-     * @return the snapshots
-     * @throws IOException if a player's files can't be read
-     */
-    /**
      * Handles a {@link GameInfoRequest}: the game's shared facts. Needs an accepted handshake but
      * no slot, so the Join Game screen can show them before the player has joined.
      *
@@ -747,20 +664,6 @@ public class RequestDispatcher {
         } catch (IOException | RuntimeException e) {
             return GameInfoResponse.failure("Failed to read the game info: " + e.getMessage());
         }
-    }
-
-    private List<PlayerSnapshot> everyPlayer() throws IOException {
-        Path players = dataRoot.resolve("players");
-        List<PlayerSnapshot> result = new ArrayList<>();
-        if (!Files.exists(players)) {
-            return result;
-        }
-        try (Stream<Path> listing = Files.list(players)) {
-            for (Path playerDir : listing.filter(Files::isDirectory).toList()) {
-                new PlayerSnapshotStore(playerDir, mapper).load().ifPresent(result::add);
-            }
-        }
-        return result;
     }
 
     private static boolean isBlank(String value) {

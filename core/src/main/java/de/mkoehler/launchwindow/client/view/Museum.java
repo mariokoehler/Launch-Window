@@ -69,6 +69,28 @@ public final class Museum {
     }
 
     /**
+     * Returns an agency's name as the race shows it: "(bot)" after a filler bot's ({@code design.md} &sect;5).
+     *
+     * @param rival the agency
+     * @return the name
+     */
+    public static String name(RivalSummary rival) {
+        return rival.agencyName() + (rival.bot() ? " (bot)" : "");
+    }
+
+    /**
+     * Returns an agency's name by itself, with "(bot)" after it if the race knows it as a filler bot.
+     *
+     * @param agencyName the agency's name
+     * @param rivals     the race, or an empty list
+     * @return the name
+     */
+    public static String name(String agencyName, java.util.List<RivalSummary> rivals) {
+        return rivals.stream().filter(rival -> rival.agencyName().equals(agencyName)).findFirst()
+            .map(Museum::name).orElse(agencyName);
+    }
+
+    /**
      * Returns an archetype as a word.
      *
      * @param archetype the archetype
@@ -144,7 +166,7 @@ public final class Museum {
                     : new Cell(true, date(turn), turn.equals(firstTurn.get(goalId))));
             }
             int count = count(rival, declared);
-            rows.add(new RaceRow(winner ? 1 : position + 1, rival.agencyName() + (rival.you() ? " (you)" : ""),
+            rows.add(new RaceRow(winner ? 1 : position + 1, name(rival) + (rival.you() ? " (you)" : ""),
                 rival.directorName(), archetype(rival.archetype()), rival.you(), winner, cells, count,
                 WinCondition.completionTurn(rival.goalTurns(), declared).map(Museum::date).orElse("—")));
         }

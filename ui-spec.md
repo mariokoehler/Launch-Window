@@ -2850,7 +2850,9 @@ review: when, what it pays, what keeps today's funding) and `PrestigeConversion`
 **Tabs:**
 - **The race:** the declared goals as goal badges, own progress, and every
   player's progress side by side, by agency name and director name: which goals they
-  hold and the turn they got them. **Needs server work:** G3.
+  hold and the turn they got them. **Needs server work:** G3. A filler bot (`design.md` §5) has
+  "(bot)" after its agency's name here, in the Intelligence Office's rival list and in the game
+  result (2026-10-25, `Museum.name`); the newspaper names it plainly, as it would any agency.
 - **Achievements:** every goal achieved or cancelled, with the turn and the
   prestige.
 - **Flights:** the completed flight count per configuration (`successfulFlightCounts`).
@@ -3907,7 +3909,8 @@ current state alone. Each is an M5 task.
   declared goals' turns; a credited goal counts from its canceller's turn, through
   `WinCondition.goalTimes`.)* Each player's agency name, director name, archetype, and the
   declared goals they hold, with turns, for the race tab. This is the
-  "per-player summary" `design.md` §3.7 planned for game-meta.
+  "per-player summary" `design.md` §3.7 planned for game-meta. `bot` (2026-10-25) says the server
+  plays the agency itself.
 - **G4. Display text.** *(Done 2026-10-05 for the early-era pack: `strings.json` beside the
   pack's rules files, read by `content.ContentStrings` and looked up through
   `client.view.ContentNames`. Shown as names everywhere, as descriptions on Program details,

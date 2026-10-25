@@ -3874,6 +3874,30 @@ history is in §1.1. Considered and left for later (user): a light rules effect,
 "unknown" on its steps until settled; theories that turn out right (the belts) as a new hazard. Next: the play
 test.
 
+**Filler bots** (the user's idea, 2026-10-25; **built the same day**): agencies the server plays itself, so a
+small play test has rivals. Listed in `game-meta.json` as `"bots": [{"id": "bot-1", "archetype": "SOVIET"}]`
+(`BotPlayer`; an agency or director name is optional, drawn from `agency-names.json` and the personnel names
+otherwise), each a player folder like any other (`players/bot-1`, made through `PlayerSlots` as a claimed
+slot is), which no account can log into. A bot plays its turn just before the turn resolves, after the turn's
+backup, so `TurnRollback --redo` plays it again with the fixed build; its `bot.json` keeps the last turn it
+played, so a retry doesn't play it twice (`BotPlayers`). Its actions go through the same validation and journal
+as a player's: `bot.FillerBot` proposes one at a time against the preview, and one the rules refuse isn't tried
+again that turn. It follows the playout bot's plan (`bot.BotPlans`, the Moon's on the standard pack, the early
+race's on early-era): opens the next flight's program and the cheapest rocket that lifts it, upgrades and hires
+until it can staff it (one more for each seat "auto-assign" can't fill beyond the people away training or sick,
+who'll be back; without that allowance new hires in basic training snowballed to 34 controllers), puts its engineers on the flight's hardware, sends idle people to training while the
+hardware is far off, and launches at about 70 % reliability (65 to 75, a turn's draw). It answers R&D decisions
+with an option at random (never the hands-on puzzle, which it leaves to the team), runs an Analysis section
+above 8,000 and an assessment of a random rival about one turn in three, skips about one turn in ten, and gives
+statements: on 70 % of its rivals' Firsts, condolences on 85 % of their lost crews, a tone on its own. **Bots can
+win** and are marked "(bot)" in the race, the Intelligence Office and the game result, not in the paper (user,
+2026-10-25; `RivalSummary.bot`). Every number is unconfirmed. On the early-era pack two bots reach the whole race
+in 60 turns (`BotPlayersTest`); on the standard pack, in one 200-turn game, the NASA bot landed and won the Moon
+race at turn 187 and the Soviet one had reached its uncrewed flyby (the smart bot's median is 87): slow, with money
+piling up past 2 million (unexplained; six engineers doing all its R&D is a guess, and it sat 40 turns on Apollo's
+lunar-module test). Left out: contracts, findings, PR duty, poaching, reacting to the news beyond
+statements.
+
 ### Later
 
 - **M6 — Deployment: built 2026-10-06, no release cut yet.** The jpackage client zip (built and

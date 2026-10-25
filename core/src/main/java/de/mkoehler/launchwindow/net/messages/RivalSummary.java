@@ -17,10 +17,11 @@ import java.util.Map;
  *                     counts from the turn of the goal that credited it); missing = not yet
  * @param playerId     an opaque key for the agency, stable for the game, that intelligence operations
  *                     name their target by ({@code design.md} &sect;2.9); never the account id
+ * @param bot          whether the server plays this agency itself, a filler bot ({@code design.md} &sect;5)
  * @author Mario Koehler
  */
 public record RivalSummary(String agencyName, String directorName, Archetype archetype, boolean you,
-                           Map<String, Integer> goalTurns, String playerId) {
+                           Map<String, Integer> goalTurns, String playerId, boolean bot) {
 
     /**
      * Creates a summary, copying the goal turns into the {@link LinkedHashMap} Kryo has registered.
@@ -50,7 +51,24 @@ public record RivalSummary(String agencyName, String directorName, Archetype arc
      */
     public static RivalSummary of(String agencyName, String directorName, Archetype archetype, boolean you,
                                   Map<String, Integer> goalTurns, String playerId) {
+        return of(agencyName, directorName, archetype, you, goalTurns, playerId, false);
+    }
+
+    /**
+     * Creates a summary with the agency's key, and whether it's a filler bot.
+     *
+     * @param agencyName   the agency
+     * @param directorName its director
+     * @param archetype    its archetype
+     * @param you          whether this is the player who asked
+     * @param goalTurns    the declared goals done, with their turns
+     * @param playerId     the agency's opaque key
+     * @param bot          whether the server plays it
+     * @return the summary
+     */
+    public static RivalSummary of(String agencyName, String directorName, Archetype archetype, boolean you,
+                                  Map<String, Integer> goalTurns, String playerId, boolean bot) {
         return new RivalSummary(agencyName, directorName, archetype, you, new LinkedHashMap<>(goalTurns),
-            playerId == null ? "" : playerId);
+            playerId == null ? "" : playerId, bot);
     }
 }

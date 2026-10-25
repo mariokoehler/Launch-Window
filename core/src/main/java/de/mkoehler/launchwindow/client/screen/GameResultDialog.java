@@ -72,7 +72,7 @@ final class GameResultDialog {
         List<String> declared = info.declaredGoalIds();
         List<String> winners = info.winnerAgencies();
         boolean tied = "TIED".equals(info.resultStatus());
-        String names = String.join(" and ", winners);
+        String names = String.join(" and ", winners.stream().map(name -> Museum.name(name, rivals)).toList());
         String mine = host.session.state().getAgencyName();
         boolean youWon = !tied && winners.size() == 1 && winners.get(0).equals(mine);
         Optional<WinCondition.MedalTable> medals = rivals.isEmpty() ? Optional.empty()
@@ -151,7 +151,7 @@ final class GameResultDialog {
         List<List<String>> rows = new ArrayList<>();
         for (String player : order) {
             List<String> cells = new ArrayList<>();
-            cells.add(rivals.get(Integer.parseInt(player)).agencyName());
+            cells.add(Museum.name(rivals.get(Integer.parseInt(player))));
             for (int place : table.places().get(player)) {
                 cells.add(ORDINALS[Math.min(place, ORDINALS.length) - 1]);
             }

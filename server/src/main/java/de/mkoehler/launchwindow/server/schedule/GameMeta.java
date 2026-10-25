@@ -30,6 +30,7 @@ public class GameMeta {
     private long gameSeed;
     private boolean devMode;
     private boolean devArchiveOpen;
+    private List<BotPlayer> bots = new ArrayList<>();
 
     /**
      * The content pack a new game plays, under {@code assets/content/}: BASPM's whole tree (user,
@@ -223,10 +224,45 @@ public class GameMeta {
         this.devArchiveOpen = devArchiveOpen;
     }
 
+    /**
+     * Returns the filler bots the server plays itself (design.md section 5, "Filler bots").
+     *
+     * @return the bots, in the file's order
+     */
+    public List<BotPlayer> getBots() {
+        return bots;
+    }
+
+    /**
+     * Sets the filler bots.
+     *
+     * @param bots the bots
+     */
+    public void setBots(List<BotPlayer> bots) {
+        this.bots = bots == null ? new ArrayList<>() : new ArrayList<>(bots);
+    }
+
+    /**
+     * Returns whether a player is one of the filler bots.
+     *
+     * @param playerId the player's folder name
+     * @return whether it's a bot's
+     */
+    public boolean isBot(String playerId) {
+        return bots.stream().anyMatch(bot -> bot.id().equals(playerId));
+    }
+
     void validate() {
         Objects.requireNonNull(schedule, "schedule must not be null").validate();
         for (Blackout blackout : blackouts) {
             Objects.requireNonNull(blackout, "a blackout entry must not be null");
+        }
+        java.util.Set<String> botIds = new java.util.HashSet<>();
+        for (BotPlayer bot : bots) {
+            Objects.requireNonNull(bot, "a bot entry must not be null");
+            if (!botIds.add(bot.id())) {
+                throw new IllegalStateException("two bots are named " + bot.id());
+            }
         }
     }
 }
