@@ -89,4 +89,21 @@ class BotPlayersTest {
         assertEquals(mapper.writeValueAsString(afterFirst), mapper.writeValueAsString(service.currentState()),
             "playing the same turn again changes nothing");
     }
+
+    @Test
+    void aRollbackOfSeveralTurnsLetsTheBotsPlayThemAgain(@TempDir Path dataRoot) throws IOException {
+        TurnScheduler scheduler = botGame(dataRoot);
+        for (int turn = 1; turn <= 5; turn++) {
+            scheduler.resolveNow();
+        }
+        String played = mapper.writeValueAsString(bot(dataRoot, "bot-1"));
+        TurnRollback.rollBackTo(dataRoot, mapper, ServerTestGames.CONTEXT, 3, java.time.LocalDateTime.of(2026, 9, 29, 7, 0));
+        assertEquals(3, mapper.readValue(dataRoot.resolve("players/bot-1").resolve(BotPlayers.MARKER).toFile(),
+            BotPlayers.Marker.class).lastPlayedTurn(), "the turn rolled back to counts as played");
+        for (int turn = 3; turn <= 5; turn++) {
+            scheduler.resolveNow();
+        }
+        assertEquals(played, mapper.writeValueAsString(bot(dataRoot, "bot-1")),
+            "the redone turns come out as the first time: the bots played every one of them");
+    }
 }

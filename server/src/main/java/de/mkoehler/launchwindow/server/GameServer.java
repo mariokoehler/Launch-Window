@@ -173,7 +173,8 @@ public class GameServer extends ApplicationAdapter {
      * Routes one received message through {@link RequestDispatcher} and
      * sends its response back on the same connection, closing the
      * connection afterward if the dispatcher says to (a rejected
-     * handshake).
+     * handshake). A handler that throws is logged and its connection
+     * closed, so a bug in one request never stops the server.
      *
      * @param connectionId the connection the message arrived on
      * @param message      the message
@@ -184,6 +185,13 @@ public class GameServer extends ApplicationAdapter {
             result = dispatcher.handle(connectionId, message);
         } catch (IllegalArgumentException e) {
             Gdx.app.error(TAG, e.getMessage());
+            return;
+        } catch (RuntimeException e) {
+            // A handler's bug must never end the render thread: the server would keep its port open
+            // and answer nothing. The client hears the connection close instead of waiting it out.
+            Gdx.app.error(TAG, "Request " + message.getClass().getSimpleName() + " failed; connection "
+                + connectionId + " closed", e);
+            networkServer.close(connectionId);
             return;
         }
         if (result.closeConnection()) {

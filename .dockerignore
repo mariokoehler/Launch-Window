@@ -11,3 +11,8 @@ data/
 client-settings.json
 # Raw source art is never shipped; assets/ holds what the game uses.
 assets-raw/
+# The server reads only assets/content/ (server/pom.xml): the art, sound and replay clips stay out.
+assets/ui/
+assets/audio/
+assets/fonts/
+assets/branding/

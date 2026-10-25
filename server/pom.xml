@@ -55,10 +55,13 @@
       <resource>
         <directory>src/main/resources</directory>
       </resource>
-      <!-- The assets/ folder at the repo root is bundled onto the classpath, same as lwjgl3's -
-           the server needs the same data files (e.g. program/mission content) the client renders. -->
+      <!-- Only assets/content/ is bundled onto the classpath: the server reads the packs and the
+           text files beside them, never the art, sound or replay clips (1.6 GB, review.md 2.5). -->
       <resource>
         <directory>${project.basedir}/../assets</directory>
+        <includes>
+          <include>content/**</include>
+        </includes>
       </resource>
     </resources>
     <plugins>

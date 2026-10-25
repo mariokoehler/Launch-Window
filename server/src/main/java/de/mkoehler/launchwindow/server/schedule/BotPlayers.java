@@ -9,6 +9,7 @@ import de.mkoehler.launchwindow.model.PlayerSnapshot;
 import de.mkoehler.launchwindow.net.messages.ClaimSlotRequest;
 import de.mkoehler.launchwindow.net.messages.SubmitStatementRequest;
 import de.mkoehler.launchwindow.persistence.ActionContext;
+import de.mkoehler.launchwindow.persistence.AtomicFiles;
 import de.mkoehler.launchwindow.persistence.PlayerAction;
 import de.mkoehler.launchwindow.persistence.PlayerSnapshotStore;
 import de.mkoehler.launchwindow.persistence.PlayerStateService;
@@ -38,7 +39,8 @@ import java.util.stream.Stream;
  * ({@code design.md} &sect;3.7). It also gives statements on its rivals' Firsts and on crews lost.</p>
  *
  * <p>A bot's {@code bot.json} in its folder records the last turn it played, so a retry after a crash
- * doesn't play it twice.</p>
+ * doesn't play it twice. Rolling back to a turn lowers it to that turn ({@link #rewind}): the turn's own
+ * actions go back into the journal as everyone's do, and the turns after it are played afresh.</p>
  *
  * @author Mario Koehler
  */
@@ -168,7 +170,39 @@ public final class BotPlayers {
         if (!turn.idle()) {
             speak(dataRoot, mapper, gameTurn, key, state, new SplittableRandom(seed ^ 0x5EECL));
         }
-        mapper.writeValue(marker.toFile(), new Marker(gameTurn));
+        writeMarker(mapper, marker, gameTurn);
+    }
+
+    /**
+     * Lowers every bot's record of the last turn it played to {@code gameTurn}, for a rollback to that
+     * turn ({@link TurnRollback}). The turn's own actions are back in the journal, so it counts as played;
+     * every later turn is played again.
+     *
+     * @param dataRoot the data root
+     * @param mapper   the persistence mapper
+     * @param gameTurn the turn rolled back to
+     * @throws IOException if a marker can't be read or written
+     */
+    static void rewind(Path dataRoot, ObjectMapper mapper, long gameTurn) throws IOException {
+        Path playersDir = dataRoot.resolve("players");
+        if (!Files.isDirectory(playersDir)) {
+            return;
+        }
+        try (Stream<Path> listing = Files.list(playersDir)) {
+            for (Path folder : listing.filter(Files::isDirectory).sorted().toList()) {
+                Path marker = folder.resolve(MARKER);
+                if (Files.exists(marker) && mapper.readValue(marker.toFile(), Marker.class).lastPlayedTurn() > gameTurn) {
+                    writeMarker(mapper, marker, gameTurn);
+                }
+            }
+        }
+    }
+
+    /** Written beside and moved into place, so a crash never leaves a torn marker. */
+    private static void writeMarker(ObjectMapper mapper, Path marker, long gameTurn) throws IOException {
+        Path temp = Files.createTempFile(marker.getParent(), "bot-", ".json.tmp");
+        mapper.writeValue(temp.toFile(), new Marker(gameTurn));
+        AtomicFiles.moveReplacingWithRetry(temp, marker);
     }
 
     /** Statements on the turn before's Firsts and lost crews, some of them, a stance at random. */
