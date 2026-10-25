@@ -456,6 +456,16 @@ leading to satellite navigation.
 - **Flight Director as a generalist:** Mission Control's five skills echo real consoles (FDO,
   GUIDO, EECOM). A great Flight Director is broad, not deep.
 - **"Tiger Team"** is real NASA jargon for an urgent specialist task force.
+- **The R&D decisions' real problems** (2026-10-25, from memory; verify before a history note uses them): the
+  diagnoses grown that day are real failure modes, told without names. Pogo, the lengthwise shaking where
+  thrust and the fuel lines feed each other, troubled the Titan II under Gemini and the Saturn V on Apollo 6
+  (April 1968), cured with gas-filled dampers in the oxidiser lines. Combustion instability nearly stopped the
+  F-1 engine; baffles across the injector face, proven by setting off small bombs in the chamber, broke up
+  the waves. Others: a stage's thrust tailing off after cutoff and bumping the one above, a pump racing on a
+  gulp of gas from a vortex over a low tank's outlet, plastics giving off vapour that fogs optics in a
+  vacuum, cold grease jamming a mechanism, metals sticking in a vacuum (cold welding), steel against
+  aluminium corroding in salt air, and the bonus of testing a whole rocket at once ("all-up" testing, which
+  NASA adopted for the Saturn V in 1963 and first flew on Apollo 4 in November 1967).
 - **Rocket families:** reliability transfer encodes the real Redstone → Jupiter-C → Juno II
   and Atlas/Titan/Saturn lineages; real families inherited engines, guidance and experience.
   (A rival-driven "second mover" discount would be a genuine cross-player idea, not decided.)
@@ -3740,7 +3750,9 @@ bot.
     day on the canvas `Launch Window — R&D decisions` (the choices are in component 26; the look confirmed by
     the user the same day) and **built** the same day: all ten types, 23 decisions, the rules, the client and
     the bots ("as built" in component 26). Next: the play test, then the pools grown by type, and the balance
-    (decisions shorten the bots' Moon race by about 13 seasons).
+    (decisions shorten the bots' Moon race by about 13 seasons). **The pools were grown on 2026-10-25:**
+    185 decisions, about 20 first steps a type (pairing 12, hands-on 7), three new story arcs and five new
+    hands-on levels (component 26, "The pools grown").
   - **Build:** the type a field in a content file (story, options, what shows in advance, effect,
     default), one resolver per type. Variety isn't a worry: other lull ideas will join it (user).
 - **The hands-on decision** (type 11; the user's idea, 2026-10-11; mocked up the same day, canvas

@@ -77,8 +77,14 @@ public final class HandsOnView {
      */
     public static String caption(HandsOnLevel level) {
         return "Up to " + level.rounds() + " rounds of " + level.slots() + " commands · objective "
-            + target(level, level.objective()) + " · bonus " + String.join(" and ",
-            level.bonus().values().stream().map(String::valueOf).toList());
+            + target(level, level.objective()) + " · bonus " + list(level.bonus().values().stream()
+            .map(String::valueOf).toList());
+    }
+
+    /** "6 and 7", or "4, 6 and 3" for three. */
+    private static String list(List<String> items) {
+        return items.size() < 2 ? String.join("", items)
+            : String.join(", ", items.subList(0, items.size() - 1)) + " and " + items.getLast();
     }
 
     /**

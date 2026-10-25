@@ -1139,10 +1139,35 @@ Writing them turned up two things for the rules, recorded in `design.md` §2.2(d
     - **Deferred:** the trade-off's lower cap (the mockup's "cap 3 points lower"): the trade-offs use an
       R&D factor on the component for some seasons (`OwnedMissionComponent.rdFactor`, read by the season
       pass and the projection) and a reliability change now instead.
-    - **Content:** `assets/content/decisions.json`, 23 decisions: 6 resource (two arcs, the test firings of
-      three steps and the vacuum chamber of two), 3 knowledge (balloon tanks, the odds multiply, blunt heat
-      shields, each linking its explainer), 2 of every other type. Outside the hashed pack; ids are kept
-      in saved state and reports, never reused. `DecisionsTest` holds it to its rules.
+    - **Content:** `assets/content/decisions.json`, 23 decisions in the first build: 6 resource (two arcs, the
+      test firings of three steps and the vacuum chamber of two), 3 knowledge (balloon tanks, the odds
+      multiply, blunt heat shields, each linking its explainer), 2 of every other type. Outside the hashed
+      pack; ids are kept in saved state and reports, never reused. `DecisionsTest` holds it to its rules.
+    - **The pools grown (2026-10-25, the user's to-do):** 185 decisions, aiming at about 20 first steps a
+      type, fewer where more would repeat themselves. First steps a rocket / a payload can draw: resource
+      20 (13 / 13; three more arcs: the spare test unit loaded to failure, thermal cycling to a hundred
+      cycles, a balloon flight to two days aloft), knowledge 24 (14 / 16, every question linking its
+      explainer), ambiguous 21 (all), oversee 20 (16 / 14), trade-off 19 (16 / 16), diagnosis 20 (12 / 12,
+      every wrong suspect ruled out by a clue), opportunity 19 (16 / 17), pairing 12 (all), intelligence 17
+      (12 / 11), hands-on 7 (4 / 4). Since the picker draws evenly among a component's usable first steps,
+      the types keep roughly their old shares; hands-on comes about half as often as before. Choices, all
+      **unconfirmed**: effect sizes stay in the first build's band (about +3 seasons at best, -1 to -1.5 at
+      worst, costs 0.05 to 0.45 of a season's funding); no negative funds effect (funds aren't checked
+      against it); every option that takes an overseer is the decision's only one (the banner lists the
+      engineers as rows without the option's label); trade-offs may slow R&D (a factor under 1, "R&D 20 %
+      slower"); outcomes favoured by a trait use only engineers' traits. The five new hands-on levels keep
+      the first level's shape (shifts pay, Overtime gives one, an expert costs one, 4 rounds of 3, which
+      help quotes) and its four icons, the test resource reusing `res_firing`, but differ in what's scarce:
+      cold-flow runs (measurements scarce), igniter tests (spare igniters both spent and part of the
+      objective), the shake table (start with parts), the sun lamps (a three-part objective), all the
+      systems at once (start with readings). A replanning bot at 20 % fails reaches the bonus 37 to 72 % of
+      the time on them (the first two levels: 68 %). `DecisionsTest` now wants at least 4 first steps a
+      type for rockets and as many for payloads. `-Dshots=decisions` renders every banner
+      (`pool-<id>.png`) and each campaign's planning screen. **Measured** (`ContentPackPlayouts standard side
+      decisions`, 200 Moon races, the same day): the Moon race averages 121.5 seasons with the grown pools,
+      115.9 with the first build's and 130.3 with none, so decisions now shorten it by about 9 seasons, not
+      14: more of the new outcomes move morale, money or the pace of R&D instead of reliability, and some slow
+      R&D. About 74 decisions a game (70 before); hands-on campaigns 190 bonus, 65 success, no failure.
     - **Client:** `DecisionBanner` in the card (`RndCards`), the board putting that card first; the
       trade-off preview is a gold line under each option ("With this: 60 % in ~3 seasons (now ~2) · the cap
       in ~25 (now ~32)") rather than a hover state on the bar; who-oversees-it lists the idle engineers as

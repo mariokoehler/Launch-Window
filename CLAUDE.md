@@ -84,6 +84,9 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
 - **R&D decisions are built** (2026-10-10, `ui-spec.md` component 26, `design.md` §5): choices about a
   component under R&D, offered mostly in lulls, decided at once (`DecideAction`, `rules.RdDecisions`), ten
   types in `assets/content/decisions.json`. Rebuild client and server together before the play test.
+  The pools were grown on 2026-10-25 to 185 decisions, about 20 first steps a type (pairing 12, hands-on 7);
+  `-Dshots=decisions` renders every banner. Only one option a decision may take an overseer (the banner lists
+  the engineers, not the option), and no negative funds effect. Rebuild client and server together; no reset.
 - **Random events tell stories** (2026-10-10, `design.md` §2.7(d)): 105 in `event-stories.json`, sized per
   event from the playouts, no repeats until an event's stories have all run.
 - **Looking ahead is built** (the user's idea, 2026-10-10, `ui-spec.md` component 25): R&D milestones with

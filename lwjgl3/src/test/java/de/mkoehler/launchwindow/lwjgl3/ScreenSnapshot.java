@@ -275,6 +275,10 @@ public final class ScreenSnapshot {
             handsOnShots(folder, game);
             return;
         }
+        if ("decisions".equals(System.getProperty("shots"))) {
+            decisionPoolShots(folder, game);
+            return;
+        }
         if ("frontpage".equals(System.getProperty("shots"))) {
             frontPageShots(folder, game);
             return;
@@ -1435,6 +1439,82 @@ public final class ScreenSnapshot {
      * strip cell, and the hub's decision dot. Each decision is put on the state directly, not rolled.
      */
     private static void decisionShots(File folder, LaunchWindowGame game) {
+        PlayerSnapshot live = decisionSession(game);
+
+        String[][] banners = {
+            {"static-firing", "r7-vostok", "decision-resource.png"},
+            {"balloon-tanks-pad", "r7-vostok", "decision-knowledge.png"},
+            {"night-shift", "vostok-capsule", "decision-ambiguous.png"},
+            {"who-signs-vibration", "vostok-capsule", "decision-oversee.png"},
+            {"freeze-design", "vostok-capsule", "decision-tradeoff.png"},
+            {"battery-in-vacuum", "vostok-capsule", "decision-diagnosis.png"},
+            {"altitude-chamber", "vostok-capsule", "decision-opportunity.png"},
+            {"pair-up", "vostok-capsule", "decision-pairing.png"},
+            {"rival-insulation", "vostok-capsule", "decision-intel.png"},
+            {"long-soak", "vostok-capsule", "decision-followup.png"}};
+        decisionBanners(folder, game, live, banners);
+        // The confirmations: a cost, a picker for who goes, two pickers for a pair.
+        live.setPendingDecision(de.mkoehler.launchwindow.model.PendingDecision.offered("static-firing", "r7-vostok",
+            22, 7L));
+        write(folder, "decision-confirm.png", new RndBoardScreen(game, RndBoardScreen.Board.ROCKET),
+            screen -> screen.openDecision("full", null));
+        live.setPendingDecision(de.mkoehler.launchwindow.model.PendingDecision.offered("altitude-chamber",
+            "vostok-capsule", 22, 7L));
+        write(folder, "decision-confirm-seconded.png", new RndBoardScreen(game, RndBoardScreen.Board.PAYLOAD),
+            screen -> screen.openDecision("accept", null));
+        live.setPendingDecision(de.mkoehler.launchwindow.model.PendingDecision.offered("pair-up", "vostok-capsule",
+            22, 7L));
+        write(folder, "decision-confirm-pair.png", new RndBoardScreen(game, RndBoardScreen.Board.PAYLOAD),
+            screen -> screen.openDecision("pair", null));
+        decisionOutcomeShots(folder, game, live);
+    }
+
+    /**
+     * Every R&amp;D decision's banner, alone with {@code -Dshots=decisions} (the pools grown 2026-10-25):
+     * one shot each on a rocket or a payload as it fits ({@code pool-<id>.png}), and each hands-on
+     * campaign's planning screen ({@code pool-<id>-planning.png}), to read the whole pool for fit.
+     */
+    private static void decisionPoolShots(File folder, LaunchWindowGame game) {
+        PlayerSnapshot live = decisionSession(game);
+        de.mkoehler.launchwindow.content.Decisions decisions = de.mkoehler.launchwindow.content.Decisions.standard();
+        List<String[]> banners = new java.util.ArrayList<>();
+        for (de.mkoehler.launchwindow.content.Decisions.Decision decision : decisions.decisions()) {
+            String component = decision.fits() == de.mkoehler.launchwindow.content.Decisions.Fits.ROCKET
+                ? "r7-vostok" : "vostok-capsule";
+            banners.add(new String[] {decision.id(), component, "pool-" + decision.id() + ".png"});
+        }
+        decisionBanners(folder, game, live, banners.toArray(new String[0][]));
+        for (de.mkoehler.launchwindow.content.Decisions.Decision decision : decisions.decisions()) {
+            if (decision.handsOn() == null) {
+                continue;
+            }
+            String component = decision.fits() == de.mkoehler.launchwindow.content.Decisions.Fits.ROCKET
+                ? "r7-vostok" : "vostok-capsule";
+            live.setPendingDecision(de.mkoehler.launchwindow.model.PendingDecision.offered(decision.id(), component,
+                22, 7L));
+            de.mkoehler.launchwindow.rules.RdDecisions.decide(live, game.session().catalog(), decisions, "run", null,
+                null);
+            write(folder, "pool-" + decision.id() + "-planning.png",
+                new de.mkoehler.launchwindow.client.screen.HandsOnScreen(game), null);
+        }
+    }
+
+    /** One banner per row (decision, component, file) on its component's board. */
+    private static void decisionBanners(File folder, LaunchWindowGame game, PlayerSnapshot live, String[][] banners) {
+        for (String[] banner : banners) {
+            live.setPendingDecision(de.mkoehler.launchwindow.model.PendingDecision.offered(banner[0], banner[1], 22,
+                7L));
+            RndBoardScreen.Board board = banner[1].equals("r7-vostok") ? RndBoardScreen.Board.ROCKET
+                : RndBoardScreen.Board.PAYLOAD;
+            write(folder, banner[2], new RndBoardScreen(game, board), null);
+        }
+    }
+
+    /**
+     * The decisions' session: a Soviet agency in 1960 with the R-7 and Vostok under R&amp;D, a team on
+     * each, idle engineers to oversee and pair, one in training, and an Intelligence Office at level 2.
+     */
+    private static PlayerSnapshot decisionSession(LaunchWindowGame game) {
         String hash = ContentPackHash.ofClasspath("content/early-era", ScreenSnapshot.class.getClassLoader());
         GameInfoResponse info = GameInfoResponse.success("early-era", hash, List.of(), 23, true,
             6 * 3_600_000L + 12 * 60_000L + 30_000L, 0L, null, List.of(), List.of(), 0);
@@ -1460,40 +1540,11 @@ public final class ScreenSnapshot {
         state.getSetSpecialists().add(training);
         state.getIntelligence().setLevel(2);
         startSession(game, state, info);
-        PlayerSnapshot live = game.session().state();
+        return game.session().state();
+    }
 
-        String[][] banners = {
-            {"static-firing", "r7-vostok", "decision-resource.png"},
-            {"balloon-tanks-pad", "r7-vostok", "decision-knowledge.png"},
-            {"night-shift", "vostok-capsule", "decision-ambiguous.png"},
-            {"who-signs-vibration", "vostok-capsule", "decision-oversee.png"},
-            {"freeze-design", "vostok-capsule", "decision-tradeoff.png"},
-            {"battery-in-vacuum", "vostok-capsule", "decision-diagnosis.png"},
-            {"altitude-chamber", "vostok-capsule", "decision-opportunity.png"},
-            {"pair-up", "vostok-capsule", "decision-pairing.png"},
-            {"rival-insulation", "vostok-capsule", "decision-intel.png"},
-            {"long-soak", "vostok-capsule", "decision-followup.png"}};
-        for (String[] banner : banners) {
-            live.setPendingDecision(de.mkoehler.launchwindow.model.PendingDecision.offered(banner[0], banner[1], 22,
-                7L));
-            RndBoardScreen.Board board = banner[1].equals("r7-vostok") ? RndBoardScreen.Board.ROCKET
-                : RndBoardScreen.Board.PAYLOAD;
-            write(folder, banner[2], new RndBoardScreen(game, board), null);
-        }
-        // The confirmations: a cost, a picker for who goes, two pickers for a pair.
-        live.setPendingDecision(de.mkoehler.launchwindow.model.PendingDecision.offered("static-firing", "r7-vostok",
-            22, 7L));
-        write(folder, "decision-confirm.png", new RndBoardScreen(game, RndBoardScreen.Board.ROCKET),
-            screen -> screen.openDecision("full", null));
-        live.setPendingDecision(de.mkoehler.launchwindow.model.PendingDecision.offered("altitude-chamber",
-            "vostok-capsule", 22, 7L));
-        write(folder, "decision-confirm-seconded.png", new RndBoardScreen(game, RndBoardScreen.Board.PAYLOAD),
-            screen -> screen.openDecision("accept", null));
-        live.setPendingDecision(de.mkoehler.launchwindow.model.PendingDecision.offered("pair-up", "vostok-capsule",
-            22, 7L));
-        write(folder, "decision-confirm-pair.png", new RndBoardScreen(game, RndBoardScreen.Board.PAYLOAD),
-            screen -> screen.openDecision("pair", null));
-
+    /** The decided banners, good and bad, then where the player meets a decision: the report and the hub. */
+    private static void decisionOutcomeShots(File folder, LaunchWindowGame game, PlayerSnapshot live) {
         // The outcomes: the test firing's clean run and its rough one, by the seed's roll.
         de.mkoehler.launchwindow.content.Decisions decisions = de.mkoehler.launchwindow.content.Decisions.standard();
         for (boolean good : new boolean[] {true, false}) {

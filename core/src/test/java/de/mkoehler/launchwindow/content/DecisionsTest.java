@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -14,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Tests the R&amp;D decisions file: every type has its first few, ids are unique, defaults take nobody
+ * Tests the R&amp;D decisions file: every type has a pool for rockets and for payloads, ids are unique, defaults take nobody
  * and cost nothing, knowledge and diagnosis have exactly one right answer, follow-ups resolve one
  * step on, explainers exist, the odds fit who an option takes, and placeholders fit their option.
  *
@@ -24,7 +25,10 @@ class DecisionsTest {
 
     private static final Decisions DECISIONS = Decisions.load(Path.of("..", "assets", "content", Decisions.FILE));
 
-    /** Every type has at least two decisions; ids are unique. */
+    /**
+     * Every type has a pool for each kind of component: at least {@link #POOL_FLOOR} first steps a rocket
+     * can draw and as many a payload can (the pools grown 2026-10-25); ids are unique.
+     */
     @Test
     void everyTypeHasDecisions() {
         Set<String> ids = new HashSet<>();
@@ -32,10 +36,17 @@ class DecisionsTest {
             assertTrue(ids.add(decision.id()), "duplicate id " + decision.id());
         }
         for (Decisions.Type type : Decisions.Type.values()) {
-            long count = DECISIONS.decisions().stream().filter(decision -> decision.type() == type).count();
-            assertTrue(count >= 2, type + " has " + count);
+            for (Decisions.Fits kind : List.of(Decisions.Fits.ROCKET, Decisions.Fits.PAYLOAD)) {
+                long count = DECISIONS.decisions().stream().filter(decision -> decision.type() == type
+                    && decision.step() == 1 && (decision.fits() == kind || decision.fits() == Decisions.Fits.ANY))
+                    .count();
+                assertTrue(count >= POOL_FLOOR, type + " has " + count + " for a " + kind);
+            }
         }
     }
+
+    /** The fewest first steps a type offers each kind of component. */
+    private static final int POOL_FLOOR = 4;
 
     /** A default exists, takes nobody and costs nothing, so a lapse can always apply it. */
     @Test
