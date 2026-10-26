@@ -3461,7 +3461,7 @@
     "maintenanceCost": 1050,
     "creationCost": 10500,
     "unitCost": 6825,
-    "mass": 42000.0,
+    "mass": 63500.0,
     "agency": "NASA",
     "rocket": null,
     "ownLift": null
@@ -3640,7 +3640,7 @@
       },
       {
         "sourceComponentId": "mercury-capsule",
-        "transferPercent": 10.0
+        "transferPercent": 35.0
       },
       {
         "sourceComponentId": "gemini-capsule",
@@ -3830,7 +3830,7 @@
       },
       {
         "sourceComponentId": "vostok-capsule",
-        "transferPercent": 7.5
+        "transferPercent": 35.0
       },
       {
         "sourceComponentId": "voskhod-capsule",
@@ -6247,6 +6247,55 @@
       "payloadToLeo": 118390.0,
       "payloadToTli": 47000.0,
       "payloadToTpi": 40820.0
+    },
+    "ownLift": null
+  },
+  {
+    "id": "nova",
+    "associatedSkill": "HUMAN_RATED_ROCKETS",
+    "baselineReliability": 3.0,
+    "maxReliability": 97.5,
+    "maxRdReliability": 91.0,
+    "rdSlotBandMaxAmounts": [
+      1.0,
+      3.0,
+      4.0,
+      6.0
+    ],
+    "maxReliabilityTransfer": 60.0,
+    "reliabilityTransferSources": [
+      {
+        "sourceComponentId": "saturn-1",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "titan-3c",
+        "transferPercent": 5.0
+      },
+      {
+        "sourceComponentId": "saturn-1b",
+        "transferPercent": 15.0
+      },
+      {
+        "sourceComponentId": "saturn-c3b",
+        "transferPercent": 25.0
+      },
+      {
+        "sourceComponentId": "saturn-v",
+        "transferPercent": 30.0
+      }
+    ],
+    "maintenanceCost": 1500,
+    "creationCost": 15000,
+    "unitCost": 9750,
+    "mass": 0.0,
+    "agency": "NASA",
+    "rocket": {
+      "rocketClass": "HEAVY",
+      "payloadToSuborbital": 400000.0,
+      "payloadToLeo": 210000.0,
+      "payloadToTli": 68000.0,
+      "payloadToTpi": 60000.0
     },
     "ownLift": null
   }

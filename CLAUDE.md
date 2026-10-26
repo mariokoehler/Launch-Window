@@ -305,6 +305,13 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
   capsule step they pilot (unconfirmed). The advisor walks the stages (`Advisor.ROAD_AHEAD`) and can no longer be hidden,
   only minimized (`ui-spec.md` component 24). `-Dshots=progression`. The pack hash changed and saved classes and events
   gained fields: reset the dev data root, rebuild client and server together.
+- **The roads to the Moon, measured, and Nova** (2026-10-26, `design.md` §2.3(e)): `-Dbot.roads=<nasa>,<soviet>` plays
+  each road (Apollo and the 7K-L3 land at a median of 81, Gemini EOR 74, the LK-700 70 to 73). Gemini direct ascent
+  (71) now needs **Nova**, a new heavy rocket (`baspm_pack.py`'s `nova_rocket`; its craft weighs 63.5 t), and lands at
+  78. Apollo's CSM and the 7K-L3's LOK inherit 35 % of the first capsule, as Gemini does (`capsule_heritage`): Apollo
+  lands at 77, the 7K-L3 at 78. Nova's pictures are **placeholders** (`assets/ui/rockets/nova.jpg`, `assets/ui/blueprints/nova.jpg`) until the
+  user's art comes; `checklist.py` doesn't know it. Next: the comparison screen of the roads (spec first). The pack hash
+  changed: reset the dev data root.
 
 ## How we work
 

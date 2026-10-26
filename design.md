@@ -395,6 +395,12 @@ leading to satellite navigation.
   above) on 22 August 1963. Neil Armstrong flew the X-15 before Gemini, and Joe Engle
   earned his wings in it before flying the Space Shuttle. What its pilots learnt (reaction-control jets, pressure
   suits, flying a reentry) went into the capsules: the game's rocket-plane wings (§2.2(c)).
+- **Nova, the rocket direct ascent needed** (2026-10-26, from Wikipedia's Nova and Saturn C-8 articles and NASA's
+  SP-4009): landing the whole spacecraft and flying it home took a rocket far bigger than the Saturn V. The Nova
+  studies drew one with eight F-1 engines in its first stage, about 12 million pounds of thrust; the 8L design could
+  send about 68 t toward the Moon. NASA picked the Saturn C-5 (the Saturn V) in December 1961 and lunar-orbit
+  rendezvous in July 1962, and the eight-engine stage was dropped; the Michoud plant's roof was also too low for a
+  stage that wide. The game's Nova (§2.3(e)), its history note in `strings.json`.
 - **The first rover sent to Mars** (2026-10-17, from Wikipedia and IEEE Spectrum; verify before a note uses it): Mars 2
   and Mars 3 each carried PrOP-M, a 4.5 kg box on two wide skis, tethered to its lander by a 15 m cable. The lander's
   arm was to set it down in view of the cameras; it would walk on its skis at up to a metre an hour, stopping every
@@ -1721,6 +1727,40 @@ added on top of BASPM's by the converter (`baspm_pack.py`'s `progression_gates`,
   bigger capsules. It gets its own reason to fly instead: rocket-plane wings (§2.2(c)).
 - **Shown:** Headquarters lists locked programs with what they need, as before; the advisor walks the stages
   (`ui-spec.md` component 24); the help topic "Programs" lists them. The filler bots' plans already fly in this order.
+
+**(e) The roads to the Moon, measured** (2026-10-26, for the comparison the user wants to show players; the smart bot,
+200 games, seed 42; `ContentPackPlayouts standard smart` with `-Dbot.roads=<nasa>,<soviet>`, plans in its `ROADS`).
+Median season of the landing (quartiles), before the Nova:
+
+| Road | Median | Quartiles |
+|---|---|---|
+| Apollo (lunar-orbit rendezvous) | 81 | 76 / 81 / 87 |
+| Gemini then Apollo (`gemini-apollo`) | 83 | 79 / 83 / 88 |
+| Gemini EOR | 74 | 69 / 74 / 79 |
+| Gemini direct ascent | 71 | 68 / 71 / 76 |
+| Soyuz 7K-L3 on the N1 | 81 | 75 / 81 / 88 |
+| LK-700 on the UR-700 | 70 to 73 | 64 / 70 / 80 |
+
+Runs with no change on one side moved that side's median by up to 3 seasons: read differences below that as noise.
+- **Why Apollo is slowest:** not money (half its 22,012 opening gained one season) but time. Its first flight waits
+  14 seasons as the bot's target (Gemini's 6): the CSM gets 10 % of Mercury's reliability and develops at half
+  Gemini's rate (R&D bands 2/4/5/7 against 4/7/10/14), Gemini 35 %. Then the lunar module's tests (about 8 seasons) and
+  the Saturn V, started only when the Moon flights need it (7 seasons at the first). The roads whose Earth-orbit
+  tests already need the heavy rocket (direct ascent, the LK-700) build it alongside the craft. Flying Gemini first
+  gives the CSM 35 % from Gemini, but the bot flies one plan entry at a time, so Gemini's 13 seasons come on top; a
+  player can overlap them.
+- **The Nova** (the user's idea, 2026-10-26, built with placeholder art): BASPM's direct-ascent craft weighed 42 t, so its
+  stack fit the Saturn V's 47 t toward the Moon. The converter (`baspm_pack.py`'s `nova_rocket`) makes it 63.5 t, the
+  stack about 67.5 t, and adds **Nova** (`nova`): heavy, 68 t toward the Moon (the eight-F-1 8L study), 15,000 to
+  create, 1,500 upkeep, an R&D ceiling of 91 %, reliability carried over from the Saturn family (the Saturn V 30 %, C-3B
+  25 %, IB 15 %, I 10 %, Titan IIIC 5 %). All its numbers are ours and unconfirmed. Gemini direct ascent's median moves
+  from 71 to **78** (a 20,000 Nova measured the same). The Earth-orbit tests still fly on the Saturn V.
+- **The lunar-orbit craft inherit like Gemini** (the user's decision, 2026-10-26): Apollo's CSM now carries over 35 % of
+  the Mercury capsule's reliability (was 10 %) and the 7K-L3's LOK 35 % of Vostok's (was 7.5 %), what Gemini takes from
+  Mercury (`baspm_pack.py`'s `capsule_heritage`). Measured at 20 / 30 / 40 %: Apollo 80 / 79 / 77, the 7K-L3 78 / 78 / 76;
+  the first flight's wait 12.3 / 11.1 / 9.2 seasons (was 14.2). At 35 %: **Apollo 77, the 7K-L3 78.**
+- **Where it stands:** Gemini EOR 74, the LK-700 70 to 73, Apollo 77, the 7K-L3 78, Gemini direct ascent 78. Gemini EOR and
+  the LK-700 keep a lead for now; the comparison screen (`ui-spec.md` §4.21) shows the trade-offs, never a ranking.
 
 ### 2.4 Mission components & reliability
 

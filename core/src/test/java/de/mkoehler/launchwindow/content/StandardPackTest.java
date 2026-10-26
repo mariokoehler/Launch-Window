@@ -40,7 +40,8 @@ class StandardPackTest {
     void holdsTheWholeTree() {
         assertEquals(13, catalog.categories().size());
         assertEquals(55, catalog.programs().size());
-        assertEquals(85, catalog.missionComponents().size());
+        // 85 from BASPM, and Nova for direct ascent (2026-10-26).
+        assertEquals(86, catalog.missionComponents().size());
         // 189 from BASPM, less two: the E-154 flies the X-15's three where it had five (2026-10-17).
         assertEquals(187, catalog.missionConfigurations().size());
         assertEquals(207, catalog.goals().size());

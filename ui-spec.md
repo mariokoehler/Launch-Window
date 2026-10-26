@@ -3831,6 +3831,90 @@ existing screens, made of existing components; every look is unconfirmed.
 - **Help:** a "Findings" topic (Rivals), on the mission plan, the turn report and the Museum.
   `ScreenSnapshot -Dshots=findings` renders the report, the dialog, the tab, a page, the help and the plan.
 
+### 4.21 Roads to the Moon *(the user's idea, 2026-10-26; specified 2026-10-26, to be mocked up on the canvas `Launch Window — Roads to the Moon`)*
+**Purpose:** help the player choose how to land on the Moon. NASA has three roads that land (Apollo, Gemini EOR,
+Gemini direct ascent) and the Soviets two (Soyuz 7K-L3, LK-700); each is a Moon program plus the Earth-orbit tests
+that make its Moon flights free to open (`design.md` §2.3(d)). The screen sets the roads side by side with what each
+costs, needs and asks of you, and the trade-offs in plain words. **It never ranks them** (user, 2026-10-26: inform,
+don't shoehorn): no "recommended", no "fastest", no measured season counts. Apollo and the 7K-L3 carry a quiet
+"The historical choice" tag, nothing more. The roads are measured close to each other (`design.md` §2.3(e)), so the
+facts and the trade-off lines carry the choice.
+
+**Where:**
+- Headquarters' Moon screen (§4.6.2/4.6.3): a button **Compare the roads to the Moon** in the Lunar expeditions
+  category's header, also while the category is locked.
+- Each Moon program's details page (§4.6.4) and each road's Earth-orbit test program's page: a link "Compare the
+  roads to the Moon".
+- The advisor's "Choose your road to the Moon" (component 24): its Go link opens this screen instead of Headquarters.
+- Breadcrumb "Space Complex › Headquarters › Roads to the Moon". A help topic "Roads to the Moon" (component 23).
+
+**Layout, top to bottom** (1920 × 1080, the usual chrome):
+- **Title** "Roads to the Moon", and one line under it: "Every road here lands on the Moon. They differ in what
+  you build, which rocket you need and how many flights it takes to get there." A concept chip for the explainer
+  "Three ways to the Moon" (E-20, component 18/19) at the end of the line.
+- **The roads**, one column per road (three for NASA, two for the Soviets), the same rows in each so they read
+  across; a narrow label column at the left names the rows. Each column:
+  - **Head:** the program's picture (its `assets-raw/Programs` art, as the program cards show it), its name, the
+    mode as a small badge with a **mode glyph** (new icon, three of them: *Direct ascent*, *Earth-orbit rendezvous*,
+    *Lunar-orbit rendezvous*), and the "The historical choice" tag where it applies. A road the player has opened is
+    marked **Your road** (navy badge), never highlighted otherwise.
+  - **How it works:** one sentence (from `moon-roads.json`, below).
+  - **To start now:** the opening price for this player, after discounts, split in two lines: "Earth-orbit tests
+    22,012" and "Moon flights: free once the tests are open"; then "Parts to build: 24,975" (the creation cost of the
+    components not yet owned) and **Total 46,987**. Discounts show where they apply ("Free: you run Gemini", in
+    green). Then "Upkeep 7,201 a season" (both programs and their components). Red when the funds can't cover it now.
+  - **Hardware to develop:** each component as a chip with its icon and name; an owned one shows its reliability
+    and a green tick ("Gemini capsule · 64 % · yours"). The count in the row's label ("3 to develop").
+  - **The rocket it needs:** the smallest rocket that lifts its landing (name, class), "Two launches per flight" for
+    Gemini EOR, and its state: "Open · 48 %", "Not open: 12,500 to open", or in red "Needs VAB level 3" (heavy rockets).
+  - **Crew per flight:** "3 astronauts" / "2 astronauts".
+  - **Flights on the way:** how many configurations its two programs offer before the landing ("22 flights before
+    the landing" for Apollo, 5 for Gemini EOR, 6 for Gemini direct ascent, 17 for the 7K-L3, 15 for the LK-700),
+    and the Firsts on the way as small goal chips (crewed flyby, lunar orbit, docking, spacewalk), each reached one
+    greyed with a tick.
+  - **The landing:** "28 steps, every one with the crew at risk · 1 launch", "36 steps · 2 launches, both must
+    work"; its first-time prestige.
+  - **Trade-offs:** two short lists from `moon-roads.json`, **For** (green bullet) and **Against** (gold bullet, not
+    red: they're costs, not failures), two or three lines each.
+  - **Foot:** a history-note icon (component 15) with the road's real story, and a button **View the program** to
+    the Moon program's details page (or **View the Earth-orbit tests**, whichever is the next to open).
+- **Reach the Moon without landing:** a slim strip under the columns with the roads that only fly round or orbit the
+  Moon (NASA: circumlunar Gemini, lunar-orbital Gemini; Soviets: the 7K-L1), one compact card each: name, mode
+  "Flyby only" / "Lunar orbit only", "To start now", the Firsts it can take, and one line ("A cheap way to the
+  Moon's first Firsts; it shares Gemini's capsule with the Gemini roads"). Never presented as a mistake.
+- **Footnote:** "Opening a road's Earth-orbit tests makes its Moon flights free to open. Rockets and components
+  you already own count for every road that uses them."
+
+**Every number is the rules'** (G7): opening prices through `ProgramOpening.openingPrice`, the rocket through the
+same lift check assembly uses, the component list and steps from the pack; nothing typed into text. The words
+(how it works, the trade-offs, the history note, the dead ends' line) live in a new
+`assets/content/moon-roads.json`, outside the pack like `front-pages.json`, keyed by the Moon program's id, with the
+Earth-orbit program and the mode; a `MoonRoadsTest` holds every lunar-expedition program of both packs to an entry
+(a road or a dead end).
+
+**Draft content** (unconfirmed; the user reviews it with the mockup):
+| Road | How it works | For | Against |
+|---|---|---|---|
+| Apollo | A mothership stays in lunar orbit; a small lander goes down and back. | The Saturn V lifts it all in one launch. The most test flights, and Firsts, on the way. | Two craft to develop and test. Three seats to fill on every flight. The Saturn V is needed only for the Moon flights: start it early. |
+| Gemini EOR | Two launches meet in Earth orbit; the joined ship flies on to the Moon. | No giant rocket: two medium ones. Builds on Gemini's capsule. | Every flight needs two launches, and both must work. The longest landing flight, and the most parts. |
+| Gemini direct ascent | One ship flies to the Moon, lands whole and comes back. | One craft and the fewest flights. Builds on Gemini's capsule. | Needs Nova, the biggest rocket there is. A heavy craft to land and lift off again. |
+| Soyuz 7K-L3 | A Soyuz orbits the Moon; one cosmonaut lands in the LK. | The N1 lifts it in one launch. Soyuz heritage; many flights on the way. | Two craft and a docking system to develop. The crew crosses to the lander by spacewalk. |
+| LK-700 | One ship flies to the Moon, lands whole and comes back. | One craft to develop; the fewest flights. | The UR-700, the largest rocket of all, from the very first test flight. |
+
+**States for the mockup:**
+1. NASA, a person in space, nothing of the three opened, Mercury open (the numbers above: Apollo total 46,987,
+   upkeep 7,201; Gemini direct ascent 29,256 / 5,089; Gemini EOR 32,543 / 3,255; Saturn V and Nova not open, VAB
+   level 2).
+2. NASA with Gemini open: both Gemini roads show "Free: you run Gemini" and the capsule as yours.
+3. NASA with Apollo chosen: its column marked **Your road**, components with reliabilities, Firsts partly ticked.
+4. The Soviet variant: two columns (7K-L3, LK-700), the 7K-L1 in the strip.
+5. Locked: before a person in space, the columns still show, with "Opens when a person has flown in space" over
+   "To start now".
+6. The history note pinned open on one column; the strip's card hovered.
+
+**New for `Theme.java` and the UI Asset Sheet:** the three mode glyphs; the For/Against bullets; the "Your road" and
+"The historical choice" badges if the existing badge kinds don't fit. Flag any new token.
+
 ## 5. Refusal reasons (for toasts and inline messages)
 
 The server replies with these codes. Suggested wording below; final wording is

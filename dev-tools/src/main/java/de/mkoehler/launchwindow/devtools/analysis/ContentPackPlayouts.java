@@ -101,6 +101,52 @@ public final class ContentPackPlayouts {
     /** The plans to the Moon ({@link BotPlans#MOON}). */
     static final Map<Archetype, List<String>> MOON_PLANS = BotPlans.MOON;
 
+    /** The early race and a lunar probe, before NASA's road to the Moon. */
+    private static final List<String> NASA_START = List.of("explorer-1-orbit", "mercury-uncrewed-suborbital",
+        "mercury-suborbital", "mercury-uncrewed-orbital", "mercury-orbital", "ranger-3-impact");
+    /** The early race and a lunar probe, before the Soviet road to the Moon. */
+    private static final List<String> SOVIET_START = List.of("sputnik-1-orbit", "vostok-uncrewed-suborbital",
+        "vostok-suborbital", "vostok-uncrewed-orbital", "vostok-orbital", "luna-2-impact");
+
+    /**
+     * Each road to a Moon landing, flown the way {@link BotPlans#MOON} flies Apollo and the 7K-L3 (2026-10-26, for
+     * comparing the roads): the craft's uncrewed tests, the Earth-orbit flights that clear the landing's bigger
+     * penalties, then out to the Moon step by step. {@code -Dbot.roads=<nasa>,<soviet>} picks them;
+     * {@code apollo,l3} is {@link BotPlans#MOON}.
+     */
+    static final Map<String, List<String>> ROADS = Map.of(
+        "apollo", BotPlans.MOON.get(Archetype.NASA),
+        "l3", BotPlans.MOON.get(Archetype.SOVIET),
+        "gemini-direct", concat(NASA_START, "gemini-uncrewed-suborbital", "gemini-uncrewed-orbital", "gemini-spacewalk",
+            "gemini-direct-ascent-uncrewed-test", "gemini-direct-ascent-crewed-test",
+            "gemini-direct-ascent-uncrewed-flyby", "gemini-direct-ascent-flyby",
+            "gemini-direct-ascent-uncrewed-lunar-orbit", "gemini-direct-ascent-lunar-orbit",
+            "gemini-direct-ascent-landing"),
+        "gemini-apollo", concat(NASA_START, java.util.stream.Stream.concat(java.util.stream.Stream.of("gemini-uncrewed-suborbital",
+            "gemini-uncrewed-orbital", "gemini-spacewalk"), BotPlans.MOON.get(Archetype.NASA).stream()
+            .skip(NASA_START.size())).toArray(String[]::new)),
+        "gemini-eor", concat(NASA_START, "gemini-uncrewed-suborbital", "gemini-uncrewed-orbital", "gemini-spacewalk",
+            "gemini-eor-lander-test", "gemini-eor-flyby", "gemini-eor-lunar-orbit",
+            "gemini-eor-lander-test-lunar-orbit", "gemini-eor-landing"),
+        "lk-700", concat(SOVIET_START, "lk-700-uncrewed-suborbital", "lk-700-uncrewed-orbital",
+            "lk-700-orbital-duration-1", "lk-700-uncrewed-flyby", "lk-700-flyby", "lk-700-uncrewed-lunar-orbit",
+            "lk-700-lunar-orbit", "lk-700-landing"));
+
+    private static List<String> concat(List<String> start, String... rest) {
+        return java.util.stream.Stream.concat(start.stream(), java.util.Arrays.stream(rest)).toList();
+    }
+
+    /** The Moon plans {@code -Dbot.roads=<nasa>,<soviet>} picks, {@link #MOON_PLANS} without it. */
+    private static Map<Archetype, List<String>> moonPlans() {
+        String roads = System.getProperty("bot.roads");
+        if (roads == null) {
+            return MOON_PLANS;
+        }
+        String[] pair = roads.split(",");
+        return Map.of(Archetype.NASA, java.util.Objects.requireNonNull(ROADS.get(pair[0]), pair[0]),
+            Archetype.SOVIET, java.util.Objects.requireNonNull(ROADS.get(pair[1]), pair[1]));
+    }
+
     /** The bot launches once every component it flies is at least this reliable (or at its R&D ceiling). */
     static final double LAUNCH_RELIABILITY = 70;
 
@@ -257,7 +303,7 @@ public final class ContentPackPlayouts {
         this.buildings = catalog.buildings();
         boolean moon = catalog.goal("crewed-lunar-landing").isPresent();
         this.declaredGoals = moon ? MOON_DECLARED_GOALS : DECLARED_GOALS;
-        this.plans = moon ? MOON_PLANS : PLANS;
+        this.plans = moon ? moonPlans() : PLANS;
     }
 
     /**

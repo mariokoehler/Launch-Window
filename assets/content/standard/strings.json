@@ -755,6 +755,11 @@
       "name": "Saturn V",
       "description": "The three-stage giant that sends a complete Apollo spacecraft to the Moon.",
       "historyNote": "The Saturn V's F-1 engines suffered from combustion instability: pressure waves sloshing across the combustion chamber could tear an engine apart within moments. Engineers added copper baffles across the injector plate, then tested them the hard way, setting off small bombs inside running engines to see whether the baffles would calm the disturbance. It took more than 1,300 test firings."
+    },
+    "nova": {
+      "name": "Nova",
+      "description": "The giant that was never built: eight F-1 engines, big enough to land a whole spacecraft on the Moon and fly it home.",
+      "historyNote": "Direct ascent, landing the whole spacecraft and flying it home, needed a rocket far bigger than the Saturn V. NASA's Nova studies drew one with eight F-1 engines in its first stage, able to send about 68 tonnes toward the Moon. It was never built: lunar-orbit rendezvous needed only a small lander, so the Saturn V was enough, and the factory at Michoud was too low for a stage that wide."
     }
   },
   "configurations": {
