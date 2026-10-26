@@ -14,6 +14,7 @@ import de.mkoehler.launchwindow.client.view.GoalModifiers;
 import de.mkoehler.launchwindow.client.view.BodyMap;
 import de.mkoehler.launchwindow.client.view.ContentNames;
 import de.mkoehler.launchwindow.client.view.Help;
+import de.mkoehler.launchwindow.client.view.MoonRoads;
 import de.mkoehler.launchwindow.client.view.Outlook;
 import de.mkoehler.launchwindow.client.view.Programs;
 import de.mkoehler.launchwindow.content.CelestialBody;
@@ -98,8 +99,17 @@ public final class BodyProgramsScreen extends ChromeScreen {
             return;
         }
         List<Program> programs = Programs.inCategory(selected, session.state(), session.catalog());
-        right.add(ui.label(ContentNames.of(selected.id(), selected.name()) + " · " + programs.size() + (programs.size() == 1 ? " program"
-            : " programs"), Theme.TextStyle.EYEBROW, Theme.ON_PAGE_STRONG)).left().padBottom(Theme.SPACE_2).row();
+        Table header = new Table();
+        header.add(ui.label(ContentNames.of(selected.id(), selected.name()) + " · " + programs.size() + (programs.size() == 1 ? " program"
+            : " programs"), Theme.TextStyle.EYEBROW, Theme.ON_PAGE_STRONG)).left().expandX();
+        // The roads to the Moon compared (ui-spec.md 4.21), from the category that holds them, locked or not.
+        MoonRoads roads = MoonRoads.standard();
+        if (programs.stream().anyMatch(program -> roads.roads().stream().anyMatch(road -> road.program()
+                .equals(program.id())))) {
+            header.add(onClick(ui.pageButton("Compare the roads to the Moon"), () -> game.setScreen(new RoadsToMoonScreen(game))))
+                .right();
+        }
+        right.add(header).growX().padBottom(Theme.SPACE_2).row();
         Table grid = new Table();
         grid.top().left();
         float cardWidth = (1920f - 2 * Theme.SPACE_6 - 400f - Theme.SPACE_5 - 2 * Theme.SPACE_4) / 3f;

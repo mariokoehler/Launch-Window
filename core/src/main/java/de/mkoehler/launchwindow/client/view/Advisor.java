@@ -57,7 +57,9 @@ public final class Advisor {
         /** The Astronaut Complex. */
         ASTRONAUT_COMPLEX,
         /** The latest turn report. */
-        TURN_REPORT
+        TURN_REPORT,
+        /** The roads to the Moon compared (ui-spec.md 4.21). */
+        ROADS_TO_THE_MOON
     }
 
     /** Where an item stands. */
@@ -162,7 +164,7 @@ public final class Advisor {
         new Item("bigger-capsules", "Choose your road to the Moon",
             "A person in space opened the bigger capsules and the Moon craft's tests in Earth orbit. Opening a "
                 + "Moon craft's tests usually makes its Moon flights free to open later.",
-            "Headquarters", Destination.HEADQUARTERS, List.of("programs")),
+            "Compare the roads", Destination.ROADS_TO_THE_MOON, List.of("roads-to-the-moon", "programs")),
         new Item("moon", "Go to the Moon",
             "A probe at the Moon and a person in orbit opened the Moon programs. A crew flies round the Moon "
                 + "before it orbits it, and orbits it before it lands.",

@@ -930,7 +930,7 @@
     ],
     "openingCostDiscounts": [
       {
-        "otherProgramId": "apollo-earth-orbit",
+        "otherProgramId": "gemini-eor-earth-orbit",
         "percent": 100
       }
     ],

@@ -775,7 +775,8 @@ Writing them turned up two things for the rules, recorded in `design.md` §2.2(d
       has wings or a bigger capsule is open), and is "not needed" for an agency without such programs.
       Waiting on one, the card says "All set for now" and when it comes ("Once your first satellite
       reaches orbit: start on a person in space."). Once the first steps are done the head reads "The
-      road ahead". `Advisor.title`/`text` put the agency's own program names in.
+      road ahead". `Advisor.title`/`text` put the agency's own program names in. "Choose your road to the Moon"'s Go link
+      ("Compare the roads") opens Roads to the Moon (§4.21).
     - **Rocket-plane wings on other screens** (2026-10-26, `design.md` §2.2(c); straight into libGDX): the
       Astronaut Complex roster shows "Rocket-plane wings" in green under the astronaut's state, the person
       page a "Rocket-plane wings" badge under the skills with "Safer piloting in capsules", each with the
@@ -3831,7 +3832,7 @@ existing screens, made of existing components; every look is unconfirmed.
 - **Help:** a "Findings" topic (Rivals), on the mission plan, the turn report and the Museum.
   `ScreenSnapshot -Dshots=findings` renders the report, the dialog, the tab, a page, the help and the plan.
 
-### 4.21 Roads to the Moon *(the user's idea, 2026-10-26; specified 2026-10-26, to be mocked up on the canvas `Launch Window — Roads to the Moon`)*
+### 4.21 Roads to the Moon *(the user's idea, 2026-10-26; specified, mocked up on the canvas `Launch Window — Roads to the Moon` and built the same day)*
 **Purpose:** help the player choose how to land on the Moon. NASA has three roads that land (Apollo, Gemini EOR,
 Gemini direct ascent) and the Soviets two (Soyuz 7K-L3, LK-700); each is a Moon program plus the Earth-orbit tests
 that make its Moon flights free to open (`design.md` §2.3(d)). The screen sets the roads side by side with what each
@@ -3903,7 +3904,8 @@ Earth-orbit program and the mode; a `MoonRoadsTest` holds every lunar-expedition
 
 **States for the mockup:**
 1. NASA, a person in space, nothing of the three opened, Mercury open (the numbers above: Apollo total 46,987,
-   upkeep 7,201; Gemini direct ascent 29,256 / 5,089; Gemini EOR 32,543 / 3,255; Saturn V and Nova not open, VAB
+   upkeep 7,201; Gemini direct ascent 29,256 / 5,089; Gemini EOR 32,543 / 3,255, 22,483 since its Moon discount was
+   fixed on 2026-10-26; Saturn V and Nova not open, VAB
    level 2).
 2. NASA with Gemini open: both Gemini roads show "Free: you run Gemini" and the capsule as yours.
 3. NASA with Apollo chosen: its column marked **Your road**, components with reliabilities, Firsts partly ticked.
@@ -3914,6 +3916,40 @@ Earth-orbit program and the mode; a `MoonRoadsTest` holds every lunar-expedition
 
 **New for `Theme.java` and the UI Asset Sheet:** the three mode glyphs; the For/Against bullets; the "Your road" and
 "The historical choice" badges if the existing badge kinds don't fit. Flag any new token.
+
+**As built (2026-10-26)** from the canvas (7 artboards; its notes list every choice): `client.screen.RoadsToMoonScreen`,
+the figures in `client.view.RoadsToMoon`, the words in `assets/content/moon-roads.json` read by `client.view.MoonRoads`
+(`RoadsToMoonTest` checks the mockup's figures against the rules and that every lunar-expedition program of both packs has
+an entry). Shots `roads-*.png` (`-Dshots=roads`). Choices and departures:
+- **New in `Theme.java`:** `BadgeKind.NAVY` ("Your road": gold would read as in progress). The mode badge (an outlined
+  tag with its glyph), the quiet "The historical choice" tag (`CAPTION_ITALIC`, `NAVY_BORDER` outline), the part chip
+  (skill icon; owned: a `SUCCESS` outline, "· 64 % · yours" and a check), the goal chip (trophy; reached: a 5 % navy fill,
+  `INK_MUTED`, a check), the 7 px For/Against dots and the locked veil (white at 72 %, a framed line with the lock icon) are
+  built in the screen from existing tokens. No new colour tokens.
+- **New icons:** `mode_direct`, `mode_eor`, `mode_lor` (`assets-raw/svg/ui/make_ui_icons.py`), from the canvas's Pieces
+  artboard: the Earth, the Moon, one path; a ring round the Earth or the Moon where the craft meet.
+- **The row labels** and the "Hardware to develop" count leading its cell ("5 to develop", "All built") are the
+  canvas's. Money in the game's own format (`$ 22,012.0`), not the canvas's bare figures.
+- **The rocket's second line:** "Two launches per flight" (Gemini EOR), "A heavy rocket from the first test flight" when
+  the road's first Earth-orbit test already needs a rocket of the landing's class (the LK-700's needs the N1, Gemini
+  direct ascent's the Saturn V; the canvas had "From the first test flight" under the UR-700, which the first test
+  doesn't need), else "Lifts the landing in one launch". The LK-700's Against line says the same.
+- **The landing line counts the steps with the crew at risk:** Gemini EOR's landing has 30 of 36 (the canvas said every
+  one).
+- **Firsts on the way** are the goals of `moon-roads.json`'s `firsts` (rendezvous, docking, crew transfer, crewed flyby,
+  crewed lunar orbit) that the road's flights before the landing earn, the cascade included.
+- **The locked veil** names the Earth-orbit tests' missing goals: "Opens when you reach Human in space".
+- **"Free: ..."** names the open program whose discount covers a line ("Free: you run Gemini"); the road's own tests
+  read "Free: ready to open".
+- **Where:** a page button "Compare the roads to the Moon" in the header of a body's category that holds a road
+  (Lunar expeditions), a secondary button on every road program's and its tests' details page, and the advisor's
+  "Choose your road to the Moon" (Go link "Compare the roads"). Help context `ROADS_TO_THE_MOON` and topic
+  "Roads to the Moon".
+- **The strip** under NASA's three columns needs a short scroll at 1080 (the page scrolls); the Soviet page fits.
+- **History notes** (all five checked into `design.md` §1.1): Apollo (Houbolt, July 1962), Gemini EOR (Chamberlin's 1961
+  Lunar Gemini and the Langley light lander; no source confirms an Earth-orbit-rendezvous variant, so the note
+  doesn't claim one), Gemini direct ascent (Nova), the 7K-L3 (the LK's three uncrewed tests, the N1's four failures),
+  the LK-700 (Chelomei's UR-700, never built).
 
 ## 5. Refusal reasons (for toasts and inline messages)
 
@@ -4226,6 +4262,10 @@ current state alone. Each is an M5 task.
    mission (§4.6.5 to §4.6.8), Mission Control (§4.7), the turn report (§4.4).
 4. **The rest:** Astronaut Complex (§4.9), Public Affairs Office (§4.10), Museum
    (§4.11), settings (§4.12), game result (§4.13).
+
+**Mocked up and built (2026-10-26, canvas `Launch Window — Roads to the Moon`):** Roads to the Moon (§4.21): 7 artboards (NASA,
+Gemini open, Apollo chosen, Soviet, locked, a pinned note, the new pieces), choices in the canvas's notes. New for
+`Theme.java`: `BadgeKind.NAVY`; three mode glyphs for the UI Asset Sheet. No new colour tokens.
 
 **Mocked up (2026-10-11, canvas `Launch Window — Contracts`):** Contracts (§4.17) and the contract
 marker (component 27): 12 artboards, choices listed under each. New for `Theme.java`: the contract

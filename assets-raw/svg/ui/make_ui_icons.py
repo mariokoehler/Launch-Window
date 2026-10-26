@@ -102,6 +102,21 @@ FILLED = {
                        '</mask></defs><path d="M4 1.5h9.6l5 5V21.5H4z" fill="currentColor" mask="url(#lwcm)"/>'
                        '<circle cx="16.5" cy="16" r="4" fill="currentColor"/><path d="M15 19.5l-1 3M18 19.5l1 3" '
                        'stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>',
+    # The roads to the Moon's mode glyphs (ui-spec.md 4.21, Roads to the Moon canvas, 2026-10-26): the Earth lower
+    # left, the Moon upper right, one path between; a ring round the Earth where two launches meet (Earth-orbit
+    # rendezvous), or round the Moon where the lander and the mothership meet (lunar-orbit rendezvous).
+    "mode_direct": '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="none" stroke="currentColor" '
+                   'stroke-width="1.4" stroke-linecap="round"><circle cx="4.2" cy="11.8" r="2.1" fill="currentColor" '
+                   'stroke="none"/><circle cx="12.4" cy="3.8" r="1.3" fill="currentColor" stroke="none"/>'
+                   '<path d="M5.9 10.3 Q 7.6 5.6 10.9 4.3"/></svg>',
+    "mode_eor": '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="none" stroke="currentColor" '
+                'stroke-width="1.4" stroke-linecap="round"><circle cx="4.2" cy="11.8" r="2.1" fill="currentColor" '
+                'stroke="none"/><circle cx="12.4" cy="3.8" r="1.3" fill="currentColor" stroke="none"/>'
+                '<circle cx="4.2" cy="11.8" r="3.8"/><path d="M7.1 9.3 Q 8.7 5.8 11 4.4"/></svg>',
+    "mode_lor": '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="none" stroke="currentColor" '
+                'stroke-width="1.4" stroke-linecap="round"><circle cx="4.2" cy="11.8" r="2.1" fill="currentColor" '
+                'stroke="none"/><circle cx="12.4" cy="3.8" r="1.3" fill="currentColor" stroke="none"/>'
+                '<circle cx="12.4" cy="3.8" r="3.0"/><path d="M5.9 10.3 Q 7.2 6.8 9.6 5"/></svg>',
 }
 
 # The astronaut glyph's antenna tip is a filled dot.

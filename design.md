@@ -401,6 +401,18 @@ leading to satellite navigation.
   send about 68 t toward the Moon. NASA picked the Saturn C-5 (the Saturn V) in December 1961 and lunar-orbit
   rendezvous in July 1962, and the eight-engine stage was dropped; the Michoud plant's roof was also too low for a
   stage that wide. The game's Nova (§2.3(e)), its history note in `strings.json`.
+- **The roads to the Moon's history notes** (2026-10-26, `assets/content/moon-roads.json`, `ui-spec.md` §4.21):
+  - Apollo: John Houbolt at Langley argued for lunar-orbit rendezvous, the lightest plan, against most of NASA, and
+    wrote over his managers' heads; NASA chose it in July 1962 (as the explainer E-20).
+  - Gemini EOR: in 1961 James Chamberlin's Gemini team sketched Lunar Gemini with a light lander after a Langley
+    design, little more than a platform on a rocket engine on which the astronaut stood, at a fraction of Apollo's
+    launch mass; it stayed on paper once LOR won (Air & Space's "Lunar Landers That Never Were", Spaceflight Histories'
+    "Lunar Gemini"). No source found confirms an Earth-orbit-rendezvous variant: the note doesn't claim one.
+  - Gemini direct ascent: Nova, above.
+  - Soyuz 7K-L3: the LK flew three uncrewed tests in Earth orbit, 1970 and 1971 (Kosmos 379, 398, 434), and worked;
+    the N1 failed all four launches, 1969 to 1972.
+  - LK-700: Chelomei's direct-ascent proposal on the UR-700; the government chose Korolev's N1-L3, and neither the
+    UR-700 nor the LK-700 was built.
 - **The first rover sent to Mars** (2026-10-17, from Wikipedia and IEEE Spectrum; verify before a note uses it): Mars 2
   and Mars 3 each carried PrOP-M, a 4.5 kg box on two wide skis, tethered to its lander by a 15 m cable. The lander's
   arm was to set it down in view of the cameras; it would walk on its skis at up to a metre an hour, stopping every
@@ -1760,7 +1772,18 @@ Runs with no change on one side moved that side's median by up to 3 seasons: rea
   Mercury (`baspm_pack.py`'s `capsule_heritage`). Measured at 20 / 30 / 40 %: Apollo 80 / 79 / 77, the 7K-L3 78 / 78 / 76;
   the first flight's wait 12.3 / 11.1 / 9.2 seasons (was 14.2). At 35 %: **Apollo 77, the 7K-L3 78.**
 - **Where it stands:** Gemini EOR 74, the LK-700 70 to 73, Apollo 77, the 7K-L3 78, Gemini direct ascent 78. Gemini EOR and
-  the LK-700 keep a lead for now; the comparison screen (`ui-spec.md` §4.21) shows the trade-offs, never a ranking.
+  the LK-700 keep a lead for now; the comparison screen (`ui-spec.md` §4.21, built 2026-10-26) shows the trade-offs, never
+  a ranking.
+- **Gemini EOR's Moon discount fixed** (found by the mockup; the user's decision, 2026-10-26: "probably a data error in
+  BASPM"): BASPM discounted its Moon program 100 % through Apollo's Earth-orbit tests, unlike every other road. The
+  converter points it at its own tests (`baspm_pack.py`'s `discount_fixes`), so its Moon flights are free once
+  `gemini-eor-earth-orbit` is open. To start from Mercury alone it now costs 22,483 (was 32,543); the smart bot lands it
+  at a median of 73 (was 74, within noise).
+- **Accepted as the status quo** (the user's decision, 2026-10-26): Gemini EOR 73, the LK-700 70 to 73, Apollo 77, the
+  7K-L3 78, Gemini direct ascent 78, the spread 5 seasons on each side (was 10 and 8 to 11). The clever roads keep a small
+  lead, paid for in risk. Levers not pulled, for a later look: the LK-700's R&D or a dearer UR-700, more weight on Gemini
+  EOR's two launches. Play tests may still move it; the bot flies its plan one flight at a time, so it undervalues
+  overlapping roads (Gemini, then Apollo).
 
 ### 2.4 Mission components & reliability
 

@@ -517,6 +517,7 @@ public final class SpaceComplexScreen extends SessionScreen {
             case MISSION_CONTROL -> goMissionControl();
             case ASTRONAUT_COMPLEX -> goAstronautComplex();
             case TURN_REPORT -> openLatestReport(null);
+            case ROADS_TO_THE_MOON -> game.setScreen(new RoadsToMoonScreen(game));
         }
     }
 

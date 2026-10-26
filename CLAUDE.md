@@ -69,7 +69,7 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
   `Launch Window — Intelligence Office` (`ui-spec.md` §4.15). Reset the dev data root before the
   next play test (new saved fields).
 - **Help is built** (2026-10-08, `ui-spec.md` component 23): a help button and F1 open the rules
-  by topic over the current screen, filtered to the screen's topics. 32 topics (synced with the code 2026-10-22). Numbers in
+  by topic over the current screen, filtered to the screen's topics. 33 topics (synced with the code 2026-10-26). Numbers in
   `help.json` are tokens filled from the rules (`HelpValues`); a new rule number goes there, never
   into the text, and a changed rule needs its topic's text changed in the same session.
 - **The advisor is built** (2026-10-08, `ui-spec.md` component 24): a hub card with a new agency's
@@ -310,8 +310,13 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
   (71) now needs **Nova**, a new heavy rocket (`baspm_pack.py`'s `nova_rocket`; its craft weighs 63.5 t), and lands at
   78. Apollo's CSM and the 7K-L3's LOK inherit 35 % of the first capsule, as Gemini does (`capsule_heritage`): Apollo
   lands at 77, the 7K-L3 at 78. Nova's pictures are **placeholders** (`assets/ui/rockets/nova.jpg`, `assets/ui/blueprints/nova.jpg`) until the
-  user's art comes; `checklist.py` doesn't know it. Next: the comparison screen of the roads (spec first). The pack hash
-  changed: reset the dev data root.
+  user's art comes; `checklist.py` doesn't know it. The pack hash changed: reset the dev data root.
+- **Roads to the Moon is built** (the user's idea, 2026-10-26, `ui-spec.md` §4.21, from the canvas
+  `Launch Window — Roads to the Moon`): the landing roads side by side, never ranked, figures from the rules
+  (`client.view.RoadsToMoon`), words in `assets/content/moon-roads.json` (outside the pack, `RoadsToMoonTest`); from
+  Headquarters' Lunar expeditions, the road programs' pages and the advisor. `-Dshots=roads`. Gemini EOR's Moon flights
+  are now free with its own tests, not Apollo's (`discount_fixes`, a BASPM data slip): the pack hash changed, reset the
+  dev data root.
 
 ## How we work
 

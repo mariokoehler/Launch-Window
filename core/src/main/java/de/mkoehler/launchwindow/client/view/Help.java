@@ -197,7 +197,9 @@ public record Help(List<Topic> topics) {
         /** The newspaper's pages: the Firsts, the world's reactions, science and memorial pages (ui-spec.md 4.18). */
         NEWSPAPER("the paper", "the-paper", "the-race", "turn-report", "careers"),
         /** The Intelligence Office. */
-        INTELLIGENCE("the Intelligence Office", "intelligence", "poaching", "the-race");
+        INTELLIGENCE("the Intelligence Office", "intelligence", "poaching", "the-race"),
+        /** The roads to the Moon compared (ui-spec.md 4.21). */
+        ROADS_TO_THE_MOON("the roads to the Moon", "roads-to-the-moon", "programs", "rockets");
 
         private final String place;
         private final List<String> topicIds;

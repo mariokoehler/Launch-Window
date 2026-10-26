@@ -980,7 +980,12 @@ public final class Theme {
         /** {@link #SUCCESS} fill. A genuinely good/high outcome. */
         SUCCESS,
         /** {@link #DANGER} fill. Failure &mdash; not yet used by a real screen, see {@code Badge}'s own README in the design system. */
-        DANGER
+        DANGER,
+        /**
+         * {@link #NAVY} fill. The player's own pick, neither in progress nor a rating: "Your road" on the roads to the
+         * Moon (Roads to the Moon canvas, 2026-10-26).
+         */
+        NAVY
     }
 
     /**
@@ -1302,6 +1307,10 @@ public final class Theme {
                 }
                 case SUCCESS -> {
                     style.background = solid(SUCCESS);
+                    style.fontColor = ON_FILL;
+                }
+                case NAVY -> {
+                    style.background = solid(NAVY);
                     style.fontColor = ON_FILL;
                 }
                 default -> {

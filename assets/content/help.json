@@ -220,6 +220,29 @@
       "related": ["rnd", "rockets", "planning-missions"]
     },
     {
+      "id": "roads-to-the-moon",
+      "group": "Programs and hardware",
+      "title": "Roads to the Moon",
+      "body": [
+        "Several programs can land a crew on the Moon. Each is a Moon program with its Earth-orbit tests: open the tests and the Moon flights cost nothing to open. Headquarters compares them side by side: on the Moon's page, Lunar expeditions, \"Compare the roads to the Moon\".",
+        "## How they differ",
+        "- Direct ascent: one ship flies to the Moon, lands whole and comes back. Few parts and few flights, but the biggest rocket.",
+        "- Earth-orbit rendezvous: two launches meet in Earth orbit and the joined ship flies on. Smaller rockets, but every flight needs both launches to work.",
+        "- Lunar-orbit rendezvous: a mothership stays in lunar orbit while a small lander goes down and back. One big rocket and more craft to develop, with many test flights on the way.",
+        "## What the comparison shows",
+        "What each costs you now after your discounts, its upkeep, the parts still to develop (the ones you own count for every road that uses them), the rocket its landing needs and whether your VAB can build it, the crew, the flights and Firsts on the way, and the landing itself. It doesn't rank them: which road suits you depends on what you already have.",
+        "Some programs reach the Moon without landing: a cheap way to its first Firsts, shown under the roads."
+      ],
+      "related": [
+        "programs",
+        "rockets",
+        "planning-missions"
+      ],
+      "explainers": [
+        "lunar-mission-modes"
+      ]
+    },
+    {
       "id": "rnd",
       "group": "Programs and hardware",
       "title": "Component R&D",

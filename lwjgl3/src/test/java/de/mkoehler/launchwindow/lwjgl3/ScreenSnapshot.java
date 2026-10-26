@@ -33,6 +33,7 @@ import de.mkoehler.launchwindow.content.CelestialBody;
 import de.mkoehler.launchwindow.client.screen.ExplainerScreen;
 import de.mkoehler.launchwindow.client.screen.HireScreen;
 import de.mkoehler.launchwindow.client.screen.SpaceComplexScreen;
+import de.mkoehler.launchwindow.client.screen.RoadsToMoonScreen;
 import de.mkoehler.launchwindow.client.view.Explainers;
 import de.mkoehler.launchwindow.client.view.Hub;
 import de.mkoehler.launchwindow.content.ContentPackHash;
@@ -341,6 +342,10 @@ public final class ScreenSnapshot {
                 6 * 3_600_000L + 12 * 60_000L + 30_000L, 0L, null, List.of(), List.of(), 0));
             return;
         }
+        if ("roads".equals(System.getProperty("shots"))) {
+            roadsShots(folder, game);
+            return;
+        }
         if ("progression".equals(System.getProperty("shots"))) {
             progressionShots(folder, game);
             return;
@@ -544,6 +549,7 @@ public final class ScreenSnapshot {
         theoryShots(folder, game);
         memorialShots(folder, game);
         progressionShots(folder, game);
+        roadsShots(folder, game);
     }
 
     /**
@@ -1032,6 +1038,67 @@ public final class ScreenSnapshot {
         write(folder, "progression-wings-plan.png", new MissionPlanScreen(game, "mercury-suborbital",
             MissionPlanScreen.Tab.ASSESSMENT), null);
         game.useAdvisorMarksInMemory(new java.util.HashSet<>(java.util.Set.of("idleTipDone")));
+    }
+
+    /**
+     * Roads to the Moon (ui-spec.md 4.21, 2026-10-26), alone with {@code -Dshots=roads}: the canvas's states. NASA
+     * with a person in space and Mercury open; with Gemini open; with Apollo opened; the Soviet roads; locked before a
+     * person has flown in space; a history note pinned; and Headquarters' Moon page with its button.
+     */
+    private static void roadsShots(File folder, LaunchWindowGame game) {
+        String hash = ContentPackHash.ofClasspath("content/standard", ScreenSnapshot.class.getClassLoader());
+        GameInfoResponse info = GameInfoResponse.success("standard", hash, List.of(), 34, true,
+            6 * 3_600_000L + 12 * 60_000L + 30_000L, 0L, null, List.of(), List.of(), 0);
+        PlayerSnapshot nasa = new PlayerSnapshot("Orion Spaceworks", Archetype.NASA, 31_400, 4_820, 3_000, 34);
+        nasa.setDirectorName("A. Reyes");
+        nasa.getBuildingLevels().put(Building.VEHICLE_ASSEMBLY, 2);
+        nasa.getOpenedProgramIds().addAll(List.of("explorer-1", "mercury"));
+        nasa.getMissionComponents().put("explorer-1-satellite", new OwnedMissionComponent(81.0, 3.0));
+        nasa.getMissionComponents().put("mercury-capsule", new OwnedMissionComponent(74.0, 3.0));
+        nasa.getAchievedGoals().put("earth-orbit-satellite", 6);
+        nasa.getAchievedGoals().put("human-in-space", 30);
+        startSession(game, nasa, info);
+        write(folder, "roads-nasa.png", new RoadsToMoonScreen(game), null);
+        write(folder, "roads-pinned-note.png", new RoadsToMoonScreen(game), screen -> screen.pinHistoryNote(0));
+        BodyProgramsScreen moon = new BodyProgramsScreen(game, CelestialBody.MOON);
+        moon.select("lunar-expeditions");
+        write(folder, "roads-hq-moon.png", moon, null);
+        write(folder, "roads-program-buttons.png", new de.mkoehler.launchwindow.client.screen.ProgramDetailsScreen(game,
+            "apollo-earth-orbit", CelestialBody.EARTH), null);
+
+        nasa.getAchievedGoals().remove("human-in-space");
+        startSession(game, nasa, info);
+        write(folder, "roads-locked.png", new RoadsToMoonScreen(game), null);
+        nasa.getAchievedGoals().put("human-in-space", 30);
+
+        nasa.getOpenedProgramIds().add("gemini");
+        nasa.getMissionComponents().put("gemini-capsule", new OwnedMissionComponent(64.0, 3.0));
+        startSession(game, nasa, info);
+        write(folder, "roads-gemini-open.png", new RoadsToMoonScreen(game), null);
+
+        nasa.setFunds(18_200);
+        nasa.getBuildingLevels().put(Building.VEHICLE_ASSEMBLY, 3);
+        nasa.getOpenedProgramIds().addAll(List.of("apollo-earth-orbit", "apollo"));
+        nasa.getMissionComponents().put("apollo-csm", new OwnedMissionComponent(38.0, 3.0));
+        nasa.getMissionComponents().put("apollo-lunar-module", new OwnedMissionComponent(21.0, 3.0));
+        nasa.getMissionComponents().put("apollo-lunar-eva-suit", new OwnedMissionComponent(30.0, 3.0));
+        nasa.getMissionComponents().put("lunar-roving-vehicle", new OwnedMissionComponent(15.0, 3.0));
+        nasa.getMissionComponents().put("agena-target-vehicle", new OwnedMissionComponent(58.0, 3.0));
+        nasa.getAchievedGoals().put("rendezvous", 40);
+        nasa.getAchievedGoals().put("docking", 42);
+        startSession(game, nasa, info);
+        write(folder, "roads-apollo-chosen.png", new RoadsToMoonScreen(game), null);
+
+        PlayerSnapshot soviet = new PlayerSnapshot("Baltic Star Agency", Archetype.SOVIET, 30_000, 4_820, 3_000, 34);
+        soviet.setDirectorName("A. Reyes");
+        soviet.getBuildingLevels().put(Building.VEHICLE_ASSEMBLY, 2);
+        soviet.getOpenedProgramIds().addAll(List.of("sputnik-1", "vostok"));
+        soviet.getMissionComponents().put("sputnik-1-satellite", new OwnedMissionComponent(81.0, 3.0));
+        soviet.getMissionComponents().put("vostok-capsule", new OwnedMissionComponent(74.0, 3.0));
+        soviet.getAchievedGoals().put("earth-orbit-satellite", 5);
+        soviet.getAchievedGoals().put("human-in-space", 28);
+        startSession(game, soviet, info);
+        write(folder, "roads-soviet.png", new RoadsToMoonScreen(game), null);
     }
 
     private static void memorialShots(File folder, LaunchWindowGame game) {

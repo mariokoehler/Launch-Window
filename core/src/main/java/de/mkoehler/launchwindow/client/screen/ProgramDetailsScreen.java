@@ -21,6 +21,7 @@ import de.mkoehler.launchwindow.client.view.BodyMap;
 import de.mkoehler.launchwindow.client.view.ContentNames;
 import de.mkoehler.launchwindow.client.view.Help;
 import de.mkoehler.launchwindow.client.view.Missions;
+import de.mkoehler.launchwindow.client.view.MoonRoads;
 import de.mkoehler.launchwindow.client.view.Outlook;
 import de.mkoehler.launchwindow.client.view.PayloadRnd;
 import de.mkoehler.launchwindow.client.view.Programs;
@@ -214,6 +215,10 @@ public final class ProgramDetailsScreen extends ChromeScreen {
         }
         buttons.add(actionButton("Mission configurations", Theme.ButtonKind.SECONDARY,
             () -> game.setScreen(new MissionConfigsScreen(game, programId))));
+        if (MoonRoads.standard().covers(programId)) {
+            buttons.add(actionButton("Compare the roads to the Moon", Theme.ButtonKind.SECONDARY,
+                () -> game.setScreen(new RoadsToMoonScreen(game)))).padLeft(10f);
+        }
         row.add(buttons).expandX().left();
         row.add(ui.label("Headquarters: " + session.state().getOpenedProgramIds().size() + " / "
             + Programs.cap(session.state(), session.catalog()) + " programs open", Theme.TextStyle.CAPTION,
