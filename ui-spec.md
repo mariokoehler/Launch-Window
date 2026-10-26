@@ -3831,7 +3831,7 @@ existing screens, made of existing components; every look is unconfirmed.
 - **Help:** a "Findings" topic (Rivals), on the mission plan, the turn report and the Museum.
   `ScreenSnapshot -Dshots=findings` renders the report, the dialog, the tab, a page, the help and the plan.
 
-### 4.21 Roads to the Moon *(the user's idea, 2026-10-26; specified 2026-10-26, to be mocked up on the canvas `Launch Window — Roads to the Moon`)*
+### 4.21 Roads to the Moon *(the user's idea, 2026-10-26; specified and mocked up 2026-10-26 on the canvas `Launch Window — Roads to the Moon`)*
 **Purpose:** help the player choose how to land on the Moon. NASA has three roads that land (Apollo, Gemini EOR,
 Gemini direct ascent) and the Soviets two (Soyuz 7K-L3, LK-700); each is a Moon program plus the Earth-orbit tests
 that make its Moon flights free to open (`design.md` §2.3(d)). The screen sets the roads side by side with what each
@@ -3914,6 +3914,42 @@ Earth-orbit program and the mode; a `MoonRoadsTest` holds every lunar-expedition
 
 **New for `Theme.java` and the UI Asset Sheet:** the three mode glyphs; the For/Against bullets; the "Your road" and
 "The historical choice" badges if the existing badge kinds don't fit. Flag any new token.
+
+**Mocked up (2026-10-26)** on the canvas `Launch Window — Roads to the Moon`: the six states above and a board
+of the new pieces. Choices, all **unconfirmed**:
+- **The grid:** a 112 px label column on the page and one card per road, the same ten rows across. Hairlines
+  (navy at 12 %) separate the rows; 16 px separate the columns.
+- **Head:** the program art at 92 × 59, the name (Archivo 700 17), the mode badge (navy outline, the glyph and
+  the mode in capitals), the quiet "The historical choice" tag (navy-border outline, muted italic), and "✓ Your
+  road" as a solid navy badge (a new `BadgeKind`; gold would read as "in progress"). Nothing else marks the
+  player's road.
+- **To start now:** always three lines (Earth-orbit tests, Moon flights, parts to build), then the total in Archivo
+  700 15 and the upkeep in caption. A free line ("Free: you run Gemini") is success green; a conditional line ("free
+  once the tests are open") is muted; only the total turns red when the funds can't cover it. Locked: a white veil
+  at 72 % over the cell with a framed "Opens when a person has flown in space" and the lock icon; the strip's cards
+  say the same instead of their price.
+- **Hardware:** the count leads each cell ("5 to develop", "All built"), since it differs per road; the row's label
+  stays "Hardware to develop". Owned parts are chips with a green line, "· 64 % · yours" and a check.
+- **The rocket:** a 26 × 52 crop of its art (Nova: a hatched placeholder), name and class, "Lifts the landing in one
+  launch" or a bold "Two launches per flight" / "From the first test flight", then its state in red ("Needs VAB
+  level 3") or ink ("Not open: 9,375 to open").
+- **Firsts on the way:** goal chips with the trophy icon (navy outline); reached ones grey with a check.
+- **The landing:** steps, launches (bold) and "5,000 prestige the first time" (muted), one line.
+- **Trade-offs:** For and Against side by side, 7 px round bullets in success green and gold.
+- **Foot:** the design system's `HistoryNote` (its card opens upward, 360 px) and "View the Earth-orbit tests" or
+  "View the program". The strip's cards turn navy-lined on hover, the whole card a link.
+- **Mode glyphs** (new icons for the UI Asset Sheet: `mode_direct`, `mode_eor`, `mode_lor`): Earth lower left, the
+  Moon upper right, one curved path; a ring round the Earth (Earth-orbit rendezvous) or the Moon (lunar-orbit
+  rendezvous) marks where the craft meet. 16 × 16, stroke 1.4.
+- **No new colour tokens.**
+- **For the pack (a question):** Gemini EOR's Moon flights are discounted by Apollo's Earth-orbit tests
+  (`gemini-eor`'s `openingCostDiscounts` names `apollo-earth-orbit`), unlike every other road's, which its own
+  tests free. So the screen shows them at 10,060 until Apollo's tests open. If unintended, the discount should name
+  `gemini-eor-earth-orbit` (state 1's EOR total would be 22,483).
+- **The draft words:** Gemini direct ascent's "One craft and the fewest flights" became "One craft, and few flights
+  on the way": Gemini EOR has fewer flights before its landing (5 against 6). The history notes on the canvas
+  (Houbolt and the 1962 choice; the Gemini Moon studies; Nova; the N1's four failures and the LK's three test
+  flights; Chelomei's LK-700) are to be checked into `design.md` §1.1 with the words file.
 
 ## 5. Refusal reasons (for toasts and inline messages)
 
