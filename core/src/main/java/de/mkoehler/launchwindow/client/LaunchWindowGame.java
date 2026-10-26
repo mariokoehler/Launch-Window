@@ -36,6 +36,8 @@ public class LaunchWindowGame extends Game {
     private static final java.util.Map<String, Float> volumesInMemory = new java.util.HashMap<>();
     /** The replay's music and effects volume until the player sets them (unconfirmed). */
     private static final float DEFAULT_VOLUME = 0.7f;
+    /** The text size when kept in memory (screenshots), else {@code null}. */
+    private static TextSize textSizeInMemory;
     private UiKit ui;
     private ServerGateway gateway;
     private SettingsStore settingsStore;
@@ -59,6 +61,7 @@ public class LaunchWindowGame extends Game {
         float[] scale = Theme.Fonts.windowScale(Gdx.graphics.getBackBufferWidth(), Gdx.graphics.getBackBufferHeight());
         ui = new UiKit(Gdx.files.internal(""), fontScale(scale[1]));
         ui.fonts().setPixelGrid(scale[0], scale[1]);
+        ui.fonts().setTextScale(textSize().scale());
         pendingFontScale = ui.fonts().scale();
         gateway = createGateway();
         settingsStore = createSettingsStore();
@@ -432,6 +435,74 @@ public class LaunchWindowGame extends Game {
         com.badlogic.gdx.Preferences preferences = preferences();
         preferences.putBoolean("sound", on);
         preferences.flush();
+    }
+
+    /**
+     * The Settings' text sizes ({@code ui-spec.md} &sect;4.12): the design's own, and a step larger for a
+     * small, sharp screen, where the 1920 by 1080 layout's text comes out tiny (user, 2026-10-26).
+     */
+    public enum TextSize {
+        /** The design's sizes (the default). */
+        STANDARD(1f),
+        /** Every working style 12 % larger; the drawings' labels and the newspaper keep their size. */
+        LARGE(1.12f);
+
+        private final float scale;
+
+        TextSize(float scale) {
+            this.scale = scale;
+        }
+
+        /**
+         * Returns how much larger than the design the text is drawn.
+         *
+         * @return the factor
+         */
+        public float scale() {
+            return scale;
+        }
+    }
+
+    /**
+     * Returns the text size on this device, for everyone (Settings).
+     *
+     * @return the text size; {@link TextSize#STANDARD} by default
+     */
+    public static TextSize textSize() {
+        if (textSizeInMemory != null) {
+            return textSizeInMemory;
+        }
+        try {
+            return TextSize.valueOf(preferences().getString("textSize", TextSize.STANDARD.name()));
+        } catch (IllegalArgumentException e) {
+            return TextSize.STANDARD;
+        }
+    }
+
+    /**
+     * Keeps the text size in memory from now on (screenshots), so it doesn't depend on this machine.
+     *
+     * @param size the text size
+     */
+    public static void useTextSizeInMemory(TextSize size) {
+        textSizeInMemory = size;
+    }
+
+    /**
+     * Sets the text size on this device and redraws the text at once: the fonts are rebuilt, and every
+     * screen lays its text out again when it sees them change.
+     *
+     * @param size the text size
+     */
+    public void setTextSize(TextSize size) {
+        if (textSizeInMemory != null) {
+            textSizeInMemory = size;
+        } else {
+            com.badlogic.gdx.Preferences preferences = preferences();
+            preferences.putString("textSize", size.name());
+            preferences.flush();
+        }
+        ui.fonts().setTextScale(size.scale());
     }
 
     /**

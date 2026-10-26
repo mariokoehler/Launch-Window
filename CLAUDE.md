@@ -318,6 +318,10 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
   are now free with its own tests, not Apollo's (`discount_fixes`, a BASPM data slip): the pack hash changed, reset the
   dev data root.
 
+- **A text size in Settings** (the user's request, 2026-10-26, `ui-spec.md` §4.12): Standard or Large
+  (112 %), per device, for small 4K screens; drawings' labels and the newspaper keep their size. Every
+  screen checked at Large with the new text-fit report (below). Client only: no reset, no server rebuild.
+
 ## How we work
 
 - **Screens:** Claude writes the spec in `ui-spec.md`, the user mocks it up in Claude Design,
@@ -508,6 +512,11 @@ mvn -q -pl lwjgl3 test-compile
 mvn -q -pl lwjgl3 dependency:build-classpath -Dmdep.outputFile=target/test-cp.txt -Dmdep.includeScope=test
 cd assets && java --enable-native-access=ALL-UNNAMED -cp "../lwjgl3/target/classes;../lwjgl3/target/test-classes;$(cat ../lwjgl3/target/test-cp.txt)" de.mkoehler.launchwindow.lwjgl3.ScreenSnapshot <out-dir>
 ```
+- **Text fit:** every run also writes `text-fit.tsv` beside the shots (`TextFit`: text overlapping
+  text, leaving its box or the screen, cut short, or a scroll pane that now scrolls).
+  `-Dui.textScale=1.12` renders at the Settings' Large text size, `-Dtextfit.marks=true` writes each
+  problem shot outlined in red to `marked/`. Run at 1 and 1.12 and compare: at 1 only the scroll
+  panes that scroll by design and a few deliberate overlays are listed. A new screen must pass at 1.12.
 - **`-Dshots=contracts`** (before `-cp`) renders only the contract shots; add a group the same way
   when iterating on one screen.
 - **Regression check for shared UI changes:** shoot before and after into fresh folders, then

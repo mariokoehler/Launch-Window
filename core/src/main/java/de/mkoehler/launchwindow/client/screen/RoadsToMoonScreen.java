@@ -471,11 +471,20 @@ public final class RoadsToMoonScreen extends ChromeScreen {
         head.add(ui.label(ContentNames.of(road.moon().id()), Theme.TextStyle.BODY_STRONG, Theme.INK));
         head.add(ui.label(" · " + road.words().reach().label(), Theme.TextStyle.CAPTION, Theme.INK_MUTED)).expandX()
             .left();
-        head.add(road.missingGoals().isEmpty()
+        Label status = road.missingGoals().isEmpty()
             ? ui.label("To start now " + money(road.total()), Theme.TextStyle.CAPTION, road.total() > state.getFunds()
                 ? Theme.DANGER : Theme.INK)
-            : ui.label(opensWhen(road.missingGoals()), Theme.TextStyle.CAPTION, Theme.NAVY)).right();
+            : ui.label(opensWhen(road.missingGoals()), Theme.TextStyle.CAPTION, Theme.NAVY);
+        // On the name's line when it fits; under it when the name and the status don't (large text, 2026-10-26).
+        float room = 560f - 84f - Theme.SPACE_3 - 2 * Theme.SPACE_2;
+        boolean fits = head.getPrefWidth() + status.getPrefWidth() + Theme.SPACE_3 <= room;
+        if (fits) {
+            head.add(status).right();
+        }
         text.add(head).growX().padBottom(4f).row();
+        if (!fits) {
+            text.add(status).left().padBottom(4f).row();
+        }
         HorizontalGroup chips = chipGroup();
         road.firsts().forEach(first -> chips.addActor(goalChip(first)));
         text.add(chips).width(560f - 84f - Theme.SPACE_3 - 2 * Theme.SPACE_2).left().padBottom(4f).row();

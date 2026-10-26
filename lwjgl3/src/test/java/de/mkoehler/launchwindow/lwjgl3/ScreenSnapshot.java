@@ -233,6 +233,7 @@ public final class ScreenSnapshot {
         // Silent, and the sound setting never this machine's: the Join screen would speak otherwise.
         configuration.disableAudio(true);
         LaunchWindowGame.useSoundInMemory(true);
+        LaunchWindowGame.useTextSizeInMemory(LaunchWindowGame.TextSize.STANDARD);
         new Lwjgl3Application(new LaunchWindowGame() {
             @Override
             protected ServerGateway createGateway() {
@@ -255,7 +256,11 @@ public final class ScreenSnapshot {
             @Override
             public void create() {
                 super.create();
+                // -Dui.textScale=1.12 draws the text larger, as the Settings' text size does; any factor
+                // can be tried. The shots' text-fit report then shows what it breaks (TextFit).
+                ui().fonts().setTextScale(Float.parseFloat(System.getProperty("ui.textScale", "1")));
                 renderAll(this, folder);
+                writeTextFit(folder);
                 Gdx.app.exit();
             }
         }, configuration);
@@ -3144,11 +3149,47 @@ public final class ScreenSnapshot {
         buffer.end();
         Pixmap upright = flipped(pixmap);
         PixmapIO.writePNG(Gdx.files.absolute(new File(folder, name).getAbsolutePath()), upright);
+        checkTextFit(folder, name, screen, upright);
         upright.dispose();
         pixmap.dispose();
         buffer.dispose();
         screen.hide();
         screen.dispose();
+    }
+
+    /** Every shot's text that doesn't fit ({@link TextFit}), one line a problem, in the order shot. */
+    private static final List<String> TEXT_FIT = new ArrayList<>();
+
+    /**
+     * Checks a shot's text with {@link TextFit}; with {@code -Dtextfit.marks=true} also writes the
+     * shot with its problems outlined in red to {@code marked/}.
+     */
+    private static void checkTextFit(File folder, String name, Screen screen, Pixmap upright) {
+        com.badlogic.gdx.scenes.scene2d.Stage stage;
+        try {
+            java.lang.reflect.Method method = screen.getClass().getMethod("stage");
+            method.setAccessible(true); // declared on the package-private StageScreen
+            stage = (com.badlogic.gdx.scenes.scene2d.Stage) method.invoke(screen);
+        } catch (ReflectiveOperationException notAStageScreen) {
+            return;
+        }
+        List<TextFit.Issue> issues = TextFit.check(stage);
+        issues.forEach(issue -> TEXT_FIT.add(issue.line(name)));
+        if (!issues.isEmpty() && Boolean.getBoolean("textfit.marks")) {
+            TextFit.mark(upright, stage.getViewport().getWorldHeight(), issues);
+            File marked = new File(folder, "marked");
+            marked.mkdirs();
+            PixmapIO.writePNG(Gdx.files.absolute(new File(marked, name).getAbsolutePath()), upright);
+        }
+    }
+
+    /** Writes every shot's text problems to {@code text-fit.tsv} beside the shots. */
+    private static void writeTextFit(File folder) {
+        try {
+            Files.write(folder.toPath().resolve("text-fit.tsv"), TEXT_FIT);
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
     }
 
     /**

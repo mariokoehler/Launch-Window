@@ -218,7 +218,7 @@ public final class AstronautComplexScreen extends ChromeScreen {
         row.pad(Theme.SPACE_3, Theme.SPACE_4, Theme.SPACE_3, Theme.SPACE_4);
         row.add(RosterCells.avatar(ui, astronaut)).size(48f).padRight(Theme.SPACE_4);
         row.add(RosterCells.who(ui, astronaut, "AGE " + astronaut.getAge(), () -> game.setScreen(
-            new PersonScreen(game, astronaut, () -> new AstronautComplexScreen(game))))).width(170f).left()
+            new PersonScreen(game, astronaut, () -> new AstronautComplexScreen(game))))).width(RosterCells.NAME_WIDTH).left()
             .padRight(Theme.SPACE_4);
 
         String text = AstronautCorps.stateText(astronaut, session.state(), session.catalog());
@@ -239,7 +239,7 @@ public final class AstronautComplexScreen extends ChromeScreen {
             stateHolder.add(ui.label(hint, Theme.TextStyle.CAPTION, Theme.GOLD_TEXT)).padTop(4f).row();
         }
         RosterCells.outlookNote(ui, stateHolder, astronaut, PersonnelGroup.ASTRONAUT, session.openTurn());
-        row.add(stateHolder).width(330f).left().padRight(Theme.SPACE_4);
+        row.add(stateHolder).width(350f).left().padRight(Theme.SPACE_4);
         row.add(RosterCells.traits(ui, astronaut)).width(RosterCells.TRAITS_WIDTH).left().padRight(Theme.SPACE_4);
 
         Table skills = new Table();

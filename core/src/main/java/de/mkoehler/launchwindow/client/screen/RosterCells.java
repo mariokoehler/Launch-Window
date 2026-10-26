@@ -69,6 +69,11 @@ final class RosterCells {
         return cell;
     }
 
+    /**
+     * A roster row's name column: room for a long name in the large text size (2026-10-26).
+     */
+    static final float NAME_WIDTH = 200f;
+
     /** A roster row's traits column ({@code ui-spec.md} component 11, People canvas, 2026-10-07). */
     static final float TRAITS_WIDTH = 230f;
 

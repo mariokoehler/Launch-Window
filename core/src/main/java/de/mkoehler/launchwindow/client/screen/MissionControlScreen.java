@@ -279,7 +279,7 @@ public final class MissionControlScreen extends ChromeScreen {
         row.pad(Theme.SPACE_3, Theme.SPACE_4, Theme.SPACE_3, Theme.SPACE_4);
         row.add(RosterCells.avatar(ui, officer)).size(48f).padRight(Theme.SPACE_4);
         row.add(RosterCells.who(ui, officer, "AGE " + officer.getAge(), () -> game.setScreen(
-            new PersonScreen(game, officer, () -> new MissionControlScreen(game))))).width(170f).left()
+            new PersonScreen(game, officer, () -> new MissionControlScreen(game))))).width(RosterCells.NAME_WIDTH).left()
             .padRight(Theme.SPACE_4);
 
         String text = MissionControl.stateText(officer, session.state(), session.catalog());
@@ -288,7 +288,7 @@ public final class MissionControlScreen extends ChromeScreen {
         stateHolder.left();
         stateHolder.add(active ? ui.badge(Theme.BadgeKind.ACTIVE, text) : RosterCells.pill(ui, text)).left().row();
         RosterCells.outlookNote(ui, stateHolder, officer, PersonnelGroup.MISSION_CONTROL, session.openTurn());
-        row.add(stateHolder).width(300f).left().padRight(Theme.SPACE_4);
+        row.add(stateHolder).width(385f).left().padRight(Theme.SPACE_4);
         row.add(RosterCells.traits(ui, officer)).width(RosterCells.TRAITS_WIDTH).left().padRight(Theme.SPACE_4);
 
         Table skills = new Table();

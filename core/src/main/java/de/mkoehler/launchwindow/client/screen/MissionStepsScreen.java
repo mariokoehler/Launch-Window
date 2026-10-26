@@ -268,7 +268,7 @@ public final class MissionStepsScreen extends ChromeScreen {
     }
 
     private Table stepsGrid() {
-        float[] widths = {26f, 150f, 206f, 0f, 236f, 62f, 196f};
+        float[] widths = {26f, 150f, 290f, 0f, 236f, 62f, 196f};
         Table grid = new Table();
         grid.top().left();
         String[] heads = {"#", "Step", "Components", "Mission control", "Crew skills", "Prestige", "Goals reached"};

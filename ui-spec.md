@@ -2930,7 +2930,7 @@ Reached from the hub's Museum building. Choices made while building it, **confir
   The note was corrected to match.
 
 ### 4.12 Settings (header gear)
-Log out; server address; sound on or off; replays (§4.4); about and version.
+Log out; server address; text size; sound on or off; replays (§4.4); about and version.
 
 **Mocked up (2026-10-04)** as `Settings` on the Museum canvas, as a `Dialog` over the hub.
 Choices still **unconfirmed**:
@@ -2957,6 +2957,19 @@ dropped (plans live on the client session), instead of the mockup's "logging out
 `assets/CREDITS.md` in the dialog (headings, paragraphs and bullets, scrolling past 520 px),
 with Back and Done. A parenthesis in a script the fonts lack (the archive's Russian name) is
 left out, since its English name stands next to it.
+**Text size (built 2026-10-26, the user's request, straight in libGDX):** a section above Sound,
+Standard or Large, for everyone on the device (`LaunchWindowGame.TextSize`, a preference like
+Sound). The whole layout already scales with the window, so on a small, sharp screen (a 15"
+4K laptop) its 10 to 13 px text comes out tiny; Large draws every working style 12 % larger in
+the same 1920 by 1080 layout, rebuilding the fonts at once (`Theme.Fonts.setTextScale`). Buttons,
+pictures and chips keep their size. The drawings' labels (`DRAWING_*`, at fixed points on the
+explainers' art) and the newspaper (`NEWS_*`, already set larger) keep the design's size
+(user). 125 % was measured too: about 100 layout fixes against 112 %'s handful, so it waits
+until 112 % has been tried. Every screen is checked at Large by `ScreenSnapshot`'s text-fit
+report (`TextFit`, `CLAUDE.md`); the fixes widened the roster's name and state columns, the
+hiring list's name column, the person page's left column, the steps table's component column
+and the hands-on result's columns, let the race table's agency column size itself, and made
+the Museum flight card's name and two Settings captions wrap.
 
 ### 4.13 Game result
 **Purpose:** announce the winner. **Shows:** an overlay on the hub when a result

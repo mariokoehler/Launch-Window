@@ -557,6 +557,17 @@ public final class Theme {
         public float letterSpacingEm() {
             return letterSpacingEm;
         }
+
+        /**
+         * Returns whether the Settings' text size enlarges this style. The drawings' labels sit at
+         * fixed points on their art, and the newspaper is a printed page set in larger type already,
+         * so both keep the design's size (user, 2026-10-26).
+         *
+         * @return whether the style follows the text size
+         */
+        public boolean followsTextSize() {
+            return !name().startsWith("DRAWING_") && !name().startsWith("NEWS_");
+        }
     }
 
     /**
@@ -607,6 +618,8 @@ public final class Theme {
         private final FileHandle directory;
         private final PixelGrid grid = new PixelGrid();
         private float scale;
+        /** How much larger than the design every style's text is drawn; 1 for the design's sizes. */
+        private float textScale = 1f;
         private int generation;
 
         private Fonts(FileHandle directory) {
@@ -704,6 +717,33 @@ public final class Theme {
             generation++;
         }
 
+        /**
+         * Returns how much larger than the design the text is drawn.
+         *
+         * @return the text scale; 1 for the design's sizes
+         */
+        public float textScale() {
+            return textScale;
+        }
+
+        /**
+         * Draws every style's text larger (or smaller) than the design, inside the same layout,
+         * and rebuilds the glyphs at once. Text laid out before must be laid out again
+         * ({@link #generation}).
+         *
+         * @param newTextScale the factor, such as 1.25 for text a quarter larger
+         * @throws IllegalArgumentException if the factor is not positive
+         */
+        public void setTextScale(float newTextScale) {
+            if (newTextScale <= 0f) {
+                throw new IllegalArgumentException("Text scale must be positive: " + newTextScale);
+            }
+            if (newTextScale != textScale) {
+                textScale = newTextScale;
+                regenerate(scale);
+            }
+        }
+
         private Map<TextStyle, BitmapFont> generate(float scale) {
             Map<TextStyle, BitmapFont> result = new EnumMap<>(TextStyle.class);
             Map<FontFile, FreeTypeFontGenerator> generators = new EnumMap<>(FontFile.class);
@@ -711,7 +751,8 @@ public final class Theme {
                 for (TextStyle style : TextStyle.values()) {
                     FreeTypeFontGenerator generator = generators.computeIfAbsent(style.file(),
                         file -> new PixelFontGenerator(directory.child(file.fileName()), grid));
-                    BitmapFont font = generator.generateFont(parameterFor(style, scale));
+                    float size = style.followsTextSize() ? scale * textScale : scale;
+                    BitmapFont font = generator.generateFont(parameterFor(style, size));
                     font.getData().setScale(1f / scale);
                     // The glyphs are snapped to the window's pixels by PixelSnapCache. libGDX's own
                     // integer positions round to whole layout units instead, which are only pixels

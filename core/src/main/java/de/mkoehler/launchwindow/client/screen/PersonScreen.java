@@ -40,7 +40,7 @@ import java.util.function.Supplier;
  */
 public final class PersonScreen extends ChromeScreen {
 
-    private static final float LEFT_WIDTH = 440f;
+    private static final float LEFT_WIDTH = 480f;
     private static final float MIDDLE_WIDTH = 720f;
     private static final float PORTRAIT = 128f;
 

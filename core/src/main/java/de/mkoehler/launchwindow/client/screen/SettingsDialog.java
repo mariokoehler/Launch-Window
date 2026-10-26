@@ -95,12 +95,19 @@ final class SettingsDialog {
         card.add(ui.paragraph("Switching logs you out and goes back to Connect, with the new address filled in.",
             Theme.TextStyle.CAPTION, Theme.INK_MUTED)).padBottom(Theme.SPACE_4).row();
 
+        card.add(section("Text size")).padBottom(Theme.SPACE_2).row();
+        Table textSize = new Table();
+        textSize.add(textSizeControl()).width(220f).height(32f).padRight(Theme.SPACE_3);
+        textSize.add(ui.paragraph("Larger text for a small, sharp screen. For everyone on this device.",
+            Theme.TextStyle.CAPTION, Theme.INK_MUTED)).expandX().fillX().left();
+        card.add(textSize).padBottom(Theme.SPACE_4).row();
+
         card.add(section("Sound")).padBottom(Theme.SPACE_2).row();
         Table sound = new Table();
         sound.add(soundControl()).width(220f).height(32f).padRight(Theme.SPACE_3);
-        sound.add(ui.label("All the game's sound. For everyone on this device.",
+        sound.add(ui.paragraph("All the game's sound. For everyone on this device.",
             Theme.TextStyle.CAPTION, Theme.INK_MUTED))
-            .expandX().left();
+            .expandX().fillX().left();
         card.add(sound).padBottom(Theme.SPACE_3).row();
         card.add(volume("Replay music", LaunchWindowGame.musicVolume(), LaunchWindowGame::setMusicVolume))
             .padBottom(Theme.SPACE_2).row();
@@ -110,8 +117,8 @@ final class SettingsDialog {
         card.add(section("Replays")).padBottom(Theme.SPACE_2).row();
         Table replays = new Table();
         replays.add(replaysControl()).width(360f).height(32f).padRight(Theme.SPACE_3);
-        replays.add(ui.label("Watch a turn's missions before its report.", Theme.TextStyle.CAPTION, Theme.INK_MUTED))
-            .expandX().left();
+        replays.add(ui.paragraph("Watch a turn's missions before its report.", Theme.TextStyle.CAPTION,
+            Theme.INK_MUTED)).expandX().fillX().left();
         card.add(replays).padBottom(Theme.SPACE_4).row();
 
         GameInfoResponse info = session.gameInfo().response();
@@ -176,6 +183,30 @@ final class SettingsDialog {
 
     private Label section(String title) {
         return ui.label(title.toUpperCase(java.util.Locale.ROOT), Theme.TextStyle.LABEL, Theme.INK_MUTED);
+    }
+
+    /** The text size, for this device: standard or large (2026-10-26). */
+    private Table textSizeControl() {
+        Table segments = new Table();
+        segments.setBackground(ui.rect(new Color(0f, 0f, 0f, 0f), Theme.NAVY_BORDER, Theme.BORDER_THIN));
+        segments.pad(Theme.BORDER_THIN);
+        String[] names = {"Standard", "Large"};
+        LaunchWindowGame.TextSize[] sizes = LaunchWindowGame.TextSize.values();
+        for (int i = 0; i < sizes.length; i++) {
+            LaunchWindowGame.TextSize size = sizes[i];
+            boolean selected = LaunchWindowGame.textSize() == size;
+            Table segment = new Table();
+            segment.setBackground(ui.solid(selected ? Theme.NAVY : Theme.SURFACE_CARD));
+            segment.add(ui.label(names[i], Theme.TextStyle.LABEL, selected ? Theme.ON_FILL : Theme.NAVY));
+            segment.setTouchable(Touchable.enabled);
+            segment.addListener(ChromeScreen.clicked(() -> {
+                game.setTextSize(size);
+                host.closeDialog();
+                open();
+            }));
+            segments.add(segment).expand().fill().uniformX();
+        }
+        return segments;
     }
 
     /** Sound on or off, for this device (the splash reads it before anyone logs in). */

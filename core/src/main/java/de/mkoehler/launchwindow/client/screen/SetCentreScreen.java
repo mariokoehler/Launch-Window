@@ -194,7 +194,7 @@ public final class SetCentreScreen extends ChromeScreen {
         row.add(RosterCells.avatar(ui, specialist)).size(48f).padRight(Theme.SPACE_4);
 
         row.add(RosterCells.who(ui, specialist, "AGE " + specialist.getAge(), () -> game.setScreen(
-            new PersonScreen(game, specialist, () -> new SetCentreScreen(game))))).width(160f).left()
+            new PersonScreen(game, specialist, () -> new SetCentreScreen(game))))).width(RosterCells.NAME_WIDTH).left()
             .padRight(Theme.SPACE_4);
 
         Container<Label> state = SetDepartment.isActive(specialist)
@@ -204,7 +204,7 @@ public final class SetCentreScreen extends ChromeScreen {
         stateHolder.left();
         stateHolder.add(state).left().row();
         RosterCells.outlookNote(ui, stateHolder, specialist, PersonnelGroup.SET, session.openTurn());
-        row.add(stateHolder).width(280f).left().padRight(Theme.SPACE_4);
+        row.add(stateHolder).width(340f).left().padRight(Theme.SPACE_4);
         row.add(RosterCells.traits(ui, specialist)).width(RosterCells.TRAITS_WIDTH).left().padRight(Theme.SPACE_4);
 
         Table skills = new Table();

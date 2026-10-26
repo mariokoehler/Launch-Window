@@ -440,7 +440,7 @@ public final class MuseumScreen extends ChromeScreen {
         text.left();
         text.defaults().left();
         text.add(ui.label(flight.program().toUpperCase(Locale.ROOT), Theme.TextStyle.EYEBROW, Theme.NAVY)).row();
-        text.add(ui.label(flight.name(), Theme.TextStyle.BODY_STRONG, Theme.INK)).padBottom(6f).row();
+        text.add(ui.paragraph(flight.name(), Theme.TextStyle.BODY_STRONG, Theme.INK)).growX().padBottom(6f).row();
         Table count = new Table();
         count.add(ui.label(String.valueOf(flight.count()), Theme.TextStyle.HEADING_LG, Theme.NAVY)).padRight(6f);
         count.add(ui.label(flight.count() == 1 ? "completed flight" : "completed flights", Theme.TextStyle.BODY_SM,

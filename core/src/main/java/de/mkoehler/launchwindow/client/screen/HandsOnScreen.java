@@ -644,7 +644,7 @@ public final class HandsOnScreen extends ChromeScreen {
         for (int i = 0; i < heads.length; i++) {
             table.add(ui.label(heads[i], Theme.TextStyle.LABEL, Theme.INK_MUTED)).align(i == 0
                 ? com.badlogic.gdx.utils.Align.left : com.badlogic.gdx.utils.Align.right).expand(i == 0, false)
-                .width(i == 0 ? 0f : 70f).padBottom(6f);
+                .width(i == 0 ? 0f : 80f).padBottom(6f);
         }
         table.row();
         table.add(new Image(ui.solid(Theme.NAVY))).colspan(4).height(Theme.BORDER_THIN).growX().padBottom(6f).row();
