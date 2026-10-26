@@ -33,7 +33,9 @@ import de.mkoehler.launchwindow.rules.MissionAssessment;
 import de.mkoehler.launchwindow.rules.MissionLaunch;
 import de.mkoehler.launchwindow.rules.MissionLaunchOutcome;
 import de.mkoehler.launchwindow.rules.MissionProgress;
+import de.mkoehler.launchwindow.rules.Findings;
 import de.mkoehler.launchwindow.rules.MissionStepResolution;
+import de.mkoehler.launchwindow.rules.RocketPlaneWings;
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
@@ -431,15 +433,24 @@ public final class MissionPlanScreen extends ChromeScreen {
                 weak.add(ui.label("WEAK", Theme.TextStyle.LABEL, Theme.GOLD_TEXT));
                 nameCell.add(weak).padLeft(6f);
             }
-            if (!step.findings().isEmpty()) {
-                // Known findings make the step safer (design.md 2.13): their points, named in the tooltip.
+            if (!step.findings().isEmpty() || step.wings() > 0) {
+                // What makes the step safer, as one badge of points, each source named in the tooltip: known
+                // findings (design.md 2.13) and a pilot's rocket-plane wings (2.2(c)).
+                double points = step.findings().size() * Findings.bonusPoints() + step.wings();
+                List<String> sources = new java.util.ArrayList<>();
+                if (!step.findings().isEmpty()) {
+                    sources.add("Known findings (" + FindingsView.pointsText(step.findings().size()) + "): "
+                        + String.join(", ", step.findings().stream().map(ContentNames::of).toList()) + ".");
+                }
+                if (step.wings() > 0) {
+                    sources.add("A pilot's rocket-plane wings (+" + Math.round(step.wings()) + ").");
+                }
                 Table safer = new Table();
                 safer.setBackground(ui.rect(new Color(0f, 0f, 0f, 0f), Theme.SUCCESS, Theme.BORDER_THIN));
                 safer.pad(1f, 5f, 1f, 5f);
-                safer.add(ui.label(FindingsView.pointsText(step.findings().size()), Theme.TextStyle.LABEL,
-                    Theme.SUCCESS));
-                ui.tooltip(safer, "Findings", "Known findings add to this step's success: " + String.join(", ",
-                    step.findings().stream().map(ContentNames::of).toList()) + ".");
+                safer.add(ui.label("+" + (points == Math.rint(points) ? String.valueOf((long) points)
+                    : String.format(Locale.ROOT, "%.1f", points)), Theme.TextStyle.LABEL, Theme.SUCCESS));
+                ui.tooltip(safer, "Safer step", "Adds to this step's success: " + String.join(" ", sources));
                 nameCell.add(safer).padLeft(6f);
             }
             Object[] cells = {ui.label(String.valueOf(number), Theme.TextStyle.BODY_SM, Theme.INK_MUTED), nameCell,
@@ -461,7 +472,8 @@ public final class MissionPlanScreen extends ChromeScreen {
             + "first roll, with the crew's skills blended in where the hardware is above "
             + Math.round(MissionStepResolution.CREW_BLEND_HARDWARE_THRESHOLD) + ". If it fails, the controllers get "
             + "a saving roll. A minor glitch lets the mission go on at half the step's prestige. Each finding you know "
-            + "adds " + FindingsView.bonusText() + " to the success of the steps it makes safer (marked).",
+            + "adds " + FindingsView.bonusText() + " to the success of the steps it makes safer, and a pilot's "
+            + "rocket-plane wings +" + Math.round(RocketPlaneWings.BONUS_POINTS) + " to the steps they pilot (marked).",
             Theme.TextStyle.CAPTION, Theme.INK_MUTED)).growX().padTop(Theme.SPACE_3);
         return card;
     }

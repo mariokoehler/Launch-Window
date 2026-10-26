@@ -49,9 +49,11 @@ public final class MissionAssessment {
      * @param catastrophic a catastrophe: the flight ends and the crew is lost
      * @param findings     the known findings that make the step safer ({@link Findings}), each adding its
      *                     points to the base chance
+     * @param wings        the points a pilot's rocket-plane wings add to the base chance ({@link RocketPlaneWings})
      */
     public record StepOdds(int seasonIndex, MissionStep step, double hardware, double success, double solved,
-                           double glitch, double failure, double catastrophic, List<String> findings) {
+                           double glitch, double failure, double catastrophic, List<String> findings,
+                           double wings) {
 
         /**
          * Copies the findings.
@@ -180,8 +182,9 @@ public final class MissionAssessment {
         // The findings the player knows, with the goals this flight earns before the step (design.md 2.13).
         List<String> findings = Findings.applying(catalog, catalog.missionConfiguration(plan.getMissionConfigurationId())
             .orElseThrow(), step, Findings.knowing(snapshot, held));
+        double wings = RocketPlaneWings.stepBonus(snapshot, catalog, plan, step);
         double base = MissionStepResolution.computeBaseProbability(componentSum, crewInvolved, crewSum)
-            + findings.size() * Findings.bonusPoints();
+            + findings.size() * Findings.bonusPoints() + wings;
         double controllerSum = Math.min(100,
             MissionProgress.controlContributionSum(snapshot, catalog, plan, step, chemistry));
         double save = Math.min(100, MissionStepResolution.computeSavingThrowProbability(base, controllerSum)
@@ -198,7 +201,7 @@ public final class MissionAssessment {
             failure += catastrophicBand;
         }
         return new StepOdds(seasonIndex, step, componentSum, first, (1 - first) * saving, glitch, failure,
-            catastrophic, findings);
+            catastrophic, findings, wings);
     }
 
     private static double clamp(double probability) {

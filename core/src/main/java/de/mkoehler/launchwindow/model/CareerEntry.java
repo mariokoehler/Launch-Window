@@ -63,7 +63,9 @@ public record CareerEntry(int turn, Kind kind, String ref, String note, String o
         /** Came over from a rival agency (poaching). */
         JOINED,
         /** Stayed when a rival made an offer (poaching). */
-        OFFER
+        OFFER,
+        /** Earned rocket-plane wings: {@code ref} is the configuration flown. */
+        WINGS
     }
 
     /**

@@ -341,6 +341,10 @@ public final class ScreenSnapshot {
                 6 * 3_600_000L + 12 * 60_000L + 30_000L, 0L, null, List.of(), List.of(), 0));
             return;
         }
+        if ("progression".equals(System.getProperty("shots"))) {
+            progressionShots(folder, game);
+            return;
+        }
         if ("connect".equals(System.getProperty("shots"))) {
             write(folder, "connect-no-account.png", filledConnect(game), screen -> screen.applyLoginResult(
                 CREDENTIALS, LoginResult.failure(LoginResult.Kind.NO_ACCOUNT, "")));
@@ -539,6 +543,7 @@ public final class ScreenSnapshot {
         reactionShots(folder, game);
         theoryShots(folder, game);
         memorialShots(folder, game);
+        progressionShots(folder, game);
     }
 
     /**
@@ -980,6 +985,55 @@ public final class ScreenSnapshot {
      * and two condolences; a short one; the losing agency's own copy; the eulogy dialog fresh and with a tone; the
      * condolence form.
      */
+    /**
+     * The guided progression (design.md 2.3(d), 2026-10-26), alone with {@code -Dshots=progression}: the advisor's
+     * road ahead after the first satellite and after a person in space, and rocket-plane wings on the roster, the
+     * person page and the mission plan's steps.
+     */
+    private static void progressionShots(File folder, LaunchWindowGame game) {
+        String hash = ContentPackHash.ofClasspath("content/standard", ScreenSnapshot.class.getClassLoader());
+        GameInfoResponse info = GameInfoResponse.success("standard", hash, List.of(), 6, true,
+            6 * 3_600_000L + 12 * 60_000L + 30_000L, 0L, null, List.of(), List.of(), 0);
+        game.useAdvisorMarksInMemory(new java.util.HashSet<>(java.util.Set.of("idleTipDone", "helpOpened",
+            "reportRead")));
+        PlayerSnapshot nasa = new PlayerSnapshot("Orion Spaceworks", Archetype.NASA, 21_400, 1_150, 3_000, 6);
+        nasa.setDirectorName("A. Reyes");
+        SetSpecialist engineer = new SetSpecialist("e1", "R. Hale", 34, 70, 50);
+        engineer.setRdTargetComponentId("explorer-1-satellite");
+        nasa.getSetSpecialists().add(engineer);
+        nasa.getMissionControlOfficers().add(new MissionControlOfficer("c1", "J. Ortiz", 31, 70, 50));
+        nasa.getOpenedProgramIds().add("explorer-1");
+        nasa.getMissionComponents().put("explorer-1-satellite", new OwnedMissionComponent(72.0, 3.0));
+        nasa.getMissionComponents().put("jupiter-c", new OwnedMissionComponent(68.0, 3.0));
+        nasa.setLastFlightSeasonTurn(5);
+        nasa.getAchievedGoals().put("earth-orbit-satellite", 5);
+        startSession(game, nasa, info);
+        write(folder, "progression-road-ahead.png", new SpaceComplexScreen(game), null);
+        write(folder, "progression-hq-moon.png", new BodyProgramsScreen(game, CelestialBody.MOON), null);
+
+        Astronaut walker = new Astronaut("a1", "J. Walker", 34, 80, 50);
+        Astronaut glenn = new Astronaut("a2", "J. Glenn", 37, 80, 50);
+        for (AstronautSkill skill : AstronautSkill.values()) {
+            walker.setSkill(skill, 55.0);
+            glenn.setSkill(skill, 50.0);
+        }
+        walker.setRocketPlaneWings(true);
+        nasa.getAstronauts().addAll(List.of(walker, glenn));
+        nasa.getOpenedProgramIds().addAll(List.of("mercury", "x-15"));
+        nasa.getMissionComponents().put("mercury-capsule", new OwnedMissionComponent(74.0, 3.0));
+        nasa.getMissionComponents().put("x-15-aircraft", new OwnedMissionComponent(70.0, 3.0));
+        nasa.getMissionComponents().put("redstone", new OwnedMissionComponent(71.0, 3.0));
+        nasa.getAchievedGoals().put("human-in-space", 9);
+        startSession(game, nasa, info);
+        write(folder, "progression-road-ahead-capsules.png", new SpaceComplexScreen(game), null);
+        write(folder, "progression-wings-roster.png", new AstronautComplexScreen(game), null);
+        write(folder, "progression-wings-person.png", new de.mkoehler.launchwindow.client.screen.PersonScreen(game,
+            walker, () -> new AstronautComplexScreen(game)), null);
+        write(folder, "progression-wings-plan.png", new MissionPlanScreen(game, "mercury-suborbital",
+            MissionPlanScreen.Tab.ASSESSMENT), null);
+        game.useAdvisorMarksInMemory(new java.util.HashSet<>(java.util.Set.of("idleTipDone")));
+    }
+
     private static void memorialShots(File folder, LaunchWindowGame game) {
         game.useFrontPageMarksInMemory(new java.util.HashSet<>());
         String hash = ContentPackHash.ofClasspath("content/standard", ScreenSnapshot.class.getClassLoader());
@@ -1686,6 +1740,9 @@ public final class ScreenSnapshot {
         startSession(game, nasa, info);
         write(folder, "advisor-ready.png", new SpaceComplexScreen(game), null);
         nasa.setLastFlightSeasonTurn(1);
+        // The capsule open and crewed, so only the report is left to wait for (the road ahead, 2026-10-26).
+        nasa.getOpenedProgramIds().add("mercury");
+        nasa.getAstronauts().add(new Astronaut("a1", "D. Slayton", 35, 70, 50));
         startSession(game, nasa, info);
         write(folder, "advisor-waiting.png", new SpaceComplexScreen(game), null);
 

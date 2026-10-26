@@ -297,6 +297,14 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
   through the players' own validation and journal; `bot.json` keeps the last turn played). They can win, and the
   race, Intelligence Office and result mark them "(bot)" (`RivalSummary.bot`). The bots' plans moved to `core`
   (`bot.BotPlans`). Every number is unconfirmed. A changed message: rebuild client and server together; no reset.
+- **A guided progression** (the user's decision, 2026-10-26, `design.md` §2.3(d)): the standard pack opens in stages, the
+  first satellite alone, then the rest with a satellite in orbit, a person in space, and a probe at the Moon with a
+  person in orbit; inside a Moon program a crewed flyby, then an orbit, then a landing (`baspm_pack.py`'s
+  `progression_gates`, full scope only). The smart bot's landing moves from season 84.2 to 85.0 on average. **Rocket-plane
+  wings** (`design.md` §2.2(c), `rules.RocketPlaneWings`): a rocket plane's crew who come home earn them, +4 on every
+  capsule step they pilot (unconfirmed). The advisor walks the stages (`Advisor.ROAD_AHEAD`) and can no longer be hidden,
+  only minimized (`ui-spec.md` component 24). `-Dshots=progression`. The pack hash changed and saved classes and events
+  gained fields: reset the dev data root, rebuild client and server together.
 
 ## How we work
 

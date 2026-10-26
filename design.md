@@ -387,6 +387,14 @@ leading to satellite navigation.
   ramjet under its tail. On 15 November 1967 Mike Adams's X-15 drifted off heading at its peak, spun, and broke up in
   the pull-out on the way down. Before landing the pilot dropped the lower half of the ventral fin, which came down on
   its own parachute, so the skids could reach the lakebed. The replay's `x15-peak`, `x15-fast` and `x15-descent`.
+- **Astronaut wings from a rocket plane** (2026-10-26, from Wikipedia's X-15 flight list, NASA and Space.com): of the
+  X-15's 199 flights, 13 by eight pilots went above 50 miles, the US Air Force's line for an astronaut; the five Air
+  Force pilots got their wings at the time, and the three NASA civilians only in August 2005: Bill Dana in person, Joe
+  Walker (killed in the XB-70 collision of June 1966) and John McKay posthumously. Two of Walker's flights also passed
+  the 100 km line used internationally, the higher at 354,200 ft (107.96 km, usually rounded to 107.8 km as in the entry
+  above) on 22 August 1963. Neil Armstrong flew the X-15 before Gemini, and Joe Engle
+  earned his wings in it before flying the Space Shuttle. What its pilots learnt (reaction-control jets, pressure
+  suits, flying a reentry) went into the capsules: the game's rocket-plane wings (§2.2(c)).
 - **The first rover sent to Mars** (2026-10-17, from Wikipedia and IEEE Spectrum; verify before a note uses it): Mars 2
   and Mars 3 each carried PrOP-M, a 4.5 kg box on two wide skis, tethered to its lander by a 15 m cable. The lander's
   arm was to set it down in view of the cameras; it would walk on its skis at up to a metre an hour, stopping every
@@ -1127,6 +1135,16 @@ season unchanged. Tiger Teams' live per-step choice doesn't fit, so it was redes
   succeeds with `25 + 10 × (skill − 80) / 20` percent, with no skill growth; success grants the
   trait for good. Several skills can be earned over a career. Expert training is the fourth kind
   in the shared training dialog. How Experts rescue steps: §2.5(i).
+- **Rocket-plane wings** (the user's idea, 2026-10-26, `rules.RocketPlaneWings`): a personal mark an astronaut earns
+  by flying a rocket plane (the X-15, the MiG E-154; any of their flights) home. It's kept for good
+  (`Astronaut.rocketPlaneWings`) and makes every capsule step they pilot safer: a step whose crew work reads piloting
+  from a seat held by a pilot with wings gains **4 points** on its base chance, once however many such pilots share it
+  (unconfirmed; the findings' size, §2.13). Any crewed flight outside the rocket planes counts as a capsule. The season
+  pass and the planning odds read it alike (`MissionAssessment.StepOdds.wings`). It gives the rocket plane a reason to
+  fly while the capsule is in R&D, beyond prestige and contracts (its `space-plane` goal only boosts Mercury's
+  capsule by 1). Shown: a "WINGS +4" badge on the mission plan's step, "Rocket-plane wings" under the astronaut on the
+  roster and on the person page, a People line in the turn report (`RocketPlaneWingsEarned`), a career entry
+  (`CareerEntry.Kind.WINGS`), the help topic "Astronauts" (token `missions.wingsBonus`). History: §1.1.
 - **Hiring** (`HiringPool`): each season every group gets a fresh batch of candidates, quality
   banded by the group's average morale. **Batch size: 10, as in BASPM** (user, 2026-10-06).
   Rosters are capped by their buildings' levels (§5, M3). Each agency has about 32 to 36
@@ -1684,6 +1702,25 @@ also pays the creation cost of each component it grants that the agency doesn't 
 BASPM does (confirmed 2026-10-06). Programs gate on `requiredGoalIds` (an AND list). Programs
 can be closed (§5, M3). BASPM's unbuilt scope (asteroids, stations, Mars expeditions) is fair
 roadmap inspiration, since those are real domains.
+
+**(d) A guided progression** (the user's decision, 2026-10-26): BASPM opened a dozen programs on day one, so a new
+player could pick Gemini first, a poor choice nothing warned of. The standard pack now opens in stages, the goals
+added on top of BASPM's by the converter (`baspm_pack.py`'s `progression_gates`, full scope only; early-era unchanged):
+- **At first:** only the first satellite (Explorer 1, Sputnik 1).
+- **A satellite in orbit** (`earth-orbit-satellite`): the other satellites, the rocket plane (X-15, MiG E-154) and the
+  one-crew capsule (Mercury, Vostok); the lunar probes as before.
+- **A person in space** (`human-in-space`): the two- and three-crew capsules and every Moon craft's Earth-orbit tests
+  (Gemini and its variants, Gemini EOR's, Apollo's, Voskhod, Soyuz 7K-OK, the 7K-L1's, 7K-L3's and LK-700's).
+  Opening those tests still makes most Moon versions free to open later.
+- **A probe at the Moon and a person in orbit** (`lunar-probe` and `human-in-orbit`): the Moon programs. Venus and
+  Mars probes stay on `lunar-probe`.
+- **Inside a Moon program** (configurations' `requiredGoalIds`, crewed flights only): the lunar orbits and lander
+  tests need `crewed-lunar-flyby`, the landings `crewed-lunar-orbit`, from any program. The uncrewed flights stay
+  open; their goal dependencies order them.
+- **The X-15 never earns `human-in-space`** (its research flights earn `space-plane`), so it's no side door to the
+  bigger capsules. It gets its own reason to fly instead: rocket-plane wings (§2.2(c)).
+- **Shown:** Headquarters lists locked programs with what they need, as before; the advisor walks the stages
+  (`ui-spec.md` component 24); the help topic "Programs" lists them. The filler bots' plans already fly in this order.
 
 ### 2.4 Mission components & reliability
 

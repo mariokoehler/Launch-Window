@@ -185,6 +185,7 @@ public final class CareerTexts {
             case RELATIONSHIP -> (entry.value() > 0 ? "Works well with " : "Clashes with ") + entry.ref() + ", after "
                 + seasons(entry.count()) + " together";
             case EXPERT -> "Expert trait earned: " + TurnReportView.skillLabel(entry.ref());
+            case WINGS -> "Rocket-plane wings earned, on " + mission(entry.ref(), catalog);
             case AMBITION -> ambitionLine(entry);
             case JOINED -> String.format(Locale.ROOT, "Joined from %s, for +%d %%: salary %s → %d, a signing bonus of %d",
                 entry.ref(), entry.count(), entry.note(), Math.round(entry.value()), Math.round(entry.value()));

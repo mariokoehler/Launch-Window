@@ -32,7 +32,9 @@
       "pegasus-satellite"
     ],
     "openingCostDiscounts": [],
-    "requiredGoalIds": [],
+    "requiredGoalIds": [
+      "earth-orbit-satellite"
+    ],
     "agency": "NASA"
   },
   {
@@ -44,7 +46,9 @@
       "biosatellite-satellite"
     ],
     "openingCostDiscounts": [],
-    "requiredGoalIds": [],
+    "requiredGoalIds": [
+      "earth-orbit-satellite"
+    ],
     "agency": "NASA"
   },
   {
@@ -56,7 +60,9 @@
       "ofo-satellite"
     ],
     "openingCostDiscounts": [],
-    "requiredGoalIds": [],
+    "requiredGoalIds": [
+      "earth-orbit-satellite"
+    ],
     "agency": "NASA"
   },
   {
@@ -68,7 +74,9 @@
       "vostok-capsule"
     ],
     "openingCostDiscounts": [],
-    "requiredGoalIds": [],
+    "requiredGoalIds": [
+      "earth-orbit-satellite"
+    ],
     "agency": "SOVIET"
   },
   {
@@ -80,7 +88,9 @@
       "sputnik-2-satellite"
     ],
     "openingCostDiscounts": [],
-    "requiredGoalIds": [],
+    "requiredGoalIds": [
+      "earth-orbit-satellite"
+    ],
     "agency": "SOVIET"
   },
   {
@@ -445,7 +455,9 @@
       "x-15-aircraft"
     ],
     "openingCostDiscounts": [],
-    "requiredGoalIds": [],
+    "requiredGoalIds": [
+      "earth-orbit-satellite"
+    ],
     "agency": "NASA"
   },
   {
@@ -457,7 +469,9 @@
       "mig-e-154-spaceplane"
     ],
     "openingCostDiscounts": [],
-    "requiredGoalIds": [],
+    "requiredGoalIds": [
+      "earth-orbit-satellite"
+    ],
     "agency": "SOVIET"
   },
   {
@@ -469,7 +483,9 @@
       "mercury-capsule"
     ],
     "openingCostDiscounts": [],
-    "requiredGoalIds": [],
+    "requiredGoalIds": [
+      "earth-orbit-satellite"
+    ],
     "agency": "NASA"
   },
   {
@@ -481,7 +497,9 @@
       "vostok-capsule"
     ],
     "openingCostDiscounts": [],
-    "requiredGoalIds": [],
+    "requiredGoalIds": [
+      "earth-orbit-satellite"
+    ],
     "agency": "SOVIET"
   },
   {
@@ -520,7 +538,9 @@
         "percent": 100
       }
     ],
-    "requiredGoalIds": [],
+    "requiredGoalIds": [
+      "human-in-space"
+    ],
     "agency": "NASA"
   },
   {
@@ -558,7 +578,9 @@
         "percent": 100
       }
     ],
-    "requiredGoalIds": [],
+    "requiredGoalIds": [
+      "human-in-space"
+    ],
     "agency": "NASA"
   },
   {
@@ -596,7 +618,9 @@
         "percent": 100
       }
     ],
-    "requiredGoalIds": [],
+    "requiredGoalIds": [
+      "human-in-space"
+    ],
     "agency": "NASA"
   },
   {
@@ -634,7 +658,9 @@
         "percent": 100
       }
     ],
-    "requiredGoalIds": [],
+    "requiredGoalIds": [
+      "human-in-space"
+    ],
     "agency": "NASA"
   },
   {
@@ -652,7 +678,9 @@
         "percent": 100
       }
     ],
-    "requiredGoalIds": [],
+    "requiredGoalIds": [
+      "human-in-space"
+    ],
     "agency": "SOVIET"
   },
   {
@@ -669,7 +697,9 @@
         "percent": 100
       }
     ],
-    "requiredGoalIds": [],
+    "requiredGoalIds": [
+      "human-in-space"
+    ],
     "agency": "SOVIET"
   },
   {
@@ -689,7 +719,9 @@
         "percent": 100
       }
     ],
-    "requiredGoalIds": [],
+    "requiredGoalIds": [
+      "human-in-space"
+    ],
     "agency": "SOVIET"
   },
   {
@@ -707,7 +739,9 @@
         "percent": 100
       }
     ],
-    "requiredGoalIds": [],
+    "requiredGoalIds": [
+      "human-in-space"
+    ],
     "agency": "SOVIET"
   },
   {
@@ -729,7 +763,9 @@
         "percent": 100
       }
     ],
-    "requiredGoalIds": [],
+    "requiredGoalIds": [
+      "human-in-space"
+    ],
     "agency": "NASA"
   },
   {
@@ -768,7 +804,8 @@
       }
     ],
     "requiredGoalIds": [
-      "lunar-probe"
+      "lunar-probe",
+      "human-in-orbit"
     ],
     "agency": "NASA"
   },
@@ -808,7 +845,8 @@
       }
     ],
     "requiredGoalIds": [
-      "lunar-probe"
+      "lunar-probe",
+      "human-in-orbit"
     ],
     "agency": "NASA"
   },
@@ -849,7 +887,8 @@
       }
     ],
     "requiredGoalIds": [
-      "lunar-probe"
+      "lunar-probe",
+      "human-in-orbit"
     ],
     "agency": "NASA"
   },
@@ -871,7 +910,8 @@
       }
     ],
     "requiredGoalIds": [
-      "lunar-probe"
+      "lunar-probe",
+      "human-in-orbit"
     ],
     "agency": "NASA"
   },
@@ -895,7 +935,8 @@
       }
     ],
     "requiredGoalIds": [
-      "lunar-probe"
+      "lunar-probe",
+      "human-in-orbit"
     ],
     "agency": "NASA"
   },
@@ -914,7 +955,8 @@
       }
     ],
     "requiredGoalIds": [
-      "lunar-probe"
+      "lunar-probe",
+      "human-in-orbit"
     ],
     "agency": "SOVIET"
   },
@@ -936,7 +978,8 @@
       }
     ],
     "requiredGoalIds": [
-      "lunar-probe"
+      "lunar-probe",
+      "human-in-orbit"
     ],
     "agency": "SOVIET"
   },
@@ -956,7 +999,8 @@
       }
     ],
     "requiredGoalIds": [
-      "lunar-probe"
+      "lunar-probe",
+      "human-in-orbit"
     ],
     "agency": "SOVIET"
   },
@@ -977,7 +1021,9 @@
         "percent": 100
       }
     ],
-    "requiredGoalIds": [],
+    "requiredGoalIds": [
+      "human-in-space"
+    ],
     "agency": "NASA"
   },
   {
@@ -991,7 +1037,9 @@
       "yastreb-eva-suit"
     ],
     "openingCostDiscounts": [],
-    "requiredGoalIds": [],
+    "requiredGoalIds": [
+      "human-in-space"
+    ],
     "agency": "SOVIET"
   }
 ]

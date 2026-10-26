@@ -4,6 +4,7 @@ import de.mkoehler.launchwindow.rules.PrDuty;
 import de.mkoehler.launchwindow.content.StaffingSlot;
 import de.mkoehler.launchwindow.rules.HiringPool;
 import de.mkoehler.launchwindow.rules.PersonnelLifecycle;
+import de.mkoehler.launchwindow.rules.RocketPlaneWings;
 
 import java.util.Map;
 
@@ -129,6 +130,17 @@ public final class Tips {
             + "training: prestige every season from Leadership and fame (%d per flight, %d per flight with a first), "
             + "at most %d. Each extra astronaut on tour earns less. After %d seasons in a row, flying skills rust.",
             PrDuty.PER_FLIGHT, PrDuty.PER_FIRST, PrDuty.MAX_YIELD, PrDuty.RUST_FREE_SEASONS));
+    }
+
+    /**
+     * Returns the rocket-plane wings' tooltip ({@code rules.RocketPlaneWings}).
+     *
+     * @return the tip
+     */
+    public static Tip wings() {
+        return new Tip("Rocket-plane wings", String.format(java.util.Locale.ROOT, "Earned by flying a rocket plane "
+            + "and landing it. For good: every capsule step this astronaut pilots gains %.0f points on its success "
+            + "chance (not more with two such pilots on a step).", RocketPlaneWings.BONUS_POINTS));
     }
 
     /**

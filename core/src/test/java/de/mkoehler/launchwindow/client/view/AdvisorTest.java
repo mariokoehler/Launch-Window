@@ -98,7 +98,8 @@ class AdvisorTest {
 
     /**
      * With everything done before the first turn resolves, the card waits for the report rather
-     * than retiring; once it's read, the advisor is finished.
+     * than retiring; once it's read, and the early pack's capsule is open (its whole road ahead), the
+     * advisor is finished.
      */
     @Test
     void reportWaitsForTheTurn() {
@@ -106,6 +107,8 @@ class AdvisorTest {
         state.getSetSpecialists().add(new SetSpecialist("e1", "A. Engineer", 30, 70, 50));
         state.getSetSpecialists().get(0).setRdTargetComponentId("sputnik-1-satellite");
         state.getOpenedProgramIds().add("sputnik-1");
+        state.getOpenedProgramIds().add("vostok");
+        state.getAstronauts().add(new Astronaut("a1", "C. Astronaut", 30, 70, 50));
         state.getMissionComponents().put("r7-sputnik", new OwnedMissionComponent(50, 40));
         state.getMissionControlOfficers().add(new MissionControlOfficer("c1", "B. Controller", 30, 70, 50));
         state.setLastFlightSeasonTurn(1);
@@ -144,12 +147,68 @@ class AdvisorTest {
     @Test
     void topicsExist() throws IOException {
         Help help = Help.parse(Files.readString(Path.of("..", "assets", "content", Help.FILE)));
-        for (Advisor.Item item : Advisor.ITEMS) {
+        for (Advisor.Item item : java.util.stream.Stream.concat(Advisor.ITEMS.stream(), Advisor.ROAD_AHEAD.stream())
+                .toList()) {
             assertFalse(item.topicIds().isEmpty(), item.id());
             for (String id : item.topicIds()) {
                 assertTrue(help.byId(id).isPresent(), item.id() + " names a missing topic " + id);
             }
         }
+    }
+
+    /**
+     * The road ahead on the full pack (2026-10-26): each stage's item comes as its programs open, names the
+     * agency's own programs, and goes once the player acts or moves past it; the advisor never finishes
+     * before the Moon is open.
+     */
+    @Test
+    void theRoadAheadFollowsTheGates() {
+        ContentCatalog standard = ContentPackLoader.load(Path.of("..", "assets", "content", "standard"));
+        Advisor.Marks done = new Advisor.Marks(true, true, true);
+        PlayerSnapshot state = new PlayerSnapshot("Atlas", Archetype.NASA, 25_000, 250, 3_000, 1);
+        state.getSetSpecialists().add(new SetSpecialist("e1", "A. Engineer", 30, 70, 50));
+        state.getSetSpecialists().get(0).setRdTargetComponentId("explorer-1-satellite");
+        state.getMissionControlOfficers().add(new MissionControlOfficer("c1", "B. Controller", 30, 70, 50));
+        state.getOpenedProgramIds().add("explorer-1");
+        state.getMissionComponents().put("explorer-1-satellite", new OwnedMissionComponent(3, 3));
+        state.getMissionComponents().put("jupiter-c", new OwnedMissionComponent(3, 3));
+        state.setLastFlightSeasonTurn(1);
+        java.util.function.Supplier<List<String>> open = () -> Advisor.open(state, standard, done).stream()
+            .map(Advisor.Item::id).toList();
+
+        // Before the first satellite reaches orbit, nothing is open: the card says what comes next.
+        assertEquals(List.of(), open.get());
+        Advisor.Item next = Advisor.later(state, standard, done).getFirst();
+        assertEquals("next-crew", next.id());
+        assertEquals("Once your first satellite reaches orbit", Advisor.waitingFor(next, state));
+        assertTrue(Advisor.firstStepsDone(state, standard, done));
+
+        state.getAchievedGoals().put("earth-orbit-satellite", 1);
+        assertEquals(List.of("next-crew", "rocket-plane"), open.get());
+        Advisor.Item plane = Advisor.ROAD_AHEAD.get(1);
+        assertEquals("Fly the " + ContentNames.of("x-15") + " meanwhile", Advisor.title(plane, state, standard));
+        assertTrue(Advisor.text(Advisor.ROAD_AHEAD.getFirst(), state, standard).contains(ContentNames.of("mercury")));
+
+        // Opening the capsule brings the probe; a pilot's wings settle the rocket plane.
+        state.getOpenedProgramIds().add("mercury");
+        state.getAstronauts().add(new Astronaut("a1", "C. Astronaut", 30, 70, 50));
+        assertEquals(List.of("rocket-plane", "lunar-probe"), open.get());
+        state.getAstronauts().getFirst().setRocketPlaneWings(true);
+        assertEquals(List.of("lunar-probe"), open.get());
+
+        state.getAchievedGoals().put("human-in-space", 2);
+        assertEquals(List.of("lunar-probe", "bigger-capsules"), open.get());
+        state.getOpenedProgramIds().add("ranger-3");
+        state.getOpenedProgramIds().add("apollo-earth-orbit");
+        assertEquals(List.of(), open.get());
+        assertFalse(Advisor.finished(state, standard, done), "the Moon is still ahead");
+        assertEquals("moon", Advisor.later(state, standard, done).getFirst().id());
+
+        state.getAchievedGoals().put("lunar-probe", 3);
+        state.getAchievedGoals().put("human-in-orbit", 4);
+        assertEquals(List.of("moon"), open.get());
+        state.getOpenedProgramIds().add("apollo");
+        assertTrue(Advisor.finished(state, standard, done));
     }
 
     /**

@@ -255,6 +255,17 @@ public final class PersonScreen extends ChromeScreen {
             card.add(skillRow(person, skill, department.label(skill), department.icon(skill),
                 department.skill(person, skill), department.isExpert(person, skill))).padBottom(6f).row();
         }
+        if (person instanceof Astronaut astronaut && astronaut.isRocketPlaneWings()) {
+            // Earned on a rocket plane, it makes the capsule steps they pilot safer (design.md 2.2(c)).
+            Table wings = new Table();
+            wings.left();
+            wings.add(ui.badge(Theme.BadgeKind.ACTIVE, "Rocket-plane wings")).left();
+            wings.add(ui.label("Safer piloting in capsules", Theme.TextStyle.CAPTION, Theme.INK_MUTED))
+                .padLeft(Theme.SPACE_2);
+            Tips.Tip tip = Tips.wings();
+            ui.tooltip(wings, tip.title(), tip.text());
+            card.add(wings).padTop(Theme.SPACE_2).row();
+        }
         if (person instanceof MissionControlOfficer officer) {
             card.add(skillRow(person, "FLIGHT_DIRECTOR", "Flight Director", "skill_flight_director",
                 officer.flightDirectorSkill(), false)).padBottom(6f).row();

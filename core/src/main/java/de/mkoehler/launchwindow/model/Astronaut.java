@@ -30,6 +30,7 @@ public class Astronaut extends Personnel {
     private int flightsFlown;
     private int firstsFlown;
     private int prDutySeasons;
+    private boolean rocketPlaneWings;
 
     /**
      * No-argument constructor required for Jackson deserialization.
@@ -188,5 +189,25 @@ public class Astronaut extends Personnel {
      */
     public void setPrDutySeasons(int prDutySeasons) {
         this.prDutySeasons = prDutySeasons;
+    }
+
+    /**
+     * Returns whether this astronaut has flown a rocket plane and landed it: their rocket-plane wings,
+     * which make the piloting steps of their capsule flights safer ({@code rules.RocketPlaneWings},
+     * {@code design.md} &sect;2.2(c)).
+     *
+     * @return whether they have them
+     */
+    public boolean isRocketPlaneWings() {
+        return rocketPlaneWings;
+    }
+
+    /**
+     * Sets whether this astronaut has their rocket-plane wings.
+     *
+     * @param rocketPlaneWings whether they have them
+     */
+    public void setRocketPlaneWings(boolean rocketPlaneWings) {
+        this.rocketPlaneWings = rocketPlaneWings;
     }
 }

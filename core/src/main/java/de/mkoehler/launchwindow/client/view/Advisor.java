@@ -4,6 +4,7 @@ import de.mkoehler.launchwindow.content.ContentCatalog;
 import de.mkoehler.launchwindow.content.MissionComponent;
 import de.mkoehler.launchwindow.content.MissionConfiguration;
 import de.mkoehler.launchwindow.content.Program;
+import de.mkoehler.launchwindow.model.Astronaut;
 import de.mkoehler.launchwindow.model.OwnedMissionComponent;
 import de.mkoehler.launchwindow.model.PlayerSnapshot;
 import de.mkoehler.launchwindow.model.SetSpecialist;
@@ -13,10 +14,13 @@ import java.util.List;
 import java.util.function.Predicate;
 
 /**
- * The advisor ({@code ui-spec.md} component 24): a new agency's first things to do, shown on a card
- * on the hub until they're done. Each item ticks itself off from the player's state, never from a
- * click, so it works the same on every machine; only "open the help" and "read the turn report"
- * come from this client's own marks. Once nothing is left, the client retires the advisor for good.
+ * The advisor ({@code ui-spec.md} component 24): a new agency's first things to do, then the road ahead as
+ * the programs open in stages (the user's idea, 2026-10-26: the next capsule, the rocket plane meanwhile, a
+ * probe to the Moon, the bigger capsules, the Moon), shown on a card on the hub. Each item ticks itself off
+ * from the player's state, never from a click, so it works the same on every machine; only "open the help"
+ * and "read the turn report" come from this client's own marks. The player can't hide it, only minimize it
+ * (user, 2026-10-26: a new player could hide it by accident and lose the help that comes later). Once nothing
+ * is left, the client retires it for good.
  *
  * @author Mario Koehler
  */
@@ -127,6 +131,46 @@ public final class Advisor {
             "What happened while you were away: launches, R&D, people and the news.",
             "Turn report", Destination.TURN_REPORT, List.of("turn-report")));
 
+    /** The categories of the bigger capsules, which a person in space opens. */
+    private static final List<String> BIGGER_CAPSULES = List.of("two-crew-capsules", "three-crew-capsules");
+    /** The one-crew capsules' category. */
+    private static final List<String> ONE_CREW = List.of("one-crew-capsules");
+    /** The rocket planes' category. */
+    private static final List<String> SPACE_PLANES = List.of(de.mkoehler.launchwindow.rules.RocketPlaneWings.CATEGORY);
+    /** The lunar probes' category. */
+    private static final List<String> LUNAR_PROBES = List.of("lunar-probes");
+    /** The crewed Moon programs' category. */
+    private static final List<String> MOON = List.of("lunar-expeditions");
+
+    /**
+     * The road ahead, after the first steps (the user's idea, 2026-10-26, {@code design.md} &sect;2.3): each
+     * item opens when its programs do, in the order the progression opens them, and goes once the player
+     * has acted or moved past it. {@code {capsule}} and {@code {plane}} stand for the agency's own programs
+     * ({@link #title}, {@link #text}).
+     */
+    public static final List<Item> ROAD_AHEAD = List.of(
+        new Item("next-crew", "Start on a person in space",
+            "Your satellite opened {capsule}, the capsule that puts a person in space. Its R&D is long: open it "
+                + "now.", "Headquarters", Destination.HEADQUARTERS, List.of("programs", "astronauts")),
+        new Item("rocket-plane", "Fly the {plane} meanwhile",
+            "A rocket plane is cheap and quick while the capsule is in R&D: prestige, contracts, and every pilot "
+                + "who lands it earns rocket-plane wings, which make their capsule flights safer.",
+            "Headquarters", Destination.HEADQUARTERS, List.of("programs", "astronauts")),
+        new Item("lunar-probe", "Send a probe to the Moon",
+            "The Moon programs open with a probe at the Moon and a person in orbit. Probes are cheap: fly one "
+                + "while the capsule gets ready.", "Headquarters", Destination.HEADQUARTERS, List.of("programs")),
+        new Item("bigger-capsules", "Choose your road to the Moon",
+            "A person in space opened the bigger capsules and the Moon craft's tests in Earth orbit. Opening a "
+                + "Moon craft's tests usually makes its Moon flights free to open later.",
+            "Headquarters", Destination.HEADQUARTERS, List.of("programs")),
+        new Item("moon", "Go to the Moon",
+            "A probe at the Moon and a person in orbit opened the Moon programs. A crew flies round the Moon "
+                + "before it orbits it, and orbits it before it lands.",
+            "Headquarters", Destination.HEADQUARTERS, List.of("programs", "mission-steps")));
+
+    /** The first steps, then the road ahead. */
+    private static final List<Item> ALL = java.util.stream.Stream.concat(ITEMS.stream(), ROAD_AHEAD.stream()).toList();
+
     /**
      * A one-off tip apart from the first steps (the user's idea, 2026-10-12): the first time someone
      * out of basic training sits idle once the agency is set up, the card says so, even after the
@@ -212,6 +256,25 @@ public final class Advisor {
                 : Status.NOT_NEEDED;
             case "read-report" -> marks.reportRead() ? Status.DONE : marks.reportResolved() ? Status.OPEN
                 : Status.LATER;
+            // The road ahead. The first two wait for a first flight too, as in a pack without the gates.
+            case "next-crew" -> !exists(state, catalog, ONE_CREW) ? Status.NOT_NEEDED
+                : opened(state, catalog, ONE_CREW) || opened(state, catalog, BIGGER_CAPSULES) ? Status.DONE
+                : available(state, catalog, ONE_CREW) && flown(state) ? Status.OPEN : Status.LATER;
+            case "rocket-plane" -> !exists(state, catalog, SPACE_PLANES) ? Status.NOT_NEEDED
+                : opened(state, catalog, SPACE_PLANES) || opened(state, catalog, BIGGER_CAPSULES)
+                    || state.getAstronauts().stream().anyMatch(Astronaut::isRocketPlaneWings) ? Status.DONE
+                : available(state, catalog, SPACE_PLANES) && flown(state) ? Status.OPEN : Status.LATER;
+            case "lunar-probe" -> !exists(state, catalog, LUNAR_PROBES) ? Status.NOT_NEEDED
+                : opened(state, catalog, LUNAR_PROBES) || opened(state, catalog, MOON) ? Status.DONE
+                : available(state, catalog, LUNAR_PROBES)
+                    && (opened(state, catalog, ONE_CREW) || opened(state, catalog, BIGGER_CAPSULES))
+                ? Status.OPEN : Status.LATER;
+            case "bigger-capsules" -> !exists(state, catalog, BIGGER_CAPSULES) ? Status.NOT_NEEDED
+                : opened(state, catalog, BIGGER_CAPSULES) ? Status.DONE
+                : available(state, catalog, BIGGER_CAPSULES) ? Status.OPEN : Status.LATER;
+            case "moon" -> !exists(state, catalog, MOON) ? Status.NOT_NEEDED
+                : opened(state, catalog, MOON) ? Status.DONE
+                : available(state, catalog, MOON) ? Status.OPEN : Status.LATER;
             default -> throw new IllegalArgumentException("Unknown advisor item: " + item.id());
         };
     }
@@ -239,6 +302,10 @@ public final class Advisor {
         return switch (item.id()) {
             case "open-program", "open-rocket", "assign-rnd" -> "Once your first engineers finish basic training";
             case "raise-reliability" -> "Once engineers are on R&D";
+            case "next-crew", "rocket-plane" -> "Once your first satellite reaches orbit";
+            case "lunar-probe" -> "Once your capsule program is open";
+            case "bigger-capsules" -> "Once a person has flown in space";
+            case "moon" -> "Once a probe reaches the Moon and a person orbits the Earth";
             default -> "Once the turn resolves";
         };
     }
@@ -252,7 +319,7 @@ public final class Advisor {
      * @return the open items
      */
     public static List<Item> open(PlayerSnapshot state, ContentCatalog catalog, Marks marks) {
-        return ITEMS.stream().filter(item -> status(item, state, catalog, marks) == Status.OPEN).toList();
+        return ALL.stream().filter(item -> status(item, state, catalog, marks) == Status.OPEN).toList();
     }
 
     /**
@@ -265,7 +332,7 @@ public final class Advisor {
      * @return the waiting items
      */
     public static List<Item> later(PlayerSnapshot state, ContentCatalog catalog, Marks marks) {
-        return ITEMS.stream().filter(item -> status(item, state, catalog, marks) == Status.LATER).toList();
+        return ALL.stream().filter(item -> status(item, state, catalog, marks) == Status.LATER).toList();
     }
 
     /**
@@ -279,6 +346,68 @@ public final class Advisor {
      */
     public static boolean finished(PlayerSnapshot state, ContentCatalog catalog, Marks marks) {
         return open(state, catalog, marks).isEmpty() && later(state, catalog, marks).isEmpty();
+    }
+
+    /**
+     * Returns whether every first step is done (or not needed), so the card speaks of the road ahead.
+     *
+     * @param state   the player's state
+     * @param catalog the content pack
+     * @param marks   this client's marks
+     * @return whether they are
+     */
+    public static boolean firstStepsDone(PlayerSnapshot state, ContentCatalog catalog, Marks marks) {
+        return ITEMS.stream().map(item -> status(item, state, catalog, marks))
+            .allMatch(status -> status == Status.DONE || status == Status.NOT_NEEDED);
+    }
+
+    /**
+     * Returns an item's title, with the agency's own program for a placeholder.
+     *
+     * @param item    the item
+     * @param state   the player's state
+     * @param catalog the content pack
+     * @return the title
+     */
+    public static String title(Item item, PlayerSnapshot state, ContentCatalog catalog) {
+        return named(item.title(), state, catalog);
+    }
+
+    /**
+     * Returns an item's line, with the agency's own programs for the placeholders.
+     *
+     * @param item    the item
+     * @param state   the player's state
+     * @param catalog the content pack
+     * @return the line
+     */
+    public static String text(Item item, PlayerSnapshot state, ContentCatalog catalog) {
+        return named(item.text(), state, catalog);
+    }
+
+    private static String named(String text, PlayerSnapshot state, ContentCatalog catalog) {
+        return text.replace("{capsule}", firstName(state, catalog, ONE_CREW, "a one-crew capsule"))
+            .replace("{plane}", firstName(state, catalog, SPACE_PLANES, "rocket plane"));
+    }
+
+    /** The name of the agency's first program in the categories, or the fallback. */
+    private static String firstName(PlayerSnapshot state, ContentCatalog catalog, List<String> categories,
+                                    String fallback) {
+        return Programs.visible(state, catalog).stream().filter(program -> categories.contains(program.categoryId()))
+            .findFirst().map(program -> ContentNames.of(program.id())).orElse(fallback);
+    }
+
+    private static boolean exists(PlayerSnapshot state, ContentCatalog catalog, List<String> categories) {
+        return Programs.visible(state, catalog).stream().anyMatch(program -> categories.contains(program.categoryId()));
+    }
+
+    private static boolean opened(PlayerSnapshot state, ContentCatalog catalog, List<String> categories) {
+        return Programs.open(state, catalog).stream().anyMatch(program -> categories.contains(program.categoryId()));
+    }
+
+    private static boolean available(PlayerSnapshot state, ContentCatalog catalog, List<String> categories) {
+        return Programs.visible(state, catalog).stream().anyMatch(program -> categories.contains(program.categoryId())
+            && Programs.state(program, state) == Programs.State.AVAILABLE);
     }
 
     /**

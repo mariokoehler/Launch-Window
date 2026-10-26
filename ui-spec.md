@@ -755,14 +755,33 @@ Writing them turned up two things for the rules, recorded in `design.md` §2.2(d
       screens' `Help.Context`), as the advisor's items do; the chip names it ("1 topic for "Open a
       rocket program"").
 24. **Advisor** *(the user's idea, 2026-10-08; built the same day without a mockup, the user having
-    confirmed the plan)*. A new agency's first things to do, on a card at the hub's bottom left, until
-    they're done.
+    confirmed the plan)*. A new agency's first things to do, then the road ahead as the programs open in
+    stages, on a card at the hub's bottom left, until they're done.
     - **The items, in order** (`client.view.Advisor.ITEMS`): open the help; hire engineers; open a
       program (a satellite is the cheapest start); open a rocket program; put engineers on R&D;
       hire flight controllers (once a program is open: every mission, uncrewed too, needs
       consoles); hire astronauts (only once a program with a crew or a CAPCOM is open); raise
       reliability; plan the first mission; read the first turn report (only once a turn has
       resolved).
+    - **The road ahead** (the user's idea, 2026-10-26, with the guided progression, `design.md` §2.3(d);
+      built without a mockup, they're items like the others; `Advisor.ROAD_AHEAD`), after the first steps:
+      "Start on a person in space" (the one-crew capsule, named: Mercury or Vostok); "Fly the X-15
+      meanwhile" (or the E-154: cheap and quick while the capsule is in R&D, and its pilots earn
+      rocket-plane wings); "Send a probe to the Moon" (once the capsule is open); "Choose your road to the
+      Moon" (once a person has been to space: the bigger capsules and the Moon craft's Earth-orbit tests);
+      "Go to the Moon" (once a probe has reached it and a person has orbited the Earth). Each comes when
+      its programs can be opened (the first two also wait for a first flight, as in the ungated early-era
+      pack), goes once one of them is open or the player has moved past it (the rocket plane once a pilot
+      has wings or a bigger capsule is open), and is "not needed" for an agency without such programs.
+      Waiting on one, the card says "All set for now" and when it comes ("Once your first satellite
+      reaches orbit: start on a person in space."). Once the first steps are done the head reads "The
+      road ahead". `Advisor.title`/`text` put the agency's own program names in.
+    - **Rocket-plane wings on other screens** (2026-10-26, `design.md` §2.2(c); straight into libGDX): the
+      Astronaut Complex roster shows "Rocket-plane wings" in green under the astronaut's state, the person
+      page a "Rocket-plane wings" badge under the skills with "Safer piloting in capsules", each with the
+      tooltip `Tips.wings()`; the mission plan's step list folds the wings into the findings' green badge,
+      one "+N" for both, the tooltip naming each source, and its footnote says so; the turn report's People
+      card has "<name> earned their rocket-plane wings". Shots `progression-*.png` (`-Dshots=progression`).
     - **Reliability first** (the user's request, 2026-10-08): "Plan your first mission" is held back
       until an open program's payload (its least reliable component) and an open rocket both reach
       `Advisor.READY_RELIABILITY`, 60 %. Until then "Raise reliability to 60 %" stands in for it,
@@ -779,8 +798,10 @@ Writing them turned up two things for the rules, recorded in `design.md` §2.2(d
     - **The card:** a navy head ("ADVISOR", "Your first seasons"), then the next **three** open
       items (each a bold title, a line of why, a **Go** link to the building and a **Rules** link
       that opens help on the item's topics), "N more things after these", a rule, the line that
-      there's no button to end a turn, and **I know the ropes · hide the advisor**. With nothing open
-      but the report still to come, it says "All set for now" and names it. 380 px wide, touchable as
+      there's no button to end a turn. **No hide link** (user, 2026-10-26, replacing "I know the ropes ·
+      hide the advisor": a new player could click it by accident and lose the help that comes later;
+      minimizing is the way to quiet it). With nothing open but something still to come, it says "All
+      set for now" and names it. 380 px wide, touchable as
       a whole so the hotspots underneath never take a click; at the bottom left it covers no
       building marker on either agency's art (only the corner of NASA's SET Centre outline).
     - **Minimize** (the user's idea, 2026-10-10, for the new NASA art, candidate 125, where the card
@@ -791,12 +812,10 @@ Writing them turned up two things for the rules, recorded in `design.md` §2.2(d
       *Unconfirmed default:* the state lasts for the client run (`LaunchWindowGame.advisorMinimized`),
       across hub visits, and a fresh start shows the whole card again, so the advisor is never lost
       by accident. Shot `advisor-minimized.png`.
-    - **Gone for good:** once every item is done (the report included), or the player hides it, the
-      client marks the advisor retired and never shows it again for that login on that server. Not
-      shown once the game is decided. So an agency that flies satellites only until the advisor
-      retires never sees "hire astronauts" when it opens a crewed program later (accepted: mission
-      assembly refuses a crewless mission and says why). A dev data reset deletes the client's
-      preferences, so the advisor comes back.
+    - **Gone for good:** once every item is done (the report and the road ahead included: a Moon program
+      open), the client marks the advisor retired and never shows it again for that login on that
+      server. Not shown once the game is decided. A login retired by the old hide link stays retired. A dev
+      data reset deletes the client's preferences, so the advisor comes back.
     - *As built:* `client.view.Advisor` (`AdvisorTest`), the card in `SpaceComplexScreen`, the marks
       in `LaunchWindowGame`. Shots `advisor-*.png` (`advisor-reliability.png` and `advisor-ready.png`
       for the bar); every other hub shot shows the card too.
@@ -809,8 +828,8 @@ Writing them turned up two things for the rules, recorded in `design.md` §2.2(d
       card; its Go link ("Their building") opens the building of the first group with someone idle,
       engineers first, and a **Got it** link puts it away. On a retired advisor the card comes back
       for it alone, captioned "A tip", without the footer. It goes for good once it stops being due
-      after it was shown (someone sent to training, or nobody idle), on Got it, or when the player
-      hides the advisor (client marks `idleTipShown`, `idleTipDone`). Its timing (as soon as someone out of basic training sits idle, even during the first steps) is confirmed by the user (2026-10-12). Shots
+      after it was shown (someone sent to training, or nobody idle), or on Got it (client marks
+      `idleTipShown`, `idleTipDone`). Its timing (as soon as someone out of basic training sits idle, even during the first steps) is confirmed by the user (2026-10-12). Shots
       `advisor-idle-tip.png` (retired) and `advisor-idle-tip-first-steps.png`.
 25. **Looking ahead** *(the user's idea, 2026-10-10: "thinking ahead gives you a big advantage in this
     game"; the user liked all seven proposals and asked for them built at once, without a mockup,
@@ -1558,7 +1577,7 @@ See `design.md` §3.13.
 **Settings gear (decided, user, 2026-10-04):** a white icon-only gear button at the end
 of the strip opens Settings (§4.12). This replaces "no Log out" below. A help button of the same
 kind follows it (2026-10-08, component 23). A new agency's advisor card sits at the bottom left
-until its first steps are done (2026-10-08, component 24).
+until its first steps and the road ahead are done (2026-10-08, 2026-10-26, component 24).
 
 **States:** a building that is upgrading shows a subtle "under construction"
 marker; a game result exists (§4.13).

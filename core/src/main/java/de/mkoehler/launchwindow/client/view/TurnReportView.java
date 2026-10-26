@@ -647,6 +647,11 @@ public final class TurnReportView {
                 lines.add(new Line(String.format(Locale.ROOT, "%s finished %s training: %s + %.1f", training.name(),
                     kindLabel(training.trainingKind()), skillLabel(training.skillName()), training.skillGain()), "",
                     "Training", 0));
+            } else if (event instanceof de.mkoehler.launchwindow.rules.RocketPlaneWingsEarned wings) {
+                String flight = catalog.missionConfiguration(wings.missionConfigurationId())
+                    .map(MissionControl::missionName).orElse("a rocket plane");
+                lines.add(new Line(wings.name() + " earned their rocket-plane wings", "Flying " + flight
+                    + " home. The capsule steps they pilot are now safer.", "Wings", 1));
             } else if (event instanceof PersonnelDeparture departure) {
                 lines.add(departure(departure));
             } else if (event instanceof PrDutyPerformed pr) {

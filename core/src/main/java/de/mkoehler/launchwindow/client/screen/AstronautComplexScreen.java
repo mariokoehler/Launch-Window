@@ -10,6 +10,7 @@ import de.mkoehler.launchwindow.actions.StartPrDutyAction;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import de.mkoehler.launchwindow.client.LaunchWindowGame;
 import de.mkoehler.launchwindow.client.ui.HistoryNote;
@@ -227,6 +228,12 @@ public final class AstronautComplexScreen extends ChromeScreen {
         stateHolder.left();
         stateHolder.defaults().left();
         stateHolder.add(active ? ui.badge(Theme.BadgeKind.ACTIVE, text) : RosterCells.pill(ui, text)).row();
+        if (astronaut.isRocketPlaneWings()) {
+            Label wings = ui.label("Rocket-plane wings", Theme.TextStyle.CAPTION, Theme.SUCCESS);
+            Tips.Tip tip = Tips.wings();
+            ui.tooltip(wings, tip.title(), tip.text());
+            stateHolder.add(wings).padTop(4f).row();
+        }
         String hint = AstronautCorps.expertHint(astronaut);
         if (hint != null) {
             stateHolder.add(ui.label(hint, Theme.TextStyle.CAPTION, Theme.GOLD_TEXT)).padTop(4f).row();

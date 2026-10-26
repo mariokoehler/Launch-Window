@@ -353,6 +353,9 @@ public final class Careers {
             } else if (event instanceof ExpertTrainingCompleted expert) {
                 add(byId, expert.personnelId(), new CareerEntry(gameTurn, CareerEntry.Kind.EXPERT, expert.skillName(),
                     "", "", 0, 0));
+            } else if (event instanceof RocketPlaneWingsEarned wings) {
+                add(byId, wings.personnelId(), new CareerEntry(gameTurn, CareerEntry.Kind.WINGS,
+                    wings.missionConfigurationId(), "", "", 0, 0));
             } else if (event instanceof TrainingCompleted training) {
                 add(byId, training.personnelId(), new CareerEntry(gameTurn, CareerEntry.Kind.TRAINING,
                     training.skillName(), training.trainingKind().name(), "", training.skillGain(), 0));

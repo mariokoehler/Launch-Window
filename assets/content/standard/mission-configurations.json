@@ -111302,7 +111302,9 @@
     ],
     "cancellationPrestigeDeduction": 5000,
     "cancellationRefundPercent": 10,
-    "requiredGoalIds": []
+    "requiredGoalIds": [
+      "crewed-lunar-flyby"
+    ]
   },
   {
     "id": "gemini-direct-ascent-uncrewed-flyby",
@@ -115530,7 +115532,9 @@
     ],
     "cancellationPrestigeDeduction": 5050,
     "cancellationRefundPercent": 10,
-    "requiredGoalIds": []
+    "requiredGoalIds": [
+      "crewed-lunar-flyby"
+    ]
   },
   {
     "id": "gemini-direct-ascent-landing",
@@ -117329,7 +117333,9 @@
     ],
     "cancellationPrestigeDeduction": 5750,
     "cancellationRefundPercent": 10,
-    "requiredGoalIds": []
+    "requiredGoalIds": [
+      "crewed-lunar-orbit"
+    ]
   },
   {
     "id": "apollo-uncrewed-flyby",
@@ -121796,7 +121802,9 @@
     ],
     "cancellationPrestigeDeduction": 6550,
     "cancellationRefundPercent": 10,
-    "requiredGoalIds": []
+    "requiredGoalIds": [
+      "crewed-lunar-flyby"
+    ]
   },
   {
     "id": "apollo-lander-test",
@@ -124138,7 +124146,9 @@
     ],
     "cancellationPrestigeDeduction": 6750,
     "cancellationRefundPercent": 10,
-    "requiredGoalIds": []
+    "requiredGoalIds": [
+      "crewed-lunar-flyby"
+    ]
   },
   {
     "id": "apollo-landing",
@@ -126940,7 +126950,9 @@
     ],
     "cancellationPrestigeDeduction": 7000,
     "cancellationRefundPercent": 10,
-    "requiredGoalIds": []
+    "requiredGoalIds": [
+      "crewed-lunar-orbit"
+    ]
   },
   {
     "id": "apollo-landing-with-rover",
@@ -130123,7 +130135,9 @@
     ],
     "cancellationPrestigeDeduction": 7750,
     "cancellationRefundPercent": 10,
-    "requiredGoalIds": []
+    "requiredGoalIds": [
+      "crewed-lunar-orbit"
+    ]
   },
   {
     "id": "gemini-eor-flyby",
@@ -133850,7 +133864,9 @@
     ],
     "cancellationPrestigeDeduction": 6550,
     "cancellationRefundPercent": 10,
-    "requiredGoalIds": []
+    "requiredGoalIds": [
+      "crewed-lunar-flyby"
+    ]
   },
   {
     "id": "gemini-eor-lander-test-lunar-orbit",
@@ -136502,7 +136518,9 @@
     ],
     "cancellationPrestigeDeduction": 6750,
     "cancellationRefundPercent": 10,
-    "requiredGoalIds": []
+    "requiredGoalIds": [
+      "crewed-lunar-flyby"
+    ]
   },
   {
     "id": "gemini-eor-landing",
@@ -139477,7 +139495,9 @@
     ],
     "cancellationPrestigeDeduction": 7000,
     "cancellationRefundPercent": 10,
-    "requiredGoalIds": []
+    "requiredGoalIds": [
+      "crewed-lunar-orbit"
+    ]
   },
   {
     "id": "soyuz-7k-l1-uncrewed-flyby",
@@ -146252,7 +146272,9 @@
     ],
     "cancellationPrestigeDeduction": 5050,
     "cancellationRefundPercent": 10,
-    "requiredGoalIds": []
+    "requiredGoalIds": [
+      "crewed-lunar-flyby"
+    ]
   },
   {
     "id": "soyuz-7k-l3-lander-test-lunar-orbit",
@@ -148446,7 +148468,9 @@
     ],
     "cancellationPrestigeDeduction": 5200,
     "cancellationRefundPercent": 10,
-    "requiredGoalIds": []
+    "requiredGoalIds": [
+      "crewed-lunar-flyby"
+    ]
   },
   {
     "id": "soyuz-7k-l3-landing",
@@ -150950,7 +150974,9 @@
     ],
     "cancellationPrestigeDeduction": 5500,
     "cancellationRefundPercent": 10,
-    "requiredGoalIds": []
+    "requiredGoalIds": [
+      "crewed-lunar-orbit"
+    ]
   },
   {
     "id": "lk-700-uncrewed-flyby",
@@ -155129,7 +155155,9 @@
     ],
     "cancellationPrestigeDeduction": 5075,
     "cancellationRefundPercent": 10,
-    "requiredGoalIds": []
+    "requiredGoalIds": [
+      "crewed-lunar-flyby"
+    ]
   },
   {
     "id": "lk-700-landing",
@@ -157086,7 +157114,9 @@
     ],
     "cancellationPrestigeDeduction": 6000,
     "cancellationRefundPercent": 10,
-    "requiredGoalIds": []
+    "requiredGoalIds": [
+      "crewed-lunar-orbit"
+    ]
   },
   {
     "id": "apollo-uncrewed-suborbital",

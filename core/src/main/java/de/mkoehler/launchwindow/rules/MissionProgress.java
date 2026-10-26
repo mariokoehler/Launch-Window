@@ -280,6 +280,7 @@ public final class MissionProgress {
         if (nextSeasonIndex >= configuration.durationInSeasons()) {
             rememberPassengers(snapshot, configuration, mission, null, gameTurn, events);
             creditCrew(snapshot, mission);
+            RocketPlaneWings.award(snapshot, catalog, configuration, mission, events);
             releaseSurvivors(snapshot, mission, events);
             // Only a completed, non-failed flight counts toward the repeat tier - design.md §2.6(d).
             // A failing season returned above, so reaching this branch means no step failed. A
@@ -493,7 +494,8 @@ public final class MissionProgress {
         double crewSum = crewInvolved
             ? Math.min(100, crewContributionSum(snapshot, mission, step) * chemistry.multiplier(true)) : 0;
         double baseProbability = MissionStepResolution.computeBaseProbability(componentSum, crewInvolved, crewSum)
-            + findingBonus(snapshot, catalog, mission, step, snapshot::hasAchievedOrCancelledGoal);
+            + findingBonus(snapshot, catalog, mission, step, snapshot::hasAchievedOrCancelledGoal)
+            + RocketPlaneWings.stepBonus(snapshot, catalog, mission, step);
 
         double firstRoll = MissionStepResolution.drawRoll(random);
         if (MissionStepResolution.firstRollSucceeded(baseProbability, firstRoll)) {

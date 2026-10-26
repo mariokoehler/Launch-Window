@@ -320,7 +320,8 @@ public final class SpaceComplexScreen extends SessionScreen {
 
     /**
      * Builds the advisor's card ({@code ui-spec.md} component 24): the next things a new agency
-     * should do, until there are none left, when it retires for good.
+     * should do, then the road ahead, until there are none left, when it retires for good. It can be
+     * minimized but never hidden (user, 2026-10-26).
      */
     private void rebuildAdvisor(PlayerSnapshot state) {
         advisorCorner.clearChildren();
@@ -360,8 +361,9 @@ public final class SpaceComplexScreen extends SessionScreen {
         head.pad(8f, Theme.SPACE_4, 8f, Theme.SPACE_4);
         head.add(ui.label("ADVISOR", Theme.TextStyle.EYEBROW, Theme.ON_FILL)).left().expandX();
         // Minimized, the head still says how much is left.
-        String caption = tipOnly ? "A tip" : !minimized ? "Your first seasons" : open.isEmpty() ? "All set for now"
-            : open.size() + (open.size() == 1 ? " thing to do" : " things to do");
+        String caption = tipOnly ? "A tip" : !minimized
+            ? (Advisor.firstStepsDone(state, session.catalog(), marks) ? "The road ahead" : "Your first seasons")
+            : open.isEmpty() ? "All set for now" : open.size() + (open.size() == 1 ? " thing to do" : " things to do");
         head.add(ui.label(caption, Theme.TextStyle.CAPTION, DIRECTOR)).right().padRight(Theme.SPACE_2);
         // The chevron points the way the card goes: down to minimize, up to open again. The whole
         // head toggles it, the chevron being only the hint.
@@ -387,8 +389,10 @@ public final class SpaceComplexScreen extends SessionScreen {
         if (open.isEmpty()) {
             Advisor.Item next = Advisor.later(state, session.catalog(), marks).get(0);
             body.add(ui.label("All set for now", Theme.TextStyle.BODY_STRONG, Theme.INK)).left().row();
-            body.add(ui.paragraph(Advisor.waitingFor(next, state) + ": " + next.title().toLowerCase(java.util.Locale.ROOT)
-                + ".", Theme.TextStyle.BODY_SM, Theme.INK_MUTED)).width(inner).left().padBottom(Theme.SPACE_3).row();
+            String title = Advisor.title(next, state, session.catalog());
+            body.add(ui.paragraph(Advisor.waitingFor(next, state) + ": " + Character.toLowerCase(title.charAt(0))
+                + title.substring(1) + ".", Theme.TextStyle.BODY_SM, Theme.INK_MUTED)).width(inner).left()
+                .padBottom(Theme.SPACE_3).row();
         } else {
             for (int i = 0; i < Math.min(Advisor.SHOWN, open.size()); i++) {
                 body.add(advisorItem(open.get(i), inner)).width(inner).left().padBottom(Theme.SPACE_3).row();
@@ -410,14 +414,6 @@ public final class SpaceComplexScreen extends SessionScreen {
         body.add(ui.paragraph("There's no button to end a turn: your orders stand, and the turn resolves on its own "
             + "when the countdown runs out.", Theme.TextStyle.CAPTION, Theme.INK_MUTED)).width(inner).left()
             .padBottom(Theme.SPACE_2).row();
-        Label ropes = ui.label("I KNOW THE ROPES · HIDE THE ADVISOR", Theme.TextStyle.LABEL, Theme.NAVY);
-        ropes.setTouchable(Touchable.enabled);
-        ropes.addListener(clicked(() -> {
-            game.retireAdvisor();
-            game.markIdleTipDone();
-            rebuildAdvisor(session.state());
-        }));
-        body.add(ropes).right();
         card.add(body).width(ADVISOR_WIDTH).row();
         advisorCorner.add(card).width(ADVISOR_WIDTH);
     }
@@ -446,8 +442,10 @@ public final class SpaceComplexScreen extends SessionScreen {
         row.top().left();
         Table text = new Table();
         text.top().left();
-        text.add(ui.label(item.title(), Theme.TextStyle.BODY_STRONG, Theme.INK)).left().row();
-        text.add(ui.paragraph(item.text(), Theme.TextStyle.BODY_SM, Theme.INK_MUTED)).width(width - 4f).left()
+        text.add(ui.label(Advisor.title(item, session.state(), session.catalog()), Theme.TextStyle.BODY_STRONG,
+            Theme.INK)).left().row();
+        text.add(ui.paragraph(Advisor.text(item, session.state(), session.catalog()), Theme.TextStyle.BODY_SM,
+            Theme.INK_MUTED)).width(width - 4f).left()
             .padBottom(Theme.SPACE_1).row();
         String progress = Advisor.progress(item, session.state(), session.catalog());
         if (progress != null) {
@@ -469,7 +467,8 @@ public final class SpaceComplexScreen extends SessionScreen {
         rules.add(ui.label(item.destination() == Advisor.Destination.HELP ? "OPEN HELP" : "RULES",
             Theme.TextStyle.LABEL, Theme.NAVY));
         // The item's own topics, the chip naming the item ("2 topics for "Hire engineers"").
-        rules.addListener(clicked(() -> openHelp(advisorTopics(item))));
+        rules.addListener(clicked(() -> openHelp(advisorTopics(item,
+            Advisor.title(item, session.state(), session.catalog())))));
         links.add(rules);
         // The idle tip is a one-off: it can be put away without acting on it.
         if (item == Advisor.IDLE_TIP) {
@@ -500,7 +499,11 @@ public final class SpaceComplexScreen extends SessionScreen {
      * @return its topics, named after it
      */
     public static Help.Topics advisorTopics(Advisor.Item item) {
-        return new Help.Topics("\"" + item.title() + "\"", item.topicIds());
+        return advisorTopics(item, item.title());
+    }
+
+    private static Help.Topics advisorTopics(Advisor.Item item, String title) {
+        return new Help.Topics("\"" + title + "\"", item.topicIds());
     }
 
     private void go(Advisor.Destination destination) {
