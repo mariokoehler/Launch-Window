@@ -233,7 +233,10 @@ public final class ScreenSnapshot {
         // Silent, and the sound setting never this machine's: the Join screen would speak otherwise.
         configuration.disableAudio(true);
         LaunchWindowGame.useSoundInMemory(true);
-        LaunchWindowGame.useTextSizeInMemory(LaunchWindowGame.TextSize.STANDARD);
+        // The Settings shot shows Large chosen when the shots are taken at its size.
+        float textScale = Float.parseFloat(System.getProperty("ui.textScale", "1"));
+        LaunchWindowGame.useTextSizeInMemory(textScale == LaunchWindowGame.TextSize.LARGE.scale()
+            ? LaunchWindowGame.TextSize.LARGE : LaunchWindowGame.TextSize.STANDARD);
         new Lwjgl3Application(new LaunchWindowGame() {
             @Override
             protected ServerGateway createGateway() {
