@@ -2969,7 +2969,9 @@ until 112 % has been tried. Every screen is checked at Large by `ScreenSnapshot`
 report (`TextFit`, `CLAUDE.md`); the fixes widened the roster's name and state columns, the
 hiring list's name column, the person page's left column, the steps table's component column
 and the hands-on result's columns, let the race table's agency column size itself, and made
-the Museum flight card's name and two Settings captions wrap.
+the Museum flight card's name and two Settings captions wrap. **Large is the default** (user, the
+same day, after trying it on the laptop and the desktop monitor: not too large on either); a
+player who picked Standard keeps it.
 
 ### 4.13 Game result
 **Purpose:** announce the winner. **Shows:** an overlay on the hub when a result

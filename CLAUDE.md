@@ -319,7 +319,7 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
   dev data root.
 
 - **A text size in Settings** (the user's request, 2026-10-26, `ui-spec.md` §4.12): Standard or Large
-  (112 %), per device, for small 4K screens; drawings' labels and the newspaper keep their size. Every
+  (112 %, the default since the user tried it), per device; drawings' labels and the newspaper keep their size. Every
   screen checked at Large with the new text-fit report (below). Client only: no reset, no server rebuild.
 
 ## How we work
@@ -514,9 +514,9 @@ cd assets && java --enable-native-access=ALL-UNNAMED -cp "../lwjgl3/target/class
 ```
 - **Text fit:** every run also writes `text-fit.tsv` beside the shots (`TextFit`: text overlapping
   text, leaving its box or the screen, cut short, or a scroll pane that now scrolls).
-  `-Dui.textScale=1.12` renders at the Settings' Large text size, `-Dtextfit.marks=true` writes each
+  Shots render at the default Large text size; `-Dui.textScale=1` renders at Standard, `-Dtextfit.marks=true` writes each
   problem shot outlined in red to `marked/`. Run at 1 and 1.12 and compare: at 1 only the scroll
-  panes that scroll by design and a few deliberate overlays are listed. A new screen must pass at 1.12.
+  panes that scroll by design and a few deliberate overlays are listed. A new screen must pass at 1.12 (the default).
 - **`-Dshots=contracts`** (before `-cp`) renders only the contract shots; add a group the same way
   when iterating on one screen.
 - **Regression check for shared UI changes:** shoot before and after into fresh folders, then

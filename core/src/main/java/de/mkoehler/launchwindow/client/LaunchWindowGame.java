@@ -442,9 +442,9 @@ public class LaunchWindowGame extends Game {
      * small, sharp screen, where the 1920 by 1080 layout's text comes out tiny (user, 2026-10-26).
      */
     public enum TextSize {
-        /** The design's sizes (the default). */
+        /** The design's sizes. */
         STANDARD(1f),
-        /** Every working style 12 % larger; the drawings' labels and the newspaper keep their size. */
+        /** Every working style 12 % larger (the default); the drawings' labels and the newspaper keep their size. */
         LARGE(1.12f);
 
         private final float scale;
@@ -466,16 +466,16 @@ public class LaunchWindowGame extends Game {
     /**
      * Returns the text size on this device, for everyone (Settings).
      *
-     * @return the text size; {@link TextSize#STANDARD} by default
+     * @return the text size; {@link TextSize#LARGE} by default (user, 2026-10-26)
      */
     public static TextSize textSize() {
         if (textSizeInMemory != null) {
             return textSizeInMemory;
         }
         try {
-            return TextSize.valueOf(preferences().getString("textSize", TextSize.STANDARD.name()));
+            return TextSize.valueOf(preferences().getString("textSize", TextSize.LARGE.name()));
         } catch (IllegalArgumentException e) {
-            return TextSize.STANDARD;
+            return TextSize.LARGE;
         }
     }
 

@@ -233,8 +233,9 @@ public final class ScreenSnapshot {
         // Silent, and the sound setting never this machine's: the Join screen would speak otherwise.
         configuration.disableAudio(true);
         LaunchWindowGame.useSoundInMemory(true);
-        // The Settings shot shows Large chosen when the shots are taken at its size.
-        float textScale = Float.parseFloat(System.getProperty("ui.textScale", "1"));
+        // The shots render at the game's default text size, Large, unless -Dui.textScale says otherwise;
+        // the Settings shot shows Large chosen when the shots are taken at its size.
+        float textScale = Float.parseFloat(System.getProperty("ui.textScale", String.valueOf(LaunchWindowGame.TextSize.LARGE.scale())));
         LaunchWindowGame.useTextSizeInMemory(textScale == LaunchWindowGame.TextSize.LARGE.scale()
             ? LaunchWindowGame.TextSize.LARGE : LaunchWindowGame.TextSize.STANDARD);
         new Lwjgl3Application(new LaunchWindowGame() {
@@ -259,9 +260,9 @@ public final class ScreenSnapshot {
             @Override
             public void create() {
                 super.create();
-                // -Dui.textScale=1.12 draws the text larger, as the Settings' text size does; any factor
+                // -Dui.textScale=1 draws the text at the design's size (Standard in Settings); any factor
                 // can be tried. The shots' text-fit report then shows what it breaks (TextFit).
-                ui().fonts().setTextScale(Float.parseFloat(System.getProperty("ui.textScale", "1")));
+                ui().fonts().setTextScale(textScale);
                 renderAll(this, folder);
                 writeTextFit(folder);
                 Gdx.app.exit();

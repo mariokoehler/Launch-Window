@@ -98,7 +98,7 @@ final class SettingsDialog {
         card.add(section("Text size")).padBottom(Theme.SPACE_2).row();
         Table textSize = new Table();
         textSize.add(textSizeControl()).width(220f).height(32f).padRight(Theme.SPACE_3);
-        textSize.add(ui.paragraph("Larger text for a small, sharp screen. For everyone on this device.",
+        textSize.add(ui.paragraph("Large reads better on a small, sharp screen. For everyone on this device.",
             Theme.TextStyle.CAPTION, Theme.INK_MUTED)).expandX().fillX().left();
         card.add(textSize).padBottom(Theme.SPACE_4).row();
 
