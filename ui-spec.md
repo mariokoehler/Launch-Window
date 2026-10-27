@@ -2908,7 +2908,10 @@ review: when, what it pays, what keeps today's funding) and `PrestigeConversion`
   result (2026-10-25, `Museum.name`); the newspaper names it plainly, as it would any agency.
 - **Achievements:** every goal achieved or cancelled, with the turn and the
   prestige.
-- **Flights:** the completed flight count per configuration (`successfulFlightCounts`).
+- **Flights:** the completed flight count per configuration (`successfulFlightCounts`), commercial flights
+  included and named beside it: "14 completed flights (12 commercial)" (user, 2026-10-27;
+  `commercialFlightCounts`, kept apart so a client's flight never lowers a later flight's prestige). A
+  configuration flown only for clients gets its card too; animals are honoured by the agency's own flights.
   *Built 2026-10-06:* a card whose configuration really carried animals that came home names
   them under a green "Came home" eyebrow once flown (Belka and Strelka; Ham; Enos; Chernushka,
   then Zvezdochka on a second flight). See `design.md` §2.5(f). Each name, or each pair
