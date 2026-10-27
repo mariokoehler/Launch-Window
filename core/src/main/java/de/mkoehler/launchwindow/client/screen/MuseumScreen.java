@@ -673,7 +673,7 @@ public final class MuseumScreen extends ChromeScreen {
      */
     private Table theoriesCard(List<Archive.Entry> entries) {
         List<FrontPageView.TheoryRow> rows = FrontPageView.museum(Theories.standard(),
-            session.state().getAchievedGoals(), session.frontPages(), entries,
+            session.raiseTurns(), session.frontPages(), entries,
             goal -> session.catalog().goal(goal).isPresent());
         if (rows.isEmpty()) {
             return null;

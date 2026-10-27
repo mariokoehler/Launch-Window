@@ -39,6 +39,8 @@ public class PlayerSnapshot {
     private List<MissionControlOfficer> missionControlCandidates = new ArrayList<>();
     private long nextPersonnelId;
     private List<String> openedProgramIds = new ArrayList<>();
+    /** The agency's season each program was first opened in (2026-10-27), for theories an opening raises. */
+    private Map<String, Integer> programOpenedSeasons = new LinkedHashMap<>();
     private Map<String, OwnedMissionComponent> missionComponents = new LinkedHashMap<>();
     private Map<String, InProgressMission> inProgressMissions = new LinkedHashMap<>();
     private long nextMissionInstanceId;
@@ -410,6 +412,28 @@ public class PlayerSnapshot {
     public void setOpenedProgramIds(List<String> openedProgramIds) {
         Objects.requireNonNull(openedProgramIds, "openedProgramIds must not be null");
         this.openedProgramIds = new ArrayList<>(openedProgramIds);
+    }
+
+    /**
+     * Returns the agency's season ({@link #getSeason()}) each program was first opened in, for the theories of the
+     * day an opening raises (2026-10-27). Programs opened before this was kept have no entry. The live map is
+     * returned.
+     *
+     * @return program ids and seasons, never {@code null}
+     */
+    public Map<String, Integer> getProgramOpenedSeasons() {
+        return programOpenedSeasons;
+    }
+
+    /**
+     * Replaces the seasons programs were first opened in. Public for Jackson/Kryo, and copied defensively.
+     *
+     * @param programOpenedSeasons program ids and seasons
+     * @throws NullPointerException if {@code programOpenedSeasons} is {@code null}
+     */
+    public void setProgramOpenedSeasons(Map<String, Integer> programOpenedSeasons) {
+        Objects.requireNonNull(programOpenedSeasons, "programOpenedSeasons must not be null");
+        this.programOpenedSeasons = new LinkedHashMap<>(programOpenedSeasons);
     }
 
     /**

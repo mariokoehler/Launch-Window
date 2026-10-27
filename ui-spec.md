@@ -1879,10 +1879,11 @@ unless one of its components needs engineers. *(User, 2026-10-08, built the same
 for a new rocket, §4.5.1:)* when a component of the program is active with no one on its R&D and
 isn't at its ceiling, a "Program opened" dialog asks "Assign engineers to <component>?" (or "to its
 components?" when there are several), with its starting reliability. Its buttons:
-- **Plan a mission** (primary) goes on to the mission list as before;
-- **Assign R&D** opens Payload R&D (§4.8.3), with that component's assign dialog open when there is
-  one; with several it just opens the board (highlighting the program's components waits for a
-  program with more than one, Gemini on);
+- **Assign R&D** (primary since 2026-10-27, user: a program just opened needs engineers first; rightmost)
+  opens Payload R&D (§4.8.3), with that component's assign dialog open when there is one; with several it
+  just opens the board (highlighting the program's components waits for a program with more than one,
+  Gemini on);
+- **Plan a mission** goes on to the mission list as before;
 - **Later** stays on Program details with the success toast.
 
 A program sharing a component that already has engineers (Vostok after Korabl-Sputnik 2) skips the
@@ -3638,6 +3639,11 @@ Flavour only: nothing in the rules reads them.
   player reached that turn ("A NEW THEORY · <season>", the question with its history note, "What would settle
   it: ...", or "Settled already, by <agency> in <season>. <answer>" when a flight in the game settled it
   before). Derived on the client from the player's goal turns and the printed pages; nothing saved.
+  *(User, 2026-10-27:)* a theory can also be raised by the player's first opening of a program in one of its
+  `raisedByCategories`: the radiation belts by the first satellite program (`earth-orbit-satellites`), since
+  their goal, the first satellite, raised and settled them in the same report. The goal still raises them in
+  games whose openings have no recorded season. `PlayerSnapshot.programOpenedSeasons` keeps the agency's season
+  of each program's first opening (`ProgramOpening`), and `FrontPageView.raiseTurns` turns it into game turns.
 - **Settled** (shared): the server prints a page of kind `SCIENCE` (`rules.SciencePrinter`, in
   `printFrontPages`, after the Firsts) the first time anyone reaches one of a theory's `answeredBy` goals; once
   per theory; agencies settling it in the same turn share it. A public one shows like any unseen page, in the

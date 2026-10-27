@@ -455,13 +455,15 @@ public final class ProgramDetailsScreen extends ChromeScreen {
             closeDialog();
             toast("Opened " + name + " — " + paid + ".", Theme.NoticeKind.SUCCESS);
         })).padRight(10f);
-        buttons.add(actionButton("Assign R&D", Theme.ButtonKind.SECONDARY, () -> {
+        buttons.add(actionButton("Plan a mission", Theme.ButtonKind.SECONDARY, () -> planMissions(program, name, paid)))
+            .padRight(10f);
+        // Primary (user, 2026-10-27): a program just opened needs engineers on its components before anything flies.
+        buttons.add(actionButton("Assign R&D", Theme.ButtonKind.PRIMARY, () -> {
             RndBoardScreen board = new RndBoardScreen(game, RndBoardScreen.Board.PAYLOAD,
                 unstaffed.size() == 1 ? unstaffed.get(0).component().id() : null);
             game.setScreen(board);
             board.toast("Opened " + name + ". Plan its missions in Headquarters.", Theme.NoticeKind.SUCCESS);
-        })).padRight(10f);
-        buttons.add(actionButton("Plan a mission", Theme.ButtonKind.PRIMARY, () -> planMissions(program, name, paid)));
+        }));
         card.add(buttons).right().fill(false, false);
         showDialog(card);
     }

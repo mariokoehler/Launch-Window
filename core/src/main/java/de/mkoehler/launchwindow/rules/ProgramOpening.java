@@ -205,6 +205,8 @@ public final class ProgramOpening {
         snapshot.setFunds(snapshot.getFunds() - cost);
         openedProgramIds.add(program.id());
         snapshot.setOpenedProgramIds(openedProgramIds);
+        // The first opening only: a theory of the day it raises was raised then (2026-10-27).
+        snapshot.getProgramOpenedSeasons().putIfAbsent(program.id(), snapshot.getSeason());
         Map<String, OwnedMissionComponent> allOwned = new LinkedHashMap<>(ownedBeforeThisOpening);
         allOwned.putAll(newlyOwned);
         for (String componentId : program.requiredMissionComponentIds()) {

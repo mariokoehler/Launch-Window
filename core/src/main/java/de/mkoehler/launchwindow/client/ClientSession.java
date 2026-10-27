@@ -355,6 +355,16 @@ public final class ClientSession {
     }
 
     /**
+     * Returns the turns that raise theories of the day for this player: its goals' and its first openings per
+     * program category (2026-10-27, {@link de.mkoehler.launchwindow.client.view.FrontPageView#raiseTurns}).
+     *
+     * @return the turns
+     */
+    public java.util.Map<String, Integer> raiseTurns() {
+        return de.mkoehler.launchwindow.client.view.FrontPageView.raiseTurns(state(), catalog(), joinedTurn());
+    }
+
+    /**
      * Returns the game turn this player's agency joined in: its first resolved turn, from its own
      * season count (1 at the start, one more per resolved turn). Front pages printed before it
      * count as seen.

@@ -34,6 +34,12 @@ public record Theories(List<Theory> theories) {
     /** The file's name, under the assets' {@code content/} folder. */
     public static final String FILE = "theories.json";
 
+    /**
+     * The prefix of a program category's key in the turns {@link Theory#raisedOn} reads: the turn the player first
+     * opened a program of that category, beside the goals' turns (2026-10-27).
+     */
+    public static final String CATEGORY = "category:";
+
     /** No theories: what a missing file reads as. */
     public static final Theories EMPTY = new Theories(List.of());
 
@@ -72,11 +78,13 @@ public record Theories(List<Theory> theories) {
      * @param notice        a technical theory's news line ({@code {agency}})
      * @param historyNote   the real history, checked in {@code design.md} &sect;1.1
      * @param archive       the archive pages about the flights that settled it ({@code archive.json} ids), maybe none
+     * @param raisedByCategories program categories whose first opening also raises it for a player, so a question a
+     *                      goal would raise and settle at once comes earlier (2026-10-27); maybe none
      */
     public record Theory(String id, Reach reach, List<String> raisedBy, List<String> answeredBy, String title,
                          String question, String settledBy, String answer, String headline, String headlineShort,
                          String deck, List<String> article, String notice, String historyNote,
-                         List<String> archive) {
+                         List<String> archive, List<String> raisedByCategories) {
 
         /**
          * Copies the lists, reading missing ones as empty.
@@ -84,6 +92,7 @@ public record Theories(List<Theory> theories) {
         public Theory {
             archive = archive == null ? List.of() : List.copyOf(archive);
             raisedBy = raisedBy == null ? List.of() : List.copyOf(raisedBy);
+            raisedByCategories = raisedByCategories == null ? List.of() : List.copyOf(raisedByCategories);
             answeredBy = answeredBy == null ? List.of() : List.copyOf(answeredBy);
             article = article == null ? List.of() : List.copyOf(article);
         }
@@ -99,14 +108,16 @@ public record Theories(List<Theory> theories) {
         }
 
         /**
-         * Returns the turn a set of goals raised this theory: the earliest turn any of its {@code raisedBy}
-         * goals was reached.
+         * Returns the turn a player raised this theory: the earliest turn any of its {@code raisedBy} goals was
+         * reached, or a program of one of its {@code raisedByCategories} was first opened.
          *
-         * @param goalTurns goals and the turn each was reached
+         * @param turns goals and the turn each was reached, and {@link #CATEGORY} plus a category for the turn its
+         *              first program was opened
          * @return the turn, if one was reached
          */
-        public Optional<Integer> raisedOn(Map<String, Integer> goalTurns) {
-            return raisedBy.stream().map(goalTurns::get).filter(Objects::nonNull).min(Integer::compare);
+        public Optional<Integer> raisedOn(Map<String, Integer> turns) {
+            return java.util.stream.Stream.concat(raisedBy.stream(), raisedByCategories.stream().map(c -> CATEGORY + c))
+                .map(turns::get).filter(Objects::nonNull).min(Integer::compare);
         }
     }
 

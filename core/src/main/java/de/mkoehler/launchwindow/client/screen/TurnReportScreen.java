@@ -630,7 +630,7 @@ public final class TurnReportScreen extends ChromeScreen {
             card.add(real).padBottom(Theme.SPACE_4).row();
         });
         // Theories of the day this turn raised for this agency (ui-spec.md section 4.18.2).
-        for (Theories.Theory theory : FrontPageView.raised(Theories.standard(), session.state().getAchievedGoals(),
+        for (Theories.Theory theory : FrontPageView.raised(Theories.standard(), session.raiseTurns(),
                 Math.toIntExact(report.gameTurn()), goal -> catalog.goal(goal).isPresent())) {
             card.add(theoryCard(theory)).padBottom(Theme.SPACE_4).row();
         }
