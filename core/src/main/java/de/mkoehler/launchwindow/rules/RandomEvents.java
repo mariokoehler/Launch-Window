@@ -531,9 +531,15 @@ public final class RandomEvents {
             String subjectId, double magnitude, int turn, String subjectName) {
         SplittableRandom storyRandom = new SplittableRandom(Intelligence.seed(snapshot.getAgencyName(),
             "event-story/" + turn + "/" + kind.name()) ^ STORY_SALT);
-        String storyId = EventStories.standard().pick(kind, storyRandom, snapshot.getUsedEventStoryIds());
+        String storyId = EventStories.standard().pick(kind, storyRandom, snapshot.getUsedEventStoryIds(),
+            story -> story.requiresGoal() == null || goalReached(snapshot, story.requiresGoal()));
         events.add(new RandomEventOccurred(kind, subjectId, magnitude, turn, storyId, subjectName));
         snapshot.getNewsLog().add(new NewsEntry(turn, kind, subjectId, magnitude, storyId, subjectName));
+    }
+
+    /** Whether the agency has reached a goal, itself or credited through the cascade, as {@link WinCondition} counts. */
+    private static boolean goalReached(PlayerSnapshot snapshot, String goalId) {
+        return snapshot.getAchievedGoals().containsKey(goalId) || snapshot.getCancelledGoalIds().contains(goalId);
     }
 
     /** Keeps the story pick's seed apart from every other salted seed. */

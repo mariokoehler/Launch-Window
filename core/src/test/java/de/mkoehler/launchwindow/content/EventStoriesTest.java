@@ -89,4 +89,45 @@ class EventStoriesTest {
         assertTrue(seen.contains(next));
         assertEquals(1, used.size(), "the event's stories started over");
     }
+
+    /**
+     * Every goal a story waits for exists in both packs, since the stories file is outside the pack,
+     * and the hardware overhead waits for a satellite in orbit (2026-10-27).
+     */
+    @Test
+    void requiredGoalsExistInEveryPack() {
+        for (String pack : List.of("standard", "early-era")) {
+            Set<String> goals = ContentPackLoader.load(Path.of("..", "assets", "content", pack)).goals().stream()
+                .map(Goal::id).collect(java.util.stream.Collectors.toSet());
+            for (EventStories.Story story : STORIES.stories()) {
+                if (story.requiresGoal() != null) {
+                    assertTrue(goals.contains(story.requiresGoal()), story.id() + "'s goal isn't in " + pack);
+                }
+            }
+        }
+        assertEquals("earth-orbit-satellite", STORIES.byId("pp-satellite-sighting").orElseThrow().requiresGoal());
+    }
+
+    /**
+     * A story that can't run yet is never picked, and keeps its turn: while only it is fresh, the
+     * usable story shown longest ago runs again; once it can run, it comes next.
+     */
+    @Test
+    void anUnusableStoryWaitsItsTurn() {
+        RandomEventKind kind = RandomEventKind.PRESTIGE_DROP;
+        EventStories stories = new EventStories(List.of(
+            new EventStories.Story("a", kind, "A", "a", null),
+            new EventStories.Story("b", kind, "B", "b", null),
+            new EventStories.Story("gated", kind, "G", "g", "goal")));
+        List<String> used = new ArrayList<>();
+        SplittableRandom random = new SplittableRandom(1);
+        Set<String> drawn = new HashSet<>();
+        for (int i = 0; i < 6; i++) {
+            drawn.add(stories.pick(kind, random, used, story -> story.requiresGoal() == null));
+        }
+        assertEquals(Set.of("a", "b"), drawn);
+        assertFalse(used.contains("gated"));
+        assertEquals("gated", stories.pick(kind, random, used, story -> true));
+        assertEquals(null, stories.pick(kind, random, used, story -> false));
+    }
 }

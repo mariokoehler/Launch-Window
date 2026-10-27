@@ -2024,7 +2024,12 @@ runs about 150 seasons and sees about 30 good and 8 bad events, the plain bot's 
 other event at most about 3. So: 18 stories each for prestige and R&D boosts, 12 for reduced
 expenditures, 6 for morale boosts, 5 for extra funding, 4 for reliability setbacks and 3 for every
 other bad event (`EventStories.SIZED`). No player sees a story twice until every story of its event
-has run; then that event starts over (`PlayerSnapshot.usedEventStoryIds`). The pick uses its own
+has run; then that event starts over (`PlayerSnapshot.usedEventStoryIds`). A story can wait for a goal
+(`requiresGoal`, 2026-10-27, after a play test's first turn told of the agency's hardware overhead):
+four prestige stories that need something in orbit (the sighting, the radio amateurs, the photos from
+above, the tracking prize) wait for `earth-orbit-satellite`, in both packs; until then they keep their
+turn, as the press stories' unusable ones do. Stories whose event already needs a flight (morale,
+extra funding) need no gate. The pick uses its own
 salted seed (agency, turn, event), so the season's draws, and the playouts, are unchanged. The
 event (`RandomEventOccurred`) and the news log entry store the story's id and the struck person's
 name, since the person may be gone when the report is read; the text stays in the client. Placeholders:
