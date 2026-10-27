@@ -1,8 +1,10 @@
 package de.mkoehler.launchwindow.client.screen;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Scaling;
 import de.mkoehler.launchwindow.actions.CancelMissionAction;
 import de.mkoehler.launchwindow.client.LaunchWindowGame;
@@ -46,6 +48,9 @@ import java.util.stream.Stream;
  * @author Mario Koehler
  */
 public final class MissionsScreen extends ChromeScreen {
+
+    /** The empty card's explanation, wrapped to this width. */
+    private static final float EMPTY_TEXT_WIDTH = 560f;
 
     private final boolean scheduled;
 
@@ -104,9 +109,12 @@ public final class MissionsScreen extends ChromeScreen {
         card.pad(Theme.SPACE_6);
         card.add(ui.label(scheduled ? "No missions scheduled." : "No missions in flight.", Theme.TextStyle.HEADING_SM,
             Theme.INK)).padBottom(Theme.SPACE_2).row();
-        card.add(ui.paragraph(scheduled ? "Missions you launch in Headquarters wait here until the next turn, when they "
-            + "fly." : "A mission moves here after its first season flies, and stays until it ends.",
-            Theme.TextStyle.BODY_SM, Theme.INK_MUTED)).padBottom(Theme.SPACE_3).row();
+        // A wrapping label needs a width of its own: without the scheduled card's button, the column had none.
+        Label hint = ui.paragraph(scheduled ? "Missions you launch in Headquarters wait here until the next turn, when "
+            + "they fly." : "A mission moves here after its first season flies, and stays until it ends.",
+            Theme.TextStyle.BODY_SM, Theme.INK_MUTED);
+        hint.setAlignment(Align.top);
+        card.add(hint).width(EMPTY_TEXT_WIDTH).padBottom(Theme.SPACE_3).row();
         if (scheduled) {
             card.add(actionButton("Plan a mission in Headquarters", Theme.ButtonKind.SECONDARY, this::goHeadquarters))
                 .fill(false, false);
