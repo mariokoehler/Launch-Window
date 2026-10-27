@@ -341,6 +341,10 @@ public final class ScreenSnapshot {
             consoleShots(folder, game);
             return;
         }
+        if ("intel".equals(System.getProperty("shots"))) {
+            intelligenceShots(folder, game);
+            return;
+        }
         if ("poaching".equals(System.getProperty("shots"))) {
             poachingShots(folder, game);
             return;
@@ -2100,18 +2104,18 @@ public final class ScreenSnapshot {
                 fact("COMPONENT_RELIABILITY", "r7-vostok", 70, 90, 0),
                 fact("COMPONENT_RELIABILITY", "sputnik-1-satellite", 80, 92, 0),
                 fact("COMPONENT_RELIABILITY", "sputnik-2-satellite", 76, 94, 0),
-                fact("COMPONENT_RELIABILITY", "vostok-capsule", 64, 84, 0))));
+                fact("COMPONENT_RELIABILITY", "vostok-capsule", 64, 84, 0)), 3));
         sever.getDossiers().put(de.mkoehler.launchwindow.model.IntelArea.PLANS, new de.mkoehler.launchwindow.model.Dossier(
             de.mkoehler.launchwindow.model.IntelArea.PLANS, 30, List.of(
                 fact("OPEN_PROGRAM", "sputnik-2", 0, 0, 0), fact("OPEN_PROGRAM", "vostok", 0, 0, 0),
                 fact("IN_FLIGHT", "vostok-orbital", 0, 0, 0),
                 fact("RD_FOCUS", "vostok-capsule", 0, 0, 3), fact("RD_FOCUS", "r7-vostok", 0, 0, 2),
-                fact("SHELF", "sputnik-2-satellite", 0, 0, 0), fact("INTEL_LEVEL", "", 0, 0, 1))));
+                fact("SHELF", "sputnik-2-satellite", 0, 0, 0), fact("INTEL_LEVEL", "", 0, 0, 1)), 1));
         sever.getDossiers().put(de.mkoehler.launchwindow.model.IntelArea.PERSONNEL,
             new de.mkoehler.launchwindow.model.Dossier(de.mkoehler.launchwindow.model.IntelArea.PERSONNEL, 30, List.of(
                 fact("HEADCOUNT", "ASTRONAUT", 0, 0, 0), fact("HEADCOUNT", "SET", 0, 0, 7),
                 fact("AVERAGE_SKILL", "SET", 31, 61, 0), fact("HEADCOUNT", "MISSION_CONTROL", 0, 0, 5),
-                fact("AVERAGE_SKILL", "MISSION_CONTROL", 21, 51, 0))));
+                fact("AVERAGE_SKILL", "MISSION_CONTROL", 21, 51, 0)), 1));
         for (int i = 0; i < 2; i++) {
             Personnel person = i == 0 ? pool.getSetSpecialistCandidates().get(2) : pool.getAstronautCandidates().get(4);
             String group = i == 0 ? "SET" : "ASTRONAUT";
@@ -2139,7 +2143,7 @@ public final class ScreenSnapshot {
         meridian.getDossiers().put(de.mkoehler.launchwindow.model.IntelArea.PLANS,
             new de.mkoehler.launchwindow.model.Dossier(de.mkoehler.launchwindow.model.IntelArea.PLANS, 27, List.of(
                 fact("OPEN_PROGRAM", "explorer-1", 0, 0, 0), fact("OPEN_PROGRAM", "mercury", 0, 0, 0),
-                fact("RD_FOCUS", "mercury-capsule", 0, 0, 4), fact("INTEL_LEVEL", "", 0, 0, 1))));
+                fact("RD_FOCUS", "mercury-capsule", 0, 0, 4), fact("INTEL_LEVEL", "", 0, 0, 1)), 1));
         de.mkoehler.launchwindow.model.RivalFolder aurora = intel.folder("kAurora", "Aurora Bureau");
         aurora.getTidbits().add(new de.mkoehler.launchwindow.model.Tidbit(29, fact("OPEN_PROGRAM", "vostok", 0, 0, 0)));
 

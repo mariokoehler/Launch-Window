@@ -3118,7 +3118,8 @@ binoculars, our own drawing; on the UI Asset Sheet since 2026-10-08). All rules 
   their Intelligence level if known, dated ("Level 2 as of Spring 1962", learned from a dossier
   or a catch), else "Intelligence level unknown".
 - **One dossier per area** (R&D, programs and plans, personnel), each stamped "As of Spring
-  1962" (no visible decay, the date says how old it is); an area never assessed says so. R&D shows the rival's
+  1962" (no visible decay, the date says how old it is), a follow-up's stamp adding which look it was ("As of
+  Winter 1962 · 3rd look", 2026-10-27, `IntelTexts.stamp`); an area never assessed says so. R&D shows the rival's
   components with reliability as ranges (component 3 with a range band rather than a value);
   plans list open programs, missions in flight and next season's scheduled launches, with "may
   have changed since".

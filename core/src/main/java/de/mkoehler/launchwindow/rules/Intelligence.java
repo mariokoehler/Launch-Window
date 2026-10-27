@@ -6,6 +6,7 @@ import de.mkoehler.launchwindow.model.IntelOperation;
 import de.mkoehler.launchwindow.model.IntelligenceState;
 import de.mkoehler.launchwindow.model.Personnel;
 import de.mkoehler.launchwindow.model.PlayerSnapshot;
+import de.mkoehler.launchwindow.model.Dossier;
 import de.mkoehler.launchwindow.model.RivalFolder;
 import de.mkoehler.launchwindow.model.TraitState;
 
@@ -162,7 +163,44 @@ public final class Intelligence {
      * @return the half-width, in points
      */
     public static int halfWidth(int spyLevel, int targetLevel) {
-        return Math.clamp(5 + 5 * (targetLevel - spyLevel + 2), 2, 15);
+        return Math.clamp(5 + 5 * (targetLevel - spyLevel + 2), MIN_HALF_WIDTH, 15);
+    }
+
+    /** The narrowest a learned range gets either side, in points. */
+    public static final int MIN_HALF_WIDTH = 2;
+    /**
+     * Seasons within which another assessment of the same area of the same rival is a follow-up
+     * (user, 2026-10-27; unconfirmed): at most this many turns after the last dossier's.
+     */
+    public static final int FOLLOW_UP_SEASONS = 2;
+    /** Points either side each follow-up takes off a range (unconfirmed). */
+    public static final int FOLLOW_UP_NARROWING = 3;
+
+    /**
+     * Returns an assessment's half-width with its follow-ups (user, 2026-10-27): each look in a row
+     * after the first narrows the range by {@link #FOLLOW_UP_NARROWING} either side, down to
+     * {@link #MIN_HALF_WIDTH}. The range is still drawn fresh around today's value, so it holds it.
+     *
+     * @param spyLevel    the spying agency's level
+     * @param targetLevel the target's level
+     * @param looks       this look's place in the row, 1 for a first look
+     * @return the half-width, in points
+     */
+    public static int followUpHalfWidth(int spyLevel, int targetLevel, int looks) {
+        int base = halfWidth(spyLevel, targetLevel);
+        return Math.max(Math.min(base, MIN_HALF_WIDTH), base - FOLLOW_UP_NARROWING * (Math.max(1, looks) - 1));
+    }
+
+    /**
+     * Returns which look in a row a new assessment is: one more than the last dossier's of the same
+     * area if that's at most {@link #FOLLOW_UP_SEASONS} turns old, else 1.
+     *
+     * @param last the folder's dossier of that area, or {@code null}
+     * @param turn the game turn the new one settles at
+     * @return the look's place in the row, from 1
+     */
+    public static int looks(Dossier last, long turn) {
+        return last != null && turn - last.turn() <= FOLLOW_UP_SEASONS ? last.looks() + 1 : 1;
     }
 
     /**

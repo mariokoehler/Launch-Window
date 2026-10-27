@@ -2154,7 +2154,14 @@ No BASPM precedent beyond its 1v1 PBEM mode and rival comparison screen.
   - **Odds against a rival's counter-intelligence** (the target's level, 0 to 3): a targeted
     action succeeds at **85 % minus 15 points per level** of the target's counter-intelligence
     (85 / 70 / 55 / 40). Ranges are tighter the higher the spy's level is over the target's:
-    half-width **5 + 5 × (target level − spy level + 2)** points, at least 2 and at most 15. A
+    half-width **5 + 5 × (target level − spy level + 2)** points, at least 2 and at most 15.
+    **Follow-ups tighten them** (the user's idea, 2026-10-27; numbers unconfirmed): an assessment of
+    the same area of the same rival at most **2 turns** after the folder's dossier there is a
+    follow-up, and each look in a row takes **3 points** either side off its ranges, down to 2
+    (`Intelligence.followUpHalfWidth`, the row counted in `Dossier.looks`). The range is still drawn
+    fresh around today's value, never intersected with the last one, since the rival's numbers move
+    between looks. A longer gap starts again at one; a failed look doesn't reset the row by itself,
+    but its season counts toward the gap. The dossier's stamp says which look it was. A
     failed action learns nothing, and is **caught** with **10 % + 10 % per target level**: the
     target's turn report names the spying agency, the spy loses **20 prestige**, and the spy's
     report says the operation was blown **and what the target's counter-intelligence level was**

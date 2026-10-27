@@ -1054,7 +1054,7 @@ public final class IntelligenceOfficeScreen extends ChromeScreen {
         card.defaults().growX().left();
         Table head = new Table();
         head.add(sectionTitle(IntelTexts.areaTitle(which))).expandX().left();
-        head.add(stamp(dossier == null ? "Never assessed" : IntelTexts.asOf(dossier.turn()), dossier == null));
+        head.add(stamp(dossier == null ? "Never assessed" : IntelTexts.stamp(dossier), dossier == null));
         card.add(head).padBottom(Theme.SPACE_3).row();
         if (dossier == null) {
             card.add(ui.paragraph("No assessment yet: " + Character.toLowerCase(IntelTexts.areaCovers(which).charAt(0))

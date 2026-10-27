@@ -1,5 +1,6 @@
 package de.mkoehler.launchwindow.client.view;
 
+import de.mkoehler.launchwindow.model.Dossier;
 import de.mkoehler.launchwindow.model.GameDate;
 import de.mkoehler.launchwindow.model.IntelArea;
 import de.mkoehler.launchwindow.model.IntelFact;
@@ -201,6 +202,29 @@ public final class IntelTexts {
      */
     public static String asOf(int turn) {
         return "As of " + GameDate.ofTurn(turn).label();
+    }
+
+    /**
+     * Returns a dossier's stamp: its date, and for a follow-up which look in a row it was, since
+     * each narrows the ranges (2026-10-27).
+     *
+     * @param dossier the dossier
+     * @return the stamp's text
+     */
+    public static String stamp(Dossier dossier) {
+        return dossier.looks() <= 1 ? asOf(dossier.turn())
+            : asOf(dossier.turn()) + " \u00b7 " + ordinal(dossier.looks()) + " look";
+    }
+
+    private static String ordinal(int n) {
+        String suffix = n % 100 >= 11 && n % 100 <= 13 ? "th"
+            : switch (n % 10) {
+                case 1 -> "st";
+                case 2 -> "nd";
+                case 3 -> "rd";
+                default -> "th";
+            };
+        return n + suffix;
     }
 
     /**

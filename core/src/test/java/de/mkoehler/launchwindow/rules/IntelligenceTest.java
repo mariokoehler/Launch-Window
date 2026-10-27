@@ -8,6 +8,7 @@ import de.mkoehler.launchwindow.model.Archetype;
 import de.mkoehler.launchwindow.model.Astronaut;
 import de.mkoehler.launchwindow.model.AstronautSkill;
 import de.mkoehler.launchwindow.model.IntelArea;
+import de.mkoehler.launchwindow.model.Dossier;
 import de.mkoehler.launchwindow.model.IntelFact;
 import de.mkoehler.launchwindow.model.IntelOperation;
 import de.mkoehler.launchwindow.model.OwnedMissionComponent;
@@ -315,6 +316,43 @@ class IntelligenceTest {
 
     private static final class PersonnelFileProbe {
         private IntelFinding file;
+    }
+
+    /**
+     * Looking again at the same area of the same rival within the follow-up window tightens the
+     * ranges a step a look, down to the floor; a longer gap starts the count again (user, 2026-10-27).
+     */
+    @Test
+    void followUpAssessmentsTightenTheRanges() {
+        assertEquals(15, Intelligence.followUpHalfWidth(2, 2, 1));
+        assertEquals(12, Intelligence.followUpHalfWidth(2, 2, 2));
+        assertEquals(Intelligence.MIN_HALF_WIDTH, Intelligence.followUpHalfWidth(2, 2, 20));
+        assertEquals(1, new Dossier(IntelArea.RND, 3, List.of(), 0).looks(), "a dossier from before counts as one look");
+        for (int[] row : new int[][] {{4, 3}, {3, 3}, {2, 1}}) {
+            int lastTurn = row[0];
+            int looks = row[1];
+            int checked = 0;
+            for (long seed = 0; seed < 40; seed++) {
+                Map<String, PlayerSnapshot> agencies = rivals(2, 2);
+                RivalFolder folder = new RivalFolder();
+                folder.getDossiers().put(IntelArea.RND, new Dossier(IntelArea.RND, lastTurn, List.of(), 2));
+                agencies.get("spy").getIntelligence().getFolders().put("target", folder);
+                Intelligence.queue(agencies.get("spy"), IntelOperation.Kind.ASSESSMENT, "target", IntelArea.RND, null,
+                    null);
+                for (IntelFinding finding : IntelligenceBoard.settle(agencies, CATALOG, seed, 5).getOrDefault("spy",
+                        List.of())) {
+                    if (finding.kind() == IntelFinding.Kind.DOSSIER) {
+                        assertEquals(looks, finding.dossier().looks(), "after a dossier of turn " + lastTurn);
+                        for (IntelFact fact : finding.dossier().facts()) {
+                            assertTrue(fact.low() <= 81 && fact.high() >= 81, fact.toString());
+                            assertEquals(2 * Intelligence.followUpHalfWidth(2, 2, looks), fact.high() - fact.low());
+                            checked++;
+                        }
+                    }
+                }
+            }
+            assertTrue(checked > 0);
+        }
     }
 
     @Test

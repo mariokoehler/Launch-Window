@@ -223,8 +223,11 @@ public final class IntelligenceBoard {
         }
         int halfWidth = Intelligence.halfWidth(spyLevel, targetLevel);
         if (operation.kind() == IntelOperation.Kind.ASSESSMENT) {
+            RivalFolder folder = spy.getIntelligence().getFolders().get(operation.targetId());
+            int looks = Intelligence.looks(folder == null ? null : folder.getDossiers().get(operation.area()), gameTurn);
             Dossier dossier = new Dossier(operation.area(), gameTurn,
-                facts(target, operation.area(), catalog, halfWidth, random));
+                facts(target, operation.area(), catalog,
+                    Intelligence.followUpHalfWidth(spyLevel, targetLevel, looks), random), looks);
             mine.add(new IntelFinding(IntelFinding.Kind.DOSSIER, operation.id(), operation.kind(), operation.targetId(),
                 target.getAgencyName(), operation.area(), dossier, null, null,
                 operation.area() == IntelArea.PLANS ? targetLevel : -1));

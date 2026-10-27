@@ -237,6 +237,9 @@ public final class HelpValues {
         v.put("intelligence.catchBase", whole(Intelligence.CATCH_BASE_PERCENT));
         v.put("intelligence.catchPerLevel", whole(Intelligence.CATCH_PER_LEVEL));
         v.put("intelligence.caughtPrestige", whole(Intelligence.CAUGHT_PRESTIGE));
+        v.put("intelligence.followUpSeasons", whole(Intelligence.FOLLOW_UP_SEASONS));
+        v.put("intelligence.followUpNarrowing", whole(Intelligence.FOLLOW_UP_NARROWING));
+        v.put("intelligence.minHalfWidth", whole(Intelligence.MIN_HALF_WIDTH));
 
         // A campaign's shape is its level's; help quotes the first one shipped.
         de.mkoehler.launchwindow.content.HandsOnLevel campaign = de.mkoehler.launchwindow.content.Decisions.standard()
