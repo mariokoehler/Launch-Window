@@ -601,9 +601,9 @@ public class LaunchWindowGame extends Game {
      * Whether a new turn's missions play before its report ({@code ui-spec.md} &sect;4.4).
      */
     public enum ReplaysFirst {
-        /** Ask each time (the default). */
+        /** Ask each time. */
         ASK,
-        /** Always play them first. */
+        /** Always play them first (the default since 2026-10-27, user). */
         ALWAYS,
         /** Never: the report opens as before. */
         NEVER
@@ -611,22 +611,22 @@ public class LaunchWindowGame extends Game {
 
     /**
      * Returns this player's choice on this device about watching a turn's missions before its report.
-     * Under the in-memory marks it's the marks "replaysAlways" and "replaysNever".
+     * Under the in-memory marks it's the marks "replaysAsk" and "replaysNever".
      *
      * @return the choice
      */
     public ReplaysFirst replaysFirst() {
         if (flagsInMemory != null) {
-            return flagsInMemory.contains("replaysAlways") ? ReplaysFirst.ALWAYS
-                : flagsInMemory.contains("replaysNever") ? ReplaysFirst.NEVER : ReplaysFirst.ASK;
+            return flagsInMemory.contains("replaysAsk") ? ReplaysFirst.ASK
+                : flagsInMemory.contains("replaysNever") ? ReplaysFirst.NEVER : ReplaysFirst.ALWAYS;
         }
         if (session == null) {
-            return ReplaysFirst.ASK;
+            return ReplaysFirst.ALWAYS;
         }
         try {
-            return ReplaysFirst.valueOf(preferences().getString(key("replaysFirst"), ReplaysFirst.ASK.name()));
+            return ReplaysFirst.valueOf(preferences().getString(key("replaysFirst"), ReplaysFirst.ALWAYS.name()));
         } catch (IllegalArgumentException e) {
-            return ReplaysFirst.ASK;
+            return ReplaysFirst.ALWAYS;
         }
     }
 
@@ -637,10 +637,10 @@ public class LaunchWindowGame extends Game {
      */
     public void setReplaysFirst(ReplaysFirst choice) {
         if (flagsInMemory != null) {
-            flagsInMemory.remove("replaysAlways");
+            flagsInMemory.remove("replaysAsk");
             flagsInMemory.remove("replaysNever");
-            if (choice == ReplaysFirst.ALWAYS) {
-                flagsInMemory.add("replaysAlways");
+            if (choice == ReplaysFirst.ASK) {
+                flagsInMemory.add("replaysAsk");
             } else if (choice == ReplaysFirst.NEVER) {
                 flagsInMemory.add("replaysNever");
             }

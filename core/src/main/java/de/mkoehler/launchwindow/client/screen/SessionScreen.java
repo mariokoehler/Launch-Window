@@ -183,10 +183,17 @@ abstract class SessionScreen extends StageScreen {
                 session.update(result);
                 stateChanged();
                 if (session.latestResolvedTurn() > resolvedBefore) {
-                    // A turn resolved while the player was here: a new front page comes first
-                    // (ui-spec.md section 4.18), then say so rather than take over the screen.
-                    withFrontPages(() -> toast("The turn resolved. Its report is waiting on the Space Complex.",
-                        Theme.NoticeKind.INFO));
+                    // A turn resolved while the player was here: say so rather than take over the screen.
+                    // With replays first, the pages wait too, since a First's page tells how a mission
+                    // ended: the hub's report brings replays, pages and report in order (2026-10-27).
+                    // Without, a new front page comes first (ui-spec.md section 4.18).
+                    if (game.replaysFirst() == LaunchWindowGame.ReplaysFirst.NEVER) {
+                        withFrontPages(() -> toast("The turn resolved. Its report is waiting on the Space Complex.",
+                            Theme.NoticeKind.INFO));
+                    } else {
+                        toast("The turn resolved. Its report is waiting on the Space Complex.",
+                            Theme.NoticeKind.INFO);
+                    }
                 }
             }
         });

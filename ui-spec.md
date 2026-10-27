@@ -1638,7 +1638,10 @@ flown, a dialog over the hub asks before the report opens: "Last night's mission
 them first, spoiler-free?" [Watch the missions] [Show the report], with "Don't ask again". Watching
 plays each mission's replay in turn (§4.7.3, the film), then the unseen front pages, then this
 report, which itself is unchanged: once the player has seen it, spoilers are fair. Settings keeps
-the choice: Ask (the default), Always watch first, Never.
+the choice: Ask, Always watch first (the default since 2026-10-27, user; Ask was), Never. An unread turn
+comes in this way however it arrives (2026-10-27): entering the game, the hub's report chip or hotspot, or
+the dev button "Resolve turn now", which went straight to the pages and the report before. A read report
+opens at once.
 **Purpose:** "what happened overnight", the async equivalent of BASPM's
 end-of-season news screen. **Ref:** `bulletin_news_*.png`,
 `end_of_season_rnd_results.png`, `mission_assessment.png`.

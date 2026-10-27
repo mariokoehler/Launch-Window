@@ -138,23 +138,43 @@ public final class SpaceComplexScreen extends SessionScreen {
         stack.add(advisorCorner);
         root.add(stack).grow();
         rebuild();
-        if (unreadReport && !pagesShown && game.reportUnread()
-            && game.replaysFirst() != LaunchWindowGame.ReplaysFirst.NEVER) {
-            // Missions flown? Offer to watch them first, before the pages and the report give the
-            // endings away (ui-spec.md 4.4).
-            fetchLatestReport(report -> {
-                if (report.missions().isEmpty()) {
-                    pagesThenReport();
-                } else if (game.replaysFirst() == LaunchWindowGame.ReplaysFirst.ALWAYS) {
-                    watchReplays(report);
-                } else {
-                    offerReplays(report);
-                }
-            }, this::pagesThenReport);
-        } else if (unreadReport && !pagesShown) {
-            pagesThenReport();
+        if (unreadReport && !pagesShown) {
+            newTurn();
         } else {
             afterPages(unreadReport);
+        }
+    }
+
+    /**
+     * Brings in an unread turn the spoiler-free way, wherever it arrives from: entering the game, the
+     * report chip or the dev button (2026-10-27). Missions flown? Their replays come first, or the offer
+     * of them, before the pages and the report give the endings away ({@code ui-spec.md} &sect;4.4).
+     */
+    private void newTurn() {
+        if (!game.reportUnread() || game.replaysFirst() == LaunchWindowGame.ReplaysFirst.NEVER) {
+            pagesThenReport();
+            return;
+        }
+        fetchLatestReport(report -> {
+            if (report.missions().isEmpty()) {
+                pagesThenReport();
+            } else if (game.replaysFirst() == LaunchWindowGame.ReplaysFirst.ALWAYS) {
+                watchReplays(report);
+            } else {
+                offerReplays(report);
+            }
+        }, this::pagesThenReport);
+    }
+
+    /**
+     * Opens the latest report from the hub: an unread one the spoiler-free way ({@link #newTurn}), a
+     * read one at once.
+     */
+    private void openReportFromHub() {
+        if (game.reportUnread()) {
+            newTurn();
+        } else {
+            openLatestReport(null);
         }
     }
 
@@ -262,7 +282,8 @@ public final class SpaceComplexScreen extends SessionScreen {
     }
 
     /**
-     * Asks the dev-mode server to resolve the open turn now, then opens its report.
+     * Asks the dev-mode server to resolve the open turn now, then brings the turn in as a new one does:
+     * replays first, the pages, the report.
      */
     private void resolveTurnNow() {
         if (resolving) {
@@ -285,7 +306,7 @@ public final class SpaceComplexScreen extends SessionScreen {
                 session.update(result);
             }
             stateChanged();
-            withFrontPages(() -> openLatestReport(null));
+            newTurn();
         });
     }
 
@@ -516,7 +537,7 @@ public final class SpaceComplexScreen extends SessionScreen {
             case ROCKET_RND -> game.setScreen(new RndBoardScreen(game, RndBoardScreen.Board.ROCKET));
             case MISSION_CONTROL -> goMissionControl();
             case ASTRONAUT_COMPLEX -> goAstronautComplex();
-            case TURN_REPORT -> openLatestReport(null);
+            case TURN_REPORT -> openReportFromHub();
             case ROADS_TO_THE_MOON -> game.setScreen(new RoadsToMoonScreen(game));
         }
     }
@@ -566,7 +587,7 @@ public final class SpaceComplexScreen extends SessionScreen {
             report.add(new Image(ui.unreadDot())).size(10f).padLeft(6f);
         }
         report.setTouchable(Touchable.enabled);
-        report.addListener(clicked(() -> openLatestReport(null)));
+        report.addListener(clicked(this::openReportFromHub));
         chips.add(report).height(CHIP_HEIGHT).padRight(gap);
         chips.add(chip(ui.solid(Theme.SURFACE_CARD), "funds", Theme.NAVY,
             ui.label(money(state.getFunds()), Theme.TextStyle.LABEL, Theme.NAVY))).height(CHIP_HEIGHT).padRight(gap);
