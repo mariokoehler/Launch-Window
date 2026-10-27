@@ -75,7 +75,7 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
 - **The advisor is built** (2026-10-08, `ui-spec.md` component 24): a hub card with a new agency's
   first steps, ticked off from the state, until all are done or the player hides it.
 - **The full content pack is built** (2026-10-08, `design.md` §5, M3): `assets/content/standard`,
-  BASPM's whole tree (55 programs, 189 configurations; 187 since the E-154 became the Soviet X-15), with its text and art, beside `early-era`.
+  BASPM's whole tree (55 programs, 189 configurations; 187 since the E-154 became the Soviet X-15, 186 without Apollo's Agena docking), with its text and art, beside `early-era`.
   **It is the server's default since 2026-10-09** (`GameMeta.DEFAULT_CONTENT_PACK`; tests still pin
   `early-era`). New engine rules came with it: a payload's own lift, air drops with no rocket,
   configurations gated on a goal. Its components have blueprint drawings in the turn report
@@ -321,6 +321,11 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
 - **A text size in Settings** (the user's request, 2026-10-26, `ui-spec.md` §4.12): Standard or Large
   (112 %, the default since the user tried it), per device; drawings' labels and the newspaper keep their size. Every
   screen checked at Large with the new text-fit report (below). Client only: no reset, no server rebuild.
+- **Program details rebuilt full width** (the user's request, 2026-10-27, `ui-spec.md` §4.6.4): a long description for
+  every program and the components it grants (`longDescription` in `strings.json`, sources in
+  `assets-raw/strings/LONG_DESCRIPTIONS.md`), a striped price table with an upkeep column, each component's blueprint.
+  **No Agena for Apollo** (user, `design.md` §5, M3): the converter drops `apollo-docking` (`dropped_configurations`).
+  The pack hash changed: reset the dev data root, rebuild client and server together.
 
 ## How we work
 

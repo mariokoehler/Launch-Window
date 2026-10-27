@@ -1,5 +1,6 @@
 package de.mkoehler.launchwindow.client.screen;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
@@ -7,11 +8,13 @@ import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Scaling;
 import de.mkoehler.launchwindow.actions.CloseProgramAction;
 import de.mkoehler.launchwindow.actions.OpenProgramAction;
 import de.mkoehler.launchwindow.client.LaunchWindowGame;
+import de.mkoehler.launchwindow.client.ui.FullWidthPicture;
 import de.mkoehler.launchwindow.client.ui.HistoryNote;
 import de.mkoehler.launchwindow.client.ui.ReliabilityBar;
 import de.mkoehler.launchwindow.client.ui.Refusals;
@@ -48,6 +51,7 @@ import java.util.Objects;
 public final class ProgramDetailsScreen extends ChromeScreen {
 
     private static final float ART_WIDTH = 620f;
+    private static final float PRICE_COLUMN = 180f;
 
     private final String programId;
     private final CelestialBody fromBody;
@@ -133,10 +137,10 @@ public final class ProgramDetailsScreen extends ChromeScreen {
         }
         head.add(title).expandX().left();
         head.add(programStateMark(programState)).right();
-        String description = ContentNames.description(program.id());
+        String description = ContentNames.longDescription(program.id());
         card.add(head).padBottom(description == null ? 22f : Theme.SPACE_2).row();
         if (description != null) {
-            card.add(ui.paragraph(description, Theme.TextStyle.BODY, Theme.INK)).width(760f).padBottom(22f).row();
+            card.add(ui.paragraph(description, Theme.TextStyle.BODY, Theme.INK)).padBottom(22f).row();
         }
 
         card.add(caption("Required goals")).padBottom(10f).row();
@@ -155,8 +159,7 @@ public final class ProgramDetailsScreen extends ChromeScreen {
             for (int i = 0; i < missing.size(); i++) {
                 String goal = missing.get(i);
                 card.add(ui.paragraph(ContentNames.of(goal) + ": " + Outlook.sourceLine(goal, state, session.catalog()),
-                    Theme.TextStyle.BODY_SM, Theme.INK)).width(760f).padBottom(i == missing.size() - 1 ? 22f : 4f)
-                    .row();
+                    Theme.TextStyle.BODY_SM, Theme.INK)).padBottom(i == missing.size() - 1 ? 22f : 4f).row();
             }
         }
 
@@ -167,25 +170,24 @@ public final class ProgramDetailsScreen extends ChromeScreen {
                 .padBottom(22f).row();
         } else {
             card.add(caption("Price to open")).padBottom(6f).row();
-            card.add(priceBreakdown(price.lines(), price.total())).width(560f).padBottom(22f).row();
+            card.add(priceTable(price, Outlook.openingUpkeep(program, state, session.catalog()))).padBottom(22f).row();
         }
 
         card.add(caption("Components it grants")).padBottom(Theme.SPACE_2).row();
         for (String componentId : program.requiredMissionComponentIds()) {
-            card.add(componentBlock(componentId, programState, state)).width(760f).padBottom(Theme.SPACE_3).row();
+            card.add(componentBlock(componentId, programState, state)).padBottom(Theme.SPACE_5).row();
         }
         if (programState == Programs.State.OPEN) {
-            card.add(earliestLaunch(program)).width(760f).padTop(Theme.SPACE_2).padBottom(Theme.SPACE_3).row();
+            card.add(earliestLaunch(program)).padTop(Theme.SPACE_2).padBottom(Theme.SPACE_3).row();
         }
         Table contractLine = ContractMarker.programLine(this, programId);
         if (contractLine != null) {
-            card.add(new Image(ui.solid(Theme.NAVY_BORDER))).width(760f).height(Theme.BORDER_THIN)
-                .padBottom(Theme.SPACE_2).row();
-            card.add(contractLine).width(760f).padBottom(Theme.SPACE_3).row();
+            card.add(new Image(ui.solid(Theme.NAVY_BORDER))).height(Theme.BORDER_THIN).padBottom(Theme.SPACE_2).row();
+            card.add(contractLine).padBottom(Theme.SPACE_3).row();
         }
         List<Concepts.Concept> concepts = Concepts.standard().forProgram(program);
         if (!concepts.isEmpty()) {
-            card.add(conceptsSection(concepts, "How the real thing works: each opens an explainer sheet", 760f,
+            card.add(conceptsSection(concepts, "How the real thing works: each opens an explainer sheet", 0f,
                 () -> new ProgramDetailsScreen(game, programId, fromBody))).padTop(Theme.SPACE_2).row();
         }
 
@@ -249,9 +251,15 @@ public final class ProgramDetailsScreen extends ChromeScreen {
         }
         head.add(ui.label(status, Theme.TextStyle.CAPTION, Theme.INK_MUTED)).right();
         block.add(head).padBottom(4f).row();
-        String description = ContentNames.description(componentId);
+        String description = ContentNames.longDescription(componentId);
         if (description != null) {
-            block.add(ui.paragraph(description, Theme.TextStyle.BODY_SM, Theme.INK_MUTED)).padBottom(6f).row();
+            block.add(ui.paragraph(description, Theme.TextStyle.BODY_SM, Theme.INK_MUTED)).padBottom(Theme.SPACE_2)
+                .row();
+        }
+        // Its blueprint drawing, as the turn report shows it, at the card's width.
+        TextureRegionDrawable blueprint = ui.picture("blueprints/" + componentId + ".jpg");
+        if (blueprint != null) {
+            block.add(new FullWidthPicture(blueprint)).padBottom(Theme.SPACE_2).row();
         }
         if (owned != null) {
             ReliabilityBar bar = new ReliabilityBar(ui, owned.getCurrentReliability(), component.maxRdReliability(),
@@ -264,6 +272,46 @@ public final class ProgramDetailsScreen extends ChromeScreen {
                 component.maxRdReliability()), Theme.TextStyle.CAPTION, Theme.INK_MUTED));
         }
         return block;
+    }
+
+    /**
+     * The price to open as a table across the card ({@code ui-spec.md} &sect;4.6.4): each line's one-time
+     * price beside the upkeep it adds every season, the rows striped so a line reads across the gap.
+     *
+     * @param price  the price breakdown
+     * @param upkeep the upkeep the program adds in all, as the Open dialog counts it
+     */
+    private Table priceTable(Programs.Price price, long upkeep) {
+        Table table = new Table();
+        table.defaults().growX();
+        table.add(priceRow(caption("Item"), caption("One-time price"), caption("Upkeep / season"), null))
+            .padBottom(Theme.SPACE_1).row();
+        Drawable stripe = ui.solid(new Color(Theme.SURFACE_CARD).lerp(Theme.NAVY, 0.06f));
+        for (int i = 0; i < price.lines().size(); i++) {
+            Programs.PriceLine line = price.lines().get(i);
+            table.add(priceRow(ui.label(line.label(), Theme.TextStyle.BODY_SM, Theme.INK),
+                ui.label(line.text() != null ? line.text() : money(line.amount()), Theme.TextStyle.BODY_SM, Theme.INK),
+                ui.label(line.upkeep() == null ? "\u2014" : line.upkeep() == 0 ? "None" : money(line.upkeep()),
+                    Theme.TextStyle.BODY_SM, Theme.INK_MUTED), i % 2 == 0 ? stripe : null)).row();
+        }
+        table.add(new Image(ui.solid(Theme.NAVY))).height(Theme.BORDER_EMPHASIS).padTop(Theme.SPACE_1)
+            .padBottom(Theme.SPACE_2).row();
+        table.add(priceRow(ui.label("Total", Theme.TextStyle.BODY_STRONG, Theme.INK),
+            ui.label(money(price.total()), Theme.TextStyle.HEADING_SM, Theme.INK),
+            ui.label(money(upkeep), Theme.TextStyle.BODY_STRONG, Theme.INK), null));
+        return table;
+    }
+
+    private Table priceRow(Label item, Label amount, Label upkeep, Drawable background) {
+        Table row = new Table();
+        row.setBackground(background);
+        row.pad(6f, Theme.SPACE_2, 6f, Theme.SPACE_2);
+        row.add(item).expandX().left();
+        amount.setAlignment(Align.right);
+        row.add(amount).width(PRICE_COLUMN).right();
+        upkeep.setAlignment(Align.right);
+        row.add(upkeep).width(PRICE_COLUMN).right();
+        return row;
     }
 
     /**

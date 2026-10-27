@@ -106,15 +106,15 @@ class RoadsToMoonTest {
         RoadsToMoon.Road apollo = roads.get(0);
         assertEquals(22_012, apollo.tests().amount());
         assertEquals(RoadsToMoon.Cost.FREE_AFTER_TESTS, apollo.flights().cost());
-        assertEquals(24_975, apollo.partsCost());
-        assertEquals(46_987, apollo.total());
-        assertEquals(7_201, apollo.upkeep());
-        assertEquals(5, apollo.toDevelop());
+        assertEquals(23_400, apollo.partsCost());
+        assertEquals(45_412, apollo.total());
+        assertEquals(7_043, apollo.upkeep());
+        assertEquals(4, apollo.toDevelop());
         assertEquals("saturn-v", apollo.rocket().rocket().id());
         assertEquals(RoadsToMoon.RocketState.VAB_TOO_SMALL, apollo.rocket().state());
         assertEquals(3, apollo.rocket().vabLevel());
         assertEquals(3, apollo.crew());
-        assertEquals(22, apollo.flightsOnWay());
+        assertEquals(21, apollo.flightsOnWay());
         assertEquals(28, apollo.landingSteps());
 
         RoadsToMoon.Road eor = roads.get(1);

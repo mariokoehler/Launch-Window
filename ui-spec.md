@@ -1808,7 +1808,9 @@ uses with the skill it reads most (`client.view.Staffing`).
 
 **Plan a mission** *(play-test request, built 2026-10-07 without a mockup, from the configuration
 cards of §4.6.5)*. Headquarters' landing screen has three cards: Plan a mission ("Ready to plan · N
-missions"), Manage open programs, Browse programs. Plan a mission lists every configuration of
+missions"), Manage open programs, Browse programs (and Contracts, §4.17). Since 2026-10-27 (user) the
+cards in a row of a landing screen (Headquarters, the VAB) share the tallest one's height, each button at
+its card's bottom (`ChromeScreen.navCard`). Plan a mission lists every configuration of
 the open programs, one section per program (its name in gold above its cards), with the §4.6.5
 card (`ConfigCards`). Since 2026-10-11 (the user's report) both lists show each configuration's whole
 picture at the card's width and its own proportions (`ui.FullWidthPicture`), never cropped or stretched,
@@ -1846,6 +1848,18 @@ the roster, and a locked card's "Needs:" line says in its tooltip where each goa
 - the components it grants, each with its reliability bar if owned;
 - a link to mission configuration selection;
 - *(specified 2026-10-07)* a Concepts section (component 19) with the program's concepts.
+
+*(User, 2026-10-27, built straight in libGDX:)* the right-hand card runs **full width**, every section
+in it. The program and each component show their **long description** (`longDescription` in
+`strings.json`, `ContentNames.longDescription`; the short `description` stays for compact places such
+as the turn report): a paragraph of 450 to 650 characters for a program, 300 to 480 for a component
+(unconfirmed), standing on its own and never repeating the history note. Every program and every
+component a program grants has one (`ContentStringsTest`); rockets don't, as they never show here.
+The price is a **table** across the card: Item, One-time price and **Upkeep / season** (what each line
+adds every season, as the Open dialog counts it: none for a component already active through another
+open program, a dash for a discount; the total is `Outlook.openingUpkeep`; the column is unconfirmed),
+its rows striped light navy and white. Each component shows its **blueprint drawing** (the turn
+report's, `FullWidthPicture`) at the card's width, under its description.
 
 **Actions:** Open (shows the price; refused if Headquarters is full, the goals
 aren't met, or funds are short). Close, which needs a confirmation: "no refund;
@@ -3876,15 +3890,15 @@ facts and the trade-off lines carry the choice.
     marked **Your road** (navy badge), never highlighted otherwise.
   - **How it works:** one sentence (from `moon-roads.json`, below).
   - **To start now:** the opening price for this player, after discounts, split in two lines: "Earth-orbit tests
-    22,012" and "Moon flights: free once the tests are open"; then "Parts to build: 24,975" (the creation cost of the
-    components not yet owned) and **Total 46,987**. Discounts show where they apply ("Free: you run Gemini", in
-    green). Then "Upkeep 7,201 a season" (both programs and their components). Red when the funds can't cover it now.
+    22,012" and "Moon flights: free once the tests are open"; then "Parts to build: 23,400" (the creation cost of the
+    components not yet owned) and **Total 45,412**. Discounts show where they apply ("Free: you run Gemini", in
+    green). Then "Upkeep 7,043 a season" (both programs and their components). Red when the funds can't cover it now.
   - **Hardware to develop:** each component as a chip with its icon and name; an owned one shows its reliability
     and a green tick ("Gemini capsule · 64 % · yours"). The count in the row's label ("3 to develop").
   - **The rocket it needs:** the smallest rocket that lifts its landing (name, class), "Two launches per flight" for
     Gemini EOR, and its state: "Open · 48 %", "Not open: 12,500 to open", or in red "Needs VAB level 3" (heavy rockets).
   - **Crew per flight:** "3 astronauts" / "2 astronauts".
-  - **Flights on the way:** how many configurations its two programs offer before the landing ("22 flights before
+  - **Flights on the way:** how many configurations its two programs offer before the landing ("21 flights before
     the landing" for Apollo, 5 for Gemini EOR, 6 for Gemini direct ascent, 17 for the 7K-L3, 15 for the LK-700),
     and the Firsts on the way as small goal chips (crewed flyby, lunar orbit, docking, spacewalk), each reached one
     greyed with a tick.
@@ -3918,8 +3932,8 @@ Earth-orbit program and the mode; a `MoonRoadsTest` holds every lunar-expedition
 | LK-700 | One ship flies to the Moon, lands whole and comes back. | One craft to develop; the fewest flights. | The UR-700, the largest rocket of all, from the very first test flight. |
 
 **States for the mockup:**
-1. NASA, a person in space, nothing of the three opened, Mercury open (the numbers above: Apollo total 46,987,
-   upkeep 7,201; Gemini direct ascent 29,256 / 5,089; Gemini EOR 32,543 / 3,255, 22,483 since its Moon discount was
+1. NASA, a person in space, nothing of the three opened, Mercury open (the numbers above: Apollo total 45,412,
+   upkeep 7,043; Gemini direct ascent 29,256 / 5,089; Gemini EOR 32,543 / 3,255, 22,483 since its Moon discount was
    fixed on 2026-10-26; Saturn V and Nova not open, VAB
    level 2).
 2. NASA with Gemini open: both Gemini roads show "Free: you run Gemini" and the capsule as yours.

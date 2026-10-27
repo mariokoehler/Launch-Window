@@ -57,304 +57,364 @@
     "sputnik-1": {
       "name": "Sputnik 1",
       "description": "The simplest satellite that could still make history: a polished sphere with a radio transmitter that anyone with a receiver can hear. Fly it to show the world your agency can reach orbit.",
-      "historyNote": "Sputnik 1 was a stopgap. Korolev's bureau was building a much heavier science satellite, Object D, but it was running late and the R-7 was falling short of its planned performance. Korolev pushed for PS-1 instead, short for 'simplest satellite', and it was built in a few months. Object D flew the following May, as Sputnik 3."
+      "historyNote": "Sputnik 1 was a stopgap. Korolev's bureau was building a much heavier science satellite, Object D, but it was running late and the R-7 was falling short of its planned performance. Korolev pushed for PS-1 instead, short for 'simplest satellite', and it was built in a few months. Object D flew the following May, as Sputnik 3.",
+      "longDescription": "The first artificial satellite, launched on 4 October 1957 by an R-7, the Soviet intercontinental missile. The satellite was kept as simple as possible: no science package, only a radio and sensors for its own temperature and pressure. The hard part was the rocket, which had to reach nearly 8 km/s, the speed at which a falling object keeps missing the Earth. Its orbit ran from about 215 to 939 km, once every 96 minutes, and its two frequencies near 20 and 40 MHz let amateurs track it. It fell back on 4 January 1958 after about 1,440 orbits."
     },
     "sputnik-2": {
       "name": "Sputnik 2",
       "description": "A heavier satellite with a sealed cabin for a passenger: the first animal in orbit. There is no way to bring the passenger home.",
-      "historyNote": "Sputnik 2 was ordered in time for the 40th anniversary of the October Revolution, which left the engineers about four weeks. Its passenger, a stray dog named Laika, could not come home. For decades the official story was that she lived for days in orbit. In 2002 a Russian scientist revealed that her cabin had overheated and she died within hours of launch."
+      "historyNote": "Sputnik 2 was ordered in time for the 40th anniversary of the October Revolution, which left the engineers about four weeks. Its passenger, a stray dog named Laika, could not come home. For decades the official story was that she lived for days in orbit. In 2002 a Russian scientist revealed that her cabin had overheated and she died within hours of launch.",
+      "longDescription": "The first flight to carry an animal into orbit, launched on 3 November 1957. Nobody knew how a body would cope with the launch and then with weightlessness, and Sputnik 2 was the test: its telemetry sent the dog's pulse, breathing and blood pressure to the ground. It also carried two spectrophotometers for the Sun's ultraviolet and X-rays, and a cosmic-ray counter. Its orbit reached about 1,660 km at its highest. It stayed up 162 days and burned up on 14 April 1958. A craft that could bring an animal back was the next step: Vostok."
     },
     "korabl-sputnik-2": {
       "name": "Korabl-Sputnik 2",
       "description": "A Vostok capsule flown without a pilot, carrying two dogs, mice, rats and plants, and bringing them all back. It proves the capsule can keep living things alive in orbit and return them safely.",
-      "historyNote": "In August 1960 the dogs Belka and Strelka became the first animals to orbit the Earth and come back alive, after about a day in space. Strelka later had puppies. Khrushchev gave one of them, Pushinka, to Caroline Kennedy, and Pushinka went on to raise puppies of her own at the White House."
+      "historyNote": "In August 1960 the dogs Belka and Strelka became the first animals to orbit the Earth and come back alive, after about a day in space. Strelka later had puppies. Khrushchev gave one of them, Pushinka, to Caroline Kennedy, and Pushinka went on to raise puppies of her own at the White House.",
+      "longDescription": "The first flight to prove that the Vostok capsule could keep living things alive in orbit and bring them home. It launched on 19 August 1960 with the dogs Belka and Strelka, 40 mice, two rats and plants, and came down the next day after about 25 hours. A television camera watched the dogs throughout. The flight had to prove the whole chain: life support, retrofire, reentry and parachutes. The dogs rode in a cabin that was ejected from the capsule and landed under its own parachute, as a cosmonaut would. The attempt before, on 28 July, had killed two dogs when the rocket broke up. On 12 April 1961 Gagarin flew a Vostok."
     },
     "vostok": {
       "name": "Vostok",
       "description": "A ball-shaped capsule for one cosmonaut, flown mostly by its automatics. It can make short hops or stay in orbit for days, and its pilot leaves by ejection seat before landing.",
-      "historyNote": "On 12 April 1961, Vostok 1 carried Yuri Gagarin once around the Earth in 108 minutes. He did not land in the capsule: he ejected at about 7 km and came down under his own parachute. Soviet officials kept that quiet for years, because the rules for an official flight record required the pilot to land with his craft."
+      "historyNote": "On 12 April 1961, Vostok 1 carried Yuri Gagarin once around the Earth in 108 minutes. He did not land in the capsule: he ejected at about 7 km and came down under his own parachute. Soviet officials kept that quiet for years, because the rules for an official flight record required the pilot to land with his craft.",
+      "longDescription": "Vostok was built by Sergei Korolev's OKB-1 to put a person in orbit as soon as possible. Since nobody knew how a human would cope with weightlessness, the ball-shaped craft could fly the whole mission without its pilot, whose manual controls were locked, the code in a sealed envelope. Its orbit was low enough to decay within about ten days, and it carried supplies for that long, in case the retrorocket failed. Dogs flew it first, then six cosmonauts from 1961 to 1963, among them Valentina Tereshkova, the first woman in space. Each left the capsule by ejection seat before landing."
     },
     "explorer-1": {
       "name": "Explorer 1",
       "description": "A small, light satellite packed with instruments instead of mass: a cosmic-ray counter, temperature sensors and a micrometeorite detector. What it measures matters as much as reaching orbit.",
-      "historyNote": "America's first planned satellite was the Navy's Vanguard, picked because it wasn't a missile program. After Sputnik, the first Vanguard attempt, shown on television in December 1957, rose a little over a meter and exploded. The Army's rocket team under Wernher von Braun, with JPL building the satellite, had Explorer 1 in orbit within two months, on 31 January 1958."
+      "historyNote": "America's first planned satellite was the Navy's Vanguard, picked because it wasn't a missile program. After Sputnik, the first Vanguard attempt, shown on television in December 1957, rose a little over a meter and exploded. The Army's rocket team under Wernher von Braun, with JPL building the satellite, had Explorer 1 in orbit within two months, on 31 January 1958.",
+      "longDescription": "America's first satellite, launched from Cape Canaveral on the night of 31 January 1958 on a Juno I: an Army Jupiter-C missile topped by three stages of small solid rockets. Those stages rode in a tub spun up before launch: the guided first stage aimed the stack, and the spin kept the unguided stages above it steady. James Van Allen's Geiger counter made the flight a scientific one. High in its orbit, which ran from about 358 to 2,550 km, the count fell to zero. Explorer 3 showed why: the tube was swamped by particles trapped in the Earth's magnetic field, the first sign of the Van Allen belts."
     },
     "mercury": {
       "name": "Project Mercury",
       "description": "America's first crewed spacecraft: a cone-shaped capsule for one astronaut, flown first on short suborbital hops, then in orbit. Unlike Vostok, the astronaut stays aboard and splashes down at sea.",
-      "historyNote": "During John Glenn's orbital flight in February 1962, a sensor suggested that Friendship 7's heat shield had come loose. Mission Control told him to keep the retrorocket pack strapped on through reentry, in the hope that its straps would hold the shield in place. He came home safely. The warning turned out to come from a faulty switch."
+      "historyNote": "During John Glenn's orbital flight in February 1962, a sensor suggested that Friendship 7's heat shield had come loose. Mission Control told him to keep the retrorocket pack strapped on through reentry, in the hope that its straps would hold the shield in place. He came home safely. The warning turned out to come from a faulty switch.",
+      "longDescription": "Project Mercury, approved on 7 October 1958, had three goals: put a person in orbit, find out whether he could work there, and bring him and the capsule back safely. Nobody knew whether a pilot could swallow, see or think clearly while weightless, so the capsule could fly itself, and chimpanzees went first: Ham on a suborbital hop on 31 January 1961, Enos twice around the Earth that November. Short Redstone flights came before Atlas orbits, and six astronauts flew between 1961 and 1963, the last for 34 hours and 22 orbits. Each stayed in his capsule all the way down to a splashdown at sea."
     },
     "pegasus": {
       "name": "Pegasus",
       "description": "A satellite with huge folding panels that count the specks of dust that hit them, to show how often a spacecraft would be struck by micrometeoroids.",
-      "historyNote": "Three Pegasus satellites flew in 1965 on Saturn I rockets. Their detector wings spanned about 29 meters and rode up folded inside a dummy Apollo service module. Engineers feared micrometeoroids could puncture an Apollo spacecraft's skin; Pegasus counted the hits so designers knew what they were up against."
+      "historyNote": "Three Pegasus satellites flew in 1965 on Saturn I rockets. Their detector wings spanned about 29 meters and rode up folded inside a dummy Apollo service module. Engineers feared micrometeoroids could puncture an Apollo spacecraft's skin; Pegasus counted the hits so designers knew what they were up against.",
+      "longDescription": "Three large targets for counting dust in orbit, flown on Saturn I rockets in 1965. The grains they counted weighed between about a ten-millionth and a ten-thousandth of a gram, but they strike at many kilometers a second, and nobody knew how often one would get through a thin wall. Each Pegasus carried about 200 square meters of detector panels in three thicknesses, from 0.04 to 0.4 mm of aluminum, so the counts gave a curve of hits against skin thickness. The satellites reported until 1968; the first two stayed in orbit until 1978 and 1979."
     },
     "biosatellite": {
       "name": "Biosatellite",
       "description": "A recoverable capsule carrying plants, insects and other small organisms, to study how living things grow and change in weightlessness.",
-      "historyNote": "Biosatellite II came home in 1967 after 45 hours, about a day early, because a tropical storm threatened the recovery area; an aircraft caught its capsule. Biosatellite III carried a macaque named Bonny on a flight planned for 30 days. After about nine days he stopped eating and drinking, NASA brought him down early, and he died soon after."
+      "historyNote": "Biosatellite II came home in 1967 after 45 hours, about a day early, because a tropical storm threatened the recovery area; an aircraft caught its capsule. Biosatellite III carried a macaque named Bonny on a flight planned for 30 days. After about nine days he stopped eating and drinking, NASA brought him down early, and he died soon after.",
+      "longDescription": "NASA's series of recoverable satellites for biology, run by its Ames Research Center, with General Electric building the craft. Six flights were planned and three flew, on Delta rockets, from 1966 to 1969. The question was whether weightlessness changes how living things grow and how they respond to radiation, and only a matched comparison could answer it: identical specimens stayed on the ground as controls. Biosatellite II carried a strontium-85 source that exposed some specimens to gamma rays in orbit. The specimens had to come home quickly to be studied, so the recovery mattered as much as the flight."
     },
     "orbiting-frog-otolith": {
       "name": "Orbiting Frog Otolith",
       "description": "A small satellite carrying two frogs wired up to record the organs of balance in their inner ears, to learn how weightlessness confuses the sense of up and down.",
-      "historyNote": "NASA launched the Orbiting Frog Otolith on 9 November 1970 on a Scout rocket. Electrodes in the two bullfrogs' balance nerves recorded how the inner ear coped with weightlessness, and with spells of artificial gravity from a small centrifuge, for almost a week. The frogs were never meant to come back."
+      "historyNote": "NASA launched the Orbiting Frog Otolith on 9 November 1970 on a Scout rocket. Electrodes in the two bullfrogs' balance nerves recorded how the inner ear coped with weightlessness, and with spells of artificial gravity from a small centrifuge, for almost a week. The frogs were never meant to come back.",
+      "longDescription": "A NASA biology satellite that asked whether the balance organs of the inner ear adapt to weightlessness. The otolith organs sense gravity through tiny crystals resting on sensory hair cells. With nothing pulling the crystals down, they send signals the brain cannot use, a suspected cause of space sickness. The experiment came from Torquato Gualtierotti at NASA's Ames Research Center and was first meant to ride on an Apollo flight. In orbit the frogs' responses changed at first and came back toward normal in the last day or so, a hint that the system adjusts."
     },
     "pioneer-4": {
       "name": "Pioneer 4",
       "description": "A small probe sent past the Moon and on into orbit around the Sun, the first American craft to escape the Earth's gravity.",
-      "historyNote": "Pioneer 4, launched on 3 March 1959 on a Juno II, was the first American spacecraft to escape the Earth's gravity. Its second stage burned too long, so it passed about 60,000 km from the Moon, too far for its sensor to trigger. It sent data for 82 hours and still circles the Sun."
+      "historyNote": "Pioneer 4, launched on 3 March 1959 on a Juno II, was the first American spacecraft to escape the Earth's gravity. Its second stage burned too long, so it passed about 60,000 km from the Moon, too far for its sensor to trigger. It sent data for 82 hours and still circles the Sun.",
+      "longDescription": "The Army and JPL's second try at the Moon. Pioneer 3 had fallen back in December 1958 from about 102,000 km, about 1,000 km/h short of escape speed, after its first stage shut down a few seconds early. Pioneer 4 flew on the same Juno II: a Jupiter missile with clusters of small solid rockets on top, which together had to reach more than 11 km/s. It became the first American craft to escape the Earth and orbit the Sun. On the way out its counters charted the radiation belts again and found the outer one changed, probably by a solar flare. Tracking stations followed it to about 655,000 km, a record at the time."
     },
     "zond-5": {
       "name": "Zond 5",
       "description": "An uncrewed lunar capsule with living passengers aboard, flown around the Moon and brought home through the atmosphere at lunar return speed.",
-      "historyNote": "In September 1968 Zond 5 carried two steppe tortoises, fruit fly eggs and plants around the Moon and splashed down in the Indian Ocean, where Soviet ships recovered it. The tortoises were the first vertebrates to go around the Moon and come home. Apollo 8 took the first people there three months later."
+      "historyNote": "In September 1968 Zond 5 carried two steppe tortoises, fruit fly eggs and plants around the Moon and splashed down in the Indian Ocean, where Soviet ships recovered it. The tortoises were the first vertebrates to go around the Moon and come home. Apollo 8 took the first people there three months later.",
+      "longDescription": "The 7K-L1 was the Soviet craft meant to fly two cosmonauts around the Moon and straight home, with no stop in lunar orbit. Earlier attempts had failed. Zond 5, in September 1968, was the first craft to go around the Moon and come back, with living things aboard, passing about 1,950 km above the far side. It tested the navigation and the Proton rocket with its Blok D stage, but the hardest part was the return: a capsule coming back from the Moon meets the air at about 11 km/s, and must enter at an angle neither too steep to survive nor too shallow to stay in. After Apollo 8 the crewed flight lost its point and was cancelled."
     },
     "ranger-3": {
       "name": "Ranger 3",
       "description": "A probe aimed straight at the Moon, taking pictures all the way down until it strikes the surface.",
-      "historyNote": "Ranger 3 launched in January 1962. A guidance fault gave it too much speed: it reached the Moon 14 hours early and missed it by about 37,000 km. Its television camera and its seismometer capsule, meant to survive the crash and keep reporting, never got to work."
+      "historyNote": "Ranger 3 launched in January 1962. A guidance fault gave it too much speed: it reached the Moon 14 hours early and missed it by about 37,000 km. Its television camera and its seismometer capsule, meant to survive the crash and keep reporting, never got to work.",
+      "longDescription": "The first of three Rangers meant to hit the Moon with two jobs at once: television pictures all the way down, and a seismometer set on the surface to listen for moonquakes. It asked a great deal of 1962 technology: an Atlas-Agena B to throw 330 kg toward the Moon, an aim good enough to hit it, and a capsule that a small rocket would slow just before the crash. A gamma-ray spectrometer rode along too, and made the first measurements of gamma rays between the planets. Rangers 3, 4 and 5 all failed, and the later Rangers carried cameras alone."
     },
     "luna-2": {
       "name": "Luna 2",
       "description": "A probe aimed to hit the Moon: the first human-made object to reach another world.",
-      "historyNote": "On 13 September 1959 Luna 2 struck the Moon east of Mare Imbrium, the first human-made object to reach another world. It carried two balls of small metal pentagons bearing the Soviet coat of arms, built to scatter on impact. Khrushchev gave a copy to President Eisenhower."
+      "historyNote": "On 13 September 1959 Luna 2 struck the Moon east of Mare Imbrium, the first human-made object to reach another world. It carried two balls of small metal pentagons bearing the Soviet coat of arms, built to scatter on impact. Khrushchev gave a copy to President Eisenhower.",
+      "longDescription": "The second Soviet try at hitting the Moon, after Luna 1 missed by about 6,000 km in January 1959. Launched on 12 September 1959, it flew a direct path and struck at about 3.3 km/s some 38 hours later, the first human-made object to reach another world. On the way it released a cloud of sodium vapor that observatories could photograph, to show where it was. Its magnetometers found no lunar magnetic field within their sensitivity, and its ion traps made one of the first direct measurements of the solar wind. Jodrell Bank in England tracked it, which helped convince doubters in the West that it had arrived."
     },
     "pioneer-2": {
       "name": "Pioneer 2",
       "description": "An early lunar orbiter, small enough for the rockets of its day, with a camera and instruments for radiation and magnetism.",
-      "historyNote": "Pioneer 2 never got far. It launched on 8 November 1958, but its Thor-Able's third stage failed to light, probably because of a broken wire, and it climbed to about 1,550 km before falling back 42 minutes later. Even that short flight hinted that the radiation above the equator was stronger than anyone had expected."
+      "historyNote": "Pioneer 2 never got far. It launched on 8 November 1958, but its Thor-Able's third stage failed to light, probably because of a broken wire, and it climbed to about 1,550 km before falling back 42 minutes later. Even that short flight hinted that the radiation above the equator was stronger than anyone had expected.",
+      "longDescription": "The third of the Able probes, built by Space Technology Laboratories and launched for NASA on 8 November 1958 on a Thor-Able. The plan asked for something no one had done: send a probe toward the Moon, then 2.6 days later fire a solid rocket at exactly the right moment to brake into lunar orbit, at a time when no rocket had yet reached escape speed. Its instruments covered radiation, magnetism, micrometeoroids and temperature, with a television scanner for the Moon's face. None of the three Able lunar probes got near the Moon. The next American probes, Pioneer 3 and 4, flew on the Army's Juno II."
     },
     "lunar-orbiter": {
       "name": "Lunar Orbiter",
       "description": "A camera platform in lunar orbit that develops its own film on board and scans the pictures for radio, to map landing sites.",
-      "historyNote": "Five Lunar Orbiters flew in 1966 and 1967 to photograph possible Apollo landing sites, and all five worked. Each developed its film on board, scanned it and radioed the pictures home. When their work was done, each was deliberately crashed into the Moon."
+      "historyNote": "Five Lunar Orbiters flew in 1966 and 1967 to photograph possible Apollo landing sites, and all five worked. Each developed its film on board, scanned it and radioed the pictures home. When their work was done, each was deliberately crashed into the Moon.",
+      "longDescription": "Five orbiters, flown in 1966 and 1967, to find where Apollo could land safely. Apollo's planners needed to see craters and boulders far smaller than any telescope on Earth could show. The first three flew low orbits near the equator and photographed 20 candidate landing sites. Each developed its film on board and scanned it for radio. The last two went into high polar orbits and mapped almost the whole Moon. Tracking their orbits had another payoff: in 1968 the craft were found to speed up over certain maria, which revealed mascons, dense masses under the surface that pull orbits off course."
     },
     "surveyor": {
       "name": "Surveyor",
       "description": "A three-legged robot lander that brakes with a rocket and settles softly onto the Moon, to prove the ground can carry a spacecraft.",
-      "historyNote": "Surveyor 3 landed in April 1967. In November 1969 Apollo 12 set down less than 200 meters away, and Pete Conrad and Alan Bean walked over and brought back its television camera and other parts, so engineers could see what more than two years on the Moon had done to them."
+      "historyNote": "Surveyor 3 landed in April 1967. In November 1969 Apollo 12 set down less than 200 meters away, and Pete Conrad and Alan Bean walked over and brought back its television camera and other parts, so engineers could see what more than two years on the Moon had done to them.",
+      "longDescription": "Seven robot landers launched by Atlas-Centaur from 1966 to 1968, to learn whether the Moon's surface would bear a spacecraft or swallow it in dust. Five landed. Surveyor 1, on 2 June 1966, was the first American soft landing, four months after the Soviet Luna 9. With no crew, the craft had to measure its own height and speed by radar and throttle its engines all the way down. Later Surveyors dug trenches with a scoop and measured the soil's chemistry with an alpha-scattering instrument, and together they showed that an Apollo lander would not sink."
     },
     "luna-15": {
       "name": "Luna 15",
       "description": "A robot lander with a drill and a small return rocket, meant to scoop up lunar soil and fly it back to Earth.",
-      "historyNote": "Luna 15 was the last Soviet chance to bring lunar soil home before Apollo 11. It was still in lunar orbit when Armstrong and Aldrin landed, and it crashed in Mare Crisium on 21 July 1969 while they were on the surface. A robot sample return finally succeeded with Luna 16 in 1970."
+      "historyNote": "Luna 15 was the last Soviet chance to bring lunar soil home before Apollo 11. It was still in lunar orbit when Armstrong and Aldrin landed, and it crashed in Mare Crisium on 21 July 1969 while they were on the surface. A robot sample return finally succeeded with Luna 16 in 1970.",
+      "longDescription": "The Ye-8-5 was a robot built to do what Apollo did with people: land, collect lunar soil and fly it home. Luna 15 left Earth on 13 July 1969, three days before Apollo 11, and entered lunar orbit on 17 July. Controllers spent days checking its systems and adjusting its orbit before trying to land: with no pilot aboard, the landing radar would have to judge the ground alone. It began its descent after 52 orbits. The design itself worked: Luna 16, 20 and 24 later brought soil home."
     },
     "luna-3": {
       "name": "Luna 3",
       "description": "A probe that swings behind the Moon and photographs the side that never faces the Earth.",
-      "historyNote": "On 7 October 1959 Luna 3 took 29 photographs of the far side of the Moon in about 40 minutes, developed the film on board, and later scanned 17 of them for radio. Rough as they were, they showed mountainous ground quite unlike the side we see."
+      "historyNote": "On 7 October 1959 Luna 3 took 29 photographs of the far side of the Moon in about 40 minutes, developed the film on board, and later scanned 17 of them for radio. Rough as they were, they showed mountainous ground quite unlike the side we see.",
+      "longDescription": "Luna 3 was sent to photograph the side of the Moon that never faces the Earth, and its path did most of the work. It carried no engine to correct its course, so the launch alone had to aim it past the Moon's south pole at about 6,200 km and around behind it. The Moon's gravity then bent its orbit so that it came back over the northern hemisphere, where the Soviet tracking stations stood. It had to prove that a probe could photograph a target, process the pictures itself and send them home across hundreds of thousands of kilometers."
     },
     "luna-17": {
       "name": "Luna 17",
       "description": "A lander that lowers ramps and sends a remote-controlled rover out to drive across the Moon.",
-      "historyNote": "Lunokhod 1 rolled down Luna 17's ramps on 17 November 1970. Built to last three lunar days, it worked through eleven and drove about 10.5 km, steered by drivers on Earth through a delay of several seconds. Its operations ended on 4 October 1971, the anniversary of Sputnik 1."
+      "historyNote": "Lunokhod 1 rolled down Luna 17's ramps on 17 November 1970. Built to last three lunar days, it worked through eleven and drove about 10.5 km, steered by drivers on Earth through a delay of several seconds. Its operations ended on 4 October 1971, the anniversary of Sputnik 1.",
+      "longDescription": "Luna 17 carried the first rover to the Moon, Lunokhod 1, launched on 10 November 1970 to land in Mare Imbrium, the Sea of Rains. The hard part was driving at all: a crew on Earth steered from television pictures that arrived seconds late, so every move was planned from the last frames, with one operator driving and another keeping the rover's main antenna pointed at the Earth. The rover had to survive each two-week lunar night on its own heat and wake up again. Its months of driving and soil tests showed what a machine driven from Earth could do on another world."
     },
     "pioneer-sun-orbiter": {
       "name": "Pioneer Sun orbiter",
       "description": "Spin-stabilized probes placed in their own orbits around the Sun, to measure the solar wind and space weather between the planets.",
-      "historyNote": "Pioneer 6 was launched in December 1965 to watch the solar wind from its own orbit around the Sun. It far outlived its design: on 8 December 2000 controllers made contact once more, 35 years after launch, the last time anyone heard from it."
+      "historyNote": "Pioneer 6 was launched in December 1965 to watch the solar wind from its own orbit around the Sun. It far outlived its design: on 8 December 2000 controllers made contact once more, 35 years after launch, the last time anyone heard from it.",
+      "longDescription": "The Pioneer Sun orbiters were small probes sent into orbits around the Sun close to the Earth's own, to measure the solar wind, magnetic fields and cosmic rays between the planets. Pioneer 6, the first, circled the Sun between about 0.81 and 0.99 times the Earth's distance, once every 311 days, so over the years it drifted around to the far side of the Sun. That was the point: spread out along the Earth's orbit, the probes sampled space at widely separated places at once. In November 1968 Pioneer 6 became the first spacecraft tracked as it passed behind the Sun, its radio signal probing the Sun's outer atmosphere on the way."
     },
     "mariner-10": {
       "name": "Mariner 10",
       "description": "A probe that uses Venus's gravity to fall inward to Mercury: the first flight to use one planet to reach another.",
-      "historyNote": "Mariner 10 flew past Venus on 5 February 1974, the first spacecraft to use one planet's gravity to reach another. The flyby bent its path inward, and it passed Mercury three times in 1974 and 1975, the first time at 703 km. The technique had been worked out on paper decades before."
+      "historyNote": "Mariner 10 flew past Venus on 5 February 1974, the first spacecraft to use one planet's gravity to reach another. The flyby bent its path inward, and it passed Mercury three times in 1974 and 1975, the first time at 703 km. The technique had been worked out on paper decades before.",
+      "longDescription": "Mariner 10 was sent to Mercury, which is hard to reach because a probe falling toward the Sun gathers speed it must not keep: a direct flight would have needed a bigger, costlier rocket. Instead it left on an Atlas-Centaur on 3 November 1973 for Venus, whose gravity bent its path inward. Giuseppe Colombo of the University of Padua saw that the probe's resulting orbit around the Sun, 176 days long, was exactly two of Mercury's years, so it could meet the planet again and again. Each pass found the same half in sunlight, so a little under half of Mercury was mapped: a cratered, Moon-like world with a weak magnetic field."
     },
     "mariner-5": {
       "name": "Mariner 5",
       "description": "A flyby probe passing close to Venus, studying its atmosphere with radio signals that skim through it.",
-      "historyNote": "Mariner 5 flew past Venus on 19 October 1967, a day after the Soviet Venera 4 dropped a capsule into its atmosphere. Scientists from both countries published the two missions' results together, a rare joint effort in the middle of the space race."
+      "historyNote": "Mariner 5 flew past Venus on 19 October 1967, a day after the Soviet Venera 4 dropped a capsule into its atmosphere. Scientists from both countries published the two missions' results together, a rare joint effort in the middle of the space race.",
+      "longDescription": "Mariner 5 was NASA's second look at Venus, almost five years after Mariner 2. It carried no camera, since Venus's clouds hide the ground. Its main tool was its own radio. Launched on 14 June 1967, the probe passed behind the planet as seen from the Earth, and its signal sank through deeper and deeper air and bent, and from the bending scientists worked out how the atmosphere's density and temperature change with height. Its ultraviolet photometer found a halo of hydrogen around the planet, it found no magnetic field, and its results pointed to a surface at over 500 degrees Celsius under 75 to 100 atmospheres."
     },
     "pioneer-venus-orbiter": {
       "name": "Pioneer Venus Orbiter",
       "description": "An orbiter that maps Venus's surface through the clouds by radar and watches its upper atmosphere for years.",
-      "historyNote": "Pioneer Venus 1 reached Venus in December 1978 and kept working for almost 14 years. Its radar mapped 93 % of the band from 74 degrees north to 63 degrees south, the first map of nearly the whole hidden surface. When its fuel ran out its orbit sank, and on 8 October 1992 it burned up in the atmosphere it had studied."
+      "historyNote": "Pioneer Venus 1 reached Venus in December 1978 and kept working for almost 14 years. Its radar mapped 93 % of the band from 74 degrees north to 63 degrees south, the first map of nearly the whole hidden surface. When its fuel ran out its orbit sank, and on 8 October 1992 it burned up in the atmosphere it had studied.",
+      "longDescription": "The Pioneer Venus Orbiter was NASA's first spacecraft to circle Venus. Launched on 20 May 1978, it was braked into orbit on 4 December by a solid rocket motor. Its orbit was a long ellipse lasting about a day, dipping to roughly 150 km at its low point, so on every pass it sampled the upper air and ionosphere directly while its radar measured the ground below. It found a planet smoother than the Earth, with almost no magnetic field, clouds of sulfuric acid and frequent lightning, and its highest peak, Maxwell Montes, about 11 km above the average surface."
     },
     "venera-15": {
       "name": "Venera 15",
       "description": "An orbiter with a large side-looking radar, mapping Venus's northern hemisphere in detail.",
-      "historyNote": "Venera 15 reached Venus in October 1983, with its twin Venera 16. Their side-looking radars mapped the northern hemisphere from the pole to about 30 degrees north, and American and Soviet scientists later turned the data into joint maps."
+      "historyNote": "Venera 15 reached Venus in October 1983, with its twin Venera 16. Their side-looking radars mapped the northern hemisphere from the pole to about 30 degrees north, and American and Soviet scientists later turned the data into joint maps.",
+      "longDescription": "Venera 15 and its twin Venera 16 tackled a problem cameras cannot solve: the surface of Venus lies under permanent cloud, and from orbit only radar sees through it. A radar looking straight down measures height but cannot tell features on either side apart, so these orbiters looked off to one side, about 10 degrees from the vertical, and built pictures from the timing and frequency of the echoes, while an altimeter alongside measured height. Their long orbits, about a day each, came lowest at roughly 1,000 km near 62 degrees north, which is why their maps covered the far north."
     },
     "pioneer-venus-multiprobe": {
       "name": "Pioneer Venus Multiprobe",
       "description": "A carrier that releases one large and three small probes, which fall through Venus's atmosphere at widely spaced points and radio back what they find.",
-      "historyNote": "On 9 December 1978 one large and three small probes, named North, Day and Night, fell into Venus's atmosphere. None was built to survive hitting the ground, but the Day probe did, and it kept sending temperatures from the surface for 67 minutes until its batteries ran out."
+      "historyNote": "On 9 December 1978 one large and three small probes, named North, Day and Night, fell into Venus's atmosphere. None was built to survive hitting the ground, but two did, and the Day probe kept sending temperatures from the surface for 67 minutes until its batteries ran out.",
+      "longDescription": "The Pioneer Venus Multiprobe was built to sample Venus's atmosphere in several places at once, since one probe can only show one column of air. A single spinning carrier, launched on 8 August 1978, released the large probe on 16 November and the three small ones four days later, each on its own path to a different target: the day side, the night side and the high north. In December they all fell in. The large probe slowed under a parachute and the small ones fell without one. Below about 50 km all four found almost the same temperatures, though they were thousands of kilometers apart."
     },
     "venera-7": {
       "name": "Venera 7",
       "description": "A heavily armored lander built to survive the heat and pressure at Venus's surface long enough to send data home.",
-      "historyNote": "On 15 December 1970 Venera 7's parachute failed and it hit Venus at about 60 km/h, coming to rest on its side. Controllers thought it had died, but weeks later the recordings showed a faint signal: it had reported about 475 degrees Celsius for some 23 minutes, the first data from the surface of another planet."
+      "historyNote": "On 15 December 1970 Venera 7's parachute failed and it hit Venus at about 60 km/h, coming to rest on its side. Controllers thought it had died, but weeks later the recordings showed a faint signal: it had reported about 475 degrees Celsius for some 23 minutes, the first data from the surface of another planet.",
+      "longDescription": "Venera 7 was the next Soviet attempt to reach the surface of Venus and keep working there, after three earlier probes had failed in the thick air on the way down. Launched on 17 August 1970, it had to settle what radio and radar from the Earth could only hint at: how hot and how dense the bottom of Venus's atmosphere really is. It measured the temperature, and from that and models of the air scientists worked out a pressure about 90 times the Earth's. It kept sending a faint signal for about 20 minutes from the ground: the first transmission from the surface of another planet. Its lessons shaped the landers that followed."
     },
     "venera-lander": {
       "name": "Venera lander",
       "description": "A carrier craft and a lander travel together to Venus; the lander dives to the surface while the carrier relays its signal.",
-      "historyNote": "Venera 9 landed on 22 October 1975 and sent back the first picture ever taken on the surface of another planet: jagged rocks on a layer of dust. A lens cap stayed on, so only half the planned view came through. The lander lasted about 53 minutes, and its carrier became the first spacecraft to orbit Venus."
+      "historyNote": "Venera 9 landed on 22 October 1975 and sent back the first picture ever taken on the surface of another planet: jagged rocks on a layer of dust. A lens cap stayed on, so only half the planned view came through. The lander lasted about 53 minutes, and its carrier became the first spacecraft to orbit Venus.",
+      "longDescription": "The Venera landers of the mid-1970s, beginning with Venera 9 and 10 in 1975, were a new and much heavier design, launched on the Proton rocket. Each mission paired a lander with a carrier that braked into orbit around Venus or, on later missions, flew past it, and relayed the lander's signal to the Earth. The relay solved an old problem: a lander lying on hot ground can hardly aim a radio at the Earth. These missions had to show that a lander could last long enough on the surface to take pictures, and they measured about 485 degrees Celsius and 90 atmospheres there."
     },
     "mariner-6": {
       "name": "Mariner 6",
       "description": "A flyby probe passing close over Mars and photographing its surface and atmosphere.",
-      "historyNote": "Mariner 6 flew past Mars on 31 July 1969, about 3,430 km up, and sent back 75 pictures. They showed so many craters that the camera team called Mars more like the Moon than the Earth. Its pictures of the south polar cap were intriguing enough that controllers reprogrammed its twin, Mariner 7, in flight to take more of them."
+      "historyNote": "Mariner 6 flew past Mars on 31 July 1969, about 3,430 km up, and sent back 75 pictures. They showed so many craters that the camera team called Mars more like the Moon than the Earth. Its pictures of the south polar cap were intriguing enough that controllers reprogrammed its twin, Mariner 7, in flight to take more of them.",
+      "longDescription": "Mariner 6 and its twin Mariner 7 were the second American look at Mars, four years after Mariner 4. Launched on 25 February 1969, they were the first Mariners to ride an Atlas-Centaur, whose extra power let them carry a much heavier set of instruments: two cameras, infrared and ultraviolet spectrometers and an infrared radiometer on a pointable platform. Mariner 6 passed south of the equator. Besides its pictures, it found an atmosphere of about 98 % carbon dioxide at a pressure of 6 to 7 millibars, well under 1 % of the Earth's, and a polar cap that looked like frozen carbon dioxide."
     },
     "mariner-9": {
       "name": "Mariner 9",
       "description": "The first spacecraft to orbit another planet, mapping Mars from pole to pole.",
-      "historyNote": "Mariner 9 reached Mars on 14 November 1971, the first spacecraft to orbit another planet, and found it hidden by a planet-wide dust storm. Only Olympus Mons and three other volcanoes showed above the haze. JPL put the mapping off until the dust settled, and Mariner 9 went on to map most of Mars."
+      "historyNote": "Mariner 9 reached Mars on 14 November 1971, the first spacecraft to orbit another planet, and found it hidden by a planet-wide dust storm. Only Olympus Mons and three other volcanoes showed above the haze. JPL put the mapping off until the dust settled, and Mariner 9 went on to map most of Mars.",
+      "longDescription": "Mariner 9 was built to do what a flyby could not: stay at Mars for months and map it. That meant braking into orbit on arrival, with an engine burn of just over 15 minutes, five and a half months after its launch on 30 May 1971. Its orbit, about 12 hours long, was later trimmed so that its passes fitted the schedule of the Goldstone tracking station that received its pictures. Over almost a year it sent 7,329 pictures and mapped about 85 % of the planet at 1 to 2 km, finding the great canyon Valles Marineris, about 20 volcanoes and channels that looked as if flowing water had cut them."
     },
     "viking": {
       "name": "Viking",
       "description": "An orbiter and a lander: the orbiter surveys Mars and picks the site, the lander searches the soil for signs of life.",
-      "historyNote": "Viking 1 landed on 20 July 1976. Its Labeled Release experiment fed soil samples nutrients laced with radioactive carbon and watched for gas, and the first result looked positive. Other tests found no organic molecules, and most scientists blame reactive chemicals in the soil, but the experiment's designer maintained it had found life."
+      "historyNote": "Viking 1 landed on 20 July 1976. Its Labeled Release experiment fed soil samples nutrients laced with radioactive carbon and watched for gas, and the first result looked positive. Other tests found no organic molecules, and most scientists blame reactive chemicals in the soil, but the experiment's designer maintained it had found life.",
+      "longDescription": "Viking was NASA's attempt to land on Mars and look for life, with two identical missions launched in August and September 1975 on Titan-Centaur rockets. Each orbiter and lander flew to Mars joined, and the orbiter examined the planned landing site from orbit before letting the lander go. That step mattered: Viking 1's first site turned out to be strewn with boulders, so its landing was put off from 4 July while a safer spot was found farther west in Chryse Planitia. The landers then worked for years, Viking 1 until November 1982, while the orbiters mapped the planet and relayed the landers' data."
     },
     "mars-2": {
       "name": "Mars 2",
       "description": "An orbiter carrying a lander, which carries a small rover on skis to step across the surface.",
-      "historyNote": "After the Mars 2 lander crashed, Mars 3 made the first soft landing on Mars on 2 December 1971, in the middle of a planet-wide dust storm. It began sending a picture and fell silent within seconds. Its small rover, meant to walk on two skis at the end of a 15-meter cable, never left the lander."
+      "historyNote": "After the Mars 2 lander crashed, Mars 3 made the first soft landing on Mars on 2 December 1971, in the middle of a planet-wide dust storm. It began sending a picture and fell silent within seconds. Its small rover, meant to walk on two skis at the end of a 15-meter cable, never left the lander.",
+      "longDescription": "Mars 2 was the Soviet attempt of 1971 to put a craft in orbit around Mars and a lander on its surface in one mission. Launched on a Proton on 19 May 1971, nine days before its twin Mars 3, it parted the two only on arrival, so the orbiter could relay the lander's signals home. The lander even carried a small rover, to step across the ground on skis. Landing meant solving three problems at once: air too thin for parachutes alone, a surface no one had seen up close, and radio delays too long to steer from Earth. Between them the two orbiters sent back about 60 pictures and measured surface temperatures from about -110 °C to 13 °C."
     },
     "mars-m69": {
       "name": "Mars M-69",
       "description": "A heavy Mars orbiter designed for the new Proton rocket, with cameras and instruments to study the planet from orbit.",
-      "historyNote": "Both Mars M-69 orbiters were lost in 1969, on 27 March and 2 April, when their Proton rockets failed. The project was already late and overweight, and its lander had been dropped from the design before launch."
+      "historyNote": "Both Mars M-69 orbiters were lost in 1969, on 27 March and 2 April, when their Proton rockets failed. The project was already late and overweight, and its lander had been dropped from the design before launch.",
+      "longDescription": "Mars M-69 was meant to give the Soviet Union the upper hand in the 1969 Mars launch window, when NASA was sending Mariner 6 and 7 past the planet. The new Proton could lift a far heavier probe than the rockets behind earlier Soviet planetary craft, so the plan was an orbiter on a long ellipse, swinging from about 1,000 km to about 70,000 km above Mars, mapping it with cameras and about ten other instruments. The design began as a conversion of the Luna E-8 landing stage, which proved unsuited to a six-month cruise. After the losses, Lavochkin reworked the design into the M-71: Mars 2 and Mars 3."
     },
     "pioneer-10": {
       "name": "Pioneer 10",
       "description": "A probe sent through the asteroid belt to Jupiter, and on out of the Solar System.",
-      "historyNote": "Pioneer 10, launched on 2 March 1972, was the first spacecraft to cross the asteroid belt and to fly past Jupiter, on 3 December 1973. It carries a plaque showing where the Earth is, in case anyone ever finds it. Its last signal reached Earth in 2003."
+      "historyNote": "Pioneer 10, launched on 2 March 1972, was the first spacecraft to cross the asteroid belt and to fly past Jupiter, on 4 December 1973. It carries a plaque showing where the Earth is, in case anyone ever finds it. Its last signal reached Earth in 2003.",
+      "longDescription": "Pioneer 10 was sent to answer two questions before anything bigger was risked: could a spacecraft cross the asteroid belt, and could it live through Jupiter's radiation? Leaving Earth at about 51,700 km/h, faster than anything before it, it entered the belt in July 1972 and came out in February 1973 having met far fewer particles than feared. At Jupiter it passed about 130,000 km above the cloud tops and took about 500 pictures, though the radiation set off false commands and cost it a planned image of Io. It then headed out of the Solar System, and in June 1983 it became the first human-made object beyond Neptune's orbit."
     },
     "pioneer-11": {
       "name": "Pioneer 11",
       "description": "A probe that flies past Jupiter and uses its gravity to swing across to Saturn.",
-      "historyNote": "Pioneer 11 flew past Jupiter in 1974, and Jupiter's gravity swung it onto a path to Saturn, which it reached in 1979, the first spacecraft there. In 1995 its power ran too low to work its instruments."
+      "historyNote": "Pioneer 11 flew past Jupiter in 1974, and Jupiter's gravity swung it onto a path to Saturn, which it reached in 1979, the first spacecraft there. In 1995 its power ran too low to work its instruments.",
+      "longDescription": "Pioneer 11, launched on 6 April 1973, followed its twin to Jupiter and was steered far closer. On 3 December 1974 it passed about 42,500 km above the cloud tops at about 171,000 km/h; the speed kept its time in the radiation belts short, and its steep path returned the first pictures of Jupiter's polar regions. Jupiter's gravity then bent its course back across the Solar System, a trip of almost five years, with two course corrections on the way. At Saturn it took about 440 images, and its crossing of the planet's bow shock, 1.5 million km out, gave the first sure evidence that Saturn has a magnetic field."
     },
     "x-15": {
       "name": "X-15",
       "description": "A rocket plane dropped from under the wing of a bomber, flying faster and higher than any aircraft before it, to the edge of space and back to a dry lakebed.",
-      "historyNote": "Three X-15s made 199 flights between 1959 and 1968, carried aloft under the wing of a B-52. Joe Walker flew one to 354,200 feet, about 108 km, in August 1963, and in 1967 Pete Knight reached Mach 6.7, about 4,520 mph, in the modified X-15A-2."
+      "historyNote": "Three X-15s made 199 flights between 1959 and 1968, carried aloft under the wing of a B-52. Joe Walker flew one to 354,200 feet, about 108 km, in August 1963, and in 1967 Pete Knight reached Mach 6.7, about 4,520 mph, in the modified X-15A-2.",
+      "longDescription": "The X-15 was built to find out what happens to an aircraft, and its pilot, at speeds and heights nobody had reached: heating from the air, control where the air is too thin for wings and rudders, and the return from the edge of space to a landing. A B-52 carried it to about 13,700 m and let it go; the pilot fired its engine for 80 to 120 seconds, then glided home without power to a dry lakebed. Twelve pilots flew it, and eight of them went above 80 km, high enough for American astronaut wings. Its data on heating, reaction controls and pilots under stress fed into Mercury, Gemini, Apollo and the Space Shuttle."
     },
     "mig-e-154": {
       "name": "OKB-MiG E-154",
       "description": "A rocket plane from the MiG design bureau, carried up under the belly of a bomber and dropped, to fly faster and higher than any Soviet aircraft before it, to the edge of space and back to a runway.",
-      "historyNote": "The E-154 is our own invention, the Soviet answer to the X-15, in place of a rocket-launched space plane in the game that inspired this one. The real Mikoyan bureau did design a Soviet space plane, Spiral, but only its subsonic test craft, the MiG-105, was built. It made eight flights between 1976 and 1978."
+      "historyNote": "The E-154 is our own invention, the Soviet answer to the X-15, in place of a rocket-launched space plane in the game that inspired this one. The real Mikoyan bureau did design a Soviet space plane, Spiral, but only its subsonic test craft, the MiG-105, was built. It made eight flights between 1976 and 1978.",
+      "longDescription": "The E-154 is the Soviet answer to the X-15: a rocket plane from the Mikoyan bureau, carried aloft under a bomber, dropped, flown on rocket power to the fringe of space, and glided back to a runway. Its flights have to prove what the X-15 did: that its structure survives hypersonic heating, that a pilot can keep control with thrusters where wings no longer bite, and that a glide from that height can end on a chosen strip. The bureau's real height record came from a jet: in 1977 a modified MiG-25, the E-266M, zoomed to 37,650 m, still the record for an aircraft that takes off under its own power."
     },
     "gemini": {
       "name": "Gemini",
       "description": "A two-person capsule built to master what a Moon landing needs: long flights, spacewalks, and rendezvous and docking with another craft.",
-      "historyNote": "Gemini 8 made the first docking of two spacecraft, with an Agena, in March 1966. Soon after, a thruster on the capsule stuck and set the pair rolling. Neil Armstrong and David Scott undocked, the capsule spun up to a turn a second, and Armstrong stopped it with the reentry thrusters, which forced an early landing in the Pacific."
+      "historyNote": "Gemini 8 made the first docking of two spacecraft, with an Agena, in March 1966. Soon after, a thruster on the capsule stuck and set the pair rolling. Neil Armstrong and David Scott undocked, the capsule spun up to a turn a second, and Armstrong stopped it with the reentry thrusters, which forced an early landing in the Pacific.",
+      "longDescription": "Gemini was there to learn, in Earth orbit, the skills a Moon landing would need, before Apollo had to use them. NASA set its goals in January 1962: flights of up to two weeks, rendezvous and docking with another craft, work outside the spacecraft, and reentry to a chosen spot. Ten two-person flights in 1965 and 1966 met nearly all of them. Gemini 7 stayed up almost 14 days, longer than a trip to the Moon and back. Crews learned that closing on another craft means thinking in orbits, since thrusting straight at a target raises the chaser's orbit and drops it behind, and spacewalkers found how hard it is to work in a pressure suit."
     },
     "circumlunar-gemini-earth-orbit": {
       "name": "Circumlunar Gemini: Earth-orbit tests",
       "description": "Tests close to home for a Gemini sent around the Moon: a heat shield for lunar return speed, and the Transtage that would push it there.",
-      "historyNote": "McDonnell proposed flying Gemini to the Moon in 1961, before the program even had its name. Its ideas ranged from a capsule pushed around the Moon by a Centaur stage, docking with the gear built for the Agena, to a Gemini modified to land. NASA kept the Moon for Apollo, and none of them flew."
+      "historyNote": "McDonnell proposed flying Gemini to the Moon in 1961, before the program even had its name. Its ideas ranged from a capsule pushed around the Moon by a Centaur stage, docking with the gear built for the Agena, to a Gemini modified to land. NASA kept the Moon for Apollo, and none of them flew.",
+      "longDescription": "These are tests that never flew: what a circumlunar Gemini would have had to prove close to Earth first. A capsule back from the Moon meets the air at about 11 km/s instead of about 7.8, carrying roughly twice the energy per kilogram, so it needed a thicker heat shield, and a 1964 NASA study found the extra mass too much for a plain Titan II. The other half was the push: dock a Gemini to a Transtage launched separately, then fire the stage with the capsule riding on its front. Gemini 10 and 11, carried higher by their docked Agenas, came closest to trying the idea."
     },
     "lunar-orbital-gemini-earth-orbit": {
       "name": "Lunar-orbit Gemini: Earth-orbit tests",
       "description": "Tests in Earth orbit for a Gemini that could brake into lunar orbit: its heat shield and the propulsion module behind it.",
-      "historyNote": "McDonnell proposed flying Gemini to the Moon in 1961, before the program even had its name. Its ideas ranged from a capsule pushed around the Moon by a Centaur stage, docking with the gear built for the Agena, to a Gemini modified to land. NASA kept the Moon for Apollo, and none of them flew."
+      "historyNote": "McDonnell proposed flying Gemini to the Moon in 1961, before the program even had its name. Its ideas ranged from a capsule pushed around the Moon by a Centaur stage, docking with the gear built for the Agena, to a Gemini modified to land. NASA kept the Moon for Apollo, and none of them flew.",
+      "longDescription": "A Gemini that stops in lunar orbit, rather than looping around and falling home, needs a burn of nearly 1 km/s to brake into orbit and about as much again to leave, judging by Apollo's later burns. That takes an engine which fires on time after days in space, with the crew's only way home depending on it, and a heat shield for the fast return. These Earth-orbit tests, never flown, would have proven the propulsion module behind the capsule: starting it after long cold waits, and steering a Gemini with a heavy stage attached. In a NASA study of July 1964 the role went to an Agena, sent toward the Moon with the capsule by a Centaur."
     },
     "gemini-direct-ascent-earth-orbit": {
       "name": "Gemini Direct Ascent: Earth-orbit tests",
       "description": "Tests in Earth orbit for a Gemini that would land on the Moon in one piece, and its landing and ascent modules.",
-      "historyNote": "McDonnell proposed flying Gemini to the Moon in 1961, before the program even had its name. Its ideas ranged from a capsule pushed around the Moon by a Centaur stage, docking with the gear built for the Agena, to a Gemini modified to land. NASA kept the Moon for Apollo, and none of them flew."
+      "historyNote": "McDonnell proposed flying Gemini to the Moon in 1961, before the program even had its name. Its ideas ranged from a capsule pushed around the Moon by a Centaur stage, docking with the gear built for the Agena, to a Gemini modified to land. NASA kept the Moon for Apollo, and none of them flew.",
+      "longDescription": "Direct ascent means landing the whole spacecraft, return fuel and capsule included, and then launching all of it back off the Moon. Every kilogram landed must first be braked down and then lifted up again, which is why NASA chose lunar orbit rendezvous for Apollo in 1962: a small lander leaves the heavy return craft in orbit. A Gemini version, launched whole on a single heavy rocket, was one of the last direct-ascent studies. It never flew. Tests in Earth orbit would have had to prove its stages: a hydrogen engine that restarts after days of coasting, a landing stage that can set the stack down gently, and an ascent stage that cannot fail."
     },
     "voskhod": {
       "name": "Voskhod",
       "description": "The Vostok capsule rebuilt to carry two or three people, and fitted with an inflatable airlock for the first spacewalk.",
-      "historyNote": "Voskhod 1 flew three cosmonauts in October 1964, the first crew of more than one, with no spacesuits: there was no room for them. On Voskhod 2 in March 1965 Alexei Leonov made the first spacewalk, 12 minutes on a 5.35 m tether. His suit ballooned in the vacuum, and he had to let air out of it to squeeze back into the airlock."
+      "historyNote": "Voskhod 1 flew three cosmonauts in October 1964, the first crew of more than one, with no spacesuits: there was no room for them. On Voskhod 2 in March 1965 Alexei Leonov made the first spacewalk, 12 minutes on a 5.35 m tether. His suit ballooned in the vacuum, and he had to let air out of it to squeeze back into the airlock.",
+      "longDescription": "Voskhod was a quick way to beat Gemini to a crew of more than one: rather than wait for a new craft, Korolev's bureau rebuilt Vostok to carry more people and, in a second version, to let one of them step outside through an inflatable airlock. Removing the ejection seat made the room, but it also took away the crew's only escape on the pad or during launch. Voskhod 1 carried three men for about a day from 12 October 1964. On Voskhod 2 in March 1965 the automatic retrofire failed, the crew fired the engine by hand on a later orbit, and they came down far off course in dense forest in the Perm region. Later flights were cancelled."
     },
     "soyuz-7k-l1-earth-orbit": {
       "name": "Soyuz 7K-L1: Earth-orbit tests",
       "description": "The stripped-down Soyuz meant to carry two cosmonauts around the Moon, first tested in flights close to Earth.",
-      "historyNote": "The 7K-L1 flew without a crew under the name Zond. In September 1968 Zond 5 went around the Moon and came home with two tortoises aboard, and Apollo 8 carried people around it three months later. No 7K-L1 ever flew a crew."
+      "historyNote": "The 7K-L1 flew without a crew under the name Zond. In September 1968 Zond 5 went around the Moon and came home with two tortoises aboard, and Apollo 8 carried people around it three months later. No 7K-L1 ever flew a crew.",
+      "longDescription": "The 7K-L1 was a Soyuz cut down to carry two cosmonauts once around the Moon and home, launched by the Proton with a Blok D upper stage. Before that, the pieces had to prove themselves near Earth: the Proton itself, the Blok D's restart in orbit, and the craft's star sensors and gyroscopes for finding its way in deep space. The first test, Kosmos 146, flew on 10 March 1967 on the Proton-K's first launch, and went well. A month later Kosmos 154 was stranded in low orbit: a control fault dropped the small motors that settle the Blok D's propellant before ignition, and its main engine never lit."
     },
     "soyuz-7k-l3-earth-orbit": {
       "name": "Soyuz 7K-L3: Earth-orbit tests",
       "description": "The lunar-orbit Soyuz and its one-person LK lander, tested in Earth orbit before any trip to the Moon.",
-      "historyNote": "The LK lander was tested without a crew in Earth orbit three times, as Kosmos 379, 398 and 434 in 1970 and 1971, firing its engine as if landing on the Moon and lifting off again. The last test qualified it as flightworthy. It never went to the Moon: the N1 rocket meant to carry it never made a successful flight."
+      "historyNote": "The LK lander was tested without a crew in Earth orbit three times, as Kosmos 379, 398 and 434 in 1970 and 1971, firing its engine as if landing on the Moon and lifting off again. The last test qualified it as flightworthy. It never went to the Moon: the N1 rocket meant to carry it never made a successful flight.",
+      "longDescription": "Before a cosmonaut could be left alone on the Moon, every step of the landing had to work in Earth orbit first, where a failure still had a quick way home. The lunar complex was two craft: the Soyuz 7K-LOK, which would wait in lunar orbit, and the LK lander. Tests had to prove that the two could find each other and dock with no tunnel between them, that a cosmonaut in a lunar suit could spacewalk from one to the other, and that the Blok D stage could brake into orbit and lower the lander. In December 1970 Kosmos 382 fired a Blok D three times in Earth orbit to rehearse those burns."
     },
     "lk-700-earth-orbit": {
       "name": "LK-700: Earth-orbit tests",
       "description": "A heavy direct-ascent lunar craft, tested in long flights around the Earth before it heads for the Moon.",
-      "historyNote": "Vladimir Chelomei proposed the LK-700 in 1964 as a simpler path than Korolev's: one craft on his giant UR-700, landing directly on the Moon and returning with no rendezvous. The money went to the N1 instead, the UR-700 was never built, and the LK-700 was cancelled in 1974."
+      "historyNote": "Vladimir Chelomei proposed the LK-700 in 1964 as a simpler path than Korolev's: one craft on his giant UR-700, landing directly on the Moon and returning with no rendezvous. The money went to the N1 instead, the UR-700 was never built, and the LK-700 was cancelled in 1974.",
+      "longDescription": "The LK-700 was never built, so its Earth-orbit flights are a plan, not a record. Chelomei's scheme put the whole expedition on one UR-700 launch: about 150 t in low orbit, of which some 17 t would reach the Moon's surface and only a capsule of about 3 t would come home. Before anyone trusted it, a crew of two had to live aboard for the length of a lunar trip, about eight days, and its landing and return stages had to start, stop and restart in vacuum. One thing Earth orbit could not prove: the capsule's return from the Moon at about 11 km/s."
     },
     "gemini-eor-earth-orbit": {
       "name": "Gemini EOR: Earth-orbit tests",
       "description": "A light lunar lander for Gemini, assembled in Earth orbit, put through its paces close to home.",
-      "historyNote": "In 1961 Langley engineers sketched the smallest Moon lander anyone took seriously: one astronaut standing on an open rocket platform with landing legs, good for two to four hours on the surface. Gemini's manager, James Chamberlin, later built a plan to land Gemini crews on the Moon around a lander much like it. NASA chose Apollo instead."
+      "historyNote": "In 1961 Langley engineers sketched the smallest Moon lander anyone took seriously: one astronaut standing on an open rocket platform with landing legs, good for two to four hours on the surface. Gemini's manager, James Chamberlin, later built a plan to land Gemini crews on the Moon around a lander much like it. NASA chose Apollo instead.",
+      "longDescription": "Earth-orbit rendezvous meant building the Moon ship in orbit from pieces launched separately, so the pieces had to be shown to find each other and lock together long before anyone trusted the method far from home. Gemini itself took the first steps: Gemini 6A and 7 met in orbit in December 1965, and Gemini 8 made the first docking, with an Agena, on 16 March 1966. These test flights go further: the service module joined to the capsule, the tug's engine restarted on command, and the open lander flown and recovered while home is still a single orbit away."
     },
     "circumlunar-gemini": {
       "name": "Circumlunar Gemini",
       "description": "A Gemini capsule pushed around the Moon by a Transtage stage it docks with in Earth orbit.",
-      "historyNote": "McDonnell proposed flying Gemini to the Moon in 1961, before the program even had its name. Its ideas ranged from a capsule pushed around the Moon by a Centaur stage, docking with the gear built for the Agena, to a Gemini modified to land. NASA kept the Moon for Apollo, and none of them flew."
+      "historyNote": "McDonnell proposed flying Gemini to the Moon in 1961, before the program even had its name. Its ideas ranged from a capsule pushed around the Moon by a Centaur stage, docking with the gear built for the Agena, to a Gemini modified to land. NASA kept the Moon for Apollo, and none of them flew.",
+      "longDescription": "A Gemini launched on its Titan II would meet a Transtage, the upper stage of the Air Force's Titan III, dock with it in Earth orbit and ride its burn onto a path that swings around the Moon and falls back to Earth with no further firing needed. Finding and docking with a stage was work Gemini already did. The hard part was coming home: a capsule returning from the Moon meets the air at about 11 km/s instead of under 8 km/s, with roughly twice the energy to shed per kilogram, and NASA's studies called for a thicker heat shield. Such plans were studied from 1961 to 1965 and never funded."
     },
     "lunar-orbital-gemini": {
       "name": "Lunar-orbit Gemini",
       "description": "A Gemini capsule with a propulsion module strong enough to brake into lunar orbit and break out again.",
-      "historyNote": "McDonnell proposed flying Gemini to the Moon in 1961, before the program even had its name. Its ideas ranged from a capsule pushed around the Moon by a Centaur stage, docking with the gear built for the Agena, to a Gemini modified to land. NASA kept the Moon for Apollo, and none of them flew."
+      "historyNote": "McDonnell proposed flying Gemini to the Moon in 1961, before the program even had its name. Its ideas ranged from a capsule pushed around the Moon by a Centaur stage, docking with the gear built for the Agena, to a Gemini modified to land. NASA kept the Moon for Apollo, and none of them flew.",
+      "longDescription": "Flying around the Moon needs one big burn; stopping there needs two more. A lunar-orbit Gemini would carry a propulsion module to brake into orbit around the Moon and later to fire it home again, each burn worth about 900 m/s or more. Both burns come behind the Moon, cut off from Earth's radio, so the crew and the ground learn whether the engine worked only when the craft reappears on the right path. One study had a Centaur send the stack toward the Moon and an Agena make both lunar burns. The prize was a long look at the surface and practice for a landing. It remained a proposal."
     },
     "gemini-direct-ascent": {
       "name": "Gemini Direct Ascent",
       "description": "One large spacecraft built around Gemini that flies straight to the Moon, lands, and lifts off for home.",
-      "historyNote": "McDonnell proposed flying Gemini to the Moon in 1961, before the program even had its name. Its ideas ranged from a capsule pushed around the Moon by a Centaur stage, docking with the gear built for the Agena, to a Gemini modified to land. NASA kept the Moon for Apollo, and none of them flew."
+      "historyNote": "McDonnell proposed flying Gemini to the Moon in 1961, before the program even had its name. Its ideas ranged from a capsule pushed around the Moon by a Centaur stage, docking with the gear built for the Agena, to a Gemini modified to land. NASA kept the Moon for Apollo, and none of them flew.",
+      "longDescription": "Direct ascent is the simplest Moon plan to describe and the hardest to launch: one craft goes all the way down to the surface and all the way back. Everything needed for the trip home, the return engine, its propellant and the heat-shielded capsule, has to be landed and then lifted off again, and every kilogram of it costs several more in propellant below it. The Gemini design stacked a braking module with a hydrogen-burning RL10 engine, dropped about 1,800 m above the surface, a landing module, a module for the liftoff and the burn home, and a capsule strengthened for the faster return. It needed a giant rocket to itself."
     },
     "apollo": {
       "name": "Apollo",
       "description": "A command and service module with a separate lunar module: two astronauts land while the third waits in lunar orbit, and they meet again to fly home.",
-      "historyNote": "Apollo 11 landed on 20 July 1969, and Neil Armstrong and Buzz Aldrin walked on the Moon while Michael Collins waited in orbit. Six Apollo missions landed in all, and twelve astronauts walked on the Moon."
+      "historyNote": "Apollo 11 landed on 20 July 1969, and Neil Armstrong and Buzz Aldrin walked on the Moon while Michael Collins waited in orbit. Six Apollo missions landed in all, and twelve astronauts walked on the Moon.",
+      "longDescription": "Apollo reached the Moon by splitting the job. Two astronauts went down in the lunar module, built for nothing but landing and lifting off, while the third waited in lunar orbit in the command module, which carried the heat shield. Propellant for the trip home never had to be landed and lifted again, and that saving let one Saturn V carry the whole expedition. The price was a rendezvous around the Moon, 384,000 km from home. NASA chose lunar orbit rendezvous in July 1962, over a giant direct-ascent rocket and over assembly in Earth orbit. Crews flew to the Moon from December 1968 to December 1972."
     },
     "gemini-eor": {
       "name": "Gemini EOR",
       "description": "A Moon landing assembled from parts launched separately and joined in Earth orbit, with a light open lander for the final step down.",
-      "historyNote": "In 1961 Langley engineers sketched the smallest Moon lander anyone took seriously: one astronaut standing on an open rocket platform with landing legs, good for two to four hours on the surface. Gemini's manager, James Chamberlin, later built a plan to land Gemini crews on the Moon around a lander much like it. NASA chose Apollo instead."
+      "historyNote": "In 1961 Langley engineers sketched the smallest Moon lander anyone took seriously: one astronaut standing on an open rocket platform with landing legs, good for two to four hours on the surface. Gemini's manager, James Chamberlin, later built a plan to land Gemini crews on the Moon around a lander much like it. NASA chose Apollo instead.",
+      "longDescription": "Instead of one giant rocket, Earth-orbit rendezvous used several smaller launches: the capsule, a service module, the open lander and a Saturn S-IVB stage as a tug, joined in orbit before the tug pushed the stack toward the Moon. Each launch was easier, but they all had to fly on schedule, because a stage waiting in orbit slowly loses its liquid hydrogen as it boils away. At the Moon the light lander takes a single suited astronaut down to the surface and back up to the waiting stack, with no cabin around him. NASA weighed Earth-orbit rendezvous for Apollo and chose lunar orbit rendezvous in 1962."
     },
     "soyuz-7k-l1": {
       "name": "Soyuz 7K-L1 circumlunar",
       "description": "A two-person Soyuz flown once around the Moon and straight back, without stopping in lunar orbit.",
-      "historyNote": "The 7K-L1 flew without a crew under the name Zond. In September 1968 Zond 5 went around the Moon and came home with two tortoises aboard, and Apollo 8 carried people around it three months later. No 7K-L1 ever flew a crew."
+      "historyNote": "The 7K-L1 flew without a crew under the name Zond. In September 1968 Zond 5 went around the Moon and came home with two tortoises aboard, and Apollo 8 carried people around it three months later. No 7K-L1 ever flew a crew.",
+      "longDescription": "The 7K-L1 was a Soyuz stripped for one job: a loop around the Moon and back. The orbital module was left off, so two cosmonauts would have shared about 4 m³ for a trip of about a week. A Proton rocket launched it and a Blok D stage sent it toward the Moon on a path that falls back to Earth by itself. Coming home at nearly escape speed, the capsule dipped into the atmosphere, skipped back out and entered again, which spread the braking and let it land in the Soviet Union. Of its uncrewed flights as Zond, only Zond 7 in August 1969 came home in a way that would have been safe for a crew."
     },
     "soyuz-7k-l3": {
       "name": "Soyuz 7K-L3 lunar landing",
       "description": "A lunar-orbit Soyuz and the one-person LK lander: a single cosmonaut goes down while the other stays in orbit.",
-      "historyNote": "The LK lander was tested without a crew in Earth orbit three times, as Kosmos 379, 398 and 434 in 1970 and 1971, firing its engine as if landing on the Moon and lifting off again. The last test qualified it as flightworthy. It never went to the Moon: the N1 rocket meant to carry it never made a successful flight."
+      "historyNote": "The LK lander was tested without a crew in Earth orbit three times, as Kosmos 379, 398 and 434 in 1970 and 1971, firing its engine as if landing on the Moon and lifting off again. The last test qualified it as flightworthy. It never went to the Moon: the N1 rocket meant to carry it never made a successful flight.",
+      "longDescription": "The Soviet landing plan was lunar orbit rendezvous cut to the minimum: two cosmonauts, one of whom goes down. In lunar orbit one cosmonaut would spacewalk from the Soyuz 7K-LOK to the LK, since no tunnel joined the two craft, and land alone after the Blok D stage had done most of the braking. After a short stay he would lift off, dock with the waiting LOK and spacewalk back carrying his samples. Every step had to work without a second pair of hands, and the cosmonaut in orbit could not go down to help. The whole complex rode one N1 rocket, and the program was cancelled in May 1974."
     },
     "lk-700": {
       "name": "LK-700 Direct Ascent",
       "description": "A heavy spacecraft that flies straight to the Moon, lands with its whole crew and returns, launched on the giant UR-700.",
-      "historyNote": "Vladimir Chelomei proposed the LK-700 in 1964 as a simpler path than Korolev's: one craft on his giant UR-700, landing directly on the Moon and returning with no rendezvous. The money went to the N1 instead, the UR-700 was never built, and the LK-700 was cancelled in 1974."
+      "historyNote": "Vladimir Chelomei proposed the LK-700 in 1964 as a simpler path than Korolev's: one craft on his giant UR-700, landing directly on the Moon and returning with no rendezvous. The money went to the N1 instead, the UR-700 was never built, and the LK-700 was cancelled in 1974.",
+      "longDescription": "Chelomei's answer to Korolev's lunar orbit rendezvous was to avoid a rendezvous altogether. One UR-700 would put about 150 t in Earth orbit, and stage after stage would burn it down: three clustered stages to leave Earth orbit, a braking stage, a landing stage, and a return stage that lifts off from the Moon with a capsule of about 3 t. Two cosmonauts would land together, stay up to a day and walk on the surface twice, about eight days for the whole trip. The price of skipping the rendezvous was size: a rocket far bigger than any yet built, to put two people on the Moon."
     },
     "apollo-earth-orbit": {
       "name": "Apollo: Earth-orbit tests",
       "description": "The Apollo spacecraft proved close to home: long flights, spacewalks, and the lunar module flown, separated and docked again in Earth orbit.",
-      "historyNote": "Apollo 9 tested the lunar module in Earth orbit in March 1969. With two crewed craft flying at once, the crew named them Spider and Gumdrop. James McDivitt and Russell Schweickart flew Spider away from Gumdrop and back, proving the lander before it went to the Moon."
+      "historyNote": "Apollo 9 tested the lunar module in Earth orbit in March 1969. With two crewed craft flying at once, the crew named them Spider and Gumdrop. James McDivitt and Russell Schweickart flew Spider away from Gumdrop and back, proving the lander before it went to the Moon.",
+      "longDescription": "Apollo's hardware flew in Earth orbit first, where a crew in trouble could be home within hours instead of days. On 22 January 1968 Apollo 5 flew a lunar module with nobody aboard and fired its ascent engine while it was still joined to the descent stage, as an aborted landing would. In October 1968 Apollo 7 kept three astronauts in the command and service module for nearly 11 days, as long as a lunar trip, and fired the service engine eight times. Only after both did a crew fly the lander away from the command ship and back, with a spacewalk on the same flight."
     },
     "soyuz-7k-ok": {
       "name": "Soyuz 7K-OK",
       "description": "The Earth-orbit Soyuz: long flights, and automatic rendezvous and docking guided by the Igla radar system.",
-      "historyNote": "In October 1967 Kosmos 186 and 188 made the first automatic docking, steered by the Igla system with nobody aboard. In January 1969 Soyuz 4 and 5 made the first docking of two crewed craft, and Aleksei Yeliseyev and Yevgeny Khrunov spacewalked across, since there was no tunnel between the ships."
+      "historyNote": "In October 1967 Kosmos 186 and 188 made the first automatic docking, steered by the Igla system with nobody aboard. In January 1969 Soyuz 4 and 5 made the first docking of two crewed craft, and Aleksei Yeliseyev and Yevgeny Khrunov spacewalked across, since there was no tunnel between the ships.",
+      "longDescription": "The 7K-OK was the first Soyuz, built to practice in Earth orbit what the Moon flights would need: maneuvering, rendezvous, automatic docking guided by the Igla radar system, and long stays. It started badly. Soyuz 1 killed Vladimir Komarov in April 1967 when its parachute failed, and in October 1968 Soyuz 3 reached its uncrewed target but could not dock. In October 1969 Soyuz 6, 7 and 8 put seven cosmonauts in orbit at once, and Soyuz 6 tried welding in vacuum. In June 1970 Soyuz 9 stayed up nearly 18 days, and its crew could barely walk afterward: an early warning for the space station flights that followed."
     }
   },
   "components": {
     "sputnik-1-satellite": {
       "name": "Sputnik 1 satellite",
       "description": "A polished aluminum sphere about half a meter across, with four long antennas and a battery-powered transmitter.",
-      "historyNote": "Sputnik 1 only sent a simple beep, for about three weeks until its batteries ran down. Two physicists at Johns Hopkins' Applied Physics Laboratory found they could work out its whole orbit from the Doppler shift of that beep. Their lab then turned the idea around: if you know a satellite's orbit, the same shift tells you where you are. That became Transit, the US Navy's satellite navigation system, an ancestor of GPS."
+      "historyNote": "Sputnik 1 only sent a simple beep, for about three weeks until its batteries ran down. Two physicists at Johns Hopkins' Applied Physics Laboratory found they could work out its whole orbit from the Doppler shift of that beep. Their lab then turned the idea around: if you know a satellite's orbit, the same shift tells you where you are. That became Transit, the US Navy's satellite navigation system, an ancestor of GPS.",
+      "longDescription": "A sphere 58 cm across and 83.6 kg, made of two aluminum alloy hemispheres 2 mm thick, bolted together over a seal, with a polished outer layer against the Sun's heat. Inside, in dry nitrogen, 51 kg of silver-zinc batteries surrounded a 1 W transmitter. A fan switched on above 36 °C, and the length of each beep carried the temperature and pressure. Two pairs of whip antennas, 2.4 and 2.9 m long, trailed back from the front."
     },
     "sputnik-2-satellite": {
       "name": "Sputnik 2 satellite",
       "description": "A sealed, air-conditioned cabin for one dog, with instruments for radiation and sunlight. It stays attached to the rocket's core stage in orbit.",
-      "historyNote": "Sputnik 2's Geiger counter, built by Sergei Vernov's team in Moscow, recorded strange swings in its counts. The team blamed a small solar flare. In fact the satellite had been dipping in and out of the radiation belts, months before Explorer 1. Its highest point was over the southern hemisphere, and an Australian team picked up its signals but had no code to read them."
+      "historyNote": "Sputnik 2's Geiger counter, built by Sergei Vernov's team in Moscow, recorded strange swings in its counts. The team blamed a small solar flare. In fact the satellite had been dipping in and out of the radiation belts, months before Explorer 1. Its highest point was over the southern hemisphere, and an Australian team picked up its signals but had no code to read them.",
+      "longDescription": "A cone about 4 m tall and 2 m across at the base, of about 500 kg, never meant to separate from the core stage of its R-7. The solar instruments rode in the nose. Other compartments held the radios, telemetry and air system, and a sealed, padded cabin held the dog, harnessed, fed with gelatin, wired for her vital signs and watched by a television camera at 10 frames a second. A chemical regenerator absorbed carbon dioxide and gave off oxygen."
     },
     "vostok-capsule": {
       "name": "Vostok capsule",
       "description": "A steel sphere for the cosmonaut, joined to an equipment module with batteries, oxygen and a single retrorocket that can't be restarted.",
-      "historyNote": "Why a ball? A sphere whose weight sits slightly off-center settles heat-shield-first into the air on its own, like a weighted toy that rights itself. So Vostok needed no thrusters to hold its attitude during reentry. The price was a steep, uncontrolled descent: cosmonauts felt around eight times their own weight on the way down."
+      "historyNote": "Why a ball? A sphere whose weight sits slightly off-center settles heat-shield-first into the air on its own, like a weighted toy that rights itself. So Vostok needed no thrusters to hold its attitude during reentry. The price was a steep, uncontrolled descent: cosmonauts felt around eight times their own weight on the way down.",
+      "longDescription": "A descent sphere 2.3 m across and about 2.4 t, covered all over in heat shield, holding the pilot's ejection seat. Behind it sat a double-cone equipment module of about 2.3 t with batteries, gas bottles and the TDU-1 retrorocket, which gave about 16 kN for some 45 seconds. After the burn the module was cast off. At about 7 km the cosmonaut ejected and came down under a separate parachute, since the sphere landed too hard for a person."
     },
     "explorer-1-satellite": {
       "name": "Explorer 1 satellite",
       "description": "A slim cylinder of about 14 kg carrying a Geiger counter, temperature sensors and a micrometeorite detector.",
-      "historyNote": "Explorer 1 was meant to spin like a bullet around its long axis. After its first orbit it was tumbling end over end instead. Its flexing wire antennas were bleeding off energy, and a spinning body that loses energy drifts toward spinning around its fattest axis. The surprise taught engineers a rule that every spacecraft designer has followed since."
+      "historyNote": "Explorer 1 was meant to spin like a bullet around its long axis. After its first orbit it was tumbling end over end instead. Its flexing wire antennas were bleeding off energy, and a spinning body that loses energy drifts toward spinning around its fattest axis. The surprise taught engineers a rule that every spacecraft designer has followed since.",
+      "longDescription": "A slim tube 203 cm long and 15 cm across that stayed fixed to the burnt-out last rocket stage and spun with it. It weighed about 14 kg, 8.3 kg of it instruments: a Geiger counter, five temperature sensors and two micrometeorite detectors, a microphone listening for impacts and a grid of fine wires that broke when hit. Mercury batteries, about 40 % of the payload, ran a 60 mW transmitter for 31 days and a 10 mW one for 105."
     },
     "mercury-capsule": {
       "name": "Mercury capsule",
       "description": "A small cone for one astronaut, with an escape tower on top, a heat shield at the base and a pack of retrorockets strapped over it.",
-      "historyNote": "The first Mercury capsules had two small portholes and a side hatch held by 70 bolts, and the astronaut was meant to climb out through the nose. The astronauts pushed for a real window above their heads and a hatch they could blow off with explosive charges. Both arrived with Liberty Bell 7, the second crewed capsule."
+      "historyNote": "The first Mercury capsules had two small portholes and a side hatch held by 70 bolts, and the astronaut was meant to climb out through the nose. The astronauts pushed for a real window above their heads and a hatch they could blow off with explosive charges. Both arrived with Liberty Bell 7, the second crewed capsule.",
+      "longDescription": "A cone about 3.3 m tall and 1.9 m across the base, holding one astronaut in pure oxygen at about 0.38 bar. The heaviest flight version weighed about 1.4 tonnes. An escape tower could pull it off a failing rocket, hydrogen peroxide thrusters turned it, and three solid retrorockets in a pack over the heat shield slowed it for reentry. The fiberglass shield, charring away to carry off the heat, then dropped on a skirt that filled with air to cushion the splashdown."
     },
     "r7-sputnik": {
       "name": "R-7 (Sputnik)",
@@ -384,282 +444,338 @@
     "pegasus-satellite": {
       "name": "Pegasus satellite",
       "description": "Two long wings of thin detector panels that unfold in orbit, each panel recording the hits of tiny particles.",
-      "historyNote": "Pegasus answered a question Apollo's designers couldn't answer on the ground: how often would tiny meteoroids punch through a thin spacecraft skin? Its detector panels, and sample shields mounted on them, found far fewer penetrating hits than the worst fears. Engineers could trust the thin-skinned service module and the heat-shield cocoon of the command module."
+      "historyNote": "Pegasus answered a question Apollo's designers couldn't answer on the ground: how often would tiny meteoroids punch through a thin spacecraft skin? Its detector panels, and sample shields mounted on them, found far fewer penetrating hits than the worst fears. Engineers could trust the thin-skinned service module and the heat-shield cocoon of the command module.",
+      "longDescription": "A satellite of about 1,450 kg, fixed to the rocket's spent upper stage, with two long wings, about 4.3 m wide, that unfolded in orbit. Each wing panel was a capacitor: a sheet of aluminum over a thin plastic film on a layer of copper, held charged. A grain that punched through the aluminum briefly shorted the layers, the panel recharged, and the hit was counted. Solar cells powered it, and a television camera watched the wings open."
     },
     "biosatellite-satellite": {
       "name": "Biosatellite capsule",
       "description": "A capsule with life support for its small passengers, and a heat shield and parachute to bring them home for study.",
-      "historyNote": "Biosatellite 1 carried more than ten million small living things into orbit in December 1966: insects, frog eggs, bacteria, plants. Its capsule separated on schedule, but its small deorbit rocket never fired. The capsule stayed in orbit with its specimens and its data, and it was never recovered."
+      "historyNote": "Biosatellite 1 carried more than ten million small living things into orbit in December 1966: insects, frog eggs, bacteria, plants. Its capsule separated on schedule, but its small deorbit rocket never fired. The capsule stayed in orbit with its specimens and its data, and it was never recovered.",
+      "longDescription": "A spacecraft in three sections: an adapter that stayed in orbit, a reentry vehicle with a small retrorocket and a bowl-shaped heat shield, and inside it the sealed capsule with the specimens and their life support. To come home, the reentry vehicle fired its retrorocket and fell behind its shield. Then the capsule opened its parachute and radioed its position, and an Air Force aircraft caught it in mid-air over the Pacific before it reached the sea."
     },
     "ofo-satellite": {
       "name": "OFO satellite",
       "description": "A small satellite with a water-filled centrifuge for two frogs, wired to record their balance organs.",
-      "historyNote": "The Orbiting Frog Otolith flew bullfrogs because their balance organs are very like ours. Fine electrodes recorded single nerve fibers from the inner-ear sensors that feel gravity, and the frogs rode in water, which cushioned them from the launch. The satellite was built to keep every acceleration below a thousandth of the Earth's gravity."
+      "historyNote": "The Orbiting Frog Otolith flew bullfrogs because their balance organs are very like ours. Fine electrodes recorded single nerve fibers from the inner-ear sensors that feel gravity, and the frogs rode in water, which cushioned them from the launch. The satellite was built to keep every acceleration below a thousandth of the Earth's gravity.",
+      "longDescription": "A cylinder about 0.76 m across and 1.2 m long, of about 133 kg. After launch it let out weights on cables to stop its spin and extended four booms, whose extra inertia kept it steady. Inside, a sealed 41 kg canister held the frogs in a water-filled centrifuge that swung their heads to 0.6 g for 14 seconds at a time. A silicone-rubber artificial lung, an oxygen bottle and a carbon dioxide absorber kept the water fresh at about 16 °C."
     },
     "pioneer-4-probe": {
       "name": "Pioneer 4 probe",
       "description": "A light cone carrying radiation counters, spun for stability and fired on a path past the Moon.",
-      "historyNote": "Pioneer 4 weighed about 6 kg: a cone of fiberglass half a meter tall, washed with gold so it would conduct electricity and act as part of the antenna. The white stripes painted on it were its whole thermal control, meant to keep the inside between 10 and 50 degrees Celsius. A ring of mercury batteries powered it."
+      "historyNote": "Pioneer 4 weighed about 6 kg: a cone of fiberglass half a meter tall, washed with gold so it would conduct electricity and act as part of the antenna. The white stripes painted on it were its whole thermal control, meant to keep the inside between 10 and 50 degrees Celsius. A ring of mercury batteries powered it.",
+      "longDescription": "A cone about 51 cm tall and 23 cm wide at the base, riding on the Juno II's last stage and spun for stability. Two Geiger-Mueller tubes counted radiation, and a photoelectric sensor was meant to see the Moon's light at close range and trigger a test of a lunar photography system. About 11 hours into the flight a despin mechanism slowed it from 480 to about 11 turns a minute."
     },
     "zond-5-probe": {
       "name": "Zond 5 spacecraft",
       "description": "An uncrewed Soyuz 7K-L1 with a descent capsule and life support for its animal passengers.",
-      "historyNote": "Zond 5's trip home went wrong. Its star tracker, fogged by gas from its own heated interior coating, delayed a course correction, and on the way back the capsule could not fly its planned guided reentry. It fell ballistically, at much higher g-forces than planned, into the Indian Ocean instead of Kazakhstan. The tortoises inside survived."
+      "historyNote": "Zond 5's trip home went wrong. Its star tracker, fogged by gas from its own heated interior coating, delayed a course correction, and on the way back the capsule could not fly its planned guided reentry. It fell ballistically, at much higher g-forces than planned, into the Indian Ocean instead of Kazakhstan. The tortoises inside survived.",
+      "longDescription": "A Soyuz without its orbital module, of about 5.4 t: a service module with the main engine and solar panels, and the bell-shaped descent capsule, with a cone and a dish antenna for deep space in the orbital module's place. It gained a gyro platform and star sensors, lost its reserve parachute, and carried life support for animals. The capsule was meant to dip into the atmosphere, climb back out and dive in again, splitting its braking into two gentler passes."
     },
     "ranger-3-probe": {
       "name": "Ranger 3 probe",
       "description": "A probe with a television camera and a capsule meant to survive the impact and keep reporting.",
-      "historyNote": "Rangers 3 to 6 were baked before launch to kill any Earth microbes that might contaminate the Moon. The engineer running the sterilization warned that the heat was damaging the electronics, and NASA's board of inquiry agreed after the failures. Later Rangers were built with parts that were never baked, and Ranger 7 sent back over 4,000 pictures in 1964."
+      "historyNote": "Rangers 3 to 6 were baked before launch to kill any Earth microbes that might contaminate the Moon. The engineer running the sterilization warned that the heat was damaging the electronics, and NASA's board of inquiry agreed after the failures. Later Rangers were built with parts that were never baked, and Ranger 7 sent back over 4,000 pictures in 1964.",
+      "longDescription": "A hexagonal base 1.5 m across carrying a dish antenna and two solar panels spanning 5.2 m, with a television camera and its telescope looking ahead. On top sat the 42.6 kg capsule: a seismometer, a transmitter and batteries for 30 days, in a casing of balsa wood. A radar altimeter was to release it about 21 km above the surface and fire a retrorocket beneath it, so it would hit slowly enough to bounce, roll and keep working."
     },
     "luna-2-probe": {
       "name": "Luna 2 probe",
       "description": "A sphere of instruments and pennants bearing the Soviet emblem, built to strike the Moon.",
-      "historyNote": "Luna 2 hit the Moon on 13 September 1959, the first human-made object to reach another world. It carried two balls covered in small metal pentagons engraved with the Soviet emblem, built to burst apart on impact and scatter them. Khrushchev gave a copy to President Eisenhower on his visit to the United States days later."
+      "historyNote": "Luna 2 was not the only thing from Earth to hit the Moon that day. The rocket's last stage, which had pushed the probe onto its path, followed it across the same 38 hours and struck about half an hour after it, somewhere no one recorded. Luna 2 itself was much like Luna 1, which had missed the Moon in January and become the first craft to orbit the Sun.",
+      "longDescription": "A sphere of about 390 kg with whip antennas, carrying magnetometers, Geiger and scintillation counters, ion traps to catch charged particles, and a radio. It also carried the pennants bearing the Soviet emblem. It had no engine of its own, so the rocket's last stage had to set it on a path that would hit the Moon unaided."
     },
     "pioneer-2-probe": {
       "name": "Pioneer 2 probe",
       "description": "A small probe with a kick motor of its own to brake into lunar orbit.",
-      "historyNote": "Pioneer 1 and 2 were short cylinders with a cone at each end, built around a solid rocket that was meant to brake them into orbit around the Moon. Eight small rockets on the upper cone would trim their speed on the way. Each carried a scanning infrared camera, meant to take crude pictures of the Moon's surface."
+      "historyNote": "Pioneer 1 and 2 were short cylinders with a cone at each end, built around a solid rocket that was meant to brake them into orbit around the Moon. Eight small rockets on the upper cone would trim their speed on the way. Each carried a scanning infrared camera, meant to take crude pictures of the Moon's surface.",
+      "longDescription": "A probe about 74 cm across and 76 cm long, of about 39 kg, built around a Thiokol TX-8-6 solid motor meant to slow it into orbit around the Moon. Its instruments were an ion chamber, a magnetometer, a micrometeoroid sensor, a counter telescope for cosmic rays and temperature sensors, all running on batteries. The motor gave a single fixed push: the probe had to arrive on the right path to use it."
     },
     "lunar-orbiter-probe": {
       "name": "Lunar Orbiter spacecraft",
       "description": "A camera with a small film laboratory on board, solar panels, and an engine for lunar orbit.",
-      "historyNote": "On 23 August 1966 Lunar Orbiter 1 pointed its camera past the Moon's edge and photographed the Earth from about 380,000 km, the first picture of our planet from near the Moon. It wasn't on the plan: a fault in the camera's motion compensation had changed the film schedule and left room for a few unplanned frames."
+      "historyNote": "On 23 August 1966 Lunar Orbiter 1 pointed its camera past the Moon's edge and photographed the Earth from about 380,000 km, the first picture of our planet from near the Moon. It wasn't on the plan: a fault in the camera's motion compensation had changed the film schedule and left room for a few unplanned frames.",
+      "longDescription": "A craft of about 387 kg, stabilized on all three axes, with four solar panels, a dish antenna and a rocket engine for braking into lunar orbit. Its 68 kg Kodak camera, adapted from a reconnaissance satellite's, shot through two lenses at once, 610 mm and 80 mm, onto one roll of film. The film was developed on board against a damp Bimat processing web, dried, then read by a fine scanning beam of light and radioed home strip by strip."
     },
     "surveyor-lander": {
       "name": "Surveyor lander",
       "description": "A three-legged lander with a braking rocket, throttleable engines for the last stretch, and a camera.",
-      "historyNote": "On 17 November 1967 Surveyor 6 fired its engines again on the Moon, rose about 4 meters and set down about 2.5 meters away: the first liftoff from another world. The hop let its camera look at its first landing site and judge the soil from a second angle, and it showed that a craft could fire its engines on the Moon."
+      "historyNote": "On 17 November 1967 Surveyor 6 fired its engines again on the Moon, rose about 4 meters and set down about 2.5 meters away: the first liftoff from another world. The hop let its camera look at its first landing site and judge the soil from a second angle, and it showed that a craft could fire its engines on the Moon.",
+      "longDescription": "A triangular aluminum frame about 3 m tall on three legs with shock absorbers, about 995 kg at launch and about 300 kg on the Moon. A solid retrorocket, over half its launch mass, fired about 75 km up and was dropped at about 11 km. Three throttleable vernier engines, steered by Doppler radar, then brought it down to about 3.4 m above the ground and cut off, letting it drop at about 3 m/s. A television camera on top looked out over the site."
     },
     "luna-15-probe": {
       "name": "Luna 15 lander",
       "description": "A landing stage with a drill arm, and a small ascent rocket carrying a sealed capsule for the sample.",
-      "historyNote": "The Soviet sample-return craft needed no rendezvous and no navigator. After the drill had sealed its core in a small capsule, the ascent stage fired straight up from the lander and flew directly back toward Earth. Luna 16's capsule, in September 1970, plunged ballistically into the atmosphere and came down under a parachute in Kazakhstan."
+      "historyNote": "The Soviet sample-return craft needed no rendezvous and no navigator. After the drill had sealed its core in a small capsule, the ascent stage fired straight up from the lander and flew directly back toward Earth. Luna 16's capsule, in September 1970, plunged ballistically into the atmosphere and came down under a parachute in Kazakhstan.",
+      "longDescription": "A landing stage on four legs, with fuel tanks, a landing radar, a television camera and a drill on an arm, carrying an ascent stage of about 520 kg. The drill could reach about 35 cm and swing its core up into a small spherical capsule on the ascent stage. The ascent stage had its own engine and tanks, and had to reach about 2,700 m/s to head for Earth."
     },
     "luna-3-probe": {
       "name": "Luna 3 probe",
       "description": "A probe with a camera that develops film on board and scans it for radio.",
-      "historyNote": "Luna 3 spun slowly for most of its flight, but for its photographs it had to point. Photocells found the Sun and the Moon, small gas jets turned the craft and held it steady, and a photocell on its upper end started the camera when it saw the sunlit far side. It was the first Soviet spacecraft that could hold itself steady on all three axes."
+      "historyNote": "Luna 3 spun slowly for most of its flight, but for its photographs it had to point. Photocells found the Sun and the Moon, small gas jets turned the craft and held it steady, and a photocell on its upper end started the camera when it saw the sunlit far side. It was the first Soviet spacecraft that could hold itself steady on all three axes.",
+      "longDescription": "A sealed cylinder about 1.3 m long with rounded ends, weighing about 280 kg and filled with gas at about a fifth of sea-level pressure. Solar cells on its skin charged batteries inside, and shutters opened to shed heat when the inside grew warmer than 25 °C. Its camera had two lenses and 35 mm film. After the shoot the film was developed, fixed and dried on board, then read by a moving spot of light and sent home like a fax."
     },
     "luna-17-lander": {
       "name": "Luna 17 lander",
       "description": "A landing stage with folding ramps at each end, for the rover to roll off.",
-      "historyNote": "Luna 17's landing stage carried its rover on top, with folding ramps on two opposite sides, so Lunokhod could drive off whichever way was clear of boulders. It used the east side. The stage itself had a full rocket landing system of its own: a main engine, tanks and four legs, the same design that brought Luna 16's sample drill down two months earlier."
+      "historyNote": "Luna 17's landing stage carried its rover on top, with folding ramps on two opposite sides, so Lunokhod could drive off whichever way was clear of boulders. It used the east side. The stage itself had a full rocket landing system of its own: a main engine, tanks and four legs, the same design that brought Luna 16's sample drill down two months earlier.",
+      "longDescription": "The landing stage was a squat platform of propellant tanks around a main engine, about 3.3 m across its legs, with the rover carried on top and folding ramps on both sides for it to drive down. Extra tanks used for braking into lunar orbit were dropped there, so the stage did not carry their weight down to the ground. From an orbit 19 by 85 km high it fired its engine and came down in about six minutes. On the surface, rover included, it weighed about 1,800 kg."
     },
     "lunokhod-1-rover": {
       "name": "Lunokhod rover",
       "description": "An eight-wheeled rover under a hinged lid of solar cells, driven from Earth with a few seconds' delay.",
-      "historyNote": "Lunokhod 1 carried a French laser reflector. After the rover fell silent in 1971 nobody knew exactly where it had stopped, and laser beams from Earth found nothing for almost 40 years. In 2010 a NASA orbiter photographed the rover, and within weeks a telescope in New Mexico got a strong reflection back from it on its first try."
+      "historyNote": "Lunokhod 1 carried a French laser reflector. After the rover fell silent in 1971 nobody knew exactly where it had stopped, and laser beams from Earth found nothing for almost 40 years. In 2010 a NASA orbiter photographed the rover, and within weeks a telescope in New Mexico got a strong reflection back from it on its first try.",
+      "longDescription": "Lunokhod was a pressurized, tub-shaped body about 1.35 m high, riding on eight wheels, each with its own electric motor, so one failed motor would not stop it. A convex lid lined with solar cells opened by day to charge its batteries and closed at night, when a polonium-210 heat source kept the inside warm. Four television cameras showed the way to its drivers on Earth, a ninth wheel measured distance, and instruments tested the soil's strength and chemistry."
     },
     "pioneer-6-probe": {
       "name": "Pioneer Sun probe",
-      "description": "A small drum-shaped probe covered in solar cells, spinning slowly to keep stable.",
-      "historyNote": "Pioneer 6 and its three sisters, spaced around the Sun along the Earth's orbit, became the first solar weather network in space. They could see parts of the Sun days before its rotation turned them toward the Earth, and their warnings of solar storms went to airlines, power companies and NASA's planners for the Apollo flights."
+      "description": "A small drum-shaped probe covered in solar cells, spinning about once a second to keep stable.",
+      "historyNote": "Pioneer 6 and its three sisters, spaced around the Sun along the Earth's orbit, became the first solar weather network in space. They could see parts of the Sun days before its rotation turned them toward the Earth, and their warnings of solar storms went to airlines, power companies and NASA's planners for the Apollo flights.",
+      "longDescription": "A drum about 0.94 m across and 0.81 m tall, its sides covered in solar cells that gave about 79 W. It spun about once a second, its axis at right angles to the Earth's orbit, so its instruments swept around the sky with every turn and the spin itself kept it steady. A directional antenna kept contact with the Earth at up to 512 bits a second, and a 1.8 m boom held the magnetometer away from the craft's own magnetic field."
     },
     "mariner-10-probe": {
       "name": "Mariner 10 probe",
       "description": "A probe with two television cameras and a sunshade, steered past Venus and on to Mercury.",
-      "historyNote": "Mariner 10 was the first spacecraft to steer with the pressure of sunlight. Its gyroscopes and solar panels had set it wobbling, wasting the nitrogen gas its thrusters needed, so controllers tilted the two panels slightly differently and let sunlight pushing on them hold it steady. The gas ran out on 24 March 1975, eight days after its last pass of Mercury."
+      "historyNote": "Mariner 10 was the first spacecraft to steer with the pressure of sunlight. Its gyroscopes and solar panels had set it wobbling, wasting the nitrogen gas its thrusters needed, so controllers tilted the two panels slightly differently and let sunlight pushing on them hold it steady. The gas ran out on 24 March 1975, eight days after its last pass of Mercury.",
+      "longDescription": "Mariner 10 was built around an eight-sided magnesium frame about 1.4 m across that held its electronics, with two solar panels each about 2.7 m long reaching out to the sides. A sunshade on the side facing the Sun protected it as it fell to about half the Earth's distance from the Sun. A dish 1.37 m across sent pictures home at up to 117.6 kilobits a second, and a 5.8 m boom held the magnetometers clear of the craft."
     },
     "mariner-5-probe": {
       "name": "Mariner 5 probe",
       "description": "A flyby probe with instruments that read Venus's atmosphere from the way its radio signal bends.",
-      "historyNote": "Mariner 5 began as the spare for Mariner 4, the first probe to photograph Mars. When Mariner 4 worked, NASA rebuilt the spare for Venus: it lost its camera, gained a sunshade, and had its solar panels turned to face the other way and made smaller, since it would be flying toward the Sun instead of away."
+      "historyNote": "Mariner 5 began as the spare for Mariner 4, the first probe to photograph Mars. When Mariner 4 worked, NASA rebuilt the spare for Venus: it lost its camera, gained a sunshade, and had its solar panels turned to face the other way and made smaller, since it would be flying toward the Sun instead of away.",
+      "longDescription": "An eight-sided magnesium frame about 1.27 m across, weighing about 245 kg, with four solar panels that spanned 5.5 m and gave about 555 W near Venus, backed by a silver-zinc battery. A dish antenna sat on top, and a mast held the low-gain antenna and the magnetometer. It had no camera. Its instruments measured ultraviolet light, magnetic fields and charged particles, and its radio was itself an instrument, read as the signal passed through the atmosphere."
     },
     "pioneer-venus-orbiter-probe": {
       "name": "Pioneer Venus Orbiter",
       "description": "A drum-shaped orbiter with a radar mapper and instruments for the upper atmosphere.",
-      "historyNote": "Pioneer Venus 1 found a second career as a comet observatory. In early 1986, when Halley's Comet passed behind the Sun as seen from the Earth, the orbiter at Venus had a clear view. Its ultraviolet spectrometer tracked the hydrogen streaming off the comet and measured how much water it was losing, near the comet's most active time."
+      "historyNote": "Pioneer Venus 1 found a second career as a comet observatory. In early 1986, when Halley's Comet passed behind the Sun as seen from the Earth, the orbiter at Venus had a clear view. Its ultraviolet spectrometer tracked the hydrogen streaming off the comet and measured how much water it was losing, near the comet's most active time.",
+      "longDescription": "A squat drum 2.5 m across and 1.2 m high, spinning about five times a minute, with solar cells on its sides that gave about 312 W at Venus. A dish 1.09 m across was turned against the spin so that it stayed pointed at the Earth while the body spun beneath it. A solid rocket motor braked it into orbit. Its radar looked down on the low part of each orbit to measure the height of the ground, building a map with features about 75 km across."
     },
     "pioneer-venus-multiprobe-craft": {
       "name": "Pioneer Venus Multiprobe",
       "description": "A carrier bus with one large and three small entry probes, each with its own heat shield.",
-      "historyNote": "The bus that carried the four Pioneer Venus probes had no heat shield and no parachute, but it was not wasted. About 90 minutes after the probes went in, it followed them, and its two mass spectrometers sampled the thin upper air that the probes had fallen through too fast to measure. It sent data for about a minute before it burned up near 110 km."
+      "historyNote": "The bus that carried the four Pioneer Venus probes had no heat shield and no parachute, but it was not wasted. About 90 minutes after the probes went in, it followed them, and its two mass spectrometers sampled the thin upper air that the probes had fallen through too fast to measure. It sent data for about a minute before it burned up near 110 km.",
+      "longDescription": "A spinning drum 2.5 m across, like the orbiter's, carrying four cone-shaped probes. The large probe, about 1.5 m across and some 315 kg, held its instruments in a sealed vessel behind a nose cone and later rode a parachute. The three small probes, about 0.8 m across and 90 kg each, kept their shells all the way down and opened small doors for their instruments about 70 km up."
     },
     "venera-15-probe": {
       "name": "Venera 15 orbiter",
       "description": "An orbiter carrying a large dish for side-looking radar mapping.",
-      "historyNote": "Venera 15 and 16 were built from the orbiter half of the earlier Venera lander missions, with a radar dish about 6 meters long in place of a lander. Because Venus is hidden under its clouds, they mapped it by radar from the side, at a resolution of one to two kilometers, over eight months."
+      "historyNote": "Venera 15 and 16 were built from the orbiter half of the earlier Venera lander missions, with a radar dish about 6 meters long in place of a lander. Because Venus is hidden under its clouds, they mapped it by radar from the side, at a resolution of one to two kilometers, over eight months.",
+      "longDescription": "A heavy orbiter with a long cylindrical body, a curved radar antenna at one end and a smaller dish for the altimeter beside it, aimed at the center of the planet while the radar looked aside. The radar worked at a wavelength of 8 cm, sending pulses down to one side and recording their echoes, and the computers on board stored each picture until it was complete. At launch it weighed about 5,250 kg, of which about 4,000 kg was the craft without its fuel."
     },
     "venera-7-probe": {
       "name": "Venera 7 lander",
       "description": "A small, heavily insulated descent capsule built to withstand Venus's pressure and heat.",
-      "historyNote": "Venera 4 had been built for about 10 atmospheres of pressure and was crushed high above the ground; Venera 5 and 6 were built for 25 and crushed too. Venera 7's lander was built for 180 atmospheres and 540 degrees Celsius, with a titanium hull in place of aluminum and magnesium alloy, and was chilled to about −8 °C by its carrier before entry. The extra strength cost weight, so it carried few instruments."
+      "historyNote": "Venera 4 had been built for about 10 atmospheres of pressure and was crushed high above the ground; Venera 5 and 6 were built for 25 and crushed too. Venera 7's lander was built for 180 atmospheres and 540 degrees Celsius, with a titanium hull in place of aluminum and magnesium alloy, and was chilled to about −8 °C by its carrier before entry. The extra strength cost weight, so it carried few instruments.",
+      "longDescription": "The Venera 7 lander was a descent capsule of about 500 kg, built far stronger than Venus's heat and pressure were expected to need, wrapped in insulation, with its parachute packed on top. The parachute opened about 60 km up, held small at first by a cord that melted in the heat, so that the canopy opened fully only in the denser air below. Its temperature sensors were its main instrument: the surface pressure was later worked out from the temperature, not measured."
     },
     "venera-9-probe": {
       "name": "Venera lander and carrier",
       "description": "A carrier that can fly past or orbit Venus, and a lander protected by a spherical shell.",
-      "historyNote": "Venera 9's lander dropped its parachutes about 50 km above Venus, while it was still far from the ground. Below that the air is so thick that a flat metal disc around the lander, about 2 meters across, was brake enough: it came down the rest of the way on the disc alone and touched the ground at about 7 meters per second."
+      "historyNote": "Venera 9's lander dropped its parachutes about 50 km above Venus, while it was still far from the ground. Below that the air is so thick that a flat metal disc around the lander, about 2 meters across, was brake enough: it came down the rest of the way on the disc alone and touched the ground at about 7 meters per second.",
+      "longDescription": "The carrier had solar panels and its own engine, able to brake into orbit around Venus and relay the lander's signal. The lander rode on top inside a spherical shell 2.4 m across that took the heat of entry at about 10.7 km/s and was then shed. Inside sat a sealed sphere about 80 cm across holding the instruments, wrapped in insulation, with a fluid loop to spread the heat and a crushable ring beneath to soften the landing."
     },
     "mariner-6-probe": {
       "name": "Mariner 6 probe",
       "description": "A flyby probe with cameras and spectrometers on a turntable platform.",
-      "historyNote": "Mariner 4 had sent its pictures of Mars home at about 8 bits a second; each picture took hours. Mariner 6 and 7 had a channel for 16,200 bits a second, almost 2,000 times as fast. Together they sent back about 200 pictures in 1969, against Mariner 4's 22 four years earlier."
+      "historyNote": "Mariner 4 had sent its pictures of Mars home at about 8 bits a second; each picture took hours. Mariner 6 and 7 had a channel for 16,200 bits a second, almost 2,000 times as fast. Together they sent back about 200 pictures in 1969, against Mariner 4's 22 four years earlier.",
+      "longDescription": "Mariner 6 was built on an eight-sided magnesium frame about 1.38 m across, with four solar panels spanning 5.79 m that gave 449 W at Mars and a 1 m dish antenna on top. Below the frame a platform that turned on two axes pointed its two television cameras, infrared and ultraviolet spectrometers and infrared radiometer. Pictures went first to an analog tape recorder and were played back to the Earth after the flyby."
     },
     "mariner-9-probe": {
       "name": "Mariner 9 orbiter",
       "description": "An orbiter with a large engine for braking into Mars orbit, and cameras for mapping.",
-      "historyNote": "Mariner 9 had a twin. Mariner 8 was launched on 8 May 1971, but its Centaur upper stage began to tumble and it fell into the Atlantic. Mariner 9 left three weeks later with a repaired Centaur and both missions' work in its plan: mapping most of the planet, and watching how its surface and air changed over time."
+      "historyNote": "Mariner 9 had a twin. Mariner 8 was launched on 8 May 1971, but its Centaur upper stage began to tumble and it fell into the Atlantic. Mariner 9 left three weeks later with a repaired Centaur and both missions' work in its plan: mapping most of the planet, and watching how its surface and air changed over time.",
+      "longDescription": "Mariner 9 kept the Mariner family's eight-sided frame, but almost half of its launch mass of about 1,000 kg was propellant and gas, feeding a 1,340 N engine that could be restarted up to five times. Four solar panels spanned 6.89 m. A scan platform carried wide- and narrow-angle cameras, an infrared radiometer, an ultraviolet spectrometer and an infrared interferometer spectrometer. It worked until its attitude-control gas ran out."
     },
     "viking-orbiter": {
       "name": "Viking orbiter",
       "description": "An orbiter that carries the lander to Mars, scouts its landing site and relays its signals.",
-      "historyNote": "On 25 July 1976, while it was looking for a landing site for Viking 2, the Viking 1 orbiter photographed a hill in the Cydonia region that looked like a human face, with the Sun low and the shadows making eyes, a nose and a mouth. NASA released it as a curiosity. Higher-resolution pictures in 1998 showed an ordinary eroded hill."
+      "historyNote": "On 25 July 1976, while it was looking for a landing site for Viking 2, the Viking 1 orbiter photographed a hill in the Cydonia region that looked like a human face, with the Sun low and the shadows making eyes, a nose and a mouth. NASA released it as a curiosity. Higher-resolution pictures in 1998 showed an ordinary eroded hill.",
+      "longDescription": "The Viking orbiter grew out of Mariner 9's design: an eight-sided ring about 2.5 m across, with four wings of solar panels giving 620 W at Mars. Most of its launch mass of 2,328 kg was propellant for a 1,323 N engine that braked the orbiter and lander together into orbit. Cameras, an infrared mapper and a water vapor detector rode on a pointable platform, and a relay radio passed on the lander's data."
     },
     "viking-lander": {
       "name": "Viking lander",
       "description": "A lander with a sampling arm and a small onboard laboratory to look for signs of life.",
-      "historyNote": "To keep Earth's microbes off Mars, each Viking lander was sealed in a protective shell and baked whole at about 112 degrees Celsius for some 40 hours, with every part designed to survive it. The shell stayed closed until the spacecraft had left Earth orbit. It was one of the most thorough sterilizations of any spacecraft."
+      "historyNote": "To keep Earth's microbes off Mars, each Viking lander was sealed in a protective shell and baked whole at about 112 degrees Celsius for some 40 hours, with every part designed to survive it. The shell stayed closed until the spacecraft had left Earth orbit. It was one of the most thorough sterilizations of any spacecraft.",
+      "longDescription": "The Viking lander had a six-sided aluminum base on three legs, with two plutonium-powered generators under wind screens. It came down inside an aeroshell whose heat shield took the entry, then a parachute about 16 m across opened 6 km up. Three throttling hydrazine engines, each spreading its exhaust through 18 nozzles to disturb the ground less, set it down at about 2.4 m/s. A sampling arm fed soil to the instruments inside."
     },
     "mars-2-probe": {
       "name": "Mars 2 spacecraft",
       "description": "An orbiter with a lander attached, the lander carrying a small rover tethered by a cable.",
-      "historyNote": "Mars 2 and 3 arrived during the biggest dust storm ever seen on Mars, but they could not wait: their computers released the landers on a schedule set before launch, and it couldn't be changed. Mariner 9, arriving at the same time, simply waited in orbit. The Mars 2 lander crashed on 27 November 1971, the first human-made object to reach the surface."
+      "historyNote": "Mars 2 and 3 arrived during the biggest dust storm ever seen on Mars, but they could not wait: their computers released the landers on a schedule set before launch, and it couldn't be changed. Mariner 9, arriving at the same time, simply waited in orbit. The Mars 2 lander crashed on 27 November 1971, the first human-made object to reach the surface.",
+      "longDescription": "At launch the craft weighed about 4.65 tonnes: a 3.4 tonne orbiter with a 1.2 tonne descent module on top. Inside a cone-shaped aeroshell 2.9 m wide sat the landing capsule, a sphere 1.2 m across, braked by aeroshell, parachutes and a small rocket, with foam inside to absorb the impact. On the ground four petals would open to set it upright and show its two cameras the view, and an arm would set down the 4.5 kg rover, to walk on skis at the end of its cable."
     },
     "mars-m69-probe": {
       "name": "Mars M-69 orbiter",
       "description": "A heavy orbiter with cameras, built to make full use of the Proton's lift.",
-      "historyNote": "The M-69 orbiters weighed about 4.85 tonnes, far more than earlier Soviet planetary probes, and needed the new Proton rocket. Georgy Babakin's team at Lavochkin threw out the planned design and started a new spacecraft only 13 months before launch. Both were lost when their Protons failed, one in the third stage and one about 30 seconds after liftoff."
+      "historyNote": "The M-69 orbiters weighed about 4.85 tonnes, far more than earlier Soviet planetary probes, and needed the new Proton rocket. Georgy Babakin's team at Lavochkin threw out the planned design and started a new spacecraft only 13 months before launch. Both were lost when their Protons failed, one in the third stage and one about 30 seconds after liftoff.",
+      "longDescription": "A heavy orbiter, too heavy for any earlier Soviet rocket, meant to make full use of the Proton. Two fixed solar panels of about 7 square meters gave it power, and a 2.8 m dish antenna carried its data home. Its cameras exposed film, about 160 frames in all, which was scanned on board and sent to Earth as a television signal. Its engine had to start in weightlessness, so a set of small tanks of bubble-free propellant fired briefly first to settle the main supply."
     },
     "pioneer-10-probe": {
       "name": "Pioneer 10 probe",
       "description": "A probe powered by radioisotope generators, since sunlight is too weak at Jupiter for solar panels.",
-      "historyNote": "Sunlight at Jupiter is too weak for solar panels of any practical size, so Pioneer 10 carried four small nuclear generators that turned the heat of decaying plutonium into about 155 watts. They rode on two 3-meter trusses to keep them well away from the instruments, and a third boom held the magnetometer more than 6 meters out."
+      "historyNote": "Sunlight at Jupiter is too weak for solar panels of any practical size, so Pioneer 10 carried four small nuclear generators that turned the heat of decaying plutonium into about 155 watts. They rode on two 3-meter trusses to keep them well away from the instruments, and a third boom held the magnetometer more than 6 meters out.",
+      "longDescription": "A spacecraft of about 258 kg built around a 2.74 m dish antenna, with a six-sided equipment compartment behind it. It spun about five times a minute around the dish's axis, which held the dish pointed at Earth the way a spinning top holds its tilt, and a movable feed in the antenna sensed which way Earth lay. An 8 watt transmitter carried its data home. Sunlight at Jupiter is too weak for solar panels, so radioisotope generators, heated by plutonium, powered it."
     },
     "pioneer-11-probe": {
       "name": "Pioneer 11 probe",
       "description": "A twin of Pioneer 10, steered through Jupiter's gravity onto a path to Saturn.",
-      "historyNote": "At Saturn in September 1979, Pioneer 11 crossed the plane of the rings at the same distance Voyager 2 would have to cross it to go on to Uranus. If the faint outer region held enough ring material to wreck a spacecraft, better to find out with Pioneer. It got through safely, found a new ring, now the F ring, and nearly hit a small, unknown moon."
+      "historyNote": "At Saturn in September 1979, Pioneer 11 crossed the plane of the rings at the same distance Voyager 2 would have to cross it to go on to Uranus. If the faint outer region held enough ring material to wreck a spacecraft, better to find out with Pioneer. It got through safely, found a new ring, now the F ring, and nearly hit a small, unknown moon.",
+      "longDescription": "Built to the same design as Pioneer 10: a spinning craft of about 259 kg with a 2.74 m dish and four radioisotope generators. It added one instrument, a fluxgate magnetometer for the strong fields close to Jupiter. Its own small thrusters made the corrections that steered it through Jupiter's gravity onto a path to Saturn. Its generators gave about 144 watts at Jupiter but only about 100 at Saturn, and that slow fall in power set the length of its working life."
     },
     "agena-target-vehicle": {
       "name": "Agena target vehicle",
       "description": "An upper stage with a docking collar and an engine that can restart: a target for docking practice, and once docked, a stage that can push the capsule higher.",
-      "historyNote": "On 25 October 1965 Gemini 6's crew sat on the pad waiting for their Agena to reach orbit. It exploded about six minutes after launch, and the flight was scrubbed. Within days NASA had a new plan: launch Gemini 7 on its two-week flight, and use it as Gemini 6's target. In December the two capsules flew in formation, as close as about 30 centimeters."
+      "historyNote": "On 25 October 1965 Gemini 6's crew sat on the pad waiting for their Agena to reach orbit. It exploded about six minutes after launch, and the flight was scrubbed. Within days NASA had a new plan: launch Gemini 7 on its two-week flight, and use it as Gemini 6's target. In December the two capsules flew in formation, as close as about 30 centimeters.",
+      "longDescription": "The Agena was a Lockheed upper stage, about 7.9 m long and 1.5 m across, launched by an Atlas and fitted with a McDonnell docking adapter to take the Gemini's nose. Its main engine burned UDMH with nitric acid for about 71 kN of thrust, and was qualified for up to 15 starts. Once docked, the crew could command it to fire, and twice it carried a Gemini far higher than the capsule could go alone: to about 760 km on Gemini 10, and to a record 1,369 km on Gemini 11."
     },
     "x-15-aircraft": {
       "name": "X-15 rocket plane",
       "description": "A black, stubby-winged rocket plane with a single rocket engine and small thrusters for control where the air runs out.",
-      "historyNote": "Above about Mach 5 the air heats a plane's skin to hundreds of degrees, enough to ruin aluminum. The X-15's outer skin was Inconel X, a nickel-chrome alloy, and its structure was designed to soak up the heat of the short, fast flights like a sponge. The pilot sat in an aluminum cabin kept apart from the hot outer shell."
+      "historyNote": "Above about Mach 5 the air heats a plane's skin to hundreds of degrees, enough to ruin aluminum. The X-15's outer skin was Inconel X, a nickel-chrome alloy, and its structure was designed to soak up the heat of the short, fast flights like a sponge. The pilot sat in an aluminum cabin kept apart from the hot outer shell.",
+      "longDescription": "About 15 m long, with wings only 6.7 m across, the X-15 weighed about 14 tonnes at launch and under half that with its propellant gone. Its single XLR99 engine burned liquid oxygen and ammonia for up to about 254 kN of thrust, and could be throttled and restarted. Above the air, small hydrogen peroxide thrusters in the nose and wings turned it. Before landing the pilot dropped the lower part of its ventral fin, and the plane touched down on two rear skids and a nose wheel."
     },
     "mig-e-154-spaceplane": {
       "name": "MiG E-154 rocket plane",
       "description": "A slender swept-wing rocket plane with a cluster of four rocket engines, a pressurized cockpit, wheels to land on and small thrusters for control above the air.",
-      "historyNote": "The real Soviet space plane project, Spiral, planned to launch its orbiter from the back of a hypersonic carrier aircraft: a 52-tonne jet that would climb to almost 30 km at up to six times the speed of sound before releasing it. The carrier was never built, but a subsonic test version of the orbiter flew eight times after being dropped from a Tu-95 bomber."
+      "historyNote": "The real Soviet space plane project, Spiral, planned to launch its orbiter from the back of a hypersonic carrier aircraft: a 52-tonne jet that would climb to almost 30 km at up to six times the speed of sound before releasing it. The carrier was never built, but a subsonic test version of the orbiter flew eight times, the later flights after being dropped from a Tu-95 bomber.",
+      "longDescription": "A slender rocket plane with swept wings, a pressurized cockpit and wheeled landing gear for an ordinary runway. Its cluster of four rocket engines follows the pattern of the American XLR11, a four-chamber engine that could not be throttled: the pilot set the thrust by lighting one, two, three or all four. Small gas thrusters would hold its attitude above the air, where its control surfaces have nothing to push against."
     },
     "voskhod-capsule": {
       "name": "Voskhod capsule",
       "description": "A Vostok sphere with the ejection seat removed to fit more people, a backup retrorocket, and an inflatable airlock.",
-      "historyNote": "Voskhod was a Vostok with the ejection seat taken out and three couches squeezed in, set crosswise. There was no room for spacesuits, and no way out on the pad or during landing: the crew rode the capsule all the way down, so a small rocket on the parachute lines fired just before touchdown to soften the landing. The crew of Voskhod 1 said they barely felt it."
+      "historyNote": "Voskhod was a Vostok with the ejection seat taken out and three couches squeezed in, set crosswise. There was no room for spacesuits, and no way out on the pad or during landing: the crew rode the capsule all the way down, so a small rocket on the parachute lines fired just before touchdown to soften the landing. The crew of Voskhod 1 said they barely felt it.",
+      "longDescription": "The sphere was Vostok's, about 2.3 m across, with its ejection seat taken out to make room for two or three people. With no seat to ride out on, the crew depended entirely on the capsule's engines, so a backup solid-fuel retrorocket sat on top of the sphere in case the main one failed. For Voskhod 2 an inflatable airlock was fitted to the hatch: stowed, it was only 70 cm wide; extended, it reached 2.5 m long and about 1 m wide inside, and it was thrown away before reentry."
     },
     "gemini-capsule": {
       "name": "Gemini capsule",
       "description": "A two-person capsule with thrusters to change orbit, a radar for rendezvous, and a nose that can dock.",
-      "historyNote": "Gemini was the first crewed spacecraft with a digital computer on board, built by IBM: about 27 kg with 4,096 words of core memory. It worked out the burns for rendezvous, steered during reentry, and stood by as a backup for the Titan rocket's guidance. Mercury had none: its pilots flew with the ground doing the arithmetic."
+      "historyNote": "Gemini was the first crewed spacecraft with a digital computer on board, built by IBM: about 27 kg with 4,096 words of core memory. It worked out the burns for rendezvous, steered during reentry, and stood by as a backup for the Titan rocket's guidance. Mercury had none: its pilots flew with the ground doing the arithmetic.",
+      "longDescription": "An enlarged Mercury on the outside, and the first crewed spacecraft that could change its own orbit. The crew's reentry module sat on an adapter holding the retrorockets, propellant, oxygen, water and power, discarded before reentry. Sixteen thrusters moved it in any direction, a radar in the nose found the target, and the nose could dock. Ejection seats replaced Mercury's escape tower, and a center of gravity set off the axis let the crew steer the reentry by rolling."
     },
     "gemini-transtage": {
       "name": "Gemini Transtage",
       "description": "The Titan's restartable upper stage, docked to a Gemini in orbit to push it toward the Moon.",
-      "historyNote": "The Transtage was the restartable top stage of the Titan III, burning fuels that light on contact so it could be fired again and again. On 16 June 1966 a Titan IIIC used it to place seven small military communications satellites, and a test satellite, into high orbit on a single launch. McDonnell's Moon proposals would have docked a Gemini to one to push it out of Earth orbit."
+      "historyNote": "The Transtage was the restartable top stage of the Titan III, burning fuels that light on contact so it could be fired again and again. On 16 June 1966 a Titan IIIC used it to place seven small military communications satellites, and a test satellite, into high orbit on a single launch. McDonnell's Moon proposals would have docked a Gemini to one to push it out of Earth orbit.",
+      "longDescription": "The top stage of the Titan III: about 4.6 m tall and 3 m across, about 12 tonnes fully fueled, with two gimbaled engines of about 36 kN each. Its propellants, Aerozine 50 and nitrogen tetroxide, ignite on contact and need no refrigeration, and gas pressure fed them to the engines without pumps, so it could wait in orbit and fire several times, for about 440 seconds in all. A Gemini docked to it would have ridden it out of Earth orbit."
     },
     "gemini-lunar-propulsion-module": {
       "name": "Gemini lunar propulsion module",
       "description": "A propulsion module behind the capsule, with enough engine to brake into lunar orbit and leave again.",
-      "historyNote": "Coming home from the Moon means hitting the air at about 11 km/s instead of about 7.8 from Earth orbit, with far more heating. That doomed the simplest lunar Gemini plan: a Centaur stage on a Titan II, good for a 72-hour flight around the Moon, was quickly dropped over worries about Gemini's heat shield. Any lunar Gemini would have needed a new one."
+      "historyNote": "Coming home from the Moon means hitting the air at about 11 km/s instead of about 7.8 from Earth orbit, with far more heating. That doomed the simplest lunar Gemini plan: a Centaur stage on a Titan II, good for a 72-hour flight around the Moon, was quickly dropped over worries about Gemini's heat shield. Any lunar Gemini would have needed a new one.",
+      "longDescription": "A module behind the Gemini capsule, carrying the propellant and a restartable engine for the two big burns at the Moon: into lunar orbit and out again. Its propellants would ignite on contact, so no igniter has to work after days in the cold, and gas pressure rather than pumps would feed them, leaving fewer parts to fail. It would stay with the capsule until the burn for home was done, then be cast off before reentry."
     },
     "gemini-direct-ascent-craft": {
       "name": "Gemini Direct Ascent spacecraft",
       "description": "A Gemini capsule stacked on landing and ascent modules, all landing on the Moon together.",
-      "historyNote": "McDonnell's direct-ascent Gemini would have braked toward the Moon with a module built around the RL10, the hydrogen-burning engine of the Centaur stage. The RL10 first flew on 27 November 1963, the first hydrogen engine to fire in space. Versions of it are still flying today, on upper stages of rockets that launch satellites and probes."
+      "historyNote": "McDonnell's direct-ascent Gemini would have braked toward the Moon with a module built around the RL10, the hydrogen-burning engine of the Centaur stage. The RL10 first flew on 27 November 1963, the first hydrogen engine to fire in space. Versions of it are still flying today, on upper stages of rockets that launch satellites and probes.",
+      "longDescription": "A stack of four parts, launched whole on a single heavy rocket. A retrograde module with an RL10 engine handled the coast to the Moon and most of the braking, then was dropped before touchdown; a terminal landing module took the craft the rest of the way down. After about a day on the surface, a service module lifted the crew off and fired them home, leaving only a Gemini reentry module, rebuilt for the speed of a lunar return, to come down through the air."
     },
     "gemini-eor-service-module": {
       "name": "Gemini EOR service module",
       "description": "A service module for the lunar trip, joined to the capsule in Earth orbit.",
-      "historyNote": "Gemini's real service section stayed in orbit: everything that didn't need to come home, the thrusters, the propellant, the oxygen, the power, was packed in an adapter behind the capsule and discarded before reentry. Gemini 5 in 1965 was the first to carry fuel cells there, making electricity from hydrogen and oxygen, with water as the byproduct, for an eight-day flight."
+      "historyNote": "Gemini's real service section stayed in orbit: everything that didn't need to come home, the thrusters, the propellant, the oxygen, the power, was packed in an adapter behind the capsule and discarded before reentry. Gemini 5 in 1965 was the first to carry fuel cells there, making electricity from hydrogen and oxygen, with water as the byproduct, for an eight-day flight.",
+      "longDescription": "Gemini's own adapter came in two parts: a retrograde section with four solid rockets that fired one after another to leave orbit, and an equipment section with 16 small thrusters for moving and turning, their propellant, and the life support. Joined to the capsule in Earth orbit, a service module for the Moon stretches the same idea to a trip of a week or more: bigger tanks, more oxygen and water, and enough thrust to correct the course on the way there and back."
     },
     "langley-lunar-lander": {
       "name": "Langley light lunar lander",
-      "description": "A minimal open lander for one astronaut in a spacesuit: little more than an engine, tanks and a seat.",
-      "historyNote": "NASA Langley's lander idea of 1961 was never built, but Langley built the next best thing: a steel gantry about 70 meters tall that held up five-sixths of a full-size lander's weight on cables. Twenty-four Apollo astronauts practiced the last 150 feet of a lunar landing there. Asked what landing on the Moon was like, Neil Armstrong said: like Langley."
+      "description": "A minimal open lander for one astronaut in a spacesuit: little more than an engine, tanks and a platform to stand on.",
+      "historyNote": "NASA Langley's lander idea of 1961 was never built, but Langley built the next best thing: a steel gantry about 70 meters tall that held up five-sixths of a full-size lander's weight on cables. Twenty-four Apollo astronauts practiced the last 150 feet of a lunar landing there. Asked what landing on the Moon was like, Neil Armstrong said: like Langley.",
+      "longDescription": "The Langley lander was a design for the least a Moon landing could need: a rocket engine, propellant tanks, landing legs and a platform for one astronaut to stand on in his suit, with no pressurized cabin at all. Leaving out the cabin saved its walls, its air and the systems to keep it, and kept the craft to a few tonnes fully fueled: about 4.4 t with storable propellants, less with hydrogen and oxygen. The suit was the astronaut's only shelter all the way down and back."
     },
     "s-ivb-space-tug": {
       "name": "S-IVB Space Tug",
       "description": "A Saturn upper stage used as a tug in Earth orbit, pushing the assembled craft out toward the Moon.",
-      "historyNote": "From Apollo 13 on, the spent S-IVB stage wasn't sent off into orbit around the Sun but steered into the Moon. Apollo 13's stage hit at about 2.6 km/s on 15 April 1970, about 135 km from the seismometer Apollo 12 had left behind. The shaking it recorded helped work out what lies under the Moon's surface. Its crater is about 30 meters across."
+      "historyNote": "From Apollo 13 on, the spent S-IVB stage wasn't sent off into orbit around the Sun but steered into the Moon. Apollo 13's stage hit at about 2.6 km/s on 15 April 1970, about 135 km from the seismometer Apollo 12 had left behind. The shaking it recorded helped work out what lies under the Moon's surface. Its crater is about 30 meters across.",
+      "longDescription": "The S-IVB was the Saturn V's third stage: about 17.8 m long and 6.6 m across, with one J-2 engine of about 1,000 kN burning liquid hydrogen and oxygen. Unlike most stages it could shut down and start again, so it could finish the climb to orbit and later, after a coast, fire again for the Moon in a burn of nearly six minutes. As a tug it makes that second burn for a stack assembled in Earth orbit, which means keeping its hydrogen cold while the pieces come together."
     },
     "apollo-csm": {
       "name": "Apollo command and service module",
       "description": "The three-person command module and the service module behind it, whose engine brakes into lunar orbit and brings the crew home.",
-      "historyNote": "The engine that brought Apollo home from the Moon had to work. So it was as simple as an engine can be: fed by gas pressure instead of pumps, with fuel and oxidizer that ignite on contact, so it needed no igniter. Its valves, plumbing and electronics were doubled; only the combustion chamber and nozzle had no backup."
+      "historyNote": "The engine that brought Apollo home from the Moon had to work. So it was as simple as an engine can be: fed by gas pressure instead of pumps, with fuel and oxidizer that ignite on contact, so it needed no igniter. Its valves, plumbing and electronics were doubled; only the combustion chamber and nozzle had no backup.",
+      "longDescription": "The command module was a cone 3.9 m across and 3.65 m tall, with about 6 m³ for three people. The service module behind it, a 7.6 m cylinder, held the 91 kN main engine, its propellant and the fuel cells. Together they weighed about 29 t. Returning at about 11 km/s, it flew blunt end first with its center of mass offset to make a little lift, and rolling it steered the descent. Its ablative heat shield, 2 to 7 cm thick, charred away, and three parachutes set it down."
     },
     "apollo-lunar-module": {
       "name": "Apollo lunar module",
       "description": "A two-stage lander: the descent stage stays on the Moon as a launch pad, the ascent stage flies the crew back to orbit.",
-      "historyNote": "Grumman fought the lunar module's weight from the first drawing. The seats went, so the crew flew standing, held by harnesses, which let the windows shrink because the astronauts' eyes were closer to them. In places the pressurized cabin's wall was about 0.3 mm thick, a few layers of kitchen foil, wrapped in insulation and a thin outer skin."
+      "historyNote": "Grumman fought the lunar module's weight from the first drawing. The seats went, so the crew flew standing, held by harnesses, which let the windows shrink because the astronauts' eyes were closer to them. In places the pressurized cabin's wall was about 0.3 mm thick, a few layers of kitchen foil, wrapped in insulation and a thin outer skin.",
+      "longDescription": "Fully loaded, the lunar module weighed about 15 t, more than half of it propellant. The descent stage, an octagonal frame 4.2 m across on four legs spanning 9.4 m, carried an engine of about 45 kN that could be throttled far down for the slow final approach, while crushable aluminum honeycomb in the legs absorbed the touchdown. The ascent stage had a fixed engine of about 16 kN and lifted off from the descent stage, which stayed behind as its launch pad."
     },
     "soyuz-7k-l1-spacecraft": {
       "name": "Soyuz 7K-L1 spacecraft",
       "description": "A Soyuz without its orbital module, to save weight for the trip around the Moon.",
-      "historyNote": "On its way back from the Moon in November 1968, Zond 6 lost its cabin air through a faulty seal, and its parachute was released too high. It crashed in Kazakhstan, and engineers had to dig its film out of the wreck; the far-side photographs were published anyway. A crew aboard would not have survived, and Apollo 8 flew around the Moon the next month."
+      "historyNote": "On its way back from the Moon in November 1968, Zond 6 lost its cabin air through a faulty seal, and its parachute was released too high. It crashed in Kazakhstan, and engineers had to dig its film out of the wreck; the far-side photographs were published anyway. A crew aboard would not have survived, and Apollo 8 flew around the Moon the next month.",
+      "longDescription": "The 7K-L1 kept the Soyuz descent and service modules, but in place of the orbital module it had a light support cone, saving weight. A dish antenna was added for the radio link from lunar distance, with star sensors and a gyroscope platform to navigate, and the reserve parachute was removed. To come home from the Moon it could skip off the upper air and dive in a second time, easing the load on a crew and landing in Kazakhstan instead of the Indian Ocean."
     },
     "soyuz-7k-lok-spacecraft": {
       "name": "Soyuz 7K-LOK spacecraft",
       "description": "A Soyuz built for lunar orbit, with a bigger engine and a docking system for the LK lander.",
-      "historyNote": "The lunar Soyuz, the 7K-LOK, flew only on top of an N1. On 23 November 1972 the fourth N1 lifted off with an uncrewed LOK and a dummy LK aboard for a test around the Moon. After 107 seconds, just before its first stage was due to finish, an engine exploded. The launch escape system pulled the spacecraft clear. It was the last N1 ever launched."
+      "historyNote": "The lunar Soyuz, the 7K-LOK, flew only on top of an N1. On 23 November 1972 the fourth N1 lifted off with an uncrewed LOK and a dummy LK aboard for a test around the Moon. After 107 seconds, just before its first stage was due to finish, an engine exploded. The launch escape system pulled the spacecraft clear. It was the last N1 ever launched.",
+      "longDescription": "The LOK was a Soyuz stretched for the Moon, about 10 m long and 9.85 t. Behind the descent module sat its own rocket stage: a main engine of about 33 kN for the 1,100 m/s burn home, and a smaller engine for adjustments in lunar orbit. Fuel cells replaced the solar panels, and their water went to the crew. On the orbital module's nose, a docking probe and a small window dome let the pilot dock with the LK by eye."
     },
     "lk-lander": {
       "name": "LK lander",
       "description": "A one-person lunar lander whose own engine block both finishes the landing and lifts it off again.",
-      "historyNote": "Apollo's lunar module had two stages, one to land and one to take off. The LK used the same rocket unit for both, with a main engine and a backup beside it, because a failure on liftoff would strand the cosmonaut for good. A separate braking stage did most of the slowing and dropped away about 4 km above the surface."
+      "historyNote": "Apollo's lunar module had two stages, one to land and one to take off. The LK used the same rocket unit for both, with a main engine and a backup beside it, because a failure on liftoff would strand the cosmonaut for good. A separate braking stage did most of the slowing and dropped away about 4 km above the surface.",
+      "longDescription": "The LK stood about 5.2 m tall and weighed about 5.5 t, little more than a third of Apollo's lunar module. Its four landing legs stayed on the Moon as the launch stand. The cosmonaut flew it standing at a window, steering with a finger controller because the suit's arms moved poorly, with perhaps 20 seconds of hover to pick his spot. On top, a hexagonal grid with 108 sockets caught the docking probe of the lunar Soyuz."
     },
     "soyuz-7k-ok-spacecraft": {
       "name": "Soyuz 7K-OK spacecraft",
       "description": "The Earth-orbit Soyuz: a descent module, an orbital module for living space, and a service module.",
-      "historyNote": "Vostok's ball fell through the air ballistically, with eight g or more on the pilot. Soyuz's bell-shaped descent capsule carries its weight off-center, so it flies tilted and makes a little lift, and turning it steers the landing and spreads the braking over a longer path: about four g on a normal return. In an emergency it spins to cancel the lift and falls straight in, at higher g."
+      "historyNote": "Vostok's ball fell through the air ballistically, with eight g or more on the pilot. Soyuz's bell-shaped descent capsule carries its weight off-center, so it flies tilted and makes a little lift, and turning it steers the landing and spreads the braking over a longer path: about four g on a normal return. In an emergency it spins to cancel the lift and falls straight in, at higher g.",
+      "longDescription": "The 7K-OK weighed about 6.5 t and was about 8 m long, its solar panels spanning nearly 10 m. At the front, the round orbital module gave room to work and sleep and carried the docking unit: a probe on the active ship, a cone on the passive one, with no hatch through it, so crews crossed between docked ships outside. The bell-shaped descent module held the crew for launch and landing, and the service module at the back carried the engine and its propellant."
     },
     "igla-docking-system": {
       "name": "Igla docking system",
       "description": "Radar antennas and electronics that let two Soyuz craft find each other and dock with nobody steering.",
-      "historyNote": "Igla, Russian for needle, measured direction and distance to its target by comparing radio signals across several antennas. It needed the target to help: the station or craft being approached had to turn its docking port toward the newcomer and keep it there. For large stations that cost too much fuel, so in the 1980s Igla gave way to Kurs."
+      "historyNote": "Igla, Russian for needle, measured direction and distance to its target by comparing radio signals across several antennas. It needed the target to help: the station or craft being approached had to turn its docking port toward the newcomer and keep it there. For large stations that cost too much fuel, so in the 1980s Igla gave way to Kurs.",
+      "longDescription": "Igla needed antennas on both craft. On the active ship, one set searched for the target, a gyro-stabilized set then locked on and tracked it, and a third set guided the final approach. From their signals the system worked out range, closing speed and direction, and fired the engines to bring the ships together slowly, aligned to about a degree, until the probe of one met the cone of the other."
     },
     "lk-700-spacecraft": {
       "name": "LK-700 spacecraft",
       "description": "A heavy lunar craft built to land and take off again in one piece, with no rendezvous in lunar orbit.",
-      "historyNote": "The LK-700 grew out of Vladimir Chelomei's LK-1, a two-seat craft for flying around the Moon on his Proton rocket. In 1965 the government took the flyby from him and gave it to Korolev, whose Soyuz 7K-L1 flew instead. Chelomei turned to landing, and presented the direct-ascent LK-700 to an expert commission in November 1966."
+      "historyNote": "The LK-700 grew out of Vladimir Chelomei's LK-1, a two-seat craft for flying around the Moon on his Proton rocket. In 1965 the government took the flyby from him and gave it to Korolev, whose Soyuz 7K-L1 flew instead. Chelomei turned to landing, and presented the direct-ascent LK-700 to an expert commission in November 1966.",
+      "longDescription": "In Chelomei's design the LK-700 was one craft for the whole trip, with no lander to meet in lunar orbit: a stack of rocket stages under a capsule. A landing stage of about 3.5 t on six legs set it down, on slopes of up to 15 degrees. The return stage, about 11.7 t, then lifted off and fired for Earth, leaving only the landing stage behind. The capsule, an Apollo-like cone of about 3.1 t, flew slightly tilted to make lift and steer its landing."
     },
     "gemini-eva-suit": {
       "name": "Gemini spacesuit",
       "description": "A pressure suit with an umbilical hose for oxygen and a tether, for work outside the capsule.",
-      "historyNote": "On Gemini 9A in June 1966 Gene Cernan was to strap on a rocket backpack at the rear of the spacecraft. With nothing to brace against, every move took far more effort than expected; his heart rate climbed to about 180 and his breath fogged his visor from the inside. The backpack test was called off. Better cooling, foot restraints, handholds and underwater training followed."
+      "historyNote": "On Gemini 9A in June 1966 Gene Cernan was to strap on a rocket backpack at the rear of the spacecraft. With nothing to brace against, every move took far more effort than expected; his heart rate climbed to about 180 and his breath fogged his visor from the inside. The backpack test was called off. Better cooling, foot restraints, handholds and underwater training followed.",
+      "longDescription": "The suit was built up in layers: a rubberized nylon bladder holding oxygen at about 0.26 bar, a link net to stop it ballooning out of shape, and an outer cover. Suits for work outside added layers of Mylar insulation and protection against micrometeoroids. An umbilical hose from the capsule supplied oxygen, with a tether to keep the wearer from drifting off; later flights added a chest pack to regulate the flow. Ed White first wore one outside in June 1965."
     },
     "apollo-lunar-eva-suit": {
       "name": "Apollo lunar surface suit",
       "description": "A suit with its own backpack for oxygen and cooling, built for hours of walking on the Moon.",
-      "historyNote": "Apollo's moon suits came from ILC, the company behind Playtex bras and girdles, and the women who sewed them came from its Playtex sewing floor. Each suit was made by hand to fit one astronaut, from about 21 layers, some glued and some stitched, with seams that had to be accurate to the width of a pin."
+      "historyNote": "Apollo's moon suits came from ILC, the company behind Playtex bras and girdles, and the women who sewed them came from its Playtex sewing floor. Each suit was made by hand to fit one astronaut, from about 21 layers, some glued and some stitched, with seams that had to be accurate to the width of a pin.",
+      "longDescription": "The lunar suit was a rubberized pressure garment inside a multilayer outer cover against heat, cold and micrometeoroids, held at about 25 kPa of pure oxygen. Underneath, a mesh garment laced with tubes carried cooling water. The backpack supplied oxygen, cooling and radio for about 6 hours, 7 on the last three missions, whose suits also gained a waist joint so the astronauts could sit on the rover. With the backpack it weighed about 91 kg on Earth, about 15 kg on the Moon."
     },
     "light-lunar-eva-suit": {
       "name": "Light lunar suit",
       "description": "A lighter surface suit for the open Langley lander, where the suit is the crew's only cabin.",
-      "historyNote": "How do you cool an astronaut in a vacuum? Apollo's life-support backpack pumped cold water through tubes in a garment worn under the suit, then past a metal plate full of tiny pores with vacuum on the far side. Water seeping through the plate froze, and the ice turned straight to vapor, carrying the body's heat away. The more heat, the faster the ice went."
+      "historyNote": "How do you cool an astronaut in a vacuum? Apollo's life-support backpack pumped cold water through tubes in a garment worn under the suit, then past a metal plate full of tiny pores with vacuum on the far side. Water seeping through the plate froze, and the ice turned straight to vapor, carrying the body's heat away. The more heat, the faster the ice went.",
+      "longDescription": "With no cabin around the astronaut, the suit had to do everything a cabin does: hold pressure, supply oxygen, remove carbon dioxide and body heat, and shield against the Sun's glare and the cold of shadow. Gemini's spacewalks showed how hard that was: on Gemini 9A in June 1966 Gene Cernan overheated and his visor fogged until he could barely see. A light suit for the open lander needs its own life-support pack and still has to bend enough to climb aboard."
     },
     "lunar-roving-vehicle": {
       "name": "Lunar Roving Vehicle",
       "description": "A folding electric car for two astronauts, carried on the lunar module's side.",
-      "historyNote": "On Apollo 17's first moonwalk Gene Cernan caught a rover fender with a hammer and tore part of it off, and the wheels began throwing up plumes of dark dust. Overnight, engineers on the ground worked out a fix: next morning the crew taped four spare maps together into a new fender and fixed it in place with two clamps borrowed from the lunar module's lights."
+      "historyNote": "On Apollo 17's first moonwalk Gene Cernan caught a rover fender with a hammer and tore part of it off, and the wheels began throwing up plumes of dark dust. Overnight, engineers on the ground worked out a fix: next morning the crew taped four spare maps together into a new fender and fixed it in place with two clamps borrowed from the lunar module's lights.",
+      "longDescription": "The rover was a 210 kg aluminum-frame car 3.1 m long that could carry about 490 kg, more than twice its own weight. Each wheel had its own small electric motor, fed by two 36 V silver-zinc batteries, and a tire of woven steel wire with titanium treads. It rode folded against the lunar module's side and unfolded as the crew lowered it on tapes. A gyro and the wheels' odometers kept track of the way back, and drives were planned to stay within walking distance of the lander."
     },
     "berkut-eva-suit": {
       "name": "Berkut spacesuit",
       "description": "A Soviet pressure suit with a backpack of oxygen, made for the first walk outside a spacecraft.",
-      "historyNote": "Leonov's Berkut suit was white rather than the orange of earlier Soviet suits, so it would reflect sunlight, and it carried 30 to 45 minutes of oxygen in a backpack. It ran at 0.4 atmospheres, a compromise between enough pressure to breathe and a suit soft enough to bend."
+      "historyNote": "Leonov's Berkut suit was white rather than the orange of earlier Soviet suits, so it would reflect sunlight, and it carried 30 to 45 minutes of oxygen in a backpack. It ran at 0.4 atmospheres, a compromise between enough pressure to breathe and a suit soft enough to bend.",
+      "longDescription": "The Berkut was a modified SK-1, the Vostok pilots' suit, made by the Zvezda plant. Its pressure shell had three layers, a main and a backup airtight layer inside a load-bearing outer one, all under a cover of vacuum insulation. Oxygen from bottles in the backpack flowed through the helmet and suit and was then vented into space. A switch set the pressure to one of two levels, 0.4 atmospheres or a softer 0.27. Suit and backpack together weighed about 41 kg."
     },
     "yastreb-eva-suit": {
       "name": "Yastreb spacesuit",
       "description": "A suit for spacewalks between two docked Soyuz craft.",
-      "historyNote": "The Yastreb carried its life support in a white metal box on the chest and stomach rather than on the back, so it would fit through Soyuz's narrow hatches. Two cosmonauts wore it in January 1969 to cross from Soyuz 5 to Soyuz 4 on the outside. Nobody filmed the crossing: the camera that was meant to record it was never set up."
+      "historyNote": "The Yastreb carried its life support in a white metal box on the chest and stomach rather than on the back, so it would fit through Soyuz's narrow hatches. Two cosmonauts wore it in January 1969 to cross from Soyuz 5 to Soyuz 4 on the outside. Nobody filmed the crossing: the camera that was meant to record it was never set up.",
+      "longDescription": "Yastreb was a suit for spacewalks between docked Soyuz craft, designed at Zvezda in 1966 after Alexei Leonov's Berkut suit had ballooned so stiff in vacuum that he struggled to get back into Voskhod 2. Yastreb's joints used pulleys and cables to keep their shape under pressure. The suit alone weighed about 20 kg and its life-support box about 21 kg, enough for about two and a half hours outside. It was used on one mission only."
     },
     "krechet-eva-suit": {
       "name": "Krechet lunar suit",
       "description": "A semi-rigid lunar suit entered through a hatch in its back.",
-      "historyNote": "A cosmonaut landing alone on the Moon would have nobody to help with the zips. So the Krechet lunar suit was entered through a door in its back, with the backpack built into the door, and closed with a lever by the right elbow. The idea outlived the Moon program: the Orlan suits Russian cosmonauts still use for spacewalks open the same way."
+      "historyNote": "A cosmonaut landing alone on the Moon would have nobody to help with the zips. So the Krechet lunar suit was entered through a door in its back, with the backpack built into the door, and closed with a lever by the right elbow. The idea outlived the Moon program: the Orlan suits Russian cosmonauts still use for spacewalks open the same way.",
+      "longDescription": "The Krechet, entered from the back, was the first semi-rigid suit: a hard upper torso of aluminum alloy with soft fabric arms and legs, ball-bearing joints at the shoulders and wrists, and joints at the waist and hips for bending down. A control panel folded down from the chest. Its life support lasted about 10 hours between refills, and a ring on the back let a fallen cosmonaut roll onto his side and stand. It weighed about 106 kg on Earth, under 18 kg on the Moon."
     },
     "r7-voskhod": {
       "name": "R-7 (Voskhod)",
@@ -1596,11 +1712,6 @@
       "name": "Rendezvous",
       "description": "Two crewed Apollos launched to meet in orbit."
     },
-    "apollo-docking": {
-      "name": "Docking",
-      "description": "An Apollo docks with a target launched ahead of it.",
-      "historyNote": "In July 1975 an Apollo docked with a Soyuz that had launched seven and a half hours ahead of it. The two craft breathed different air: Apollo pure oxygen at about a third of an atmosphere, Soyuz a nitrogen-oxygen mix near sea-level pressure. A docking module between them worked as an airlock, and the Soyuz crew lowered their cabin pressure to make the crossing easier."
-    },
     "soyuz-7k-ok-uncrewed-suborbital": {
       "name": "Uncrewed suborbital test",
       "description": "Fly the Soyuz without a crew on a short up-and-down hop, to prove the launch, the heat shield and the recovery before anyone rides it."
@@ -1803,10 +1914,6 @@
     "landing-and-recovery": {
       "name": "Landing and recovery",
       "description": "Touchdown, and recovery teams reach the craft and its crew."
-    },
-    "splashdown": {
-      "name": "Splashdown",
-      "description": "The capsule hits the sea under its parachutes."
     },
     "splashdown-and-recovery": {
       "name": "Splashdown and recovery",

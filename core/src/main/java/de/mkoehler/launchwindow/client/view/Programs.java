@@ -9,6 +9,7 @@ import de.mkoehler.launchwindow.content.MissionStep;
 import de.mkoehler.launchwindow.content.Program;
 import de.mkoehler.launchwindow.content.ProgramCategory;
 import de.mkoehler.launchwindow.model.Building;
+import de.mkoehler.launchwindow.model.OwnedMissionComponent;
 import de.mkoehler.launchwindow.model.PlayerSnapshot;
 import de.mkoehler.launchwindow.rules.BuildingUpgrades;
 import de.mkoehler.launchwindow.rules.ProgramOpening;
@@ -53,8 +54,21 @@ public final class Programs {
      * @param label  what it is
      * @param amount its effect on the total (negative for a discount)
      * @param text   shown instead of an amount ("Free", "None"), or {@code null}
+     * @param upkeep what it adds to the upkeep every season once bought, or {@code null} where that
+     *               doesn't apply (a discount, a price that isn't a program's)
      */
-    public record PriceLine(String label, long amount, String text) {
+    public record PriceLine(String label, long amount, String text, Long upkeep) {
+
+        /**
+         * A line with no upkeep of its own.
+         *
+         * @param label  what it is
+         * @param amount its effect on the total (negative for a discount)
+         * @param text   shown instead of an amount, or {@code null}
+         */
+        public PriceLine(String label, long amount, String text) {
+            this(label, amount, text, null);
+        }
     }
 
     /**
@@ -151,7 +165,9 @@ public final class Programs {
     /**
      * Breaks a program's price down: its opening cost, each discount from another open program
      * (capped at 100% together, as the rule caps it), and each component's creation cost, or
-     * "Free" if it's already owned.
+     * "Free" if it's already owned. Each line but a discount carries the upkeep it adds, as
+     * {@link Outlook#openingUpkeep} counts it: a component already active through another open
+     * program adds none.
      *
      * @param program the program
      * @param state   the player's state
@@ -160,7 +176,9 @@ public final class Programs {
      */
     public static Price price(Program program, PlayerSnapshot state, ContentCatalog catalog) {
         List<PriceLine> lines = new ArrayList<>();
-        lines.add(new PriceLine("Opening cost", program.openingCost(), null));
+        double multiplier = state.getCostMultiplier();
+        lines.add(new PriceLine("Opening cost", program.openingCost(), null,
+            Math.round(program.maintenanceCost() * multiplier)));
         List<Program.OpeningCostDiscount> applicable = program.openingCostDiscounts().stream()
             .filter(discount -> state.getOpenedProgramIds().contains(discount.otherProgramId())).toList();
         long totalDiscount = program.openingCost()
@@ -181,11 +199,13 @@ public final class Programs {
         }
         for (String componentId : program.requiredMissionComponentIds()) {
             String name = ContentNames.of(componentId);
-            if (state.getMissionComponents().containsKey(componentId)) {
-                lines.add(new PriceLine(name + " (already owned)", 0, "Free"));
+            MissionComponent component = catalog.missionComponent(componentId).orElseThrow();
+            OwnedMissionComponent owned = state.getMissionComponents().get(componentId);
+            long upkeep = owned != null && owned.isActive() ? 0 : Math.round(component.maintenanceCost() * multiplier);
+            if (owned != null) {
+                lines.add(new PriceLine(name + " (already owned)", 0, "Free", upkeep));
             } else {
-                MissionComponent component = catalog.missionComponent(componentId).orElseThrow();
-                lines.add(new PriceLine(name + " (creation cost)", component.creationCost(), null));
+                lines.add(new PriceLine(name + " (creation cost)", component.creationCost(), null, upkeep));
             }
         }
         return new Price(lines, ProgramOpening.openingPrice(state, program, catalog));

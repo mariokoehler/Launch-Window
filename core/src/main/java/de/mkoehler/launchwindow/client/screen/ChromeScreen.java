@@ -290,7 +290,8 @@ abstract class ChromeScreen extends SessionScreen {
         card.add(ui.label(eyebrow, Theme.TextStyle.EYEBROW, Theme.NAVY)).padBottom(Theme.SPACE_2).row();
         card.add(ui.label(title, Theme.TextStyle.HEADING_SM, Theme.INK)).padBottom(Theme.SPACE_2).row();
         card.add(ui.paragraph(body, Theme.TextStyle.BODY, Theme.INK_MUTED)).padBottom(Theme.SPACE_3).row();
-        card.add(actionButton(action, Theme.ButtonKind.PRIMARY, onClick)).left().fill(false, false);
+        // The button row takes any extra height, so cards stretched to a row's tallest end on their buttons.
+        card.add(actionButton(action, Theme.ButtonKind.PRIMARY, onClick)).expandY().bottom().left().fill(false, false);
         return card;
     }
 
@@ -737,7 +738,7 @@ abstract class ChromeScreen extends SessionScreen {
      *
      * @param concepts the concepts, in chip order
      * @param hint     the text on the right of the title, or {@code null} for the count not read yet
-     * @param width    the section's width, so the chips know where to wrap
+     * @param width    the section's width, so the chips know where to wrap; 0 for its cell's width
      * @param back     builds this screen again, for the explainer's Close
      * @return the section
      */
@@ -751,8 +752,13 @@ abstract class ChromeScreen extends SessionScreen {
         long unread = concepts.stream().filter(concept -> !game.explainerRead(concept.explainer())).count();
         String right = hint != null ? hint : unread > 0 ? unread + " not read yet" : "All read";
         head.add(ui.label(right, Theme.TextStyle.CAPTION, Theme.INK_MUTED)).right();
-        section.add(head).width(width).padBottom(Theme.SPACE_2).row();
-        section.add(conceptChips(concepts, back)).width(width);
+        if (width > 0f) {
+            section.add(head).width(width).padBottom(Theme.SPACE_2).row();
+            section.add(conceptChips(concepts, back)).width(width);
+        } else {
+            section.add(head).growX().padBottom(Theme.SPACE_2).row();
+            section.add(conceptChips(concepts, back)).growX();
+        }
         return section;
     }
 

@@ -43,6 +43,11 @@ engineering problem or tidbit, note it here the same session.
   card (`ui-spec.md` component 15). Always optional, never rules help. The join screen's
   Director field has the first, so players learn the icon there. Content history notes live in
   `assets/content/early-era/strings.json` (G4).
+- **Long descriptions (user, 2026-10-27):** every program and every component a program grants has a
+  paragraph on Program details (`longDescription` in `strings.json`, `ui-spec.md` §4.6.4): what it was
+  for, how it worked and what it had to prove, never repeating its history note. Written from checked
+  facts, each figure's source in `assets-raw/strings/LONG_DESCRIPTIONS.md`. Projects that never flew
+  are written as proposals.
 - **Space-race news in the turn report (user 2026-10-04, built 2026-10-06):** real events from
   the same three months as the turn's game date open the report's news.
   - **The stories:** `assets/content/space-race-news.json`, 47 stories from Winter 1955 to
@@ -1779,6 +1784,13 @@ Runs with no change on one side moved that side's median by up to 3 seasons: rea
   converter points it at its own tests (`baspm_pack.py`'s `discount_fixes`), so its Moon flights are free once
   `gemini-eor-earth-orbit` is open. To start from Mercury alone it now costs 22,483 (was 32,543); the smart bot lands it
   at a median of 73 (was 74, within noise).
+- **No Agena for Apollo** (the user's decision, 2026-10-27: a goal mustn't come from hardware a program never flew):
+  BASPM's Apollo Earth-orbit tests had a docking flight with an Agena, which no Apollo flew. The converter drops the
+  configuration and the Agena from the program (`baspm_pack.py`'s `dropped_configurations`); the docking goal stays
+  earnable through Gemini, the 7K-OK and circumlunar Gemini, and Apollo 9's CSM-LM docking (`apollo-lunar-module-test-*`)
+  still grants none. Apollo's road from Mercury costs 45,412 (was 46,987), 4 parts to develop, 21 flights on the way.
+  Its `splashdown` step type, the configuration's art and the Agena's Apollo clip rules went with it. Kontakt in place of
+  Igla on the lunar Soyuz stays as BASPM has it (user): Igla serves the 7K-OK too, one component to develop.
 - **Accepted as the status quo** (the user's decision, 2026-10-26): Gemini EOR 73, the LK-700 70 to 73, Apollo 77, the
   7K-L3 78, Gemini direct ascent 78, the spread 5 seasons on each side (was 10 and 8 to 11). The clever roads keep a small
   lead, paid for in risk. Levers not pulled, for a later look: the LK-700's R&D or a dearer UR-700, more weight on Gemini

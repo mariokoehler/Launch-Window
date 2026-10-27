@@ -267,7 +267,6 @@ CONFIGURATIONS = {
     "apollo-spacewalk-duration-3": "apollo_orbital_eva_extended_3.png",
     "apollo-spacewalk-duration-4": "apollo_orbital_eva_extended_4.png",
     "apollo-rendezvous": "apollo_orbital_rendezvous.png",
-    "apollo-docking": "apollo_orbital_docking.png",
     "soyuz-7k-ok-uncrewed-suborbital": "soyuz_7K_OK_uncrewed_suborbital.png",
     "soyuz-7k-ok-suborbital": "soyuz_7K_OK_suborbital.png",
     "soyuz-7k-ok-uncrewed-orbital": "soyuz_7K_OK_uncrewed_orbital.png",

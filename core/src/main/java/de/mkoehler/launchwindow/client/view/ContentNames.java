@@ -132,6 +132,24 @@ public final class ContentNames {
     }
 
     /**
+     * Returns a program's or component's long description, for screens with room for a paragraph
+     * (Program details), or its short one if the pack has no long one.
+     *
+     * @param id the program or component id
+     * @return the description, or {@code null} if the pack has neither
+     */
+    public static String longDescription(String id) {
+        for (Map<String, ContentStrings.Text> kind : java.util.List.of(installed.strings().programs(),
+                installed.strings().components())) {
+            ContentStrings.Text text = kind.get(id);
+            if (text != null && text.longDescription() != null && !text.longDescription().isBlank()) {
+                return text.longDescription();
+            }
+        }
+        return description(id);
+    }
+
+    /**
      * Returns a content id's history note, for the history-note icon ({@code ui-spec.md} component 15).
      *
      * @param id the id

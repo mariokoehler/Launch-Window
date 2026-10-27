@@ -1012,8 +1012,7 @@
     "requiredMissionComponentIds": [
       "apollo-csm",
       "apollo-lunar-eva-suit",
-      "apollo-lunar-module",
-      "agena-target-vehicle"
+      "apollo-lunar-module"
     ],
     "openingCostDiscounts": [
       {
