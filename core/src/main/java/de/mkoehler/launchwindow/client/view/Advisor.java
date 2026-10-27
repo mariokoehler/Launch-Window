@@ -158,13 +158,16 @@ public final class Advisor {
             "A rocket plane is cheap and quick while the capsule is in R&D: prestige, contracts, and every pilot "
                 + "who lands it earns rocket-plane wings, which make their capsule flights safer.",
             "Headquarters", Destination.HEADQUARTERS, List.of("programs", "astronauts")),
-        new Item("lunar-probe", "Send a probe to the Moon",
-            "The Moon programs open with a probe at the Moon and a person in orbit. Probes are cheap: fly one "
-                + "while the capsule gets ready.", "Headquarters", Destination.HEADQUARTERS, List.of("programs")),
         new Item("bigger-capsules", "Choose your road to the Moon",
             "A person in space opened the bigger capsules and the Moon craft's tests in Earth orbit. Opening a "
                 + "Moon craft's tests usually makes its Moon flights free to open later.",
             "Compare the roads", Destination.ROADS_TO_THE_MOON, List.of("roads-to-the-moon", "programs")),
+        // After the roads (user, 2026-10-27): with the one-crew capsule and the rocket plane it read as a third
+        // program to run at once, too much that early; a person in space opens the first roads to the Moon.
+        new Item("lunar-probe", "Send a probe to the Moon",
+            "The Moon programs open with a probe at the Moon and a person in orbit. Probes are cheap: fly one "
+                + "while your crews work toward orbit.", "Headquarters", Destination.HEADQUARTERS,
+            List.of("programs")),
         new Item("moon", "Go to the Moon",
             "A probe at the Moon and a person in orbit opened the Moon programs. A crew flies round the Moon "
                 + "before it orbits it, and orbits it before it lands.",
@@ -266,10 +269,13 @@ public final class Advisor {
                 : opened(state, catalog, SPACE_PLANES) || opened(state, catalog, BIGGER_CAPSULES)
                     || state.getAstronauts().stream().anyMatch(Astronaut::isRocketPlaneWings) ? Status.DONE
                 : available(state, catalog, SPACE_PLANES) && flown(state) ? Status.OPEN : Status.LATER;
+            // With the bigger capsules, once a person has been in space (user, 2026-10-27); a pack without
+            // them falls back to the capsule program being open.
             case "lunar-probe" -> !exists(state, catalog, LUNAR_PROBES) ? Status.NOT_NEEDED
                 : opened(state, catalog, LUNAR_PROBES) || opened(state, catalog, MOON) ? Status.DONE
-                : available(state, catalog, LUNAR_PROBES)
-                    && (opened(state, catalog, ONE_CREW) || opened(state, catalog, BIGGER_CAPSULES))
+                : available(state, catalog, LUNAR_PROBES) && (exists(state, catalog, BIGGER_CAPSULES)
+                    ? available(state, catalog, BIGGER_CAPSULES) || opened(state, catalog, BIGGER_CAPSULES)
+                    : opened(state, catalog, ONE_CREW))
                 ? Status.OPEN : Status.LATER;
             case "bigger-capsules" -> !exists(state, catalog, BIGGER_CAPSULES) ? Status.NOT_NEEDED
                 : opened(state, catalog, BIGGER_CAPSULES) ? Status.DONE
@@ -305,7 +311,7 @@ public final class Advisor {
             case "open-program", "open-rocket", "assign-rnd" -> "Once your first engineers finish basic training";
             case "raise-reliability" -> "Once engineers are on R&D";
             case "next-crew", "rocket-plane" -> "Once your first satellite reaches orbit";
-            case "lunar-probe" -> "Once your capsule program is open";
+            case "lunar-probe" -> "Once a person has flown in space";
             case "bigger-capsules" -> "Once a person has flown in space";
             case "moon" -> "Once a probe reaches the Moon and a person orbits the Earth";
             default -> "Once the turn resolves";

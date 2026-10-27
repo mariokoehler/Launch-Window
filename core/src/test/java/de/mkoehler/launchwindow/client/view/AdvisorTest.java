@@ -189,15 +189,20 @@ class AdvisorTest {
         assertEquals("Fly the " + ContentNames.of("x-15") + " meanwhile", Advisor.title(plane, state, standard));
         assertTrue(Advisor.text(Advisor.ROAD_AHEAD.getFirst(), state, standard).contains(ContentNames.of("mercury")));
 
-        // Opening the capsule brings the probe; a pilot's wings settle the rocket plane.
+        // Opening the capsule doesn't bring the probe yet (user, 2026-10-27); a pilot's wings settle the plane.
         state.getOpenedProgramIds().add("mercury");
         state.getAstronauts().add(new Astronaut("a1", "C. Astronaut", 30, 70, 50));
-        assertEquals(List.of("rocket-plane", "lunar-probe"), open.get());
+        assertEquals(List.of("rocket-plane"), open.get());
         state.getAstronauts().getFirst().setRocketPlaneWings(true);
-        assertEquals(List.of("lunar-probe"), open.get());
+        assertEquals(List.of(), open.get());
+        assertEquals(List.of("bigger-capsules", "lunar-probe", "moon"), Advisor.later(state, standard, done).stream()
+            .map(Advisor.Item::id).toList());
+        Advisor.Item probe = Advisor.later(state, standard, done).get(1);
+        assertEquals("Once a person has flown in space", Advisor.waitingFor(probe, state));
 
+        // A person in space opens the roads to the Moon, and the probe comes with them.
         state.getAchievedGoals().put("human-in-space", 2);
-        assertEquals(List.of("lunar-probe", "bigger-capsules"), open.get());
+        assertEquals(List.of("bigger-capsules", "lunar-probe"), open.get());
         state.getOpenedProgramIds().add("ranger-3");
         state.getOpenedProgramIds().add("apollo-earth-orbit");
         assertEquals(List.of(), open.get());

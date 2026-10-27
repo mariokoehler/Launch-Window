@@ -776,9 +776,11 @@ Writing them turned up two things for the rules, recorded in `design.md` §2.2(d
       built without a mockup, they're items like the others; `Advisor.ROAD_AHEAD`), after the first steps:
       "Start on a person in space" (the one-crew capsule, named: Mercury or Vostok); "Fly the X-15
       meanwhile" (or the E-154: cheap and quick while the capsule is in R&D, and its pilots earn
-      rocket-plane wings); "Send a probe to the Moon" (once the capsule is open); "Choose your road to the
-      Moon" (once a person has been to space: the bigger capsules and the Moon craft's Earth-orbit tests);
-      "Go to the Moon" (once a probe has reached it and a person has orbited the Earth). Each comes when
+      rocket-plane wings); "Choose your road to the Moon" (once a person has been to space: the bigger
+      capsules and the Moon craft's Earth-orbit tests); "Send a probe to the Moon" (with the roads, once a
+      person has been to space: "fly one while your crews work toward orbit"; user, 2026-10-27, it used to come
+      once the capsule was open and read as a third program to run beside the capsule and the rocket plane;
+      a pack without bigger capsules keeps the old timing); "Go to the Moon" (once a probe has reached it and a person has orbited the Earth). Each comes when
       its programs can be opened (the first two also wait for a first flight, as in the ungated early-era
       pack), goes once one of them is open or the player has moved past it (the rocket plane once a pilot
       has wings or a bigger capsule is open), and is "not needed" for an agency without such programs.
