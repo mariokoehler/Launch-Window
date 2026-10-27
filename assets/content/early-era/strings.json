@@ -38,7 +38,7 @@
       "name": "Explorer 1",
       "description": "A small, light satellite packed with instruments instead of mass: a cosmic-ray counter, temperature sensors and a micrometeorite detector. What it measures matters as much as reaching orbit.",
       "historyNote": "America's first planned satellite was the Navy's Vanguard, picked because it wasn't a missile program. After Sputnik, the first Vanguard attempt, shown on television in December 1957, rose a little over a meter and exploded. The Army's rocket team under Wernher von Braun, with JPL building the satellite, had Explorer 1 in orbit within two months, on 31 January 1958.",
-      "longDescription": "America's first satellite, launched from Cape Canaveral on the night of 31 January 1958 on a Juno I: an Army Jupiter-C missile topped by three stages of small solid rockets. Those stages rode in a tub spun up before launch: the guided first stage aimed the stack, and the spin kept the unguided stages above it steady. James Van Allen's Geiger counter made the flight a scientific one. High in its orbit, which ran from about 358 to 2,550 km, the count fell to zero. Explorer 3 showed why: the tube was swamped by particles trapped in the Earth's magnetic field, the first sign of the Van Allen belts."
+      "longDescription": "America's first satellite, launched from Cape Canaveral on the night of 31 January 1958 on a Juno I: an Army Jupiter-C missile topped by three stages of small solid rockets. Those stages rode in a tub spun up before launch: the guided first stage aimed the stack, and the spin kept the unguided stages above it steady. James Van Allen's Geiger counter, built to count cosmic rays, made the flight a scientific one. Its orbit, which ran from about 358 to 2,550 km, would carry the counter far above the sounding rockets that had measured cosmic rays before, and nobody knew what it would find there."
     },
     "mercury": {
       "name": "Project Mercury",
@@ -217,7 +217,7 @@
     "explorer-1-orbit": {
       "name": "Orbital flight",
       "description": "Launch the satellite and send back what its instruments find, for a season.",
-      "historyNote": "Explorer 1's Geiger counter kept going quiet at high altitude. James Van Allen's team worked out why: the radiation up there was so intense that it overwhelmed the counter. They had found belts of charged particles trapped by the Earth's magnetic field, now named after him: the first great scientific discovery of the space age."
+      "historyNote": "Explorer 1 carried no tape recorder. Its counts went out live by radio and reached the Earth only while it passed within range of a ground station, a few minutes at a time, so its record of each orbit was full of gaps. Its radio kept going until 23 May 1958; the satellite itself stayed in orbit until 31 March 1970."
     },
     "explorer-1-extended": {
       "name": "Extended mission",

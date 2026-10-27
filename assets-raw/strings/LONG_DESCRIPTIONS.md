@@ -814,3 +814,10 @@ Sources abbreviated below:
 - **Vostok's "short hops"** stay in its short description (the game's suborbital flights mirror NASA's); no history note
   claims a suborbital Vostok.
 - **Igla on the lunar Soyuz** stays (the real craft used Kontakt): one docking component serves the 7K-OK too.
+- **Explorer 1: no spoiler** (user, 2026-10-27). The long description and the `explorer-1-orbit` history note told of the
+  Van Allen belts, which the first satellite's archive page reveals once it has flown (and the theory "Is space above
+  the air empty?" asks). The description now ends on the counter going where only sounding rockets had measured
+  (his V-2, Aerobee and rockoon flights reached about 100 to 200 km for minutes: https://en.wikipedia.org/wiki/James_Van_Allen, https://en.wikipedia.org/wiki/Rockoon), with nobody knowing what it would find.
+  The history note now tells of the missing tape recorder (`assets-raw/archive/CHECKS.md`), the radio to 23 May 1958
+  (`design.md` §1.1, E-16) and the reentry on 31 March 1970 (JPL Mission and Spacecraft Library, https://space.jpl.nasa.gov/msl/QuickLooks/explorer1QL.html; Wikipedia, decay
+  date; NSSDCA 1958-001A).
