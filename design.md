@@ -1787,8 +1787,10 @@ Runs with no change on one side moved that side's median by up to 3 seasons: rea
 - **No Agena for Apollo** (the user's decision, 2026-10-27: a goal mustn't come from hardware a program never flew):
   BASPM's Apollo Earth-orbit tests had a docking flight with an Agena, which no Apollo flew. The converter drops the
   configuration and the Agena from the program (`baspm_pack.py`'s `dropped_configurations`); the docking goal stays
-  earnable through Gemini, the 7K-OK and circumlunar Gemini, and Apollo 9's CSM-LM docking (`apollo-lunar-module-test-*`)
-  still grants none. Apollo's road from Mercury costs 45,412 (was 46,987), 4 parts to develop, 21 flights on the way.
+  earnable through Gemini, the 7K-OK and circumlunar Gemini, and inside Apollo through its lunar module tests (Apollo 9's
+  CSM-LM docking: `apollo-lunar-module-test-flown` credits `docking`). No goal was the docking flight's alone. Kept out after a second look (user, 2026-10-27): its
+  picture showed two CSMs nose to nose, which probe-and-drogue docking can't do (both carry the probe), and Apollo's
+  real Earth-orbit dockings were with its lunar module (Apollo 9), Skylab and Soyuz 19, never an Agena or another CSM. Apollo's road from Mercury costs 45,412 (was 46,987), 4 parts to develop, 21 flights on the way.
   Its `splashdown` step type, the configuration's art and the Agena's Apollo clip rules went with it. Kontakt in place of
   Igla on the lunar Soyuz stays as BASPM has it (user): Igla serves the 7K-OK too, one component to develop.
 - **Accepted as the status quo** (the user's decision, 2026-10-26): Gemini EOR 73, the LK-700 70 to 73, Apollo 77, the
