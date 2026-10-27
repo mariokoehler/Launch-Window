@@ -22,7 +22,7 @@
     },
     "venus-probes": {
       "name": "Venus probes",
-      "description": "Craft for the planet hidden under clouds: flybys, orbiters with radar, and landers built to survive crushing pressure and furnace heat."
+      "description": "Craft for the planet hidden under clouds: flybys, orbiters with radar, and landers built to find out what lies beneath."
     },
     "mars-probes": {
       "name": "Mars probes",
@@ -112,7 +112,7 @@
       "name": "Pioneer 4",
       "description": "A small probe sent past the Moon and on into orbit around the Sun, the first American craft to escape the Earth's gravity.",
       "historyNote": "Pioneer 4, launched on 3 March 1959 on a Juno II, was the first American spacecraft to escape the Earth's gravity. Its second stage burned too long, so it passed about 60,000 km from the Moon, too far for its sensor to trigger. It sent data for 82 hours and still circles the Sun.",
-      "longDescription": "The Army and JPL's second try at the Moon. Pioneer 3 had fallen back in December 1958 from about 102,000 km, about 1,000 km/h short of escape speed, after its first stage shut down a few seconds early. Pioneer 4 flew on the same Juno II: a Jupiter missile with clusters of small solid rockets on top, which together had to reach more than 11 km/s. It became the first American craft to escape the Earth and orbit the Sun. On the way out its counters charted the radiation belts again and found the outer one changed, probably by a solar flare. Tracking stations followed it to about 655,000 km, a record at the time."
+      "longDescription": "The Army and JPL's second try at the Moon. Pioneer 3 had fallen back in December 1958 from about 102,000 km, about 1,000 km/h short of escape speed, after its first stage shut down a few seconds early. Pioneer 4 flew on the same Juno II: a Jupiter missile with clusters of small solid rockets on top, which together had to reach more than 11 km/s. It became the first American craft to escape the Earth and orbit the Sun. On the way out its counters measured the radiation around the Earth and beyond. Tracking stations followed it to about 655,000 km, a record at the time."
     },
     "zond-5": {
       "name": "Zond 5",
@@ -135,20 +135,20 @@
     "pioneer-2": {
       "name": "Pioneer 2",
       "description": "An early lunar orbiter, small enough for the rockets of its day, with a camera and instruments for radiation and magnetism.",
-      "historyNote": "Pioneer 2 never got far. It launched on 8 November 1958, but its Thor-Able's third stage failed to light, probably because of a broken wire, and it climbed to about 1,550 km before falling back 42 minutes later. Even that short flight hinted that the radiation above the equator was stronger than anyone had expected.",
+      "historyNote": "Pioneer 2 never got far. It launched on 8 November 1958, but its Thor-Able's third stage failed to light, probably because of a broken wire, and it climbed to about 1,550 km before falling back 42 minutes later. Its instruments still sent back data on the way up and down.",
       "longDescription": "The third of the Able probes, built by Space Technology Laboratories and launched for NASA on 8 November 1958 on a Thor-Able. The plan asked for something no one had done: send a probe toward the Moon, then 2.6 days later fire a solid rocket at exactly the right moment to brake into lunar orbit, at a time when no rocket had yet reached escape speed. Its instruments covered radiation, magnetism, micrometeoroids and temperature, with a television scanner for the Moon's face. None of the three Able lunar probes got near the Moon. The next American probes, Pioneer 3 and 4, flew on the Army's Juno II."
     },
     "lunar-orbiter": {
       "name": "Lunar Orbiter",
       "description": "A camera platform in lunar orbit that develops its own film on board and scans the pictures for radio, to map landing sites.",
       "historyNote": "Five Lunar Orbiters flew in 1966 and 1967 to photograph possible Apollo landing sites, and all five worked. Each developed its film on board, scanned it and radioed the pictures home. When their work was done, each was deliberately crashed into the Moon.",
-      "longDescription": "Five orbiters, flown in 1966 and 1967, to find where Apollo could land safely. Apollo's planners needed to see craters and boulders far smaller than any telescope on Earth could show. The first three flew low orbits near the equator and photographed 20 candidate landing sites. Each developed its film on board and scanned it for radio. The last two went into high polar orbits and mapped almost the whole Moon. Tracking their orbits had another payoff: in 1968 the craft were found to speed up over certain maria, which revealed mascons, dense masses under the surface that pull orbits off course."
+      "longDescription": "Five orbiters, flown in 1966 and 1967, to find where Apollo could land safely. Apollo's planners needed to see craters and boulders far smaller than any telescope on Earth could show. The first three flew low orbits near the equator and photographed 20 candidate landing sites. Each developed its film on board and scanned it for radio. The last two went into high polar orbits and mapped almost the whole Moon. Controllers tracked every orbit closely, since Apollo would have to fly the same paths."
     },
     "surveyor": {
       "name": "Surveyor",
       "description": "A three-legged robot lander that brakes with a rocket and settles softly onto the Moon, to prove the ground can carry a spacecraft.",
       "historyNote": "Surveyor 3 landed in April 1967. In November 1969 Apollo 12 set down less than 200 meters away, and Pete Conrad and Alan Bean walked over and brought back its television camera and other parts, so engineers could see what more than two years on the Moon had done to them.",
-      "longDescription": "Seven robot landers launched by Atlas-Centaur from 1966 to 1968, to learn whether the Moon's surface would bear a spacecraft or swallow it in dust. Five landed. Surveyor 1, on 2 June 1966, was the first American soft landing, four months after the Soviet Luna 9. With no crew, the craft had to measure its own height and speed by radar and throttle its engines all the way down. Later Surveyors dug trenches with a scoop and measured the soil's chemistry with an alpha-scattering instrument, and together they showed that an Apollo lander would not sink."
+      "longDescription": "Seven robot landers launched by Atlas-Centaur from 1966 to 1968, to learn whether the Moon's surface would bear a spacecraft or swallow it in dust. Five landed. Surveyor 1, on 2 June 1966, was the first American soft landing, four months after the Soviet Luna 9. With no crew, the craft had to measure its own height and speed by radar and throttle its engines all the way down. Later Surveyors dug trenches with a scoop and measured the soil's chemistry with an alpha-scattering instrument, and everything they learned went to Apollo's planners."
     },
     "luna-15": {
       "name": "Luna 15",
@@ -184,7 +184,7 @@
       "name": "Mariner 5",
       "description": "A flyby probe passing close to Venus, studying its atmosphere with radio signals that skim through it.",
       "historyNote": "Mariner 5 flew past Venus on 19 October 1967, a day after the Soviet Venera 4 dropped a capsule into its atmosphere. Scientists from both countries published the two missions' results together, a rare joint effort in the middle of the space race.",
-      "longDescription": "Mariner 5 was NASA's second look at Venus, almost five years after Mariner 2. It carried no camera, since Venus's clouds hide the ground. Its main tool was its own radio. Launched on 14 June 1967, the probe passed behind the planet as seen from the Earth, and its signal sank through deeper and deeper air and bent, and from the bending scientists worked out how the atmosphere's density and temperature change with height. Its ultraviolet photometer found a halo of hydrogen around the planet, it found no magnetic field, and its results pointed to a surface at over 500 degrees Celsius under 75 to 100 atmospheres."
+      "longDescription": "Mariner 5 was NASA's second look at Venus, almost five years after Mariner 2. It carried no camera, since Venus's clouds hide the ground. Its main tool was its own radio. Launched on 14 June 1967, the probe passed behind the planet as seen from the Earth, and its signal sank through deeper and deeper air and bent, and from the bending scientists worked out how the atmosphere's density and temperature change with height. Its ultraviolet photometer found a halo of hydrogen around the planet, and it found no magnetic field."
     },
     "pioneer-venus-orbiter": {
       "name": "Pioneer Venus Orbiter",
@@ -206,15 +206,15 @@
     },
     "venera-7": {
       "name": "Venera 7",
-      "description": "A heavily armored lander built to survive the heat and pressure at Venus's surface long enough to send data home.",
-      "historyNote": "On 15 December 1970 Venera 7's parachute failed and it hit Venus at about 60 km/h, coming to rest on its side. Controllers thought it had died, but weeks later the recordings showed a faint signal: it had reported about 475 degrees Celsius for some 23 minutes, the first data from the surface of another planet.",
-      "longDescription": "Venera 7 was the next Soviet attempt to reach the surface of Venus and keep working there, after three earlier probes had failed in the thick air on the way down. Launched on 17 August 1970, it had to settle what radio and radar from the Earth could only hint at: how hot and how dense the bottom of Venus's atmosphere really is. It measured the temperature, and from that and models of the air scientists worked out a pressure about 90 times the Earth's. It kept sending a faint signal for about 20 minutes from the ground: the first transmission from the surface of another planet. Its lessons shaped the landers that followed."
+      "description": "A heavily armored lander built to reach the surface of Venus and send data home from it.",
+      "historyNote": "On 15 December 1970 Venera 7's parachute failed and it hit Venus at about 60 km/h, coming to rest on its side. Controllers thought it had died, but weeks later the recordings showed a faint signal: it had kept reporting from the ground for some 23 minutes, the first data from the surface of another planet.",
+      "longDescription": "Venera 7 was the next Soviet attempt to reach the surface of Venus and keep working there, after three earlier probes had fallen silent on the way down. Launched on 17 August 1970, it had to settle what radio and radar from the Earth could only hint at: how hot and how dense the bottom of Venus's atmosphere really is. It measured the temperature, and from that and models of the air scientists worked out the pressure. It kept sending a faint signal for about 20 minutes from the ground: the first transmission from the surface of another planet. Its lessons shaped the landers that followed."
     },
     "venera-lander": {
       "name": "Venera lander",
       "description": "A carrier craft and a lander travel together to Venus; the lander dives to the surface while the carrier relays its signal.",
       "historyNote": "Venera 9 landed on 22 October 1975 and sent back the first picture ever taken on the surface of another planet: jagged rocks on a layer of dust. A lens cap stayed on, so only half the planned view came through. The lander lasted about 53 minutes, and its carrier became the first spacecraft to orbit Venus.",
-      "longDescription": "The Venera landers of the mid-1970s, beginning with Venera 9 and 10 in 1975, were a new and much heavier design, launched on the Proton rocket. Each mission paired a lander with a carrier that braked into orbit around Venus or, on later missions, flew past it, and relayed the lander's signal to the Earth. The relay solved an old problem: a lander lying on hot ground can hardly aim a radio at the Earth. These missions had to show that a lander could last long enough on the surface to take pictures, and they measured about 485 degrees Celsius and 90 atmospheres there."
+      "longDescription": "The Venera landers of the mid-1970s, beginning with Venera 9 and 10 in 1975, were a new and much heavier design, launched on the Proton rocket. Each mission paired a lander with a carrier that braked into orbit around Venus or, on later missions, flew past it, and relayed the lander's signal to the Earth. The relay solved an old problem: a lander lying on the ground can hardly aim a radio at the Earth. These missions had to show that a lander could last long enough on the surface to take pictures of it."
     },
     "mariner-6": {
       "name": "Mariner 6",
@@ -395,7 +395,7 @@
     "sputnik-2-satellite": {
       "name": "Sputnik 2 satellite",
       "description": "A sealed, air-conditioned cabin for one dog, with instruments for radiation and sunlight. It stays attached to the rocket's core stage in orbit.",
-      "historyNote": "Sputnik 2's Geiger counter, built by Sergei Vernov's team in Moscow, recorded strange swings in its counts. The team blamed a small solar flare. In fact the satellite had been dipping in and out of the radiation belts, months before Explorer 1. Its highest point was over the southern hemisphere, and an Australian team picked up its signals but had no code to read them.",
+      "historyNote": "Sputnik 2's Geiger counter, built by Sergei Vernov's team in Moscow, recorded strange swings in its counts, and the team blamed a small solar flare. Its highest point was over the southern hemisphere, out of reach of the Soviet ground stations, and an Australian team that picked up its signals there had no code to read them.",
       "longDescription": "A cone about 4 m tall and 2 m across at the base, of about 500 kg, never meant to separate from the core stage of its R-7. The solar instruments rode in the nose. Other compartments held the radios, telemetry and air system, and a sealed, padded cabin held the dog, harnessed, fed with gelatin, wired for her vital signs and watched by a television camera at 10 frames a second. A chemical regenerator absorbed carbon dioxide and gave off oxygen."
     },
     "vostok-capsule": {
@@ -563,9 +563,9 @@
     },
     "venera-7-probe": {
       "name": "Venera 7 lander",
-      "description": "A small, heavily insulated descent capsule built to withstand Venus's pressure and heat.",
-      "historyNote": "Venera 4 had been built for about 10 atmospheres of pressure and was crushed high above the ground; Venera 5 and 6 were built for 25 and crushed too. Venera 7's lander was built for 180 atmospheres and 540 degrees Celsius, with a titanium hull in place of aluminum and magnesium alloy, and was chilled to about −8 °C by its carrier before entry. The extra strength cost weight, so it carried few instruments.",
-      "longDescription": "The Venera 7 lander was a descent capsule of about 500 kg, built far stronger than Venus's heat and pressure were expected to need, wrapped in insulation, with its parachute packed on top. The parachute opened about 60 km up, held small at first by a cord that melted in the heat, so that the canopy opened fully only in the denser air below. Its temperature sensors were its main instrument: the surface pressure was later worked out from the temperature, not measured."
+      "description": "A small, heavily insulated descent capsule built to reach the surface of Venus whole.",
+      "historyNote": "Venera 7's lander was built far stronger than Venera 4, 5 and 6, which had all fallen silent on the way down, with a titanium hull in place of aluminum and magnesium alloy, and was chilled to about −8 °C by its carrier before entry. The extra strength cost weight, so it carried few instruments.",
+      "longDescription": "The Venera 7 lander was a descent capsule of about 500 kg, built far stronger than the landers before it, wrapped in insulation, with its parachute packed on top. The parachute opened about 60 km up, held small at first by a cord made to melt away lower down, so that the canopy opened fully only in the denser air below. Its temperature sensors were its main instrument: the surface pressure was later worked out from the temperature, not measured."
     },
     "venera-9-probe": {
       "name": "Venera lander and carrier",
@@ -1176,7 +1176,7 @@
     "venera-flyby-and-lander": {
       "name": "Flyby and lander",
       "description": "The carrier flies past Venus and relays the lander's signal while the lander goes down.",
-      "historyNote": "Venera 13 landed on 1 March 1982 and sent back the first color pictures from the surface of Venus: flat, slabby rocks and soil under an orange sky. It was built to last 32 minutes at about 457 degrees Celsius and 89 times the Earth's air pressure. It kept working for 127, a record no other lander on Venus has beaten."
+      "historyNote": "Venera 13 landed on 1 March 1982 and sent back the first color pictures from the surface of Venus: flat, slabby rocks and soil under an orange sky. It was built to last 32 minutes on the surface and kept working for 127, a record no other lander on Venus has beaten."
     },
     "venera-orbiter-and-lander": {
       "name": "Orbiter and lander",
@@ -1351,7 +1351,7 @@
     "voskhod-orbital-duration-2": {
       "name": "Orbital flight (duration level II)",
       "description": "A longer stay in orbit in the Voskhod, to learn how people and machines hold up over time.",
-      "historyNote": "The longest Voskhod flight carried two dogs. Veterok and Ugolyok, picked from about a hundred strays, launched on 22 February 1966 as Kosmos 110 and orbited for 22 days, passing through the inner radiation belt. They came back dehydrated, thin and weak, and took weeks to recover. No crew stayed up as long until Soyuz 11 in 1971."
+      "historyNote": "The longest Voskhod flight carried two dogs. Veterok and Ugolyok, picked from about a hundred strays, launched on 22 February 1966 as Kosmos 110 and orbited for 22 days, on an orbit that climbed to about 900 km, higher than any crew had yet flown. They came back dehydrated, thin and weak, and took weeks to recover. No crew stayed up as long until Soyuz 11 in 1971."
     },
     "voskhod-orbital-duration-3": {
       "name": "Orbital flight (duration level III)",

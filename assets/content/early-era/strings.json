@@ -57,7 +57,7 @@
     "sputnik-2-satellite": {
       "name": "Sputnik 2 satellite",
       "description": "A sealed, air-conditioned cabin for one dog, with instruments for radiation and sunlight. It stays attached to the rocket's core stage in orbit.",
-      "historyNote": "Sputnik 2's Geiger counter, built by Sergei Vernov's team in Moscow, recorded strange swings in its counts. The team blamed a small solar flare. In fact the satellite had been dipping in and out of the radiation belts, months before Explorer 1. Its highest point was over the southern hemisphere, and an Australian team picked up its signals but had no code to read them.",
+      "historyNote": "Sputnik 2's Geiger counter, built by Sergei Vernov's team in Moscow, recorded strange swings in its counts, and the team blamed a small solar flare. Its highest point was over the southern hemisphere, out of reach of the Soviet ground stations, and an Australian team that picked up its signals there had no code to read them.",
       "longDescription": "A cone about 4 m tall and 2 m across at the base, of about 500 kg, never meant to separate from the core stage of its R-7. The solar instruments rode in the nose. Other compartments held the radios, telemetry and air system, and a sealed, padded cabin held the dog, harnessed, fed with gelatin, wired for her vital signs and watched by a television camera at 10 frames a second. A chemical regenerator absorbed carbon dioxide and gave off oxygen."
     },
     "vostok-capsule": {

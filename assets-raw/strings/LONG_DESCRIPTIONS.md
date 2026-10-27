@@ -821,3 +821,16 @@ Sources abbreviated below:
   The history note now tells of the missing tape recorder (`assets-raw/archive/CHECKS.md`), the radio to 23 May 1958
   (`design.md` §1.1, E-16) and the reentry on 31 March 1970 (JPL Mission and Spacecraft Library, https://space.jpl.nasa.gov/msl/QuickLooks/explorer1QL.html; Wikipedia, decay
   date; NSSDCA 1958-001A).
+- **No theory answered early** (user, 2026-10-27). Texts a player can read before a theory of the day is settled
+  (`assets/content/theories.json`) no longer give its answer; the archive pages, unlocked by the flights, still do.
+  - *Radiation belts:* Sputnik 2's satellite note (both packs) keeps the puzzling counts and the Australian signals,
+    and now says why the Soviets missed them: the high point lay out of reach of their ground stations. Pioneer 4's
+    counters "measured the radiation around the Earth and beyond". Pioneer 2's note ends on its instruments sending
+    data on the way up and down (Wikipedia, "Pioneer 2": it returned radiation and micrometeoroid data). Kosmos 110's
+    orbit "climbed to about 900 km" (Wikipedia, 190 x 882 km; RussianSpaceWeb, 187 x 904 km), higher than any crew had
+    flown by February 1966 (Voskhod 2 about 500 km; Gemini 11's 1,369 km came in September 1966).
+  - *The Moon's dust:* Surveyor's description no longer says the lander would not sink.
+  - *Mascons:* Lunar Orbiter's description ends on the close tracking of its orbits, for Apollo's paths.
+  - *Venus:* no Venus text gives the surface's heat or pressure: the category, Mariner 5, Venera 7 (program and
+    lander), the Venera landers and Venera 13's note. Venera 4 to 6 "fell silent on the way down" (crushed, the archive
+    page says). Each text otherwise kept its checked figures.
