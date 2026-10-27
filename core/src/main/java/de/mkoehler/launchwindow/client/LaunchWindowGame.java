@@ -217,6 +217,23 @@ public class LaunchWindowGame extends Game {
     }
 
     /**
+     * Returns whether an explainer is still locked in this game, because it would answer a theory of the day no
+     * flight has settled yet ({@link de.mkoehler.launchwindow.client.view.Explainers#locked}). Locked explainers
+     * show no chip anywhere and only a closed card in the Museum.
+     *
+     * @param explainer the explainer
+     * @return whether it's locked; never without a session
+     */
+    public boolean explainerLocked(de.mkoehler.launchwindow.client.view.Explainers.Explainer explainer) {
+        if (session == null || explainer.lockedUntil().isEmpty()) {
+            return false;
+        }
+        return de.mkoehler.launchwindow.client.view.Explainers.locked(explainer,
+            de.mkoehler.launchwindow.content.Theories.standard(), session.frontPages(),
+            goal -> session.catalog().goal(goal).isPresent(), session.gameInfo().response().decided());
+    }
+
+    /**
      * Marks an explainer as read, as soon as any of its sheets opens.
      *
      * @param explainerId the explainer

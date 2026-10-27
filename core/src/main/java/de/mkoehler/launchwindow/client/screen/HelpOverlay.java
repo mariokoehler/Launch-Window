@@ -342,7 +342,10 @@ public final class HelpOverlay {
                     .padBottom(Theme.SPACE_3).row();
             }
         }
-        if (!topic.related().isEmpty() || !topic.explainers().isEmpty()) {
+        // A locked explainer would answer a theory of the day early: no chip.
+        List<Explainers.Explainer> open = topic.explainers().stream()
+            .flatMap(id -> Explainers.standard().byId(id).stream()).filter(e -> !game.explainerLocked(e)).toList();
+        if (!topic.related().isEmpty() || !open.isEmpty()) {
             text.add(new Image(ui.solid(Theme.NAVY_BORDER))).width(width).height(Theme.BORDER_THIN)
                 .padTop(Theme.SPACE_3).padBottom(Theme.SPACE_3).row();
         }
@@ -357,16 +360,15 @@ public final class HelpOverlay {
             text.add(links).width(width).padBottom(Theme.SPACE_4).row();
         }
         // Not over an explainer: a second one would free the first one's drawings on closing.
-        if (!topic.explainers().isEmpty() && !(host instanceof ExplainerScreen)) {
+        if (!open.isEmpty() && !(host instanceof ExplainerScreen)) {
             text.add(ui.label("HOW THE REAL THING WORKS", Theme.TextStyle.LABEL, Theme.INK_MUTED))
                 .padBottom(Theme.SPACE_2).row();
             HorizontalGroup chips = new HorizontalGroup();
             chips.wrap().space(ConceptChip.GAP).wrapSpace(ConceptChip.GAP).rowLeft().left();
-            for (String id : topic.explainers()) {
-                Explainers.standard().byId(id).ifPresent(explainer -> chips.addActor(new ConceptChip(ui,
-                    explainer.title(), !game.explainerRead(explainer.id()),
+            for (Explainers.Explainer explainer : open) {
+                chips.addActor(new ConceptChip(ui, explainer.title(), !game.explainerRead(explainer.id()),
                     // Visits the explainer and comes back to this very screen, help still open on this topic.
-                    () -> game.visit(new ExplainerScreen(game, explainer, 0, () -> host)))));
+                    () -> game.visit(new ExplainerScreen(game, explainer, 0, () -> host))));
             }
             text.add(chips).width(width).row();
         }

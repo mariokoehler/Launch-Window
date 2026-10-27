@@ -813,6 +813,12 @@ public final class ScreenSnapshot {
                     MuseumScreen.Tab.ENCYCLOPEDIA)), null);
             }
         }
+        // The explainers that answer a theory of the day, locked until it's settled (2026-10-27), then open.
+        write(folder, "museum-encyclopedia-locked.png", new MuseumScreen(game, MuseumScreen.Tab.ENCYCLOPEDIA), null);
+        game.session().keepFrontPages(java.util.stream.Stream.of("weightless-body", "radiation-belts", "deep-dust",
+            "venus-jungle").map(theory -> new FrontPage("1-science-" + theory, "goal", 1, theory, "", List.of(),
+                List.of(), List.of(), FrontPage.Kind.SCIENCE, null, null)).toList());
+        write(folder, "museum-encyclopedia-settled.png", new MuseumScreen(game, MuseumScreen.Tab.ENCYCLOPEDIA), null);
     }
 
     /**

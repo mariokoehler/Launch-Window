@@ -743,7 +743,13 @@ abstract class ChromeScreen extends SessionScreen {
      * @return the section
      */
     protected Table conceptsSection(List<Concepts.Concept> concepts, String hint, float width, Supplier<Screen> back) {
+        // A locked explainer has no chip, and isn't counted as not read yet (it would answer a theory early).
+        concepts = concepts.stream().filter(concept -> Explainers.standard().byId(concept.explainer())
+            .filter(explainer -> !game.explainerLocked(explainer)).isPresent()).toList();
         Table section = new Table();
+        if (concepts.isEmpty()) {
+            return section;
+        }
         section.left();
         section.defaults().left();
         Table head = new Table();
@@ -774,7 +780,7 @@ abstract class ChromeScreen extends SessionScreen {
         chips.wrap().space(ConceptChip.GAP).wrapSpace(ConceptChip.GAP).rowLeft().left();
         for (Concepts.Concept concept : concepts) {
             Explainers.Explainer explainer = Explainers.standard().byId(concept.explainer()).orElse(null);
-            if (explainer == null) {
+            if (explainer == null || game.explainerLocked(explainer)) {
                 continue;
             }
             chips.addActor(new ConceptChip(ui, concept.label(), !game.explainerRead(explainer.id()),

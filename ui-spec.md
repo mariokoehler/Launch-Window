@@ -501,6 +501,15 @@ On the right:
         standard pack's step names ("Transposition and docking", "Cruise to Mars", "Venus flyby":
         the pack has no "Lunar slingshot" or "transit" step); Mars's air "less than 1 %" of Earth's,
         not "about 1 %"; the X-15's height "about 108 km", not 107.8 (354,200 ft).
+    - **Locked until its theory is settled** (user, 2026-10-27, straight in libGDX): an explainer that answers a
+      theory of the day (§4.18.2) names it in `lockedUntil` and stays locked until a flight in the game settles
+      every one of them (its science page is printed), the race is decided, or the game's pack can't settle it
+      (`Explainers.locked`, `LaunchWindowGame.explainerLocked`). E-06 waits for "Can people eat and work
+      weightless?", E-12 for the radiation belts, E-25 for the Moon's dust and Venus. A locked explainer has no
+      concept chip anywhere (screens, R&D decisions, help), and the Museum shows a closed card: its code, "Locked",
+      the title greyed and "It would answer a question the space age argued over. It opens once a flight in this
+      game settles that question.", with no drawing, summary or button. Before the pages are fetched it counts as
+      locked. `-Dshots=explainers` renders the encyclopedia locked and settled.
 19. **Concept chips** *(user's idea, 2026-10-07; specified, mocked up and built the same day; the
     look confirmed by the user that day)*. A small **Concepts** section listing the
     real-world ideas behind a piece of game content, as clickable chips. A chip opens the

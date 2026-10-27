@@ -108,10 +108,10 @@ public final class MuseumScreen extends ChromeScreen {
         rebuild();
         fetchRivals();
         fetchArchive();
-        // The theories of the day read the printed pages (ui-spec.md 4.18.2).
+        // The theories of the day read the printed pages (ui-spec.md 4.18.2), and so do the explainers' locks.
         if (session.frontPages() == null) {
             fetchFrontPages(() -> {
-                if (this.tab == Tab.ARCHIVE) {
+                if (this.tab == Tab.ARCHIVE || this.tab == Tab.ENCYCLOPEDIA) {
                     rebuild();
                 }
             });
@@ -498,6 +498,9 @@ public final class MuseumScreen extends ChromeScreen {
     }
 
     private Actor explainerCard(Explainers.Explainer explainer) {
+        if (game.explainerLocked(explainer)) {
+            return lockedExplainerCard(explainer);
+        }
         Table card = ui.card();
         card.top();
         card.pad(Theme.BORDER_EMPHASIS);
@@ -542,6 +545,27 @@ public final class MuseumScreen extends ChromeScreen {
         marked.add(card);
         marked.add(overlay);
         return marked;
+    }
+
+    /**
+     * A locked explainer's card (2026-10-27): its code and title only, no drawing, summary or button, since it
+     * would answer a theory of the day before a flight in this game does.
+     */
+    private Actor lockedExplainerCard(Explainers.Explainer explainer) {
+        Table card = ui.card();
+        card.top();
+        card.pad(Theme.BORDER_EMPHASIS);
+        card.defaults().growX().left();
+        card.add(new Image(ui.solid(Theme.SKILL_TRACK))).height(251f).row();
+        Table text = new Table();
+        text.pad(10f, 16f, 16f, 16f);
+        text.defaults().left().growX();
+        text.add(ui.label(explainer.code() + " · Locked", Theme.TextStyle.EYEBROW, Theme.INK_MUTED)).row();
+        text.add(ui.label(explainer.title(), Theme.TextStyle.HEADING_SM, Theme.INK_MUTED)).padBottom(6f).row();
+        text.add(ui.paragraph("It would answer a question the space age argued over. It opens once a flight in "
+            + "this game settles that question.", Theme.TextStyle.BODY, Theme.INK_MUTED));
+        card.add(text);
+        return card;
     }
 
     /**
