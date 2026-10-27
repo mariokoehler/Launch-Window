@@ -46,7 +46,9 @@ import java.util.random.RandomGenerator;
  * resignation take any employee who isn't on a mission. BASPM takes any active
  * employee, which would strand a crew member mid-flight; Launch Window's
  * assignment invariants forbid that. Idle astronauts only, for the astronaut group,
- * as BASPM does.</p>
+ * as BASPM does. A resignation also leans on morale (user, 2026-10-27): each
+ * person's chance is their morale's distance below 100, so nobody at 100 resigns,
+ * and with everyone there the event doesn't apply.</p>
  *
  * @author Mario Koehler
  */
@@ -135,7 +137,7 @@ public final class RandomEvents {
         return switch (kind) {
             case BASIC_TRAINING_EXTENSION -> extendBasicTraining(snapshot, random, turn, events);
             case EMPLOYEE_DISMISSED -> departAnyEligible(snapshot, random, DepartureReason.DISMISSED, kind, turn, events);
-            case EMPLOYEE_RESIGNING -> departAnyEligible(snapshot, random, DepartureReason.RESIGNED, kind, turn, events);
+            case EMPLOYEE_RESIGNING -> departUnhappy(snapshot, random, turn, events);
             case EMPLOYEE_FAILED_BASIC_TRAINING -> failBasicTraining(snapshot, random, turn, events);
             case PERISHED_ASTRONAUT -> perishAstronaut(snapshot, random, turn, events);
             case MORALE_DROP -> shiftMorale(kind, -1, snapshot, roster, random, turn, events);
@@ -337,6 +339,44 @@ public final class RandomEvents {
     }
 
     /**
+     * Removes one eligible employee who resigns, from the first group, in a shuffled order, with
+     * anyone below full morale: each is picked with a weight of {@link #RESIGNATION_MORALE} less
+     * their morale, so the unhappy go first and nobody at full morale goes at all.
+     */
+    private static boolean departUnhappy(PlayerSnapshot snapshot, RandomGenerator random, int turn,
+            List<ResolutionEvent> events) {
+        List<PersonnelGroup> groups = new ArrayList<>(List.of(PersonnelGroup.values()));
+        shuffle(groups, random);
+        for (PersonnelGroup group : groups) {
+            List<Personnel> eligible = eligibleEmployees(snapshot, group);
+            int total = 0;
+            for (Personnel person : eligible) {
+                total += resignationWeight(person);
+            }
+            if (total == 0) {
+                continue;
+            }
+            int draw = random.nextInt(total);
+            for (Personnel person : eligible) {
+                draw -= resignationWeight(person);
+                if (draw < 0) {
+                    depart(snapshot, group, person, DepartureReason.RESIGNED, RandomEventKind.EMPLOYEE_RESIGNING,
+                        turn, events);
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    /** The morale at which nobody resigns at random; a person's weight is their distance below it. */
+    static final int RESIGNATION_MORALE = 100;
+
+    private static int resignationWeight(Personnel person) {
+        return Math.max(0, RESIGNATION_MORALE - person.getMorale());
+    }
+
+    /**
      * Removes one random trainee who failed basic training.
      */
     private static boolean failBasicTraining(PlayerSnapshot snapshot, RandomGenerator random, int turn,
@@ -504,7 +544,7 @@ public final class RandomEvents {
             case MISSION_CONTROL -> removeAndReport(snapshot.getMissionControlOfficers(),
                 (MissionControlOfficer) person, group, reason, events);
         }
-        occurred(snapshot, events, kind, person.getId(), 1, turn, person.getName());
+        occurred(snapshot, events, kind, person.getId(), 1, turn, person.getName(), person.getMorale());
     }
 
     private static <T extends Personnel> void removeAndReport(List<T> roster, T person, PersonnelGroup group,
@@ -524,15 +564,26 @@ public final class RandomEvents {
     }
 
     /**
-     * Records one applied event with the person it struck, and picks its story (2026-10-10): one the
-     * player hasn't seen, from its own salted random so the season's draws stay as they were.
+     * Records one applied event with the person it struck.
      */
     private static void occurred(PlayerSnapshot snapshot, List<ResolutionEvent> events, RandomEventKind kind,
             String subjectId, double magnitude, int turn, String subjectName) {
+        occurred(snapshot, events, kind, subjectId, magnitude, turn, subjectName, null);
+    }
+
+    /**
+     * Records one applied event with the person it struck, and picks its story (2026-10-10): one the
+     * player hasn't seen, from its own salted random so the season's draws stay as they were. A story
+     * with a morale ceiling runs only for a person at or below it ({@code subjectMorale}, or
+     * {@code null} when the event struck nobody's morale in particular).
+     */
+    private static void occurred(PlayerSnapshot snapshot, List<ResolutionEvent> events, RandomEventKind kind,
+            String subjectId, double magnitude, int turn, String subjectName, Integer subjectMorale) {
         SplittableRandom storyRandom = new SplittableRandom(Intelligence.seed(snapshot.getAgencyName(),
             "event-story/" + turn + "/" + kind.name()) ^ STORY_SALT);
         String storyId = EventStories.standard().pick(kind, storyRandom, snapshot.getUsedEventStoryIds(),
-            story -> story.requiresGoal() == null || goalReached(snapshot, story.requiresGoal()));
+            story -> (story.requiresGoal() == null || goalReached(snapshot, story.requiresGoal()))
+                && (story.maxMorale() == null || subjectMorale != null && subjectMorale <= story.maxMorale()));
         events.add(new RandomEventOccurred(kind, subjectId, magnitude, turn, storyId, subjectName));
         snapshot.getNewsLog().add(new NewsEntry(turn, kind, subjectId, magnitude, storyId, subjectName));
     }

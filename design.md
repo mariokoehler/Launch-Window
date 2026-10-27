@@ -2055,6 +2055,13 @@ the start of the pass, so an N-season effect covers N seasons.
   trains and researches. Two multipliers in one slot multiply and the longer duration stays
   (`rules.TimedEffects`, user 2026-10-06, for press stories, §2.2(c)); BASPM's setter replaced
   the older one.
+- **A random resignation leans on morale** (user, 2026-10-27, after a play test where someone at 100
+  morale resigned "after too many nights at the site"): each eligible person's weight is 100 less
+  their morale, so nobody at 100 resigns and with everyone there the event doesn't apply (the next
+  event in the pool is tried). BASPM takes anyone. The burned-out story (`res-burned-out`) has
+  `"maxMorale": 60`; the other two resignation stories fit any morale. The playouts' resignation
+  counts (§3.10) predate this and weren't re-measured: the event is rare beside morale's own
+  resignations at 35.
 
 ### 2.8 Campaign objectives
 

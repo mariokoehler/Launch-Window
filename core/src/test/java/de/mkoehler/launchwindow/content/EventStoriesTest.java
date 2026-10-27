@@ -106,6 +106,7 @@ class EventStoriesTest {
             }
         }
         assertEquals("earth-orbit-satellite", STORIES.byId("pp-satellite-sighting").orElseThrow().requiresGoal());
+        assertEquals(60, STORIES.byId("res-burned-out").orElseThrow().maxMorale());
     }
 
     /**
@@ -116,9 +117,9 @@ class EventStoriesTest {
     void anUnusableStoryWaitsItsTurn() {
         RandomEventKind kind = RandomEventKind.PRESTIGE_DROP;
         EventStories stories = new EventStories(List.of(
-            new EventStories.Story("a", kind, "A", "a", null),
-            new EventStories.Story("b", kind, "B", "b", null),
-            new EventStories.Story("gated", kind, "G", "g", "goal")));
+            new EventStories.Story("a", kind, "A", "a", null, null),
+            new EventStories.Story("b", kind, "B", "b", null, null),
+            new EventStories.Story("gated", kind, "G", "g", "goal", null)));
         List<String> used = new ArrayList<>();
         SplittableRandom random = new SplittableRandom(1);
         Set<String> drawn = new HashSet<>();

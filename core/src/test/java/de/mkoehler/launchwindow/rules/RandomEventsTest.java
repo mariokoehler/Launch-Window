@@ -218,6 +218,51 @@ class RandomEventsTest {
         assertTrue(later.containsAll(training), "both happen from the second season on: " + later);
     }
 
+    /**
+     * A random resignation leans on morale (user, 2026-10-27): nobody at full morale resigns, the
+     * unhappiest go most often, and the burned-out story is told only of someone unhappy.
+     */
+    @Test
+    void resignationsTakeTheUnhappy() {
+        Map<String, Integer> resigned = new java.util.HashMap<>();
+        for (long seed = 0; seed < 600; seed++) {
+            PlayerSnapshot player = quietPlayer(0, 0);
+            player.setSeason(2);
+            player.setLastFailureTurn(-1);
+            player.setLastFlightSeasonTurn(-1);
+            player.setSetSpecialists(new ArrayList<>(List.of(new SetSpecialist("happy", "Happy", 35, 100, 60),
+                new SetSpecialist("content", "Content", 35, 80, 60), new SetSpecialist("glum", "Glum", 35, 40, 60))));
+            List<ResolutionEvent> events = RandomEvents.advanceSeason(player, roster(100, 0), new Random(seed), 2, 2);
+            for (ResolutionEvent event : events) {
+                if (event instanceof RandomEventOccurred occurred
+                        && occurred.kind() == RandomEventKind.EMPLOYEE_RESIGNING) {
+                    resigned.merge(occurred.subjectId(), 1, Integer::sum);
+                    if ("res-burned-out".equals(occurred.storyId())) {
+                        assertEquals("glum", occurred.subjectId());
+                    }
+                }
+            }
+        }
+        assertFalse(resigned.containsKey("happy"), "nobody at full morale resigns: " + resigned);
+        assertTrue(resigned.getOrDefault("glum", 0) > resigned.getOrDefault("content", 0), resigned.toString());
+        assertTrue(resigned.getOrDefault("content", 0) > 0, resigned.toString());
+    }
+
+    /** With everyone at full morale, a random resignation doesn't apply at all. */
+    @Test
+    void nobodyResignsAtFullMorale() {
+        for (long seed = 0; seed < 300; seed++) {
+            PlayerSnapshot player = quietPlayer(0, 0);
+            player.setSeason(2);
+            player.setLastFailureTurn(-1);
+            player.setLastFlightSeasonTurn(-1);
+            player.setSetSpecialists(new ArrayList<>(List.of(new SetSpecialist("a", "A", 35, 100, 60),
+                new SetSpecialist("b", "B", 35, 100, 60))));
+            assertFalse(kindsApplied(RandomEvents.advanceSeason(player, roster(100, 0), new Random(seed), 2, 2))
+                .contains(RandomEventKind.EMPLOYEE_RESIGNING));
+        }
+    }
+
     /** A first-season agency whose only people are engineers in basic training. */
     private static PlayerSnapshot traineesOnly() {
         PlayerSnapshot player = quietPlayer(0, 0);

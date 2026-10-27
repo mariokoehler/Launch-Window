@@ -80,13 +80,17 @@ public record EventStories(List<Story> stories) {
      * @param requiresGoal a goal the agency must have reached before the story may run (its hardware
      *                     overhead needs a satellite in orbit; 2026-10-27), or {@code null} for none.
      *                     The stories file is outside the pack, so the goal must exist in every pack
+     * @param maxMorale    the highest morale the struck person may have for the story to run (a
+     *                     burned-out resignation needs someone unhappy; 2026-10-27), or {@code null} for any
      */
-    public record Story(String id, RandomEventKind kind, String headline, String text, String requiresGoal) {
+    public record Story(String id, RandomEventKind kind, String headline, String text, String requiresGoal,
+            Integer maxMorale) {
 
         /**
          * Validates the story.
          *
-         * @throws NullPointerException if a field other than {@code requiresGoal} is {@code null}
+         * @throws NullPointerException if a field other than {@code requiresGoal} or {@code maxMorale} is
+         *                              {@code null}
          */
         public Story {
             Objects.requireNonNull(id, "id must not be null");
@@ -197,7 +201,7 @@ public record EventStories(List<Story> stories) {
     /**
      * Picks a usable story of an event that the player hasn't been shown yet, and records it as
      * shown; a story is unusable while the goal it {@linkplain Story#requiresGoal requires} isn't
-     * reached. Once every story of that event has run, its stories start over. When the only fresh
+     * reached, or the struck person is happier than its {@linkplain Story#maxMorale morale ceiling}. Once every story of that event has run, its stories start over. When the only fresh
      * stories are unusable, the usable one shown longest ago runs again and moves to the back of the
      * record, so the unusable ones keep their turn. The same rules as {@link PrPress#pick(PrPress.Tone,
      * RandomGenerator, List, Predicate)}: keep the two alike.
