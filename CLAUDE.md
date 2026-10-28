@@ -423,6 +423,9 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
   - **Clip effects** (2026-10-21): the user's Pixabay finds in `assets-raw/audio/` go in through
     `assets-raw/replay/sounds/make_effect_sounds.py`; `assets-raw/replay/effects.py` cues them where their layers
     show in the built projects (main PC only; rerun it after publishing a clip whose timeline changed).
+    It skips a clip whose project is newer than its render; a rebuild without a publish does that. To clear one, compare
+    the render's frames with the project's (`render-frame`; a `"mirror"` step's render is the project flipped by ffmpeg),
+    and touch the WebMs only if they match (2026-10-28: all 17 skipped then did, and gained their missing cues).
   - **Sound effects:** Stable Audio 3 (the user's `Sound_Effects.json`) was tried for the replay's sounds on
     2026-10-15 and almost nothing was usable: the user curates clips (Pixabay) for a few moments instead.
 - **Photocraft** (an open-source Photoshop, as the `photocraft` MCP server): reads and writes only

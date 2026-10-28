@@ -3,6 +3,14 @@
  "revealAt": 3.5,
  "cues": [
   {
+   "at": 0.0,
+   "sound": "vent",
+   "loop": true,
+   "carry": true,
+   "until": 1.0,
+   "fade": 0.3
+  },
+  {
    "at": 0.9,
    "sound": "rocket-roar",
    "loop": true

@@ -3,6 +3,11 @@
  "revealAt": 3.0,
  "cues": [
   {
+   "at": 3.0,
+   "sound": "rcs-puff",
+   "volume": 0.25
+  },
+  {
    "at": 3.05,
    "sound": "radio-corridor-glitch"
   }
