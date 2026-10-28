@@ -3,10 +3,6 @@
  "revealAt": 2.4,
  "cues": [
   {
-   "at": 0.0,
-   "sound": "decoupler"
-  },
-  {
    "at": 0.433,
    "sound": "reentry-plasma",
    "loop": true
