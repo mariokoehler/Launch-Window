@@ -72,6 +72,12 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
   by topic over the current screen, filtered to the screen's topics. 33 topics (synced with the code 2026-10-26). Numbers in
   `help.json` are tokens filled from the rules (`HelpValues`); a new rule number goes there, never
   into the text, and a changed rule needs its topic's text changed in the same session.
+  **The public wiki mirrors it** (2026-10-28, github.com/mariokoehler/Launch-Window/wiki): a hand-written
+  `Home.md` with the user's banner, and one page a topic plus `_Sidebar.md`, written by dev-tools' `HelpWiki`
+  with the numbers filled. After a change to `help.json` or a rule it quotes, clone
+  `https://github.com/mariokoehler/Launch-Window.wiki.git`, run
+  `mvn -pl dev-tools compile exec:java -DmainClass=de.mkoehler.launchwindow.devtools.HelpWiki -Dexec.args=<clone>`
+  (after `mvn -q install -pl core -am -DskipTests`), commit and push. A renamed topic title leaves its old page behind: delete it.
 - **The advisor is built** (2026-10-08, `ui-spec.md` component 24): a hub card with a new agency's
   first steps, ticked off from the state, until all are done or the player hides it.
 - **The full content pack is built** (2026-10-08, `design.md` §5, M3): `assets/content/standard`,
@@ -350,7 +356,8 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
   sentences, and verify every figure in a history note (BASPM's facts contradict each other).
 - **Commits** are GPG-signed. If signing fails, start Kleopatra
   (`C:\Program Files (x86)\Gpg4win\bin\kleopatra.exe`) and retry; never `--no-gpg-sign`.
-- **The GitHub repo** (`mariokoehler/Launch-Window`) is private. Ask before making it public.
+- **The GitHub repo** (`mariokoehler/Launch-Window`) is public since 2026-10-28 (the user, for the wiki):
+  everything pushed is published, so the hard rule below matters doubly.
 
 ## Source material (read-only, never copied into the repo)
 
@@ -504,8 +511,8 @@ mvn -pl dev-tools compile exec:exec@handson         # any hands-on level's puzzl
     `deploy/docker-compose.yml` for the NAS, with the data root bind-mounted at
     `/share/Container/launchwindow/data`. `.dockerignore` keeps `data/` (password hashes) and
     `assets-raw/` out of the image.
-  - **While the repo is private,** the release zip and the image need a GitHub login:
-    `update.cmd` can't download anonymously and the NAS needs a token for GHCR.
+  - **The repo went public on 2026-10-28,** so release zips download anonymously; the GHCR image's
+    visibility is a separate package setting (it was private, needing a token on the NAS): check it before relying on that.
   - **Icons:** `assets-raw/icon.ico` (exe) and `lwjgl3/src/main/resources/launchwindow-icon-*.png`
     (window), both from `assets/branding/logo.png`: placeholders until an icon-only logo exists.
 
