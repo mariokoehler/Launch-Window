@@ -509,5 +509,12 @@
     "object": "rocket",
     "layout": "the rocket lying horizontally across the sheet, tail on the left, nose pointing to the right, with an end view on the far left",
     "body": "Far left: a view from behind, a large round base with a ring of alternating dark and pale segments around its edge and a pale round center, with thin crosshair lines through it.\n\nMain side view, from left to right: five engine bells at the tail with four swept fins shaded in deep navy, the first stage with bold black and white blocks like a roll pattern, and a dark V-shaped pattern near its tail. Then a white second stage with a dark rectangle, separated by a short pale ring, and a long white third stage. Then a band of black and white squares like a checkerboard on a short cone, a narrower cylinder with a thin dark ring and a short pale cone at the right end."
+  },
+  "nova": {
+    "subject": "a Nova-style giant moon rocket, wider and heavier than any rocket that flew",
+    "object": "rocket",
+    "layout": "the rocket lying horizontally across the sheet, tail on the left, nose pointing to the right",
+    "reference": "references/nova.png",
+    "body": "Main side view, from left to right: a cluster of large engine bells at the tail, three of them stacked one above another, each drawn with ribbed nozzle walls, and four swept fins, one pointing up, one pointing down and two smaller ones seen edge-on, shaded in deep navy. Then a very wide, long cylindrical first stage with bold black and white blocks like a roll pattern near its tail, a band of fine vertical ribbing, and a long plain white section. Then a dark interstage ring with small square panels, and a white second stage of the same width with a second band of fine ribbing and a dark block near its upper end.\n\nThen the rocket narrows: a short open section shows the dark engine bells of the third stage, then a much slimmer white third stage cylinder with a thin dark ring, and a long tapering cone. At the right end, a small blunt spacecraft with a dark band, topped by a short, thin escape tower with a tiny pointed tip."
   }
 }

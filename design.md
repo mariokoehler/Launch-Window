@@ -1766,7 +1766,7 @@ Runs with no change on one side moved that side's median by up to 3 seasons: rea
   tests already need the heavy rocket (direct ascent, the LK-700) build it alongside the craft. Flying Gemini first
   gives the CSM 35 % from Gemini, but the bot flies one plan entry at a time, so Gemini's 13 seasons come on top; a
   player can overlap them.
-- **The Nova** (the user's idea, 2026-10-26, built with placeholder art): BASPM's direct-ascent craft weighed 42 t, so its
+- **The Nova** (the user's idea, 2026-10-26; its art the user's, 2026-10-28): BASPM's direct-ascent craft weighed 42 t, so its
   stack fit the Saturn V's 47 t toward the Moon. The converter (`baspm_pack.py`'s `nova_rocket`) makes it 63.5 t, the
   stack about 67.5 t, and adds **Nova** (`nova`): heavy, 68 t toward the Moon (the eight-F-1 8L study), 15,000 to
   create, 1,500 upkeep, an R&D ceiling of 91 %, reliability carried over from the Saturn family (the Saturn V 30 %, C-3B

@@ -2,12 +2,12 @@
 
 Cross-reference of the art in `assets-raw/Program Categories`, `assets-raw/Programs`, and
 `assets-raw/Mission Configuration` against BASPM's full program tree (55 programs, 189 mission
-configurations; `baspm.md` §10), and `assets-raw/Rocket Programs` against its 24 rockets. Program names are the real historical programs; BASPM's
+configurations; `baspm.md` §10), and `assets-raw/Rocket Programs` against its 25 rockets. Program names are the real historical programs; BASPM's
 fictional ones are renamed to our own (`design.md` §1.2). The BASPM ids (`00-00` = category
 `00`, program `00`) are only there to cross-reference `baspm.md`. Built 2026-10-03; tick boxes
 as art lands.
 
-**Status:** programs 55/55, mission configurations 189/189, rocket programs 24/24.
+**Status:** programs 55/55, mission configurations 189/189, rocket programs 25/25.
 Items marked **(M3 pack)** are flown by the early-era content pack (`assets/content/early-era`).
 
 Notes:
@@ -393,3 +393,4 @@ not drawn yet are proposals in the style of the first ones (2026-10-08).
 - [x] **Saturn IB** (Medium) — `saturn_ib`
 - [x] **Saturn C-3B** (Medium) — `saturn_c3`
 - [x] **Saturn V** (Heavy) — `saturn_v`
+- [x] **Nova** (Heavy) — `nova`

@@ -315,8 +315,8 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
   each road (Apollo and the 7K-L3 land at a median of 81, Gemini EOR 74, the LK-700 70 to 73). Gemini direct ascent
   (71) now needs **Nova**, a new heavy rocket (`baspm_pack.py`'s `nova_rocket`; its craft weighs 63.5 t), and lands at
   78. Apollo's CSM and the 7K-L3's LOK inherit 35 % of the first capsule, as Gemini does (`capsule_heritage`): Apollo
-  lands at 77, the 7K-L3 at 78. Nova's pictures are **placeholders** (`assets/ui/rockets/nova.jpg`, `assets/ui/blueprints/nova.jpg`) until the
-  user's art comes; `checklist.py` doesn't know it. The pack hash changed: reset the dev data root.
+  lands at 77, the 7K-L3 at 78. Nova's pictures are the user's (2026-10-28): the rocket program image, and a blueprint generated from the
+  user's reference (`assets-raw/blueprints/references/nova.png`). The pack hash changed: reset the dev data root.
 - **Roads to the Moon is built** (the user's idea, 2026-10-26, `ui-spec.md` §4.21, from the canvas
   `Launch Window — Roads to the Moon`): the landing roads side by side, never ranked, figures from the rules
   (`client.view.RoadsToMoon`), words in `assets/content/moon-roads.json` (outside the pack, `RoadsToMoonTest`); from

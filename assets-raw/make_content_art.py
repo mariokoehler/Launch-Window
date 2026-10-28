@@ -312,6 +312,7 @@ ROCKETS = {
     "saturn-1b": "saturn_ib.png",
     "saturn-c3b": "saturn_c3.png",
     "saturn-v": "saturn_v.png",
+    "nova": "nova.png",
 }
 
 
