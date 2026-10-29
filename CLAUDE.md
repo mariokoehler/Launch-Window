@@ -78,6 +78,12 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
   `https://github.com/mariokoehler/Launch-Window.wiki.git`, run
   `mvn -pl dev-tools compile exec:java -DmainClass=de.mkoehler.launchwindow.devtools.HelpWiki -Dexec.args=<clone>`
   (after `mvn -q install -pl core -am -DskipTests`), commit and push. A renamed topic title leaves its old page behind: delete it.
+  **Pages show the screens they talk about** (2026-10-29): `HelpWiki.SCREENS` picks `ScreenSnapshot` shots per topic,
+  each after the first paragraph or under a named subheading. After a screen changes, shoot (below) and pass the
+  folder as a second argument (`-Dexec.args="<clone> <shots>"`, Windows paths): it remakes `images/help/`, which it
+  empties first, so nothing else goes in there (the banner is in `images/`). A missing shot or subheading fails it.
+- **The README** (2026-10-29): its screenshots are `docs/screenshots/`, made from a shots folder by
+  `docs/screenshots/make_screenshots.py <shots>` (its `PICKS`). It says the game has no licence yet and takes no contributions (user).
 - **The advisor is built** (2026-10-08, `ui-spec.md` component 24): a hub card with a new agency's
   first steps, ticked off from the state, until all are done or the player hides it.
 - **The full content pack is built** (2026-10-08, `design.md` §5, M3): `assets/content/standard`,
@@ -515,7 +521,7 @@ mvn -pl dev-tools compile exec:exec@handson         # any hands-on level's puzzl
     `/share/Container/launchwindow/data`. `.dockerignore` keeps `data/` (password hashes) and
     `assets-raw/` out of the image.
   - **The repo went public on 2026-10-28,** so release zips download anonymously; the GHCR image's
-    visibility is a separate package setting (it was private, needing a token on the NAS): check it before relying on that.
+    visibility is a separate package setting (it was private, needing a token on the NAS; still private on 2026-10-29, the user means it to be public): check it before relying on that.
   - **Icons:** `assets-raw/icon.ico` (exe) and `lwjgl3/src/main/resources/launchwindow-icon-*.png`
     (window), both from `assets/branding/logo.png`: placeholders until an icon-only logo exists.
 
