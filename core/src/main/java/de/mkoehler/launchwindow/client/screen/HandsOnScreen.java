@@ -122,7 +122,7 @@ public final class HandsOnScreen extends ChromeScreen {
 
     @Override
     protected Help.Context helpContext() {
-        return Help.Context.RND;
+        return Help.Context.HANDS_ON;
     }
 
     @Override

@@ -276,11 +276,34 @@
         "## Story arcs",
         "A good outcome can lead somewhere: a later quiet season may bring a follow-up about the same component, with more at stake.",
         "## Hands-on",
-        "Some decisions are a short campaign you can run yourself, or leave to the team. Run it, and you plan up to {handsOn.rounds} rounds of {handsOn.slots} commands. Each command spends some of what you hold and makes something else; what it costs is paid when you queue it, what it makes comes only when the round runs, so it can't pay for another command the same round.",
-        "When the round runs, each command can fail (one less of what it mainly makes), go as planned, or go exceptionally well (one more). The team sets the odds: a fail is less likely the more skilled its best engineer, {handsOn.failLow} % at best, and good chemistry makes an exceptional result likelier ({handsOn.exceptionalGood} % instead of {handsOn.exceptional} %). On a fail you may call in an expert for {handsOn.resist} shift to make it a normal result. Overtime never fails and gives a shift.",
-        "Meet the objective by the last round for about a season and a half of R&D; meet the bonus, which ends the campaign at once, for about three. Falling short costs nothing. Once started, the campaign counts: unfinished when the turn resolves, it settles as it stands."
+        "Some decisions are a hands-on campaign: a short week of testing you can plan yourself, round by round, or leave to the team. Its rules have a topic of their own, Hands-on campaigns."
       ],
-      "related": ["rnd", "random-events"]
+      "related": ["hands-on", "rnd", "random-events"]
+    },
+    {
+      "id": "hands-on",
+      "group": "Programs and hardware",
+      "title": "Hands-on campaigns",
+      "body": [
+        "Some R&D decisions are a hands-on campaign: a week of testing on one component, on a test stand, in a vacuum chamber or on a shake table, that you can plan yourself or leave to the team. It comes like any R&D decision, on the component's card on its R&D board. The banner says what the campaign asks for and the odds the team gives before you choose.",
+        "## Starting",
+        "- Leave it to the team: nothing changes. This is the option taken if you don't decide.",
+        "- Run it yourself: asks once, then opens the campaign.",
+        "Once started, the campaign counts. You can leave its screen between steps and come back with Continue on the component's card or in the turn report. If the turn resolves first, it settles as it stands: a fail waiting for an answer is accepted, commands not yet confirmed are refunded, and the rounds left run empty.",
+        "## What you hold",
+        "A campaign has four resources: shifts, the thing being tested (firings, chamber runs, ignitions and so on), measurements, and spare parts. You start with a few shifts, and in some campaigns a few parts or measurements too. The objective and the bonus are amounts of two or three resources to hold at the end. What you hold counts, not what you made: a command that uses up a firing takes it off.",
+        "## Planning a round",
+        "You have up to {handsOn.rounds} rounds of {handsOn.slots} commands. Each command turns some resources into others; the commands are grouped by what they make, and their In and Out columns show what they cost and what they make. Click a command to queue it in the next slot. Its cost is paid at once; a command you can't pay for is greyed out and says what you're short of. What a command makes arrives only when the round runs, so it can't pay for another command in the same round: plan one round ahead.",
+        "Undo takes the last command back and Reset the whole queue, refunding them. Confirm commands runs the round; slots may stay empty. Overtime costs nothing and gives a shift.",
+        "## Running a round",
+        "The commands run in slot order. Each one but Overtime rolls: it fails and makes one less of its main output (the one underlined in the Out column), goes as planned, or goes exceptionally well and makes one more.",
+        "On a fail, if you hold {handsOn.resist} shift, the round stops and asks: call in an expert, paying the shift, and the command goes as planned; or accept the fail. With no shift left the fail stands. Your answer doesn't change how the later commands roll.",
+        "## The odds",
+        "The engineers on the component's R&D set the odds when the campaign starts. With nobody skilled a command fails {handsOn.failBase} % of the time; each {handsOn.skillPerPoint} points of the best engineer's skill in the component's skill take one point off, down to {handsOn.failLow} %. A command goes exceptionally well {handsOn.exceptional} % of the time, or {handsOn.exceptionalGood} % when the team's chemistry reads Good. The screen shows the odds under the queue.",
+        "## How it ends",
+        "The moment you hold the bonus after a round, the campaign ends with it: about three seasons of the component's R&D. Otherwise it ends after the last round, and holding the objective earns about a season and a half. Short of the objective it changes nothing: a campaign never costs reliability, money or people."
+      ],
+      "related": ["decisions", "rnd", "chemistry"]
     },
     {
       "id": "rockets",

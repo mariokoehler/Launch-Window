@@ -735,6 +735,9 @@ Writing them turned up two things for the rules, recorded in `design.md` §2.2(d
       Synced with the code on 2026-10-22: 32 topics, the newspaper's among them ("The Daily Zenith"); its pages open
       on it (`Help.Context.NEWSPAPER`), the archive's pages and the explainers on the Museum's. `HelpTest` checks that
       every context names real topics and that every topic is on some screen's list (the basics on the hub's).
+      2026-10-29 (user): the hands-on campaign has its own topic ("Hands-on campaigns": starting, what you hold,
+      planning and running a round, the odds, how it ends), 34 topics; the Hands-on screen opens on it
+      (`Help.Context.HANDS_ON`), and R&D decisions' Hands-on section points to it.
     - **Filter:** typing searches **every** topic's title and text (numbers filled in, ignoring
       case) and drops the screen's filter; the status line says how many topics mention the text,
       or that none does. **Show all topics** clears both the text and the screen's filter.

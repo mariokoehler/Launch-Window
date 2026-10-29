@@ -174,7 +174,7 @@ public record Help(List<Topic> topics) {
         SET_CENTRE("the SET Centre", "rnd", "hiring", "training", "chemistry", "traits", "morale", "salaries",
             "poaching"),
         /** A Payload or Rocket R&amp;D board. */
-        RND("R&D", "rnd", "decisions", "chemistry", "traits"),
+        RND("R&D", "rnd", "decisions", "hands-on", "chemistry", "traits"),
         /** The VAB and its rocket programs. */
         VAB("the VAB", "rockets", "rnd", "programs"),
         /** Mission Control and its missions. */
@@ -199,7 +199,9 @@ public record Help(List<Topic> topics) {
         /** The Intelligence Office. */
         INTELLIGENCE("the Intelligence Office", "intelligence", "poaching", "the-race"),
         /** The roads to the Moon compared (ui-spec.md 4.21). */
-        ROADS_TO_THE_MOON("the roads to the Moon", "roads-to-the-moon", "programs", "rockets");
+        ROADS_TO_THE_MOON("the roads to the Moon", "roads-to-the-moon", "programs", "rockets"),
+        /** A hands-on campaign's screen. */
+        HANDS_ON("the hands-on campaign", "hands-on", "decisions", "chemistry", "rnd");
 
         private final String place;
         private final List<String> topicIds;

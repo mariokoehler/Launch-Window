@@ -248,6 +248,8 @@ public final class HelpValues {
         v.put("handsOn.rounds", campaign == null ? "4" : whole(campaign.rounds()));
         v.put("handsOn.slots", campaign == null ? "3" : whole(campaign.slots()));
         v.put("handsOn.resist", campaign == null ? "1" : whole(campaign.resist()));
+        v.put("handsOn.failBase", whole(Math.round(HandsOn.BASE_FAIL * 100)));
+        v.put("handsOn.skillPerPoint", whole(Math.round(0.01 / HandsOn.FAIL_PER_SKILL)));
         v.put("handsOn.failLow", whole(Math.round(HandsOn.MIN_FAIL * 100)));
         v.put("handsOn.exceptional", whole(Math.round(HandsOn.EXCEPTIONAL * 100)));
         v.put("handsOn.exceptionalGood", whole(Math.round(HandsOn.EXCEPTIONAL_GOOD_CHEMISTRY * 100)));

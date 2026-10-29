@@ -69,7 +69,7 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
   `Launch Window — Intelligence Office` (`ui-spec.md` §4.15). Reset the dev data root before the
   next play test (new saved fields).
 - **Help is built** (2026-10-08, `ui-spec.md` component 23): a help button and F1 open the rules
-  by topic over the current screen, filtered to the screen's topics. 33 topics (synced with the code 2026-10-26). Numbers in
+  by topic over the current screen, filtered to the screen's topics. 34 topics (synced with the code 2026-10-29: hands-on campaigns got their own). Numbers in
   `help.json` are tokens filled from the rules (`HelpValues`); a new rule number goes there, never
   into the text, and a changed rule needs its topic's text changed in the same session.
   **The public wiki mirrors it** (2026-10-28, github.com/mariokoehler/Launch-Window/wiki): a hand-written

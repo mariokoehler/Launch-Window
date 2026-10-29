@@ -113,8 +113,15 @@ public final class HelpWiki {
             new Screen("payload-rnd", "Payload R&D: each component's reliability, its ceilings and the engineers on it.",
                 "Engineers on R&D"));
         screens("decisions",
-            new Screen("decision-tradeoff", "An R&D decision on a component's card.", "Deciding"),
-            new Screen("handson-planning", "A hands-on puzzle, planned round by round.", "Hands-on"));
+            new Screen("decision-tradeoff", "An R&D decision on a component's card.", "Deciding"));
+        screens("hands-on",
+            new Screen("handson-banner", "A hands-on campaign offered on a rocket's R&D card.", "Starting"),
+            new Screen("handson-planning", "Planning round 1: the commands on the left, the queue on the right.",
+                "Planning a round"),
+            new Screen("handson-fail", "A command failed: call in an expert for a shift, or accept it.",
+                "Running a round"),
+            new Screen("handson-result-bonus", "The bonus held after round 3: the campaign ends there.",
+                "How it ends"));
         screens("rockets",
             new Screen("standard-apollo-rockets", "Rocket assignment: a rocket too small for the payload is greyed out.",
                 "Lift"),
