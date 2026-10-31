@@ -120,6 +120,38 @@ public final class PayloadRnd {
     }
 
     /**
+     * Returns a board's components that R&amp;D could still improve with nobody working on them (the user's
+     * idea, 2026-10-31): the hub's gold dot on the VAB and the SET Centre.
+     *
+     * @param state   the player's state
+     * @param catalog the content pack
+     * @param rockets whether to look at the rocket board
+     * @return the components' cards, in the content pack's order
+     */
+    public static List<Card> unstaffed(PlayerSnapshot state, ContentCatalog catalog, boolean rockets) {
+        return cards(state, catalog, rockets).stream()
+            .filter(card -> !card.atCap() && card.slots().stream().allMatch(java.util.Objects::isNull))
+            .toList();
+    }
+
+    /**
+     * Words a board's unstaffed components for the building's hover.
+     *
+     * @param state   the player's state
+     * @param catalog the content pack
+     * @param rockets whether to look at the rocket board
+     * @return "Atlas has no engineers", "3 rockets have no engineers", or {@code null} for none
+     */
+    public static String unstaffedLine(PlayerSnapshot state, ContentCatalog catalog, boolean rockets) {
+        List<Card> cards = unstaffed(state, catalog, rockets);
+        if (cards.isEmpty()) {
+            return null;
+        }
+        return cards.size() == 1 ? ContentNames.of(cards.get(0).component().id()) + " has no engineers"
+            : cards.size() + (rockets ? " rockets" : " payloads") + " have no engineers";
+    }
+
+    /**
      * Returns the engineers who could be assigned to a component: idle and available, best in
      * the component's skill first. <b>Unconfirmed default</b> (2026-10-04): the mockup simply took
      * "the next idle specialist"; here the player picks from this list.

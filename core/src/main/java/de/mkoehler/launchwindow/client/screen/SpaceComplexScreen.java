@@ -27,6 +27,7 @@ import de.mkoehler.launchwindow.client.view.DecisionView;
 import de.mkoehler.launchwindow.client.view.Advisor;
 import de.mkoehler.launchwindow.client.view.Help;
 import de.mkoehler.launchwindow.client.view.Hub;
+import de.mkoehler.launchwindow.client.view.PayloadRnd;
 import de.mkoehler.launchwindow.client.view.Tips;
 import de.mkoehler.launchwindow.model.Building;
 import de.mkoehler.launchwindow.model.FrontPage;
@@ -804,11 +805,13 @@ public final class SpaceComplexScreen extends SessionScreen {
                 shapes.circle(dotX, dotY, IDLE_DOT_RADIUS, 24);
             }
             // A decision waiting (ui-spec.md component 26): the same dot in gold, upper left. Headquarters
-            // gets it for new contracts on offer and for a contract still to launch (ui-spec.md section 4.17).
+            // gets it for new contracts on offer and for a contract still to launch (ui-spec.md section 4.17);
+            // the VAB and the SET Centre for a component below its cap with nobody on it.
             Hub.Place deciding = decisionPlace();
             boolean offers = newContracts() || contractToLaunch() != null;
             for (Hub.Hotspot spot : hotspots) {
-                if (spot.place() != deciding && !(offers && spot.place() == Hub.Place.HEADQUARTERS)) {
+                if (spot.place() != deciding && !(offers && spot.place() == Hub.Place.HEADQUARTERS)
+                    && unstaffedLine(spot.place()) == null) {
                     continue;
                 }
                 float radius = isUpgrading(spot.place()) ? MARKER_RADIUS : IDLE_MARKER_RADIUS;
@@ -860,6 +863,13 @@ public final class SpaceComplexScreen extends SessionScreen {
                     drawCentered(batch, idleName, waiting, hover.labelX() * scaleX, below, parentAlpha);
                     below -= idleName.getHeight() + 2f;
                 }
+                String unstaffed = unstaffedLine(hover.place());
+                if (unstaffed != null) {
+                    drawCentered(batch, idleShadow, unstaffed, hover.labelX() * scaleX + 1.5f, below - 1.5f,
+                        parentAlpha);
+                    drawCentered(batch, idleName, unstaffed, hover.labelX() * scaleX, below, parentAlpha);
+                    below -= idleName.getHeight() + 2f;
+                }
                 String contracts = hover.place() != Hub.Place.HEADQUARTERS ? null
                     : newContracts() ? "New contracts on offer" : contractToLaunch();
                 if (contracts != null) {
@@ -887,6 +897,12 @@ public final class SpaceComplexScreen extends SessionScreen {
         /** The reminder of an awarded contract with no mission launched for it, or {@code null}. */
         private String contractToLaunch() {
             return ContractsView.launchReminder(session.state(), session.openTurn());
+        }
+
+        /** What a building's R&D board has below its cap with nobody on it, or {@code null}. */
+        private String unstaffedLine(Hub.Place place) {
+            return place == Hub.Place.VAB || place == Hub.Place.SET_CENTRE
+                ? PayloadRnd.unstaffedLine(session.state(), session.catalog(), place == Hub.Place.VAB) : null;
         }
 
         /** The building whose board holds a waiting decision: the VAB for a rocket, else the SET Centre. */

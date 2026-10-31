@@ -913,6 +913,9 @@ public final class ScreenSnapshot {
             new de.mkoehler.launchwindow.model.Rapport("c3", "c4", -35, 0, 9, true))));
         startSession(game, planning, info);
         write(folder, "assemble-many-marks.png", new AssembleMissionScreen(game, "vostok-orbital"), null);
+        write(folder, "hub-unstaffed-vab.png", new SpaceComplexScreen(game), screen -> screen.hover(Hub.Place.VAB));
+        write(folder, "hub-unstaffed-set.png", new SpaceComplexScreen(game),
+            screen -> screen.hover(Hub.Place.SET_CENTRE));
     }
 
     /**

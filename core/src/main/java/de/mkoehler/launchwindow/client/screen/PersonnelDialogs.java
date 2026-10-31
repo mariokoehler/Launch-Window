@@ -306,7 +306,7 @@ final class PersonnelDialogs {
                 // skill (astronauts and controllers only).
                 boolean expert = department.hasExperts() && department.isExpert(specialist, option);
                 Table value = new Table();
-                value.add(ui.label(String.valueOf((int) Math.floor(department.skill(specialist, option))),
+                value.add(ui.label(String.valueOf(Math.round(department.skill(specialist, option))),
                     Theme.TextStyle.BODY_STRONG, expert ? Theme.GOLD_TEXT : tone));
                 if (expert) {
                     Image star = new Image(ui.icon("prestige"), Scaling.fit);

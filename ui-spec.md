@@ -974,6 +974,9 @@ Writing them turned up two things for the rules, recorded in `design.md` §2.2(d
       default>." and a primary button "Decide on the R&D board". The at-a-glance strip's Events cell
       becomes "Events · decision" when one waits (or a sixth cell "Decision: 1 waiting", whichever the
       mockup prefers).
+    - **Hub, an unstaffed component (the user's idea, 2026-10-31):** the same gold dot on the VAB or SET Centre while a
+      component of its board is below its R&D cap with no engineers, hover "Atlas has no engineers" or "3 rockets have
+      no engineers" (`PayloadRnd.unstaffed`).
     - **Hub:** a gold dot with a white ring on the upper left of the VAB's (rocket) or SET Centre's
       (payload) marker, opposite the red idle-staff dot. Hover adds a line under the building's name:
       "A decision waiting: Atlas".
@@ -3930,6 +3933,7 @@ facts and the trade-off lines carry the choice.
     and a green tick ("Gemini capsule · 64 % · yours"). The count in the row's label ("3 to develop").
   - **The rocket it needs:** the smallest rocket that lifts its landing (name, class), "Two launches per flight" for
     Gemini EOR, and its state: "Open · 48 %", "Not open: 12,500 to open", or in red "Needs VAB level 3" (heavy rockets).
+    Its picture is whole, 81 × 52 (2026-10-31, user; a narrow crop cut the Saturn V off).
   - **Crew per flight:** "3 astronauts" / "2 astronauts".
   - **Flights on the way:** how many configurations its two programs offer before the landing ("21 flights before
     the landing" for Apollo, 5 for Gemini EOR, 6 for Gemini direct ascent, 17 for the 7K-L3, 15 for the LK-700),

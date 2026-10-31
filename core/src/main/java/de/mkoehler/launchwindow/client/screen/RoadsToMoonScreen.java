@@ -345,8 +345,9 @@ public final class RoadsToMoonScreen extends ChromeScreen {
                 Theme.DANGER)).left();
             return cell;
         }
-        Drawable art = ui.croppedPicture("rockets/" + rocket.rocket().id() + ".jpg", 26f / 52f);
-        cell.add(art == null ? new Image(ui.solid(Theme.NAVY_BORDER)) : new Image(art, Scaling.fill)).size(26f, 52f)
+        // Whole, not cropped: the art's 448 by 288 frame, as high as the row's three lines.
+        Drawable art = ui.picture("rockets/" + rocket.rocket().id() + ".jpg");
+        cell.add(art == null ? new Image(ui.solid(Theme.NAVY_BORDER)) : new Image(art, Scaling.fit)).size(81f, 52f)
             .top().padRight(Theme.SPACE_3);
         Table text = new Table();
         text.top().left();
