@@ -1951,7 +1951,8 @@ does (`baspm.md` §10.11), plus the chosen rocket per launch:
   component 22):* one chemistry for the whole mission, crew and consoles together as the rules
   compute it, in a card under the flight crew with its reasons listed; the odds say they include
   it. Tiles show revealed traits and relationship marks (only when the partner is on this mission
-  too). The slot pickers get the R&D assign dialog's columns, the current holder highlighted with
+  too), wrapping inside the tile (2026-10-31: one row of them used to widen every column past the card).
+  The slot pickers get the R&D assign dialog's columns, the current holder highlighted with
   "Keep".
   *As built (2026-10-07):* one chemistry for the whole mission in its own card under the crew, with
   its reasons listed ("Why"); the rocket card stays. Tiles show revealed traits and a mark when
@@ -2984,7 +2985,10 @@ filled in (a bad address shows the Connect screen's own error under the field). 
 two disabled segments until the game had sound; *since 2026-10-12* it's On (the default) or Off, for
 everyone on the device, since the splash plays before anyone logs in. *Since 2026-10-13* two sliders
 under it set the replay's music (its fanfares) and sounds (§4.7.3, "Sound"), 70 % by default, for the device; the
-voices at the start and on joining play at full volume. Replays: Ask, Always or Never,
+voices at the start and on joining play at full volume. *Since 2026-10-31* everything clickable clicks
+(the user's request, `client.ui.ClickSound`, a capture listener on every screen's stage, so a new widget
+needs nothing): on release over the widget, not when disabled, dragged off or scrolling; the sounds slider
+sets its volume too, and sound Off silences it. Replays: Ask, Always or Never,
 per account (§4.4). **Confirmed by the user (2026-10-04):** the hash is shortened to 8 characters; the
 "connected" label is fixed text; and the account note says an unlaunched mission plan is
 dropped (plans live on the client session), instead of the mockup's "logging out loses nothing".
@@ -3305,7 +3309,9 @@ archetypes; the Soviet clients are ministries and institutes, which only changes
 can fly · Applied: Transatlantic relay", or "Active: Transatlantic relay · launch by Autumn 1963". The
 breadcrumb is "Space Complex › Headquarters › Contracts". Headquarters' hub marker gets the gold
 dot (as component 26's) when a listing the agency qualifies for is new this turn and it hasn't
-applied anywhere, hover "New contracts on offer". A help topic "Contracts" (component 23).
+applied anywhere, hover "New contracts on offer". The same dot stays on while an awarded contract has no
+mission launched for it, hover "Contract to launch: <title> · 2 seasons left" (the user's idea, 2026-10-31); a
+mission called off before it flies brings it back. A help topic "Contracts" (component 23).
 
 **Layout, top to bottom:**
 - **Your contract** card. With an active contract: client and line, the tier won ("Tier 1 of 3"),

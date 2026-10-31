@@ -184,6 +184,9 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
   Armstrong's "one small step" with the splash, Kennedy's "We choose to go to the Moon" when the Join
   screen opens. Settings' Sound On/Off now works, for the whole device (`LaunchWindowGame.soundOn`).
   `ScreenSnapshot` runs silent. Client only.
+- **Everything clickable clicks** (the user's request, 2026-10-31, `ui-spec.md` §4.12): one capture listener on
+  every screen's stage (`client.ui.ClickSound`), so a new widget needs nothing; a bare `new ClickListener()`
+  counts as a click-swallower, not a click. Client only.
 - **The archive** (the user's idea, 2026-10-15, `design.md` §2.12, `ui-spec.md` §4.19): pages about real
   missions (NASA's public-domain pictures, sound, our own text), unlocked for everyone in a game when a
   goal is first reached there, linked from the turn report, in a Museum tab. Mocked up and built the same

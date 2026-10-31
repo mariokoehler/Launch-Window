@@ -6,6 +6,7 @@ import com.badlogic.gdx.utils.Scaling;
 import de.mkoehler.launchwindow.client.view.TraitTexts;
 import de.mkoehler.launchwindow.model.Trait;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -59,20 +60,34 @@ public final class TraitChip extends Table {
      * @return the row
      */
     public static Table row(UiKit ui, List<Trait> traits, float width) {
+        List<TraitChip> chips = new ArrayList<>();
+        for (Trait trait : traits) {
+            chips.add(new TraitChip(ui, trait));
+        }
+        return flow(chips, width);
+    }
+
+    /**
+     * Lays chips, and whatever sits among them, out in a row that wraps.
+     *
+     * @param items the chips and marks
+     * @param width the row's width, so they know where to wrap
+     * @return the row
+     */
+    public static Table flow(List<? extends Table> items, float width) {
         Table rows = new Table();
         rows.left().top();
         Table line = new Table();
         float used = 0f;
-        for (Trait trait : traits) {
-            TraitChip chip = new TraitChip(ui, trait);
-            float chipWidth = chip.getPrefWidth();
-            if (used > 0f && used + GAP + chipWidth > width) {
+        for (Table item : items) {
+            float itemWidth = item.getPrefWidth();
+            if (used > 0f && used + GAP + itemWidth > width) {
                 rows.add(line).left().padBottom(GAP).row();
                 line = new Table();
                 used = 0f;
             }
-            line.add(chip).height(HEIGHT).padRight(GAP);
-            used += chipWidth + GAP;
+            line.add(item).height(HEIGHT).padRight(GAP);
+            used += itemWidth + GAP;
         }
         rows.add(line).left();
         return rows;

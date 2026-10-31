@@ -804,9 +804,9 @@ public final class SpaceComplexScreen extends SessionScreen {
                 shapes.circle(dotX, dotY, IDLE_DOT_RADIUS, 24);
             }
             // A decision waiting (ui-spec.md component 26): the same dot in gold, upper left. Headquarters
-            // gets it for new contracts on offer (ui-spec.md section 4.17).
+            // gets it for new contracts on offer and for a contract still to launch (ui-spec.md section 4.17).
             Hub.Place deciding = decisionPlace();
-            boolean offers = newContracts();
+            boolean offers = newContracts() || contractToLaunch() != null;
             for (Hub.Hotspot spot : hotspots) {
                 if (spot.place() != deciding && !(offers && spot.place() == Hub.Place.HEADQUARTERS)) {
                     continue;
@@ -860,8 +860,10 @@ public final class SpaceComplexScreen extends SessionScreen {
                     drawCentered(batch, idleName, waiting, hover.labelX() * scaleX, below, parentAlpha);
                     below -= idleName.getHeight() + 2f;
                 }
-                if (hover.place() == Hub.Place.HEADQUARTERS && newContracts()) {
-                    String offered = "New contracts on offer";
+                String contracts = hover.place() != Hub.Place.HEADQUARTERS ? null
+                    : newContracts() ? "New contracts on offer" : contractToLaunch();
+                if (contracts != null) {
+                    String offered = contracts;
                     drawCentered(batch, idleShadow, offered, hover.labelX() * scaleX + 1.5f, below - 1.5f,
                         parentAlpha);
                     drawCentered(batch, idleName, offered, hover.labelX() * scaleX, below, parentAlpha);
@@ -880,6 +882,11 @@ public final class SpaceComplexScreen extends SessionScreen {
         /** Whether a contract the agency can apply for is new this turn, and it hasn't applied anywhere. */
         private boolean newContracts() {
             return ContractsView.newOffers(session.state(), session.catalog(), session.openTurn());
+        }
+
+        /** The reminder of an awarded contract with no mission launched for it, or {@code null}. */
+        private String contractToLaunch() {
+            return ContractsView.launchReminder(session.state(), session.openTurn());
         }
 
         /** The building whose board holds a waiting decision: the VAB for a rocket, else the SET Centre. */

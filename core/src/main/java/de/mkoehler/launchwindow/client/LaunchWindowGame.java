@@ -11,6 +11,7 @@ import de.mkoehler.launchwindow.client.screen.ConnectScreen;
 import de.mkoehler.launchwindow.client.screen.SpaceComplexScreen;
 import de.mkoehler.launchwindow.client.settings.ClientSettings;
 import de.mkoehler.launchwindow.client.settings.SettingsStore;
+import de.mkoehler.launchwindow.client.ui.ClickSound;
 import de.mkoehler.launchwindow.client.ui.Theme;
 import de.mkoehler.launchwindow.client.ui.UiKit;
 import de.mkoehler.launchwindow.client.view.Hub;
@@ -917,6 +918,7 @@ public class LaunchWindowGame extends Game {
         if (ui != null) {
             ui.dispose();
         }
+        ClickSound.dispose();
     }
 
     /**

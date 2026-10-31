@@ -281,6 +281,10 @@ public final class ScreenSnapshot {
             contractShots(folder, game);
             return;
         }
+        if ("assemble".equals(System.getProperty("shots"))) {
+            assembleShots(folder, game);
+            return;
+        }
         if ("handson".equals(System.getProperty("shots"))) {
             handsOnShots(folder, game);
             return;
@@ -892,6 +896,25 @@ public final class ScreenSnapshot {
         write(folder, "rival-firsts-review.png", new TurnReportScreen(game, reviewed), null);
     }
 
+    /** Assemble mission's console tiles with a holder who has two traits and four clashes, which must wrap. */
+    private static void assembleShots(File folder, LaunchWindowGame game) {
+        String hash = ContentPackHash.ofClasspath("content/early-era", ScreenSnapshot.class.getClassLoader());
+        GameInfoResponse info = GameInfoResponse.success("early-era", hash, List.of(), 1, true,
+            6 * 3_600_000L + 12 * 60_000L + 30_000L, 0L, null, List.of(), List.of(), 0);
+        PlayerSnapshot planning = planningState(11, 25_000);
+        planning.getMissionControlOfficers().forEach(person -> person.setWorkSeasons(6));
+        planning.getMissionControlOfficers().get(4).setTraits(List.of(
+            revealed(de.mkoehler.launchwindow.model.Trait.MUST_BE_THE_BEST),
+            revealed(de.mkoehler.launchwindow.model.Trait.ABRASIVE)));
+        planning.setRapports(new ArrayList<>(List.of(
+            new de.mkoehler.launchwindow.model.Rapport("c0", "c4", -48, 0, 9, true),
+            new de.mkoehler.launchwindow.model.Rapport("c1", "c4", -40, 0, 9, true),
+            new de.mkoehler.launchwindow.model.Rapport("c2", "c4", -55, 0, 9, true),
+            new de.mkoehler.launchwindow.model.Rapport("c3", "c4", -35, 0, 9, true))));
+        startSession(game, planning, info);
+        write(folder, "assemble-many-marks.png", new AssembleMissionScreen(game, "vostok-orbital"), null);
+    }
+
     /**
      * Crewed flights grounded after a crew was lost (design.md 2.5(j), 2026-10-12): the launch screen's
      * refusal, the mission cards' readiness, and the turn report's line; then the advisor's idle tip
@@ -1500,6 +1523,8 @@ public final class ScreenSnapshot {
         live.setContractBoard(List.of(relay, weather, medicine));
         write(folder, "contracts-active.png", new de.mkoehler.launchwindow.client.screen.ContractsScreen(game), null);
         write(folder, "contracts-hq-active.png", new HeadquartersScreen(game), null);
+        write(folder, "contracts-hub-active.png", new SpaceComplexScreen(game),
+            screen -> screen.hover(Hub.Place.HEADQUARTERS));
         write(folder, "contracts-assemble.png",
             new de.mkoehler.launchwindow.client.screen.AssembleMissionScreen(game, "sputnik-1-orbit"), null);
         write(folder, "contracts-configs-sputnik.png",

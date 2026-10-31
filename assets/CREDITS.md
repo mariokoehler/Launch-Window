@@ -19,6 +19,9 @@ cut from the variable fonts), for the Firsts' front pages, under the SIL Open Fo
 - `audio/moon-speech.mp3`: President John F. Kennedy at Rice University, Houston, 12 September
   1962, "We choose to go to the Moon". NASA, https://www.nasa.gov/historical-sounds/. Public domain.
   Plays when the Join screen opens.
+- `audio/ui/button-click.mp3`: a button click from Pixabay, under the Pixabay Content License,
+  https://pixabay.com/service/license-summary/. Its download page is no longer known. Carried over
+  from the author's Robot-Rampage project.
 - `audio/handson/`: the hands-on puzzle's sounds, published by `assets-raw/audio/make_handson_sounds.py`.
 - `audio/handson/tense-loop.ogg`: "Thrilling and tense sound effect-01" by bbb2588, Pixabay,
   https://pixabay.com/sound-effects/horror-thrilling-and-tense-sound-effect-01-194450/. Pixabay Content License, https://pixabay.com/service/license-summary/.
