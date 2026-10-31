@@ -98,7 +98,7 @@ public final class FrontPageView {
         return Optional.of(new Page(headline.toUpperCase(Locale.ROOT), shortHeadline.toUpperCase(Locale.ROOT),
             found.map(s -> fill(s.deck(), tokens)).orElse(""), fill(first.get().caption(), tokens), first.get().brief(),
             paragraphs, droppable, folio, date.label().toUpperCase(Locale.ROOT), page.weather(),
-            race(page, all, words, inPack, names), "frontpage/" + page.goalId() + ".jpg"));
+            race(page, all, words, inPack, names), PilotPhoto.of(page)));
     }
 
     /**
@@ -139,7 +139,7 @@ public final class FrontPageView {
         return Optional.of(new Page(headline.toUpperCase(Locale.ROOT), shortHeadline.toUpperCase(Locale.ROOT), deck,
             fill(first.get().caption(), tokens), List.of(), paragraphs, text.get().close().size(), folio,
             date.label().toUpperCase(Locale.ROOT), page.weather(), race(page, all, words, inPack, names),
-            "frontpage/" + page.goalId() + ".jpg"));
+            PilotPhoto.of(page)));
     }
 
     /**

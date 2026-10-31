@@ -214,5 +214,437 @@
     "height": 704,
     "seed": 159242699749686,
     "prompt": "A grainy black-and-white 1960s press photograph. A ghostly, low-resolution image as received by television from the Moon: an astronaut in a bulky white spacesuit and backpack stands on grey powdery lunar ground beside the spindly foil-wrapped leg of a landing craft, long black shadows across the dust, black sky. Visible television scan lines, high contrast, blurred highlights. Shot on a press camera, strong contrast, deep blacks, film grain, documentary photojournalism, monochrome. No text, no captions, no logos, no flags, no insignia, no badges or emblems on clothing, no lettering anywhere."
+  },
+  {
+    "file": "variants/photo-human-in-orbit-male-european_1.png",
+    "job": "photo-human-in-orbit-male-european",
+    "variant": 1,
+    "width": 1024,
+    "height": 704,
+    "seed": 69712179957266,
+    "prompt": "A grainy black-and-white 1960s press photograph. A young white European man test pilot, with short hair, in a bulky silver pressure suit, holding his round white helmet under one arm, smiles and waves to a crowd, walking straight toward the camera across an airfield tarmac, the face clear and in focus, flanked by technicians in white coveralls. Behind them, the open hatch of a small scorched space capsule on a recovery truck. Slight motion blur on the technicians. Shot on a press camera, strong contrast, deep blacks, film grain, documentary photojournalism, monochrome. No text, no captions, no logos, no flags, no insignia, no badges or emblems on clothing, no lettering anywhere."
+  },
+  {
+    "file": "variants/photo-human-in-orbit-male-european_2.png",
+    "job": "photo-human-in-orbit-male-european",
+    "variant": 2,
+    "width": 1024,
+    "height": 704,
+    "seed": 25253900914293,
+    "prompt": "A grainy black-and-white 1960s press photograph. A young white European man test pilot, with short hair, in a bulky silver pressure suit, holding his round white helmet under one arm, smiles and waves to a crowd, walking straight toward the camera across an airfield tarmac, the face clear and in focus, flanked by technicians in white coveralls. Behind them, the open hatch of a small scorched space capsule on a recovery truck. Slight motion blur on the technicians. Shot on a press camera, strong contrast, deep blacks, film grain, documentary photojournalism, monochrome. No text, no captions, no logos, no flags, no insignia, no badges or emblems on clothing, no lettering anywhere."
+  },
+  {
+    "file": "variants/photo-human-in-orbit-male-european_3.png",
+    "job": "photo-human-in-orbit-male-european",
+    "variant": 3,
+    "width": 1024,
+    "height": 704,
+    "seed": 7515777943387,
+    "prompt": "A grainy black-and-white 1960s press photograph. A young white European man test pilot, with short hair, in a bulky silver pressure suit, holding his round white helmet under one arm, smiles and waves to a crowd, walking straight toward the camera across an airfield tarmac, the face clear and in focus, flanked by technicians in white coveralls. Behind them, the open hatch of a small scorched space capsule on a recovery truck. Slight motion blur on the technicians. Shot on a press camera, strong contrast, deep blacks, film grain, documentary photojournalism, monochrome. No text, no captions, no logos, no flags, no insignia, no badges or emblems on clothing, no lettering anywhere."
+  },
+  {
+    "file": "variants/photo-human-in-orbit-male-european_4.png",
+    "job": "photo-human-in-orbit-male-european",
+    "variant": 4,
+    "width": 1024,
+    "height": 704,
+    "seed": 38283765215659,
+    "prompt": "A grainy black-and-white 1960s press photograph. A young white European man test pilot, with short hair, in a bulky silver pressure suit, holding his round white helmet under one arm, smiles and waves to a crowd, walking straight toward the camera across an airfield tarmac, the face clear and in focus, flanked by technicians in white coveralls. Behind them, the open hatch of a small scorched space capsule on a recovery truck. Slight motion blur on the technicians. Shot on a press camera, strong contrast, deep blacks, film grain, documentary photojournalism, monochrome. No text, no captions, no logos, no flags, no insignia, no badges or emblems on clothing, no lettering anywhere."
+  },
+  {
+    "file": "variants/photo-human-in-orbit-male-black_1.png",
+    "job": "photo-human-in-orbit-male-black",
+    "variant": 1,
+    "width": 1024,
+    "height": 704,
+    "seed": 178348944283385,
+    "prompt": "A grainy black-and-white 1960s press photograph. A young Black, with dark skin man test pilot, with short hair, in a bulky silver pressure suit, holding his round white helmet under one arm, smiles and waves to a crowd, walking straight toward the camera across an airfield tarmac, the face clear and in focus, flanked by technicians in white coveralls. Behind them, the open hatch of a small scorched space capsule on a recovery truck. Slight motion blur on the technicians. Shot on a press camera, strong contrast, deep blacks, film grain, documentary photojournalism, monochrome. No text, no captions, no logos, no flags, no insignia, no badges or emblems on clothing, no lettering anywhere."
+  },
+  {
+    "file": "variants/photo-human-in-orbit-male-black_2.png",
+    "job": "photo-human-in-orbit-male-black",
+    "variant": 2,
+    "width": 1024,
+    "height": 704,
+    "seed": 257580871786732,
+    "prompt": "A grainy black-and-white 1960s press photograph. A young Black, with dark skin man test pilot, with short hair, in a bulky silver pressure suit, holding his round white helmet under one arm, smiles and waves to a crowd, walking straight toward the camera across an airfield tarmac, the face clear and in focus, flanked by technicians in white coveralls. Behind them, the open hatch of a small scorched space capsule on a recovery truck. Slight motion blur on the technicians. Shot on a press camera, strong contrast, deep blacks, film grain, documentary photojournalism, monochrome. No text, no captions, no logos, no flags, no insignia, no badges or emblems on clothing, no lettering anywhere."
+  },
+  {
+    "file": "variants/photo-human-in-orbit-male-black_3.png",
+    "job": "photo-human-in-orbit-male-black",
+    "variant": 3,
+    "width": 1024,
+    "height": 704,
+    "seed": 45159572192968,
+    "prompt": "A grainy black-and-white 1960s press photograph. A young Black, with dark skin man test pilot, with short hair, in a bulky silver pressure suit, holding his round white helmet under one arm, smiles and waves to a crowd, walking straight toward the camera across an airfield tarmac, the face clear and in focus, flanked by technicians in white coveralls. Behind them, the open hatch of a small scorched space capsule on a recovery truck. Slight motion blur on the technicians. Shot on a press camera, strong contrast, deep blacks, film grain, documentary photojournalism, monochrome. No text, no captions, no logos, no flags, no insignia, no badges or emblems on clothing, no lettering anywhere."
+  },
+  {
+    "file": "variants/photo-human-in-orbit-male-black_4.png",
+    "job": "photo-human-in-orbit-male-black",
+    "variant": 4,
+    "width": 1024,
+    "height": 704,
+    "seed": 166581771374727,
+    "prompt": "A grainy black-and-white 1960s press photograph. A young Black, with dark skin man test pilot, with short hair, in a bulky silver pressure suit, holding his round white helmet under one arm, smiles and waves to a crowd, walking straight toward the camera across an airfield tarmac, the face clear and in focus, flanked by technicians in white coveralls. Behind them, the open hatch of a small scorched space capsule on a recovery truck. Slight motion blur on the technicians. Shot on a press camera, strong contrast, deep blacks, film grain, documentary photojournalism, monochrome. No text, no captions, no logos, no flags, no insignia, no badges or emblems on clothing, no lettering anywhere."
+  },
+  {
+    "file": "variants/photo-human-in-orbit-male-east-asian_1.png",
+    "job": "photo-human-in-orbit-male-east-asian",
+    "variant": 1,
+    "width": 1024,
+    "height": 704,
+    "seed": 45386334279657,
+    "prompt": "A grainy black-and-white 1960s press photograph. A young East Asian man test pilot, with short hair, in a bulky silver pressure suit, holding his round white helmet under one arm, smiles and waves to a crowd, walking straight toward the camera across an airfield tarmac, the face clear and in focus, flanked by technicians in white coveralls. Behind them, the open hatch of a small scorched space capsule on a recovery truck. Slight motion blur on the technicians. Shot on a press camera, strong contrast, deep blacks, film grain, documentary photojournalism, monochrome. No text, no captions, no logos, no flags, no insignia, no badges or emblems on clothing, no lettering anywhere."
+  },
+  {
+    "file": "variants/photo-human-in-orbit-male-east-asian_2.png",
+    "job": "photo-human-in-orbit-male-east-asian",
+    "variant": 2,
+    "width": 1024,
+    "height": 704,
+    "seed": 278172486410168,
+    "prompt": "A grainy black-and-white 1960s press photograph. A young East Asian man test pilot, with short hair, in a bulky silver pressure suit, holding his round white helmet under one arm, smiles and waves to a crowd, walking straight toward the camera across an airfield tarmac, the face clear and in focus, flanked by technicians in white coveralls. Behind them, the open hatch of a small scorched space capsule on a recovery truck. Slight motion blur on the technicians. Shot on a press camera, strong contrast, deep blacks, film grain, documentary photojournalism, monochrome. No text, no captions, no logos, no flags, no insignia, no badges or emblems on clothing, no lettering anywhere."
+  },
+  {
+    "file": "variants/photo-human-in-orbit-male-east-asian_3.png",
+    "job": "photo-human-in-orbit-male-east-asian",
+    "variant": 3,
+    "width": 1024,
+    "height": 704,
+    "seed": 64183593489897,
+    "prompt": "A grainy black-and-white 1960s press photograph. A young East Asian man test pilot, with short hair, in a bulky silver pressure suit, holding his round white helmet under one arm, smiles and waves to a crowd, walking straight toward the camera across an airfield tarmac, the face clear and in focus, flanked by technicians in white coveralls. Behind them, the open hatch of a small scorched space capsule on a recovery truck. Slight motion blur on the technicians. Shot on a press camera, strong contrast, deep blacks, film grain, documentary photojournalism, monochrome. No text, no captions, no logos, no flags, no insignia, no badges or emblems on clothing, no lettering anywhere."
+  },
+  {
+    "file": "variants/photo-human-in-orbit-male-east-asian_4.png",
+    "job": "photo-human-in-orbit-male-east-asian",
+    "variant": 4,
+    "width": 1024,
+    "height": 704,
+    "seed": 90868820271934,
+    "prompt": "A grainy black-and-white 1960s press photograph. A young East Asian man test pilot, with short hair, in a bulky silver pressure suit, holding his round white helmet under one arm, smiles and waves to a crowd, walking straight toward the camera across an airfield tarmac, the face clear and in focus, flanked by technicians in white coveralls. Behind them, the open hatch of a small scorched space capsule on a recovery truck. Slight motion blur on the technicians. Shot on a press camera, strong contrast, deep blacks, film grain, documentary photojournalism, monochrome. No text, no captions, no logos, no flags, no insignia, no badges or emblems on clothing, no lettering anywhere."
+  },
+  {
+    "file": "variants/photo-human-in-orbit-male-central-asian_1.png",
+    "job": "photo-human-in-orbit-male-central-asian",
+    "variant": 1,
+    "width": 1024,
+    "height": 704,
+    "seed": 256565099686278,
+    "prompt": "A grainy black-and-white 1960s press photograph. A young Central Asian, with high cheekbones and dark hair man test pilot, with short hair, in a bulky silver pressure suit, holding his round white helmet under one arm, smiles and waves to a crowd, walking straight toward the camera across an airfield tarmac, the face clear and in focus, flanked by technicians in white coveralls. Behind them, the open hatch of a small scorched space capsule on a recovery truck. Slight motion blur on the technicians. Shot on a press camera, strong contrast, deep blacks, film grain, documentary photojournalism, monochrome. No text, no captions, no logos, no flags, no insignia, no badges or emblems on clothing, no lettering anywhere."
+  },
+  {
+    "file": "variants/photo-human-in-orbit-male-central-asian_2.png",
+    "job": "photo-human-in-orbit-male-central-asian",
+    "variant": 2,
+    "width": 1024,
+    "height": 704,
+    "seed": 111470155713275,
+    "prompt": "A grainy black-and-white 1960s press photograph. A young Central Asian, with high cheekbones and dark hair man test pilot, with short hair, in a bulky silver pressure suit, holding his round white helmet under one arm, smiles and waves to a crowd, walking straight toward the camera across an airfield tarmac, the face clear and in focus, flanked by technicians in white coveralls. Behind them, the open hatch of a small scorched space capsule on a recovery truck. Slight motion blur on the technicians. Shot on a press camera, strong contrast, deep blacks, film grain, documentary photojournalism, monochrome. No text, no captions, no logos, no flags, no insignia, no badges or emblems on clothing, no lettering anywhere."
+  },
+  {
+    "file": "variants/photo-human-in-orbit-male-central-asian_3.png",
+    "job": "photo-human-in-orbit-male-central-asian",
+    "variant": 3,
+    "width": 1024,
+    "height": 704,
+    "seed": 86251755010157,
+    "prompt": "A grainy black-and-white 1960s press photograph. A young Central Asian, with high cheekbones and dark hair man test pilot, with short hair, in a bulky silver pressure suit, holding his round white helmet under one arm, smiles and waves to a crowd, walking straight toward the camera across an airfield tarmac, the face clear and in focus, flanked by technicians in white coveralls. Behind them, the open hatch of a small scorched space capsule on a recovery truck. Slight motion blur on the technicians. Shot on a press camera, strong contrast, deep blacks, film grain, documentary photojournalism, monochrome. No text, no captions, no logos, no flags, no insignia, no badges or emblems on clothing, no lettering anywhere."
+  },
+  {
+    "file": "variants/photo-human-in-orbit-male-central-asian_4.png",
+    "job": "photo-human-in-orbit-male-central-asian",
+    "variant": 4,
+    "width": 1024,
+    "height": 704,
+    "seed": 6271965645196,
+    "prompt": "A grainy black-and-white 1960s press photograph. A young Central Asian, with high cheekbones and dark hair man test pilot, with short hair, in a bulky silver pressure suit, holding his round white helmet under one arm, smiles and waves to a crowd, walking straight toward the camera across an airfield tarmac, the face clear and in focus, flanked by technicians in white coveralls. Behind them, the open hatch of a small scorched space capsule on a recovery truck. Slight motion blur on the technicians. Shot on a press camera, strong contrast, deep blacks, film grain, documentary photojournalism, monochrome. No text, no captions, no logos, no flags, no insignia, no badges or emblems on clothing, no lettering anywhere."
+  },
+  {
+    "file": "variants/photo-human-in-orbit-male-latin_1.png",
+    "job": "photo-human-in-orbit-male-latin",
+    "variant": 1,
+    "width": 1024,
+    "height": 704,
+    "seed": 44516651908281,
+    "prompt": "A grainy black-and-white 1960s press photograph. A young Latin American, with a warm brown complexion and dark hair man test pilot, with short hair, in a bulky silver pressure suit, holding his round white helmet under one arm, smiles and waves to a crowd, walking straight toward the camera across an airfield tarmac, the face clear and in focus, flanked by technicians in white coveralls. Behind them, the open hatch of a small scorched space capsule on a recovery truck. Slight motion blur on the technicians. Shot on a press camera, strong contrast, deep blacks, film grain, documentary photojournalism, monochrome. No text, no captions, no logos, no flags, no insignia, no badges or emblems on clothing, no lettering anywhere."
+  },
+  {
+    "file": "variants/photo-human-in-orbit-male-latin_2.png",
+    "job": "photo-human-in-orbit-male-latin",
+    "variant": 2,
+    "width": 1024,
+    "height": 704,
+    "seed": 53052365801526,
+    "prompt": "A grainy black-and-white 1960s press photograph. A young Latin American, with a warm brown complexion and dark hair man test pilot, with short hair, in a bulky silver pressure suit, holding his round white helmet under one arm, smiles and waves to a crowd, walking straight toward the camera across an airfield tarmac, the face clear and in focus, flanked by technicians in white coveralls. Behind them, the open hatch of a small scorched space capsule on a recovery truck. Slight motion blur on the technicians. Shot on a press camera, strong contrast, deep blacks, film grain, documentary photojournalism, monochrome. No text, no captions, no logos, no flags, no insignia, no badges or emblems on clothing, no lettering anywhere."
+  },
+  {
+    "file": "variants/photo-human-in-orbit-male-latin_3.png",
+    "job": "photo-human-in-orbit-male-latin",
+    "variant": 3,
+    "width": 1024,
+    "height": 704,
+    "seed": 141147119828708,
+    "prompt": "A grainy black-and-white 1960s press photograph. A young Latin American, with a warm brown complexion and dark hair man test pilot, with short hair, in a bulky silver pressure suit, holding his round white helmet under one arm, smiles and waves to a crowd, walking straight toward the camera across an airfield tarmac, the face clear and in focus, flanked by technicians in white coveralls. Behind them, the open hatch of a small scorched space capsule on a recovery truck. Slight motion blur on the technicians. Shot on a press camera, strong contrast, deep blacks, film grain, documentary photojournalism, monochrome. No text, no captions, no logos, no flags, no insignia, no badges or emblems on clothing, no lettering anywhere."
+  },
+  {
+    "file": "variants/photo-human-in-orbit-male-latin_4.png",
+    "job": "photo-human-in-orbit-male-latin",
+    "variant": 4,
+    "width": 1024,
+    "height": 704,
+    "seed": 149053941832902,
+    "prompt": "A grainy black-and-white 1960s press photograph. A young Latin American, with a warm brown complexion and dark hair man test pilot, with short hair, in a bulky silver pressure suit, holding his round white helmet under one arm, smiles and waves to a crowd, walking straight toward the camera across an airfield tarmac, the face clear and in focus, flanked by technicians in white coveralls. Behind them, the open hatch of a small scorched space capsule on a recovery truck. Slight motion blur on the technicians. Shot on a press camera, strong contrast, deep blacks, film grain, documentary photojournalism, monochrome. No text, no captions, no logos, no flags, no insignia, no badges or emblems on clothing, no lettering anywhere."
+  },
+  {
+    "file": "variants/photo-human-in-orbit-male-caucasus_1.png",
+    "job": "photo-human-in-orbit-male-caucasus",
+    "variant": 1,
+    "width": 1024,
+    "height": 704,
+    "seed": 82748496572202,
+    "prompt": "A grainy black-and-white 1960s press photograph. A young from the Caucasus, with an olive complexion, strong dark brows and dark hair man test pilot, with short hair, in a bulky silver pressure suit, holding his round white helmet under one arm, smiles and waves to a crowd, walking straight toward the camera across an airfield tarmac, the face clear and in focus, flanked by technicians in white coveralls. Behind them, the open hatch of a small scorched space capsule on a recovery truck. Slight motion blur on the technicians. Shot on a press camera, strong contrast, deep blacks, film grain, documentary photojournalism, monochrome. No text, no captions, no logos, no flags, no insignia, no badges or emblems on clothing, no lettering anywhere."
+  },
+  {
+    "file": "variants/photo-human-in-orbit-male-caucasus_2.png",
+    "job": "photo-human-in-orbit-male-caucasus",
+    "variant": 2,
+    "width": 1024,
+    "height": 704,
+    "seed": 31559092191916,
+    "prompt": "A grainy black-and-white 1960s press photograph. A young from the Caucasus, with an olive complexion, strong dark brows and dark hair man test pilot, with short hair, in a bulky silver pressure suit, holding his round white helmet under one arm, smiles and waves to a crowd, walking straight toward the camera across an airfield tarmac, the face clear and in focus, flanked by technicians in white coveralls. Behind them, the open hatch of a small scorched space capsule on a recovery truck. Slight motion blur on the technicians. Shot on a press camera, strong contrast, deep blacks, film grain, documentary photojournalism, monochrome. No text, no captions, no logos, no flags, no insignia, no badges or emblems on clothing, no lettering anywhere."
+  },
+  {
+    "file": "variants/photo-human-in-orbit-male-caucasus_3.png",
+    "job": "photo-human-in-orbit-male-caucasus",
+    "variant": 3,
+    "width": 1024,
+    "height": 704,
+    "seed": 148044112455152,
+    "prompt": "A grainy black-and-white 1960s press photograph. A young from the Caucasus, with an olive complexion, strong dark brows and dark hair man test pilot, with short hair, in a bulky silver pressure suit, holding his round white helmet under one arm, smiles and waves to a crowd, walking straight toward the camera across an airfield tarmac, the face clear and in focus, flanked by technicians in white coveralls. Behind them, the open hatch of a small scorched space capsule on a recovery truck. Slight motion blur on the technicians. Shot on a press camera, strong contrast, deep blacks, film grain, documentary photojournalism, monochrome. No text, no captions, no logos, no flags, no insignia, no badges or emblems on clothing, no lettering anywhere."
+  },
+  {
+    "file": "variants/photo-human-in-orbit-male-caucasus_4.png",
+    "job": "photo-human-in-orbit-male-caucasus",
+    "variant": 4,
+    "width": 1024,
+    "height": 704,
+    "seed": 256690253107584,
+    "prompt": "A grainy black-and-white 1960s press photograph. A young from the Caucasus, with an olive complexion, strong dark brows and dark hair man test pilot, with short hair, in a bulky silver pressure suit, holding his round white helmet under one arm, smiles and waves to a crowd, walking straight toward the camera across an airfield tarmac, the face clear and in focus, flanked by technicians in white coveralls. Behind them, the open hatch of a small scorched space capsule on a recovery truck. Slight motion blur on the technicians. Shot on a press camera, strong contrast, deep blacks, film grain, documentary photojournalism, monochrome. No text, no captions, no logos, no flags, no insignia, no badges or emblems on clothing, no lettering anywhere."
+  },
+  {
+    "file": "variants/photo-human-in-orbit-female-european_1.png",
+    "job": "photo-human-in-orbit-female-european",
+    "variant": 1,
+    "width": 1024,
+    "height": 704,
+    "seed": 92658465272724,
+    "prompt": "A grainy black-and-white 1960s press photograph. A young white European woman test pilot, with short practical 1960s hair, in a bulky silver pressure suit, holding her round white helmet under one arm, smiles and waves to a crowd, walking straight toward the camera across an airfield tarmac, the face clear and in focus, flanked by technicians in white coveralls. Behind them, the open hatch of a small scorched space capsule on a recovery truck. Slight motion blur on the technicians. Shot on a press camera, strong contrast, deep blacks, film grain, documentary photojournalism, monochrome. No text, no captions, no logos, no flags, no insignia, no badges or emblems on clothing, no lettering anywhere."
+  },
+  {
+    "file": "variants/photo-human-in-orbit-female-european_2.png",
+    "job": "photo-human-in-orbit-female-european",
+    "variant": 2,
+    "width": 1024,
+    "height": 704,
+    "seed": 57848229635598,
+    "prompt": "A grainy black-and-white 1960s press photograph. A young white European woman test pilot, with short practical 1960s hair, in a bulky silver pressure suit, holding her round white helmet under one arm, smiles and waves to a crowd, walking straight toward the camera across an airfield tarmac, the face clear and in focus, flanked by technicians in white coveralls. Behind them, the open hatch of a small scorched space capsule on a recovery truck. Slight motion blur on the technicians. Shot on a press camera, strong contrast, deep blacks, film grain, documentary photojournalism, monochrome. No text, no captions, no logos, no flags, no insignia, no badges or emblems on clothing, no lettering anywhere."
+  },
+  {
+    "file": "variants/photo-human-in-orbit-female-european_3.png",
+    "job": "photo-human-in-orbit-female-european",
+    "variant": 3,
+    "width": 1024,
+    "height": 704,
+    "seed": 72557517364480,
+    "prompt": "A grainy black-and-white 1960s press photograph. A young white European woman test pilot, with short practical 1960s hair, in a bulky silver pressure suit, holding her round white helmet under one arm, smiles and waves to a crowd, walking straight toward the camera across an airfield tarmac, the face clear and in focus, flanked by technicians in white coveralls. Behind them, the open hatch of a small scorched space capsule on a recovery truck. Slight motion blur on the technicians. Shot on a press camera, strong contrast, deep blacks, film grain, documentary photojournalism, monochrome. No text, no captions, no logos, no flags, no insignia, no badges or emblems on clothing, no lettering anywhere."
+  },
+  {
+    "file": "variants/photo-human-in-orbit-female-european_4.png",
+    "job": "photo-human-in-orbit-female-european",
+    "variant": 4,
+    "width": 1024,
+    "height": 704,
+    "seed": 166806919228030,
+    "prompt": "A grainy black-and-white 1960s press photograph. A young white European woman test pilot, with short practical 1960s hair, in a bulky silver pressure suit, holding her round white helmet under one arm, smiles and waves to a crowd, walking straight toward the camera across an airfield tarmac, the face clear and in focus, flanked by technicians in white coveralls. Behind them, the open hatch of a small scorched space capsule on a recovery truck. Slight motion blur on the technicians. Shot on a press camera, strong contrast, deep blacks, film grain, documentary photojournalism, monochrome. No text, no captions, no logos, no flags, no insignia, no badges or emblems on clothing, no lettering anywhere."
+  },
+  {
+    "file": "variants/photo-human-in-orbit-female-black_1.png",
+    "job": "photo-human-in-orbit-female-black",
+    "variant": 1,
+    "width": 1024,
+    "height": 704,
+    "seed": 147471604888642,
+    "prompt": "A grainy black-and-white 1960s press photograph. A young Black, with dark skin woman test pilot, with short practical 1960s hair, in a bulky silver pressure suit, holding her round white helmet under one arm, smiles and waves to a crowd, walking straight toward the camera across an airfield tarmac, the face clear and in focus, flanked by technicians in white coveralls. Behind them, the open hatch of a small scorched space capsule on a recovery truck. Slight motion blur on the technicians. Shot on a press camera, strong contrast, deep blacks, film grain, documentary photojournalism, monochrome. No text, no captions, no logos, no flags, no insignia, no badges or emblems on clothing, no lettering anywhere."
+  },
+  {
+    "file": "variants/photo-human-in-orbit-female-black_2.png",
+    "job": "photo-human-in-orbit-female-black",
+    "variant": 2,
+    "width": 1024,
+    "height": 704,
+    "seed": 141531319547798,
+    "prompt": "A grainy black-and-white 1960s press photograph. A young Black, with dark skin woman test pilot, with short practical 1960s hair, in a bulky silver pressure suit, holding her round white helmet under one arm, smiles and waves to a crowd, walking straight toward the camera across an airfield tarmac, the face clear and in focus, flanked by technicians in white coveralls. Behind them, the open hatch of a small scorched space capsule on a recovery truck. Slight motion blur on the technicians. Shot on a press camera, strong contrast, deep blacks, film grain, documentary photojournalism, monochrome. No text, no captions, no logos, no flags, no insignia, no badges or emblems on clothing, no lettering anywhere."
+  },
+  {
+    "file": "variants/photo-human-in-orbit-female-black_3.png",
+    "job": "photo-human-in-orbit-female-black",
+    "variant": 3,
+    "width": 1024,
+    "height": 704,
+    "seed": 131721745733797,
+    "prompt": "A grainy black-and-white 1960s press photograph. A young Black, with dark skin woman test pilot, with short practical 1960s hair, in a bulky silver pressure suit, holding her round white helmet under one arm, smiles and waves to a crowd, walking straight toward the camera across an airfield tarmac, the face clear and in focus, flanked by technicians in white coveralls. Behind them, the open hatch of a small scorched space capsule on a recovery truck. Slight motion blur on the technicians. Shot on a press camera, strong contrast, deep blacks, film grain, documentary photojournalism, monochrome. No text, no captions, no logos, no flags, no insignia, no badges or emblems on clothing, no lettering anywhere."
+  },
+  {
+    "file": "variants/photo-human-in-orbit-female-black_4.png",
+    "job": "photo-human-in-orbit-female-black",
+    "variant": 4,
+    "width": 1024,
+    "height": 704,
+    "seed": 73056701192286,
+    "prompt": "A grainy black-and-white 1960s press photograph. A young Black, with dark skin woman test pilot, with short practical 1960s hair, in a bulky silver pressure suit, holding her round white helmet under one arm, smiles and waves to a crowd, walking straight toward the camera across an airfield tarmac, the face clear and in focus, flanked by technicians in white coveralls. Behind them, the open hatch of a small scorched space capsule on a recovery truck. Slight motion blur on the technicians. Shot on a press camera, strong contrast, deep blacks, film grain, documentary photojournalism, monochrome. No text, no captions, no logos, no flags, no insignia, no badges or emblems on clothing, no lettering anywhere."
+  },
+  {
+    "file": "variants/photo-human-in-orbit-female-east-asian_1.png",
+    "job": "photo-human-in-orbit-female-east-asian",
+    "variant": 1,
+    "width": 1024,
+    "height": 704,
+    "seed": 95585852451257,
+    "prompt": "A grainy black-and-white 1960s press photograph. A young East Asian woman test pilot, with short practical 1960s hair, in a bulky silver pressure suit, holding her round white helmet under one arm, smiles and waves to a crowd, walking straight toward the camera across an airfield tarmac, the face clear and in focus, flanked by technicians in white coveralls. Behind them, the open hatch of a small scorched space capsule on a recovery truck. Slight motion blur on the technicians. Shot on a press camera, strong contrast, deep blacks, film grain, documentary photojournalism, monochrome. No text, no captions, no logos, no flags, no insignia, no badges or emblems on clothing, no lettering anywhere."
+  },
+  {
+    "file": "variants/photo-human-in-orbit-female-east-asian_2.png",
+    "job": "photo-human-in-orbit-female-east-asian",
+    "variant": 2,
+    "width": 1024,
+    "height": 704,
+    "seed": 150811575528480,
+    "prompt": "A grainy black-and-white 1960s press photograph. A young East Asian woman test pilot, with short practical 1960s hair, in a bulky silver pressure suit, holding her round white helmet under one arm, smiles and waves to a crowd, walking straight toward the camera across an airfield tarmac, the face clear and in focus, flanked by technicians in white coveralls. Behind them, the open hatch of a small scorched space capsule on a recovery truck. Slight motion blur on the technicians. Shot on a press camera, strong contrast, deep blacks, film grain, documentary photojournalism, monochrome. No text, no captions, no logos, no flags, no insignia, no badges or emblems on clothing, no lettering anywhere."
+  },
+  {
+    "file": "variants/photo-human-in-orbit-female-east-asian_3.png",
+    "job": "photo-human-in-orbit-female-east-asian",
+    "variant": 3,
+    "width": 1024,
+    "height": 704,
+    "seed": 55468519155143,
+    "prompt": "A grainy black-and-white 1960s press photograph. A young East Asian woman test pilot, with short practical 1960s hair, in a bulky silver pressure suit, holding her round white helmet under one arm, smiles and waves to a crowd, walking straight toward the camera across an airfield tarmac, the face clear and in focus, flanked by technicians in white coveralls. Behind them, the open hatch of a small scorched space capsule on a recovery truck. Slight motion blur on the technicians. Shot on a press camera, strong contrast, deep blacks, film grain, documentary photojournalism, monochrome. No text, no captions, no logos, no flags, no insignia, no badges or emblems on clothing, no lettering anywhere."
+  },
+  {
+    "file": "variants/photo-human-in-orbit-female-east-asian_4.png",
+    "job": "photo-human-in-orbit-female-east-asian",
+    "variant": 4,
+    "width": 1024,
+    "height": 704,
+    "seed": 22200276210835,
+    "prompt": "A grainy black-and-white 1960s press photograph. A young East Asian woman test pilot, with short practical 1960s hair, in a bulky silver pressure suit, holding her round white helmet under one arm, smiles and waves to a crowd, walking straight toward the camera across an airfield tarmac, the face clear and in focus, flanked by technicians in white coveralls. Behind them, the open hatch of a small scorched space capsule on a recovery truck. Slight motion blur on the technicians. Shot on a press camera, strong contrast, deep blacks, film grain, documentary photojournalism, monochrome. No text, no captions, no logos, no flags, no insignia, no badges or emblems on clothing, no lettering anywhere."
+  },
+  {
+    "file": "variants/photo-human-in-orbit-female-central-asian_1.png",
+    "job": "photo-human-in-orbit-female-central-asian",
+    "variant": 1,
+    "width": 1024,
+    "height": 704,
+    "seed": 94742671803059,
+    "prompt": "A grainy black-and-white 1960s press photograph. A young Central Asian, with high cheekbones and dark hair woman test pilot, with short practical 1960s hair, in a bulky silver pressure suit, holding her round white helmet under one arm, smiles and waves to a crowd, walking straight toward the camera across an airfield tarmac, the face clear and in focus, flanked by technicians in white coveralls. Behind them, the open hatch of a small scorched space capsule on a recovery truck. Slight motion blur on the technicians. Shot on a press camera, strong contrast, deep blacks, film grain, documentary photojournalism, monochrome. No text, no captions, no logos, no flags, no insignia, no badges or emblems on clothing, no lettering anywhere."
+  },
+  {
+    "file": "variants/photo-human-in-orbit-female-central-asian_2.png",
+    "job": "photo-human-in-orbit-female-central-asian",
+    "variant": 2,
+    "width": 1024,
+    "height": 704,
+    "seed": 205314316425831,
+    "prompt": "A grainy black-and-white 1960s press photograph. A young Central Asian, with high cheekbones and dark hair woman test pilot, with short practical 1960s hair, in a bulky silver pressure suit, holding her round white helmet under one arm, smiles and waves to a crowd, walking straight toward the camera across an airfield tarmac, the face clear and in focus, flanked by technicians in white coveralls. Behind them, the open hatch of a small scorched space capsule on a recovery truck. Slight motion blur on the technicians. Shot on a press camera, strong contrast, deep blacks, film grain, documentary photojournalism, monochrome. No text, no captions, no logos, no flags, no insignia, no badges or emblems on clothing, no lettering anywhere."
+  },
+  {
+    "file": "variants/photo-human-in-orbit-female-central-asian_3.png",
+    "job": "photo-human-in-orbit-female-central-asian",
+    "variant": 3,
+    "width": 1024,
+    "height": 704,
+    "seed": 145807840756802,
+    "prompt": "A grainy black-and-white 1960s press photograph. A young Central Asian, with high cheekbones and dark hair woman test pilot, with short practical 1960s hair, in a bulky silver pressure suit, holding her round white helmet under one arm, smiles and waves to a crowd, walking straight toward the camera across an airfield tarmac, the face clear and in focus, flanked by technicians in white coveralls. Behind them, the open hatch of a small scorched space capsule on a recovery truck. Slight motion blur on the technicians. Shot on a press camera, strong contrast, deep blacks, film grain, documentary photojournalism, monochrome. No text, no captions, no logos, no flags, no insignia, no badges or emblems on clothing, no lettering anywhere."
+  },
+  {
+    "file": "variants/photo-human-in-orbit-female-central-asian_4.png",
+    "job": "photo-human-in-orbit-female-central-asian",
+    "variant": 4,
+    "width": 1024,
+    "height": 704,
+    "seed": 167517959423656,
+    "prompt": "A grainy black-and-white 1960s press photograph. A young Central Asian, with high cheekbones and dark hair woman test pilot, with short practical 1960s hair, in a bulky silver pressure suit, holding her round white helmet under one arm, smiles and waves to a crowd, walking straight toward the camera across an airfield tarmac, the face clear and in focus, flanked by technicians in white coveralls. Behind them, the open hatch of a small scorched space capsule on a recovery truck. Slight motion blur on the technicians. Shot on a press camera, strong contrast, deep blacks, film grain, documentary photojournalism, monochrome. No text, no captions, no logos, no flags, no insignia, no badges or emblems on clothing, no lettering anywhere."
+  },
+  {
+    "file": "variants/photo-human-in-orbit-female-latin_1.png",
+    "job": "photo-human-in-orbit-female-latin",
+    "variant": 1,
+    "width": 1024,
+    "height": 704,
+    "seed": 72471652072274,
+    "prompt": "A grainy black-and-white 1960s press photograph. A young Latin American, with a warm brown complexion and dark hair woman test pilot, with short practical 1960s hair, in a bulky silver pressure suit, holding her round white helmet under one arm, smiles and waves to a crowd, walking straight toward the camera across an airfield tarmac, the face clear and in focus, flanked by technicians in white coveralls. Behind them, the open hatch of a small scorched space capsule on a recovery truck. Slight motion blur on the technicians. Shot on a press camera, strong contrast, deep blacks, film grain, documentary photojournalism, monochrome. No text, no captions, no logos, no flags, no insignia, no badges or emblems on clothing, no lettering anywhere."
+  },
+  {
+    "file": "variants/photo-human-in-orbit-female-latin_2.png",
+    "job": "photo-human-in-orbit-female-latin",
+    "variant": 2,
+    "width": 1024,
+    "height": 704,
+    "seed": 205032956054183,
+    "prompt": "A grainy black-and-white 1960s press photograph. A young Latin American, with a warm brown complexion and dark hair woman test pilot, with short practical 1960s hair, in a bulky silver pressure suit, holding her round white helmet under one arm, smiles and waves to a crowd, walking straight toward the camera across an airfield tarmac, the face clear and in focus, flanked by technicians in white coveralls. Behind them, the open hatch of a small scorched space capsule on a recovery truck. Slight motion blur on the technicians. Shot on a press camera, strong contrast, deep blacks, film grain, documentary photojournalism, monochrome. No text, no captions, no logos, no flags, no insignia, no badges or emblems on clothing, no lettering anywhere."
+  },
+  {
+    "file": "variants/photo-human-in-orbit-female-latin_3.png",
+    "job": "photo-human-in-orbit-female-latin",
+    "variant": 3,
+    "width": 1024,
+    "height": 704,
+    "seed": 105482299208597,
+    "prompt": "A grainy black-and-white 1960s press photograph. A young Latin American, with a warm brown complexion and dark hair woman test pilot, with short practical 1960s hair, in a bulky silver pressure suit, holding her round white helmet under one arm, smiles and waves to a crowd, walking straight toward the camera across an airfield tarmac, the face clear and in focus, flanked by technicians in white coveralls. Behind them, the open hatch of a small scorched space capsule on a recovery truck. Slight motion blur on the technicians. Shot on a press camera, strong contrast, deep blacks, film grain, documentary photojournalism, monochrome. No text, no captions, no logos, no flags, no insignia, no badges or emblems on clothing, no lettering anywhere."
+  },
+  {
+    "file": "variants/photo-human-in-orbit-female-latin_4.png",
+    "job": "photo-human-in-orbit-female-latin",
+    "variant": 4,
+    "width": 1024,
+    "height": 704,
+    "seed": 65627932715688,
+    "prompt": "A grainy black-and-white 1960s press photograph. A young Latin American, with a warm brown complexion and dark hair woman test pilot, with short practical 1960s hair, in a bulky silver pressure suit, holding her round white helmet under one arm, smiles and waves to a crowd, walking straight toward the camera across an airfield tarmac, the face clear and in focus, flanked by technicians in white coveralls. Behind them, the open hatch of a small scorched space capsule on a recovery truck. Slight motion blur on the technicians. Shot on a press camera, strong contrast, deep blacks, film grain, documentary photojournalism, monochrome. No text, no captions, no logos, no flags, no insignia, no badges or emblems on clothing, no lettering anywhere."
+  },
+  {
+    "file": "variants/photo-human-in-orbit-female-caucasus_1.png",
+    "job": "photo-human-in-orbit-female-caucasus",
+    "variant": 1,
+    "width": 1024,
+    "height": 704,
+    "seed": 13319515893810,
+    "prompt": "A grainy black-and-white 1960s press photograph. A young from the Caucasus, with an olive complexion, strong dark brows and dark hair woman test pilot, with short practical 1960s hair, in a bulky silver pressure suit, holding her round white helmet under one arm, smiles and waves to a crowd, walking straight toward the camera across an airfield tarmac, the face clear and in focus, flanked by technicians in white coveralls. Behind them, the open hatch of a small scorched space capsule on a recovery truck. Slight motion blur on the technicians. Shot on a press camera, strong contrast, deep blacks, film grain, documentary photojournalism, monochrome. No text, no captions, no logos, no flags, no insignia, no badges or emblems on clothing, no lettering anywhere."
+  },
+  {
+    "file": "variants/photo-human-in-orbit-female-caucasus_2.png",
+    "job": "photo-human-in-orbit-female-caucasus",
+    "variant": 2,
+    "width": 1024,
+    "height": 704,
+    "seed": 88857027315353,
+    "prompt": "A grainy black-and-white 1960s press photograph. A young from the Caucasus, with an olive complexion, strong dark brows and dark hair woman test pilot, with short practical 1960s hair, in a bulky silver pressure suit, holding her round white helmet under one arm, smiles and waves to a crowd, walking straight toward the camera across an airfield tarmac, the face clear and in focus, flanked by technicians in white coveralls. Behind them, the open hatch of a small scorched space capsule on a recovery truck. Slight motion blur on the technicians. Shot on a press camera, strong contrast, deep blacks, film grain, documentary photojournalism, monochrome. No text, no captions, no logos, no flags, no insignia, no badges or emblems on clothing, no lettering anywhere."
+  },
+  {
+    "file": "variants/photo-human-in-orbit-female-caucasus_3.png",
+    "job": "photo-human-in-orbit-female-caucasus",
+    "variant": 3,
+    "width": 1024,
+    "height": 704,
+    "seed": 135195205801387,
+    "prompt": "A grainy black-and-white 1960s press photograph. A young from the Caucasus, with an olive complexion, strong dark brows and dark hair woman test pilot, with short practical 1960s hair, in a bulky silver pressure suit, holding her round white helmet under one arm, smiles and waves to a crowd, walking straight toward the camera across an airfield tarmac, the face clear and in focus, flanked by technicians in white coveralls. Behind them, the open hatch of a small scorched space capsule on a recovery truck. Slight motion blur on the technicians. Shot on a press camera, strong contrast, deep blacks, film grain, documentary photojournalism, monochrome. No text, no captions, no logos, no flags, no insignia, no badges or emblems on clothing, no lettering anywhere."
+  },
+  {
+    "file": "variants/photo-human-in-orbit-female-caucasus_4.png",
+    "job": "photo-human-in-orbit-female-caucasus",
+    "variant": 4,
+    "width": 1024,
+    "height": 704,
+    "seed": 159143715226912,
+    "prompt": "A grainy black-and-white 1960s press photograph. A young from the Caucasus, with an olive complexion, strong dark brows and dark hair woman test pilot, with short practical 1960s hair, in a bulky silver pressure suit, holding her round white helmet under one arm, smiles and waves to a crowd, walking straight toward the camera across an airfield tarmac, the face clear and in focus, flanked by technicians in white coveralls. Behind them, the open hatch of a small scorched space capsule on a recovery truck. Slight motion blur on the technicians. Shot on a press camera, strong contrast, deep blacks, film grain, documentary photojournalism, monochrome. No text, no captions, no logos, no flags, no insignia, no badges or emblems on clothing, no lettering anywhere."
   }
 ]

@@ -276,6 +276,11 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
   to 33 % of the goal's prestige. The mapping awaits the user's review. Every finding has its archive page (33 pages in all).
   `-Dshots=findings`, `-Drules.findingBonus=0`. Reset the dev data root, rebuild client and server together.
 
+- **The orbit photo shows your own pilot** (the user's idea and picks, 2026-10-31, `ui-spec.md` §4.18): 12 versions by
+  sex and look (`client.view.PilotPhoto`, `PilotPhotoTest` holds every ethnicity to a look and a file; the variants
+  go through `make_frontpage_art.py`, `picks.json` and `make_frontpage_assets.py` as ever). `MissionFlown` and
+  `Achiever` gained a field: rebuild client and server together; no reset.
+
 - **The world reacts is built** (the user's idea, 2026-10-20, built 2026-10-22, `design.md` §5, `ui-spec.md`
   §4.18.1, component 28 and G17, from the canvas `Launch Window — The World Reacts`): rivals give one statement
   on a First in the turn after it (`SubmitStatementRequest`, kept in `reactions/turn-N.json` by rival key), and

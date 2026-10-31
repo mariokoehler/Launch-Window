@@ -102,15 +102,31 @@ public record TurnReport(int version, long gameTurn, long prestigeBefore, long p
      * @param seasonsTotal           how many seasons it has
      * @param ended                  whether it's over now (completed, failed, or lost)
      * @param crewNames              who flew aboard, by name
+     * @param commanderPortraitId    the first of them's portrait, or {@code null}
      */
     public record MissionFlown(String missionInstanceId, String missionConfigurationId, int seasonIndex,
-                               int seasonsTotal, boolean ended, List<String> crewNames) {
+                               int seasonsTotal, boolean ended, List<String> crewNames, String commanderPortraitId) {
 
         /**
          * Copies the crew list.
          */
         public MissionFlown {
             crewNames = crewNames == null ? List.of() : List.copyOf(crewNames);
+        }
+
+        /**
+         * A flight with no portrait to go by.
+         *
+         * @param missionInstanceId      the mission
+         * @param missionConfigurationId its configuration
+         * @param seasonIndex            the season it flew, from 0
+         * @param seasonsTotal           how many seasons it has
+         * @param ended                  whether it's over now
+         * @param crewNames              who flew aboard, by name
+         */
+        public MissionFlown(String missionInstanceId, String missionConfigurationId, int seasonIndex,
+                            int seasonsTotal, boolean ended, List<String> crewNames) {
+            this(missionInstanceId, missionConfigurationId, seasonIndex, seasonsTotal, ended, crewNames, null);
         }
     }
 
@@ -156,21 +172,23 @@ public record TurnReport(int version, long gameTurn, long prestigeBefore, long p
             }
             MissionConfiguration configuration = catalog.missionConfiguration(mission.getMissionConfigurationId())
                 .orElse(null);
-            List<String> crew = mission.crewIds().stream().map(id -> nameOf(before, id)).filter(Objects::nonNull)
-                .toList();
+            List<Personnel> aboard = mission.crewIds().stream().map(id -> personOf(before, id))
+                .filter(Objects::nonNull).toList();
+            List<String> crew = aboard.stream().map(Personnel::getName).toList();
             missions.add(new MissionFlown(mission.getId(), mission.getMissionConfigurationId(), flown.getValue(),
                 configuration == null ? 0 : configuration.seasons().size(),
-                !after.getInProgressMissions().containsKey(mission.getId()), crew));
+                !after.getInProgressMissions().containsKey(mission.getId()), crew,
+                aboard.isEmpty() ? null : aboard.get(0).getPortraitId()));
         }
         return new TurnReport(VERSION, gameTurn, before.getPrestige(), after.getPrestige(), before.getFunds(),
             after.getFunds(), components, missions, events);
     }
 
-    private static String nameOf(PlayerSnapshot state, String id) {
+    private static Personnel personOf(PlayerSnapshot state, String id) {
         return Stream.of(state.getAstronauts(), state.getMissionControlOfficers(), state.getSetSpecialists())
             .flatMap(List::stream)
             .filter(person -> person.getId().equals(id))
-            .map(Personnel::getName)
+            .map(Personnel.class::cast)
             .findFirst()
             .orElse(null);
     }

@@ -54,6 +54,17 @@ class FrontPagePrinterTest {
     }
 
     @Test
+    void thePageKeepsTheCommandersPortrait() {
+        TurnReport.MissionFlown flown = new TurnReport.MissionFlown("m1", "config", 1, 1, true,
+            List.of("Daniel Hale"), "nasa_001");
+        TurnReport report = new TurnReport(TurnReport.VERSION, 26, 0, 0, 0, 0, List.of(), List.of(flown),
+            new ArrayList<>(flight("m1", List.of("Daniel Hale"), first("m1", "human-in-orbit", true)).goals()), null);
+        List<FrontPage> pages = FrontPagePrinter.print(26, 7L, List.of(agency("Orion Spaceworks", report)), PAGES,
+            goal -> true);
+        assertEquals("nasa_001", pages.get(0).achievers().get(0).commanderPortraitId());
+    }
+
+    @Test
     void theSamePageIsPrintedEveryTime() {
         List<FrontPagePrinter.Agency> agencies = List.of(
             agency("Orion Spaceworks", report(26, flight("m1", List.of("Daniel Hale"),

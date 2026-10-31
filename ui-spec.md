@@ -3532,7 +3532,11 @@ race box. *Unconfirmed.* The masthead is art, so it needs no font.
 
 **Component art** (`assets/ui/frontpage/`, from `assets-raw/frontpage/`, CLAUDE.md "Tools outside the
 repo"): `paper.jpg` (1440 x 900), `masthead.png` (ink on transparent, 1269 x 180, drawn at 60 %), one
-press photo per First (1024 x 704, printed in ink on the paper's colour, drawn at 640 x 440). All
+press photo per First (1024 x 704, printed in ink on the paper's colour, drawn at 640 x 440). The first human in
+orbit's is the one with a face, so it comes in 12 versions (the user's idea and picks, 2026-10-31,
+`ui/frontpage/human-in-orbit-<sex>-<look>.jpg`), chosen by the commander's portrait (`PilotPhoto`, kept on the page as
+`Achiever.commanderPortraitId`): six broad looks, since 31 ethnicities can't be told apart on newsprint. A tie shows
+the first agency's pilot, and a page without a portrait the plain photo. All
 generated with Qwen Image (ComfyUI), fixed seeds; the picks are in `picks.json`.
 
 **States:** one page; several ("1 of 3"); a tie; a solo game (no rival paragraph, no rivals in the race

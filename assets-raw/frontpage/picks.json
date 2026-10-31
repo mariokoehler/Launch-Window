@@ -5,5 +5,17 @@
   "photo-human-in-space": 1,
   "photo-human-in-orbit": 5,
   "photo-crewed-lunar-flyby": 1,
-  "photo-crewed-lunar-landing": 2
+  "photo-crewed-lunar-landing": 2,
+  "photo-human-in-orbit-female-black": 4,
+  "photo-human-in-orbit-female-caucasus": 3,
+  "photo-human-in-orbit-female-central-asian": 2,
+  "photo-human-in-orbit-female-east-asian": 4,
+  "photo-human-in-orbit-female-european": 1,
+  "photo-human-in-orbit-female-latin": 1,
+  "photo-human-in-orbit-male-black": 1,
+  "photo-human-in-orbit-male-caucasus": 1,
+  "photo-human-in-orbit-male-central-asian": 1,
+  "photo-human-in-orbit-male-east-asian": 4,
+  "photo-human-in-orbit-male-european": 1,
+  "photo-human-in-orbit-male-latin": 4
 }

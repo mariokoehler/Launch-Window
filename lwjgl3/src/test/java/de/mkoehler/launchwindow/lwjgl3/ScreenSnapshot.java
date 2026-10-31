@@ -989,6 +989,17 @@ public final class ScreenSnapshot {
         game.session().keepFrontPages(all);
         write(folder, "frontpage-orbit-rival.png", new FrontPageScreen(game, List.of(orbit), () -> { }, false), null);
         write(folder, "frontpage-two.png", new FrontPageScreen(game, List.of(space, orbit), () -> { }, false), null);
+        // The orbit photo follows the pilot: a Kazakh woman here, a Black man next.
+        for (String[] pilot : new String[][] {{"FEMALE", "kazakh"}, {"MALE", "black_american"}}) {
+            String portrait = de.mkoehler.launchwindow.rules.PortraitCatalog.all().stream()
+                .filter(p -> p.sex().name().equals(pilot[0]) && p.ethnicity().equals(pilot[1])).findFirst()
+                .orElseThrow().id();
+            FrontPage own = new FrontPage("26-human-in-orbit", "human-in-orbit", 26, "orbit-circles",
+                "Fair and cool tonight", List.of(), List.of(new FrontPage.Achiever("Orion Spaceworks", "Dir. A. Reyes",
+                    List.of("Daniel Hale"), portrait)), List.of("Kestrel Aerospace", "Baltic Star Agency"));
+            write(folder, "frontpage-orbit-" + pilot[1] + ".png",
+                new FrontPageScreen(game, List.of(own), () -> { }, false), null);
+        }
         write(folder, "frontpage-space-you.png", new FrontPageScreen(game, List.of(space), () -> { }, true), null);
         write(folder, "frontpage-satellite.png", new FrontPageScreen(game, List.of(satellite), () -> { }, true), null);
 

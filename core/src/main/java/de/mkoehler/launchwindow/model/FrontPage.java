@@ -310,14 +310,28 @@ public record FrontPage(String id, String goalId, int gameTurn, String storyId, 
      * @param agencyName   the agency's name
      * @param directorName its director's name
      * @param crewNames    the crew of the flight that made it, in seat order; empty for an uncrewed First
+     * @param commanderPortraitId the first of the crew's portrait, or {@code null} (an uncrewed First, or a
+     *                     page printed before these were kept)
      */
-    public record Achiever(String agencyName, String directorName, List<String> crewNames) {
+    public record Achiever(String agencyName, String directorName, List<String> crewNames,
+                           String commanderPortraitId) {
 
         /**
          * Copies the list into an {@link ArrayList}, which Kryo can rebuild.
          */
         public Achiever {
             crewNames = crewNames == null ? new ArrayList<>() : new ArrayList<>(crewNames);
+        }
+
+        /**
+         * An agency with no portrait to go by.
+         *
+         * @param agencyName   the agency's name
+         * @param directorName its director's name
+         * @param crewNames    the crew of the flight that made it, in seat order
+         */
+        public Achiever(String agencyName, String directorName, List<String> crewNames) {
+            this(agencyName, directorName, crewNames, null);
         }
     }
 
