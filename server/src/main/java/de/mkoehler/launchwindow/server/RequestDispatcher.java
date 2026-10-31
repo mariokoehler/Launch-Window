@@ -551,7 +551,11 @@ public class RequestDispatcher {
                     // everyone once it's published (design.md section 2.13).
                     Integer own = mine.get(goal);
                     Integer published = me == null ? null : me.getPublicFindings().get(goal);
-                    turn = own == null ? published : published == null ? own : Math.min(own, published);
+                    if (own == null || published == null) {
+                        turn = own == null ? published : own;
+                    } else {
+                        turn = Math.min(own, published);
+                    }
                     if (decided != null && (turn == null || turn > decided)) {
                         unlocks.add(new ArchiveUnlock(goal, decided, false, true));
                     } else if (turn != null) {

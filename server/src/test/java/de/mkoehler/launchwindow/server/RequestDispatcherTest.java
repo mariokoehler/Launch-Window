@@ -408,6 +408,43 @@ class RequestDispatcherTest {
     }
 
     /**
+     * Verifies a finding's page (design.md 2.13): closed to an agency that doesn't know it, which must not
+     * fail the whole answer, and open from the turn it reached the goal or the finding was published,
+     * whichever came first.
+     */
+    @Test
+    void aFindingsPageOpensOnlyForWhoKnowsIt(@TempDir Path dataRoot) throws Exception {
+        RequestDispatcher dispatcher = dispatcher(createAccountStore(dataRoot), dataRoot, false);
+        dispatcher.handleCreateAccount(1, new CreateAccountRequest(AppVersion.getVersion(), "mario", "hunter2"));
+        dispatcher.handleClaimSlot(1, new ClaimSlotRequest(Archetype.SOVIET, "OKB-1", "Chief"));
+        List<String> goals = List.of("magnetic-field-study");
+        assertEquals(List.of(), successfulUnlocks(dispatcher, goals), "nobody knows it yet");
+
+        Path player;
+        try (java.util.stream.Stream<Path> listing = Files.list(dataRoot.resolve("players"))) {
+            player = listing.filter(Files::isDirectory).findFirst().orElseThrow();
+        }
+        de.mkoehler.launchwindow.persistence.PlayerSnapshotStore store =
+            new de.mkoehler.launchwindow.persistence.PlayerSnapshotStore(player, mapper);
+        PlayerSnapshot snapshot = store.load().orElseThrow();
+        snapshot.getPublicFindings().put("magnetic-field-study", 7);
+        store.save(store.latestTurnNumber().orElse(0) + 1, snapshot, null);
+        assertEquals(List.of(new ArchiveUnlock("magnetic-field-study", 7, false)), successfulUnlocks(dispatcher, goals),
+            "a rival published it");
+
+        snapshot.getAchievedGoals().put("magnetic-field-study", 4);
+        store.save(store.latestTurnNumber().orElse(0) + 1, snapshot, null);
+        assertEquals(List.of(new ArchiveUnlock("magnetic-field-study", 4, true)), successfulUnlocks(dispatcher, goals),
+            "reached before it was published");
+    }
+
+    private static List<ArchiveUnlock> successfulUnlocks(RequestDispatcher dispatcher, List<String> goals) {
+        ArchiveResponse response = dispatcher.handleArchive(1, ArchiveRequest.of(goals));
+        assertTrue(response.success(), response.message());
+        return response.unlocks();
+    }
+
+    /**
      * Verifies that game-meta.json's devArchiveOpen opens every page asked about, in dev mode only: a
      * finding's page too, which otherwise opens only for the agencies that know it (design.md 2.13).
      */
@@ -421,10 +458,11 @@ class RequestDispatcherTest {
                 ServerTestGames.CONTEXT, meta, ServerTestGames.gameInfo(root, mapper, meta));
             dispatcher.handleCreateAccount(1, new CreateAccountRequest(AppVersion.getVersion(), "mario", "hunter2"));
             dispatcher.handleClaimSlot(1, new ClaimSlotRequest(Archetype.SOVIET, "OKB-1", "Chief"));
-            List<ArchiveUnlock> unlocks = dispatcher.handleArchive(1, ArchiveRequest.of(
-                List.of("lunar-flyby", "magnetic-field-study"))).unlocks();
+            ArchiveResponse response = dispatcher.handleArchive(1, ArchiveRequest.of(
+                List.of("lunar-flyby", "magnetic-field-study")));
+            assertTrue(response.success(), response.message());
             assertEquals(dev ? List.of(new ArchiveUnlock("lunar-flyby", 1, true),
-                new ArchiveUnlock("magnetic-field-study", 1, true)) : List.of(), unlocks);
+                new ArchiveUnlock("magnetic-field-study", 1, true)) : List.of(), response.unlocks());
         }
     }
 

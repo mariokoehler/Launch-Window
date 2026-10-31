@@ -1,5 +1,6 @@
 package de.mkoehler.launchwindow.client.screen;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.graphics.Color;
@@ -124,6 +125,9 @@ public final class MuseumScreen extends ChromeScreen {
             return;
         }
         game.gateway().fetchArchive(session.credentials(), goals, result -> {
+            if (!result.ok()) {
+                Gdx.app.error("Archive", result.message());
+            }
             if (!isShowing()) {
                 return;
             }
