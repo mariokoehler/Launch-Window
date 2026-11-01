@@ -20,9 +20,10 @@ import java.util.function.ToDoubleFunction;
 /**
  * A team's chemistry ({@code design.md} &sect;2.2(d)): how well it works together, from -1 to +1,
  * and what that does to its output, 1 + 0.15 &times; chemistry. One function for every caller:
- * the season's resolution uses the real traits and rapport; the client's previews ask for the
- * known part only (revealed traits, shown relationships), so a preview equals the resolution for
- * everything the player knows and never gives away what's hidden.
+ * the season's resolution uses the real traits; the client's previews ask for the known part only
+ * (revealed traits), so a preview equals the resolution for everything the player knows and never
+ * gives away what's hidden. Only shown relationships count, each for itself (user, 2026-11-01):
+ * rapport the player can't see does nothing.
  *
  * @author Mario Koehler
  */
@@ -30,6 +31,12 @@ public final class Chemistry {
 
     /** How much a team's output moves at the extremes of chemistry: 15 %. */
     public static final double OUTPUT_BAND = 0.15;
+
+    /** What each shown relationship in a team does to its output, up or down: 4 % (unconfirmed). */
+    public static final double RELATIONSHIP_OUTPUT = 0.04;
+
+    /** The same in chemistry: what a friendship adds to a team's, and a clash takes away. */
+    public static final double RELATIONSHIP = RELATIONSHIP_OUTPUT / OUTPUT_BAND;
 
     /** What each Team player adds to the team's chemistry. */
     public static final double TEAM_PLAYER = 0.15;
@@ -112,29 +119,17 @@ public final class Chemistry {
             return NEUTRAL;
         }
         List<Reason> reasons = new ArrayList<>();
-        double pairs = 0;
-        int pairCount = 0;
+        double value = 0;
         for (int i = 0; i < members.size(); i++) {
             for (int j = i + 1; j < members.size(); j++) {
-                pairCount++;
                 Rapport pair = Personality.rapport(snapshot, members.get(i).getId(), members.get(j).getId());
-                if (pair == null || knownOnly && !pair.shown()) {
+                if (pair == null || !pair.shown() || pair.rapport() == 0) {
                     continue;
                 }
-                pairs += pair.rapport() / Personality.RAPPORT_MAX;
-                if (pair.shown()) {
-                    reasons.add(new Reason("pair", List.of(pair.first(), pair.second()), pair.rapport() / Personality.RAPPORT_MAX));
-                }
+                double amount = Math.signum(pair.rapport()) * RELATIONSHIP;
+                value += amount;
+                reasons.add(new Reason("pair", List.of(pair.first(), pair.second()), amount));
             }
-        }
-        double value = pairCount == 0 ? 0 : pairs / pairCount;
-        // A shown pair's reason carries its share of the average.
-        if (pairCount > 1) {
-            List<Reason> scaled = new ArrayList<>();
-            for (Reason reason : reasons) {
-                scaled.add(new Reason(reason.kind(), reason.ids(), reason.amount() / pairCount));
-            }
-            reasons = scaled;
         }
         for (Personnel person : members) {
             if (counts(person, Trait.TEAM_PLAYER, knownOnly)) {

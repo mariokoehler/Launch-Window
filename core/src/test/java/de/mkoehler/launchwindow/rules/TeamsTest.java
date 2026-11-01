@@ -105,6 +105,74 @@ class TeamsTest {
             "r7-sputnik", 3), events.get(1));
     }
 
+    /** A shown relationship between two people, and a pair about to cross the line. */
+    private static PlayerSnapshot aboutToShow(double rapport, double affinity, Rapport existing,
+            SetSpecialist... engineers) {
+        PlayerSnapshot snapshot = agency(engineers);
+        snapshot.setRapports(new ArrayList<>(List.of(existing,
+            new Rapport("set-1", "set-2", rapport, affinity, 3, false))));
+        return snapshot;
+    }
+
+    @Test
+    void someoneWithAFriendGetsNoSecondOneUntilTheFirstLeaves() {
+        SetSpecialist a = engineer("set-1");
+        SetSpecialist b = engineer("set-2");
+        SetSpecialist friend = engineer("set-3");
+        PlayerSnapshot snapshot = aboutToShow(25, 1, new Rapport("set-1", "set-3", 60, 1, 9, true), a, b, friend);
+
+        assertTrue(Teams.advanceSeason(snapshot, List.of(rd("set-1", "set-2"))).isEmpty());
+        Rapport held = Personality.rapport(snapshot, "set-1", "set-2");
+        assertFalse(held.shown());
+        assertEquals(25, held.rapport(), 1e-9, "it waits just short of showing");
+        assertEquals(4, held.seasonsTogether());
+
+        snapshot.getSetSpecialists().remove(friend);
+        assertEquals(1, Teams.advanceSeason(snapshot, List.of(rd("set-1", "set-2"))).size());
+        assertTrue(Personality.rapport(snapshot, "set-1", "set-2").shown());
+    }
+
+    @Test
+    void anEasyGoingPersonHasRoomForTwoFriendsAndAnAbrasiveOneForTwoClashes() {
+        SetSpecialist easy = engineer("set-1", new TraitState(Trait.EASY_GOING, 2, true));
+        PlayerSnapshot friendly = aboutToShow(25, 1, new Rapport("set-1", "set-3", 60, 1, 9, true), easy,
+            engineer("set-2"), engineer("set-3"));
+        Teams.advanceSeason(friendly, List.of(rd("set-1", "set-2")));
+        assertTrue(Personality.rapport(friendly, "set-1", "set-2").shown());
+
+        SetSpecialist abrasive = engineer("set-1", new TraitState(Trait.ABRASIVE, 2, true));
+        PlayerSnapshot hostile = aboutToShow(-25, -1, new Rapport("set-1", "set-3", -60, -1, 9, true), abrasive,
+            engineer("set-2"), engineer("set-3"));
+        Teams.advanceSeason(hostile, List.of(rd("set-1", "set-2")));
+        assertTrue(Personality.rapport(hostile, "set-1", "set-2").shown());
+
+        // The room is for their own kind, and the other person needs room too.
+        SetSpecialist plain = engineer("set-1", new TraitState(Trait.EASY_GOING, 2, true));
+        SetSpecialist taken = engineer("set-2");
+        PlayerSnapshot full = aboutToShow(25, 1, new Rapport("set-2", "set-3", 60, 1, 9, true), plain, taken,
+            engineer("set-3"));
+        Teams.advanceSeason(full, List.of(rd("set-1", "set-2")));
+        assertFalse(Personality.rapport(full, "set-1", "set-2").shown());
+    }
+
+    @Test
+    void theOppositeKindComesOnlyOnThePairsOwnRoll() {
+        SetSpecialist hasClash = engineer("set-0");
+        SetSpecialist enemy = engineer("set-enemy");
+        int passed = 0;
+        int pairs = 400;
+        for (int i = 0; i < pairs; i++) {
+            SetSpecialist other = engineer("set-other-" + i);
+            PlayerSnapshot snapshot = agency(hasClash, enemy, other);
+            snapshot.setRapports(new ArrayList<>(List.of(new Rapport("set-0", "set-enemy", -60, -1, 9, true))));
+            boolean first = Personality.canShowRelationship(snapshot, hasClash, other, true);
+            assertEquals(first, Personality.canShowRelationship(snapshot, hasClash, other, true), "fixed per pair");
+            assertFalse(Personality.canShowRelationship(snapshot, hasClash, other, false), "already has a clash");
+            passed += first ? 1 : 0;
+        }
+        assertEquals(Personality.OPPOSITE_RELATIONSHIP_CHANCE, passed / (double) pairs, 0.08);
+    }
+
     @Test
     void aPairLeavesWithEitherPerson() {
         SetSpecialist a = engineer("set-1");

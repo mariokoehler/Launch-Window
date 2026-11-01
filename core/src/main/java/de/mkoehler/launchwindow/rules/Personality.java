@@ -52,6 +52,15 @@ public final class Personality {
     /** How far a pair's rapport moves per shared work season, times their affinity. */
     public static final double RAPPORT_DRIFT = 10;
 
+    /** How many friendships, and how many clashes, someone can have (user, 2026-11-01; unconfirmed). */
+    public static final int RELATIONSHIPS_OF_A_KIND = 1;
+
+    /** The same for an Easy-going person's friendships and an Abrasive person's clashes. */
+    public static final int RELATIONSHIPS_OF_THEIR_KIND = 2;
+
+    /** The chance a pair still shows when one of them already has the opposite kind (unconfirmed). */
+    public static final double OPPOSITE_RELATIONSHIP_CHANCE = 0.35;
+
     /** The bounds of a pair's rapport. */
     public static final double RAPPORT_MAX = 100;
 
@@ -156,6 +165,52 @@ public final class Personality {
             value += AFFINITY_TWO_WHO_MUST_BE_BEST;
         }
         return Math.max(-1.0, Math.min(1.0, value));
+    }
+
+    /**
+     * Returns whether a pair's relationship can show now: each has room for one of that kind, and if
+     * either already has the opposite kind, the pair's own roll lets it through. The roll is fixed per
+     * pair and nothing is saved, so a pair held back waits, and tries again if what held it goes.
+     *
+     * @param snapshot the agency
+     * @param a        one of them
+     * @param b        the other
+     * @param friendly whether it's a friendship, not a clash
+     * @return whether it can show
+     */
+    public static boolean canShowRelationship(PlayerSnapshot snapshot, Personnel a, Personnel b, boolean friendly) {
+        if (relationships(snapshot, a, friendly) >= relationshipLimit(a, friendly)
+            || relationships(snapshot, b, friendly) >= relationshipLimit(b, friendly)) {
+            return false;
+        }
+        return relationships(snapshot, a, !friendly) == 0 && relationships(snapshot, b, !friendly) == 0
+            || oppositeRoll(snapshot, a, b) < OPPOSITE_RELATIONSHIP_CHANCE;
+    }
+
+    /**
+     * Returns how many relationships of a kind someone can have.
+     *
+     * @param person   the person
+     * @param friendly whether friendships, not clashes
+     * @return the limit
+     */
+    public static int relationshipLimit(Personnel person, boolean friendly) {
+        return has(person, friendly ? Trait.EASY_GOING : Trait.ABRASIVE) ? RELATIONSHIPS_OF_THEIR_KIND
+            : RELATIONSHIPS_OF_A_KIND;
+    }
+
+    private static long relationships(PlayerSnapshot snapshot, Personnel person, boolean friendly) {
+        return snapshot.getRapports().stream().filter(pair -> pair.shown() && pair.involves(person.getId())
+            && (friendly ? pair.rapport() > 0 : pair.rapport() < 0)).count();
+    }
+
+    /** The pair's own stream, as for its affinity: the draw after that one, off the season's stream. */
+    private static double oppositeRoll(PlayerSnapshot snapshot, Personnel a, Personnel b) {
+        String first = a.getId().compareTo(b.getId()) <= 0 ? a.getId() : b.getId();
+        String second = first.equals(a.getId()) ? b.getId() : a.getId();
+        SplittableRandom random = new SplittableRandom(seed(snapshot.getAgencyName(), first + "|" + second));
+        random.nextDouble(-1.0, 1.0);
+        return random.nextDouble();
     }
 
     /**

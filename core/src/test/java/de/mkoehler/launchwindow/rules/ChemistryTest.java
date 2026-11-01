@@ -56,12 +56,23 @@ class ChemistryTest {
     }
 
     @Test
-    void aPairsRapportSetsATwoPersonTeamsChemistry() {
+    void aShownRelationshipMovesOutputByTheSameAmountInAnyTeam() {
         PlayerSnapshot snapshot = agency(engineer("set-1", 50, 0), engineer("set-2", 40, 1));
         snapshot.setRapports(List.of(new Rapport("set-1", "set-2", 40, 0.5, 8, true)));
-        Chemistry.Result chemistry = real(snapshot);
-        assertEquals(0.4, chemistry.value(), 1e-9);
-        assertEquals(1.06, chemistry.multiplier(), 1e-9);
+        assertEquals(1.04, real(snapshot).multiplier(), 1e-9);
+
+        // The strength doesn't matter, nor do the other pairs of a bigger team: no averaging.
+        PlayerSnapshot four = agency(engineer("set-1", 50, 0), engineer("set-2", 40, 1), engineer("set-3", 30, 2),
+            engineer("set-4", 20, 3));
+        four.setRapports(List.of(new Rapport("set-1", "set-2", -100, -1, 20, true)));
+        assertEquals(0.96, real(four).multiplier(), 1e-9);
+    }
+
+    @Test
+    void rapportThatHasntShownCountsForNothing() {
+        PlayerSnapshot snapshot = agency(engineer("set-1", 50, 0), engineer("set-2", 40, 1));
+        snapshot.setRapports(List.of(new Rapport("set-1", "set-2", 29, 1, 3, false)));
+        assertEquals(0, real(snapshot).value(), 1e-9);
     }
 
     @Test
@@ -77,7 +88,15 @@ class ChemistryTest {
         PlayerSnapshot friends = agency(engineer("set-1", 50, 0, new TraitState(Trait.TEAM_PLAYER, 2, false)),
             engineer("set-2", 40, 1, new TraitState(Trait.TEAM_PLAYER, 2, false)));
         friends.setRapports(List.of(new Rapport("set-1", "set-2", 100, 1, 30, true)));
-        assertEquals(1, real(friends).value(), 1e-9);
+        assertEquals(0.15 + 0.15 + Chemistry.RELATIONSHIP, real(friends).value(), 1e-9);
+        // Chemistry stops at the end of its scale, with a Loner working alone's bonus twice over.
+        PlayerSnapshot many = agency(engineer("set-1", 50, 0), engineer("set-2", 40, 1), engineer("set-3", 30, 2));
+        many.setRapports(List.of(new Rapport("set-1", "set-2", 50, 1, 9, true),
+            new Rapport("set-1", "set-3", 50, 1, 9, true), new Rapport("set-2", "set-3", 50, 1, 9, true)));
+        many.getSetSpecialists().get(0).setTraits(List.of(new TraitState(Trait.TEAM_PLAYER, 2, false)));
+        many.getSetSpecialists().get(1).setTraits(List.of(new TraitState(Trait.TEAM_PLAYER, 2, false)));
+        many.getSetSpecialists().get(2).setTraits(List.of(new TraitState(Trait.TEAM_PLAYER, 2, false)));
+        assertEquals(1, real(many).value(), 1e-9);
     }
 
     @Test
@@ -100,9 +119,10 @@ class ChemistryTest {
             new Rapport("set-2", "set-3", -20, -1, 4, false)));
 
         Chemistry.Result preview = Chemistry.research(snapshot, snapshot.getSetSpecialists(), SetSkill.ROCKETS, true);
-        assertEquals(0.6 / 3 + 0.15, preview.value(), 1e-9);
+        assertEquals(Chemistry.RELATIONSHIP + 0.15, preview.value(), 1e-9);
         assertTrue(preview.unknownFactors());
-        assertEquals((0.6 - 0.2) / 3 + 0.15 - 0.3, real(snapshot).value(), 1e-9);
+        // The real value adds the hidden Loner; the unshown clash counts in neither.
+        assertEquals(Chemistry.RELATIONSHIP + 0.15 - 0.3, real(snapshot).value(), 1e-9);
         assertFalse(real(snapshot).unknownFactors());
     }
 
@@ -129,6 +149,6 @@ class ChemistryTest {
         double base = neutral.getMissionComponents().get("rocket-redstone").getCurrentReliability() - 50;
         double gained = friends.getMissionComponents().get("rocket-redstone").getCurrentReliability() - 50;
         assertTrue(base > 0);
-        assertEquals(base * (1 + 0.15 * 0.5), gained, 1e-9);
+        assertEquals(base * (1 + Chemistry.RELATIONSHIP_OUTPUT), gained, 1e-9);
     }
 }

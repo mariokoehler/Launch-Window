@@ -352,6 +352,11 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
   (`ExpertRescueLines`). **All hands on deck** (`ui-spec.md` component 11) pulls a department out of training at
   once. A changed refusal: rebuild client and server together; no reset.
 
+- **Few relationships, each one felt** (the user's decision, 2026-11-01, `design.md` §2.2(d); every number
+  unconfirmed): one friendship and one clash a person (Easy-going two friendships, Abrasive two clashes), a 35 % roll
+  for the opposite kind, ±4 % output for each shown relationship in a team, hidden rapport counting for nothing.
+  Nothing saved changed; rebuild client and server together, no reset. The wiki follows `help.json`.
+
 ## How we work
 
 - **Screens:** Claude writes the spec in `ui-spec.md`, the user mocks it up in Claude Design,

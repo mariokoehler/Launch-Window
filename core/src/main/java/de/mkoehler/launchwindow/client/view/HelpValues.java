@@ -196,6 +196,9 @@ public final class HelpValues {
         v.put("events.good", whole(RandomEventRoster.baspmClose().goodChancePercent()));
 
         v.put("chemistry.band", whole(Math.round(Chemistry.OUTPUT_BAND * 100)));
+        v.put("chemistry.relationship", whole(Math.round(Chemistry.RELATIONSHIP_OUTPUT * 100)));
+        v.put("chemistry.relationshipsOfAKind", whole(Personality.RELATIONSHIPS_OF_A_KIND));
+        v.put("chemistry.relationshipsOfTheirKind", whole(Personality.RELATIONSHIPS_OF_THEIR_KIND));
         v.put("chemistry.rapportDrift", whole(Math.round(Personality.RAPPORT_DRIFT)));
         v.put("chemistry.rapportShown", whole(Math.round(Personality.RAPPORT_SHOWN_AT)));
         v.put("chemistry.rapportMax", whole(Math.round(Personality.RAPPORT_MAX)));

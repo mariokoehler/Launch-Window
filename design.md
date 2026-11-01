@@ -1478,6 +1478,19 @@ such as letting a brilliant troublemaker go.
     clamped to −1..+1. Each work season they share, rapport moves by **10 × affinity** (5 until
     2026-10-08), within
     −100..+100. It shows once past ±30 ("work well together", "clash").
+  - **Few relationships, each one felt** (user, 2026-11-01; every number unconfirmed): relationships had
+    become background noise, 31 shown among 19 people by season 37 of a play test. Someone can have one
+    friendship and one clash (`Personality.RELATIONSHIPS_OF_A_KIND`); Easy-going two friendships, Abrasive two
+    clashes. If either of a pair already has the opposite kind, it shows only on the pair's own 35 % roll,
+    drawn after its affinity from the pair's stream, so off the season's stream. A pair held back stays just
+    short of showing and nothing is saved: it shows if what held it goes, not never. Relationships from R&D
+    decisions ignore all this (they're the player's doing). Those already over the limit keep them.
+    **Chemistry no longer averages pairs:** each shown relationship in a team is ±4 % output
+    (`Chemistry.RELATIONSHIP_OUTPUT`), whatever the team's size, and hidden rapport counts for nothing; the
+    average below is the old rule.
+    Measured (`ContentPackPlayouts standard smart`, 2026-11-01, before and after): relationships shown in 24
+    seasons 6.4 to 3.7 a game (friendships 2.5 to 1.7); average completion season 79.7 to 78.8, medians NASA 76 to
+    79, Soviet 78 to 75: within noise, though the bots never choose teams for chemistry.
   - **Chemistry** of a team is a number from −1 to +1: the average rapport / 100 over all its
     pairs (0 for a team of one), plus the team traits below, clamped. It scales the team's output
     by **1 + 0.15 × chemistry**: the component's R&D reliability gain, and the mission's crew and

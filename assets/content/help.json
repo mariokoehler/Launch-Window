@@ -483,9 +483,10 @@
         "A team's chemistry scales its output by up to {chemistry.band} % either way: the reliability its R&D gains, or its contribution to each mission step.",
         "## Rapport",
         "Each pair of people who share a team builds rapport, from -{chemistry.rapportMax} to +{chemistry.rapportMax}. Every season together moves it by up to {chemistry.rapportDrift} points, toward liking or toward friction, depending on how the two get along. It never resets, so old colleagues meet again as friends or as enemies, and it's lost only when one of them leaves.",
-        "Past {chemistry.rapportShown} either way, it shows: the two \"work well together\" or \"clash\".",
-        "A team's chemistry is the average rapport of all its pairs, plus what its members' team traits add. R&D decisions can also change two engineers' rapport.",
-        "The chemistry shown on the R&D board and in Assemble mission counts only traits that have shown and relationships that are visible, and says “unknown factors” when there may be more. The season uses the real values.",
+        "Past {chemistry.rapportShown} either way, it shows: the two \"work well together\" or \"clash\". Only then does it count.",
+        "People don't get on with everyone or fall out with everyone. Each person can have {chemistry.relationshipsOfAKind} friendship and {chemistry.relationshipsOfAKind} clash; someone Easy-going can have {chemistry.relationshipsOfTheirKind} friendships, someone Abrasive {chemistry.relationshipsOfTheirKind} clashes. Someone who already has one kind is less likely to get the other. When a relationship ends because someone leaves, room opens for a new one.",
+        "Each friendship inside a team adds {chemistry.relationship} % to its output, and each clash takes {chemistry.relationship} % away, whatever the team's size. What its members' team traits add comes on top. R&D decisions can also change two engineers' rapport, and a relationship made that way ignores the limits.",
+        "The chemistry shown on the R&D board and in Assemble mission counts only traits that have shown, and says “unknown factors” when there may be more. The season uses the real traits.",
         "## Traits",
         "People have none, one or two hidden traits. A trait shows itself after {chemistry.revealMin} to {chemistry.revealMax} seasons of work in teams, or sooner when it matters. Some change the person's own work, such as Workaholic, Steady or Perfectionist. Others change the team: a Team player lifts it, a Loner works best alone, and someone who Must be the best wants to be its most skilled member.",
         "So choose teams with care: a slightly weaker engineer who gets on with everyone can beat a brilliant one who clashes."

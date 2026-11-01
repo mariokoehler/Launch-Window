@@ -92,8 +92,8 @@ class PeopleTest {
         List<People.ReasonLine> reasons = People.reasons(state, chemistry);
         assertEquals(List.of(new People.ReasonLine("rel_good", "Kowalczyk and Lindqvist work well together", 1),
             new People.ReasonLine("trait_team", "Team player: Kowalczyk", 1)), reasons);
-        // The hidden Loner and the unshown clash don't count: the shown pair's share plus the Team player.
-        assertEquals(0.45 / 3 + Chemistry.TEAM_PLAYER, chemistry.value(), 1e-9);
+        // The hidden Loner and the unshown clash don't count: the shown pair plus the Team player.
+        assertEquals(Chemistry.RELATIONSHIP + Chemistry.TEAM_PLAYER, chemistry.value(), 1e-9);
     }
 
     @Test
@@ -134,8 +134,8 @@ class PeopleTest {
         Chemistry.MissionChemistry swapped = People.missionWith(state, configuration, crew, control, false, 0,
             "astro-3");
         // The crew with CAPCOM is a team of two, one pair: the clash goes, the friendship comes.
-        assertEquals(-0.6, now.crew().value(), 1e-9);
-        assertEquals(0.6, swapped.crew().value(), 1e-9);
+        assertEquals(-Chemistry.RELATIONSHIP, now.crew().value(), 1e-9);
+        assertEquals(Chemistry.RELATIONSHIP, swapped.crew().value(), 1e-9);
         // The controller is a team of their own, untouched by either.
         assertEquals(0, now.consoles().value(), 1e-9);
         assertEquals(0, swapped.consoles().value(), 1e-9);
