@@ -281,6 +281,10 @@ public final class ScreenSnapshot {
             allHandsShots(folder, game);
             return;
         }
+        if ("mcpager".equals(System.getProperty("shots"))) {
+            missionPagerShots(folder, game);
+            return;
+        }
         if ("configcards".equals(System.getProperty("shots"))) {
             configCardShots(folder, game);
             return;
@@ -2486,6 +2490,26 @@ public final class ScreenSnapshot {
         write(folder, "plan-configs-readonly.png", new MissionConfigsScreen(game, "vostok"), null);
         write(folder, "plan-assessment-readonly.png", new MissionPlanScreen(game, "vostok-orbital",
             MissionPlanScreen.Tab.ASSESSMENT), null);
+    }
+
+    /** Mission Control's glance paging two scheduled and two active missions, alone with {@code -Dshots=mcpager}. */
+    private static void missionPagerShots(File folder, LaunchWindowGame game) {
+        PlayerSnapshot state = missionControlState();
+        InProgressMission second = new InProgressMission("z-scheduled", "sputnik-1-orbit", List.of(), List.of());
+        second.setRocketIds(List.of("r7-sputnik"));
+        state.getInProgressMissions().put(second.getId(), second);
+        InProgressMission flying = new InProgressMission("z-flying", "sputnik-1-extended", List.of(), List.of());
+        flying.setRocketIds(List.of("r7-sputnik"));
+        flying.setCurrentSeasonIndex(1);
+        state.getInProgressMissions().put(flying.getId(), flying);
+        String hash = ContentPackHash.ofClasspath("content/early-era", ScreenSnapshot.class.getClassLoader());
+        startSession(game, state, GameInfoResponse.success("early-era", hash, DECLARED, 23, true,
+            6 * 3_600_000L, 0L, null, List.of(), List.of(), 0));
+        write(folder, "mc-pager.png", new MissionControlScreen(game), null);
+        write(folder, "mc-pager-next.png", new MissionControlScreen(game), screen -> {
+            screen.pageMissions(true, 1);
+            screen.pageMissions(false, -1);
+        });
     }
 
     private static void missionControlShots(File folder, LaunchWindowGame game, GameInfoResponse info) {

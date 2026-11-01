@@ -41,10 +41,16 @@ import java.util.Locale;
  */
 public final class MissionControlScreen extends ChromeScreen {
 
+    /** The glance's arrows, tall as the card and narrow, so the card keeps its width. */
+    private static final float PAGE_ARROW_WIDTH = 32f;
+
     private final PersonnelDialogs dialogs = new PersonnelDialogs(this, Department.MISSION_CONTROL);
     private MissionControl.Filter filter = MissionControl.Filter.ALL;
     /** The skill the roster is sorted by, best first, or {@code null} for roster order. */
     private String sortBy;
+    /** The glance's pages; wrapped when read, since the lists can shrink. */
+    private int scheduledPage;
+    private int activePage;
 
     /**
      * Builds the screen from the session.
@@ -134,8 +140,8 @@ public final class MissionControlScreen extends ChromeScreen {
     }
 
     /**
-     * The missions at a glance: the first scheduled and the first active mission, each linking to
-     * its list. {@code null} with neither.
+     * The missions at a glance: one scheduled and one active mission, each linking to its list, with
+     * arrows beside the card when there are more to page through. {@code null} with neither.
      */
     private Table glance() {
         PlayerSnapshot state = session.state();
@@ -146,15 +152,58 @@ public final class MissionControlScreen extends ChromeScreen {
         }
         Table row = new Table();
         if (!scheduled.isEmpty()) {
-            row.add(missionLink(scheduled.get(0), true)).expandX().fillX().uniformX().padRight(Theme.SPACE_4);
+            row.add(missionPager(scheduled, scheduledPage, true)).expandX().fillX().uniformX()
+                .padRight(Theme.SPACE_4);
         }
         if (!active.isEmpty()) {
-            row.add(missionLink(active.get(0), false)).expandX().fillX().uniformX();
+            row.add(missionPager(active, activePage, false)).expandX().fillX().uniformX();
         }
         return row;
     }
 
-    private Table missionLink(InProgressMission mission, boolean scheduled) {
+    /** One mission's card, with arrows either side when the list has more than one. */
+    private Table missionPager(List<InProgressMission> missions, int page, boolean scheduled) {
+        int shown = Math.floorMod(page, missions.size());
+        Table card = missionLink(missions.get(shown), scheduled, shown, missions.size());
+        if (missions.size() == 1) {
+            return card;
+        }
+        Table pager = new Table();
+        pager.add(pageArrow(-1, scheduled)).width(PAGE_ARROW_WIDTH).fillY().padRight(Theme.SPACE_2);
+        pager.add(card).expandX().fillX();
+        pager.add(pageArrow(1, scheduled)).width(PAGE_ARROW_WIDTH).fillY().padLeft(Theme.SPACE_2);
+        return pager;
+    }
+
+    private Table pageArrow(int step, boolean scheduled) {
+        Table arrow = new Table();
+        arrow.setBackground(ui.rect(Theme.SURFACE_CARD, Theme.NAVY_BORDER, Theme.BORDER_THIN));
+        Image chevron = new Image(ui.icon("chevron"), Scaling.fit);
+        chevron.setColor(Theme.NAVY);
+        chevron.setOrigin(7f, 7f);
+        chevron.setRotation(step < 0 ? 180f : 0f);
+        arrow.add(chevron).size(14f);
+        arrow.setTouchable(Touchable.enabled);
+        arrow.addListener(clicked(() -> pageMissions(scheduled, step)));
+        return arrow;
+    }
+
+    /**
+     * Pages the glance's scheduled or active missions, going round at either end.
+     *
+     * @param scheduled the scheduled missions rather than the active ones
+     * @param step      the pages to move, negative for back
+     */
+    public void pageMissions(boolean scheduled, int step) {
+        if (scheduled) {
+            scheduledPage += step;
+        } else {
+            activePage += step;
+        }
+        rebuild();
+    }
+
+    private Table missionLink(InProgressMission mission, boolean scheduled, int index, int count) {
         MissionConfiguration configuration = session.catalog().missionConfiguration(mission.getMissionConfigurationId())
             .orElseThrow();
         Table link = ui.card();
@@ -172,8 +221,16 @@ public final class MissionControlScreen extends ChromeScreen {
         text.add(ui.label(MissionsScreen.peopleLine(mission, configuration, state()), Theme.TextStyle.CAPTION,
             Theme.INK_MUTED));
         link.add(text).expandX().fillX().left();
-        link.add(ui.label(scheduled ? "Scrub or re-staff ›" : "Watch or re-staff ›", Theme.TextStyle.LABEL,
-            Theme.NAVY)).right();
+        Table end = new Table();
+        end.right();
+        end.defaults().right();
+        if (count > 1) {
+            end.add(ui.label("Mission " + (index + 1) + " of " + count, Theme.TextStyle.CAPTION, Theme.INK_MUTED))
+                .padBottom(2f).row();
+        }
+        end.add(ui.label(scheduled ? "Scrub or re-staff ›" : "Watch or re-staff ›", Theme.TextStyle.LABEL,
+            Theme.NAVY));
+        link.add(end).right();
         link.setTouchable(Touchable.enabled);
         link.addListener(clicked(() -> game.setScreen(new MissionsScreen(game, scheduled))));
         return link;

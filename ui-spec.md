@@ -2075,6 +2075,10 @@ cap 5/13/22/35. **Ref:** `mission_control_*.png`,
 
 **4.7.1 Personnel overview** (component 11) for controllers, with sub-screens
 Hire, Manage department, Inspect active missions, and Inspect scheduled missions.
+Its glance row has one card for scheduled missions and one for active ones. With more than one
+in a list, arrows beside that card page through them, going round at either end, and the card
+says "Mission 1 of 2" (user, 2026-11-01). With one mission there are no arrows. The card still
+opens the whole list.
 
 **4.7.2 Inspect scheduled missions.** Missions launched today that fly at the next
 resolution. Each shows its configuration, rockets, crew, CAPCOM, controllers, and
