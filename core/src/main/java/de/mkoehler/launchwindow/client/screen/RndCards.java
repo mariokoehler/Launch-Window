@@ -152,6 +152,8 @@ final class RndCards {
         if (decision != null) {
             box.add(decision).padBottom(Theme.SPACE_3).row();
         }
+        // Takes any height a taller neighbour gives the card, so the team sits on its bottom edge.
+        box.add().expandY().row();
         if (!team.isEmpty()) {
             box.add(chemistryRow(component, team)).padBottom(Theme.SPACE_3).row();
         }

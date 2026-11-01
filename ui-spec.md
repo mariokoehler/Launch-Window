@@ -167,7 +167,10 @@ On the right:
    today's actions with their results ("Opened Sputnik 1 · −876"). Undo is by
    opposite action only, so this is how a player sees what they've committed to.
 10. **R&D board** (used twice: Rocket R&D in the VAB, Payload R&D in the SET
-    Centre). One card per owned, active component of that kind, with:
+    Centre). One card per owned, active component of that kind, two to a row; both cards of a
+    row are the same height, a shorter one's team chemistry and slots on its bottom edge,
+    except in a row with an R&D decision, whose height would leave a gap in the other card
+    *(user, 2026-11-01)*, with:
     - its reliability bar;
     - its four R&D slots: slot 1 earns the most, slot 4 the least, and each slot
       shows the specialist in it or "empty";

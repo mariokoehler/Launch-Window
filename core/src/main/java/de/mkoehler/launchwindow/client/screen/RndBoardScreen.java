@@ -108,8 +108,15 @@ public final class RndBoardScreen extends ChromeScreen {
         Table grid = new Table();
         grid.top();
         for (int i = 0; i < cards.size(); i++) {
-            grid.add(card(cards.get(i))).expandX().fillX().uniformX().top().pad(0f, 0f, Theme.SPACE_4,
+            // Both cards of a row end level (the user's request, 2026-11-01), unless one holds a decision:
+            // its height would leave a wide gap in the other.
+            var cell = grid.add(card(cards.get(i))).expandX().fillX().uniformX().pad(0f, 0f, Theme.SPACE_4,
                 i % 2 == 0 ? Theme.SPACE_4 : 0f);
+            if (rowHasDecision(cards, i)) {
+                cell.top();
+            } else {
+                cell.fillY();
+            }
             if (i % 2 == 1) {
                 grid.row();
             }
@@ -119,6 +126,13 @@ public final class RndBoardScreen extends ChromeScreen {
         }
         ScrollPane scroll = scrollPane(grid);
         content.add(scroll).expand().fill();
+    }
+
+    private boolean rowHasDecision(List<PayloadRnd.Card> cards, int index) {
+        int first = index - index % 2;
+        return java.util.stream.IntStream.range(first, Math.min(first + 2, cards.size())).anyMatch(i ->
+            de.mkoehler.launchwindow.client.view.DecisionView.about(session.state(),
+                cards.get(i).component().id()).isPresent());
     }
 
     /**
