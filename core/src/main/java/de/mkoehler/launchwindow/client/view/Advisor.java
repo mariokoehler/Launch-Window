@@ -4,7 +4,7 @@ import de.mkoehler.launchwindow.content.ContentCatalog;
 import de.mkoehler.launchwindow.content.MissionComponent;
 import de.mkoehler.launchwindow.content.MissionConfiguration;
 import de.mkoehler.launchwindow.content.Program;
-import de.mkoehler.launchwindow.model.Astronaut;
+import de.mkoehler.launchwindow.model.Astronaut;
 import de.mkoehler.launchwindow.model.OwnedMissionComponent;
 import de.mkoehler.launchwindow.model.PlayerSnapshot;
 import de.mkoehler.launchwindow.model.SetSpecialist;
@@ -272,7 +272,9 @@ public final class Advisor {
             // With the bigger capsules, once a person has been in space (user, 2026-10-27); a pack without
             // them falls back to the capsule program being open.
             case "lunar-probe" -> !exists(state, catalog, LUNAR_PROBES) ? Status.NOT_NEEDED
-                : opened(state, catalog, LUNAR_PROBES) || opened(state, catalog, MOON) ? Status.DONE
+                // The goal too: a probe program is closed once it has flown, and that mustn't bring this back.
+                : state.hasAchievedOrCancelledGoal("lunar-probe") || opened(state, catalog, LUNAR_PROBES)
+                    || opened(state, catalog, MOON) ? Status.DONE
                 : available(state, catalog, LUNAR_PROBES) && (exists(state, catalog, BIGGER_CAPSULES)
                     ? available(state, catalog, BIGGER_CAPSULES) || opened(state, catalog, BIGGER_CAPSULES)
                     : opened(state, catalog, ONE_CREW))

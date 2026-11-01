@@ -212,6 +212,9 @@ class AdvisorTest {
         state.getAchievedGoals().put("lunar-probe", 3);
         state.getAchievedGoals().put("human-in-orbit", 4);
         assertEquals(List.of("moon"), open.get());
+        // A probe program closed once it has flown doesn't bring the probe back.
+        state.getOpenedProgramIds().remove("ranger-3");
+        assertEquals(List.of("moon"), open.get());
         state.getOpenedProgramIds().add("apollo");
         assertTrue(Advisor.finished(state, standard, done));
     }
