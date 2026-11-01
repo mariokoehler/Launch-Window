@@ -582,13 +582,31 @@ public final class TurnReportView {
             }
         }
         for (ResolutionEvent event : report.events()) {
-            if (event instanceof de.mkoehler.launchwindow.rules.IntelligenceFound found) {
+            if (event instanceof de.mkoehler.launchwindow.rules.IntelligenceFound found
+                    && found.finding().kind() != de.mkoehler.launchwindow.rules.IntelFinding.Kind.FOREIGN_HARDWARE) {
                 String[] text = IntelTexts.finding(found.finding());
                 lines.add(new Line(text[0], text[1], found.finding().kind().name(),
                     IntelTexts.tone(found.finding())));
             }
         }
         return lines;
+    }
+
+    /**
+     * Returns the other side's hardware explained this season: it leads the Intelligence section.
+     *
+     * @param report the report
+     * @return the program and rocket ids; empty on a season with none
+     */
+    public static List<String> foreignHardware(TurnReport report) {
+        List<String> ids = new ArrayList<>();
+        for (ResolutionEvent event : report.events()) {
+            if (event instanceof de.mkoehler.launchwindow.rules.IntelligenceFound found
+                    && found.finding().kind() == de.mkoehler.launchwindow.rules.IntelFinding.Kind.FOREIGN_HARDWARE) {
+                ids.add(found.finding().tidbit().fact().ref());
+            }
+        }
+        return ids;
     }
 
     /**

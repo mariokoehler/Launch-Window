@@ -2137,7 +2137,7 @@ No BASPM precedent beyond its 1v1 PBEM mode and rival comparison screen.
 
     The ladder is people, then agencies, then rivals' people (user, 2026-10-07); level 3's
     personnel file is what makes a poaching offer an informed one.
-  - **Foreign hardware** (the user's idea, 2026-11-01; designed, not built; every number unconfirmed).
+  - **Foreign hardware** (the user's idea, 2026-11-01; built the same day; every number unconfirmed).
     Rival hardware means little to a player who isn't a space nerd, so analysts explain it, a piece at a
     time. **Pool:** every program and rocket program that an agency of the other side has open now,
     minus what the player already knows; a closed program leaves the pool until it is opened again.

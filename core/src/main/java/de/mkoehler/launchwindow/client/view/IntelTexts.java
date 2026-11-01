@@ -26,6 +26,17 @@ public final class IntelTexts {
     }
 
     /**
+     * Returns what a level brings of the other side's hardware (the ladder's Hardware row).
+     *
+     * @param level the level
+     * @return the line
+     */
+    public static String hardware(int level) {
+        int percent = Intelligence.HARDWARE_PERCENT[Math.clamp(level, 0, Intelligence.MAX_LEVEL)];
+        return percent == 0 ? "None" : percent + " % a season: one piece of their hardware explained";
+    }
+
+    /**
      * Returns a level's name.
      *
      * @param level the level
@@ -327,6 +338,7 @@ public final class IntelTexts {
             case AVERAGE_SKILL -> new String[] {groupName(fact.ref()) + ", average skill", range(fact)};
             case SKILL -> new String[] {TurnReportView.skillLabel(fact.ref()), range(fact)};
             case CONTRACT -> new String[] {"Contract", name(fact.ref()) + " · tier " + fact.count()};
+            case FOREIGN_HARDWARE -> new String[] {"Foreign hardware", name(fact.ref())};
             case CONTRACT_RECORD -> new String[] {"Contract record, " + name(fact.ref()),
                 fact.low() + " flown · " + fact.high() + " failed · " + signed(fact.count())};
         };
@@ -352,6 +364,7 @@ public final class IntelTexts {
             case SKILL -> "One of their people rates " + range(fact) + " in "
                 + TurnReportView.skillLabel(fact.ref()) + ".";
             case CONTRACT -> "They hold a tier " + fact.count() + " contract for " + name(fact.ref()) + ".";
+            case FOREIGN_HARDWARE -> "Your analysts explained " + name(fact.ref()) + ".";
             case CONTRACT_RECORD -> "They have flown " + fact.low() + " contracts for " + name(fact.ref())
                 + " and failed " + fact.high() + ".";
         };
@@ -452,6 +465,7 @@ public final class IntelTexts {
             case NOT_SETTLED -> new String[] {"Operation" + what, "Queued too late for this turn; nothing happened."};
             // Offers report through their own line (OfferSettled), never as a finding.
             case OFFER_MADE, OFFER_RECEIVED -> new String[] {rival + what, ""};
+            case FOREIGN_HARDWARE -> new String[] {"Foreign hardware", tidbit(finding.tidbit().fact())};
         };
     }
 
@@ -463,7 +477,7 @@ public final class IntelTexts {
      */
     public static int tone(IntelFinding finding) {
         return switch (finding.kind()) {
-            case DOSSIER, PERSONNEL_FILE, TIDBIT, CAUGHT_THEIRS -> 1;
+            case DOSSIER, PERSONNEL_FILE, TIDBIT, CAUGHT_THEIRS, FOREIGN_HARDWARE -> 1;
             case CAUGHT -> -1;
             default -> 0;
         };

@@ -3157,7 +3157,7 @@ binoculars, our own drawing; on the UI Asset Sheet since 2026-10-08). All rules 
 - **Tidbits:** the passive finds, newest first, each dated.
 - **Caught:** agents of yours this rival caught, and theirs you caught.
 
-**Foreign hardware** *(specified 2026-11-01 for `design.md` §2.9; mocked up the same day, not built)*:
+**Foreign hardware** *(specified 2026-11-01 for `design.md` §2.9; mocked up and built the same day)*:
 - **Dossiers:** a known item gets a plain role line under its name, and its counterpart ("their
   counterpart to your Mercury") where there is one; clicking it opens the file. An unknown item keeps
   its name alone, with a small "not yet analysed" mark. The same goes for the turn report's
@@ -3202,7 +3202,7 @@ and a sheet of the pieces. Choices the spec left open, all **unconfirmed** (each
   shows its description and blueprint. On the right the history note, a dashed "Theirs, not yours" box (no
   prices; reliability lives in the dossiers), and the dossiers that list it. Crumbs end in the item; the title
   row has "All foreign hardware" instead of tabs. **Rockets have no long description** (§4.6.4), so a rocket's
-  About is its short description above the blueprint: the user's call whether to write the 23.
+  About is its short description above the blueprint: the user's call whether to write the 25.
 - **Turn report:** the item learned leads the Intelligence section, tinted as the people news are, with the
   document glyph: "Foreign hardware · Proton-K with Block D" (a link to the file), the role, "Their counterpart
   to your Titan IIIC." A season with nothing learned has no line, and with nothing else the section is gone.
@@ -3212,6 +3212,21 @@ and a sheet of the pieces. Choices the spec left open, all **unconfirmed** (each
 - **Pieces:** no new colour tokens and no new icons (`search`, `document`, `chevron`, `binoculars` exist). New
   shapes for `Theme.java` and the UI Asset Sheet: the not-yet-analysed mark, the file link, the kind and New tags,
   the tab dot, the foreign-file strip and stamp, the dashed read-only box.
+
+**Built in libGDX (2026-11-01),** `-Dshots=foreign` renders the boards: `client.view.ForeignHardware` (the words and
+what's known), `client.screen.ForeignFileScreen`, the fourth tab, dossier rows, ladder row, overview card and report
+line in `IntelligenceOfficeScreen` and `TurnReportScreen`, `client.ui.DashedBox` (the dashed and hatched shapes, in place
+of Theme tokens). Defaults taken where the mockup left a gap or the client differs, all **unconfirmed**:
+- A component counts as the craft itself when it's its program's first; any other is a part ("part of their Gemini"). With
+  several programs needing it, the first known one speaks for it.
+- New, and the tab's gold dot (square, as nothing else draws a circle), mean learned in the last resolved turn, not "since you
+  last looked": they clear by themselves, with no per-game mark on the client (`review.md` 2.8 has that open).
+- Hardware of the player's own side shows its role with no link: the file is for foreign hardware only.
+- The plans dossier keeps its plain names. It wasn't on the boards.
+- A long R&D dossier scrolls with the page, not in its own column. The folder's widths are 320 / 680 / 500 / 312 px: personnel
+  files need the 500, more than the board's 455.
+- A counterpart that's a program links to its page; one that's a rocket doesn't, as rockets have no page of their own.
+- The tab's history note keeps the existing style and heading, not the board's "The real thing"; the file uses the board's.
 
 **Hire screen addition** (component 14): see there.
 

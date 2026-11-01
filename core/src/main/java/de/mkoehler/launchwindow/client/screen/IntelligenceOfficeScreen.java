@@ -15,9 +15,13 @@ import de.mkoehler.launchwindow.actions.SetIntelligenceTargetAction;
 import de.mkoehler.launchwindow.client.LaunchWindowGame;
 import de.mkoehler.launchwindow.client.ui.HistoryNotes;
 import de.mkoehler.launchwindow.client.ui.ReliabilityBar;
+import de.mkoehler.launchwindow.client.ui.DashedBox;
+import de.mkoehler.launchwindow.client.ui.UiKit;
 import de.mkoehler.launchwindow.client.ui.Theme;
 import de.mkoehler.launchwindow.client.ui.TraitChip;
 import de.mkoehler.launchwindow.client.view.Help;
+import de.mkoehler.launchwindow.client.view.ForeignHardware;
+import de.mkoehler.launchwindow.client.view.ContentNames;
 import de.mkoehler.launchwindow.client.view.IntelTexts;
 import de.mkoehler.launchwindow.client.view.PoachTexts;
 import de.mkoehler.launchwindow.client.view.Museum;
@@ -64,7 +68,9 @@ public final class IntelligenceOfficeScreen extends ChromeScreen {
         /** Queuing operations. */
         OPERATIONS("Operations"),
         /** A folder per rival. */
-        FOLDERS("Folders");
+        FOLDERS("Folders"),
+        /** What the analysts have explained of the other side's hardware. */
+        FOREIGN_HARDWARE("Foreign hardware");
 
         private final String label;
 
@@ -74,6 +80,16 @@ public final class IntelligenceOfficeScreen extends ChromeScreen {
     }
 
     private static final float COLUMN_GAP = Theme.SPACE_4;
+    /** The R&amp;D dossier's width, so a role and a counterpart stay on one line each. */
+    private static final float RND_DOSSIER_WIDTH = 680f;
+    /** The folders' other columns: with the R&amp;D dossier's, they fill the page and no more. */
+    private static final float RIVAL_LIST_WIDTH = 320f;
+    private static final float MIDDLE_COLUMN_WIDTH = 500f;
+    private static final float LAST_COLUMN_WIDTH = 312f;
+    private static final String HARDWARE_NOTE = "To the West the R-7 was the SS-6 \u201cSapwood\u201d, a NATO "
+        + "reporting name, for years before anyone outside saw one. A full-size Vostok rocket first went on show at "
+        + "the Paris Air Show in 1967, and a US report from the show found Western estimates of its size and "
+        + "configuration substantially correct.";
     private static final String HISTORY_NOTE = "In 1963 a reconnaissance satellite caught the first signs of a "
         + "huge new building site at Baikonur. In December 1967 the President's Daily Brief reported that a US "
         + "satellite had, for the first time, photographed a giant rocket on one of the new pads: the N1, the "
@@ -177,8 +193,13 @@ public final class IntelligenceOfficeScreen extends ChromeScreen {
                 + Poaching.OFFERS_PER_SEASON + " used", Theme.TextStyle.CAPTION, Theme.ON_PAGE_STRONG))
                 .padRight(Theme.SPACE_3);
         }
+        if (tab == Tab.FOREIGN_HARDWARE && !otherSide()) {
+            tab = Tab.OVERVIEW;
+        }
         for (Tab each : Tab.values()) {
-            titleActions.add(tabButton(each)).padLeft(Theme.SPACE_2);
+            if (each != Tab.FOREIGN_HARDWARE || otherSide()) {
+                titleActions.add(tabButton(each)).padLeft(Theme.SPACE_2);
+            }
         }
         content.clearChildren();
         content.top();
@@ -189,6 +210,7 @@ public final class IntelligenceOfficeScreen extends ChromeScreen {
             case OVERVIEW -> overview();
             case OPERATIONS -> operations();
             case FOLDERS -> folders();
+            case FOREIGN_HARDWARE -> foreignHardware();
         };
         content.add(scrollPane(body)).expand().fill();
     }
@@ -206,6 +228,9 @@ public final class IntelligenceOfficeScreen extends ChromeScreen {
             button.add(lock).size(11f).padRight(5f);
         }
         button.add(ui.label(each.label.toUpperCase(Locale.ROOT), Theme.TextStyle.LABEL, color));
+        if (each == Tab.FOREIGN_HARDWARE && !newHardware().isEmpty()) {
+            button.add(new Image(ui.solid(Theme.GOLD))).size(7f).padLeft(Theme.SPACE_2);
+        }
         button.setTouchable(Touchable.enabled);
         button.addListener(clicked(() -> select(each)));
         if (locked) {
@@ -230,7 +255,7 @@ public final class IntelligenceOfficeScreen extends ChromeScreen {
         Table right = column();
         right.add(counterCard()).padBottom(COLUMN_GAP).row();
         right.add(foldersCard()).padBottom(COLUMN_GAP).row();
-        right.add(historyNote()).row();
+        right.add(otherSide() ? foreignCard() : historyNote()).row();
         columns.add(left).width(520f).top().padRight(COLUMN_GAP);
         columns.add(middle).expandX().fillX().top().padRight(COLUMN_GAP);
         columns.add(right).width(420f).top();
@@ -469,6 +494,9 @@ public final class IntelligenceOfficeScreen extends ChromeScreen {
         rungLine(grid, "Actions", level == 0 ? "none" : level + " a season", false);
         rungLine(grid, "Unlocks", IntelTexts.unlocks(level), locked && level > 0);
         rungLine(grid, "Passive", IntelTexts.passive(level), false);
+        if (otherSide()) {
+            rungLine(grid, "Hardware", IntelTexts.hardware(level), false);
+        }
         rungLine(grid, "Counter-intel", IntelTexts.counter(level), false);
         body.add(grid).growX();
         rung.add(body).expandX().fillX();
@@ -953,7 +981,7 @@ public final class IntelligenceOfficeScreen extends ChromeScreen {
         for (Map.Entry<String, String> name : names.entrySet()) {
             list.add(folderTab(name.getKey(), name.getValue())).padBottom(Theme.SPACE_2).row();
         }
-        columns.add(list).width(360f).top().padRight(COLUMN_GAP);
+        columns.add(list).width(RIVAL_LIST_WIDTH).top().padRight(COLUMN_GAP);
         columns.add(folderKey == null ? new Table() : folder(folderKey, names.get(folderKey))).expandX().fillX().top();
         return columns;
     }
@@ -974,7 +1002,10 @@ public final class IntelligenceOfficeScreen extends ChromeScreen {
         tab.add(ui.label(folder == null || folder.getKnownLevel() < 0 ? "Intelligence level unknown"
             : "Level " + folder.getKnownLevel() + " as of " + Museum.date(folder.getKnownLevelTurn()),
             Theme.TextStyle.CAPTION, Theme.INK_MUTED)).row();
-        tab.add(ui.paragraph(dossierDates(folder), Theme.TextStyle.CAPTION, Theme.INK_MUTED)).growX();
+        tab.add(ui.paragraph(dossierDates(folder), Theme.TextStyle.CAPTION, Theme.INK_MUTED)).growX().row();
+        if (summary.filter(rival -> rival.archetype() == session.state().getArchetype()).isPresent()) {
+            tab.add(ui.label("Your side: its hardware is known", Theme.TextStyle.CAPTION, Theme.INK_MUTED));
+        }
         tab.setTouchable(Touchable.enabled);
         tab.addListener(clicked(() -> openFolder(key)));
         return tab;
@@ -1020,17 +1051,17 @@ public final class IntelligenceOfficeScreen extends ChromeScreen {
         Table grid = new Table();
         grid.top();
         Table first = column();
-        first.add(dossierCard(folder, IntelArea.RND)).padBottom(COLUMN_GAP).row();
-        first.add(dossierCard(folder, IntelArea.PLANS)).row();
+        first.add(dossierCard(folder, IntelArea.RND)).row();
         Table second = column();
+        second.add(dossierCard(folder, IntelArea.PLANS)).padBottom(COLUMN_GAP).row();
         second.add(dossierCard(folder, IntelArea.PERSONNEL)).padBottom(COLUMN_GAP).row();
         second.add(filesBlock(key, folder)).row();
         Table third = column();
         third.add(tidbitsCard(folder)).padBottom(COLUMN_GAP).row();
         third.add(caughtCard(folder)).row();
-        grid.add(first).expandX().fillX().uniformX().top().padRight(COLUMN_GAP);
-        grid.add(second).expandX().fillX().uniformX().top().padRight(COLUMN_GAP);
-        grid.add(third).expandX().fillX().uniformX().top();
+        grid.add(first).width(RND_DOSSIER_WIDTH).top().padRight(COLUMN_GAP);
+        grid.add(second).width(MIDDLE_COLUMN_WIDTH).top().padRight(COLUMN_GAP);
+        grid.add(third).width(LAST_COLUMN_WIDTH).top();
         column.add(grid).row();
         return column;
     }
@@ -1076,8 +1107,10 @@ public final class IntelligenceOfficeScreen extends ChromeScreen {
             for (IntelFact fact : dossier.facts()) {
                 card.add(rangeRow(fact)).padBottom(Theme.SPACE_2).row();
             }
-            card.add(ui.paragraph("Reliability somewhere in the band; the gold mark is each component's R&D cap.",
-                Theme.TextStyle.CAPTION, Theme.INK_MUTED)).row();
+            boolean linked = dossier.facts().stream().anyMatch(fact -> ForeignHardware.standard().row(fact.ref(),
+                session.state(), session.catalog(), session.gameInfo().response().decided()).opens());
+            card.add(ui.paragraph("Reliability somewhere in the band; the gold mark is each component's R&D cap."
+                + (linked ? " Linked names open their file." : ""), Theme.TextStyle.CAPTION, Theme.INK_MUTED)).row();
         } else if (which == IntelArea.PERSONNEL) {
             card.add(personnelTable(dossier)).row();
         } else {
@@ -1146,17 +1179,98 @@ public final class IntelligenceOfficeScreen extends ChromeScreen {
 
     private Table rangeRow(IntelFact fact) {
         Table row = new Table();
-        row.add(ui.label(IntelTexts.row(fact)[0], Theme.TextStyle.BODY_SM, Theme.INK)).width(150f).left()
-            .padRight(Theme.SPACE_2);
+        row.add(hardwareWords(fact.ref())).expandX().fillX().left().padRight(Theme.SPACE_2);
         Optional<MissionComponent> component = session.catalog().missionComponent(fact.ref());
         double max = component.map(MissionComponent::maxReliability).orElse(100.0);
         double cap = component.map(MissionComponent::maxRdReliability).orElse(max);
-        row.add(new ReliabilityBar(ui, 0, cap, max, 0).range(ui, fact.low(), fact.high())).expandX().fillX()
+        row.add(new ReliabilityBar(ui, 0, cap, max, 0).range(ui, fact.low(), fact.high())).width(120f)
             .padRight(Theme.SPACE_2);
         Label value = ui.label(fact.low() + "–" + fact.high() + " %", Theme.TextStyle.BODY_STRONG, Theme.INK);
         value.setAlignment(Align.right);
         row.add(value).width(70f);
         return row;
+    }
+
+    /** A piece of hardware's name and, once it's known, its role and second line. */
+    private Table hardwareWords(String id) {
+        ForeignHardware.Row row = ForeignHardware.standard().row(id, session.state(), session.catalog(),
+            session.gameInfo().response().decided());
+        Table words = new Table();
+        words.left();
+        words.defaults().left();
+        if (row.opens()) {
+            words.add(fileLink(row.name(), row.fileId())).row();
+        } else if (row.foreign() && !row.known()) {
+            Table line = new Table();
+            line.add(ui.label(row.name(), Theme.TextStyle.BODY_SM, Theme.INK)).padRight(Theme.SPACE_2);
+            line.add(notAnalysed());
+            words.add(line).row();
+        } else {
+            words.add(ui.label(row.name(), Theme.TextStyle.BODY_SM, Theme.INK)).row();
+        }
+        if (row.role() != null) {
+            words.add(ui.label(row.role(), Theme.TextStyle.CAPTION, Theme.INK)).row();
+        }
+        if (row.linkLead() != null) {
+            Table second = new Table();
+            second.add(ui.label(row.linkLead(), Theme.TextStyle.CAPTION, Theme.INK_MUTED));
+            second.add(ui.label(row.linkName(), Theme.TextStyle.CAPTION, Theme.INK));
+            words.add(second);
+        }
+        return words;
+    }
+
+    private Table notAnalysed() {
+        Table mark = new Table();
+        mark.setBackground(new DashedBox(null, ui.solid(Theme.NAVY_BORDER), null));
+        mark.pad(1f, 6f, 1f, 6f);
+        Image glyph = new Image(ui.icon("search"), Scaling.fit);
+        glyph.setColor(Theme.INK_MUTED);
+        mark.add(glyph).size(10f).padRight(4f);
+        mark.add(ui.label("not yet analysed", Theme.TextStyle.CAPTION_ITALIC, Theme.INK_MUTED));
+        return mark;
+    }
+
+    /** A name that opens a foreign file: navy, the document glyph, a quiet underline. */
+    private Table fileLink(String name, String fileId) {
+        return fileLink(this, name, fileId);
+    }
+
+    /**
+     * Builds the link to a foreign file, as dossiers, the tab and the turn report show it.
+     *
+     * @param host   the screen it sits on
+     * @param name   the name to show
+     * @param fileId the program or rocket
+     * @return the link
+     */
+    static Table fileLink(ChromeScreen host, String name, String fileId) {
+        Table link = new Table();
+        Image glyph = new Image(host.ui.icon("document"), Scaling.fit);
+        glyph.setColor(Theme.NAVY);
+        link.add(glyph).size(12f).padRight(4f);
+        Table words = new Table();
+        words.add(host.ui.label(name, Theme.TextStyle.BODY_STRONG, Theme.NAVY)).row();
+        words.add(new Image(host.ui.solid(Theme.NAVY_BORDER))).height(1f).growX();
+        link.add(words);
+        link.setTouchable(Touchable.enabled);
+        link.addListener(host.clicked(() -> host.game.setScreen(new ForeignFileScreen(host.game, fileId))));
+        return link;
+    }
+
+    /**
+     * Builds the Program or Rocket tag.
+     *
+     * @param ui     the kit
+     * @param rocket a rocket rather than a program
+     * @return the tag
+     */
+    static Table kindTag(UiKit ui, boolean rocket) {
+        Table tag = new Table();
+        tag.setBackground(ui.rect(Theme.SURFACE_CARD, Theme.NAVY_BORDER, Theme.BORDER_THIN));
+        tag.pad(2f, 6f, 2f, 6f);
+        tag.add(ui.label(rocket ? "ROCKET" : "PROGRAM", Theme.TextStyle.LABEL, Theme.INK_MUTED));
+        return tag;
     }
 
     private Table filesBlock(String key, RivalFolder folder) {
@@ -1547,6 +1661,177 @@ public final class IntelligenceOfficeScreen extends ChromeScreen {
     }
 
     // ---- Rivals
+
+    // ---- Foreign hardware
+
+    /** Whether the game has an agency on the other side, bots included; what's learned says so too. */
+    private boolean otherSide() {
+        return !intel().getForeignHardware().isEmpty()
+            || session.rivals() != null && session.rivals().stream().anyMatch(rival -> !rival.you()
+                && rival.archetype() != session.state().getArchetype());
+    }
+
+    /** What's been learned, newest first. */
+    private List<Map.Entry<String, Integer>> learned() {
+        List<Map.Entry<String, Integer>> entries = new ArrayList<>(intel().getForeignHardware().entrySet());
+        java.util.Collections.reverse(entries);
+        return entries;
+    }
+
+    /** What the last resolved turn taught: the tab's dot and the list's New. */
+    private List<String> newHardware() {
+        return learned().stream().filter(entry -> entry.getValue() >= session.latestResolvedTurn())
+            .map(Map.Entry::getKey).toList();
+    }
+
+    private Table foreignHardware() {
+        Table columns = new Table();
+        columns.top();
+        Table side = column();
+        side.add(analystsCard()).padBottom(COLUMN_GAP).row();
+        side.add(sapwoodCard()).row();
+        columns.add(hardwareList()).expandX().fillX().top().padRight(COLUMN_GAP);
+        columns.add(side).width(460f).top();
+        return columns;
+    }
+
+    private Table hardwareList() {
+        List<Map.Entry<String, Integer>> entries = learned();
+        Table card = ui.card();
+        card.top();
+        card.defaults().growX().left();
+        Table head = new Table();
+        head.add(sectionTitle("Learned, newest first")).expandX().left();
+        if (!entries.isEmpty()) {
+            head.add(ui.label(entries.size() + " known", Theme.TextStyle.BODY_STRONG, Theme.INK));
+        }
+        card.add(head).padBottom(Theme.SPACE_3).row();
+        if (entries.isEmpty()) {
+            Table empty = new Table();
+            Image glyph = new Image(ui.icon("binoculars"), Scaling.fit);
+            glyph.setColor(Theme.NAVY_BORDER);
+            empty.add(glyph).size(40f).padBottom(Theme.SPACE_3).row();
+            empty.add(ui.label("Nothing learned yet", Theme.TextStyle.HEADING_SM, Theme.INK)).padBottom(Theme.SPACE_1)
+                .row();
+            empty.add(ui.paragraph("Programs and rockets the other side has opened appear here as your analysts "
+                + "explain them, with what each does and its nearest match on your side.", Theme.TextStyle.BODY_SM,
+                Theme.INK_MUTED)).width(480f);
+            card.add(empty).padTop(Theme.SPACE_5).padBottom(Theme.SPACE_5).row();
+            return card;
+        }
+        List<String> fresh = newHardware();
+        for (Map.Entry<String, Integer> entry : entries) {
+            card.add(new Image(ui.solid(Theme.NAVY_BORDER))).height(Theme.BORDER_THIN).row();
+            card.add(hardwareRow(entry.getKey(), entry.getValue(), fresh.contains(entry.getKey()))).row();
+        }
+        return card;
+    }
+
+    private Table hardwareRow(String id, int turn, boolean fresh) {
+        ForeignHardware.Row row = ForeignHardware.standard().row(id, session.state(), session.catalog(), true);
+        Table line = new Table();
+        if (fresh) {
+            line.setBackground(ui.cardAccent(Theme.GOLD));
+        }
+        line.pad(Theme.SPACE_3, Theme.SPACE_2, Theme.SPACE_3, Theme.SPACE_2);
+        line.add(ui.label(Museum.date(turn), Theme.TextStyle.CAPTION, Theme.INK_MUTED)).width(120f).top()
+            .padRight(Theme.SPACE_2);
+        Table name = new Table();
+        name.left();
+        name.defaults().left();
+        name.add(fileLink(row.name(), id)).padBottom(Theme.SPACE_1).row();
+        Table tags = new Table();
+        tags.add(kindTag(ui, session.catalog().program(id).isEmpty()));
+        if (fresh) {
+            tags.add(ui.activeBadge("New")).padLeft(Theme.SPACE_1);
+        }
+        name.add(tags);
+        line.add(name).width(320f).top().padRight(Theme.SPACE_3);
+        Table words = new Table();
+        words.left().top();
+        words.defaults().left();
+        if (row.role() != null) {
+            words.add(ui.label(row.role(), Theme.TextStyle.BODY_SM, Theme.INK)).row();
+        }
+        if (row.linkLead() != null) {
+            Table second = new Table();
+            second.add(ui.label(row.linkLead(), Theme.TextStyle.CAPTION, Theme.INK_MUTED));
+            second.add(ui.label(row.linkName(), Theme.TextStyle.CAPTION, Theme.INK));
+            words.add(second);
+        }
+        line.add(words).expandX().fillX().top();
+        Image chevron = new Image(ui.icon("chevron"), Scaling.fit);
+        chevron.setColor(Theme.NAVY);
+        line.add(chevron).size(12f).padLeft(Theme.SPACE_2);
+        line.setTouchable(Touchable.enabled);
+        line.addListener(clicked(() -> game.setScreen(new ForeignFileScreen(game, id))));
+        return line;
+    }
+
+    private Table analystsCard() {
+        int level = intel().getLevel();
+        Table card = ui.card();
+        card.top();
+        card.defaults().growX().left();
+        card.add(sectionTitle("How your analysts work")).padBottom(Theme.SPACE_2).row();
+        card.add(ui.paragraph("Each season your analysts may explain one piece of the other side's hardware: a "
+            + "program or a rocket one of their agencies has open. What they learn stays here for good, even if the "
+            + "office shrinks.", Theme.TextStyle.BODY_SM, Theme.INK)).padBottom(Theme.SPACE_3).row();
+        card.add(new Image(ui.solid(Theme.NAVY_BORDER))).height(Theme.BORDER_THIN).padBottom(Theme.SPACE_2).row();
+        Table numbers = new Table();
+        kv(numbers, "Chance a season", Intelligence.HARDWARE_PERCENT[level] + " % · level " + level + ", "
+            + IntelTexts.levelName(level));
+        if (level < Intelligence.MAX_LEVEL) {
+            kv(numbers, "At level " + (level + 1), Intelligence.HARDWARE_PERCENT[level + 1] + " %");
+        }
+        card.add(numbers).padBottom(Theme.SPACE_2).row();
+        card.add(ui.paragraph("A quiet season tells you nothing: either the roll failed or there was nothing new to "
+            + "look at.", Theme.TextStyle.CAPTION, Theme.INK_MUTED));
+        return card;
+    }
+
+    private Table sapwoodCard() {
+        Table card = new Table();
+        card.setBackground(ui.historyNoteCard());
+        card.pad(Theme.SPACE_3, Theme.SPACE_4, Theme.SPACE_4, Theme.SPACE_4);
+        card.top();
+        Table head = new Table();
+        Image glyph = new Image(ui.historyNoteIcon(), Scaling.fit);
+        glyph.setColor(Theme.NAVY);
+        head.add(glyph).size(16f).padRight(Theme.SPACE_2);
+        head.add(ui.label("HISTORY", Theme.TextStyle.LABEL, Theme.NAVY)).expandX().left();
+        card.add(head).growX().padBottom(Theme.SPACE_2).row();
+        card.add(ui.paragraph(HARDWARE_NOTE, Theme.TextStyle.BODY_SM, Theme.INK)).growX();
+        return card;
+    }
+
+    /** The overview's card: the count, the newest two, and the chance. */
+    private Table foreignCard() {
+        List<Map.Entry<String, Integer>> entries = learned();
+        Table card = ui.card();
+        card.top();
+        card.defaults().growX().left();
+        Table head = new Table();
+        head.add(sectionTitle("Foreign hardware")).expandX().left();
+        head.add(ui.label(entries.size() + " known", Theme.TextStyle.BODY_STRONG, Theme.INK));
+        card.add(head).padBottom(Theme.SPACE_2).row();
+        for (Map.Entry<String, Integer> entry : entries.subList(0, Math.min(2, entries.size()))) {
+            Table line = new Table();
+            line.add(fileLink(ContentNames.of(entry.getKey()), entry.getKey())).expandX().left();
+            line.add(ui.label(Museum.date(entry.getValue()), Theme.TextStyle.CAPTION, Theme.INK_MUTED));
+            card.add(line).padBottom(Theme.SPACE_2).row();
+        }
+        int level = intel().getLevel();
+        card.add(ui.paragraph(Intelligence.HARDWARE_PERCENT[level] + " % a season now"
+            + (level < Intelligence.MAX_LEVEL ? ", " + Intelligence.HARDWARE_PERCENT[Intelligence.MAX_LEVEL]
+            + " % at level " + Intelligence.MAX_LEVEL : "") + ".", Theme.TextStyle.CAPTION, Theme.INK_MUTED))
+            .padBottom(Theme.SPACE_2).row();
+        Label all = ui.label("All foreign hardware", Theme.TextStyle.CAPTION, Theme.NAVY);
+        all.setTouchable(Touchable.enabled);
+        all.addListener(clicked(() -> select(Tab.FOREIGN_HARDWARE)));
+        card.add(all);
+        return card;
+    }
 
     private List<RivalSummary> rivals() {
         List<RivalSummary> all = session.rivals();

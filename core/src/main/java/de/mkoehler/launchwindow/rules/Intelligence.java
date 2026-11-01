@@ -1,5 +1,6 @@
 package de.mkoehler.launchwindow.rules;
 
+import de.mkoehler.launchwindow.content.ContentCatalog;
 import de.mkoehler.launchwindow.model.IntelArea;
 import de.mkoehler.launchwindow.model.IntelCatch;
 import de.mkoehler.launchwindow.model.IntelOperation;
@@ -10,6 +11,8 @@ import de.mkoehler.launchwindow.model.Dossier;
 import de.mkoehler.launchwindow.model.RivalFolder;
 import de.mkoehler.launchwindow.model.TraitState;
 
+import java.util.TreeSet;
+import java.util.Collection;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -50,6 +53,8 @@ public final class Intelligence {
     public static final int PASSIVE_CANDIDATE_PERCENT = 20;
     /** The passive chance per season of a tidbit about a random rival, by level. */
     public static final int[] TIDBIT_PERCENT = {0, 0, 25, 40};
+    /** The chance a season, per level, to learn one piece of the other side's hardware. */
+    public static final int[] HARDWARE_PERCENT = {0, 25, 50, 80};
     /** A targeted operation's success against counter-intelligence 0. */
     public static final int SUCCESS_BASE_PERCENT = 85;
     /** Success lost per level of the target's counter-intelligence. */
@@ -401,7 +406,43 @@ public final class Intelligence {
         return events;
     }
 
+    /**
+     * Returns what an agency's service could learn about the other side's hardware ({@code design.md}
+     * &sect;2.9): every program and rocket program an agency of another archetype has open now, minus
+     * what it already knows. Sorted, so a roll picks the same item whatever order agencies come in.
+     *
+     * @param agency   the agency
+     * @param agencies every agency in the game, the agency too
+     * @param catalog  the content catalog
+     * @return the program and rocket ids
+     */
+    public static List<String> hardwarePool(PlayerSnapshot agency, Collection<PlayerSnapshot> agencies,
+            ContentCatalog catalog) {
+        Objects.requireNonNull(agency, "agency must not be null");
+        Objects.requireNonNull(agencies, "agencies must not be null");
+        Objects.requireNonNull(catalog, "catalog must not be null");
+        TreeSet<String> pool = new TreeSet<>();
+        for (PlayerSnapshot other : agencies) {
+            if (other.getArchetype() == agency.getArchetype()) {
+                continue;
+            }
+            pool.addAll(other.getOpenedProgramIds());
+            other.getMissionComponents().forEach((id, owned) -> {
+                if (owned.isActive() && catalog.missionComponent(id).filter(c -> c.rocket() != null).isPresent()) {
+                    pool.add(id);
+                }
+            });
+        }
+        pool.removeAll(agency.getIntelligence().getForeignHardware().keySet());
+        return List.copyOf(pool);
+    }
+
     private static void apply(PlayerSnapshot snapshot, IntelFinding finding, int gameTurn) {
+        // Learned from no rival in particular: the report names nobody.
+        if (finding.kind() == IntelFinding.Kind.FOREIGN_HARDWARE) {
+            snapshot.getIntelligence().getForeignHardware().putIfAbsent(finding.tidbit().fact().ref(), gameTurn);
+            return;
+        }
         if (finding.rivalId() == null) {
             return;
         }

@@ -281,6 +281,10 @@ public final class ScreenSnapshot {
             allHandsShots(folder, game);
             return;
         }
+        if ("foreign".equals(System.getProperty("shots"))) {
+            foreignHardwareShots(folder, game);
+            return;
+        }
         if ("mcpager".equals(System.getProperty("shots"))) {
             missionPagerShots(folder, game);
             return;
@@ -2490,6 +2494,103 @@ public final class ScreenSnapshot {
         write(folder, "plan-configs-readonly.png", new MissionConfigsScreen(game, "vostok"), null);
         write(folder, "plan-assessment-readonly.png", new MissionPlanScreen(game, "vostok-orbital",
             MissionPlanScreen.Tab.ASSESSMENT), null);
+    }
+
+    /** An agency at level 2 with a rival's R&amp;D dossier, known and unknown items side by side. */
+    private static PlayerSnapshot foreignState(Archetype archetype, String rivalKey, String rivalName,
+            List<String> known, List<String> dossier) {
+        PlayerSnapshot state = new PlayerSnapshot("Orion Spaceworks", archetype, 21_640, 9_870, 3_000, 31);
+        state.setDirectorName("A. Reyes");
+        de.mkoehler.launchwindow.model.IntelligenceState intel = state.getIntelligence();
+        intel.setLevel(2);
+        intel.setTargetLevel(3);
+        int turn = 52 - known.size();
+        for (String id : known) {
+            intel.getForeignHardware().put(id, turn++);
+        }
+        de.mkoehler.launchwindow.model.RivalFolder folder = intel.folder(rivalKey, rivalName);
+        folder.learnLevel(1, 40, de.mkoehler.launchwindow.model.RivalFolder.FROM_DOSSIER);
+        List<de.mkoehler.launchwindow.model.IntelFact> facts = new java.util.ArrayList<>();
+        int low = 40;
+        for (String id : dossier) {
+            facts.add(fact("COMPONENT_RELIABILITY", id, low, low + 16, 0));
+            low += 4;
+        }
+        folder.getDossiers().put(de.mkoehler.launchwindow.model.IntelArea.RND,
+            new de.mkoehler.launchwindow.model.Dossier(de.mkoehler.launchwindow.model.IntelArea.RND, 50, facts, 3));
+        folder.getDossiers().put(de.mkoehler.launchwindow.model.IntelArea.PLANS,
+            new de.mkoehler.launchwindow.model.Dossier(de.mkoehler.launchwindow.model.IntelArea.PLANS, 49, List.of(
+                fact("OPEN_PROGRAM", dossier.isEmpty() ? "" : "vostok", 0, 0, 0)), 1));
+        return state;
+    }
+
+    /** Foreign hardware (ui-spec.md 4.15, 2026-11-01), alone with {@code -Dshots=foreign}: the canvas's boards. */
+    private static void foreignHardwareShots(File folder, LaunchWindowGame game) {
+        String hash = ContentPackHash.ofClasspath("content/standard", ScreenSnapshot.class.getClassLoader());
+        GameInfoResponse info = GameInfoResponse.success("standard", hash, List.of(), 52, true,
+            6 * 3_600_000L, 0L, null, List.of(), List.of(), 0);
+        RivalSummary me = RivalSummary.of("Orion Spaceworks", "A. Reyes", Archetype.NASA, true, Map.of(), "kMe");
+        RivalSummary sever = RivalSummary.of("Sever Design Bureau", "Tamara Abenova", Archetype.SOVIET, false,
+            Map.of(), "kSever");
+        RivalSummary sameSide = RivalSummary.of("Cape Horizon Corporation", "Grace Whitfield", Archetype.NASA, false,
+            Map.of(), "kCape");
+        List<String> soviet = List.of("r7-vostok", "vostok-capsule", "proton-k-block-d", "voskhod-capsule",
+            "soyuz-7k-l1-spacecraft", "n1", "lk-lander", "sputnik-2-satellite");
+        List<String> known = List.of("vostok", "r7-vostok", "sputnik-2", "luna-3", "r7-voskhod", "proton",
+            "voskhod", "soyuz-7k-l1-earth-orbit", "proton-k-block-d");
+        de.mkoehler.launchwindow.client.screen.IntelligenceOfficeScreen.Tab tab =
+            de.mkoehler.launchwindow.client.screen.IntelligenceOfficeScreen.Tab.FOREIGN_HARDWARE;
+        de.mkoehler.launchwindow.client.screen.IntelligenceOfficeScreen.Tab folders =
+            de.mkoehler.launchwindow.client.screen.IntelligenceOfficeScreen.Tab.FOLDERS;
+        de.mkoehler.launchwindow.client.screen.IntelligenceOfficeScreen.Tab overview =
+            de.mkoehler.launchwindow.client.screen.IntelligenceOfficeScreen.Tab.OVERVIEW;
+
+        PlayerSnapshot state = foreignState(Archetype.NASA, "kSever", "Sever Design Bureau", known, soviet);
+        startSession(game, state, info);
+        game.session().keepRivals(List.of(me, sever, sameSide));
+        write(folder, "fh-dossier.png", new de.mkoehler.launchwindow.client.screen.IntelligenceOfficeScreen(game,
+            folders), screen -> screen.openFolder("kSever"));
+        write(folder, "fh-tab-many.png", new de.mkoehler.launchwindow.client.screen.IntelligenceOfficeScreen(game, tab),
+            null);
+        write(folder, "fh-ladder.png", new de.mkoehler.launchwindow.client.screen.IntelligenceOfficeScreen(game,
+            overview), null);
+        write(folder, "fh-file-program.png", new de.mkoehler.launchwindow.client.screen.ForeignFileScreen(game,
+            "voskhod"), null);
+        write(folder, "fh-file-rocket.png", new de.mkoehler.launchwindow.client.screen.ForeignFileScreen(game,
+            "proton-k-block-d"), null);
+        PlayerSnapshot before = foreignState(Archetype.NASA, "kSever", "Sever Design Bureau", known, soviet);
+        TurnReport report = TurnReport.build(before, before, List.of(
+            new de.mkoehler.launchwindow.rules.IntelligenceFound(new de.mkoehler.launchwindow.rules.IntelFinding(
+                de.mkoehler.launchwindow.rules.IntelFinding.Kind.FOREIGN_HARDWARE, null, null, null, null, null, null,
+                null, new de.mkoehler.launchwindow.model.Tidbit(51, fact("FOREIGN_HARDWARE", "proton-k-block-d", 0, 0,
+                0)), -1))), 51, game.session().catalog());
+        write(folder, "fh-report.png", new TurnReportScreen(game, report), null);
+
+        startSession(game, foreignState(Archetype.NASA, "kSever", "Sever Design Bureau", List.of("vostok"), soviet),
+            info);
+        game.session().keepRivals(List.of(me, sever));
+        write(folder, "fh-tab-one.png", new de.mkoehler.launchwindow.client.screen.IntelligenceOfficeScreen(game, tab),
+            null);
+        startSession(game, foreignState(Archetype.NASA, "kSever", "Sever Design Bureau", List.of(), soviet), info);
+        game.session().keepRivals(List.of(me, sever));
+        write(folder, "fh-tab-empty.png", new de.mkoehler.launchwindow.client.screen.IntelligenceOfficeScreen(game,
+            tab), null);
+
+        startSession(game, foreignState(Archetype.SOVIET, "kCape", "Cape Horizon Corporation",
+            List.of("mercury", "atlas", "saturn-1b", "gemini"), List.of("atlas", "mercury-capsule", "saturn-1b",
+                "saturn-v", "gemini-capsule", "agena-target-vehicle", "apollo-csm", "x-15-aircraft")), info);
+        game.session().keepRivals(List.of(RivalSummary.of("Orion Spaceworks", "A. Reyes", Archetype.SOVIET, true,
+            Map.of(), "kMe"), sameSide));
+        write(folder, "fh-dossier-soviet.png", new de.mkoehler.launchwindow.client.screen.IntelligenceOfficeScreen(game,
+            folders), screen -> screen.openFolder("kCape"));
+
+        startSession(game, foreignState(Archetype.NASA, "kCape", "Cape Horizon Corporation", List.of(),
+            List.of("atlas", "mercury-capsule", "saturn-v")), info);
+        game.session().keepRivals(List.of(me, sameSide));
+        write(folder, "fh-noside-overview.png", new de.mkoehler.launchwindow.client.screen.IntelligenceOfficeScreen(
+            game, overview), null);
+        write(folder, "fh-noside-folder.png", new de.mkoehler.launchwindow.client.screen.IntelligenceOfficeScreen(game,
+            folders), screen -> screen.openFolder("kCape"));
     }
 
     /** Mission Control's glance paging two scheduled and two active missions, alone with {@code -Dshots=mcpager}. */

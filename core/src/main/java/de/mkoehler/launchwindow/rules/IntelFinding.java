@@ -21,7 +21,7 @@ import java.util.Objects;
  * @param area          an assessment's area, or {@code null}
  * @param dossier       the new dossier, for {@link Kind#DOSSIER}
  * @param file          the new personnel file, for {@link Kind#PERSONNEL_FILE}
- * @param tidbit        the tidbit, for {@link Kind#TIDBIT}
+ * @param tidbit        the tidbit, for {@link Kind#TIDBIT} and {@link Kind#FOREIGN_HARDWARE}
  * @param level         the rival's level learned: their counter-intelligence for {@link Kind#CAUGHT},
  *                      their Intelligence level for {@link Kind#CAUGHT_THEIRS} and a plans dossier; else -1
  * @param offer         a poaching offer's result, for {@link Kind#OFFER_MADE} and {@link Kind#OFFER_RECEIVED}
@@ -54,7 +54,9 @@ public record IntelFinding(Kind kind, String operationId, IntelOperation.Kind op
         /** Our offer to a rival's person was settled (poaching, {@code design.md} &sect;2.2(d)). */
         OFFER_MADE,
         /** A rival's offer to one of our people was settled. */
-        OFFER_RECEIVED
+        OFFER_RECEIVED,
+        /** One piece of the other side's hardware explained: the {@code tidbit}'s fact names it. */
+        FOREIGN_HARDWARE
     }
 
     /**

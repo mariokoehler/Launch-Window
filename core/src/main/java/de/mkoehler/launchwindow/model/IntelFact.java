@@ -44,7 +44,9 @@ public record IntelFact(Kind kind, String ref, int low, int high, int count) {
          * Their record in a contract line ({@code ref}): {@code low} flown, {@code high} failed or lapsed,
          * {@code count} the points it adds to their score.
          */
-        CONTRACT_RECORD
+        CONTRACT_RECORD,
+        /** A program or rocket of the other side ({@code ref}), explained. */
+        FOREIGN_HARDWARE
     }
 
     /**
@@ -65,7 +67,8 @@ public record IntelFact(Kind kind, String ref, int low, int high, int count) {
     public IntelArea area() {
         return switch (kind) {
             case COMPONENT_RELIABILITY -> IntelArea.RND;
-            case OPEN_PROGRAM, IN_FLIGHT, RD_FOCUS, SHELF, INTEL_LEVEL, CONTRACT, CONTRACT_RECORD -> IntelArea.PLANS;
+            case OPEN_PROGRAM, IN_FLIGHT, RD_FOCUS, SHELF, INTEL_LEVEL, CONTRACT, CONTRACT_RECORD, FOREIGN_HARDWARE ->
+                IntelArea.PLANS;
             case HEADCOUNT, AVERAGE_SKILL, SKILL -> IntelArea.PERSONNEL;
         };
     }

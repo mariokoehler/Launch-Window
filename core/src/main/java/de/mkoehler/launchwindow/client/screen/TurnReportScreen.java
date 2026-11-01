@@ -11,6 +11,7 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Scaling;
 import de.mkoehler.launchwindow.model.PendingDecision;
 import de.mkoehler.launchwindow.content.Decisions;
+import de.mkoehler.launchwindow.client.view.ForeignHardware;
 import de.mkoehler.launchwindow.client.view.ContractsView;
 import de.mkoehler.launchwindow.client.view.DecisionView;
 import de.mkoehler.launchwindow.rules.ContractSettled;
@@ -138,8 +139,9 @@ public final class TurnReportScreen extends ChromeScreen {
         second.add(rnd(catalog)).row();
         Table newsColumn = newsLeft ? first : second;
         newsColumn.add(news(catalog)).row();
-        if (!intelligence.isEmpty()) {
-            newsColumn.add(intelligence(intelligence)).row();
+        List<String> hardware = TurnReportView.foreignHardware(report);
+        if (!intelligence.isEmpty() || !hardware.isEmpty()) {
+            newsColumn.add(intelligence(hardware, intelligence)).row();
         }
         first.add(goals()).row();
         Table findings = findings(catalog);
@@ -722,8 +724,33 @@ public final class TurnReportScreen extends ChromeScreen {
         return box;
     }
 
-    private Table intelligence(List<TurnReportView.Line> lines) {
+    /** An item learned: it leads the section, tinted as the people news are. */
+    private Table hardwareLine(String id) {
+        ForeignHardware.Row row = ForeignHardware.standard().row(id, session.state(), session.catalog(), true);
+        Table line = new Table();
+        line.setBackground(ui.cardAccent(Theme.NAVY));
+        line.pad(Theme.SPACE_2, Theme.SPACE_3, Theme.SPACE_2, Theme.SPACE_3);
+        line.left();
+        line.defaults().left();
+        Table head = new Table();
+        head.add(ui.label("Foreign hardware · ", Theme.TextStyle.BODY_STRONG, Theme.INK));
+        head.add(IntelligenceOfficeScreen.fileLink(this, row.name(), id));
+        line.add(head).row();
+        if (row.role() != null) {
+            line.add(ui.label(row.role() + ".", Theme.TextStyle.BODY_SM, Theme.INK)).row();
+        }
+        if (row.linkLead() != null) {
+            line.add(ui.label(Character.toUpperCase(row.linkLead().charAt(0)) + row.linkLead().substring(1)
+                + row.linkName() + ".", Theme.TextStyle.BODY_SM, Theme.INK_MUTED));
+        }
+        return line;
+    }
+
+    private Table intelligence(List<String> hardware, List<TurnReportView.Line> lines) {
         Table card = section("Intelligence", null);
+        for (String id : hardware) {
+            card.add(hardwareLine(id)).growX().padBottom(Theme.SPACE_3).row();
+        }
         for (TurnReportView.Line line : lines) {
             Table row = new Table();
             Image glyph = new Image(ui.icon(line.tone() > 0 ? "check" : line.tone() < 0 ? "close" : "binoculars"),

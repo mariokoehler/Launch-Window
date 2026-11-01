@@ -68,10 +68,12 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
   (the Intelligence Office), a level dial with actions and passives, from the canvas
   `Launch Window — Intelligence Office` (`ui-spec.md` §4.15). Reset the dev data root before the
   next play test (new saved fields).
-- **Foreign hardware is designed and mocked up, not built** (the user's idea, 2026-11-01, `design.md` §2.9, `ui-spec.md` §4.15):
-  a 25 / 50 / 80 % chance a season to learn one item of what the other side has open. The words are drafted in
-  `assets/content/foreign-hardware.json`, nothing reads it yet. Mocked up the same day on the canvas
-  `Launch Window — Intelligence Office` (three new rows); open: long descriptions for rockets. Next: build it.
+- **Foreign hardware is built** (the user's idea, 2026-11-01, `design.md` §2.9, `ui-spec.md` §4.15, from the canvas
+  `Launch Window — Intelligence Office`): a 25 / 50 / 80 % chance a season to learn one item the other side has open
+  (`Intelligence.HARDWARE_PERCENT`, kept in `IntelligenceState.foreignHardware`), its words in
+  `assets/content/foreign-hardware.json` (outside the pack, `ForeignHardwareTest` holds every program and rocket to an entry,
+  a role to 46 characters). `-Dshots=foreign`. Every number and the counterparts await the user's review; rockets have no long
+  description. A saved field and a new finding: rebuild client and server together; no reset.
 - **Help is built** (2026-10-08, `ui-spec.md` component 23): a help button and F1 open the rules
   by topic over the current screen, filtered to the screen's topics. 34 topics (synced with the code 2026-10-29: hands-on campaigns got their own). Numbers in
   `help.json` are tokens filled from the rules (`HelpValues`); a new rule number goes there, never

@@ -42,6 +42,7 @@ public final class IntelligenceBoard {
 
     private static final long TIDBIT_SALT = 0x71DB_17C0_FFEE_1962L;
     private static final long OFFER_SALT = 0x0FFE_5EED_1945_0A55L;
+    private static final long HARDWARE_SALT = 0x5A9F_00D5_1967_0B0EL;
 
     private IntelligenceBoard() {
     }
@@ -105,6 +106,24 @@ public final class IntelligenceBoard {
             IntelFact fact = facts.get(random.nextInt(facts.size()));
             findings.computeIfAbsent(spy.getKey(), id -> new ArrayList<>()).add(new IntelFinding(
                 IntelFinding.Kind.TIDBIT, null, null, rivalId, rival.getAgencyName(), area, null, null,
+                new Tidbit((int) gameTurn, fact), -1));
+        }
+        // Foreign hardware has its own seed, so the rolls above never shift.
+        for (Map.Entry<String, PlayerSnapshot> spy : sorted.entrySet()) {
+            int percent = Intelligence.HARDWARE_PERCENT[spy.getValue().getIntelligence().getLevel()];
+            SplittableRandom random = new SplittableRandom(seed(gameSeed, gameTurn, spy.getKey(), "hardware")
+                ^ HARDWARE_SALT);
+            if (random.nextInt(100) >= percent) {
+                continue;
+            }
+            List<String> pool = Intelligence.hardwarePool(spy.getValue(), sorted.values(), catalog);
+            if (pool.isEmpty()) {
+                continue;
+            }
+            IntelFact fact = new IntelFact(IntelFact.Kind.FOREIGN_HARDWARE, pool.get(random.nextInt(pool.size())), 0, 0,
+                0);
+            findings.computeIfAbsent(spy.getKey(), id -> new ArrayList<>()).add(new IntelFinding(
+                IntelFinding.Kind.FOREIGN_HARDWARE, null, null, null, null, null, null, null,
                 new Tidbit((int) gameTurn, fact), -1));
         }
         return findings;

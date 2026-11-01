@@ -233,6 +233,9 @@ public final class HelpValues {
         v.put("intelligence.passiveCandidate", whole(Intelligence.PASSIVE_CANDIDATE_PERCENT));
         v.put("intelligence.tidbit2", whole(Intelligence.TIDBIT_PERCENT[2]));
         v.put("intelligence.tidbit3", whole(Intelligence.TIDBIT_PERCENT[3]));
+        v.put("intelligence.hardware1", whole(Intelligence.HARDWARE_PERCENT[1]));
+        v.put("intelligence.hardware2", whole(Intelligence.HARDWARE_PERCENT[2]));
+        v.put("intelligence.hardware3", whole(Intelligence.HARDWARE_PERCENT[3]));
         v.put("intelligence.successBase", whole(Intelligence.SUCCESS_BASE_PERCENT));
         v.put("intelligence.successPerLevel", whole(Intelligence.SUCCESS_PER_LEVEL));
         v.put("intelligence.successLowest", whole(Intelligence.SUCCESS_BASE_PERCENT

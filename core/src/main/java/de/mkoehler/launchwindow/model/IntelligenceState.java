@@ -20,6 +20,8 @@ public class IntelligenceState {
     private long nextOperationId;
     private List<IntelOperation> queued = new ArrayList<>();
     private Map<String, RivalFolder> folders = new LinkedHashMap<>();
+    /** The other side's programs and rockets explained so far, with the turn each was learned, oldest first. */
+    private Map<String, Integer> foreignHardware = new LinkedHashMap<>();
 
     /**
      * No-argument constructor for Jackson and Kryo; level 0, no service.
@@ -151,7 +153,25 @@ public class IntelligenceState {
     }
 
     /**
-     * Sets the folders.
+     * Replaces the other side's hardware learned.
+     *
+     * @param foreignHardware the program and rocket ids, with the turn each was learned
+     */
+    public void setForeignHardware(Map<String, Integer> foreignHardware) {
+        this.foreignHardware = new LinkedHashMap<>(foreignHardware);
+    }
+
+    /**
+     * Returns the other side's hardware learned so far ({@code design.md} &sect;2.9). The live map.
+     *
+     * @return the program and rocket ids, with the turn each was learned, oldest first
+     */
+    public Map<String, Integer> getForeignHardware() {
+        return foreignHardware;
+    }
+
+    /**
+     * Replaces the rival folders.
      *
      * @param folders the folders
      */
