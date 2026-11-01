@@ -2762,6 +2762,10 @@ Geophysical Year. No secrecy bonus for either archetype (as in §2.9).
     TV frame (the page's only picture), a Pioneer Venus painting credited to Paul Hudson. Three are figures
     from NASA reports' PDFs (`make_archive_assets.py`'s `PDF_PAGES`, `BLANKS`). On the way, `viking-1` lost
     its year for the Mutch Memorial Station (NASA Science says January 1982, other sources 7 January 1981).
+    Surveyor 3's page moved to `lunar-soil-analysis` on 2026-11-01 (user): `lunar-soil-study` comes from the
+    lunar impacts, so a Ranger or Luna 2 flight opened a page about a lander's scoop. It now opens with
+    Surveyor's landing, for everyone in the game. The finding got its own page the same day (user), `ranger-surface`,
+    on what Rangers 7 to 9 let scientists infer about the soil: 34 pages in all.
   - **Measured (2026-10-21):** `ContentPackPlayouts standard smart`, 200 games, with the bonus on and off
     (`-Drules.findingBonus=0`): average completion season 84.6 against 84.8, medians 82 and 81 (NASA), 81
     and 82 (Soviet), crewed completion chance at launch 0.62 against 0.63 (median): no effect beyond noise.

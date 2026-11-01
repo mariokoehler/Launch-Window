@@ -328,6 +328,103 @@
       ]
     },
     {
+      "id": "ranger-surface",
+      "goalId": "lunar-soil-study",
+      "title": "Ranger: reading the ground from pictures",
+      "agency": "NASA",
+      "date": "1964 to 1966",
+      "when": "1964-08",
+      "summary": "With nothing to touch the Moon, scientists worked out its soil from slopes and craters.",
+      "facts": [
+        {
+          "label": "Craft",
+          "value": "Rangers 7, 8 and 9"
+        },
+        {
+          "label": "Impacts",
+          "value": "31 July 1964, 20 February and 24 March 1965"
+        },
+        {
+          "label": "Sites",
+          "value": "Mare Cognitum, Mare Tranquillitatis, Alphonsus"
+        },
+        {
+          "label": "Instruments",
+          "value": "Television cameras, nothing else"
+        },
+        {
+          "label": "Slopes",
+          "value": "Half the ground under about 5° over 1 m"
+        },
+        {
+          "label": "Loose layer",
+          "value": "About 1 m between the rays, Shoemaker’s estimate"
+        },
+        {
+          "label": "Crew",
+          "value": "None"
+        },
+        {
+          "label": "Agency",
+          "value": "NASA (JPL)"
+        }
+      ],
+      "firsts": [
+        "First crater counts on the Moon down to sizes no telescope could show"
+      ],
+      "sections": [
+        {
+          "heading": "What a camera can tell",
+          "text": "Rangers 3, 4 and 5 were built to touch the Moon: each carried a radar and a seismometer in a capsule meant to survive a rough landing. None of them delivered it. Ranger 3 missed by about 36,800 km. Rangers 7, 8 and 9 carried cameras and nothing else, and were simply flown into the ground. Eugene Shoemaker put the limit plainly in the Ranger 7 report: a picture gives the shape of the ground and how bright it is. Everything else, strength included, had to be argued from those two facts."
+        },
+        {
+          "heading": "What telescopes had already said",
+          "text": "The Moon’s light showed a surface rough at the finest scale, with grains well under a millimeter, and only about a tenth of the top layer’s volume filled. Its heat said the same: during eclipses the ground cooled so fast that its top few millimeters had to be loose and open. Radar reflections, reaching deeper, suggested about half the density of solid rock or less. Thomas Gold had argued in 1955 for deep dust. The open questions were how far down the loose material went, and whether it would carry a spacecraft."
+        },
+        {
+          "heading": "Slopes from shading",
+          "text": "A patch of ground tilted toward the Sun looks brighter than one tilted away, so brightness can be turned into tilt. Worked through Ranger 7’s last partial frame, and measured over lengths of 1 m, the result was gentle: about a tenth of the area sloped less than 1 degree, half less than about 5 degrees, and nine tenths less than about 15. The report judged that such roughness did not look an unreasonable risk to Surveyor or Apollo."
+        },
+        {
+          "heading": "Depth from counting craters",
+          "text": "Every crater throws out debris, and small ones far outnumbered what the big ones predicted. Shoemaker read most of them as secondaries, made by rocks thrown from larger impacts. That made a count into a depth gauge: find the size at which craters together would cover the whole mare, and their depth gives how far the ground has been stirred at least once. He arrived at about 1 m between the rays and warned of a large uncertainty. Harold Urey called the process gardening. For Rangers 8 and 9, lab work by Leonard Jaffe added a second gauge: a fine layer a thirtieth of a crater’s width is enough to soften its look. Where sharp craters ran out at about 2 m on the floor of Alphonsus, the top layer came to some 7 cm, and about three times that at Ranger 7’s site."
+        },
+        {
+          "heading": "One set of pictures, several Moons",
+          "text": "The same frames supported very different readings. Gerard Kuiper thought the maria were topped by a lava froth, formed in vacuum, and tested stand-ins on Earth: laboratory froth bore 1 to 4 kg per square centimeter, and Hawaiian basalt 2 to 3, rising to 6 to 8 once its surface was crushed. He told reporters that walking there would be like walking on crunchy snow. Gold saw his fears confirmed. Rocks lying on the surface in Ranger 8’s pictures were a useful clue, since they would have sunk in deep dust or thick froth. Gold himself remarked that the pictures worked like a mirror for what each scientist already believed."
+        },
+        {
+          "heading": "The answer came by landing",
+          "text": "The Ranger 7 report said it outright: direct tests of bearing strength would be needed before anyone could promise a safe landing. Surveyor 1 stood on the Moon in June 1966, and later Surveyors dug into it. Apollo-era sounding found a loose layer a few meters deep on the maria, close to Shoemaker’s model, and with no need for Kuiper’s froth. Ranger 7 left one more measurement behind without knowing it: 365.7 kg striking at 2.62 km/s made a crater about 14 m across, picked out in an Apollo 16 photograph in 1972."
+        }
+      ],
+      "sources": [
+        "JPL Technical Report 32-700, Ranger VII Part II: Experimenters’ Analyses and Interpretations (1965)",
+        "JPL Technical Report 32-800, Ranger VIII and IX Part II (1966)",
+        "Wilhelms, To a Rocky Moon, chapter 5",
+        "NASA NSSDC, Ranger 3, Ranger 7, Ranger 8 and Ranger 9 images",
+        "NASA History, 60 Years Ago: Ranger 8 Moon Photos Aid in Apollo Site Selection",
+        "LROC, Making an Impact on History"
+      ],
+      "images": [
+        {
+          "file": "archive/ra8_b090.jpg",
+          "caption": "The Sea of Tranquility from about 11 km, some 5 seconds before Ranger 8 hit, in a frame about 2 km across. Craters like these were what the scientists counted.",
+          "credit": "NASA/JPL · ra8_b090"
+        },
+        {
+          "file": "archive/ntrs-19650012561-fig31.jpg",
+          "caption": "A Ranger 7 frame as its scientists marked it up in their report: p for primary impact craters, s for what they took for sinkholes, d for dimple craters, r for a crater with rock masses inside.",
+          "credit": "NASA/JPL · TR 32-700, Fig. 31"
+        },
+        {
+          "file": "archive/ra9_p012.jpg",
+          "caption": "Ranger 9’s last two pictures of the floor of Alphonsus. The top frame, about 70 m across, was taken from 600 m, a quarter of a second before impact, and was cut off by it.",
+          "credit": "NASA/JPL · ra9_p012"
+        }
+      ]
+    },
+    {
       "id": "pegasus",
       "goalId": "micrometeoroid-study",
       "title": "Pegasus: wings to catch meteoroids",
@@ -1080,7 +1177,7 @@
     },
     {
       "id": "surveyor-3",
-      "goalId": "lunar-soil-study",
+      "goalId": "lunar-soil-analysis",
       "title": "Surveyor 3: digging into the Moon",
       "agency": "NASA",
       "date": "1967 to 1969",

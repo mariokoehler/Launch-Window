@@ -365,6 +365,17 @@ figures' sources in `CHECKS.md`.
     published source; figures in the 1972 University of Milan contractor report (CR-62084), whose
     contractor-made figures are not clearly NASA's; Wikimedia Commons' OFO files (no source given).
 
+### Ranger: reading the ground from pictures (NASA, 1964 to 1966)
+- **Unlocked by:** `lunar-soil-study` (Lunar surface studied), a finding, earned by the lunar impacts: the page
+  opens for the agencies that know it. Written 2026-11-01 (user), when Surveyor 3's page moved to
+  `lunar-soil-analysis`.
+- **Images (public domain, NASA):**
+  - `ra8_b090`, Ranger 8's B-camera frame 90, https://nssdc.gsfc.nasa.gov/imgcat/html/object_page/ra8_b090.html.
+  - `ntrs-19650012561-fig31`, Fig. 31 of JPL TR 32-700 (NTRS 19650012561), frame A199 with the authors' letters,
+    cut from page 51 (PDF page 54). A halftone scan; fine at archive size.
+  - `ra9_p012`, Ranger 9's last P-camera frames, https://nssdc.gsfc.nasa.gov/imgcat/html/object_page/ra9_p012.html.
+  - Not used: `ra9_b087`, whose NSSDC page dates a Ranger 9 frame 20 February 1965 (Ranger 9 flew in March).
+
 ### Surveyor 3: digging into the Moon (NASA, 1967 to 1969)
 - **Unlocked by:** `lunar-soil-study` (a finding: makes powered descent and landing on the Moon safer).
 - **Images:**

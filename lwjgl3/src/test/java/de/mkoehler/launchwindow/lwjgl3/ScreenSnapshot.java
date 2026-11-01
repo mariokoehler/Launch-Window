@@ -672,7 +672,7 @@ public final class ScreenSnapshot {
             // The findings' pages (design.md 2.13, 2026-10-21).
             "explorer-1", "korabl-sputnik-2", "pegasus", "pioneer-6-9", "lunar-orbiter-micrometeoroids", "mascons",
             "surveyor-3", "mariner-5-venera-4", "zond-5", "mariners-6-7", "orbiting-frog-otolith", "viking-soil",
-            "pioneer-venus-multiprobe")) {
+            "pioneer-venus-multiprobe", "ranger-surface")) {
             write(folder, "archive-page-" + id + ".png", new ArchivePageScreen(game,
                 new de.mkoehler.launchwindow.client.view.Archive.Entry(archive.page(id), 60, true), () -> null), null);
         }
