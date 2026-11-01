@@ -3157,6 +3157,27 @@ binoculars, our own drawing; on the UI Asset Sheet since 2026-10-08). All rules 
 - **Tidbits:** the passive finds, newest first, each dated.
 - **Caught:** agents of yours this rival caught, and theirs you caught.
 
+**Foreign hardware** *(specified 2026-11-01 for `design.md` §2.9; not mocked up, not built)*:
+- **Dossiers:** a known item gets a plain role line under its name, and its counterpart ("their
+  counterpart to your Mercury") where there is one; clicking it opens the file. An unknown item keeps
+  its name alone, with a small "not yet analysed" mark. The same goes for the turn report's
+  Intelligence section.
+- **A Foreign hardware tab** in the office lists what has been learned, newest first, with the count
+  ("9 known"), never how many are left, which would give away the size of the pool.
+- **The file:** a read-only program details view (description, long description, history note,
+  blueprint) with no prices or open button.
+- **Turn report:** a line for each item learned, none on a season without one.
+- **The ladder** gives the passive's chance at each level. With no agency on the other side, the ladder
+  line and the tab are hidden, and dossiers drop the counterpart.
+- **The words:** `assets/content/foreign-hardware.json`, a role of at most 46 characters and a
+  counterpart for each of the 80 programs and rocket programs (a draft for the user's review; 23 have
+  no counterpart, and the line is then left out).
+
+**For the mockup:** a dossier mixing known and unknown items, on the NASA side and the Soviet side;
+a known item with no counterpart; the longest role (46 characters) at Large text; the tab with
+one item, with many, and empty (nothing learned yet); the file on a rocket and on a program; the
+turn report's line; the ladder with the passive; a game with no other side.
+
 **Hire screen addition** (component 14): see there.
 
 **Turn report:** an "Intelligence" section (level changes, reveals, dossiers, tidbits, catches),

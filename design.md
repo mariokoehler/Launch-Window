@@ -2131,6 +2131,22 @@ No BASPM precedent beyond its 1v1 PBEM mode and rival comparison screen.
 
     The ladder is people, then agencies, then rivals' people (user, 2026-10-07); level 3's
     personnel file is what makes a poaching offer an informed one.
+  - **Foreign hardware** (the user's idea, 2026-11-01; designed, not built; every number unconfirmed).
+    Rival hardware means little to a player who isn't a space nerd, so analysts explain it, a piece at a
+    time. **Pool:** every program and rocket program that an agency of the other side has open now,
+    minus what the player already knows; a closed program leaves the pool until it is opened again.
+    **Passive:** each season, a **25 / 50 / 80 %** chance at levels 1 / 2 / 3 (0 at level 0) to learn one
+    random item of the pool, independent of the actions and on its own salted seed. No lag: the chance
+    is what keeps a player behind (a single new item takes about 4 / 2 / 1.25 seasons on average), and
+    a season with no news means nothing, since a failed roll and an empty pool look alike. So the
+    report says nothing then. What is learned is kept for good, a dropped level included. It opens a
+    role line, the counterpart on the player's side where there is one, and a read-only file; a
+    component is known once any program needing it is. Dossiers show unknown items by name only, with a
+    "not yet analysed" mark. **Your own side's hardware is always known,** so a game with no agency on
+    the other side (bots count as agencies) needs no special rules: the pool stays empty, and the
+    passive's ladder line and the Foreign hardware tab are hidden, as are counterpart lines. Once the
+    race is decided, everything opens. The roles and counterparts go in a text file outside the pack,
+    with a test that holds every program and rocket to an entry.
   - **Background check** (the decided feature above, now concrete). The **active check answers
     at once**: the server replies during the season with one of the candidate's traits, or "no
     notable traits", and the action is used. It's desk work, so instant fits, and an answer at
