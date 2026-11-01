@@ -277,6 +277,10 @@ public final class ScreenSnapshot {
         // The idle tip done: only its own shots show it (groundingShots).
         game.useAdvisorMarksInMemory(new java.util.HashSet<>(java.util.Set.of("idleTipDone")));
         // -Dshots=contracts renders only one group, for a quick look at the screens being worked on.
+        if ("configcards".equals(System.getProperty("shots"))) {
+            configCardShots(folder, game);
+            return;
+        }
         if ("contracts".equals(System.getProperty("shots"))) {
             contractShots(folder, game);
             return;
@@ -1577,6 +1581,25 @@ public final class ScreenSnapshot {
      * (no rocket picker) and its gated research flight, and Apollo's own lift easing the Saturn IB's
      * load.
      */
+    /**
+     * Every program's mission cards in the standard pack, for an agency with every program open and
+     * no one on staff, so the cards carry their longest lines: text-fit.tsv lists any that overflow.
+     */
+    private static void configCardShots(File folder, LaunchWindowGame game) {
+        String hash = ContentPackHash.ofClasspath("content/standard", ScreenSnapshot.class.getClassLoader());
+        GameInfoResponse info = GameInfoResponse.success("standard", hash, List.of(), 31, true,
+            6 * 3_600_000L, 0L, null, List.of(), List.of(), 0);
+        PlayerSnapshot nasa = new PlayerSnapshot("Orion Spaceworks", Archetype.NASA, 60_000, 2_140, 3_000, 31);
+        nasa.setDirectorName("A. Reyes");
+        startSession(game, nasa, info);
+        List<String> programs = game.session().catalog().programs().stream().map(program -> program.id()).toList();
+        nasa.getOpenedProgramIds().addAll(programs);
+        startSession(game, nasa, info);
+        for (String program : programs) {
+            write(folder, "configcards-" + program + ".png", new MissionConfigsScreen(game, program), null);
+        }
+    }
+
     private static void standardPackShots(File folder, LaunchWindowGame game) {
         String hash = ContentPackHash.ofClasspath("content/standard", ScreenSnapshot.class.getClassLoader());
         GameInfoResponse info = GameInfoResponse.success("standard", hash, List.of(), 31, true,
