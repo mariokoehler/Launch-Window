@@ -72,8 +72,7 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
   `Launch Window — Intelligence Office`): a 25 / 50 / 80 % chance a season to learn one item the other side has open
   (`Intelligence.HARDWARE_PERCENT`, kept in `IntelligenceState.foreignHardware`), its words in
   `assets/content/foreign-hardware.json` (outside the pack, `ForeignHardwareTest` holds every program and rocket to an entry,
-  a role to 46 characters). `-Dshots=foreign`. Every number and the counterparts await the user's review; rockets have no long
-  description. A saved field and a new finding: rebuild client and server together; no reset.
+  a role to 46 characters). `-Dshots=foreign`. Every number and the counterparts await the user's review. A saved field and a new finding: rebuild client and server together; no reset.
 - **Help is built** (2026-10-08, `ui-spec.md` component 23): a help button and F1 open the rules
   by topic over the current screen, filtered to the screen's topics. 34 topics (synced with the code 2026-10-29: hands-on campaigns got their own). Numbers in
   `help.json` are tokens filled from the rules (`HelpValues`); a new rule number goes there, never

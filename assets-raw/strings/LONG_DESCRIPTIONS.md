@@ -834,3 +834,37 @@ Sources abbreviated below:
   - *Venus:* no Venus text gives the surface's heat or pressure: the category, Mariner 5, Venera 7 (program and
     lander), the Venera landers and Venera 13's note. Venera 4 to 6 "fell silent on the way down" (crushed, the archive
     page says). Each text otherwise kept its checked figures.
+
+---
+
+# Rockets' long descriptions (2026-11-01)
+
+Written for the Foreign hardware file (`ui-spec.md` 4.15), which shows a rocket's `longDescription` as its About, for all 25
+rockets, in `strings.json` of whichever pack has the rocket. Each avoids its history note's story. Wikipedia infoboxes were used
+as pointers to their sources; where a page's infobox and text disagreed, the text says "about" or leaves the figure out.
+
+- **r7-sputnik:** https://en.wikipedia.org/wiki/Sputnik_(rocket) (8K71PS: 30 m, 267 t, 3,890 kN, 500 kg to LEO, RD-107 and RD-108, two flights).
+- **r7-vostok:** https://en.wikipedia.org/wiki/Vostok-K (30.84 m, 281 t, RD-0109 54.5 kN and 365 s, 4,730 kg, 13 launches, 2 failures, payloads).
+- **r7-voskhod:** https://en.wikipedia.org/wiki/Voskhod_(rocket) (30.84 m, 298.4 t, RD-0107, 5,900 kg, 300 launches, 287 successes).
+- **r7-luna:** https://en.wikipedia.org/wiki/Luna_(rocket) (277 t, RD-0105 49 kN, 316 s, 4,000 kg to LEO, nine launches, table of payloads). "A few hundred kilograms" is Luna 1 to 3's own mass, about 280 to 390 kg (their program pages).
+- **r7-molniya:** https://en.wikipedia.org/wiki/Molniya_(rocket) (43.44 m, 305 t, four stages, Block L, 40 launches: 20 / 9 / 11, payloads).
+- **r7-soyuz:** https://en.wikipedia.org/wiki/Soyuz_(rocket) (50.7 m, 308 t, RD-0110 294 kN, 6,450 kg, 32 launches, 2 failures, AVD).
+- **proton:** https://en.wikipedia.org/wiki/Proton_(rocket_family) and https://en.wikipedia.org/wiki/UR-500 (central tank at the rail gauge, six fuel tanks that don't separate, 7.4 m, N2O4/UDMH, 10,470 kN, 53 m and 693.8 t). Sources give 19.8 to 23.7 t to LEO by version: "around 20 tonnes".
+- **proton-k-block-d:** https://en.wikipedia.org/wiki/Proton-K and https://en.wikipedia.org/wiki/UR-500 (RD-58M 83.4 kN LOX/RP-1, first flight 10 March 1967 with a 7K-L1, escape system saved the craft on early failures, 310 launches, last 30 March 2012).
+- **n1:** https://en.wikipedia.org/wiki/N1_(rocket) (105 m, 17 m, 2,750 t, 45,400 to 45,780 kN, 30/8/4/1/1 engines, 95 t, flights 1969 to 1972, suspended 1974, cancelled 1976). "A third more" against the Saturn V's 34,500 kN.
+- **ur-700:** https://russianspaceweb.com/ur700.html, https://www.fplib.org/partners/mwade/lvs/ur700.htm, https://en.wikipedia.org/wiki/Universal_Rocket (nine 4.15 m modules, six in pairs and three, an RD-270 each, 5,760 t thrust, cross-feed). RussianSpaceWeb describes an eight-booster form too, hence "figures vary between its drafts".
+- **jupiter-c:** https://en.wikipedia.org/wiki/Jupiter-C (21.3 m, 1.8 m, 29 t, Hydyne/LOX, 11 and 3 motors, three flights 1956 to 1957, first nose cone recovered, Juno I).
+- **redstone:** https://en.wikipedia.org/wiki/Mercury-Redstone_Launch_Vehicle (25.41 m, 1.78 m, 30 t, A-7 350 kN, 143.5 s, alcohol/LOX, about 800 changes, abort system, 5 May 1961).
+- **juno-2:** https://en.wikipedia.org/wiki/Juno_II (24.0 m, 2.67 m, 55.11 t, S-3D, 11+3+1 motors, 41 kg, 6 kg, ten flights 1958 to 1961).
+- **atlas:** https://en.wikipedia.org/wiki/Atlas_LV-3B (29.06 m, 3.0 m, 120 t, 1,517 kN for 135 s, 363 kN for 5 min, 1,360 kg, ASIS, nine launches, two failures, four crewed).
+- **thor-able:** https://en.wikipedia.org/wiki/Thor-Able (26.9 to 27.8 m, 2.44 m, 51.6 t, 758.7 kN, 34.7 kN, HNO3/UDMH, Altair, 120 kg to 640 km, 16 flights, 6 failures, Pioneer 0 to 2, Tiros 1).
+- **atlas-agena:** https://en.wikipedia.org/wiki/Atlas-Agena (36 m, 155 t, 1,000 kg, 16,000 lbf for 265 s, UDMH/IRFNA, 109 launches, 93 successes, payloads).
+- **atlas-centaur:** https://en.wikipedia.org/wiki/Atlas-Centaur (balloon tanks, seven Surveyors, Pioneer 10 and 11), https://space.skyrocket.de/doc_stage/centaur.htm (2 RL10, 9.1 m, 3.05 m), https://orbitcodex.com/launch-vehicles/atlas-centaur-d (33 m, 136.1 t, about 950 kg to TLI; one database's entry, Surveyor's own mass agrees).
+- **titan-2:** https://en.wikipedia.org/wiki/Titan_II_GLV (33 m, 3.0 m, 150 t, Aerozine 50/N2O4, 3.6 t, 12 flights, changes from the missile).
+- **titan-3c:** https://en.wikipedia.org/wiki/Titan_IIIC (42 m, 626 t, boosters 85 ft and nearly 500,000 lb, about 115 s, Transtage, 13.1 t, 3 t, 36 launches 1965 to 1982).
+- **titan-3e-centaur:** https://en.wikipedia.org/wiki/Titan_IIIE (48.8 m, 633 t, 5,339 kN, 2 RL10, 15.4 t, 3.7 t, Star 37E, seven launches 1974 to 1977).
+- **saturn-1:** https://en.wikipedia.org/wiki/Saturn_I (55 m, 6.6 m, 510 t, 6,700 kN, six RL10, 9.1 t, flights 1961 to 1965, SA-5 first to orbit, 29 January 1964).
+- **saturn-1b:** https://en.wikipedia.org/wiki/Saturn_IB (43.2 m without payload, 6.61 m, 590 t, 7,100 kN, 890 kN, 21 t, nine flights, Apollo-Soyuz).
+- **saturn-c3b:** https://en.wikipedia.org/wiki/Saturn_C-3 (82 m, 1,024 t, 2 F-1, 4 J-2, 6 RL10, 45 t, 18 t, 1959 to 1962, Lundin committee's two or three, LOR chosen 7 November 1962).
+- **saturn-v:** https://en.wikipedia.org/wiki/Saturn_V (111 m, 10 m, 2,822 to 2,965 t, 34.5 MN, 5 F-1, 5 J-2, 1 J-2, 140 t, 43.5 t, 13 launches, Apollo 6 partial).
+- **nova:** https://en.wikipedia.org/wiki/Nova_(NASA_rocket) (8 F-1, 2 M-1, 1 J-2, 68 t translunar, studies into 1962 as a backup, later post-Apollo designs).

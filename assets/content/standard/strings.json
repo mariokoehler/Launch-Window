@@ -419,27 +419,32 @@
     "r7-sputnik": {
       "name": "R-7 (Sputnik)",
       "description": "The world's first intercontinental missile, adapted to carry a satellite: a core stage ringed by four strap-on boosters, all lit on the launch pad.",
-      "historyNote": "Why light every engine on the ground? In the early 1950s nobody knew whether a large rocket engine could be started reliably high up, in thin air or in vacuum. The R-7's designers sidestepped the question: the core and all four boosters ignite on the pad, and the empty boosters simply fall away. Its descendant, Soyuz, still flies this way."
+      "historyNote": "Why light every engine on the ground? In the early 1950s nobody knew whether a large rocket engine could be started reliably high up, in thin air or in vacuum. The R-7's designers sidestepped the question: the core and all four boosters ignite on the pad, and the empty boosters simply fall away. Its descendant, Soyuz, still flies this way.",
+      "longDescription": "The R-7 as it launched Sputnik 1 and 2: about 30 m tall and 267 tonnes at liftoff. A core stage nearly 3 m across, with one RD-108 engine, runs the whole way up, ringed by four tapering boosters with an RD-107 each. All five burn kerosene and liquid oxygen, for about 3,900 kN at liftoff. In this form it could put about 500 kg into low orbit, and it flew only those two times before a stronger version took over."
     },
     "r7-vostok": {
       "name": "R-7 (Vostok)",
       "description": "The R-7 with a small upper stage on top, enough to put a crewed Vostok capsule into orbit.",
-      "historyNote": "Gagarin's rocket was the R-7 with a third stage, the Block E. Semyon Kosberg's bureau, which had built engines for aircraft, developed its engine in about nine months for the first Moon probes. Three of the first lunar launches failed, and on 2 January 1959 the stage worked for the first time, sending Luna 1 past the Moon. Gagarin rode an improved version of it."
+      "historyNote": "Gagarin's rocket was the R-7 with a third stage, the Block E. Semyon Kosberg's bureau, which had built engines for aircraft, developed its engine in about nine months for the first Moon probes. Three of the first lunar launches failed, and on 2 January 1959 the stage worked for the first time, sending Luna 1 past the Moon. Gagarin rode an improved version of it.",
+      "longDescription": "The R-7 with a third stage, about 31 m tall and 281 tonnes at liftoff. The stage's single RD-0109 engine gave about 54 kN for about six minutes, for about 4.7 tonnes in low orbit. This version flew 13 times from 1960 to 1964 and failed twice. It launched all six crewed Vostok flights, Korabl-Sputnik 4 and 5, the Elektron science satellites and the first Zenit spy satellites."
     },
     "jupiter-c": {
       "name": "Jupiter-C",
       "description": "A lengthened Redstone missile topped with a spinning cluster of small solid rockets, just enough to put a very light satellite into orbit.",
-      "historyNote": "In September 1956 this rocket could have put a satellite in orbit, a year before Sputnik. Washington wanted the first American satellite to come from the civilian Vanguard project, so the Army flew with a dummy top stage filled with sand, and the payload only arced 5,300 km downrange. After Sputnik and a Vanguard exploding on its pad, a Jupiter-C finally launched Explorer 1 in January 1958."
+      "historyNote": "In September 1956 this rocket could have put a satellite in orbit, a year before Sputnik. Washington wanted the first American satellite to come from the civilian Vanguard project, so the Army flew with a dummy top stage filled with sand, and the payload only arced 5,300 km downrange. After Sputnik and a Vanguard exploding on its pad, a Jupiter-C finally launched Explorer 1 in January 1958.",
+      "longDescription": "A stretched Redstone, about 21 m tall, 1.8 m wide and 29 tonnes at liftoff, built to test nose cones for the Jupiter missile: its first stage burned Hydyne and liquid oxygen, and on top a spinning tub held 11 small solid rockets around 3 more. Its three flights, in 1956 and 1957, were all suborbital, and the last brought back the first nose cone recovered from space. The version that launched Explorer 1 added one more solid rocket on top, and was called Juno I."
     },
     "redstone": {
       "name": "Redstone",
       "description": "A single-stage missile, made safe enough to carry an astronaut. It can only lob a capsule on a short suborbital hop.",
-      "historyNote": "Mercury-Redstone 1, in November 1960, became known as the \"four-inch flight\": the rocket rose about ten centimeters and shut itself down, because a plug had come out in the wrong order and told it the flight was over. The capsule then fired its escape tower away on its own and released its parachutes, leaving a fully fueled rocket on the pad with parachutes draped down its side."
+      "historyNote": "Mercury-Redstone 1, in November 1960, became known as the \"four-inch flight\": the rocket rose about ten centimeters and shut itself down, because a plug had come out in the wrong order and told it the flight was over. The capsule then fired its escape tower away on its own and released its parachutes, leaving a fully fueled rocket on the pad with parachutes draped down its side.",
+      "longDescription": "A single-stage rocket, about 25 m tall with its capsule, 1.8 m wide and 30 tonnes at liftoff. One A-7 engine gave about 350 kN for about two and a half minutes, on alcohol and liquid oxygen. For Mercury it had about 800 changes: longer tanks, a simpler autopilot, and an automatic system that shut the engine down and fired the escape tower if the rocket strayed or lost power. Alan Shepard rode one on 5 May 1961."
     },
     "atlas": {
       "name": "Atlas",
       "description": "A missile built so light that it needs the pressure in its tanks to keep its shape, and powerful enough to put a Mercury capsule into orbit.",
-      "historyNote": "The Atlas's steel skin was thinner than a coin, so the rocket had to stay pressurized even on the ground, or it would buckle under its own weight. Like the R-7, it lit all its engines at liftoff, because nobody was sure an engine would start in space. Partway up it simply dropped its two outer engines and flew on with the one in the middle."
+      "historyNote": "The Atlas's steel skin was thinner than a coin, so the rocket had to stay pressurized even on the ground, or it would buckle under its own weight. Like the R-7, it lit all its engines at liftoff, because nobody was sure an engine would start in space. Partway up it simply dropped its two outer engines and flew on with the one in the middle.",
+      "longDescription": "The Atlas that flew Mercury was about 29 m tall and 3 m wide, and weighed about 120 tonnes at liftoff. Two booster engines gave about 1,500 kN for a little over two minutes, then dropped away, leaving one sustainer of about 360 kN burning for five minutes in all, a design called a stage and a half. It put about 1.4 tonnes into low orbit. A new abort system watched its health. It flew nine times from 1960 to 1963, four with an astronaut, and failed twice."
     },
     "pegasus-satellite": {
       "name": "Pegasus satellite",
@@ -780,102 +785,122 @@
     "r7-voskhod": {
       "name": "R-7 (Voskhod)",
       "description": "The R-7 with a more powerful upper stage, able to lift the heavier Voskhod.",
-      "historyNote": "The Voskhod rocket, the R-7 with a bigger third stage, flew about 300 times between 1963 and 1976. Only two of those launches carried people. Many of the rest put Zenit reconnaissance satellites into orbit, spy satellites whose cameras and film came back to Earth in a capsule. Its busiest year, 1969, saw 32 flights."
+      "historyNote": "The Voskhod rocket, the R-7 with a bigger third stage, flew about 300 times between 1963 and 1976. Only two of those launches carried people. Many of the rest put Zenit reconnaissance satellites into orbit, spy satellites whose cameras and film came back to Earth in a capsule. Its busiest year, 1969, saw 32 flights.",
+      "longDescription": "The same core and boosters as the Vostok rocket, with a stronger third stage, the Block I, on a single RD-0107 engine. It stood about 31 m tall and weighed about 298 tonnes at liftoff, and it put about 5.9 tonnes into low orbit, over a tonne more than the Vostok version. That margin made room for a heavier capsule. Of its 300 launches, 287 succeeded, which made it one of the workhorses of the Soviet program."
     },
     "r7-luna": {
       "name": "R-7 (Luna)",
       "description": "The R-7 with a small third stage that sends probes to the Moon.",
-      "historyNote": "Luna 1 left on 2 January 1959, on the first R-7 with a third stage that worked. The next day, about 113,000 km out, it released a kilogram of sodium vapor, a glowing artificial comet that observers photographed from the ground to check its path. It was aimed at the Moon, missed by about 6,000 km because of an error in the engine's cutoff, and became the first spacecraft to orbit the Sun."
+      "historyNote": "Luna 1 left on 2 January 1959, on the first R-7 with a third stage that worked. The next day, about 113,000 km out, it released a kilogram of sodium vapor, a glowing artificial comet that observers photographed from the ground to check its path. It was aimed at the Moon, missed by about 6,000 km because of an error in the engine's cutoff, and became the first spacecraft to orbit the Sun.",
+      "longDescription": "The first R-7 with a third stage: the Block E, on one RD-0105 engine of about 49 kN that burned for a little over five minutes, on kerosene and liquid oxygen. At about 277 tonnes at liftoff, the rocket could put about 4 tonnes into low orbit, or throw a few hundred kilograms toward the Moon. It flew nine times from 1958 to 1960. Luna 1, 2 and 3 were its three full successes."
     },
     "r7-molniya": {
       "name": "R-7 (Molniya)",
       "description": "The R-7 with a stage that restarts in orbit, for flights to the Moon and the planets.",
-      "historyNote": "The R-7 with a fourth stage was named after its most famous payload: Molniya, Russian for lightning, the first Soviet communications satellites. They flew a long 12-hour orbit tilted at 63.4 degrees, at which the orbit's high point doesn't drift. Each satellite hung for hours high over the far north, where satellites over the equator are hard to see from, and three of them covered it around the clock."
+      "historyNote": "The R-7 with a fourth stage was named after its most famous payload: Molniya, Russian for lightning, the first Soviet communications satellites. They flew a long 12-hour orbit tilted at 63.4 degrees, at which the orbit's high point doesn't drift. Each satellite hung for hours high over the far north, where satellites over the equator are hard to see from, and three of them covered it around the clock.",
+      "longDescription": "The R-7's four-stage version, about 43 m tall and 305 tonnes at liftoff. Its top stage, the Block L, waited in low orbit and then fired to push the payload out toward the Moon or a planet, which a probe to another planet needed. It flew 40 times from 1960 to 1967, with the Mars and Venera probes, Luna landers, Zonds and Molniya satellites. Only 20 flights fully worked, nine failed and eleven partly failed."
     },
     "r7-soyuz": {
       "name": "R-7 (Soyuz)",
       "description": "The R-7 version built for the Soyuz spacecraft, with an escape tower for the crew.",
-      "historyNote": "The R-7 began as the world's first intercontinental missile in the 1950s, and it was soon too big and slow to be a good one. As a launcher it never retired: its Soyuz descendants still carry crews into orbit today. Counting every version, the family has flown more than 1,900 times, more than any other rocket in history."
+      "historyNote": "The R-7 began as the world's first intercontinental missile in the 1950s, and it was soon too big and slow to be a good one. As a launcher it never retired: its Soyuz descendants still carry crews into orbit today. Counting every version, the family has flown more than 1,900 times, more than any other rocket in history.",
+      "longDescription": "The R-7 built for Soyuz, about 51 m tall with the spacecraft and its escape tower, and about 308 tonnes at liftoff. Its third stage, on one RD-0110 engine of about 294 kN, helped put about 6.5 tonnes into low orbit. An automatic system watched power, engines and flight path, and could shut the rocket down, firing the crew's escape tower on a crewed flight. This first version flew 32 times from 1966 to 1976, and two flights failed."
     },
     "proton": {
       "name": "Proton",
       "description": "A heavy rocket on storable propellants, powerful enough for the largest probes.",
-      "historyNote": "Vladimir Chelomei designed the UR-500 as a missile to carry an enormous nuclear warhead. It never served as one. Its first flights, from July 1965, carried Proton, a series of heavy satellites of over 12 tonnes for studying cosmic rays, and the rocket took their name. Modern versions of it were still flying more than half a century later."
+      "historyNote": "Vladimir Chelomei designed the UR-500 as a missile to carry an enormous nuclear warhead. It never served as one. Its first flights, from July 1965, carried Proton, a series of heavy satellites of over 12 tonnes for studying cosmic rays, and the rocket took their name. Modern versions of it were still flying more than half a century later.",
+      "longDescription": "Proton's first stage looks like a core with six boosters, but nothing falls away from it. The central oxidizer tank is as wide as Soviet railways allow, and the six tanks around it hold fuel and carry the engines, which makes the base 7.4 m across. All its stages burn storable nitrogen tetroxide and UDMH, which ignite on contact. Six engines give about 10,500 kN. The three-stage version stands over 50 m tall, weighs about 690 tonnes and puts around 20 tonnes into low orbit."
     },
     "proton-k-block-d": {
       "name": "Proton-K with Block D",
       "description": "The Proton with a restartable upper stage, able to send a crewed craft around the Moon.",
-      "historyNote": "The Block D stage was built for the Soviet Moon landing: as the N1's fifth stage it would correct the course to the Moon, brake into lunar orbit and start the LK's descent. On top of a Proton it found a longer life, sending Zond capsules around the Moon, and Luna 16, Lunokhod, Mars 3 and Venera 9 on their way. A later version first took Soviet satellites to geostationary orbit."
+      "historyNote": "The Block D stage was built for the Soviet Moon landing: as the N1's fifth stage it would correct the course to the Moon, brake into lunar orbit and start the LK's descent. On top of a Proton it found a longer life, sending Zond capsules around the Moon, and Luna 16, Lunokhod, Mars 3 and Venera 9 on their way. A later version first took Soviet satellites to geostationary orbit.",
+      "longDescription": "The three-stage Proton-K with a fourth stage on top: the Block D, on a single engine of about 83 kN burning kerosene and liquid oxygen, unlike the storable propellants below it. Its restart let a spacecraft leave a parking orbit. Its first flight, in March 1967, carried a 7K-L1, the Soyuz meant to take a crew around the Moon. Several early flights failed, and the capsule's escape system saved the spacecraft each time. Proton-K itself flew 310 times, until 2012."
     },
     "n1": {
       "name": "N1",
       "description": "The giant Soviet Moon rocket, its first stage driven by a ring of many smaller engines.",
-      "historyNote": "The N1's first stage had 30 engines, more than any rocket before it. A control system called KORD watched them, and if one failed it shut down the one opposite to keep the thrust balanced. All four launches failed. On the second, on 3 July 1969, an oxygen pump exploded as it lifted off, and the rocket fell back onto the pad, and the pad took about 18 months to rebuild."
+      "historyNote": "The N1's first stage had 30 engines, more than any rocket before it. A control system called KORD watched them, and if one failed it shut down the one opposite to keep the thrust balanced. All four launches failed. On the second, on 3 July 1969, an oxygen pump exploded as it lifted off, and the rocket fell back onto the pad, and the pad took about 18 months to rebuild.",
+      "longDescription": "The largest Soviet rocket: about 105 m tall, 17 m across at the base and 2,750 tonnes at liftoff, with five stages all burning kerosene and liquid oxygen. Its 30 first-stage engines gave about 45,000 kN, a third more than the Saturn V, then 8, 4, 1 and 1 engines above them. It was rated for about 95 tonnes to low orbit. It flew four times from 1969 to 1972 and never reached orbit. The Moon program was halted in 1974 and the rocket was cancelled in 1976."
     },
     "ur-700": {
       "name": "UR-700",
       "description": "A proposed giant rocket for a direct flight to the Moon, built from storable-propellant modules.",
-      "historyNote": "Chelomei's UR-700 was a bundle of rocket modules with one big engine each: six around the outside as the first stage and three in the middle as the second, nine engines in all, carrying about 150 tonnes to low orbit. Its RD-270 engine, by Valentin Glushko's bureau, was test-fired 27 times between 1967 and 1969, but the rocket was never built."
+      "historyNote": "Chelomei's UR-700 was a bundle of rocket modules with one big engine each: six around the outside as the first stage and three in the middle as the second, nine engines in all, carrying about 150 tonnes to low orbit. Its RD-270 engine, by Valentin Glushko's bureau, was test-fired 27 times between 1967 and 1969, but the rocket was never built.",
+      "longDescription": "Vladimir Chelomei's answer to the N1: a rocket big enough to fly a crew straight to the Moon's surface in the LK-700, with no rendezvous at all. Its modules were each 4.15 m wide, six in pairs around three, on storable propellants, with the outer ones feeding the inner engines during the climb so the second stage started with full tanks. Nine engines gave about 5,800 tonnes of thrust. Figures vary between its drafts, and it never left the drawing board."
     },
     "juno-2": {
       "name": "Juno II",
       "description": "A Jupiter missile with small solid upper stages, for probes to the Moon and beyond.",
-      "historyNote": "The Juno II was a Jupiter missile with stretched tanks, a stronger frame for the upper stages and radio guidance from the ground, topped with clusters of small solid rockets. It had a rough record: six of its ten launches failed. Pioneer 4 in March 1959 was a success, and so was Explorer 7 in October 1959, which made the first measurements of the energy the Earth gains from the Sun and gives off."
+      "historyNote": "The Juno II was a Jupiter missile with stretched tanks, a stronger frame for the upper stages and radio guidance from the ground, topped with clusters of small solid rockets. It had a rough record: six of its ten launches failed. Pioneer 4 in March 1959 was a success, and so was Explorer 7 in October 1959, which made the first measurements of the energy the Earth gains from the Sun and gives off.",
+      "longDescription": "A Jupiter missile first stage on one S-3D engine, burning kerosene and liquid oxygen, with the spinning cluster of small solid rockets on top: 11, then 3, then 1. It stood about 24 m tall, 2.67 m wide and weighed about 55 tonnes. All that lifted only about 41 kg to low orbit, and about 6 kg away from the Earth, so its probes had to be tiny. It flew ten times from 1958 to 1961."
     },
     "thor-able": {
       "name": "Thor-Able",
       "description": "A Thor missile with an upper stage on top: an early workhorse for small satellites and probes.",
-      "historyNote": "On 14 August 1959 Explorer 6, launched a week earlier on a Thor-Able, sent back the first picture of the Earth from orbit. Its camera was a simple scanning eye that swept the view in strips as the satellite spun, and engineers pieced the strips together like a shredded letter. The blurry result showed sunlit clouds over the Pacific, the first step toward weather satellites."
+      "historyNote": "On 14 August 1959 Explorer 6, launched a week earlier on a Thor-Able, sent back the first picture of the Earth from orbit. Its camera was a simple scanning eye that swept the view in strips as the satellite spun, and engineers pieced the strips together like a shredded letter. The blurry result showed sunlit clouds over the Pacific, the first step toward weather satellites.",
+      "longDescription": "A Thor missile, about 760 kN on kerosene and liquid oxygen, with the Able upper stage on top: about 35 kN on nitric acid and UDMH, with an Altair solid stage added for satellites and probes. It stood about 27 m tall, 2.4 m wide and 52 tonnes at liftoff, and put about 120 kg into a 640 km orbit. It flew 16 times from 1958 to 1960, ending with Tiros 1. Six flights failed, among them Pioneer 0, 1 and 2 and most of the probe launches."
     },
     "atlas-agena": {
       "name": "Atlas-Agena",
       "description": "An Atlas with the restartable Agena upper stage, for lunar and planetary probes.",
-      "historyNote": "On 22 July 1962 an Atlas-Agena carrying Mariner 1 to Venus veered off course and was destroyed. A symbol in the guidance equations had lost its bar, the mark meaning a smoothed average, so the software chased noise as if it were real drift. The press called it the most expensive hyphen in history. Five weeks later Mariner 2 left for Venus, and it made the first flyby of another planet in December."
+      "historyNote": "On 22 July 1962 an Atlas-Agena carrying Mariner 1 to Venus veered off course and was destroyed. A symbol in the guidance equations had lost its bar, the mark meaning a smoothed average, so the software chased noise as if it were real drift. The press called it the most expensive hyphen in history. Five weeks later Mariner 2 left for Venus, and it made the first flyby of another planet in December.",
+      "longDescription": "An Atlas with the Agena on top, about 36 m tall and 155 tonnes at liftoff, able to put about a tonne into low orbit. The Agena's engine gave about 71 kN for about four and a half minutes, on UDMH and nitric acid. It launched Ranger, Mariner and all five Lunar Orbiters, and an Agena alone became the target for Gemini's dockings. It flew 109 times from 1960 to 1978, and 93 flights worked."
     },
     "atlas-centaur": {
       "name": "Atlas-Centaur",
       "description": "An Atlas with the Centaur, the first upper stage burning liquid hydrogen, for heavier probes.",
-      "historyNote": "The first Atlas-Centaur, in May 1962, broke up less than a minute after launch when insulation panels on the hydrogen tank failed. Wernher von Braun recommended cancelling the stage, and in November President Kennedy suggested the same. It survived because Surveyor depended on it, and because Apollo needed experience with liquid hydrogen. In 1966 it sent Surveyor 1 to its landing on the Moon."
+      "historyNote": "The first Atlas-Centaur, in May 1962, broke up less than a minute after launch when insulation panels on the hydrogen tank failed. Wernher von Braun recommended cancelling the stage, and in November President Kennedy suggested the same. It survived because Surveyor depended on it, and because Apollo needed experience with liquid hydrogen. In 1966 it sent Surveyor 1 to its landing on the Moon.",
+      "longDescription": "An Atlas under the Centaur stage, 3 m wide and about 9 m long, on two RL10 engines burning liquid hydrogen and liquid oxygen. Hydrogen gives far more push for its weight, but it's so light that it needs huge tanks, so Centaur's were pressure-stabilized balloons like the Atlas's own. The rocket stood about 33 m tall and weighed about 136 tonnes, and sent nearly a tonne toward the Moon. It launched all seven Surveyors, and later Pioneer 10 and 11."
     },
     "titan-2": {
       "name": "Titan II",
       "description": "A missile on storable propellants, made human-rated to fly the Gemini capsule.",
-      "historyNote": "The Titan II was a missile, and it shook: a vibration along its length that the Air Force could live with was far beyond what NASA would accept for astronauts, a quarter of a g. A first fix made it worse, doubling the shaking. Then engineers found the cause, bubbles forming at the pump inlets, and gas-filled dampers in the feed lines brought it down to about a tenth of a g."
+      "historyNote": "The Titan II was a missile, and it shook: a vibration along its length that the Air Force could live with was far beyond what NASA would accept for astronauts, a quarter of a g. A first fix made it worse, doubling the shaking. Then engineers found the cause, bubbles forming at the pump inlets, and gas-filled dampers in the feed lines brought it down to about a tenth of a g.",
+      "longDescription": "A two-stage missile about 33 m tall, 3 m wide and 150 tonnes at liftoff. It burned Aerozine 50 and nitrogen tetroxide, which ignite on contact and keep at room temperature, so a missile could be ready in a silo. For Gemini it gained a system that warned the crew of a fault, backup guidance and redundant parts, and it dropped the missile's vernier engines. It put about 3.6 tonnes into low orbit. All 12 flights, from 1964 to 1966, worked."
     },
     "titan-3c": {
       "name": "Titan IIIC",
       "description": "A Titan with two large solid boosters strapped to its sides and a Transtage on top.",
-      "historyNote": "The Titan IIIC lifted off on its two big solid boosters alone, each three meters wide and built from five segments stacked near the pad. The liquid-fuelled core in the middle only lit high in the air, as the solids' thrust tailed off. At its first flight in 1965 it was the most powerful rocket that had ever flown."
+      "historyNote": "The Titan IIIC lifted off on its two big solid boosters alone, each three meters wide and built from five segments stacked near the pad. The liquid-fuelled core in the middle only lit high in the air, as the solids' thrust tailed off. At its first flight in 1965 it was the most powerful rocket that had ever flown.",
+      "longDescription": "A Titan core 3 m wide between two solid boosters about 26 m long, each weighing nearly 230 tonnes and burning for just under two minutes. The stack was about 42 m tall and 626 tonnes at liftoff. On top sat the Transtage, whose two restartable engines could place several satellites in different orbits on one flight. It could put about 13 tonnes into low orbit or 3 tonnes toward geostationary orbit, and it flew 36 times from 1965 to 1982, mostly for the US Air Force."
     },
     "titan-3e-centaur": {
       "name": "Titan IIIE-Centaur",
       "description": "A Titan with solid boosters and a Centaur on top, for the outer planets.",
-      "historyNote": "The first Titan IIIE-Centaur, in February 1974, failed when its Centaur stage did not ignite. It flew six more times and never failed again, and those six flights launched some of the most famous probes there are: Helios 1 and 2 toward the Sun, Viking 1 and 2 to Mars, and Voyager 2 and Voyager 1 to the outer planets."
+      "historyNote": "The first Titan IIIE-Centaur, in February 1974, failed when its Centaur stage did not ignite. It flew six more times and never failed again, and those six flights launched some of the most famous probes there are: Helios 1 and 2 toward the Sun, Viking 1 and 2 to Mars, and Voyager 2 and Voyager 1 to the outer planets.",
+      "longDescription": "The Air Force's Titan married to NASA's Centaur: two five-segment solid boosters of about 5,300 kN each, a two-stage Titan core, and a Centaur with two RL10 engines on top, about 49 m tall and 633 tonnes in all. It could put about 15 tonnes into low orbit or send about 3.7 tonnes to another planet, and a small solid stage could be added for the fastest flights. It flew only seven times, from 1974 to 1977."
     },
     "saturn-1": {
       "name": "Saturn I",
       "description": "The first Saturn, its first stage a cluster of eight engines fed from a cluster of tanks.",
-      "historyNote": "The Saturn I's first stage was a bundle: eight narrow tanks around one wide one, all at the diameters of the Redstone and Jupiter missiles so their tooling could be used, feeding eight engines. Skeptics called it Cluster's Last Stand. It flew ten times without a failure, launched the three Pegasus satellites and flew test versions of the Apollo spacecraft."
+      "historyNote": "The Saturn I's first stage was a bundle: eight narrow tanks around one wide one, all at the diameters of the Redstone and Jupiter missiles so their tooling could be used, feeding eight engines. Skeptics called it Cluster's Last Stand. It flew ten times without a failure, launched the three Pegasus satellites and flew test versions of the Apollo spacecraft.",
+      "longDescription": "The first American rocket built from the start to lift heavy loads into space: about 55 m tall, 6.6 m wide and 510 tonnes at liftoff. Eight H-1 engines gave about 6,700 kN on kerosene and liquid oxygen. The first four flights were suborbital tests. Then the S-IV stage, on six RL10 engines burning liquid hydrogen, brought it to orbit in January 1964, with room for about 9 tonnes. It flew from 1961 to 1965."
     },
     "saturn-1b": {
       "name": "Saturn IB",
       "description": "An improved Saturn I with a hydrogen upper stage, able to put an Apollo into Earth orbit.",
-      "historyNote": "The Saturn IB was much shorter than the Saturn V, but the launch pads at the Kennedy Space Center had been built for the giant. So NASA stood it on a pedestal about 39 meters tall, nicknamed the milkstool, until its upper stage and spacecraft lined up with the service arms. It launched the three Skylab crews from it in 1973."
+      "historyNote": "The Saturn IB was much shorter than the Saturn V, but the launch pads at the Kennedy Space Center had been built for the giant. So NASA stood it on a pedestal about 39 meters tall, nicknamed the milkstool, until its upper stage and spacecraft lined up with the service arms. It launched the three Skylab crews from it in 1973.",
+      "longDescription": "The Saturn I's first stage, improved to about 7,100 kN, under the S-IVB: a hydrogen stage on one J-2 engine of about 890 kN, a close relative of the Saturn V's top stage. About 43 m tall without its payload, 6.6 m wide and 590 tonnes, it put about 21 tonnes into low orbit, enough for an Apollo spacecraft. All nine flights worked, from 1966 to Apollo-Soyuz in July 1975."
     },
     "saturn-c3b": {
       "name": "Saturn C-3B",
       "description": "A Saturn design between the IB and the V, for lunar missions assembled in Earth orbit.",
-      "historyNote": "The C in the early Saturn names wasn't an abbreviation: the designs were options lettered A, B and C, and Saturn C was chosen and numbered. The C-1 became the Saturn I and the C-5 the Saturn V. The C-3 never flew: it would have used two of the Saturn V's big engines, and Marshall planned to build a Moon ship from several of them in Earth orbit."
+      "historyNote": "The C in the early Saturn names wasn't an abbreviation: the designs were options lettered A, B and C, and Saturn C was chosen and numbered. The C-1 became the Saturn I and the C-5 the Saturn V. The C-3 never flew: it would have used two of the Saturn V's big engines, and Marshall planned to build a Moon ship from several of them in Earth orbit.",
+      "longDescription": "A rocket that never left paper, studied from 1959 to 1962. The design had three stages: two F-1 engines, then four J-2s, then six RL10s, about 82 m tall and over 1,000 tonnes at liftoff, for about 45 tonnes to low orbit or 18 tonnes toward the Moon. One 1961 committee wanted a Moon landing from two or three of them, joined in Earth orbit. Once NASA chose lunar-orbit rendezvous in November 1962, the work stopped."
     },
     "saturn-v": {
       "name": "Saturn V",
       "description": "The three-stage giant that sends a complete Apollo spacecraft to the Moon.",
-      "historyNote": "The Saturn V's F-1 engines suffered from combustion instability: pressure waves sloshing across the combustion chamber could tear an engine apart within moments. Engineers added copper baffles across the injector plate, then tested them the hard way, setting off small bombs inside running engines to see whether the baffles would calm the disturbance. It took more than 1,300 test firings."
+      "historyNote": "The Saturn V's F-1 engines suffered from combustion instability: pressure waves sloshing across the combustion chamber could tear an engine apart within moments. Engineers added copper baffles across the injector plate, then tested them the hard way, setting off small bombs inside running engines to see whether the baffles would calm the disturbance. It took more than 1,300 test firings.",
+      "longDescription": "About 111 m tall, 10 m wide and nearly 3,000 tonnes at liftoff. Five F-1 engines gave about 34,500 kN on kerosene and liquid oxygen. Five J-2s, then one more, took over on liquid hydrogen, and the last restarted in orbit to send Apollo to the Moon. It could put 140 tonnes into low orbit or about 43 tonnes toward the Moon. It flew 13 times from 1967 to 1973 and never lost a payload, though Apollo 6 only partly worked."
     },
     "nova": {
       "name": "Nova",
       "description": "The giant that was never built: eight F-1 engines, big enough to land a whole spacecraft on the Moon and fly it home.",
-      "historyNote": "Direct ascent, landing the whole spacecraft and flying it home, needed a rocket far bigger than the Saturn V. NASA's Nova studies drew one with eight F-1 engines in its first stage, able to send about 68 tonnes toward the Moon. It was never built: lunar-orbit rendezvous needed only a small lander, so the Saturn V was enough, and the factory at Michoud was too low for a stage that wide."
+      "historyNote": "Direct ascent, landing the whole spacecraft and flying it home, needed a rocket far bigger than the Saturn V. NASA's Nova studies drew one with eight F-1 engines in its first stage, able to send about 68 tonnes toward the Moon. It was never built: lunar-orbit rendezvous needed only a small lander, so the Saturn V was enough, and the factory at Michoud was too low for a stage that wide.",
+      "longDescription": "A three-stage giant on paper: eight F-1 engines in the first stage, two M-1 hydrogen engines in the second and a J-2 in the third, for about 68 tonnes toward the Moon, enough to land a whole Apollo-sized ship and bring it back. Nova studies went on into 1962 as a backup for Saturn, and ended once the plan to meet in lunar orbit was settled. The name lived on in larger post-Apollo designs, which weren't built either."
     }
   },
   "configurations": {

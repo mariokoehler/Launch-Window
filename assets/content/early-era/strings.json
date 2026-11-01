@@ -81,27 +81,32 @@
     "r7-sputnik": {
       "name": "R-7 (Sputnik)",
       "description": "The world's first intercontinental missile, adapted to carry a satellite: a core stage ringed by four strap-on boosters, all lit on the launch pad.",
-      "historyNote": "Why light every engine on the ground? In the early 1950s nobody knew whether a large rocket engine could be started reliably high up, in thin air or in vacuum. The R-7's designers sidestepped the question: the core and all four boosters ignite on the pad, and the empty boosters simply fall away. Its descendant, Soyuz, still flies this way."
+      "historyNote": "Why light every engine on the ground? In the early 1950s nobody knew whether a large rocket engine could be started reliably high up, in thin air or in vacuum. The R-7's designers sidestepped the question: the core and all four boosters ignite on the pad, and the empty boosters simply fall away. Its descendant, Soyuz, still flies this way.",
+      "longDescription": "The R-7 as it launched Sputnik 1 and 2: about 30 m tall and 267 tonnes at liftoff. A core stage nearly 3 m across, with one RD-108 engine, runs the whole way up, ringed by four tapering boosters with an RD-107 each. All five burn kerosene and liquid oxygen, for about 3,900 kN at liftoff. In this form it could put about 500 kg into low orbit, and it flew only those two times before a stronger version took over."
     },
     "r7-vostok": {
       "name": "R-7 (Vostok)",
       "description": "The R-7 with a small upper stage on top, enough to put a crewed Vostok capsule into orbit.",
-      "historyNote": "Gagarin's rocket was the R-7 with a third stage, the Block E. Semyon Kosberg's bureau, which had built engines for aircraft, developed its engine in about nine months for the first Moon probes. Three of the first lunar launches failed, and on 2 January 1959 the stage worked for the first time, sending Luna 1 past the Moon. Gagarin rode an improved version of it."
+      "historyNote": "Gagarin's rocket was the R-7 with a third stage, the Block E. Semyon Kosberg's bureau, which had built engines for aircraft, developed its engine in about nine months for the first Moon probes. Three of the first lunar launches failed, and on 2 January 1959 the stage worked for the first time, sending Luna 1 past the Moon. Gagarin rode an improved version of it.",
+      "longDescription": "The R-7 with a third stage, about 31 m tall and 281 tonnes at liftoff. The stage's single RD-0109 engine gave about 54 kN for about six minutes, for about 4.7 tonnes in low orbit. This version flew 13 times from 1960 to 1964 and failed twice. It launched all six crewed Vostok flights, Korabl-Sputnik 4 and 5, the Elektron science satellites and the first Zenit spy satellites."
     },
     "jupiter-c": {
       "name": "Jupiter-C",
       "description": "A lengthened Redstone missile topped with a spinning cluster of small solid rockets, just enough to put a very light satellite into orbit.",
-      "historyNote": "In September 1956 this rocket could have put a satellite in orbit, a year before Sputnik. Washington wanted the first American satellite to come from the civilian Vanguard project, so the Army flew with a dummy top stage filled with sand, and the payload only arced 5,300 km downrange. After Sputnik and a Vanguard exploding on its pad, a Jupiter-C finally launched Explorer 1 in January 1958."
+      "historyNote": "In September 1956 this rocket could have put a satellite in orbit, a year before Sputnik. Washington wanted the first American satellite to come from the civilian Vanguard project, so the Army flew with a dummy top stage filled with sand, and the payload only arced 5,300 km downrange. After Sputnik and a Vanguard exploding on its pad, a Jupiter-C finally launched Explorer 1 in January 1958.",
+      "longDescription": "A stretched Redstone, about 21 m tall, 1.8 m wide and 29 tonnes at liftoff, built to test nose cones for the Jupiter missile: its first stage burned Hydyne and liquid oxygen, and on top a spinning tub held 11 small solid rockets around 3 more. Its three flights, in 1956 and 1957, were all suborbital, and the last brought back the first nose cone recovered from space. The version that launched Explorer 1 added one more solid rocket on top, and was called Juno I."
     },
     "redstone": {
       "name": "Redstone",
       "description": "A single-stage missile, made safe enough to carry an astronaut. It can only lob a capsule on a short suborbital hop.",
-      "historyNote": "Mercury-Redstone 1, in November 1960, became known as the \"four-inch flight\": the rocket rose about ten centimeters and shut itself down, because a plug had come out in the wrong order and told it the flight was over. The capsule then fired its escape tower away on its own and released its parachutes, leaving a fully fueled rocket on the pad with parachutes draped down its side."
+      "historyNote": "Mercury-Redstone 1, in November 1960, became known as the \"four-inch flight\": the rocket rose about ten centimeters and shut itself down, because a plug had come out in the wrong order and told it the flight was over. The capsule then fired its escape tower away on its own and released its parachutes, leaving a fully fueled rocket on the pad with parachutes draped down its side.",
+      "longDescription": "A single-stage rocket, about 25 m tall with its capsule, 1.8 m wide and 30 tonnes at liftoff. One A-7 engine gave about 350 kN for about two and a half minutes, on alcohol and liquid oxygen. For Mercury it had about 800 changes: longer tanks, a simpler autopilot, and an automatic system that shut the engine down and fired the escape tower if the rocket strayed or lost power. Alan Shepard rode one on 5 May 1961."
     },
     "atlas": {
       "name": "Atlas",
       "description": "A missile built so light that it needs the pressure in its tanks to keep its shape, and powerful enough to put a Mercury capsule into orbit.",
-      "historyNote": "The Atlas's steel skin was thinner than a coin, so the rocket had to stay pressurized even on the ground, or it would buckle under its own weight. Like the R-7, it lit all its engines at liftoff, because nobody was sure an engine would start in space. Partway up it simply dropped its two outer engines and flew on with the one in the middle."
+      "historyNote": "The Atlas's steel skin was thinner than a coin, so the rocket had to stay pressurized even on the ground, or it would buckle under its own weight. Like the R-7, it lit all its engines at liftoff, because nobody was sure an engine would start in space. Partway up it simply dropped its two outer engines and flew on with the one in the middle.",
+      "longDescription": "The Atlas that flew Mercury was about 29 m tall and 3 m wide, and weighed about 120 tonnes at liftoff. Two booster engines gave about 1,500 kN for a little over two minutes, then dropped away, leaving one sustainer of about 360 kN burning for five minutes in all, a design called a stage and a half. It put about 1.4 tonnes into low orbit. A new abort system watched its health. It flew nine times from 1960 to 1963, four with an astronaut, and failed twice."
     }
   },
   "configurations": {

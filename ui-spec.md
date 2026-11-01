@@ -3201,8 +3201,8 @@ and a sheet of the pieces. Choices the spec left open, all **unconfirmed** (each
   role in bold, the counterpart linked to the player's own program; About is the long description, and each part
   shows its description and blueprint. On the right the history note, a dashed "Theirs, not yours" box (no
   prices; reliability lives in the dossiers), and the dossiers that list it. Crumbs end in the item; the title
-  row has "All foreign hardware" instead of tabs. **Rockets have no long description** (§4.6.4), so a rocket's
-  About is its short description above the blueprint: the user's call whether to write the 25.
+  row has "All foreign hardware" instead of tabs. A rocket's About is its long description above
+  the blueprint (written 2026-11-01, sources in `assets-raw/strings/LONG_DESCRIPTIONS.md`).
 - **Turn report:** the item learned leads the Intelligence section, tinted as the people news are, with the
   document glyph: "Foreign hardware · Proton-K with Block D" (a link to the file), the role, "Their counterpart
   to your Titan IIIC." A season with nothing learned has no line, and with nothing else the section is gone.
