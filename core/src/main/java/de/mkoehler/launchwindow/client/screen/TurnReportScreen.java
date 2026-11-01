@@ -16,6 +16,7 @@ import de.mkoehler.launchwindow.client.view.DecisionView;
 import de.mkoehler.launchwindow.rules.ContractSettled;
 import de.mkoehler.launchwindow.client.view.Help;
 import de.mkoehler.launchwindow.content.Theories;
+import de.mkoehler.launchwindow.client.ui.FullWidthPicture;
 import de.mkoehler.launchwindow.client.ui.HistoryNote;
 import de.mkoehler.launchwindow.client.view.FrontPageView;
 import de.mkoehler.launchwindow.model.FrontPage;
@@ -570,7 +571,7 @@ public final class TurnReportScreen extends ChromeScreen {
             Optional<MissionComponent> component = catalog.missionComponent(line.componentId());
             TextureRegionDrawable blueprint = ui.picture("blueprints/" + line.componentId() + ".jpg");
             if (blueprint != null) {
-                card.add(new Blueprint(blueprint)).padBottom(Theme.SPACE_2).row();
+                card.add(new FullWidthPicture(blueprint)).padBottom(Theme.SPACE_2).row();
             }
             Table head = new Table();
             head.add(ui.label(ContentNames.of(line.componentId()), Theme.TextStyle.BODY_STRONG, Theme.INK)).expandX()
@@ -604,39 +605,6 @@ public final class TurnReportScreen extends ChromeScreen {
         return card;
     }
 
-    /**
-     * A component's blueprint drawing ({@code ui-spec.md} &sect;4.4): as wide as the card, as tall as its
-     * aspect then needs. Its preferred height follows the width the card gives it, so the card lays out
-     * a second time once the width is known.
-     */
-    private static final class Blueprint extends Image {
-
-        private final float aspect;
-
-        Blueprint(TextureRegionDrawable drawing) {
-            super(drawing, Scaling.fit);
-            aspect = drawing.getRegion().getRegionHeight() / (float) drawing.getRegion().getRegionWidth();
-        }
-
-        @Override
-        public float getPrefWidth() {
-            return 0f;
-        }
-
-        @Override
-        public float getPrefHeight() {
-            return getWidth() * aspect;
-        }
-
-        @Override
-        protected void sizeChanged() {
-            super.sizeChanged();
-            if (Math.abs(getHeight() - getPrefHeight()) > 0.5f) {
-                invalidateHierarchy();
-            }
-        }
-    }
-
     private Table news(ContentCatalog catalog) {
         Table card = section("News", "This season");
         // Another agency's crew lost this turn, first in the news, with "Send condolences" (ui-spec.md 4.18.3).
@@ -662,7 +630,7 @@ public final class TurnReportScreen extends ChromeScreen {
             card.add(real).padBottom(Theme.SPACE_4).row();
         });
         // Theories of the day this turn raised for this agency (ui-spec.md section 4.18.2).
-        for (Theories.Theory theory : FrontPageView.raised(Theories.standard(), session.state().getAchievedGoals(),
+        for (Theories.Theory theory : FrontPageView.raised(Theories.standard(), session.raiseTurns(),
                 Math.toIntExact(report.gameTurn()), goal -> catalog.goal(goal).isPresent())) {
             card.add(theoryCard(theory)).padBottom(Theme.SPACE_4).row();
         }

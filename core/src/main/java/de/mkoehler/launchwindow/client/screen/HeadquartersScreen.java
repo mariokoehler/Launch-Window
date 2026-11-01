@@ -57,16 +57,16 @@ public final class HeadquartersScreen extends ChromeScreen {
         cards.add(navCard("Ready to plan · " + missions + (missions == 1 ? " mission" : " missions"), "Plan a mission",
             "Every mission of the programs open now, in one list. Pick one to assess its odds, choose rockets, and "
                 + "assemble the crew.", "Plan a mission", () -> game.setScreen(new PlanMissionScreen(game))))
-            .expandX().fillX().uniformX().top().padRight(Theme.SPACE_4);
+            .expandX().fill().uniformX().padRight(Theme.SPACE_4);
         cards.add(navCard("Currently open · " + open, "Manage open programs",
             "Upkeep, component reliability, missions in flight, and the next goal each open program can reach.",
             "Manage open programs", () -> game.setScreen(new OpenProgramsScreen(game))))
-            .expandX().fillX().uniformX().top().padRight(Theme.SPACE_4);
+            .expandX().fill().uniformX().padRight(Theme.SPACE_4);
         cards.add(navCard("By celestial body", "Browse programs",
             "Pick a destination, then a category, to see which programs are open, available, or still locked "
                 + "behind a goal.", "Browse programs", () -> game.setScreen(new SelectBodyScreen(game))))
-            .expandX().fillX().uniformX().top().padRight(Theme.SPACE_4);
-        cards.add(contractsCard()).expandX().fillX().uniformX().top();
+            .expandX().fill().uniformX().padRight(Theme.SPACE_4);
+        cards.add(contractsCard()).expandX().fill().uniformX();
         content.add(cards);
     }
 
@@ -97,7 +97,7 @@ public final class HeadquartersScreen extends ChromeScreen {
         row.add(ui.paragraph(state[1], Theme.TextStyle.BODY_SM, Theme.INK)).expandX().fillX();
         card.add(row).padBottom(Theme.SPACE_3).row();
         card.add(actionButton("Open the board", Theme.ButtonKind.PRIMARY, () -> game.setScreen(new ContractsScreen(game))))
-            .left().fill(false, false);
+            .expandY().bottom().left().fill(false, false);
         return card;
     }
 }

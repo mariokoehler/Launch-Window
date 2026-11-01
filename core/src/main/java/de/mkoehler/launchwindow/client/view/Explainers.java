@@ -2,6 +2,8 @@ package de.mkoehler.launchwindow.client.view;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import de.mkoehler.launchwindow.content.Theories;
+import de.mkoehler.launchwindow.model.FrontPage;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -9,6 +11,7 @@ import java.io.UncheckedIOException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.function.Predicate;
 
 /**
  * The Museum encyclopedia's explainers ({@code ui-spec.md} component 18, {@code design.md}
@@ -47,10 +50,13 @@ public record Explainers(List<Explainer> explainers) {
      * @param title   the idea, such as "Suborbital vs orbital", for the title block and the Museum
      * @param topic   the topic word in a sheet's eyebrow, such as "Weightlessness", or {@code null} for the
      *                title
-     * @param summary one sentence for the Museum's list
-     * @param sheets  the sheets, in reading order
+     * @param summary     one sentence for the Museum's list
+     * @param sheets      the sheets, in reading order
+     * @param lockedUntil the theories of the day it answers ({@link Theories}), so it stays locked until a flight
+     *                    in the game settles every one of them (2026-10-27); possibly empty
      */
-    public record Explainer(String id, String code, String title, String topic, String summary, List<Sheet> sheets) {
+    public record Explainer(String id, String code, String title, String topic, String summary, List<Sheet> sheets,
+                            List<String> lockedUntil) {
 
         /**
          * Checks the fields.
@@ -58,6 +64,7 @@ public record Explainers(List<Explainer> explainers) {
         public Explainer {
             Objects.requireNonNull(id, "id must not be null");
             sheets = sheets == null ? List.of() : List.copyOf(sheets);
+            lockedUntil = lockedUntil == null ? List.of() : List.copyOf(lockedUntil);
         }
 
         /**
@@ -217,6 +224,28 @@ public record Explainers(List<Explainer> explainers) {
      */
     public Optional<Explainer> byId(String id) {
         return explainers.stream().filter(explainer -> explainer.id().equals(id)).findFirst();
+    }
+
+    /**
+     * Returns whether an explainer is still locked because it would answer a theory of the day before a flight in
+     * the game does (2026-10-27). A theory the game's pack can't settle doesn't lock it, and once the race is
+     * decided nothing does, as the archive opens then too.
+     *
+     * @param explainer the explainer
+     * @param theories  the theories of the day
+     * @param pages     every page printed in the game, or {@code null} if none are fetched yet (locked, to be safe)
+     * @param inPack    whether the game's pack has a goal
+     * @param decided   whether the race is decided
+     * @return whether it's locked
+     */
+    public static boolean locked(Explainer explainer, Theories theories, List<FrontPage> pages,
+                                 Predicate<String> inPack, boolean decided) {
+        if (decided) {
+            return false;
+        }
+        return explainer.lockedUntil().stream()
+            .anyMatch(id -> theories.theory(id).filter(theory -> theory.playable(inPack)).isPresent()
+                && FrontPageView.settledBy(pages, id, Integer.MAX_VALUE).isEmpty());
     }
 
     private static <T> T read(String path, Class<T> type) {

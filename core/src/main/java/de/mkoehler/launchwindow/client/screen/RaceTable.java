@@ -75,7 +75,8 @@ final class RaceTable {
         if (museum) {
             table.add(head(ui, "Place")).width(64f);
         }
-        table.add(head(ui, "Agency")).expandX().uniformX();
+        // Not uniform with the goals: a long agency name would widen every column (large text, 2026-10-26).
+        table.add(head(ui, "Agency")).expandX();
         for (String goalId : goalIds) {
             table.add(head(ui, ContentNames.of(goalId))).expandX().uniformX();
         }

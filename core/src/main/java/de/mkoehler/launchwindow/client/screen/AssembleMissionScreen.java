@@ -70,6 +70,8 @@ import java.util.Set;
 public final class AssembleMissionScreen extends ChromeScreen {
 
     private static final int COLUMNS = 4;
+    /** Where a console tile wraps its holder's traits and marks: inside a tile a quarter of the card wide. */
+    private static final float CONSOLE_EXTRAS_WIDTH = 270f;
     /** The slot picker's width: room for traits, marks and the chemistry preview. */
     private static final float PICKER_WIDTH = 920f;
 
@@ -316,16 +318,14 @@ public final class AssembleMissionScreen extends ChromeScreen {
         if (traits.isEmpty() && marks.isEmpty()) {
             return null;
         }
-        Table extras = new Table();
-        extras.left();
-        if (!traits.isEmpty()) {
-            extras.add(TraitChip.row(ui, traits, width)).padRight(Theme.SPACE_2);
+        List<Table> extras = new ArrayList<>();
+        for (Trait trait : traits) {
+            extras.add(new TraitChip(ui, trait));
         }
         for (People.Relationship mark : marks) {
-            extras.add(RelationshipMarker.mark(ui, mark.positive(), mark.partner().getName(), "Also on this mission."))
-                .padRight(Theme.SPACE_2);
+            extras.add(RelationshipMarker.mark(ui, mark.positive(), mark.partner().getName(), "Also on this mission."));
         }
-        return extras;
+        return TraitChip.flow(extras, width);
     }
 
     private Table rocketCard(MissionDraft draft) {
@@ -524,14 +524,14 @@ public final class AssembleMissionScreen extends ChromeScreen {
                     : "Flight controller", staffing.kind() == StaffingSlot.Kind.ASTRONAUT,
                     CrewSkills.icon(staffing.skill()), CrewSkills.label(staffing.skill()),
                     person == null ? null : person.getName(), value, configuration.usedControlSlots().contains(slot),
-                    () -> openPicker(false, index), holderExtras(draft, person, 200f)))
-                .expandX().fillX().uniformX().top().pad(0f, 0f, 10f, slot % COLUMNS < COLUMNS - 1 ? 10f : 0f);
+                    () -> openPicker(false, index), holderExtras(draft, person, CONSOLE_EXTRAS_WIDTH)))
+                .minWidth(0f).prefWidth(0f).expandX().fillX().uniformX().top().pad(0f, 0f, 10f, slot % COLUMNS < COLUMNS - 1 ? 10f : 0f);
             if (slot % COLUMNS == COLUMNS - 1) {
                 grid.row();
             }
         }
         for (int slot = configuration.controlSlots().size(); slot % COLUMNS != 0; slot++) {
-            grid.add().expandX().fillX().uniformX();
+            grid.add().minWidth(0f).prefWidth(0f).expandX().fillX().uniformX();
         }
         card.add(grid).row();
         card.add(ui.paragraph("Any flight controller fits any controller slot; CAPCOM takes an astronaut who isn't in "

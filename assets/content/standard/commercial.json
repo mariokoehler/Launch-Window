@@ -172,8 +172,7 @@
   {
     "programId": "apollo-earth-orbit",
     "unlockConfigurationIds": [
-      "apollo-orbital",
-      "apollo-docking"
+      "apollo-orbital"
     ],
     "contractConfigurationId": "apollo-orbital"
   },

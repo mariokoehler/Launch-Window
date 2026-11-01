@@ -11,9 +11,12 @@ import java.util.Objects;
  * @param area  the area
  * @param turn  the game turn it dates from
  * @param facts what it found
+ * @param looks how many assessments of this area in a row it caps, each a follow-up of the one before
+ *              (2026-10-27, {@code Intelligence.followUpHalfWidth}); 1 for a first look, 0 in a
+ *              dossier saved before looks were counted, which counts as 1
  * @author Mario Koehler
  */
-public record Dossier(IntelArea area, int turn, List<IntelFact> facts) {
+public record Dossier(IntelArea area, int turn, List<IntelFact> facts, int looks) {
 
     /**
      * Checks the area and copies the facts into a list Kryo can carry.
@@ -23,5 +26,6 @@ public record Dossier(IntelArea area, int turn, List<IntelFact> facts) {
     public Dossier {
         Objects.requireNonNull(area, "area must not be null");
         facts = facts == null ? new ArrayList<>() : new ArrayList<>(facts);
+        looks = Math.max(1, looks);
     }
 }

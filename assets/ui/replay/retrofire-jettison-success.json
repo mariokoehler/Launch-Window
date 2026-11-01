@@ -3,6 +3,10 @@
  "revealAt": 1.6,
  "cues": [
   {
+   "at": 1.0,
+   "sound": "decoupler"
+  },
+  {
    "at": 1.65,
    "sound": "radio-separation-good"
   }

@@ -82,9 +82,27 @@ class MuseumTest {
         List<Museum.Flight> flights = Museum.flights(state, PACK);
         assertEquals(1, flights.size());
         assertTrue(flights.get(0).crewed());
+        assertEquals(0, flights.get(0).commercial());
         List<Museum.Plaque> plaques = Museum.memorial(state, PACK);
         assertEquals("Lost on a mission, " + Museum.date(22) + ", aged 31.", plaques.get(0).line());
         assertTrue(plaques.get(0).detail().contains("reentry"), plaques.get(0).detail());
+    }
+
+    /**
+     * Commercial flights count on their configuration's card, and put a configuration flown only for
+     * clients on the tab (2026-10-27).
+     */
+    @Test
+    void commercialFlightsCountBesideTheAgencysOwn() {
+        PlayerSnapshot state = new PlayerSnapshot("Zarya", Archetype.SOVIET, 0, 0, 0, 25);
+        state.setSuccessfulFlightCounts(Map.of("vostok-orbital", 1));
+        state.setCommercialFlightCounts(Map.of("vostok-orbital", 2, "vostok-uncrewed-orbital", 1));
+        Map<String, Museum.Flight> flights = new java.util.HashMap<>();
+        Museum.flights(state, PACK).forEach(flight -> flights.put(flight.configurationId(), flight));
+        assertEquals(3, flights.get("vostok-orbital").count());
+        assertEquals(2, flights.get("vostok-orbital").commercial());
+        assertEquals(1, flights.get("vostok-uncrewed-orbital").count());
+        assertEquals(1, flights.get("vostok-uncrewed-orbital").commercial());
     }
 
     /**

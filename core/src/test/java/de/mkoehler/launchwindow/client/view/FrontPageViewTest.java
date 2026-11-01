@@ -5,8 +5,12 @@ import de.mkoehler.launchwindow.content.ContentPackLoader;
 import de.mkoehler.launchwindow.content.FrontPageReactions;
 import de.mkoehler.launchwindow.content.FrontPages;
 import de.mkoehler.launchwindow.content.Theories;
+import de.mkoehler.launchwindow.model.Archetype;
 import de.mkoehler.launchwindow.model.FrontPage;
+import de.mkoehler.launchwindow.model.PlayerSnapshot;
 import de.mkoehler.launchwindow.net.messages.ArchiveUnlock;
+import de.mkoehler.launchwindow.rules.OpenProgramOutcome;
+import de.mkoehler.launchwindow.rules.ProgramOpening;
 import de.mkoehler.launchwindow.rules.ReactionPrinter;
 import org.junit.jupiter.api.Test;
 
@@ -192,5 +196,23 @@ class FrontPageViewTest {
         assertTrue(rows.get(1).settled() == null && rows.get(1).archive().isEmpty());
         assertEquals(null, rows.get(5).raisedOn(), "settled before this agency raised it");
         assertFalse(FrontPageView.museum(theories, Map.of(), null, entries, goal -> true).iterator().hasNext());
+    }
+
+    /**
+     * Opening a satellite program records the agency's season, and the turn it was opened in raises the radiation
+     * belts for that agency (2026-10-27), counted from the turn the agency joined in.
+     */
+    @Test
+    void openingTheFirstSatelliteProgramRaisesTheRadiationBelts() {
+        ContentCatalog standard = ContentPackLoader.load(Path.of("..", "assets", "content", "standard"));
+        PlayerSnapshot state = new PlayerSnapshot("Baltic Star Agency", Archetype.NASA, 10_000, 0, 0, 3);
+        assertEquals(OpenProgramOutcome.OPENED, ProgramOpening.open(state, "explorer-1", standard));
+        assertEquals(Map.of("explorer-1", 3), state.getProgramOpenedSeasons());
+        // Joined in turn 5: its season 3 is turn 7.
+        Map<String, Integer> turns = FrontPageView.raiseTurns(state, standard, 5);
+        assertEquals(7, turns.get(Theories.CATEGORY + "earth-orbit-satellites"));
+        Theories theories = Theories.load(Path.of("..", "assets", "content", Theories.FILE));
+        assertEquals(List.of("radiation-belts"), FrontPageView.raised(theories, turns, 7, goal -> true).stream()
+            .map(Theories.Theory::id).toList());
     }
 }

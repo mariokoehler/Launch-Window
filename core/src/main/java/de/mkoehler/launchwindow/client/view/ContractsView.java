@@ -187,6 +187,22 @@ public final class ContractsView {
     }
 
     /**
+     * Words the reminder on the hub's Headquarters marker (the user's idea, 2026-10-31): an awarded contract
+     * with no mission launched for it, which also shows the gold dot until one is.
+     *
+     * @param state    the agency
+     * @param openTurn the turn open now
+     * @return the hover line, or {@code null} when no contract waits
+     */
+    public static String launchReminder(PlayerSnapshot state, long openTurn) {
+        ActiveContract contract = state.getActiveContract();
+        if (contract == null || contract.missionId() != null) {
+            return null;
+        }
+        return "Contract to launch: " + title(contract, state) + " · " + seasonsLeft(contract, openTurn);
+    }
+
+    /**
      * Returns Headquarters' Contracts card: the eyebrow and the state row.
      *
      * @param state    the agency

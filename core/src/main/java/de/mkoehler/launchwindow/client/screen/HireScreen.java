@@ -232,7 +232,7 @@ public final class HireScreen extends ChromeScreen {
             who.add(quote).padTop(Theme.SPACE_2).padLeft(Theme.SPACE_2).row();
         }
         who.add(intelligence(candidate)).padTop(Theme.SPACE_2).padLeft(Theme.SPACE_2);
-        inner.add(who).width(190f).left().top().padRight(Theme.SPACE_4);
+        inner.add(who).width(215f).left().top().padRight(Theme.SPACE_4);
 
         Table skills = new Table();
         for (String skill : department.ratings()) {
@@ -360,7 +360,7 @@ public final class HireScreen extends ChromeScreen {
             inner.add(RosterCells.avatar(ui, recruit)).size(40f).padRight(Theme.SPACE_3);
             Table who = new Table();
             who.defaults().left();
-            who.add(ui.label(recruit.getName(), Theme.TextStyle.HEADING_SM, Theme.INK)).row();
+            who.add(ui.label(recruit.getName(), Theme.TextStyle.HEADING_SM, Theme.INK)).padBottom(2f).row();
             String hint = People.hintQuote(recruit.getHint());
             who.add(ui.label(String.format(Locale.ROOT, "AGE %d · $ %.1f", recruit.getAge(), recruit.getSalary())
                 + (hint == null ? "" : " · a former colleague: " + hint), Theme.TextStyle.CAPTION, Theme.INK_MUTED));

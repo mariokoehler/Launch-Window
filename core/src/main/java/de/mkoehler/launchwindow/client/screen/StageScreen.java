@@ -7,6 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import de.mkoehler.launchwindow.client.LaunchWindowGame;
+import de.mkoehler.launchwindow.client.ui.ClickSound;
 import de.mkoehler.launchwindow.client.ui.Theme;
 import de.mkoehler.launchwindow.client.ui.UiKit;
 
@@ -38,6 +39,7 @@ abstract class StageScreen extends ScreenAdapter {
         root.setFillParent(true);
         root.setBackground(ui.blueprintGrid());
         stage.addActor(root);
+        stage.addCaptureListener(new ClickSound());
         fontGeneration = ui.fonts().generation();
     }
 

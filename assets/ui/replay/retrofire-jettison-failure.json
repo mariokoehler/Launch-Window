@@ -3,6 +3,14 @@
  "revealAt": 3.2,
  "cues": [
   {
+   "at": 1.0,
+   "sound": "decoupler"
+  },
+  {
+   "at": 2.8,
+   "sound": "decoupler"
+  },
+  {
    "at": 3.25,
    "sound": "radio-separation-failed"
   }

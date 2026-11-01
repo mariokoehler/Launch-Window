@@ -459,7 +459,7 @@ public class FrontPageScreen extends SessionScreen {
         // A science page opens its first column with how the question stood for the reader (ui-spec.md 4.18.2).
         Theories.Theory theory = page.science() ? Theories.standard().theory(page.storyId()).orElse(null) : null;
         List<FrontPageView.RaceRow> standing = theory == null ? List.of()
-            : FrontPageView.standing(theory, session.state().getAchievedGoals(), page);
+            : FrontPageView.standing(theory, session.raiseTurns(), page);
         float questionHeight = theory == null ? 0f : boxHeight(theory.title(), standing, R_COLUMN - 24f) + 14f;
         float jump = captionFont.getLineHeight() + 6f;
         float[] capacities = {height - (photo ? R_PHOTO_HEIGHT + 6f + captionHeight + 8f : questionHeight)

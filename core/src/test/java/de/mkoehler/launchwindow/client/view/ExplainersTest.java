@@ -2,6 +2,10 @@ package de.mkoehler.launchwindow.client.view;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.mkoehler.launchwindow.client.ui.Theme;
+import de.mkoehler.launchwindow.content.ContentCatalog;
+import de.mkoehler.launchwindow.content.ContentPackLoader;
+import de.mkoehler.launchwindow.content.Theories;
+import de.mkoehler.launchwindow.model.FrontPage;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -75,5 +79,54 @@ class ExplainersTest {
                     explainer.id() + ": '" + (char) c + "' in " + each));
             }
         }
+    }
+
+    /**
+     * The explainers that answer a theory of the day name it, and only theories the standard pack can settle
+     * (2026-10-27): the radiation belts, weightlessness, and the Moon's dust and Venus's heat.
+     */
+    @Test
+    void theExplainersThatAnswerATheoryWaitForIt() throws IOException {
+        Explainers explainers = Explainers.parse(Files.readString(ASSETS.resolve("content").resolve(Explainers.FILE)));
+        Theories theories = Theories.load(ASSETS.resolve("content").resolve(Theories.FILE));
+        ContentCatalog standard = ContentPackLoader.load(ASSETS.resolve("content").resolve("standard"));
+        for (Explainers.Explainer explainer : explainers.explainers()) {
+            for (String id : explainer.lockedUntil()) {
+                Theories.Theory theory = theories.theory(id).orElseThrow(() -> new AssertionError(explainer.id() + ": " + id));
+                assertTrue(theory.playable(goal -> standard.goal(goal).isPresent()), explainer.id() + ": " + id);
+            }
+        }
+        assertEquals(List.of("radiation-belts"), explainers.byId("space-environment").orElseThrow().lockedUntil());
+        assertEquals(List.of("weightless-body"), explainers.byId("weightlessness").orElseThrow().lockedUntil());
+        assertEquals(List.of("deep-dust", "venus-jungle"),
+            explainers.byId("landing-on-other-worlds").orElseThrow().lockedUntil());
+    }
+
+    /**
+     * An explainer stays locked until a science page settles every theory it waits for, unless the pack can't
+     * settle one or the race is decided; with no pages fetched it stays locked.
+     */
+    @Test
+    void anExplainerOpensWhenItsTheoriesAreSettled() throws IOException {
+        Theories theories = Theories.load(ASSETS.resolve("content").resolve(Theories.FILE));
+        Explainers.Explainer both = new Explainers.Explainer("both", "E-99", "Both", null, "", List.of(),
+            List.of("deep-dust", "venus-jungle"));
+        java.util.function.Predicate<String> all = goal -> true;
+        FrontPage dust = science("deep-dust");
+        FrontPage venus = science("venus-jungle");
+        assertTrue(Explainers.locked(both, theories, null, all, false));
+        assertTrue(Explainers.locked(both, theories, List.of(), all, false));
+        assertTrue(Explainers.locked(both, theories, List.of(dust), all, false));
+        assertFalse(Explainers.locked(both, theories, List.of(dust, venus), all, false));
+        assertFalse(Explainers.locked(both, theories, List.of(), all, true), "the race is decided");
+        // A pack with no Venus can't settle that theory, so only the dust counts.
+        assertFalse(Explainers.locked(both, theories, List.of(dust), goal -> !goal.startsWith("venus"), false));
+        Explainers.Explainer none = new Explainers.Explainer("none", "E-98", "None", null, "", List.of(), null);
+        assertFalse(Explainers.locked(none, theories, null, all, false));
+    }
+
+    private static FrontPage science(String theory) {
+        return new FrontPage("1-science-" + theory, "goal", 1, theory, "", List.of(), List.of(), List.of(),
+            FrontPage.Kind.SCIENCE, null, null);
     }
 }

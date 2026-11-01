@@ -43,6 +43,11 @@ engineering problem or tidbit, note it here the same session.
   card (`ui-spec.md` component 15). Always optional, never rules help. The join screen's
   Director field has the first, so players learn the icon there. Content history notes live in
   `assets/content/early-era/strings.json` (G4).
+- **Long descriptions (user, 2026-10-27):** every program and every component a program grants has a
+  paragraph on Program details (`longDescription` in `strings.json`, `ui-spec.md` §4.6.4): what it was
+  for, how it worked and what it had to prove, never repeating its history note. Written from checked
+  facts, each figure's source in `assets-raw/strings/LONG_DESCRIPTIONS.md`. Projects that never flew
+  are written as proposals.
 - **Space-race news in the turn report (user 2026-10-04, built 2026-10-06):** real events from
   the same three months as the turn's game date open the report's news.
   - **The stories:** `assets/content/space-race-news.json`, 47 stories from Winter 1955 to
@@ -401,6 +406,18 @@ leading to satellite navigation.
   send about 68 t toward the Moon. NASA picked the Saturn C-5 (the Saturn V) in December 1961 and lunar-orbit
   rendezvous in July 1962, and the eight-engine stage was dropped; the Michoud plant's roof was also too low for a
   stage that wide. The game's Nova (§2.3(e)), its history note in `strings.json`.
+- **The roads to the Moon's history notes** (2026-10-26, `assets/content/moon-roads.json`, `ui-spec.md` §4.21):
+  - Apollo: John Houbolt at Langley argued for lunar-orbit rendezvous, the lightest plan, against most of NASA, and
+    wrote over his managers' heads; NASA chose it in July 1962 (as the explainer E-20).
+  - Gemini EOR: in 1961 James Chamberlin's Gemini team sketched Lunar Gemini with a light lander after a Langley
+    design, little more than a platform on a rocket engine on which the astronaut stood, at a fraction of Apollo's
+    launch mass; it stayed on paper once LOR won (Air & Space's "Lunar Landers That Never Were", Spaceflight Histories'
+    "Lunar Gemini"). No source found confirms an Earth-orbit-rendezvous variant: the note doesn't claim one.
+  - Gemini direct ascent: Nova, above.
+  - Soyuz 7K-L3: the LK flew three uncrewed tests in Earth orbit, 1970 and 1971 (Kosmos 379, 398, 434), and worked;
+    the N1 failed all four launches, 1969 to 1972.
+  - LK-700: Chelomei's direct-ascent proposal on the UR-700; the government chose Korolev's N1-L3, and neither the
+    UR-700 nor the LK-700 was built.
 - **The first rover sent to Mars** (2026-10-17, from Wikipedia and IEEE Spectrum; verify before a note uses it): Mars 2
   and Mars 3 each carried PrOP-M, a 4.5 kg box on two wide skis, tethered to its lander by a 15 m cable. The lander's
   arm was to set it down in view of the cameras; it would walk on its skis at up to a metre an hour, stopping every
@@ -1139,7 +1156,8 @@ season unchanged. Tiger Teams' live per-step choice doesn't fit, so it was redes
 - **Expert trait** (replaces Tiger Teams, user, 2026-09-27 and 2026-10-02): an astronaut or
   controller (never SET) with a skill at 80 or more can train toward Expert in it. Each season
   succeeds with `25 + 10 × (skill − 80) / 20` percent, with no skill growth; success grants the
-  trait for good. Several skills can be earned over a career. Expert training is the fourth kind
+  trait for good. One Expert skill a person, for good (user, 2026-11-01; those who already hold more
+  keep them): an Expert can't start Expert training again. Expert training is the fourth kind
   in the shared training dialog. How Experts rescue steps: §2.5(i).
 - **Rocket-plane wings** (the user's idea, 2026-10-26, `rules.RocketPlaneWings`): a personal mark an astronaut earns
   by flying a rocket plane (the X-15, the MiG E-154; any of their flights) home. It's kept for good
@@ -1460,6 +1478,19 @@ such as letting a brilliant troublemaker go.
     clamped to −1..+1. Each work season they share, rapport moves by **10 × affinity** (5 until
     2026-10-08), within
     −100..+100. It shows once past ±30 ("work well together", "clash").
+  - **Few relationships, each one felt** (user, 2026-11-01; every number unconfirmed): relationships had
+    become background noise, 31 shown among 19 people by season 37 of a play test. Someone can have one
+    friendship and one clash (`Personality.RELATIONSHIPS_OF_A_KIND`); Easy-going two friendships, Abrasive two
+    clashes. If either of a pair already has the opposite kind, it shows only on the pair's own 35 % roll,
+    drawn after its affinity from the pair's stream, so off the season's stream. A pair held back stays just
+    short of showing and nothing is saved: it shows if what held it goes, not never. Relationships from R&D
+    decisions ignore all this (they're the player's doing). Those already over the limit keep them.
+    **Chemistry no longer averages pairs:** each shown relationship in a team is ±4 % output
+    (`Chemistry.RELATIONSHIP_OUTPUT`), whatever the team's size, and hidden rapport counts for nothing; the
+    average below is the old rule.
+    Measured (`ContentPackPlayouts standard smart`, 2026-11-01, before and after): relationships shown in 24
+    seasons 6.4 to 3.7 a game (friendships 2.5 to 1.7); average completion season 79.7 to 78.8, medians NASA 76 to
+    79, Soviet 78 to 75: within noise, though the bots never choose teams for chemistry.
   - **Chemistry** of a team is a number from −1 to +1: the average rapport / 100 over all its
     pairs (0 for a team of one), plus the team traits below, clamped. It scales the team's output
     by **1 + 0.15 × chemistry**: the component's R&D reliability gain, and the mission's crew and
@@ -1590,7 +1621,7 @@ such as letting a brilliant troublemaker go.
     | Astronaut | Fly on a joint flight | flew as crew on a configuration of two launches or more | another astronaut did | such a crewed configuration is open | 14 |
     | Flight controller | Be on the consoles for a crewed orbital flight | flew on a control slot of a crewed orbital mission | another controller did | a crewed orbital configuration is open | 12 |
     | Flight controller | Be on the consoles for a first | on a control slot of a mission that settles a goal first in the game | another controller was | as "be first" | 16 |
-    | Flight controller | Become an Expert | earns the Expert trait in their best skill | (never) | not yet Expert in it | 16 |
+    | Flight controller | Become an Expert | earns the Expert trait in their best skill | (never) | not an Expert in anything yet | 16 |
     | Engineer | Bring a component to its R&D cap | on the team when *that* component reaches its cap | it reaches the cap without them | the component is owned, active and below its cap | 12 |
     | Engineer | Build hardware for a first | a component they ever worked on flies on a mission that settles a goal first in the game | (never) | as "be first" | 16 |
     | Engineer | Be the agency's best | the most skilled engineer in their own best skill (at least three engineers) | (never) | not already the best | 12 |
@@ -1749,7 +1780,7 @@ Runs with no change on one side moved that side's median by up to 3 seasons: rea
   tests already need the heavy rocket (direct ascent, the LK-700) build it alongside the craft. Flying Gemini first
   gives the CSM 35 % from Gemini, but the bot flies one plan entry at a time, so Gemini's 13 seasons come on top; a
   player can overlap them.
-- **The Nova** (the user's idea, 2026-10-26, built with placeholder art): BASPM's direct-ascent craft weighed 42 t, so its
+- **The Nova** (the user's idea, 2026-10-26; its art the user's, 2026-10-28): BASPM's direct-ascent craft weighed 42 t, so its
   stack fit the Saturn V's 47 t toward the Moon. The converter (`baspm_pack.py`'s `nova_rocket`) makes it 63.5 t, the
   stack about 67.5 t, and adds **Nova** (`nova`): heavy, 68 t toward the Moon (the eight-F-1 8L study), 15,000 to
   create, 1,500 upkeep, an R&D ceiling of 91 %, reliability carried over from the Saturn family (the Saturn V 30 %, C-3B
@@ -1760,7 +1791,27 @@ Runs with no change on one side moved that side's median by up to 3 seasons: rea
   Mercury (`baspm_pack.py`'s `capsule_heritage`). Measured at 20 / 30 / 40 %: Apollo 80 / 79 / 77, the 7K-L3 78 / 78 / 76;
   the first flight's wait 12.3 / 11.1 / 9.2 seasons (was 14.2). At 35 %: **Apollo 77, the 7K-L3 78.**
 - **Where it stands:** Gemini EOR 74, the LK-700 70 to 73, Apollo 77, the 7K-L3 78, Gemini direct ascent 78. Gemini EOR and
-  the LK-700 keep a lead for now; the comparison screen (`ui-spec.md` §4.21) shows the trade-offs, never a ranking.
+  the LK-700 keep a lead for now; the comparison screen (`ui-spec.md` §4.21, built 2026-10-26) shows the trade-offs, never
+  a ranking.
+- **Gemini EOR's Moon discount fixed** (found by the mockup; the user's decision, 2026-10-26: "probably a data error in
+  BASPM"): BASPM discounted its Moon program 100 % through Apollo's Earth-orbit tests, unlike every other road. The
+  converter points it at its own tests (`baspm_pack.py`'s `discount_fixes`), so its Moon flights are free once
+  `gemini-eor-earth-orbit` is open. To start from Mercury alone it now costs 22,483 (was 32,543); the smart bot lands it
+  at a median of 73 (was 74, within noise).
+- **No Agena for Apollo** (the user's decision, 2026-10-27: a goal mustn't come from hardware a program never flew):
+  BASPM's Apollo Earth-orbit tests had a docking flight with an Agena, which no Apollo flew. The converter drops the
+  configuration and the Agena from the program (`baspm_pack.py`'s `dropped_configurations`); the docking goal stays
+  earnable through Gemini, the 7K-OK and circumlunar Gemini, and inside Apollo through its lunar module tests (Apollo 9's
+  CSM-LM docking: `apollo-lunar-module-test-flown` credits `docking`). No goal was the docking flight's alone. Kept out after a second look (user, 2026-10-27): its
+  picture showed two CSMs nose to nose, which probe-and-drogue docking can't do (both carry the probe), and Apollo's
+  real Earth-orbit dockings were with its lunar module (Apollo 9), Skylab and Soyuz 19, never an Agena or another CSM. Apollo's road from Mercury costs 45,412 (was 46,987), 4 parts to develop, 21 flights on the way.
+  Its `splashdown` step type, the configuration's art and the Agena's Apollo clip rules went with it. Kontakt in place of
+  Igla on the lunar Soyuz stays as BASPM has it (user): Igla serves the 7K-OK too, one component to develop.
+- **Accepted as the status quo** (the user's decision, 2026-10-26): Gemini EOR 73, the LK-700 70 to 73, Apollo 77, the
+  7K-L3 78, Gemini direct ascent 78, the spread 5 seasons on each side (was 10 and 8 to 11). The clever roads keep a small
+  lead, paid for in risk. Levers not pulled, for a later look: the LK-700's R&D or a dearer UR-700, more weight on Gemini
+  EOR's two launches. Play tests may still move it; the bot flies its plan one flight at a time, so it undervalues
+  overlapping roads (Gemini, then Apollo).
 
 ### 2.4 Mission components & reliability
 
@@ -1884,7 +1935,8 @@ layouts.
   after. Every consultation counts, even if the step still fails. **Capped at 95 %**, without
   ever lowering a higher natural chance.
 - No extra randomness. `ExpertRescueApplied` reports each consultation; its "after" value doesn't
-  reflect the cap.
+  reflect the cap. The replay holds its lines to it (`ExpertRescueLines`, user, 2026-11-01): an
+  Expert past the cap "couldn't add anything", one out of uses "had nothing left to give".
 
 **(j) A lost crew grounds crewed flights** (the user's decision, 2026-10-12: "gambling with the lives of
 the astronauts should be where the line is drawn"; built the same day, `rules.CrewedGrounding`). The
@@ -1987,7 +2039,12 @@ runs about 150 seasons and sees about 30 good and 8 bad events, the plain bot's 
 other event at most about 3. So: 18 stories each for prestige and R&D boosts, 12 for reduced
 expenditures, 6 for morale boosts, 5 for extra funding, 4 for reliability setbacks and 3 for every
 other bad event (`EventStories.SIZED`). No player sees a story twice until every story of its event
-has run; then that event starts over (`PlayerSnapshot.usedEventStoryIds`). The pick uses its own
+has run; then that event starts over (`PlayerSnapshot.usedEventStoryIds`). A story can wait for a goal
+(`requiresGoal`, 2026-10-27, after a play test's first turn told of the agency's hardware overhead):
+four prestige stories that need something in orbit (the sighting, the radio amateurs, the photos from
+above, the tracking prize) wait for `earth-orbit-satellite`, in both packs; until then they keep their
+turn, as the press stories' unusable ones do. Stories whose event already needs a flight (morale,
+extra funding) need no gate. The pick uses its own
 salted seed (agency, turn, event), so the season's draws, and the playouts, are unchanged. The
 event (`RandomEventOccurred`) and the news log entry store the story's id and the struck person's
 name, since the person may be gone when the report is read; the text stays in the client. Placeholders:
@@ -2013,6 +2070,13 @@ the start of the pass, so an N-season effect covers N seasons.
   trains and researches. Two multipliers in one slot multiply and the longer duration stays
   (`rules.TimedEffects`, user 2026-10-06, for press stories, §2.2(c)); BASPM's setter replaced
   the older one.
+- **A random resignation leans on morale** (user, 2026-10-27, after a play test where someone at 100
+  morale resigned "after too many nights at the site"): each eligible person's weight is 100 less
+  their morale, so nobody at 100 resigns and with everyone there the event doesn't apply (the next
+  event in the pool is tried). BASPM takes anyone. The burned-out story (`res-burned-out`) has
+  `"maxMorale": 60`; the other two resignation stories fit any morale. The playouts' resignation
+  counts (§3.10) predate this and weren't re-measured: the event is rare beside morale's own
+  resignations at 35.
 
 ### 2.8 Campaign objectives
 
@@ -2067,6 +2131,22 @@ No BASPM precedent beyond its 1v1 PBEM mode and rival comparison screen.
 
     The ladder is people, then agencies, then rivals' people (user, 2026-10-07); level 3's
     personnel file is what makes a poaching offer an informed one.
+  - **Foreign hardware** (the user's idea, 2026-11-01; designed, not built; every number unconfirmed).
+    Rival hardware means little to a player who isn't a space nerd, so analysts explain it, a piece at a
+    time. **Pool:** every program and rocket program that an agency of the other side has open now,
+    minus what the player already knows; a closed program leaves the pool until it is opened again.
+    **Passive:** each season, a **25 / 50 / 80 %** chance at levels 1 / 2 / 3 (0 at level 0) to learn one
+    random item of the pool, independent of the actions and on its own salted seed. No lag: the chance
+    is what keeps a player behind (a single new item takes about 4 / 2 / 1.25 seasons on average), and
+    a season with no news means nothing, since a failed roll and an empty pool look alike. So the
+    report says nothing then. What is learned is kept for good, a dropped level included. It opens a
+    role line, the counterpart on the player's side where there is one, and a read-only file; a
+    component is known once any program needing it is. Dossiers show unknown items by name only, with a
+    "not yet analysed" mark. **Your own side's hardware is always known,** so a game with no agency on
+    the other side (bots count as agencies) needs no special rules: the pool stays empty, and the
+    passive's ladder line and the Foreign hardware tab are hidden, as are counterpart lines. Once the
+    race is decided, everything opens. The roles and counterparts go in a text file outside the pack,
+    with a test that holds every program and rocket to an entry.
   - **Background check** (the decided feature above, now concrete). The **active check answers
     at once**: the server replies during the season with one of the candidate's traits, or "no
     notable traits", and the action is used. It's desk work, so instant fits, and an answer at
@@ -2105,7 +2185,14 @@ No BASPM precedent beyond its 1v1 PBEM mode and rival comparison screen.
   - **Odds against a rival's counter-intelligence** (the target's level, 0 to 3): a targeted
     action succeeds at **85 % minus 15 points per level** of the target's counter-intelligence
     (85 / 70 / 55 / 40). Ranges are tighter the higher the spy's level is over the target's:
-    half-width **5 + 5 × (target level − spy level + 2)** points, at least 2 and at most 15. A
+    half-width **5 + 5 × (target level − spy level + 2)** points, at least 2 and at most 15.
+    **Follow-ups tighten them** (the user's idea, 2026-10-27; numbers unconfirmed): an assessment of
+    the same area of the same rival at most **2 turns** after the folder's dossier there is a
+    follow-up, and each look in a row takes **3 points** either side off its ranges, down to 2
+    (`Intelligence.followUpHalfWidth`, the row counted in `Dossier.looks`). The range is still drawn
+    fresh around today's value, never intersected with the last one, since the rival's numbers move
+    between looks. A longer gap starts again at one; a failed look doesn't reset the row by itself,
+    but its season counts toward the gap. The dossier's stamp says which look it was. A
     failed action learns nothing, and is **caught** with **10 % + 10 % per target level**: the
     target's turn report names the spying agency, the spy loses **20 prestige**, and the spy's
     report says the operation was blown **and what the target's counter-intelligence level was**
@@ -2704,6 +2791,10 @@ Geophysical Year. No secrecy bonus for either archetype (as in §2.9).
     TV frame (the page's only picture), a Pioneer Venus painting credited to Paul Hudson. Three are figures
     from NASA reports' PDFs (`make_archive_assets.py`'s `PDF_PAGES`, `BLANKS`). On the way, `viking-1` lost
     its year for the Mutch Memorial Station (NASA Science says January 1982, other sources 7 January 1981).
+    Surveyor 3's page moved to `lunar-soil-analysis` on 2026-11-01 (user): `lunar-soil-study` comes from the
+    lunar impacts, so a Ranger or Luna 2 flight opened a page about a lander's scoop. It now opens with
+    Surveyor's landing, for everyone in the game. The finding got its own page the same day (user), `ranger-surface`,
+    on what Rangers 7 to 9 let scientists infer about the soil: 34 pages in all.
   - **Measured (2026-10-21):** `ContentPackPlayouts standard smart`, 200 games, with the bonus on and off
     (`-Drules.findingBonus=0`): average completion season 84.6 against 84.8, medians 82 and 81 (NASA), 81
     and 82 (Soviet), crewed completion chance at launch 0.62 against 0.63 (median): no effect beyond noise.

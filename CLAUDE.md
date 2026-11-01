@@ -68,14 +68,29 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
   (the Intelligence Office), a level dial with actions and passives, from the canvas
   `Launch Window — Intelligence Office` (`ui-spec.md` §4.15). Reset the dev data root before the
   next play test (new saved fields).
+- **Foreign hardware is designed, not built** (the user's idea, 2026-11-01, `design.md` §2.9, `ui-spec.md` §4.15):
+  a 25 / 50 / 80 % chance a season to learn one item of what the other side has open. The words are drafted in
+  `assets/content/foreign-hardware.json`, nothing reads it yet. Next: the mockup, on the canvas `Launch Window — Intelligence Office`.
 - **Help is built** (2026-10-08, `ui-spec.md` component 23): a help button and F1 open the rules
-  by topic over the current screen, filtered to the screen's topics. 32 topics (synced with the code 2026-10-22). Numbers in
+  by topic over the current screen, filtered to the screen's topics. 34 topics (synced with the code 2026-10-29: hands-on campaigns got their own). Numbers in
   `help.json` are tokens filled from the rules (`HelpValues`); a new rule number goes there, never
   into the text, and a changed rule needs its topic's text changed in the same session.
+  **The public wiki mirrors it** (2026-10-28, github.com/mariokoehler/Launch-Window/wiki): a hand-written
+  `Home.md` with the user's banner, and one page a topic plus `_Sidebar.md`, written by dev-tools' `HelpWiki`
+  with the numbers filled. After a change to `help.json` or a rule it quotes, clone
+  `https://github.com/mariokoehler/Launch-Window.wiki.git`, run
+  `mvn -pl dev-tools compile exec:java -DmainClass=de.mkoehler.launchwindow.devtools.HelpWiki -Dexec.args=<clone>`
+  (after `mvn -q install -pl core -am -DskipTests`), commit and push. A renamed topic title leaves its old page behind: delete it.
+  **Pages show the screens they talk about** (2026-10-29): `HelpWiki.SCREENS` picks `ScreenSnapshot` shots per topic,
+  each after the first paragraph or under a named subheading. After a screen changes, shoot (below) and pass the
+  folder as a second argument (`-Dexec.args="<clone> <shots>"`, Windows paths): it remakes `images/help/`, which it
+  empties first, so nothing else goes in there (the banner is in `images/`). A missing shot or subheading fails it.
+- **The README** (2026-10-29): its screenshots are `docs/screenshots/`, made from a shots folder by
+  `docs/screenshots/make_screenshots.py <shots>` (its `PICKS`). It says the game has no licence yet and takes no contributions (user).
 - **The advisor is built** (2026-10-08, `ui-spec.md` component 24): a hub card with a new agency's
   first steps, ticked off from the state, until all are done or the player hides it.
 - **The full content pack is built** (2026-10-08, `design.md` §5, M3): `assets/content/standard`,
-  BASPM's whole tree (55 programs, 189 configurations; 187 since the E-154 became the Soviet X-15), with its text and art, beside `early-era`.
+  BASPM's whole tree (55 programs, 189 configurations; 187 since the E-154 became the Soviet X-15, 186 without Apollo's Agena docking), with its text and art, beside `early-era`.
   **It is the server's default since 2026-10-09** (`GameMeta.DEFAULT_CONTENT_PACK`; tests still pin
   `early-era`). New engine rules came with it: a payload's own lift, air drops with no rocket,
   configurations gated on a goal. Its components have blueprint drawings in the turn report
@@ -172,6 +187,9 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
   Armstrong's "one small step" with the splash, Kennedy's "We choose to go to the Moon" when the Join
   screen opens. Settings' Sound On/Off now works, for the whole device (`LaunchWindowGame.soundOn`).
   `ScreenSnapshot` runs silent. Client only.
+- **Everything clickable clicks** (the user's request, 2026-10-31, `ui-spec.md` §4.12): one capture listener on
+  every screen's stage (`client.ui.ClickSound`), so a new widget needs nothing; a bare `new ClickListener()`
+  counts as a click-swallower, not a click. Client only.
 - **The archive** (the user's idea, 2026-10-15, `design.md` §2.12, `ui-spec.md` §4.19): pages about real
   missions (NASA's public-domain pictures, sound, our own text), unlocked for everyone in a game when a
   goal is first reached there, linked from the turn report, in a Museum tab. Mocked up and built the same
@@ -258,8 +276,13 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
   straight in libGDX): science goals in each pack's hashed `findings.json` add `Findings.BONUS_POINTS` to the
   steps they make safer (`rules.Findings`, in the season pass and `MissionAssessment` alike), published by
   `PublishFindingAction`, settled once a turn (`FindingPublications`, `publications/turn-N.json`), paying up
-  to 33 % of the goal's prestige. The mapping awaits the user's review. Every finding has its archive page (33 pages in all).
+  to 33 % of the goal's prestige. The mapping awaits the user's review. Every finding has its archive page (34 pages in all).
   `-Dshots=findings`, `-Drules.findingBonus=0`. Reset the dev data root, rebuild client and server together.
+
+- **The orbit photo shows your own pilot** (the user's idea and picks, 2026-10-31, `ui-spec.md` §4.18): 12 versions by
+  sex and look (`client.view.PilotPhoto`, `PilotPhotoTest` holds every ethnicity to a look and a file; the variants
+  go through `make_frontpage_art.py`, `picks.json` and `make_frontpage_assets.py` as ever). `MissionFlown` and
+  `Achiever` gained a field: rebuild client and server together; no reset.
 
 - **The world reacts is built** (the user's idea, 2026-10-20, built 2026-10-22, `design.md` §5, `ui-spec.md`
   §4.18.1, component 28 and G17, from the canvas `Launch Window — The World Reacts`): rivals give one statement
@@ -309,9 +332,33 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
   each road (Apollo and the 7K-L3 land at a median of 81, Gemini EOR 74, the LK-700 70 to 73). Gemini direct ascent
   (71) now needs **Nova**, a new heavy rocket (`baspm_pack.py`'s `nova_rocket`; its craft weighs 63.5 t), and lands at
   78. Apollo's CSM and the 7K-L3's LOK inherit 35 % of the first capsule, as Gemini does (`capsule_heritage`): Apollo
-  lands at 77, the 7K-L3 at 78. Nova's pictures are **placeholders** (`assets/ui/rockets/nova.jpg`, `assets/ui/blueprints/nova.jpg`) until the
-  user's art comes; `checklist.py` doesn't know it. Next: the comparison screen of the roads (spec first). The pack hash
-  changed: reset the dev data root.
+  lands at 77, the 7K-L3 at 78. Nova's pictures are the user's (2026-10-28): the rocket program image, and a blueprint generated from the
+  user's reference (`assets-raw/blueprints/references/nova.png`). The pack hash changed: reset the dev data root.
+- **Roads to the Moon is built** (the user's idea, 2026-10-26, `ui-spec.md` §4.21, from the canvas
+  `Launch Window — Roads to the Moon`): the landing roads side by side, never ranked, figures from the rules
+  (`client.view.RoadsToMoon`), words in `assets/content/moon-roads.json` (outside the pack, `RoadsToMoonTest`); from
+  Headquarters' Lunar expeditions, the road programs' pages and the advisor. `-Dshots=roads`. Gemini EOR's Moon flights
+  are now free with its own tests, not Apollo's (`discount_fixes`, a BASPM data slip): the pack hash changed, reset the
+  dev data root.
+
+- **A text size in Settings** (the user's request, 2026-10-26, `ui-spec.md` §4.12): Standard or Large
+  (112 %, the default since the user tried it), per device; drawings' labels and the newspaper keep their size. Every
+  screen checked at Large with the new text-fit report (below). Client only: no reset, no server rebuild.
+- **Program details rebuilt full width** (the user's request, 2026-10-27, `ui-spec.md` §4.6.4): a long description for
+  every program and the components it grants (`longDescription` in `strings.json`, sources in
+  `assets-raw/strings/LONG_DESCRIPTIONS.md`), a striped price table with an upkeep column, each component's blueprint.
+  **No Agena for Apollo** (user, `design.md` §5, M3): the converter drops `apollo-docking` (`dropped_configurations`).
+  The pack hash changed: reset the dev data root, rebuild client and server together.
+
+- **One Expert skill a person** (the user's decision, 2026-11-01, `design.md` §2.2(c)): those holding more keep
+  them, and someone already training toward a second finishes. The replay's Expert lines stop at the 95 % cap
+  (`ExpertRescueLines`). **All hands on deck** (`ui-spec.md` component 11) pulls a department out of training at
+  once. A changed refusal: rebuild client and server together; no reset.
+
+- **Few relationships, each one felt** (the user's decision, 2026-11-01, `design.md` §2.2(d); every number
+  unconfirmed): one friendship and one clash a person (Easy-going two friendships, Abrasive two clashes), a 35 % roll
+  for the opposite kind, ±4 % output for each shown relationship in a team, hidden rapport counting for nothing.
+  Nothing saved changed; rebuild client and server together, no reset. The wiki follows `help.json`.
 
 ## How we work
 
@@ -336,7 +383,8 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
   sentences, and verify every figure in a history note (BASPM's facts contradict each other).
 - **Commits** are GPG-signed. If signing fails, start Kleopatra
   (`C:\Program Files (x86)\Gpg4win\bin\kleopatra.exe`) and retry; never `--no-gpg-sign`.
-- **The GitHub repo** (`mariokoehler/Launch-Window`) is private. Ask before making it public.
+- **The GitHub repo** (`mariokoehler/Launch-Window`) is public since 2026-10-28 (the user, for the wiki):
+  everything pushed is published, so the hard rule below matters doubly.
 
 ## Source material (read-only, never copied into the repo)
 
@@ -402,6 +450,9 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
   - **Clip effects** (2026-10-21): the user's Pixabay finds in `assets-raw/audio/` go in through
     `assets-raw/replay/sounds/make_effect_sounds.py`; `assets-raw/replay/effects.py` cues them where their layers
     show in the built projects (main PC only; rerun it after publishing a clip whose timeline changed).
+    It skips a clip whose project is newer than its render; a rebuild without a publish does that. To clear one, compare
+    the render's frames with the project's (`render-frame`; a `"mirror"` step's render is the project flipped by ffmpeg),
+    and touch the WebMs only if they match (2026-10-28: all 17 skipped then did, and gained their missing cues).
   - **Sound effects:** Stable Audio 3 (the user's `Sound_Effects.json`) was tried for the replay's sounds on
     2026-10-15 and almost nothing was usable: the user curates clips (Pixabay) for a few moments instead.
 - **Photocraft** (an open-source Photoshop, as the `photocraft` MCP server): reads and writes only
@@ -490,8 +541,8 @@ mvn -pl dev-tools compile exec:exec@handson         # any hands-on level's puzzl
     `deploy/docker-compose.yml` for the NAS, with the data root bind-mounted at
     `/share/Container/launchwindow/data`. `.dockerignore` keeps `data/` (password hashes) and
     `assets-raw/` out of the image.
-  - **While the repo is private,** the release zip and the image need a GitHub login:
-    `update.cmd` can't download anonymously and the NAS needs a token for GHCR.
+  - **The repo went public on 2026-10-28,** so release zips download anonymously; the GHCR image's
+    visibility is a separate package setting (it was private, needing a token on the NAS; still private on 2026-10-29, the user means it to be public): check it before relying on that.
   - **Icons:** `assets-raw/icon.ico` (exe) and `lwjgl3/src/main/resources/launchwindow-icon-*.png`
     (window), both from `assets/branding/logo.png`: placeholders until an icon-only logo exists.
 
@@ -503,6 +554,11 @@ mvn -q -pl lwjgl3 test-compile
 mvn -q -pl lwjgl3 dependency:build-classpath -Dmdep.outputFile=target/test-cp.txt -Dmdep.includeScope=test
 cd assets && java --enable-native-access=ALL-UNNAMED -cp "../lwjgl3/target/classes;../lwjgl3/target/test-classes;$(cat ../lwjgl3/target/test-cp.txt)" de.mkoehler.launchwindow.lwjgl3.ScreenSnapshot <out-dir>
 ```
+- **Text fit:** every run also writes `text-fit.tsv` beside the shots (`TextFit`: text overlapping
+  text, leaving its box or the screen, cut short, or a scroll pane that now scrolls).
+  Shots render at the default Large text size; `-Dui.textScale=1` renders at Standard, `-Dtextfit.marks=true` writes each
+  problem shot outlined in red to `marked/`. Run at 1 and 1.12 and compare: at 1 only the scroll
+  panes that scroll by design and a few deliberate overlays are listed. A new screen must pass at 1.12 (the default).
 - **`-Dshots=contracts`** (before `-cp`) renders only the contract shots; add a group the same way
   when iterating on one screen.
 - **Regression check for shared UI changes:** shoot before and after into fresh folders, then

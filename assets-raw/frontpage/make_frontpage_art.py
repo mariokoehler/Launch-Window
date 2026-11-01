@@ -19,7 +19,7 @@ committed (git add -f; .gitignore keeps the others local).
 
 Usage (ComfyUI running locally):
     python make_frontpage_art.py                      # every job, 3 variants each
-    python make_frontpage_art.py --only photo-human-in-orbit --variants 5
+    python make_frontpage_art.py --only photo-human-in-orbit --variants 5   # also its versions per pilot
     python make_frontpage_art.py --force              # regenerate files that already exist
     python make_frontpage_art.py --review-only        # only rebuild the review sheets
 
@@ -75,6 +75,27 @@ FIRSTS = [
      'television scan lines, high contrast, blurred highlights.'),
 ]
 
+# The human-in-orbit photo is the one First with a face: it has to look like the agency's own pilot. One
+# version per sex and look, the looks broad enough to tell apart on grainy newsprint; which of the portraits'
+# ethnicities falls under which look is the client's to decide.
+PILOT_LOOKS = {
+    'european': 'white European',
+    'black': 'Black, with dark skin',
+    'east-asian': 'East Asian',
+    'central-asian': 'Central Asian, with high cheekbones and dark hair',
+    'latin': 'Latin American, with a warm brown complexion and dark hair',
+    'caucasus': 'from the Caucasus, with an olive complexion, strong dark brows and dark hair',
+}
+PILOTS = {
+    'male': ('man', 'his', 'with short hair'),
+    'female': ('woman', 'her', 'with short practical 1960s hair'),
+}
+PILOT_SCENE = ('A young {look} {noun} test pilot, {hair}, in a bulky silver pressure suit, holding {her} round '
+               'white helmet under one arm, smiles and waves to a crowd, walking straight toward the camera '
+               'across an airfield tarmac, the face clear and in focus, flanked by technicians in white '
+               'coveralls. Behind them, the open hatch of a small scorched space capsule on a recovery truck. '
+               'Slight motion blur on the technicians.')
+
 JOBS = {
     'paper': dict(w=1344, h=832, prompt=(
         'A flat, evenly lit scan of the top half of a single blank sheet of old 1960s newsprint paper, '
@@ -91,6 +112,10 @@ JOBS = {
 }
 for first_id, scene in FIRSTS:
     JOBS['photo-' + first_id] = dict(w=1024, h=704, prompt=PHOTO.format(scene=scene))
+for sex, (noun, her, hair) in PILOTS.items():
+    for key, look in PILOT_LOOKS.items():
+        scene = PILOT_SCENE.format(look=look, noun=noun, her=her, hair=hair)
+        JOBS[f'photo-human-in-orbit-{sex}-{key}'] = dict(w=1024, h=704, prompt=PHOTO.format(scene=scene))
 
 
 def seed_for(job, variant):
@@ -151,7 +176,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--host', default='http://127.0.0.1:8188')
     parser.add_argument('--variants', type=int, default=3)
-    parser.add_argument('--only', help='a job name (paper, masthead, photo-<first-id>)')
+    parser.add_argument('--only', help='a job name or how it starts (paper, masthead, photo-<first-id>)')
     parser.add_argument('--force', action='store_true')
     parser.add_argument('--review-only', action='store_true')
     args = parser.parse_args()
@@ -164,7 +189,7 @@ def main():
             workflow = json.load(source)
         os.makedirs(VARIANTS, exist_ok=True)
         for name, job in JOBS.items():
-            if args.only not in (None, name):
+            if args.only is not None and not name.startswith(args.only):
                 continue
             for variant in range(1, args.variants + 1):
                 file = f'variants/{name}_{variant}.png'

@@ -1,5 +1,5 @@
 {
-  "_comment": "Theories of the day (ui-spec.md 4.18.2, design.md 1.1): a question a player's scientists raise when the player first reaches one of raisedBy (a card in that turn's report, private), and its answer when anyone in the game first reaches one of answeredBy (PUBLIC: a science page in the paper; TECHNICAL: a line in every report's news). Flavour only. Our own text; the articles name no real person, the history notes are checked in design.md 1.1. Ids are stored in printed pages: never rename or reuse one. Tokens: {agency} (who settled it, a list for several), {season}. TheoriesTest holds the rules.",
+  "_comment": "Theories of the day (ui-spec.md 4.18.2, design.md 1.1): a question a player's scientists raise when the player first reaches one of raisedBy, or first opens a program of one of raisedByCategories (2026-10-27: the radiation belts, whose goal would raise and settle them at once) (a card in that turn's report, private), and its answer when anyone in the game first reaches one of answeredBy (PUBLIC: a science page in the paper; TECHNICAL: a line in every report's news). Flavour only. Our own text; the articles name no real person, the history notes are checked in design.md 1.1. Ids are stored in printed pages: never rename or reuse one. Tokens: {agency} (who settled it, a list for several), {season}. TheoriesTest holds the rules.",
   "theories": [
     {
       "id": "deep-dust",
@@ -61,6 +61,7 @@
     {
       "id": "radiation-belts",
       "reach": "PUBLIC",
+      "raisedByCategories": ["earth-orbit-satellites"],
       "raisedBy": [
         "earth-orbit-satellite"
       ],

@@ -76,7 +76,7 @@ class IntelligenceWireTest {
         for (int i = 0; i < 12; i++) {
             rnd.add(fact(IntelFact.Kind.COMPONENT_RELIABILITY, "component-number-" + i, 60, 80, 0));
         }
-        folder.getDossiers().put(IntelArea.RND, new Dossier(IntelArea.RND, 30, rnd));
+        folder.getDossiers().put(IntelArea.RND, new Dossier(IntelArea.RND, 30, rnd, 2));
         List<IntelFact> plans = new ArrayList<>();
         for (int i = 0; i < 6; i++) {
             plans.add(fact(IntelFact.Kind.OPEN_PROGRAM, "program-number-" + i, 0, 0, 0));
@@ -84,12 +84,12 @@ class IntelligenceWireTest {
             plans.add(fact(IntelFact.Kind.IN_FLIGHT, "configuration-number-" + i, 0, 0, 0));
         }
         plans.add(fact(IntelFact.Kind.INTEL_LEVEL, "", 0, 0, 2));
-        folder.getDossiers().put(IntelArea.PLANS, new Dossier(IntelArea.PLANS, 31, plans));
+        folder.getDossiers().put(IntelArea.PLANS, new Dossier(IntelArea.PLANS, 31, plans, 1));
         folder.getDossiers().put(IntelArea.PERSONNEL, new Dossier(IntelArea.PERSONNEL, 29, List.of(
             fact(IntelFact.Kind.HEADCOUNT, "ASTRONAUT", 0, 0, 8), fact(IntelFact.Kind.AVERAGE_SKILL, "ASTRONAUT", 50, 60, 0),
             fact(IntelFact.Kind.HEADCOUNT, "SET", 0, 0, 20), fact(IntelFact.Kind.AVERAGE_SKILL, "SET", 40, 50, 0),
             fact(IntelFact.Kind.HEADCOUNT, "MISSION_CONTROL", 0, 0, 13),
-            fact(IntelFact.Kind.AVERAGE_SKILL, "MISSION_CONTROL", 45, 55, 0))));
+            fact(IntelFact.Kind.AVERAGE_SKILL, "MISSION_CONTROL", 45, 55, 0)), 1));
         for (int i = 0; i < files; i++) {
             folder.getPersonnelFiles().add(new PersonnelFile("p" + i, "Person Number " + i, "portrait-" + i, "SET", 40,
                 28, List.of(fact(IntelFact.Kind.SKILL, "ROCKETS", 50, 60, 0), fact(IntelFact.Kind.SKILL, "SPACE_PROBES",

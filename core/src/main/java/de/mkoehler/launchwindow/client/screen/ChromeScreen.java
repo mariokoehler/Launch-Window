@@ -78,9 +78,6 @@ abstract class ChromeScreen extends SessionScreen {
         static final Crumb ASTRONAUT_COMPLEX = new Crumb("Astronaut Complex", ChromeScreen::goAstronautComplex);
         /** The VAB's landing screen. */
         static final Crumb VAB = new Crumb("VAB", ChromeScreen::goVab);
-        /** The VAB's Manage Rocket Programs. */
-        static final Crumb ROCKET_PROGRAMS = new Crumb("Manage Rocket Programs",
-            screen -> screen.game.setScreen(new RocketProgramsScreen(screen.game)));
     }
 
     /** The screen's own area, between the title row and the footer. */
@@ -290,7 +287,8 @@ abstract class ChromeScreen extends SessionScreen {
         card.add(ui.label(eyebrow, Theme.TextStyle.EYEBROW, Theme.NAVY)).padBottom(Theme.SPACE_2).row();
         card.add(ui.label(title, Theme.TextStyle.HEADING_SM, Theme.INK)).padBottom(Theme.SPACE_2).row();
         card.add(ui.paragraph(body, Theme.TextStyle.BODY, Theme.INK_MUTED)).padBottom(Theme.SPACE_3).row();
-        card.add(actionButton(action, Theme.ButtonKind.PRIMARY, onClick)).left().fill(false, false);
+        // The button row takes any extra height, so cards stretched to a row's tallest end on their buttons.
+        card.add(actionButton(action, Theme.ButtonKind.PRIMARY, onClick)).expandY().bottom().left().fill(false, false);
         return card;
     }
 
@@ -737,12 +735,18 @@ abstract class ChromeScreen extends SessionScreen {
      *
      * @param concepts the concepts, in chip order
      * @param hint     the text on the right of the title, or {@code null} for the count not read yet
-     * @param width    the section's width, so the chips know where to wrap
+     * @param width    the section's width, so the chips know where to wrap; 0 for its cell's width
      * @param back     builds this screen again, for the explainer's Close
      * @return the section
      */
     protected Table conceptsSection(List<Concepts.Concept> concepts, String hint, float width, Supplier<Screen> back) {
+        // A locked explainer has no chip, and isn't counted as not read yet (it would answer a theory early).
+        concepts = concepts.stream().filter(concept -> Explainers.standard().byId(concept.explainer())
+            .filter(explainer -> !game.explainerLocked(explainer)).isPresent()).toList();
         Table section = new Table();
+        if (concepts.isEmpty()) {
+            return section;
+        }
         section.left();
         section.defaults().left();
         Table head = new Table();
@@ -751,8 +755,13 @@ abstract class ChromeScreen extends SessionScreen {
         long unread = concepts.stream().filter(concept -> !game.explainerRead(concept.explainer())).count();
         String right = hint != null ? hint : unread > 0 ? unread + " not read yet" : "All read";
         head.add(ui.label(right, Theme.TextStyle.CAPTION, Theme.INK_MUTED)).right();
-        section.add(head).width(width).padBottom(Theme.SPACE_2).row();
-        section.add(conceptChips(concepts, back)).width(width);
+        if (width > 0f) {
+            section.add(head).width(width).padBottom(Theme.SPACE_2).row();
+            section.add(conceptChips(concepts, back)).width(width);
+        } else {
+            section.add(head).growX().padBottom(Theme.SPACE_2).row();
+            section.add(conceptChips(concepts, back)).growX();
+        }
         return section;
     }
 
@@ -768,7 +777,7 @@ abstract class ChromeScreen extends SessionScreen {
         chips.wrap().space(ConceptChip.GAP).wrapSpace(ConceptChip.GAP).rowLeft().left();
         for (Concepts.Concept concept : concepts) {
             Explainers.Explainer explainer = Explainers.standard().byId(concept.explainer()).orElse(null);
-            if (explainer == null) {
+            if (explainer == null || game.explainerLocked(explainer)) {
                 continue;
             }
             chips.addActor(new ConceptChip(ui, concept.label(), !game.explainerRead(explainer.id()),

@@ -175,12 +175,25 @@ public record ContentStrings(Map<String, Text> categories, Map<String, Text> pro
     /**
      * One entry's text.
      *
-     * @param name        the display name
-     * @param description a short description, or {@code null}
-     * @param historyNote a short real-world story for the history-note icon, or {@code null}
+     * @param name            the display name
+     * @param description     a short description, or {@code null}
+     * @param historyNote     a short real-world story for the history-note icon, or {@code null}
+     * @param longDescription a paragraph for screens with room for it (a program's or component's
+     *                        details), standing on its own in place of the short one, or {@code null}
      */
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public record Text(String name, String description, String historyNote) {
+    public record Text(String name, String description, String historyNote, String longDescription) {
+
+        /**
+         * An entry with no long description.
+         *
+         * @param name        the display name
+         * @param description a short description, or {@code null}
+         * @param historyNote a short real-world story, or {@code null}
+         */
+        public Text(String name, String description, String historyNote) {
+            this(name, description, historyNote, null);
+        }
     }
 
     /**

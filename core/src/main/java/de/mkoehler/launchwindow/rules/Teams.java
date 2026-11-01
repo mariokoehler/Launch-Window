@@ -167,9 +167,12 @@ public final class Teams {
             }
         }
         Rapport pair = index >= 0 ? pairs.get(index) : newPair(snapshot, a, b);
-        double rapport = Math.max(-Personality.RAPPORT_MAX, Math.min(Personality.RAPPORT_MAX,
+        double drifted = Math.max(-Personality.RAPPORT_MAX, Math.min(Personality.RAPPORT_MAX,
             pair.rapport() + Personality.RAPPORT_DRIFT * pair.affinity()));
-        boolean shows = !pair.shown() && Math.abs(rapport) >= Personality.RAPPORT_SHOWN_AT;
+        boolean crossing = !pair.shown() && Math.abs(drifted) >= Personality.RAPPORT_SHOWN_AT;
+        boolean shows = crossing && Personality.canShowRelationship(snapshot, a, b, drifted > 0);
+        // Held back: it waits just short of showing, until someone's relationship ends.
+        double rapport = crossing && !shows ? pair.rapport() : drifted;
         Rapport updated = new Rapport(pair.first(), pair.second(), rapport, pair.affinity(), pair.seasonsTogether() + 1,
             pair.shown() || shows);
         if (index >= 0) {

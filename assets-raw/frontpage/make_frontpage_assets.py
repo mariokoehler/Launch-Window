@@ -6,7 +6,8 @@ ships, in assets/ui/frontpage/ (ui-spec.md 4.18):
   generated image is black on white; its darkness becomes the alpha, in the page's ink colour, and
   it's cropped to the lettering. RGB colour everywhere, so mipmaps can't fringe it.
 - <first-id>.jpg, one per First: the press photo printed in ink on the paper colour (a multiply of the
-  photo over the newsprint, baked), so the client draws it as it is.
+  photo over the newsprint, baked), so the client draws it as it is. human-in-orbit also has a version per
+  pilot, <first-id>-<sex>-<look>.jpg, which the client picks by the commander's portrait (PilotPhoto).
 
 Usage:
     python make_frontpage_assets.py
@@ -23,6 +24,8 @@ OUT = os.path.join(HERE, '..', '..', 'assets', 'ui', 'frontpage')
 PAGE = (1440, 900)
 INK = np.array([0x1c, 0x1c, 0x1a], dtype=np.float64)   # Theme.INK, the page's ink
 PAPER = np.array([0xf5, 0xf0, 0xdd], dtype=np.float64)  # the newsprint's mid tone, for the photos
+# A pick with a black strip the model left along an edge: how many pixels to cut from its left.
+TRIM_LEFT = {'photo-human-in-orbit-male-black': 10}
 
 
 def variant(picks, job):
@@ -58,7 +61,11 @@ def main():
     masthead(variant(picks, 'masthead')).save(os.path.join(OUT, 'masthead.png'))
     for job in picks:
         if job.startswith('photo-'):
-            photo(variant(picks, job)).save(os.path.join(OUT, job[len('photo-'):] + '.jpg'), quality=90)
+            image = variant(picks, job)
+            trim = TRIM_LEFT.get(job, 0)
+            if trim:
+                image = image.crop((trim, 0, image.width, image.height)).resize(image.size, Image.LANCZOS)
+            photo(image).save(os.path.join(OUT, job[len('photo-'):] + '.jpg'), quality=90)
     for name in sorted(os.listdir(OUT)):
         print(name, Image.open(os.path.join(OUT, name)).size)
 

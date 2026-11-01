@@ -196,6 +196,9 @@ public final class HelpValues {
         v.put("events.good", whole(RandomEventRoster.baspmClose().goodChancePercent()));
 
         v.put("chemistry.band", whole(Math.round(Chemistry.OUTPUT_BAND * 100)));
+        v.put("chemistry.relationship", whole(Math.round(Chemistry.RELATIONSHIP_OUTPUT * 100)));
+        v.put("chemistry.relationshipsOfAKind", whole(Personality.RELATIONSHIPS_OF_A_KIND));
+        v.put("chemistry.relationshipsOfTheirKind", whole(Personality.RELATIONSHIPS_OF_THEIR_KIND));
         v.put("chemistry.rapportDrift", whole(Math.round(Personality.RAPPORT_DRIFT)));
         v.put("chemistry.rapportShown", whole(Math.round(Personality.RAPPORT_SHOWN_AT)));
         v.put("chemistry.rapportMax", whole(Math.round(Personality.RAPPORT_MAX)));
@@ -237,6 +240,9 @@ public final class HelpValues {
         v.put("intelligence.catchBase", whole(Intelligence.CATCH_BASE_PERCENT));
         v.put("intelligence.catchPerLevel", whole(Intelligence.CATCH_PER_LEVEL));
         v.put("intelligence.caughtPrestige", whole(Intelligence.CAUGHT_PRESTIGE));
+        v.put("intelligence.followUpSeasons", whole(Intelligence.FOLLOW_UP_SEASONS));
+        v.put("intelligence.followUpNarrowing", whole(Intelligence.FOLLOW_UP_NARROWING));
+        v.put("intelligence.minHalfWidth", whole(Intelligence.MIN_HALF_WIDTH));
 
         // A campaign's shape is its level's; help quotes the first one shipped.
         de.mkoehler.launchwindow.content.HandsOnLevel campaign = de.mkoehler.launchwindow.content.Decisions.standard()
@@ -245,6 +251,8 @@ public final class HelpValues {
         v.put("handsOn.rounds", campaign == null ? "4" : whole(campaign.rounds()));
         v.put("handsOn.slots", campaign == null ? "3" : whole(campaign.slots()));
         v.put("handsOn.resist", campaign == null ? "1" : whole(campaign.resist()));
+        v.put("handsOn.failBase", whole(Math.round(HandsOn.BASE_FAIL * 100)));
+        v.put("handsOn.skillPerPoint", whole(Math.round(0.01 / HandsOn.FAIL_PER_SKILL)));
         v.put("handsOn.failLow", whole(Math.round(HandsOn.MIN_FAIL * 100)));
         v.put("handsOn.exceptional", whole(Math.round(HandsOn.EXCEPTIONAL * 100)));
         v.put("handsOn.exceptionalGood", whole(Math.round(HandsOn.EXCEPTIONAL_GOOD_CHEMISTRY * 100)));

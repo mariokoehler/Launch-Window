@@ -1,5 +1,6 @@
 package de.mkoehler.launchwindow.client.screen;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.graphics.Color;
@@ -108,10 +109,10 @@ public final class MuseumScreen extends ChromeScreen {
         rebuild();
         fetchRivals();
         fetchArchive();
-        // The theories of the day read the printed pages (ui-spec.md 4.18.2).
+        // The theories of the day read the printed pages (ui-spec.md 4.18.2), and so do the explainers' locks.
         if (session.frontPages() == null) {
             fetchFrontPages(() -> {
-                if (this.tab == Tab.ARCHIVE) {
+                if (this.tab == Tab.ARCHIVE || this.tab == Tab.ENCYCLOPEDIA) {
                     rebuild();
                 }
             });
@@ -124,6 +125,9 @@ public final class MuseumScreen extends ChromeScreen {
             return;
         }
         game.gateway().fetchArchive(session.credentials(), goals, result -> {
+            if (!result.ok()) {
+                Gdx.app.error("Archive", result.message());
+            }
             if (!isShowing()) {
                 return;
             }
@@ -440,10 +444,11 @@ public final class MuseumScreen extends ChromeScreen {
         text.left();
         text.defaults().left();
         text.add(ui.label(flight.program().toUpperCase(Locale.ROOT), Theme.TextStyle.EYEBROW, Theme.NAVY)).row();
-        text.add(ui.label(flight.name(), Theme.TextStyle.BODY_STRONG, Theme.INK)).padBottom(6f).row();
+        text.add(ui.paragraph(flight.name(), Theme.TextStyle.BODY_STRONG, Theme.INK)).growX().padBottom(6f).row();
         Table count = new Table();
         count.add(ui.label(String.valueOf(flight.count()), Theme.TextStyle.HEADING_LG, Theme.NAVY)).padRight(6f);
-        count.add(ui.label(flight.count() == 1 ? "completed flight" : "completed flights", Theme.TextStyle.BODY_SM,
+        count.add(ui.label((flight.count() == 1 ? "completed flight" : "completed flights")
+            + (flight.commercial() > 0 ? " (" + flight.commercial() + " commercial)" : ""), Theme.TextStyle.BODY_SM,
             Theme.INK_MUTED)).bottom().padBottom(3f);
         text.add(count).row();
         text.add(ui.label(flight.crewed() ? "Crewed" : "Uncrewed", Theme.TextStyle.CAPTION, Theme.INK_MUTED)).row();
@@ -498,6 +503,9 @@ public final class MuseumScreen extends ChromeScreen {
     }
 
     private Actor explainerCard(Explainers.Explainer explainer) {
+        if (game.explainerLocked(explainer)) {
+            return lockedExplainerCard(explainer);
+        }
         Table card = ui.card();
         card.top();
         card.pad(Theme.BORDER_EMPHASIS);
@@ -542,6 +550,27 @@ public final class MuseumScreen extends ChromeScreen {
         marked.add(card);
         marked.add(overlay);
         return marked;
+    }
+
+    /**
+     * A locked explainer's card (2026-10-27): its code and title only, no drawing, summary or button, since it
+     * would answer a theory of the day before a flight in this game does.
+     */
+    private Actor lockedExplainerCard(Explainers.Explainer explainer) {
+        Table card = ui.card();
+        card.top();
+        card.pad(Theme.BORDER_EMPHASIS);
+        card.defaults().growX().left();
+        card.add(new Image(ui.solid(Theme.SKILL_TRACK))).height(251f).row();
+        Table text = new Table();
+        text.pad(10f, 16f, 16f, 16f);
+        text.defaults().left().growX();
+        text.add(ui.label(explainer.code() + " · Locked", Theme.TextStyle.EYEBROW, Theme.INK_MUTED)).row();
+        text.add(ui.label(explainer.title(), Theme.TextStyle.HEADING_SM, Theme.INK_MUTED)).padBottom(6f).row();
+        text.add(ui.paragraph("It would answer a question the space age argued over. It opens once a flight in "
+            + "this game settles that question.", Theme.TextStyle.BODY, Theme.INK_MUTED));
+        card.add(text);
+        return card;
     }
 
     /**
@@ -649,7 +678,7 @@ public final class MuseumScreen extends ChromeScreen {
      */
     private Table theoriesCard(List<Archive.Entry> entries) {
         List<FrontPageView.TheoryRow> rows = FrontPageView.museum(Theories.standard(),
-            session.state().getAchievedGoals(), session.frontPages(), entries,
+            session.raiseTurns(), session.frontPages(), entries,
             goal -> session.catalog().goal(goal).isPresent());
         if (rows.isEmpty()) {
             return null;

@@ -33,6 +33,7 @@ import de.mkoehler.launchwindow.content.CelestialBody;
 import de.mkoehler.launchwindow.client.screen.ExplainerScreen;
 import de.mkoehler.launchwindow.client.screen.HireScreen;
 import de.mkoehler.launchwindow.client.screen.SpaceComplexScreen;
+import de.mkoehler.launchwindow.client.screen.RoadsToMoonScreen;
 import de.mkoehler.launchwindow.client.view.Explainers;
 import de.mkoehler.launchwindow.client.view.Hub;
 import de.mkoehler.launchwindow.content.ContentPackHash;
@@ -232,6 +233,11 @@ public final class ScreenSnapshot {
         // Silent, and the sound setting never this machine's: the Join screen would speak otherwise.
         configuration.disableAudio(true);
         LaunchWindowGame.useSoundInMemory(true);
+        // The shots render at the game's default text size, Large, unless -Dui.textScale says otherwise;
+        // the Settings shot shows Large chosen when the shots are taken at its size.
+        float textScale = Float.parseFloat(System.getProperty("ui.textScale", String.valueOf(LaunchWindowGame.TextSize.LARGE.scale())));
+        LaunchWindowGame.useTextSizeInMemory(textScale == LaunchWindowGame.TextSize.LARGE.scale()
+            ? LaunchWindowGame.TextSize.LARGE : LaunchWindowGame.TextSize.STANDARD);
         new Lwjgl3Application(new LaunchWindowGame() {
             @Override
             protected ServerGateway createGateway() {
@@ -254,7 +260,11 @@ public final class ScreenSnapshot {
             @Override
             public void create() {
                 super.create();
+                // -Dui.textScale=1 draws the text at the design's size (Standard in Settings); any factor
+                // can be tried. The shots' text-fit report then shows what it breaks (TextFit).
+                ui().fonts().setTextScale(textScale);
                 renderAll(this, folder);
+                writeTextFit(folder);
                 Gdx.app.exit();
             }
         }, configuration);
@@ -267,8 +277,24 @@ public final class ScreenSnapshot {
         // The idle tip done: only its own shots show it (groundingShots).
         game.useAdvisorMarksInMemory(new java.util.HashSet<>(java.util.Set.of("idleTipDone")));
         // -Dshots=contracts renders only one group, for a quick look at the screens being worked on.
+        if ("allhands".equals(System.getProperty("shots"))) {
+            allHandsShots(folder, game);
+            return;
+        }
+        if ("mcpager".equals(System.getProperty("shots"))) {
+            missionPagerShots(folder, game);
+            return;
+        }
+        if ("configcards".equals(System.getProperty("shots"))) {
+            configCardShots(folder, game);
+            return;
+        }
         if ("contracts".equals(System.getProperty("shots"))) {
             contractShots(folder, game);
+            return;
+        }
+        if ("assemble".equals(System.getProperty("shots"))) {
+            assembleShots(folder, game);
             return;
         }
         if ("handson".equals(System.getProperty("shots"))) {
@@ -331,6 +357,14 @@ public final class ScreenSnapshot {
             consoleShots(folder, game);
             return;
         }
+        if ("museum".equals(System.getProperty("shots"))) {
+            museumShots(folder, game, null);
+            return;
+        }
+        if ("intel".equals(System.getProperty("shots"))) {
+            intelligenceShots(folder, game);
+            return;
+        }
         if ("poaching".equals(System.getProperty("shots"))) {
             poachingShots(folder, game);
             return;
@@ -339,6 +373,10 @@ public final class ScreenSnapshot {
             String hash = ContentPackHash.ofClasspath("content/early-era", ScreenSnapshot.class.getClassLoader());
             reportShots(folder, game, GameInfoResponse.success("early-era", hash, List.of(), 1, true,
                 6 * 3_600_000L + 12 * 60_000L + 30_000L, 0L, null, List.of(), List.of(), 0));
+            return;
+        }
+        if ("roads".equals(System.getProperty("shots"))) {
+            roadsShots(folder, game);
             return;
         }
         if ("progression".equals(System.getProperty("shots"))) {
@@ -544,6 +582,7 @@ public final class ScreenSnapshot {
         theoryShots(folder, game);
         memorialShots(folder, game);
         progressionShots(folder, game);
+        roadsShots(folder, game);
     }
 
     /**
@@ -637,7 +676,7 @@ public final class ScreenSnapshot {
             // The findings' pages (design.md 2.13, 2026-10-21).
             "explorer-1", "korabl-sputnik-2", "pegasus", "pioneer-6-9", "lunar-orbiter-micrometeoroids", "mascons",
             "surveyor-3", "mariner-5-venera-4", "zond-5", "mariners-6-7", "orbiting-frog-otolith", "viking-soil",
-            "pioneer-venus-multiprobe")) {
+            "pioneer-venus-multiprobe", "ranger-surface")) {
             write(folder, "archive-page-" + id + ".png", new ArchivePageScreen(game,
                 new de.mkoehler.launchwindow.client.view.Archive.Entry(archive.page(id), 60, true), () -> null), null);
         }
@@ -798,6 +837,12 @@ public final class ScreenSnapshot {
                     MuseumScreen.Tab.ENCYCLOPEDIA)), null);
             }
         }
+        // The explainers that answer a theory of the day, locked until it's settled (2026-10-27), then open.
+        write(folder, "museum-encyclopedia-locked.png", new MuseumScreen(game, MuseumScreen.Tab.ENCYCLOPEDIA), null);
+        game.session().keepFrontPages(java.util.stream.Stream.of("weightless-body", "radiation-belts", "deep-dust",
+            "venus-jungle").map(theory -> new FrontPage("1-science-" + theory, "goal", 1, theory, "", List.of(),
+                List.of(), List.of(), FrontPage.Kind.SCIENCE, null, null)).toList());
+        write(folder, "museum-encyclopedia-settled.png", new MuseumScreen(game, MuseumScreen.Tab.ENCYCLOPEDIA), null);
     }
 
     /**
@@ -861,6 +906,28 @@ public final class ScreenSnapshot {
             game.session().catalog());
         game.session().keepReport(reviewed);
         write(folder, "rival-firsts-review.png", new TurnReportScreen(game, reviewed), null);
+    }
+
+    /** Assemble mission's console tiles with a holder who has two traits and four clashes, which must wrap. */
+    private static void assembleShots(File folder, LaunchWindowGame game) {
+        String hash = ContentPackHash.ofClasspath("content/early-era", ScreenSnapshot.class.getClassLoader());
+        GameInfoResponse info = GameInfoResponse.success("early-era", hash, List.of(), 1, true,
+            6 * 3_600_000L + 12 * 60_000L + 30_000L, 0L, null, List.of(), List.of(), 0);
+        PlayerSnapshot planning = planningState(11, 25_000);
+        planning.getMissionControlOfficers().forEach(person -> person.setWorkSeasons(6));
+        planning.getMissionControlOfficers().get(4).setTraits(List.of(
+            revealed(de.mkoehler.launchwindow.model.Trait.MUST_BE_THE_BEST),
+            revealed(de.mkoehler.launchwindow.model.Trait.ABRASIVE)));
+        planning.setRapports(new ArrayList<>(List.of(
+            new de.mkoehler.launchwindow.model.Rapport("c0", "c4", -48, 0, 9, true),
+            new de.mkoehler.launchwindow.model.Rapport("c1", "c4", -40, 0, 9, true),
+            new de.mkoehler.launchwindow.model.Rapport("c2", "c4", -55, 0, 9, true),
+            new de.mkoehler.launchwindow.model.Rapport("c3", "c4", -35, 0, 9, true))));
+        startSession(game, planning, info);
+        write(folder, "assemble-many-marks.png", new AssembleMissionScreen(game, "vostok-orbital"), null);
+        write(folder, "hub-unstaffed-vab.png", new SpaceComplexScreen(game), screen -> screen.hover(Hub.Place.VAB));
+        write(folder, "hub-unstaffed-set.png", new SpaceComplexScreen(game),
+            screen -> screen.hover(Hub.Place.SET_CENTRE));
     }
 
     /**
@@ -934,6 +1001,17 @@ public final class ScreenSnapshot {
         game.session().keepFrontPages(all);
         write(folder, "frontpage-orbit-rival.png", new FrontPageScreen(game, List.of(orbit), () -> { }, false), null);
         write(folder, "frontpage-two.png", new FrontPageScreen(game, List.of(space, orbit), () -> { }, false), null);
+        // The orbit photo follows the pilot: a Kazakh woman here, a Black man next.
+        for (String[] pilot : new String[][] {{"FEMALE", "kazakh"}, {"MALE", "black_american"}}) {
+            String portrait = de.mkoehler.launchwindow.rules.PortraitCatalog.all().stream()
+                .filter(p -> p.sex().name().equals(pilot[0]) && p.ethnicity().equals(pilot[1])).findFirst()
+                .orElseThrow().id();
+            FrontPage own = new FrontPage("26-human-in-orbit", "human-in-orbit", 26, "orbit-circles",
+                "Fair and cool tonight", List.of(), List.of(new FrontPage.Achiever("Orion Spaceworks", "Dir. A. Reyes",
+                    List.of("Daniel Hale"), portrait)), List.of("Kestrel Aerospace", "Baltic Star Agency"));
+            write(folder, "frontpage-orbit-" + pilot[1] + ".png",
+                new FrontPageScreen(game, List.of(own), () -> { }, false), null);
+        }
         write(folder, "frontpage-space-you.png", new FrontPageScreen(game, List.of(space), () -> { }, true), null);
         write(folder, "frontpage-satellite.png", new FrontPageScreen(game, List.of(satellite), () -> { }, true), null);
 
@@ -1032,6 +1110,67 @@ public final class ScreenSnapshot {
         write(folder, "progression-wings-plan.png", new MissionPlanScreen(game, "mercury-suborbital",
             MissionPlanScreen.Tab.ASSESSMENT), null);
         game.useAdvisorMarksInMemory(new java.util.HashSet<>(java.util.Set.of("idleTipDone")));
+    }
+
+    /**
+     * Roads to the Moon (ui-spec.md 4.21, 2026-10-26), alone with {@code -Dshots=roads}: the canvas's states. NASA
+     * with a person in space and Mercury open; with Gemini open; with Apollo opened; the Soviet roads; locked before a
+     * person has flown in space; a history note pinned; and Headquarters' Moon page with its button.
+     */
+    private static void roadsShots(File folder, LaunchWindowGame game) {
+        String hash = ContentPackHash.ofClasspath("content/standard", ScreenSnapshot.class.getClassLoader());
+        GameInfoResponse info = GameInfoResponse.success("standard", hash, List.of(), 34, true,
+            6 * 3_600_000L + 12 * 60_000L + 30_000L, 0L, null, List.of(), List.of(), 0);
+        PlayerSnapshot nasa = new PlayerSnapshot("Orion Spaceworks", Archetype.NASA, 31_400, 4_820, 3_000, 34);
+        nasa.setDirectorName("A. Reyes");
+        nasa.getBuildingLevels().put(Building.VEHICLE_ASSEMBLY, 2);
+        nasa.getOpenedProgramIds().addAll(List.of("explorer-1", "mercury"));
+        nasa.getMissionComponents().put("explorer-1-satellite", new OwnedMissionComponent(81.0, 3.0));
+        nasa.getMissionComponents().put("mercury-capsule", new OwnedMissionComponent(74.0, 3.0));
+        nasa.getAchievedGoals().put("earth-orbit-satellite", 6);
+        nasa.getAchievedGoals().put("human-in-space", 30);
+        startSession(game, nasa, info);
+        write(folder, "roads-nasa.png", new RoadsToMoonScreen(game), null);
+        write(folder, "roads-pinned-note.png", new RoadsToMoonScreen(game), screen -> screen.pinHistoryNote(0));
+        BodyProgramsScreen moon = new BodyProgramsScreen(game, CelestialBody.MOON);
+        moon.select("lunar-expeditions");
+        write(folder, "roads-hq-moon.png", moon, null);
+        write(folder, "roads-program-buttons.png", new de.mkoehler.launchwindow.client.screen.ProgramDetailsScreen(game,
+            "apollo-earth-orbit", CelestialBody.EARTH), null);
+
+        nasa.getAchievedGoals().remove("human-in-space");
+        startSession(game, nasa, info);
+        write(folder, "roads-locked.png", new RoadsToMoonScreen(game), null);
+        nasa.getAchievedGoals().put("human-in-space", 30);
+
+        nasa.getOpenedProgramIds().add("gemini");
+        nasa.getMissionComponents().put("gemini-capsule", new OwnedMissionComponent(64.0, 3.0));
+        startSession(game, nasa, info);
+        write(folder, "roads-gemini-open.png", new RoadsToMoonScreen(game), null);
+
+        nasa.setFunds(18_200);
+        nasa.getBuildingLevels().put(Building.VEHICLE_ASSEMBLY, 3);
+        nasa.getOpenedProgramIds().addAll(List.of("apollo-earth-orbit", "apollo"));
+        nasa.getMissionComponents().put("apollo-csm", new OwnedMissionComponent(38.0, 3.0));
+        nasa.getMissionComponents().put("apollo-lunar-module", new OwnedMissionComponent(21.0, 3.0));
+        nasa.getMissionComponents().put("apollo-lunar-eva-suit", new OwnedMissionComponent(30.0, 3.0));
+        nasa.getMissionComponents().put("lunar-roving-vehicle", new OwnedMissionComponent(15.0, 3.0));
+        nasa.getMissionComponents().put("agena-target-vehicle", new OwnedMissionComponent(58.0, 3.0));
+        nasa.getAchievedGoals().put("rendezvous", 40);
+        nasa.getAchievedGoals().put("docking", 42);
+        startSession(game, nasa, info);
+        write(folder, "roads-apollo-chosen.png", new RoadsToMoonScreen(game), null);
+
+        PlayerSnapshot soviet = new PlayerSnapshot("Baltic Star Agency", Archetype.SOVIET, 30_000, 4_820, 3_000, 34);
+        soviet.setDirectorName("A. Reyes");
+        soviet.getBuildingLevels().put(Building.VEHICLE_ASSEMBLY, 2);
+        soviet.getOpenedProgramIds().addAll(List.of("sputnik-1", "vostok"));
+        soviet.getMissionComponents().put("sputnik-1-satellite", new OwnedMissionComponent(81.0, 3.0));
+        soviet.getMissionComponents().put("vostok-capsule", new OwnedMissionComponent(74.0, 3.0));
+        soviet.getAchievedGoals().put("earth-orbit-satellite", 5);
+        soviet.getAchievedGoals().put("human-in-space", 28);
+        startSession(game, soviet, info);
+        write(folder, "roads-soviet.png", new RoadsToMoonScreen(game), null);
     }
 
     private static void memorialShots(File folder, LaunchWindowGame game) {
@@ -1410,6 +1549,8 @@ public final class ScreenSnapshot {
         live.setContractBoard(List.of(relay, weather, medicine));
         write(folder, "contracts-active.png", new de.mkoehler.launchwindow.client.screen.ContractsScreen(game), null);
         write(folder, "contracts-hq-active.png", new HeadquartersScreen(game), null);
+        write(folder, "contracts-hub-active.png", new SpaceComplexScreen(game),
+            screen -> screen.hover(Hub.Place.HEADQUARTERS));
         write(folder, "contracts-assemble.png",
             new de.mkoehler.launchwindow.client.screen.AssembleMissionScreen(game, "sputnik-1-orbit"), null);
         write(folder, "contracts-configs-sputnik.png",
@@ -1448,6 +1589,60 @@ public final class ScreenSnapshot {
      * (no rocket picker) and its gated research flight, and Apollo's own lift easing the Saturn IB's
      * load.
      */
+    /**
+     * All hands on deck: two astronauts and two controllers in training, one of each on Expert.
+     */
+    private static void allHandsShots(File folder, LaunchWindowGame game) {
+        PlayerSnapshot state = missionControlState();
+        List<Astronaut> astronauts = state.getAstronauts().stream()
+            .filter(astronaut -> astronaut.getAssignmentState() == AssignmentState.IDLE).limit(2).toList();
+        List<de.mkoehler.launchwindow.model.MissionControlOfficer> officers = state.getMissionControlOfficers().stream()
+            .filter(officer -> officer.getAssignmentState() == AssignmentState.IDLE).limit(2).toList();
+        for (int i = 0; i < 2; i++) {
+            TrainingKind kind = i == 0 ? TrainingKind.ADVANCED : TrainingKind.EXPERT;
+            Astronaut astronaut = astronauts.get(i);
+            astronaut.setAssignmentState(AssignmentState.IN_TRAINING);
+            astronaut.setTrainingKind(kind);
+            astronaut.setTrainingTargetSkill(AstronautSkill.EVA);
+            astronaut.setTrainingSeasonsTotal(3);
+            var officer = officers.get(i);
+            officer.setAssignmentState(AssignmentState.IN_TRAINING);
+            officer.setTrainingKind(kind);
+            officer.setTrainingTargetSkill(de.mkoehler.launchwindow.model.MissionControlSkill.values()[0]);
+            officer.setTrainingSeasonsTotal(3);
+        }
+        String hash = ContentPackHash.ofClasspath("content/early-era", ScreenSnapshot.class.getClassLoader());
+        startSession(game, state, GameInfoResponse.success("early-era", hash, DECLARED, 23, true,
+            6 * 3_600_000L, 0L, null, List.of(), List.of(), 0));
+        write(folder, "allhands-ac.png", new AstronautComplexScreen(game), null);
+        write(folder, "allhands-ac-confirm.png", new AstronautComplexScreen(game), AstronautComplexScreen::confirmAllHands);
+        write(folder, "allhands-mc.png", new MissionControlScreen(game), null);
+        write(folder, "allhands-mc-confirm.png", new MissionControlScreen(game), MissionControlScreen::confirmAllHands);
+        startSession(game, setCentreState(), GameInfoResponse.success("early-era", hash, DECLARED, 23, true,
+            6 * 3_600_000L, 0L, null, List.of(), List.of(), 0));
+        write(folder, "allhands-set.png", new SetCentreScreen(game), null);
+        write(folder, "allhands-set-confirm.png", new SetCentreScreen(game), SetCentreScreen::confirmAllHands);
+    }
+
+    /**
+     * Every program's mission cards in the standard pack, for an agency with every program open and
+     * no one on staff, so the cards carry their longest lines: text-fit.tsv lists any that overflow.
+     */
+    private static void configCardShots(File folder, LaunchWindowGame game) {
+        String hash = ContentPackHash.ofClasspath("content/standard", ScreenSnapshot.class.getClassLoader());
+        GameInfoResponse info = GameInfoResponse.success("standard", hash, List.of(), 31, true,
+            6 * 3_600_000L, 0L, null, List.of(), List.of(), 0);
+        PlayerSnapshot nasa = new PlayerSnapshot("Orion Spaceworks", Archetype.NASA, 60_000, 2_140, 3_000, 31);
+        nasa.setDirectorName("A. Reyes");
+        startSession(game, nasa, info);
+        List<String> programs = game.session().catalog().programs().stream().map(program -> program.id()).toList();
+        nasa.getOpenedProgramIds().addAll(programs);
+        startSession(game, nasa, info);
+        for (String program : programs) {
+            write(folder, "configcards-" + program + ".png", new MissionConfigsScreen(game, program), null);
+        }
+    }
+
     private static void standardPackShots(File folder, LaunchWindowGame game) {
         String hash = ContentPackHash.ofClasspath("content/standard", ScreenSnapshot.class.getClassLoader());
         GameInfoResponse info = GameInfoResponse.success("standard", hash, List.of(), 31, true,
@@ -2018,18 +2213,18 @@ public final class ScreenSnapshot {
                 fact("COMPONENT_RELIABILITY", "r7-vostok", 70, 90, 0),
                 fact("COMPONENT_RELIABILITY", "sputnik-1-satellite", 80, 92, 0),
                 fact("COMPONENT_RELIABILITY", "sputnik-2-satellite", 76, 94, 0),
-                fact("COMPONENT_RELIABILITY", "vostok-capsule", 64, 84, 0))));
+                fact("COMPONENT_RELIABILITY", "vostok-capsule", 64, 84, 0)), 3));
         sever.getDossiers().put(de.mkoehler.launchwindow.model.IntelArea.PLANS, new de.mkoehler.launchwindow.model.Dossier(
             de.mkoehler.launchwindow.model.IntelArea.PLANS, 30, List.of(
                 fact("OPEN_PROGRAM", "sputnik-2", 0, 0, 0), fact("OPEN_PROGRAM", "vostok", 0, 0, 0),
                 fact("IN_FLIGHT", "vostok-orbital", 0, 0, 0),
                 fact("RD_FOCUS", "vostok-capsule", 0, 0, 3), fact("RD_FOCUS", "r7-vostok", 0, 0, 2),
-                fact("SHELF", "sputnik-2-satellite", 0, 0, 0), fact("INTEL_LEVEL", "", 0, 0, 1))));
+                fact("SHELF", "sputnik-2-satellite", 0, 0, 0), fact("INTEL_LEVEL", "", 0, 0, 1)), 1));
         sever.getDossiers().put(de.mkoehler.launchwindow.model.IntelArea.PERSONNEL,
             new de.mkoehler.launchwindow.model.Dossier(de.mkoehler.launchwindow.model.IntelArea.PERSONNEL, 30, List.of(
                 fact("HEADCOUNT", "ASTRONAUT", 0, 0, 0), fact("HEADCOUNT", "SET", 0, 0, 7),
                 fact("AVERAGE_SKILL", "SET", 31, 61, 0), fact("HEADCOUNT", "MISSION_CONTROL", 0, 0, 5),
-                fact("AVERAGE_SKILL", "MISSION_CONTROL", 21, 51, 0))));
+                fact("AVERAGE_SKILL", "MISSION_CONTROL", 21, 51, 0)), 1));
         for (int i = 0; i < 2; i++) {
             Personnel person = i == 0 ? pool.getSetSpecialistCandidates().get(2) : pool.getAstronautCandidates().get(4);
             String group = i == 0 ? "SET" : "ASTRONAUT";
@@ -2057,7 +2252,7 @@ public final class ScreenSnapshot {
         meridian.getDossiers().put(de.mkoehler.launchwindow.model.IntelArea.PLANS,
             new de.mkoehler.launchwindow.model.Dossier(de.mkoehler.launchwindow.model.IntelArea.PLANS, 27, List.of(
                 fact("OPEN_PROGRAM", "explorer-1", 0, 0, 0), fact("OPEN_PROGRAM", "mercury", 0, 0, 0),
-                fact("RD_FOCUS", "mercury-capsule", 0, 0, 4), fact("INTEL_LEVEL", "", 0, 0, 1))));
+                fact("RD_FOCUS", "mercury-capsule", 0, 0, 4), fact("INTEL_LEVEL", "", 0, 0, 1)), 1));
         de.mkoehler.launchwindow.model.RivalFolder aurora = intel.folder("kAurora", "Aurora Bureau");
         aurora.getTidbits().add(new de.mkoehler.launchwindow.model.Tidbit(29, fact("OPEN_PROGRAM", "vostok", 0, 0, 0)));
 
@@ -2295,6 +2490,26 @@ public final class ScreenSnapshot {
         write(folder, "plan-configs-readonly.png", new MissionConfigsScreen(game, "vostok"), null);
         write(folder, "plan-assessment-readonly.png", new MissionPlanScreen(game, "vostok-orbital",
             MissionPlanScreen.Tab.ASSESSMENT), null);
+    }
+
+    /** Mission Control's glance paging two scheduled and two active missions, alone with {@code -Dshots=mcpager}. */
+    private static void missionPagerShots(File folder, LaunchWindowGame game) {
+        PlayerSnapshot state = missionControlState();
+        InProgressMission second = new InProgressMission("z-scheduled", "sputnik-1-orbit", List.of(), List.of());
+        second.setRocketIds(List.of("r7-sputnik"));
+        state.getInProgressMissions().put(second.getId(), second);
+        InProgressMission flying = new InProgressMission("z-flying", "sputnik-1-extended", List.of(), List.of());
+        flying.setRocketIds(List.of("r7-sputnik"));
+        flying.setCurrentSeasonIndex(1);
+        state.getInProgressMissions().put(flying.getId(), flying);
+        String hash = ContentPackHash.ofClasspath("content/early-era", ScreenSnapshot.class.getClassLoader());
+        startSession(game, state, GameInfoResponse.success("early-era", hash, DECLARED, 23, true,
+            6 * 3_600_000L, 0L, null, List.of(), List.of(), 0));
+        write(folder, "mc-pager.png", new MissionControlScreen(game), null);
+        write(folder, "mc-pager-next.png", new MissionControlScreen(game), screen -> {
+            screen.pageMissions(true, 1);
+            screen.pageMissions(false, -1);
+        });
     }
 
     private static void missionControlShots(File folder, LaunchWindowGame game, GameInfoResponse info) {
@@ -2641,6 +2856,7 @@ public final class ScreenSnapshot {
             new GoalRecord("human-in-orbit", 24, "vostok-orbital", "vostok-orbital-flown", true, 3_000)));
         state.setSuccessfulFlightCounts(Map.of("sputnik-1-orbit", 2, "sputnik-1-extended", 1,
             "vostok-uncrewed-suborbital", 1, "vostok-uncrewed-orbital", 2, "vostok-orbital", 1, "korabl-sputnik-2-orbit", 1));
+        state.setCommercialFlightCounts(Map.of("sputnik-1-orbit", 12, "vostok-uncrewed-orbital", 1));
         state.setMemorial(List.of(new MemorialEntry("Laika", 0, 4, MemorialEntry.Cause.PASSENGER, "sputnik-2-orbit",
             null, "laika"), new MemorialEntry("Arseny Kolesov", 27, 19, MemorialEntry.Cause.ACCIDENT, null, null,
             "soviet_051"), new MemorialEntry("Pavel Orlov", 31, 22, MemorialEntry.Cause.MISSION, "vostok-orbital",
@@ -3077,11 +3293,47 @@ public final class ScreenSnapshot {
         buffer.end();
         Pixmap upright = flipped(pixmap);
         PixmapIO.writePNG(Gdx.files.absolute(new File(folder, name).getAbsolutePath()), upright);
+        checkTextFit(folder, name, screen, upright);
         upright.dispose();
         pixmap.dispose();
         buffer.dispose();
         screen.hide();
         screen.dispose();
+    }
+
+    /** Every shot's text that doesn't fit ({@link TextFit}), one line a problem, in the order shot. */
+    private static final List<String> TEXT_FIT = new ArrayList<>();
+
+    /**
+     * Checks a shot's text with {@link TextFit}; with {@code -Dtextfit.marks=true} also writes the
+     * shot with its problems outlined in red to {@code marked/}.
+     */
+    private static void checkTextFit(File folder, String name, Screen screen, Pixmap upright) {
+        com.badlogic.gdx.scenes.scene2d.Stage stage;
+        try {
+            java.lang.reflect.Method method = screen.getClass().getMethod("stage");
+            method.setAccessible(true); // declared on the package-private StageScreen
+            stage = (com.badlogic.gdx.scenes.scene2d.Stage) method.invoke(screen);
+        } catch (ReflectiveOperationException notAStageScreen) {
+            return;
+        }
+        List<TextFit.Issue> issues = TextFit.check(stage);
+        issues.forEach(issue -> TEXT_FIT.add(issue.line(name)));
+        if (!issues.isEmpty() && Boolean.getBoolean("textfit.marks")) {
+            TextFit.mark(upright, stage.getViewport().getWorldHeight(), issues);
+            File marked = new File(folder, "marked");
+            marked.mkdirs();
+            PixmapIO.writePNG(Gdx.files.absolute(new File(marked, name).getAbsolutePath()), upright);
+        }
+    }
+
+    /** Writes every shot's text problems to {@code text-fit.tsv} beside the shots. */
+    private static void writeTextFit(File folder) {
+        try {
+            Files.write(folder.toPath().resolve("text-fit.tsv"), TEXT_FIT);
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
     }
 
     /**

@@ -211,6 +211,7 @@ class ContractsTest {
         assertEquals(funds + 2808, snapshot.getFunds());
         assertEquals(prestige, snapshot.getPrestige());
         assertEquals(1, snapshot.getSuccessfulFlightCounts().get("explorer-1-orbit"));
+        assertEquals(1, snapshot.getCommercialFlightCounts().get("explorer-1-orbit"), "the Museum counts it");
         assertNull(snapshot.getActiveContract());
         assertEquals(new ContractRecord(1, 0, 0), snapshot.getContractRecords().get(LINE));
         ContractSettled paid = (ContractSettled) events.stream().filter(ContractSettled.class::isInstance)

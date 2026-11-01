@@ -3,6 +3,10 @@
  "revealAt": 2.6,
  "cues": [
   {
+   "at": 0.3,
+   "sound": "hatch-open"
+  },
+  {
    "at": 2.65,
    "sound": "radio-ingress-good"
   }

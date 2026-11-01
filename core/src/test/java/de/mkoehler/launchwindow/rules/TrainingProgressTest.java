@@ -535,8 +535,24 @@ class TrainingProgressTest {
         astronaut.getExpertSkills().add(AstronautSkill.PILOTING);
         PlayerSnapshot snapshot = snapshotWithAstronaut(astronaut);
 
-        assertEquals(StartExpertTrainingOutcome.ALREADY_EXPERT_IN_SKILL,
+        assertEquals(StartExpertTrainingOutcome.ALREADY_AN_EXPERT,
             TrainingProgress.startAstronautExpertTraining(snapshot, "a1", AstronautSkill.PILOTING));
+    }
+
+    /**
+     * Verifies an Expert in one skill can't train toward another: one Expert skill a person.
+     */
+    @Test
+    void startExpertTrainingRejectsAnExpertInAnotherSkill() {
+        Astronaut astronaut = new Astronaut("a1", "Candidate", 30, 80, 50);
+        astronaut.setSkill(AstronautSkill.PILOTING, 90.0);
+        astronaut.setSkill(AstronautSkill.EVA, 90.0);
+        astronaut.getExpertSkills().add(AstronautSkill.PILOTING);
+        PlayerSnapshot snapshot = snapshotWithAstronaut(astronaut);
+
+        assertEquals(StartExpertTrainingOutcome.ALREADY_AN_EXPERT,
+            TrainingProgress.startAstronautExpertTraining(snapshot, "a1", AstronautSkill.EVA));
+        assertEquals(AssignmentState.IDLE, astronaut.getAssignmentState());
     }
 
     /**

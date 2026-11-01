@@ -39,6 +39,8 @@ public class PlayerSnapshot {
     private List<MissionControlOfficer> missionControlCandidates = new ArrayList<>();
     private long nextPersonnelId;
     private List<String> openedProgramIds = new ArrayList<>();
+    /** The agency's season each program was first opened in (2026-10-27), for theories an opening raises. */
+    private Map<String, Integer> programOpenedSeasons = new LinkedHashMap<>();
     private Map<String, OwnedMissionComponent> missionComponents = new LinkedHashMap<>();
     private Map<String, InProgressMission> inProgressMissions = new LinkedHashMap<>();
     private long nextMissionInstanceId;
@@ -46,6 +48,8 @@ public class PlayerSnapshot {
     public static final int NEWS_LOG_CAPACITY = 50;
 
     private Map<String, Integer> successfulFlightCounts = new LinkedHashMap<>();
+    /** Completed commercial flights per configuration (2026-10-27), for the Museum; never a repeat tier. */
+    private Map<String, Integer> commercialFlightCounts = new LinkedHashMap<>();
     private Map<String, Integer> achievedGoals = new LinkedHashMap<>();
     private Set<String> cancelledGoalIds = new LinkedHashSet<>();
     private long prestigeAtLastReview;
@@ -413,6 +417,28 @@ public class PlayerSnapshot {
     }
 
     /**
+     * Returns the agency's season ({@link #getSeason()}) each program was first opened in, for the theories of the
+     * day an opening raises (2026-10-27). Programs opened before this was kept have no entry. The live map is
+     * returned.
+     *
+     * @return program ids and seasons, never {@code null}
+     */
+    public Map<String, Integer> getProgramOpenedSeasons() {
+        return programOpenedSeasons;
+    }
+
+    /**
+     * Replaces the seasons programs were first opened in. Public for Jackson/Kryo, and copied defensively.
+     *
+     * @param programOpenedSeasons program ids and seasons
+     * @throws NullPointerException if {@code programOpenedSeasons} is {@code null}
+     */
+    public void setProgramOpenedSeasons(Map<String, Integer> programOpenedSeasons) {
+        Objects.requireNonNull(programOpenedSeasons, "programOpenedSeasons must not be null");
+        this.programOpenedSeasons = new LinkedHashMap<>(programOpenedSeasons);
+    }
+
+    /**
      * Returns this player's owned mission components, keyed by
      * {@code MissionComponent} id.
      *
@@ -475,6 +501,28 @@ public class PlayerSnapshot {
     public void setSuccessfulFlightCounts(Map<String, Integer> successfulFlightCounts) {
         Objects.requireNonNull(successfulFlightCounts, "successfulFlightCounts must not be null");
         this.successfulFlightCounts = new LinkedHashMap<>(successfulFlightCounts);
+    }
+
+    /**
+     * Returns how many commercial flights this player has completed per configuration (2026-10-27).
+     * They stay out of {@link #getSuccessfulFlightCounts()}, so they never lower a later flight's
+     * prestige ({@code design.md} &sect;2.11); the Museum counts them beside it. The live map.
+     *
+     * @return configuration ids and counts, never {@code null}
+     */
+    public Map<String, Integer> getCommercialFlightCounts() {
+        return commercialFlightCounts;
+    }
+
+    /**
+     * Replaces the commercial flight counts. Public for Jackson/Kryo, and copied defensively.
+     *
+     * @param commercialFlightCounts configuration ids and counts
+     * @throws NullPointerException if {@code commercialFlightCounts} is {@code null}
+     */
+    public void setCommercialFlightCounts(Map<String, Integer> commercialFlightCounts) {
+        Objects.requireNonNull(commercialFlightCounts, "commercialFlightCounts must not be null");
+        this.commercialFlightCounts = new LinkedHashMap<>(commercialFlightCounts);
     }
 
     /**

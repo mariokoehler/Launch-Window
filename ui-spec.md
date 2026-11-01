@@ -167,7 +167,10 @@ On the right:
    today's actions with their results ("Opened Sputnik 1 · −876"). Undo is by
    opposite action only, so this is how a player sees what they've committed to.
 10. **R&D board** (used twice: Rocket R&D in the VAB, Payload R&D in the SET
-    Centre). One card per owned, active component of that kind, with:
+    Centre). One card per owned, active component of that kind, two to a row; both cards of a
+    row are the same height, a shorter one's team chemistry and slots on its bottom edge,
+    except in a row with an R&D decision, whose height would leave a gap in the other card
+    *(user, 2026-11-01)*, with:
     - its reliability bar;
     - its four R&D slots: slot 1 earns the most, slot 4 the least, and each slot
       shows the specialist in it or "empty";
@@ -216,10 +219,14 @@ On the right:
 
     **Row actions:**
     - **Train:** opens the training dialog (component 12);
-    - **Expert training:** astronauts and controllers only, when a skill is at 80
+    - **Expert training:** astronauts and controllers only, once in a person's
+      career *(user, 2026-11-01)*, when a skill is at 80
       or more; open-ended until the trait is earned;
     - **Pull out of training:** partial credit for fixed-length kinds, nothing for
-      Expert; needs a confirmation;
+      Expert; needs a confirmation. **All hands on deck** *(user, 2026-11-01)*, a
+      title-bar button on the Astronaut Complex, Mission Control and the SET Centre, with a count,
+      shown only when someone can be pulled out, does it for everyone at once, basic
+      training excepted; its confirmation says what the pull costs;
     - **Dismiss:** free, refused for an astronaut or controller on a mission
       (crew, CAPCOM, or controller); SET can be dismissed mid-R&D, which frees the
       slot; needs a confirmation.
@@ -501,6 +508,15 @@ On the right:
         standard pack's step names ("Transposition and docking", "Cruise to Mars", "Venus flyby":
         the pack has no "Lunar slingshot" or "transit" step); Mars's air "less than 1 %" of Earth's,
         not "about 1 %"; the X-15's height "about 108 km", not 107.8 (354,200 ft).
+    - **Locked until its theory is settled** (user, 2026-10-27, straight in libGDX): an explainer that answers a
+      theory of the day (§4.18.2) names it in `lockedUntil` and stays locked until a flight in the game settles
+      every one of them (its science page is printed), the race is decided, or the game's pack can't settle it
+      (`Explainers.locked`, `LaunchWindowGame.explainerLocked`). E-06 waits for "Can people eat and work
+      weightless?", E-12 for the radiation belts, E-25 for the Moon's dust and Venus. A locked explainer has no
+      concept chip anywhere (screens, R&D decisions, help), and the Museum shows a closed card: its code, "Locked",
+      the title greyed and "It would answer a question the space age argued over. It opens once a flight in this
+      game settles that question.", with no drawing, summary or button. Before the pages are fetched it counts as
+      locked. `-Dshots=explainers` renders the encyclopedia locked and settled.
 19. **Concept chips** *(user's idea, 2026-10-07; specified, mocked up and built the same day; the
     look confirmed by the user that day)*. A small **Concepts** section listing the
     real-world ideas behind a piece of game content, as clickable chips. A chip opens the
@@ -726,6 +742,9 @@ Writing them turned up two things for the rules, recorded in `design.md` §2.2(d
       Synced with the code on 2026-10-22: 32 topics, the newspaper's among them ("The Daily Zenith"); its pages open
       on it (`Help.Context.NEWSPAPER`), the archive's pages and the explainers on the Museum's. `HelpTest` checks that
       every context names real topics and that every topic is on some screen's list (the basics on the hub's).
+      2026-10-29 (user): the hands-on campaign has its own topic ("Hands-on campaigns": starting, what you hold,
+      planning and running a round, the odds, how it ends), 34 topics; the Hands-on screen opens on it
+      (`Help.Context.HANDS_ON`), and R&D decisions' Hands-on section points to it.
     - **Filter:** typing searches **every** topic's title and text (numbers filled in, ignoring
       case) and drops the screen's filter; the status line says how many topics mention the text,
       or that none does. **Show all topics** clears both the text and the screen's filter.
@@ -767,15 +786,18 @@ Writing them turned up two things for the rules, recorded in `design.md` §2.2(d
       built without a mockup, they're items like the others; `Advisor.ROAD_AHEAD`), after the first steps:
       "Start on a person in space" (the one-crew capsule, named: Mercury or Vostok); "Fly the X-15
       meanwhile" (or the E-154: cheap and quick while the capsule is in R&D, and its pilots earn
-      rocket-plane wings); "Send a probe to the Moon" (once the capsule is open); "Choose your road to the
-      Moon" (once a person has been to space: the bigger capsules and the Moon craft's Earth-orbit tests);
-      "Go to the Moon" (once a probe has reached it and a person has orbited the Earth). Each comes when
+      rocket-plane wings); "Choose your road to the Moon" (once a person has been to space: the bigger
+      capsules and the Moon craft's Earth-orbit tests); "Send a probe to the Moon" (with the roads, once a
+      person has been to space: "fly one while your crews work toward orbit"; user, 2026-10-27, it used to come
+      once the capsule was open and read as a third program to run beside the capsule and the rocket plane;
+      a pack without bigger capsules keeps the old timing); "Go to the Moon" (once a probe has reached it and a person has orbited the Earth). Each comes when
       its programs can be opened (the first two also wait for a first flight, as in the ungated early-era
       pack), goes once one of them is open or the player has moved past it (the rocket plane once a pilot
       has wings or a bigger capsule is open), and is "not needed" for an agency without such programs.
       Waiting on one, the card says "All set for now" and when it comes ("Once your first satellite
       reaches orbit: start on a person in space."). Once the first steps are done the head reads "The
-      road ahead". `Advisor.title`/`text` put the agency's own program names in.
+      road ahead". `Advisor.title`/`text` put the agency's own program names in. "Choose your road to the Moon"'s Go link
+      ("Compare the roads") opens Roads to the Moon (§4.21).
     - **Rocket-plane wings on other screens** (2026-10-26, `design.md` §2.2(c); straight into libGDX): the
       Astronaut Complex roster shows "Rocket-plane wings" in green under the astronaut's state, the person
       page a "Rocket-plane wings" badge under the skills with "Safer piloting in capsules", each with the
@@ -959,6 +981,9 @@ Writing them turned up two things for the rules, recorded in `design.md` §2.2(d
       default>." and a primary button "Decide on the R&D board". The at-a-glance strip's Events cell
       becomes "Events · decision" when one waits (or a sixth cell "Decision: 1 waiting", whichever the
       mockup prefers).
+    - **Hub, an unstaffed component (the user's idea, 2026-10-31):** the same gold dot on the VAB or SET Centre while a
+      component of its board is below its R&D cap with no engineers, hover "Atlas has no engineers" or "3 rockets have
+      no engineers" (`PayloadRnd.unstaffed`).
     - **Hub:** a gold dot with a white ring on the upper left of the VAB's (rocket) or SET Centre's
       (payload) marker, opposite the red idle-staff dot. Hover adds a line under the building's name:
       "A decision waiting: Atlas".
@@ -1396,7 +1421,8 @@ Splash ─► Connect ─► Join game (skipped if already in the game) ─► [
 Space Complex hub
 ├─ VAB
 │   ├─ Open rocket program
-│   ├─ Manage rocket programs ─► Rocket R&D
+│   ├─ Rocket R&D (also from Manage rocket programs)
+│   ├─ Manage rocket programs
 │   └─ (building panel)
 ├─ SET Centre ─► Personnel overview
 │   ├─ Hire SET personnel
@@ -1626,7 +1652,10 @@ flown, a dialog over the hub asks before the report opens: "Last night's mission
 them first, spoiler-free?" [Watch the missions] [Show the report], with "Don't ask again". Watching
 plays each mission's replay in turn (§4.7.3, the film), then the unseen front pages, then this
 report, which itself is unchanged: once the player has seen it, spoilers are fair. Settings keeps
-the choice: Ask (the default), Always watch first, Never.
+the choice: Ask, Always watch first (the default since 2026-10-27, user; Ask was), Never. An unread turn
+comes in this way however it arrives (2026-10-27): entering the game, the hub's report chip or hotspot, or
+the dev button "Resolve turn now", which went straight to the pages and the report before. A read report
+opens at once.
 **Purpose:** "what happened overnight", the async equivalent of BASPM's
 end-of-season news screen. **Ref:** `bulletin_news_*.png`,
 `end_of_season_rnd_results.png`, `mission_assessment.png`.
@@ -1778,8 +1807,9 @@ them, **confirmed by the user (2026-10-04)**:
   as in the mockup.
 - **The class gate can't show with the real pack,** because every early-era rocket is
   Light. `RocketsTest` proves it on a fixture catalog.
-- **Rocket R&D's breadcrumb** runs through Manage Rocket Programs, and its back button
-  goes there, as in the mockup.
+- **Rocket R&D** has a button on the VAB's landing page as well as on Manage Rocket Programs,
+  as Payload R&D has on the SET Centre's *(user, 2026-11-01)*; its breadcrumb and back button
+  go to the VAB.
 
 ### 4.6 Headquarters: programs and mission planning
 **Purpose:** decide what the agency works on, and plan and launch missions.
@@ -1807,7 +1837,9 @@ uses with the skill it reads most (`client.view.Staffing`).
 
 **Plan a mission** *(play-test request, built 2026-10-07 without a mockup, from the configuration
 cards of §4.6.5)*. Headquarters' landing screen has three cards: Plan a mission ("Ready to plan · N
-missions"), Manage open programs, Browse programs. Plan a mission lists every configuration of
+missions"), Manage open programs, Browse programs (and Contracts, §4.17). Since 2026-10-27 (user) the
+cards in a row of a landing screen (Headquarters, the VAB) share the tallest one's height, each button at
+its card's bottom (`ChromeScreen.navCard`). Plan a mission lists every configuration of
 the open programs, one section per program (its name in gold above its cards), with the §4.6.5
 card (`ConfigCards`). Since 2026-10-11 (the user's report) both lists show each configuration's whole
 picture at the card's width and its own proportions (`ui.FullWidthPicture`), never cropped or stretched,
@@ -1846,6 +1878,18 @@ the roster, and a locked card's "Needs:" line says in its tooltip where each goa
 - a link to mission configuration selection;
 - *(specified 2026-10-07)* a Concepts section (component 19) with the program's concepts.
 
+*(User, 2026-10-27, built straight in libGDX:)* the right-hand card runs **full width**, every section
+in it. The program and each component show their **long description** (`longDescription` in
+`strings.json`, `ContentNames.longDescription`; the short `description` stays for compact places such
+as the turn report): a paragraph of 450 to 650 characters for a program, 300 to 480 for a component
+(unconfirmed), standing on its own and never repeating the history note. Every program and every
+component a program grants has one (`ContentStringsTest`); rockets don't, as they never show here.
+The price is a **table** across the card: Item, One-time price and **Upkeep / season** (what each line
+adds every season, as the Open dialog counts it: none for a component already active through another
+open program, a dash for a discount; the total is `Outlook.openingUpkeep`; the column is unconfirmed),
+its rows striped light navy and white. Each component shows its **blueprint drawing** (the turn
+report's, `FullWidthPicture`) at the card's width, under its description.
+
 **Actions:** Open (shows the price; refused if Headquarters is full, the goals
 aren't met, or funds are short). Close, which needs a confirmation: "no refund;
 its components go inactive and their researchers are released; refused while one
@@ -1855,10 +1899,11 @@ unless one of its components needs engineers. *(User, 2026-10-08, built the same
 for a new rocket, §4.5.1:)* when a component of the program is active with no one on its R&D and
 isn't at its ceiling, a "Program opened" dialog asks "Assign engineers to <component>?" (or "to its
 components?" when there are several), with its starting reliability. Its buttons:
-- **Plan a mission** (primary) goes on to the mission list as before;
-- **Assign R&D** opens Payload R&D (§4.8.3), with that component's assign dialog open when there is
-  one; with several it just opens the board (highlighting the program's components waits for a
-  program with more than one, Gemini on);
+- **Assign R&D** (primary since 2026-10-27, user: a program just opened needs engineers first; rightmost)
+  opens Payload R&D (§4.8.3), with that component's assign dialog open when there is one; with several it
+  just opens the board (highlighting the program's components waits for a program with more than one,
+  Gemini on);
+- **Plan a mission** goes on to the mission list as before;
 - **Later** stays on Program details with the success toast.
 
 A program sharing a component that already has engineers (Vostok after Korabl-Sputnik 2) skips the
@@ -1918,7 +1963,8 @@ does (`baspm.md` §10.11), plus the chosen rocket per launch:
   component 22):* one chemistry for the whole mission, crew and consoles together as the rules
   compute it, in a card under the flight crew with its reasons listed; the odds say they include
   it. Tiles show revealed traits and relationship marks (only when the partner is on this mission
-  too). The slot pickers get the R&D assign dialog's columns, the current holder highlighted with
+  too), wrapping inside the tile (2026-10-31: one row of them used to widen every column past the card).
+  The slot pickers get the R&D assign dialog's columns, the current holder highlighted with
   "Keep".
   *As built (2026-10-07):* one chemistry for the whole mission in its own card under the crew, with
   its reasons listed ("Why"); the rocket card stays. Tiles show revealed traits and a mark when
@@ -2029,6 +2075,10 @@ cap 5/13/22/35. **Ref:** `mission_control_*.png`,
 
 **4.7.1 Personnel overview** (component 11) for controllers, with sub-screens
 Hire, Manage department, Inspect active missions, and Inspect scheduled missions.
+Its glance row has one card for scheduled missions and one for active ones. With more than one
+in a list, arrows beside that card page through them, going round at either end, and the card
+says "Mission 1 of 2" (user, 2026-11-01). With one mission there are no arrows. The card still
+opens the whole list.
 
 **4.7.2 Inspect scheduled missions.** Missions launched today that fly at the next
 resolution. Each shows its configuration, rockets, crew, CAPCOM, controllers, and
@@ -2881,7 +2931,10 @@ review: when, what it pays, what keeps today's funding) and `PrestigeConversion`
   result (2026-10-25, `Museum.name`); the newspaper names it plainly, as it would any agency.
 - **Achievements:** every goal achieved or cancelled, with the turn and the
   prestige.
-- **Flights:** the completed flight count per configuration (`successfulFlightCounts`).
+- **Flights:** the completed flight count per configuration (`successfulFlightCounts`), commercial flights
+  included and named beside it: "14 completed flights (12 commercial)" (user, 2026-10-27;
+  `commercialFlightCounts`, kept apart so a client's flight never lowers a later flight's prestige). A
+  configuration flown only for clients gets its card too; animals are honoured by the agency's own flights.
   *Built 2026-10-06:* a card whose configuration really carried animals that came home names
   them under a green "Came home" eyebrow once flown (Belka and Strelka; Ham; Enos; Chernushka,
   then Zvezdochka on a second flight). See `design.md` §2.5(f). Each name, or each pair
@@ -2929,7 +2982,7 @@ Reached from the hub's Museum building. Choices made while building it, **confir
   The note was corrected to match.
 
 ### 4.12 Settings (header gear)
-Log out; server address; sound on or off; replays (§4.4); about and version.
+Log out; server address; text size; sound on or off; replays (§4.4); about and version.
 
 **Mocked up (2026-10-04)** as `Settings` on the Museum canvas, as a `Dialog` over the hub.
 Choices still **unconfirmed**:
@@ -2948,7 +3001,10 @@ filled in (a bad address shows the Connect screen's own error under the field). 
 two disabled segments until the game had sound; *since 2026-10-12* it's On (the default) or Off, for
 everyone on the device, since the splash plays before anyone logs in. *Since 2026-10-13* two sliders
 under it set the replay's music (its fanfares) and sounds (§4.7.3, "Sound"), 70 % by default, for the device; the
-voices at the start and on joining play at full volume. Replays: Ask, Always or Never,
+voices at the start and on joining play at full volume. *Since 2026-10-31* everything clickable clicks
+(the user's request, `client.ui.ClickSound`, a capture listener on every screen's stage, so a new widget
+needs nothing): on release over the widget, not when disabled, dragged off or scrolling; the sounds slider
+sets its volume too, and sound Off silences it. Replays: Ask, Always or Never,
 per account (§4.4). **Confirmed by the user (2026-10-04):** the hash is shortened to 8 characters; the
 "connected" label is fixed text; and the account note says an unlaunched mission plan is
 dropped (plans live on the client session), instead of the mockup's "logging out loses nothing".
@@ -2956,6 +3012,21 @@ dropped (plans live on the client session), instead of the mockup's "logging out
 `assets/CREDITS.md` in the dialog (headings, paragraphs and bullets, scrolling past 520 px),
 with Back and Done. A parenthesis in a script the fonts lack (the archive's Russian name) is
 left out, since its English name stands next to it.
+**Text size (built 2026-10-26, the user's request, straight in libGDX):** a section above Sound,
+Standard or Large, for everyone on the device (`LaunchWindowGame.TextSize`, a preference like
+Sound). The whole layout already scales with the window, so on a small, sharp screen (a 15"
+4K laptop) its 10 to 13 px text comes out tiny; Large draws every working style 12 % larger in
+the same 1920 by 1080 layout, rebuilding the fonts at once (`Theme.Fonts.setTextScale`). Buttons,
+pictures and chips keep their size. The drawings' labels (`DRAWING_*`, at fixed points on the
+explainers' art) and the newspaper (`NEWS_*`, already set larger) keep the design's size
+(user). 125 % was measured too: about 100 layout fixes against 112 %'s handful, so it waits
+until 112 % has been tried. Every screen is checked at Large by `ScreenSnapshot`'s text-fit
+report (`TextFit`, `CLAUDE.md`); the fixes widened the roster's name and state columns, the
+hiring list's name column, the person page's left column, the steps table's component column
+and the hands-on result's columns, let the race table's agency column size itself, and made
+the Museum flight card's name and two Settings captions wrap. **Large is the default** (user, the
+same day, after trying it on the laptop and the desktop monitor: not too large on either); a
+player who picked Standard keeps it.
 
 ### 4.13 Game result
 **Purpose:** announce the winner. **Shows:** an overlay on the hub when a result
@@ -3076,7 +3147,8 @@ binoculars, our own drawing; on the UI Asset Sheet since 2026-10-08). All rules 
   their Intelligence level if known, dated ("Level 2 as of Spring 1962", learned from a dossier
   or a catch), else "Intelligence level unknown".
 - **One dossier per area** (R&D, programs and plans, personnel), each stamped "As of Spring
-  1962" (no visible decay, the date says how old it is); an area never assessed says so. R&D shows the rival's
+  1962" (no visible decay, the date says how old it is), a follow-up's stamp adding which look it was ("As of
+  Winter 1962 · 3rd look", 2026-10-27, `IntelTexts.stamp`); an area never assessed says so. R&D shows the rival's
   components with reliability as ranges (component 3 with a range band rather than a value);
   plans list open programs, missions in flight and next season's scheduled launches, with "may
   have changed since".
@@ -3084,6 +3156,27 @@ binoculars, our own drawing; on the UI Asset Sheet since 2026-10-08). All rules 
   ambition, one trait as component 20).
 - **Tidbits:** the passive finds, newest first, each dated.
 - **Caught:** agents of yours this rival caught, and theirs you caught.
+
+**Foreign hardware** *(specified 2026-11-01 for `design.md` §2.9; not mocked up, not built)*:
+- **Dossiers:** a known item gets a plain role line under its name, and its counterpart ("their
+  counterpart to your Mercury") where there is one; clicking it opens the file. An unknown item keeps
+  its name alone, with a small "not yet analysed" mark. The same goes for the turn report's
+  Intelligence section.
+- **A Foreign hardware tab** in the office lists what has been learned, newest first, with the count
+  ("9 known"), never how many are left, which would give away the size of the pool.
+- **The file:** a read-only program details view (description, long description, history note,
+  blueprint) with no prices or open button.
+- **Turn report:** a line for each item learned, none on a season without one.
+- **The ladder** gives the passive's chance at each level. With no agency on the other side, the ladder
+  line and the tab are hidden, and dossiers drop the counterpart.
+- **The words:** `assets/content/foreign-hardware.json`, a role of at most 46 characters and a
+  counterpart for each of the 80 programs and rocket programs (a draft for the user's review; 23 have
+  no counterpart, and the line is then left out).
+
+**For the mockup:** a dossier mixing known and unknown items, on the NASA side and the Soviet side;
+a known item with no counterpart; the longest role (46 characters) at Large text; the tab with
+one item, with many, and empty (nothing learned yet); the file on a rocket and on a program; the
+turn report's line; the ladder with the passive; a game with no other side.
 
 **Hire screen addition** (component 14): see there.
 
@@ -3253,7 +3346,9 @@ archetypes; the Soviet clients are ministries and institutes, which only changes
 can fly · Applied: Transatlantic relay", or "Active: Transatlantic relay · launch by Autumn 1963". The
 breadcrumb is "Space Complex › Headquarters › Contracts". Headquarters' hub marker gets the gold
 dot (as component 26's) when a listing the agency qualifies for is new this turn and it hasn't
-applied anywhere, hover "New contracts on offer". A help topic "Contracts" (component 23).
+applied anywhere, hover "New contracts on offer". The same dot stays on while an awarded contract has no
+mission launched for it, hover "Contract to launch: <title> · 2 seasons left" (the user's idea, 2026-10-31); a
+mission called off before it flies brings it back. A help topic "Contracts" (component 23).
 
 **Layout, top to bottom:**
 - **Your contract** card. With an active contract: client and line, the tier won ("Tier 1 of 3"),
@@ -3471,7 +3566,11 @@ race box. *Unconfirmed.* The masthead is art, so it needs no font.
 
 **Component art** (`assets/ui/frontpage/`, from `assets-raw/frontpage/`, CLAUDE.md "Tools outside the
 repo"): `paper.jpg` (1440 x 900), `masthead.png` (ink on transparent, 1269 x 180, drawn at 60 %), one
-press photo per First (1024 x 704, printed in ink on the paper's colour, drawn at 640 x 440). All
+press photo per First (1024 x 704, printed in ink on the paper's colour, drawn at 640 x 440). The first human in
+orbit's is the one with a face, so it comes in 12 versions (the user's idea and picks, 2026-10-31,
+`ui/frontpage/human-in-orbit-<sex>-<look>.jpg`), chosen by the commander's portrait (`PilotPhoto`, kept on the page as
+`Achiever.commanderPortraitId`): six broad looks, since 31 ethnicities can't be told apart on newsprint. A tie shows
+the first agency's pilot, and a page without a portrait the plain photo. All
 generated with Qwen Image (ComfyUI), fixed seeds; the picks are in `picks.json`.
 
 **States:** one page; several ("1 of 3"); a tie; a solo game (no rival paragraph, no rivals in the race
@@ -3599,6 +3698,11 @@ Flavour only: nothing in the rules reads them.
   player reached that turn ("A NEW THEORY · <season>", the question with its history note, "What would settle
   it: ...", or "Settled already, by <agency> in <season>. <answer>" when a flight in the game settled it
   before). Derived on the client from the player's goal turns and the printed pages; nothing saved.
+  *(User, 2026-10-27:)* a theory can also be raised by the player's first opening of a program in one of its
+  `raisedByCategories`: the radiation belts by the first satellite program (`earth-orbit-satellites`), since
+  their goal, the first satellite, raised and settled them in the same report. The goal still raises them in
+  games whose openings have no recorded season. `PlayerSnapshot.programOpenedSeasons` keeps the agency's season
+  of each program's first opening (`ProgramOpening`), and `FrontPageView.raiseTurns` turns it into game turns.
 - **Settled** (shared): the server prints a page of kind `SCIENCE` (`rules.SciencePrinter`, in
   `printFrontPages`, after the Firsts) the first time anyone reaches one of a theory's `answeredBy` goals; once
   per theory; agencies settling it in the same turn share it. A public one shows like any unseen page, in the
@@ -3831,7 +3935,7 @@ existing screens, made of existing components; every look is unconfirmed.
 - **Help:** a "Findings" topic (Rivals), on the mission plan, the turn report and the Museum.
   `ScreenSnapshot -Dshots=findings` renders the report, the dialog, the tab, a page, the help and the plan.
 
-### 4.21 Roads to the Moon *(the user's idea, 2026-10-26; specified and mocked up 2026-10-26 on the canvas `Launch Window — Roads to the Moon`)*
+### 4.21 Roads to the Moon *(the user's idea, 2026-10-26; specified, mocked up on the canvas `Launch Window — Roads to the Moon` and built the same day)*
 **Purpose:** help the player choose how to land on the Moon. NASA has three roads that land (Apollo, Gemini EOR,
 Gemini direct ascent) and the Soviets two (Soyuz 7K-L3, LK-700); each is a Moon program plus the Earth-orbit tests
 that make its Moon flights free to open (`design.md` §2.3(d)). The screen sets the roads side by side with what each
@@ -3860,15 +3964,16 @@ facts and the trade-off lines carry the choice.
     marked **Your road** (navy badge), never highlighted otherwise.
   - **How it works:** one sentence (from `moon-roads.json`, below).
   - **To start now:** the opening price for this player, after discounts, split in two lines: "Earth-orbit tests
-    22,012" and "Moon flights: free once the tests are open"; then "Parts to build: 24,975" (the creation cost of the
-    components not yet owned) and **Total 46,987**. Discounts show where they apply ("Free: you run Gemini", in
-    green). Then "Upkeep 7,201 a season" (both programs and their components). Red when the funds can't cover it now.
+    22,012" and "Moon flights: free once the tests are open"; then "Parts to build: 23,400" (the creation cost of the
+    components not yet owned) and **Total 45,412**. Discounts show where they apply ("Free: you run Gemini", in
+    green). Then "Upkeep 7,043 a season" (both programs and their components). Red when the funds can't cover it now.
   - **Hardware to develop:** each component as a chip with its icon and name; an owned one shows its reliability
     and a green tick ("Gemini capsule · 64 % · yours"). The count in the row's label ("3 to develop").
   - **The rocket it needs:** the smallest rocket that lifts its landing (name, class), "Two launches per flight" for
     Gemini EOR, and its state: "Open · 48 %", "Not open: 12,500 to open", or in red "Needs VAB level 3" (heavy rockets).
+    Its picture is whole, 81 × 52 (2026-10-31, user; a narrow crop cut the Saturn V off).
   - **Crew per flight:** "3 astronauts" / "2 astronauts".
-  - **Flights on the way:** how many configurations its two programs offer before the landing ("22 flights before
+  - **Flights on the way:** how many configurations its two programs offer before the landing ("21 flights before
     the landing" for Apollo, 5 for Gemini EOR, 6 for Gemini direct ascent, 17 for the 7K-L3, 15 for the LK-700),
     and the Firsts on the way as small goal chips (crewed flyby, lunar orbit, docking, spacewalk), each reached one
     greyed with a tick.
@@ -3902,8 +4007,9 @@ Earth-orbit program and the mode; a `MoonRoadsTest` holds every lunar-expedition
 | LK-700 | One ship flies to the Moon, lands whole and comes back. | One craft to develop; the fewest flights. | The UR-700, the largest rocket of all, from the very first test flight. |
 
 **States for the mockup:**
-1. NASA, a person in space, nothing of the three opened, Mercury open (the numbers above: Apollo total 46,987,
-   upkeep 7,201; Gemini direct ascent 29,256 / 5,089; Gemini EOR 32,543 / 3,255; Saturn V and Nova not open, VAB
+1. NASA, a person in space, nothing of the three opened, Mercury open (the numbers above: Apollo total 45,412,
+   upkeep 7,043; Gemini direct ascent 29,256 / 5,089; Gemini EOR 32,543 / 3,255, 22,483 since its Moon discount was
+   fixed on 2026-10-26; Saturn V and Nova not open, VAB
    level 2).
 2. NASA with Gemini open: both Gemini roads show "Free: you run Gemini" and the capsule as yours.
 3. NASA with Apollo chosen: its column marked **Your road**, components with reliabilities, Firsts partly ticked.
@@ -3915,41 +4021,39 @@ Earth-orbit program and the mode; a `MoonRoadsTest` holds every lunar-expedition
 **New for `Theme.java` and the UI Asset Sheet:** the three mode glyphs; the For/Against bullets; the "Your road" and
 "The historical choice" badges if the existing badge kinds don't fit. Flag any new token.
 
-**Mocked up (2026-10-26)** on the canvas `Launch Window — Roads to the Moon`: the six states above and a board
-of the new pieces. Choices, all **unconfirmed**:
-- **The grid:** a 112 px label column on the page and one card per road, the same ten rows across. Hairlines
-  (navy at 12 %) separate the rows; 16 px separate the columns.
-- **Head:** the program art at 92 × 59, the name (Archivo 700 17), the mode badge (navy outline, the glyph and
-  the mode in capitals), the quiet "The historical choice" tag (navy-border outline, muted italic), and "✓ Your
-  road" as a solid navy badge (a new `BadgeKind`; gold would read as "in progress"). Nothing else marks the
-  player's road.
-- **To start now:** always three lines (Earth-orbit tests, Moon flights, parts to build), then the total in Archivo
-  700 15 and the upkeep in caption. A free line ("Free: you run Gemini") is success green; a conditional line ("free
-  once the tests are open") is muted; only the total turns red when the funds can't cover it. Locked: a white veil
-  at 72 % over the cell with a framed "Opens when a person has flown in space" and the lock icon; the strip's cards
-  say the same instead of their price.
-- **Hardware:** the count leads each cell ("5 to develop", "All built"), since it differs per road; the row's label
-  stays "Hardware to develop". Owned parts are chips with a green line, "· 64 % · yours" and a check.
-- **The rocket:** a 26 × 52 crop of its art (Nova: a hatched placeholder), name and class, "Lifts the landing in one
-  launch" or a bold "Two launches per flight" / "From the first test flight", then its state in red ("Needs VAB
-  level 3") or ink ("Not open: 9,375 to open").
-- **Firsts on the way:** goal chips with the trophy icon (navy outline); reached ones grey with a check.
-- **The landing:** steps, launches (bold) and "5,000 prestige the first time" (muted), one line.
-- **Trade-offs:** For and Against side by side, 7 px round bullets in success green and gold.
-- **Foot:** the design system's `HistoryNote` (its card opens upward, 360 px) and "View the Earth-orbit tests" or
-  "View the program". The strip's cards turn navy-lined on hover, the whole card a link.
-- **Mode glyphs** (new icons for the UI Asset Sheet: `mode_direct`, `mode_eor`, `mode_lor`): Earth lower left, the
-  Moon upper right, one curved path; a ring round the Earth (Earth-orbit rendezvous) or the Moon (lunar-orbit
-  rendezvous) marks where the craft meet. 16 × 16, stroke 1.4.
-- **No new colour tokens.**
-- **For the pack (a question):** Gemini EOR's Moon flights are discounted by Apollo's Earth-orbit tests
-  (`gemini-eor`'s `openingCostDiscounts` names `apollo-earth-orbit`), unlike every other road's, which its own
-  tests free. So the screen shows them at 10,060 until Apollo's tests open. If unintended, the discount should name
-  `gemini-eor-earth-orbit` (state 1's EOR total would be 22,483).
-- **The draft words:** Gemini direct ascent's "One craft and the fewest flights" became "One craft, and few flights
-  on the way": Gemini EOR has fewer flights before its landing (5 against 6). The history notes on the canvas
-  (Houbolt and the 1962 choice; the Gemini Moon studies; Nova; the N1's four failures and the LK's three test
-  flights; Chelomei's LK-700) are to be checked into `design.md` §1.1 with the words file.
+**As built (2026-10-26)** from the canvas (7 artboards; its notes list every choice): `client.screen.RoadsToMoonScreen`,
+the figures in `client.view.RoadsToMoon`, the words in `assets/content/moon-roads.json` read by `client.view.MoonRoads`
+(`RoadsToMoonTest` checks the mockup's figures against the rules and that every lunar-expedition program of both packs has
+an entry). Shots `roads-*.png` (`-Dshots=roads`). Choices and departures:
+- **New in `Theme.java`:** `BadgeKind.NAVY` ("Your road": gold would read as in progress). The mode badge (an outlined
+  tag with its glyph), the quiet "The historical choice" tag (`CAPTION_ITALIC`, `NAVY_BORDER` outline), the part chip
+  (skill icon; owned: a `SUCCESS` outline, "· 64 % · yours" and a check), the goal chip (trophy; reached: a 5 % navy fill,
+  `INK_MUTED`, a check), the 7 px For/Against dots and the locked veil (white at 72 %, a framed line with the lock icon) are
+  built in the screen from existing tokens. No new colour tokens.
+- **New icons:** `mode_direct`, `mode_eor`, `mode_lor` (`assets-raw/svg/ui/make_ui_icons.py`), from the canvas's Pieces
+  artboard: the Earth, the Moon, one path; a ring round the Earth or the Moon where the craft meet.
+- **The row labels** and the "Hardware to develop" count leading its cell ("5 to develop", "All built") are the
+  canvas's. Money in the game's own format (`$ 22,012.0`), not the canvas's bare figures.
+- **The rocket's second line:** "Two launches per flight" (Gemini EOR), "A heavy rocket from the first test flight" when
+  the road's first Earth-orbit test already needs a rocket of the landing's class (the LK-700's needs the N1, Gemini
+  direct ascent's the Saturn V; the canvas had "From the first test flight" under the UR-700, which the first test
+  doesn't need), else "Lifts the landing in one launch". The LK-700's Against line says the same.
+- **The landing line counts the steps with the crew at risk:** Gemini EOR's landing has 30 of 36 (the canvas said every
+  one).
+- **Firsts on the way** are the goals of `moon-roads.json`'s `firsts` (rendezvous, docking, crew transfer, crewed flyby,
+  crewed lunar orbit) that the road's flights before the landing earn, the cascade included.
+- **The locked veil** names the Earth-orbit tests' missing goals: "Opens when you reach Human in space".
+- **"Free: ..."** names the open program whose discount covers a line ("Free: you run Gemini"); the road's own tests
+  read "Free: ready to open".
+- **Where:** a page button "Compare the roads to the Moon" in the header of a body's category that holds a road
+  (Lunar expeditions), a secondary button on every road program's and its tests' details page, and the advisor's
+  "Choose your road to the Moon" (Go link "Compare the roads"). Help context `ROADS_TO_THE_MOON` and topic
+  "Roads to the Moon".
+- **The strip** under NASA's three columns needs a short scroll at 1080 (the page scrolls); the Soviet page fits.
+- **History notes** (all five checked into `design.md` §1.1): Apollo (Houbolt, July 1962), Gemini EOR (Chamberlin's 1961
+  Lunar Gemini and the Langley light lander; no source confirms an Earth-orbit-rendezvous variant, so the note
+  doesn't claim one), Gemini direct ascent (Nova), the 7K-L3 (the LK's three uncrewed tests, the N1's four failures),
+  the LK-700 (Chelomei's UR-700, never built).
 
 ## 5. Refusal reasons (for toasts and inline messages)
 
@@ -4262,6 +4366,10 @@ current state alone. Each is an M5 task.
    mission (§4.6.5 to §4.6.8), Mission Control (§4.7), the turn report (§4.4).
 4. **The rest:** Astronaut Complex (§4.9), Public Affairs Office (§4.10), Museum
    (§4.11), settings (§4.12), game result (§4.13).
+
+**Mocked up and built (2026-10-26, canvas `Launch Window — Roads to the Moon`):** Roads to the Moon (§4.21): 7 artboards (NASA,
+Gemini open, Apollo chosen, Soviet, locked, a pinned note, the new pieces), choices in the canvas's notes. New for
+`Theme.java`: `BadgeKind.NAVY`; three mode glyphs for the UI Asset Sheet. No new colour tokens.
 
 **Mocked up (2026-10-11, canvas `Launch Window — Contracts`):** Contracts (§4.17) and the contract
 marker (component 27): 12 artboards, choices listed under each. New for `Theme.java`: the contract

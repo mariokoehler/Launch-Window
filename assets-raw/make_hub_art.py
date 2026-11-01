@@ -3,6 +3,7 @@ assets: 2 agencies x 4 seasons x 4 times of day, plus each agency's hotspot poly
 
     assets/ui/hub/<AGENCY>_<season>_<time>.jpg   1920 x 1080
     assets/ui/hub/<AGENCY>.hotspots.json         scaled to 1920 x 1080
+    assets/ui/archetype_<agency>.jpg             872 x 490, the Join screen's card (summer noon)
 
 The raw images can be any size a little taller than 16:9 (since 2026-10-10 they are 2720 x 1536;
 the first set was 1920 x 1088). The bottom rows past 16:9 are cropped (design.md 3.13), then the
@@ -24,6 +25,8 @@ AGENCIES = ("NASA", "SOVIET")
 SEASONS = ("winter", "spring", "summer", "fall")
 TIMES = ("dawn", "noon", "dusk", "night")
 WIDTH, HEIGHT = 1920, 1080
+CARD = (872, 490)
+CARD_VIEW = ("summer", "noon")
 
 
 def main():
@@ -43,6 +46,9 @@ def main():
                 if image.size != (WIDTH, HEIGHT):
                     image = image.resize((WIDTH, HEIGHT), Image.LANCZOS)
                 image.save(os.path.join(OUT, f"{agency}_{season}_{time}.jpg"), quality=80, optimize=True)
+                if (season, time) == CARD_VIEW:
+                    image.resize(CARD, Image.LANCZOS).save(
+                        os.path.join(REPO, "assets", "ui", f"archetype_{agency.lower()}.jpg"), quality=85, optimize=True)
         with open(os.path.join(RAW, f"LW_main_menu_{agency}.hotspots.json"), encoding="utf-8") as f:
             hotspots = json.load(f)
         if hotspots["imageWidth"] / WIDTH != scale:

@@ -287,6 +287,7 @@ public final class MissionProgress {
             // contract flight never counts, so it never lowers a later flight's prestige (§2.11).
             if (mission.isContract()) {
                 Contracts.flightEnded(snapshot, mission, true, false, events);
+                snapshot.getCommercialFlightCounts().merge(configuration.id(), 1, Integer::sum);
             } else {
                 java.util.Set<String> unlockedBefore = Contracts.unlockedPrograms(snapshot, catalog);
                 snapshot.getSuccessfulFlightCounts().merge(configuration.id(), 1, Integer::sum);

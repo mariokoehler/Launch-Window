@@ -152,15 +152,17 @@ final class DecisionBanner {
                 () -> confirm(pending, decision, option, null))).row();
         }
         banner.add(options).row();
-        if (!decision.explainers().isEmpty()) {
+        List<Concepts.Concept> concepts = new ArrayList<>();
+        for (String id : decision.explainers()) {
+            // A locked explainer would answer a theory of the day early: no chip.
+            Explainers.standard().byId(id).filter(explainer -> !host.game.explainerLocked(explainer))
+                .ifPresent(explainer -> concepts.add(new Concepts.Concept(id, explainer.title(), id, 1, null, null,
+                    null, null, null)));
+        }
+        if (!concepts.isEmpty()) {
             Table chips = new Table();
             chips.left();
             chips.add(ui.label("How it works:", Theme.TextStyle.CAPTION, Theme.INK_MUTED)).padRight(Theme.SPACE_2);
-            List<Concepts.Concept> concepts = new ArrayList<>();
-            for (String id : decision.explainers()) {
-                Explainers.standard().byId(id).ifPresent(explainer -> concepts.add(new Concepts.Concept(id,
-                    explainer.title(), id, 1, null, null, null, null, null)));
-            }
             chips.add(host.conceptChips(concepts, () -> host)).left();
             banner.add(chips).padTop(4f).row();
         }

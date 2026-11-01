@@ -7,6 +7,7 @@ import de.mkoehler.launchwindow.content.Goal;
 import de.mkoehler.launchwindow.content.Theories;
 import de.mkoehler.launchwindow.model.FrontPage;
 import de.mkoehler.launchwindow.model.GameDate;
+import de.mkoehler.launchwindow.model.PlayerSnapshot;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -97,7 +98,7 @@ public final class FrontPageView {
         return Optional.of(new Page(headline.toUpperCase(Locale.ROOT), shortHeadline.toUpperCase(Locale.ROOT),
             found.map(s -> fill(s.deck(), tokens)).orElse(""), fill(first.get().caption(), tokens), first.get().brief(),
             paragraphs, droppable, folio, date.label().toUpperCase(Locale.ROOT), page.weather(),
-            race(page, all, words, inPack, names), "frontpage/" + page.goalId() + ".jpg"));
+            race(page, all, words, inPack, names), PilotPhoto.of(page)));
     }
 
     /**
@@ -138,7 +139,7 @@ public final class FrontPageView {
         return Optional.of(new Page(headline.toUpperCase(Locale.ROOT), shortHeadline.toUpperCase(Locale.ROOT), deck,
             fill(first.get().caption(), tokens), List.of(), paragraphs, text.get().close().size(), folio,
             date.label().toUpperCase(Locale.ROOT), page.weather(), race(page, all, words, inPack, names),
-            "frontpage/" + page.goalId() + ".jpg"));
+            PilotPhoto.of(page)));
     }
 
     /**
@@ -188,6 +189,23 @@ public final class FrontPageView {
                                                java.util.function.Predicate<String> inPack) {
         return theories.theories().stream().filter(t -> t.playable(inPack))
             .filter(t -> t.raisedOn(goalTurns).map(turn -> turn == gameTurn).orElse(false)).toList();
+    }
+
+    /**
+     * Returns the turns that raise theories for a player ({@link Theories.Theory#raisedOn}): each goal and the turn
+     * it was reached, and for each program category the game turn its first program was opened in (2026-10-27).
+     *
+     * @param state      the player's state
+     * @param catalog    the game's content
+     * @param joinedTurn the game turn the player's agency joined in, its season 1
+     * @return the turns, keyed by goal id and by {@link Theories#CATEGORY} plus category id
+     */
+    public static Map<String, Integer> raiseTurns(PlayerSnapshot state, ContentCatalog catalog, long joinedTurn) {
+        Map<String, Integer> turns = new HashMap<>(state.getAchievedGoals());
+        state.getProgramOpenedSeasons().forEach((programId, season) -> catalog.program(programId).ifPresent(program ->
+            turns.merge(Theories.CATEGORY + program.categoryId(), Math.toIntExact(joinedTurn + season - 1),
+                Math::min)));
+        return turns;
     }
 
     /**

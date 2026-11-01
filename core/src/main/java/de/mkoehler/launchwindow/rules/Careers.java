@@ -807,8 +807,9 @@ public final class Careers {
                 && configuration.launches().size() >= 2);
             case BE_FIRST, CONSOLES_FIRST, FIRST_HARDWARE -> open.stream().anyMatch(configuration ->
                 unreachedGoal(snapshot, tally, configuration));
+            // One Expert skill a person: someone who has theirs can't earn this any more.
             case BECOME_EXPERT -> person instanceof MissionControlOfficer controller
-                && !controller.getExpertSkills().contains(bestSkill(controller));
+                && controller.getExpertSkills().isEmpty();
             case COMPONENT_CAP -> !ref.isEmpty() && belowCap(snapshot, catalog, ref);
             case TOP_ENGINEER -> person instanceof SetSpecialist engineer && snapshot.getSetSpecialists().size() >= 3
                 && !top(snapshot, engineer);

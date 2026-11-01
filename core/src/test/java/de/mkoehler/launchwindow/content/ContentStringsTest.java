@@ -94,6 +94,32 @@ class ContentStringsTest {
     }
 
     /**
+     * Every program and every component a program grants has a long description for Program
+     * details ({@code ui-spec.md} &sect;4.6.4): a paragraph, not a line, and written without dashes as
+     * the rest of the text is.
+     */
+    @ParameterizedTest
+    @ValueSource(strings = {"early-era", "standard"})
+    void programsAndTheirComponentsHaveLongDescriptions(String packName) {
+        ContentCatalog pack = catalog(packName);
+        ContentStrings strings = text(packName);
+        for (Program program : pack.programs()) {
+            assertParagraph(strings.programs().get(program.id()), "program " + program.id());
+            for (String componentId : program.requiredMissionComponentIds()) {
+                assertParagraph(strings.components().get(componentId), "component " + componentId);
+            }
+        }
+    }
+
+    private static void assertParagraph(ContentStrings.Text text, String what) {
+        assertNotNull(text, what);
+        String paragraph = text.longDescription();
+        assertTrue(paragraph != null && paragraph.length() >= 250 && paragraph.length() <= 800,
+            what + "'s long description should be 250 to 800 characters");
+        assertFalse(paragraph.contains("—") || paragraph.contains("–"), what + " uses a dash");
+    }
+
+    /**
      * Every entry in the text belongs to something in the pack, so a mistyped key can't hide.
      */
     @ParameterizedTest

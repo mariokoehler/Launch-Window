@@ -59,6 +59,9 @@ class TheoriesTest {
             for (String goal : goals) {
                 assertTrue(catalog.goal(goal).isPresent(), theory.id() + ": " + goal);
             }
+            for (String category : theory.raisedByCategories()) {
+                assertTrue(catalog.category(category).isPresent(), theory.id() + ": " + category);
+            }
             assertTrue(theory.playable(g -> catalog.goal(g).isPresent()), theory.id());
         }
     }
@@ -148,5 +151,19 @@ class TheoriesTest {
         assertEquals(java.util.Optional.of(14), dust.raisedOn(Map.of("lunar-probe", 14, "earth-orbit-satellite", 3)));
         assertTrue(dust.raisedOn(Map.of("earth-orbit-satellite", 3)).isEmpty());
         assertFalse(dust.playable(g -> g.equals("lunar-probe")));
+    }
+
+    /**
+     * The radiation belts are raised when the first satellite program opens (2026-10-27), since the first satellite's
+     * goal would raise and settle them in the same turn; the goal still raises them where no opening is known.
+     */
+    @Test
+    void theRadiationBeltsAreRaisedByOpeningASatelliteProgram() {
+        Theories.Theory belts = THEORIES.theory("radiation-belts").orElseThrow();
+        assertEquals(List.of("earth-orbit-satellites"), belts.raisedByCategories());
+        assertEquals(java.util.Optional.of(2), belts.raisedOn(Map.of(Theories.CATEGORY + "earth-orbit-satellites", 2,
+            "earth-orbit-satellite", 9)));
+        assertEquals(java.util.Optional.of(9), belts.raisedOn(Map.of("earth-orbit-satellite", 9)));
+        assertTrue(belts.raisedOn(Map.of(Theories.CATEGORY + "lunar-probes", 2)).isEmpty());
     }
 }

@@ -27,6 +27,7 @@ import de.mkoehler.launchwindow.client.view.DecisionView;
 import de.mkoehler.launchwindow.client.view.Advisor;
 import de.mkoehler.launchwindow.client.view.Help;
 import de.mkoehler.launchwindow.client.view.Hub;
+import de.mkoehler.launchwindow.client.view.PayloadRnd;
 import de.mkoehler.launchwindow.client.view.Tips;
 import de.mkoehler.launchwindow.model.Building;
 import de.mkoehler.launchwindow.model.FrontPage;
@@ -138,23 +139,43 @@ public final class SpaceComplexScreen extends SessionScreen {
         stack.add(advisorCorner);
         root.add(stack).grow();
         rebuild();
-        if (unreadReport && !pagesShown && game.reportUnread()
-            && game.replaysFirst() != LaunchWindowGame.ReplaysFirst.NEVER) {
-            // Missions flown? Offer to watch them first, before the pages and the report give the
-            // endings away (ui-spec.md 4.4).
-            fetchLatestReport(report -> {
-                if (report.missions().isEmpty()) {
-                    pagesThenReport();
-                } else if (game.replaysFirst() == LaunchWindowGame.ReplaysFirst.ALWAYS) {
-                    watchReplays(report);
-                } else {
-                    offerReplays(report);
-                }
-            }, this::pagesThenReport);
-        } else if (unreadReport && !pagesShown) {
-            pagesThenReport();
+        if (unreadReport && !pagesShown) {
+            newTurn();
         } else {
             afterPages(unreadReport);
+        }
+    }
+
+    /**
+     * Brings in an unread turn the spoiler-free way, wherever it arrives from: entering the game, the
+     * report chip or the dev button (2026-10-27). Missions flown? Their replays come first, or the offer
+     * of them, before the pages and the report give the endings away ({@code ui-spec.md} &sect;4.4).
+     */
+    private void newTurn() {
+        if (!game.reportUnread() || game.replaysFirst() == LaunchWindowGame.ReplaysFirst.NEVER) {
+            pagesThenReport();
+            return;
+        }
+        fetchLatestReport(report -> {
+            if (report.missions().isEmpty()) {
+                pagesThenReport();
+            } else if (game.replaysFirst() == LaunchWindowGame.ReplaysFirst.ALWAYS) {
+                watchReplays(report);
+            } else {
+                offerReplays(report);
+            }
+        }, this::pagesThenReport);
+    }
+
+    /**
+     * Opens the latest report from the hub: an unread one the spoiler-free way ({@link #newTurn}), a
+     * read one at once.
+     */
+    private void openReportFromHub() {
+        if (game.reportUnread()) {
+            newTurn();
+        } else {
+            openLatestReport(null);
         }
     }
 
@@ -262,7 +283,8 @@ public final class SpaceComplexScreen extends SessionScreen {
     }
 
     /**
-     * Asks the dev-mode server to resolve the open turn now, then opens its report.
+     * Asks the dev-mode server to resolve the open turn now, then brings the turn in as a new one does:
+     * replays first, the pages, the report.
      */
     private void resolveTurnNow() {
         if (resolving) {
@@ -285,7 +307,7 @@ public final class SpaceComplexScreen extends SessionScreen {
                 session.update(result);
             }
             stateChanged();
-            withFrontPages(() -> openLatestReport(null));
+            newTurn();
         });
     }
 
@@ -516,7 +538,8 @@ public final class SpaceComplexScreen extends SessionScreen {
             case ROCKET_RND -> game.setScreen(new RndBoardScreen(game, RndBoardScreen.Board.ROCKET));
             case MISSION_CONTROL -> goMissionControl();
             case ASTRONAUT_COMPLEX -> goAstronautComplex();
-            case TURN_REPORT -> openLatestReport(null);
+            case TURN_REPORT -> openReportFromHub();
+            case ROADS_TO_THE_MOON -> game.setScreen(new RoadsToMoonScreen(game));
         }
     }
 
@@ -565,7 +588,7 @@ public final class SpaceComplexScreen extends SessionScreen {
             report.add(new Image(ui.unreadDot())).size(10f).padLeft(6f);
         }
         report.setTouchable(Touchable.enabled);
-        report.addListener(clicked(() -> openLatestReport(null)));
+        report.addListener(clicked(this::openReportFromHub));
         chips.add(report).height(CHIP_HEIGHT).padRight(gap);
         chips.add(chip(ui.solid(Theme.SURFACE_CARD), "funds", Theme.NAVY,
             ui.label(money(state.getFunds()), Theme.TextStyle.LABEL, Theme.NAVY))).height(CHIP_HEIGHT).padRight(gap);
@@ -782,11 +805,13 @@ public final class SpaceComplexScreen extends SessionScreen {
                 shapes.circle(dotX, dotY, IDLE_DOT_RADIUS, 24);
             }
             // A decision waiting (ui-spec.md component 26): the same dot in gold, upper left. Headquarters
-            // gets it for new contracts on offer (ui-spec.md section 4.17).
+            // gets it for new contracts on offer and for a contract still to launch (ui-spec.md section 4.17);
+            // the VAB and the SET Centre for a component below its cap with nobody on it.
             Hub.Place deciding = decisionPlace();
-            boolean offers = newContracts();
+            boolean offers = newContracts() || contractToLaunch() != null;
             for (Hub.Hotspot spot : hotspots) {
-                if (spot.place() != deciding && !(offers && spot.place() == Hub.Place.HEADQUARTERS)) {
+                if (spot.place() != deciding && !(offers && spot.place() == Hub.Place.HEADQUARTERS)
+                    && unstaffedLine(spot.place()) == null) {
                     continue;
                 }
                 float radius = isUpgrading(spot.place()) ? MARKER_RADIUS : IDLE_MARKER_RADIUS;
@@ -838,8 +863,17 @@ public final class SpaceComplexScreen extends SessionScreen {
                     drawCentered(batch, idleName, waiting, hover.labelX() * scaleX, below, parentAlpha);
                     below -= idleName.getHeight() + 2f;
                 }
-                if (hover.place() == Hub.Place.HEADQUARTERS && newContracts()) {
-                    String offered = "New contracts on offer";
+                String unstaffed = unstaffedLine(hover.place());
+                if (unstaffed != null) {
+                    drawCentered(batch, idleShadow, unstaffed, hover.labelX() * scaleX + 1.5f, below - 1.5f,
+                        parentAlpha);
+                    drawCentered(batch, idleName, unstaffed, hover.labelX() * scaleX, below, parentAlpha);
+                    below -= idleName.getHeight() + 2f;
+                }
+                String contracts = hover.place() != Hub.Place.HEADQUARTERS ? null
+                    : newContracts() ? "New contracts on offer" : contractToLaunch();
+                if (contracts != null) {
+                    String offered = contracts;
                     drawCentered(batch, idleShadow, offered, hover.labelX() * scaleX + 1.5f, below - 1.5f,
                         parentAlpha);
                     drawCentered(batch, idleName, offered, hover.labelX() * scaleX, below, parentAlpha);
@@ -858,6 +892,17 @@ public final class SpaceComplexScreen extends SessionScreen {
         /** Whether a contract the agency can apply for is new this turn, and it hasn't applied anywhere. */
         private boolean newContracts() {
             return ContractsView.newOffers(session.state(), session.catalog(), session.openTurn());
+        }
+
+        /** The reminder of an awarded contract with no mission launched for it, or {@code null}. */
+        private String contractToLaunch() {
+            return ContractsView.launchReminder(session.state(), session.openTurn());
+        }
+
+        /** What a building's R&D board has below its cap with nobody on it, or {@code null}. */
+        private String unstaffedLine(Hub.Place place) {
+            return place == Hub.Place.VAB || place == Hub.Place.SET_CENTRE
+                ? PayloadRnd.unstaffedLine(session.state(), session.catalog(), place == Hub.Place.VAB) : null;
         }
 
         /** The building whose board holds a waiting decision: the VAB for a rocket, else the SET Centre. */

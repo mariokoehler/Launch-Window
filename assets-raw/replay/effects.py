@@ -16,7 +16,8 @@ with a changed timeline:
 - helicopter: from just before the helicopter flies in to the clip's end
 - decoupler (the user's own, Stable Audio 3, as the three below): springs, bolts, straps and latches firing
   (SEPARATIONS' flashes; latches only where they let go), a spent stage falling away, the ascent stage leaving
-  the descent stage, the X-15's ventral fin dropped
+  the descent stage, the X-15's ventral fin dropped (where its turn parts from the plane's, with its chute opening
+  after: the layer moves with the plane all along, and a fin torn off at speed has no chute)
 - explosion-debris: a `burst` near the ground (GROUND_BLASTS: the pad, a launch falling back, the Luna landers)
 - servo: an arm, a dish or a panel moving, a boom drawn in, a lid shut, PrOP-M's first step (SERVOS)
 - deploy: booms, whips, wings and masts swinging out, ramps down, a lid or petals opening, panels opening,
@@ -64,7 +65,7 @@ PETALS = {"mars-2-mars-landing": 2.667}
 BORROW = (re.compile(r"(^|-)ascent$"), "decoupler")  # Mars 2's petals open after touchdown (the legs' turn runs on from the fall)
 WANTED = PUFFS | GLOWS | HATCHES | WISPS | LEVELS | SEPARATIONS | UNFOLDS | {
     MAP_PUFF, "burst", "r-cable", "r-jet-stuck", "e-vent", "r-splash", "y-heli", "flame-ignite", "o-orbit", "o-streak",
-    "k-latch", "debris-3", "n-ascent", "x15-ventral", "pr-rover"} | {n for n, _, _ in SERVOS + DEPLOYS}
+    "k-latch", "debris-3", "n-ascent", "x15-ventral", "w-plane", "r-main", "pr-rover"} | {n for n, _, _ in SERVOS + DEPLOYS}
 
 
 def props(o, out):
@@ -121,7 +122,8 @@ def read(name):
         layers[layer["name"]] = {"shown": shown(keyed["opacity"], dur) if "opacity" in keyed else None,
                                  "moves": {m: moving(k) for m, k in keyed.items() if m != "opacity"},
                                  "first": {m: k[0][1] for m, k in keyed.items()},
-                                 "path": keyed.get("position") if layer["name"] == "y-heli" else None}
+                                 "path": keyed.get("position") if layer["name"] == "y-heli" else None,
+                                 "turn": keyed.get("rotation") if layer["name"] in ("x15-ventral", "w-plane") else None}
     return name, {"name": name.rsplit("-", 1)[0], "dur": dur, "layers": layers}
 
 
@@ -168,7 +170,9 @@ def effects(clip):
         parts += starts("k-latch")
     parts += [a for a, b, v0, v1 in moves("debris-3", "position")[:1] if not any(abs(a - t) < 0.5 for t in bursts)]
     parts += [a for a, b, v0, v1 in moves("n-ascent", "position")[:1]]
-    parts += [a for a, b, v0, v1 in moves("x15-ventral", "position")[:1]]
+    fin, plane = L.get("x15-ventral", {}).get("turn"), L.get("w-plane", {}).get("turn")
+    if fin and plane and L.get("r-main", {}).get("shown"):
+        parts += [t for (t, a), (_, b) in zip(fin, plane) if abs(a - b) > 0.5][:1]
     for t in onsets(parts, 0.3):
         cues.append(cue(t, "decoupler"))
 

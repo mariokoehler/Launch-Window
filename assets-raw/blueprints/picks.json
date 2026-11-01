@@ -83,5 +83,6 @@
   "saturn-1": "variants/saturn-1_soft_1.png",
   "saturn-1b": "variants/saturn-1b_soft_2.png",
   "saturn-c3b": "variants/saturn-c3b_soft_2.png",
-  "saturn-v": "variants/saturn-v_soft_2.png"
+  "saturn-v": "variants/saturn-v_soft_2.png",
+  "nova": "variants/nova_soft_3.png"
 }

@@ -1102,3 +1102,24 @@ the pages say less; these rest on one weaker source, or on none fetched, and are
 - Image ARC-1977-AC77-0376-8: 'Charlie Hall inspects the Pioneer Venus multiprobe at Hughes Aircraft Co. in Dec. 1976': https://images.nasa.gov/details/ARC-1977-AC77-0376-8; Hall as Pioneer project manager: NSSDC 1978-078A; Beyond Earth p. 148
 - Image ARC-1978-AC78-9245: 'Art by Paul Hudson Pioneer Venus: Multiprobe Artwork': https://images.nasa.gov/details/ARC-1978-AC78-9245; NASA History 40 Years Ago: 'Illustration by Paul Hudson of Pioneer Venus Multiprobe releasing its probes as it approaches Venus'
 - Not used: masses (NSSDC gives 315 and 300 kg for the large probe, 90 and 75 kg for the small; Siddiqi 316.5 kg and 904 kg in all, NSSDC 875 kg); small-probe diameter (0.8 m NSSDC, 76 cm Siddiqi); the bus's burn-up height (110 km NSSDC, 120 km Siddiqi and NASA Science, 75 miles NASA History); the Night Probe's 2 seconds on the surface; the Vega balloons' 54 km float height (Wikipedia only); any claim that Pioneer Venus data were used to design the Vega balloons or later landers (no source found)
+
+## Ranger: reading the ground from pictures (`ranger-surface`)
+
+- Source: TR 32-700 = JPL Technical Report 32-700, Ranger VII Part II, 10 February 1965: https://ntrs.nasa.gov/citations/19650012561
+- Source: TR 32-800 = JPL Technical Report 32-800, Ranger VIII and IX Part II, 15 March 1966: https://ntrs.nasa.gov/citations/19660015757
+- Source: Wilhelms, To a Rocky Moon, chapter 5: https://www.lpi.usra.edu/publications/books/rockyMoon/06Chapter5.pdf
+- Rangers 3 to 5: radar altimeter, seismometer in a rough-landing capsule; Ranger 3 missed by about 36,800 km: https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=1962-001A
+- A picture gives only topography and photometry, the rest is inference: TR 32-700, Shoemaker, opening of "Major Facts Established by Ranger VII Photographs" (PDF page 77)
+- Grains considerably under 1 mm, low thermal inertia of the top few millimeters: TR 32-700, PDF page 10
+- About 10 % of the volume filled; eclipse measurements at 10 microns; radar at 68 cm, 0.4 to 0.5 of solid rock: TR 32-700, Kuiper
+- Slopes over 1 m lengths, 10 % under 1 deg, 50 % under about 5, 90 % under about 15; "unreasonable risk"; direct tests needed: TR 32-700, summary
+- Average fragmental layer between the rays of the order of 1 m, large uncertainty: TR 32-700, Shoemaker, PDF page 126. Method (total crater area equal to the maria's): PDF pages 123 to 124
+- Excess small craters read as secondaries; Urey's "gardening": Wilhelms, chapter 5
+- 1/30 D softens a crater (Jaffe); about 7 cm on the Alphonsus floor, sharp craters falling off below about 2 m; about 3 times that at Ranger 7: TR 32-800 p. 170, read from the scan (the PDF's text layer garbles the fraction as 150). "Leonard" Jaffe: JPL's L. D. Jaffe
+- Rock froth; simolivac 1 to 4 kg/cm2; Hawaiian basalt 2 to 3, 6 to 8 after crushing: TR 32-700, Kuiper (PDF page 41 ff.)
+- Crunchy snow; Gold's "worst fears realized"; Ranger 8 rocks would sink in dust or froth; pictures as a mirror: Wilhelms, chapter 5
+- Mare regolith of a few meters: Apollo Lunar Sounder, https://www.osti.gov/biblio/5987852
+- 365.7 kg, 2.62 km/s: https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=1964-041A
+- Crater nearly 14 m, Apollo 16 pan frame AS16-P-5430, described by Moore in 1972: https://www.lroc.asu.edu/posts/52 (LROC's feature page rounds to 13 m)
+- Ranger 8 frame figures: NSSDC ra8_b090. Ranger 9 frame figures: NSSDC ra9_p012
+- Ranger 9 impact 24 March 1965: NASA History, https://www.nasa.gov/history/60-years-ago-ranger-8-moon-photos-aid-in-apollo-site-selection/ and the LEAG 2015 Alphonsus abstract, https://www.hou.usra.edu/meetings/leag2015/pdf/2056.pdf; NSSDC's ra9_b087 page says 20 February, a slip

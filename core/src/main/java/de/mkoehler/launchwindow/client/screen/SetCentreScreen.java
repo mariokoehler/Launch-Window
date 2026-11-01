@@ -53,10 +53,6 @@ public final class SetCentreScreen extends ChromeScreen {
     public SetCentreScreen(LaunchWindowGame game) {
         super(game, List.of(Crumb.SPACE_COMPLEX, Crumb.SET_CENTRE), "SET Centre",
             "Personnel overview");
-        titleActions.add(onPage(ui.pageButton("Hire"), () -> game.setScreen(new HireScreen(game)))).padRight(10f);
-        titleActions.add(onPage(ui.pageButton("Manage Department"), this::openManageDepartment)).padRight(10f);
-        titleActions.add(button("Payload R&D", Theme.ButtonKind.PRIMARY,
-            () -> game.setScreen(new RndBoardScreen(game, RndBoardScreen.Board.PAYLOAD))));
         rebuild();
     }
 
@@ -67,6 +63,13 @@ public final class SetCentreScreen extends ChromeScreen {
 
     @Override
     protected void rebuild() {
+        titleActions.clearChildren();
+        dialogs.addAllHands(titleActions, session.state().getSetSpecialists());
+        titleActions.add(onPage(ui.pageButton("Hire"), () -> game.setScreen(new HireScreen(game)))).padRight(10f);
+        titleActions.add(onPage(ui.pageButton("Manage Department"), this::openManageDepartment)).padRight(10f);
+        titleActions.add(button("Payload R&D", Theme.ButtonKind.PRIMARY,
+            () -> game.setScreen(new RndBoardScreen(game, RndBoardScreen.Board.PAYLOAD))));
+
         content.clearChildren();
         content.top();
         content.defaults().growX();
@@ -194,7 +197,7 @@ public final class SetCentreScreen extends ChromeScreen {
         row.add(RosterCells.avatar(ui, specialist)).size(48f).padRight(Theme.SPACE_4);
 
         row.add(RosterCells.who(ui, specialist, "AGE " + specialist.getAge(), () -> game.setScreen(
-            new PersonScreen(game, specialist, () -> new SetCentreScreen(game))))).width(160f).left()
+            new PersonScreen(game, specialist, () -> new SetCentreScreen(game))))).width(RosterCells.NAME_WIDTH).left()
             .padRight(Theme.SPACE_4);
 
         Container<Label> state = SetDepartment.isActive(specialist)
@@ -204,7 +207,7 @@ public final class SetCentreScreen extends ChromeScreen {
         stateHolder.left();
         stateHolder.add(state).left().row();
         RosterCells.outlookNote(ui, stateHolder, specialist, PersonnelGroup.SET, session.openTurn());
-        row.add(stateHolder).width(280f).left().padRight(Theme.SPACE_4);
+        row.add(stateHolder).width(340f).left().padRight(Theme.SPACE_4);
         row.add(RosterCells.traits(ui, specialist)).width(RosterCells.TRAITS_WIDTH).left().padRight(Theme.SPACE_4);
 
         Table skills = new Table();
@@ -313,7 +316,14 @@ public final class SetCentreScreen extends ChromeScreen {
     }
 
     /**
-     * Asks to pull an engineer out of training (component 5).
+     * Asks to pull everyone out of training, as the All hands on deck button does.
+     */
+    public void confirmAllHands() {
+        dialogs.confirmAllHands(session.state().getSetSpecialists());
+    }
+
+    /**
+     * Asks to pull an engineer out of training, as their Pull out button does.
      *
      * @param specialist the engineer
      */

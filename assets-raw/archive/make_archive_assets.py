@@ -101,6 +101,10 @@ PICTURES = {
     "PIA00145": None,
     "ARC-1977-AC77-0376-8": None,
     "ARC-1978-AC78-9245": None,
+    # Added 2026-11-01: the lunar soil study's page.
+    "ra8_b090": NSSDC + "ranger/ra8_b090.tiff",
+    "ra9_p012": NSSDC + "ranger/ra9_p012.tiff",
+    "ntrs-19650012561-fig31": "https://ntrs.nasa.gov/api/citations/19650012561/downloads/19650012561.pdf",
 }
 
 
@@ -112,12 +116,13 @@ PIXEL_CROPS = {"M175502049RC": (930, 25540, 1430, 25940),
                # trench from SP-146's page; the halves of NASA History's two-photo Zond 5 composites.
                "ntrs-19700024873-fig4": (420, 352, 3080, 2172), "ntrs-19700024873-fig5": (360, 132, 3080, 2252),
                "surveyor3_sp146_fig4-10": (346, 307, 2192, 2267),
+               "ntrs-19650012561-fig31": (160, 640, 2340, 2650),
                "zond5_earth": (609, 0, 917, 424), "zond5_splashdown": (0, 0, 456, 337)}
 MIRRORED = {"M175502049RC"}
 # Figures that are scanned pages of a NASA report's PDF: the page (from 1) and how far to turn it, in degrees
 # counter-clockwise (a page printed sideways). PIXEL_CROPS then cut the figure out of the turned page.
 PDF_PAGES = {"ntrs-19700024873-fig4": (14, 90), "ntrs-19700024873-fig5": (16, 90),
-             "surveyor3_sp146_fig4-10": (81, 0)}
+             "surveyor3_sp146_fig4-10": (81, 0), "ntrs-19650012561-fig31": (54, 0)}
 # Boxes painted white after the crop, in its pixels: the press kit's figure numbers, which share a row
 # with the drawings' labels.
 BLANKS = {"ntrs-19700024873-fig4": (2120, 1630, 2440, 1750), "ntrs-19700024873-fig5": (2090, 1990, 2430, 2110)}

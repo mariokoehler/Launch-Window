@@ -1,5 +1,5 @@
 {
-  "_comment": "The Museum encyclopedia's explainers (ui-spec.md component 18, design.md 1.1): how things work, drawn as engineering sheets. Outside the frozen content pack, like strings.json, so text fixes reach running games. Each sheet has a drawing from assets/ui/explainers/ (made by assets-raw/explainers/make_explainer_art.py), three points, an 'In Launch Window' line, and optionally a legend and bars drawn by the client. Every figure is checked (design.md 1.1). No inline bold: a label can't switch fonts mid-text.",
+  "_comment": "The Museum encyclopedia's explainers (ui-spec.md component 18, design.md 1.1): how things work, drawn as engineering sheets. Outside the frozen content pack, like strings.json, so text fixes reach running games. Each sheet has a drawing from assets/ui/explainers/ (made by assets-raw/explainers/make_explainer_art.py), three points, an 'In Launch Window' line, and optionally a legend and bars drawn by the client. Every figure is checked (design.md 1.1). No inline bold: a label can't switch fonts mid-text. An explainer that answers a theory of the day (theories.json) names it in lockedUntil and stays locked until a flight in the game settles every one of them, or the race is decided (2026-10-27).",
   "explainers": [
     {
       "id": "suborbital-vs-orbital",
@@ -335,6 +335,7 @@
     },
     {
       "id": "weightlessness",
+      "lockedUntil": ["weightless-body"],
       "code": "E-06",
       "title": "Falling, not floating",
       "topic": "Weightlessness",
@@ -629,6 +630,7 @@
     },
     {
       "id": "space-environment",
+      "lockedUntil": ["radiation-belts"],
       "code": "E-12",
       "title": "What Explorer 1 found",
       "topic": "Space environment",
@@ -1226,6 +1228,7 @@
     },
     {
       "id": "landing-on-other-worlds",
+      "lockedUntil": ["deep-dust", "venus-jungle"],
       "code": "E-25",
       "title": "Landing on other worlds",
       "topic": "Landing",

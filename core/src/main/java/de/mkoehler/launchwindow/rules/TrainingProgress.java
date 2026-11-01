@@ -365,7 +365,8 @@ public final class TrainingProgress {
      * yet). Fails without mutating anything if the astronaut id is
      * unknown, not currently {@link AssignmentState#IDLE}, below
      * {@link SkillGrowth#EXPERT_TRAINING_SKILL_THRESHOLD} in {@code skill},
-     * or already Expert in it.
+     * or already an Expert in anything: one Expert skill a person (user,
+     * 2026-11-01).
      *
      * @param snapshot    the player snapshot to start training for; mutated
      *                    in place on success
@@ -387,11 +388,11 @@ public final class TrainingProgress {
         if (astronaut.getAssignmentState() != AssignmentState.IDLE) {
             return StartExpertTrainingOutcome.NOT_IDLE;
         }
+        if (!astronaut.getExpertSkills().isEmpty()) {
+            return StartExpertTrainingOutcome.ALREADY_AN_EXPERT;
+        }
         if (astronaut.getSkill(skill) < SkillGrowth.EXPERT_TRAINING_SKILL_THRESHOLD) {
             return StartExpertTrainingOutcome.SKILL_BELOW_THRESHOLD;
-        }
-        if (astronaut.getExpertSkills().contains(skill)) {
-            return StartExpertTrainingOutcome.ALREADY_EXPERT_IN_SKILL;
         }
 
         astronaut.setTrainingKind(TrainingKind.EXPERT);
@@ -425,11 +426,11 @@ public final class TrainingProgress {
         if (officer.getAssignmentState() != AssignmentState.IDLE) {
             return StartExpertTrainingOutcome.NOT_IDLE;
         }
+        if (!officer.getExpertSkills().isEmpty()) {
+            return StartExpertTrainingOutcome.ALREADY_AN_EXPERT;
+        }
         if (officer.getSkill(skill) < SkillGrowth.EXPERT_TRAINING_SKILL_THRESHOLD) {
             return StartExpertTrainingOutcome.SKILL_BELOW_THRESHOLD;
-        }
-        if (officer.getExpertSkills().contains(skill)) {
-            return StartExpertTrainingOutcome.ALREADY_EXPERT_IN_SKILL;
         }
 
         officer.setTrainingKind(TrainingKind.EXPERT);

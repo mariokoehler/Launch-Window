@@ -11,6 +11,7 @@ import de.mkoehler.launchwindow.client.screen.ConnectScreen;
 import de.mkoehler.launchwindow.client.screen.SpaceComplexScreen;
 import de.mkoehler.launchwindow.client.settings.ClientSettings;
 import de.mkoehler.launchwindow.client.settings.SettingsStore;
+import de.mkoehler.launchwindow.client.ui.ClickSound;
 import de.mkoehler.launchwindow.client.ui.Theme;
 import de.mkoehler.launchwindow.client.ui.UiKit;
 import de.mkoehler.launchwindow.client.view.Hub;
@@ -36,6 +37,8 @@ public class LaunchWindowGame extends Game {
     private static final java.util.Map<String, Float> volumesInMemory = new java.util.HashMap<>();
     /** The replay's music and effects volume until the player sets them (unconfirmed). */
     private static final float DEFAULT_VOLUME = 0.7f;
+    /** The text size when kept in memory (screenshots), else {@code null}. */
+    private static TextSize textSizeInMemory;
     private UiKit ui;
     private ServerGateway gateway;
     private SettingsStore settingsStore;
@@ -59,6 +62,7 @@ public class LaunchWindowGame extends Game {
         float[] scale = Theme.Fonts.windowScale(Gdx.graphics.getBackBufferWidth(), Gdx.graphics.getBackBufferHeight());
         ui = new UiKit(Gdx.files.internal(""), fontScale(scale[1]));
         ui.fonts().setPixelGrid(scale[0], scale[1]);
+        ui.fonts().setTextScale(textSize().scale());
         pendingFontScale = ui.fonts().scale();
         gateway = createGateway();
         settingsStore = createSettingsStore();
@@ -211,6 +215,23 @@ public class LaunchWindowGame extends Game {
             return explainersReadInMemory.contains(explainerId);
         }
         return session != null && preferences().getBoolean(key("explainerRead." + explainerId), false);
+    }
+
+    /**
+     * Returns whether an explainer is still locked in this game, because it would answer a theory of the day no
+     * flight has settled yet ({@link de.mkoehler.launchwindow.client.view.Explainers#locked}). Locked explainers
+     * show no chip anywhere and only a closed card in the Museum.
+     *
+     * @param explainer the explainer
+     * @return whether it's locked; never without a session
+     */
+    public boolean explainerLocked(de.mkoehler.launchwindow.client.view.Explainers.Explainer explainer) {
+        if (session == null || explainer.lockedUntil().isEmpty()) {
+            return false;
+        }
+        return de.mkoehler.launchwindow.client.view.Explainers.locked(explainer,
+            de.mkoehler.launchwindow.content.Theories.standard(), session.frontPages(),
+            goal -> session.catalog().goal(goal).isPresent(), session.gameInfo().response().decided());
     }
 
     /**
@@ -435,6 +456,74 @@ public class LaunchWindowGame extends Game {
     }
 
     /**
+     * The Settings' text sizes ({@code ui-spec.md} &sect;4.12): the design's own, and a step larger for a
+     * small, sharp screen, where the 1920 by 1080 layout's text comes out tiny (user, 2026-10-26).
+     */
+    public enum TextSize {
+        /** The design's sizes. */
+        STANDARD(1f),
+        /** Every working style 12 % larger (the default); the drawings' labels and the newspaper keep their size. */
+        LARGE(1.12f);
+
+        private final float scale;
+
+        TextSize(float scale) {
+            this.scale = scale;
+        }
+
+        /**
+         * Returns how much larger than the design the text is drawn.
+         *
+         * @return the factor
+         */
+        public float scale() {
+            return scale;
+        }
+    }
+
+    /**
+     * Returns the text size on this device, for everyone (Settings).
+     *
+     * @return the text size; {@link TextSize#LARGE} by default (user, 2026-10-26)
+     */
+    public static TextSize textSize() {
+        if (textSizeInMemory != null) {
+            return textSizeInMemory;
+        }
+        try {
+            return TextSize.valueOf(preferences().getString("textSize", TextSize.LARGE.name()));
+        } catch (IllegalArgumentException e) {
+            return TextSize.LARGE;
+        }
+    }
+
+    /**
+     * Keeps the text size in memory from now on (screenshots), so it doesn't depend on this machine.
+     *
+     * @param size the text size
+     */
+    public static void useTextSizeInMemory(TextSize size) {
+        textSizeInMemory = size;
+    }
+
+    /**
+     * Sets the text size on this device and redraws the text at once: the fonts are rebuilt, and every
+     * screen lays its text out again when it sees them change.
+     *
+     * @param size the text size
+     */
+    public void setTextSize(TextSize size) {
+        if (textSizeInMemory != null) {
+            textSizeInMemory = size;
+        } else {
+            com.badlogic.gdx.Preferences preferences = preferences();
+            preferences.putString("textSize", size.name());
+            preferences.flush();
+        }
+        ui.fonts().setTextScale(size.scale());
+    }
+
+    /**
      * Returns the replay's music volume on this device (Settings).
      *
      * @return 0 to 1; 0.7 by default
@@ -513,9 +602,9 @@ public class LaunchWindowGame extends Game {
      * Whether a new turn's missions play before its report ({@code ui-spec.md} &sect;4.4).
      */
     public enum ReplaysFirst {
-        /** Ask each time (the default). */
+        /** Ask each time. */
         ASK,
-        /** Always play them first. */
+        /** Always play them first (the default since 2026-10-27, user). */
         ALWAYS,
         /** Never: the report opens as before. */
         NEVER
@@ -523,22 +612,22 @@ public class LaunchWindowGame extends Game {
 
     /**
      * Returns this player's choice on this device about watching a turn's missions before its report.
-     * Under the in-memory marks it's the marks "replaysAlways" and "replaysNever".
+     * Under the in-memory marks it's the marks "replaysAsk" and "replaysNever".
      *
      * @return the choice
      */
     public ReplaysFirst replaysFirst() {
         if (flagsInMemory != null) {
-            return flagsInMemory.contains("replaysAlways") ? ReplaysFirst.ALWAYS
-                : flagsInMemory.contains("replaysNever") ? ReplaysFirst.NEVER : ReplaysFirst.ASK;
+            return flagsInMemory.contains("replaysAsk") ? ReplaysFirst.ASK
+                : flagsInMemory.contains("replaysNever") ? ReplaysFirst.NEVER : ReplaysFirst.ALWAYS;
         }
         if (session == null) {
-            return ReplaysFirst.ASK;
+            return ReplaysFirst.ALWAYS;
         }
         try {
-            return ReplaysFirst.valueOf(preferences().getString(key("replaysFirst"), ReplaysFirst.ASK.name()));
+            return ReplaysFirst.valueOf(preferences().getString(key("replaysFirst"), ReplaysFirst.ALWAYS.name()));
         } catch (IllegalArgumentException e) {
-            return ReplaysFirst.ASK;
+            return ReplaysFirst.ALWAYS;
         }
     }
 
@@ -549,10 +638,10 @@ public class LaunchWindowGame extends Game {
      */
     public void setReplaysFirst(ReplaysFirst choice) {
         if (flagsInMemory != null) {
-            flagsInMemory.remove("replaysAlways");
+            flagsInMemory.remove("replaysAsk");
             flagsInMemory.remove("replaysNever");
-            if (choice == ReplaysFirst.ALWAYS) {
-                flagsInMemory.add("replaysAlways");
+            if (choice == ReplaysFirst.ASK) {
+                flagsInMemory.add("replaysAsk");
             } else if (choice == ReplaysFirst.NEVER) {
                 flagsInMemory.add("replaysNever");
             }
@@ -829,6 +918,7 @@ public class LaunchWindowGame extends Game {
         if (ui != null) {
             ui.dispose();
         }
+        ClickSound.dispose();
     }
 
     /**

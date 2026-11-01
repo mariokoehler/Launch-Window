@@ -68,7 +68,7 @@
       "components": ["vostok-capsule", "mercury-capsule", "gemini-capsule", "apollo-csm",
         "soyuz-7k-ok-spacecraft", "soyuz-7k-l1-spacecraft", "soyuz-7k-lok-spacecraft"]},
     {"id": "land-or-sea", "label": "Land or sea", "explainer": "coming-home", "sheet": 1,
-      "steps": ["descent-and-landing", "descent-and-splashdown", "splashdown", "landing-and-recovery"]},
+      "steps": ["descent-and-landing", "descent-and-splashdown", "landing-and-recovery"]},
     {"id": "tracking", "label": "Tracking", "explainer": "tracking", "sheet": 1,
       "programs": ["sputnik-1"], "goals": ["radio-signals-from-orbit"],
       "configurations": ["sputnik-1-orbit", "sputnik-1-extended", "sputnik-2-orbit", "explorer-1-orbit",

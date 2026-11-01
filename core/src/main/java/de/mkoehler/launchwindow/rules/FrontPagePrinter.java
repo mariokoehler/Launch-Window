@@ -68,13 +68,13 @@ public final class FrontPagePrinter {
         // Per agency, its flights that reached Firsts, and per First, who reached it on which flight.
         Map<String, Map<String, Set<String>>> flights = new HashMap<>();
         Map<String, Map<String, String>> reachedBy = new LinkedHashMap<>();
-        Map<String, List<String>> crews = new HashMap<>();
+        Map<String, TurnReport.MissionFlown> crews = new HashMap<>();
         for (Agency agency : sorted) {
             if (agency.report() == null) {
                 continue;
             }
             for (TurnReport.MissionFlown flown : agency.report().missions()) {
-                crews.put(agency.agencyName() + "/" + flown.missionInstanceId(), flown.crewNames());
+                crews.put(agency.agencyName() + "/" + flown.missionInstanceId(), flown);
             }
             for (ResolutionEvent event : agency.report().events()) {
                 if (!(event instanceof GoalSettled settled) || !settled.firstInGame()
@@ -136,8 +136,9 @@ public final class FrontPagePrinter {
                 String mission = reachedBy.get(goal).get(agency.agencyName());
                 if (mission != null) {
                     names.add(agency.agencyName());
+                    TurnReport.MissionFlown flown = crews.get(agency.agencyName() + "/" + mission);
                     achievers.add(new FrontPage.Achiever(agency.agencyName(), agency.directorName(),
-                        crews.getOrDefault(agency.agencyName() + "/" + mission, List.of())));
+                        flown == null ? List.of() : flown.crewNames(), flown == null ? null : flown.commanderPortraitId()));
                 }
             }
             SplittableRandom random = random(gameSeed, goal);

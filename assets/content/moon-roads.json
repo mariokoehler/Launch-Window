@@ -1,0 +1,78 @@
+{
+  "_comment": "The roads to the Moon screen's words (ui-spec.md 4.21, design.md 2.3(e)). Outside the pack, like front-pages.json: corrections reach running games. Every number on the screen comes from the rules; only words live here, and never a ranking. Roads show in this order. A road is a Moon program that lands, with the Earth-orbit tests that make its Moon flights free to open; withoutLanding lists the ones that only fly round or orbit the Moon. firsts are the goals shown as 'Firsts on the way'. MoonRoadsTest holds every lunar-expedition program of both packs to an entry.",
+  "firsts": ["rendezvous", "docking", "crew-transfer", "crewed-lunar-flyby", "crewed-lunar-orbit"],
+  "roads": [
+    {
+      "program": "apollo",
+      "earthOrbit": "apollo-earth-orbit",
+      "mode": "LUNAR_ORBIT_RENDEZVOUS",
+      "historical": true,
+      "howItWorks": "A mothership stays in lunar orbit; a small lander goes down and back.",
+      "for": ["The Saturn V lifts it all in one launch.", "The most test flights, and Firsts, on the way."],
+      "against": ["Two craft to develop and test.", "Three seats to fill on every flight.",
+        "The Saturn V is needed only for the Moon flights: start it early."],
+      "historyNote": "Lunar-orbit rendezvous looked the riskiest plan: a docking 380,000 km from home. John Houbolt, an engineer at NASA's Langley centre, argued it was also the lightest, since only a small lander had to go down and come back up, and he wrote over his managers' heads to make the case. NASA chose it in July 1962, and one Saturn V could launch the whole Apollo stack."
+    },
+    {
+      "program": "gemini-eor",
+      "earthOrbit": "gemini-eor-earth-orbit",
+      "mode": "EARTH_ORBIT_RENDEZVOUS",
+      "historical": false,
+      "howItWorks": "Two launches meet in Earth orbit; the joined ship flies on to the Moon.",
+      "for": ["No giant rocket: two medium ones.", "Builds on Gemini's capsule."],
+      "against": ["Every flight needs two launches, and both must work.",
+        "The longest landing flight, and the most parts."],
+      "historyNote": "In 1961 James Chamberlin's Gemini team sketched Gemini flights to the Moon, with a light lander after a design from NASA's Langley centre: little more than a platform on a rocket engine, the astronaut standing on it among the fuel tanks. Its launch mass would have been a fraction of Apollo's. NASA chose lunar-orbit rendezvous and Apollo in July 1962, and Lunar Gemini stayed on paper."
+    },
+    {
+      "program": "gemini-direct-ascent",
+      "earthOrbit": "gemini-direct-ascent-earth-orbit",
+      "mode": "DIRECT_ASCENT",
+      "historical": false,
+      "howItWorks": "One ship flies to the Moon, lands whole and comes back.",
+      "for": ["One craft, and few flights on the way.", "Builds on Gemini's capsule."],
+      "against": ["Needs Nova, the biggest rocket there is.", "A heavy craft to land and lift off again."],
+      "historyNote": "Direct ascent was the first plan: one rocket sends the whole ship, which lands tail first and takes off again for home. It needed Nova, a rocket drawn with eight F-1 engines that could send about 68 tonnes toward the Moon. Once lunar-orbit rendezvous let the Saturn V do the job, Nova was never built."
+    },
+    {
+      "program": "soyuz-7k-l3",
+      "earthOrbit": "soyuz-7k-l3-earth-orbit",
+      "mode": "LUNAR_ORBIT_RENDEZVOUS",
+      "historical": true,
+      "howItWorks": "A Soyuz orbits the Moon; one cosmonaut lands in the LK.",
+      "for": ["The N1 lifts it in one launch.", "Soyuz heritage; many flights on the way."],
+      "against": ["Two craft and a docking system to develop.", "The crew crosses to the lander by spacewalk."],
+      "historyNote": "Korolev's N1-L3 used lunar-orbit rendezvous too, with a lander for one cosmonaut, the LK, who was to cross to it from the orbiter by spacewalk. The LK flew three times without a crew in Earth orbit, in 1970 and 1971, and worked. The N1 never did: all four launches, from 1969 to 1972, failed, and no cosmonaut went to the Moon."
+    },
+    {
+      "program": "lk-700",
+      "earthOrbit": "lk-700-earth-orbit",
+      "mode": "DIRECT_ASCENT",
+      "historical": false,
+      "howItWorks": "One ship flies to the Moon, lands whole and comes back.",
+      "for": ["One craft to develop; the fewest flights."],
+      "against": ["The UR-700, the largest rocket of all, and a heavy rocket from the very first test flight."],
+      "historyNote": "Vladimir Chelomei, Korolev's rival, proposed landing directly: the UR-700 rocket would send his LK-700 to the Moon whole, to land and fly home. The government chose Korolev's N1-L3 instead, and the UR-700 and the LK-700 never left the drawing board."
+    }
+  ],
+  "withoutLanding": [
+    {
+      "program": "circumlunar-gemini",
+      "earthOrbit": "circumlunar-gemini-earth-orbit",
+      "reach": "FLYBY",
+      "line": "Round the Moon and home; shares Gemini's capsule with the Gemini roads."
+    },
+    {
+      "program": "lunar-orbital-gemini",
+      "earthOrbit": "lunar-orbital-gemini-earth-orbit",
+      "reach": "LUNAR_ORBIT",
+      "line": "Into lunar orbit and home; shares Gemini's capsule with the Gemini roads."
+    },
+    {
+      "program": "soyuz-7k-l1",
+      "earthOrbit": "soyuz-7k-l1-earth-orbit",
+      "reach": "FLYBY",
+      "line": "Round the Moon and home without stopping; shares no parts with the landing roads."
+    }
+  ]
+}

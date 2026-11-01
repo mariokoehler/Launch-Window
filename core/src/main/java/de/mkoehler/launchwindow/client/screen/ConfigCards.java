@@ -2,6 +2,7 @@ package de.mkoehler.launchwindow.client.screen;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
+import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -152,8 +153,8 @@ final class ConfigCards {
         Table block = new Table();
         block.left();
         block.defaults().left();
-        Table row = new Table();
-        row.left();
+        // Wraps: six checks don't fit on a card's one line.
+        HorizontalGroup row = new HorizontalGroup().wrap().rowLeft().space(Theme.SPACE_3).wrapSpace(2f);
         StringBuilder detail = new StringBuilder();
         for (Outlook.Check check : readiness.checks()) {
             Color color = color(check.status());
@@ -163,10 +164,12 @@ final class ConfigCards {
                 case BLOCKED -> "close";
             }), Scaling.fit);
             glyph.setColor(color);
-            row.add(glyph).size(12f).padRight(4f);
+            Table item = new Table();
+            item.add(glyph).size(12f).padRight(4f);
             String text = check.label() + (check.status() == Outlook.Status.WAITING && check.seasons() > 0
                 ? " ~" + check.seasons() : "");
-            row.add(ui.label(text, Theme.TextStyle.CAPTION, color)).padRight(Theme.SPACE_3);
+            item.add(ui.label(text, Theme.TextStyle.CAPTION, color));
+            row.addActor(item);
             if (detail.length() > 0) {
                 detail.append("\n");
             }
@@ -174,7 +177,7 @@ final class ConfigCards {
         }
         ui.tooltip(row, "Ready to fly?", detail + "\nSeasons are the rules' average with today's teams; "
             + "reliability counts as ready at " + (int) Advisor.READY_RELIABILITY + " %.");
-        block.add(row).padBottom(4f).row();
+        block.add(row).growX().padBottom(4f).row();
         block.add(earliestLabel(host, readiness)).growX();
         return block;
     }
@@ -190,22 +193,21 @@ final class ConfigCards {
     static Label earliestLabel(ChromeScreen host, Outlook.Readiness readiness) {
         UiKit ui = host.ui;
         if (readiness.readyNow()) {
-            return ui.label("Ready to launch now.", Theme.TextStyle.CAPTION, Theme.SUCCESS);
+            return ui.paragraph("Ready to launch now.", Theme.TextStyle.CAPTION, Theme.SUCCESS);
         }
         if (readiness.earliest().isPresent() && readiness.earliest().getAsInt() == 0) {
-            return host.ui.label("Could launch now, if you cut someone's training short.", Theme.TextStyle.CAPTION,
+            return ui.paragraph("Could launch now, if you cut someone's training short.", Theme.TextStyle.CAPTION,
                 Theme.GOLD_TEXT);
         }
+        // Every line wraps: one wider than the card pushes its picture and text out of line.
         if (readiness.earliest().isPresent()) {
             int seasons = readiness.earliest().getAsInt();
-            return ui.label("Earliest launch: " + Outlook.by(host.session.openTurn(), seasons) + ", in "
+            return ui.paragraph("Earliest launch: " + Outlook.by(host.session.openTurn(), seasons) + ", in "
                 + Outlook.seasons(seasons) + ", waiting on " + waitingOn(readiness.limiter()) + ".",
                 Theme.TextStyle.CAPTION, Theme.GOLD_TEXT);
         }
-        Label blocked = ui.label("Can't tell when yet: " + readiness.limiter().detail(), Theme.TextStyle.CAPTION,
+        return ui.paragraph("Can't tell when yet: " + readiness.limiter().detail(), Theme.TextStyle.CAPTION,
             Theme.DANGER);
-        blocked.setWrap(true);
-        return blocked;
     }
 
     private static String waitingOn(Outlook.Check check) {

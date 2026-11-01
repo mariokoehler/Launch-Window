@@ -24,6 +24,6 @@ public enum StartExpertTrainingOutcome {
      */
     SKILL_BELOW_THRESHOLD,
 
-    /** The employee already holds the Expert trait in the targeted skill. */
-    ALREADY_EXPERT_IN_SKILL
+    /** The employee already holds the Expert trait: one skill a person (user, 2026-11-01). */
+    ALREADY_AN_EXPERT
 }

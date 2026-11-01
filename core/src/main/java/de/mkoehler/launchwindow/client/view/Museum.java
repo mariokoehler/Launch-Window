@@ -278,13 +278,14 @@ public final class Museum {
      * @param configurationId the configuration
      * @param program         its program's name
      * @param name            its name
-     * @param count           its completed flights
+     * @param count           its completed flights, commercial ones included
+     * @param commercial      how many of them were commercial (2026-10-27)
      * @param crewed          whether it flies a crew
      * @param cameHome        the animals honoured for flying it and coming home, by name, in flight order
      * @param honours         the same animals, grouped by the photo they share, in flight order
      */
-    public record Flight(String configurationId, String program, String name, int count, boolean crewed,
-                         List<String> cameHome, List<Honour> honours) {
+    public record Flight(String configurationId, String program, String name, int count, int commercial,
+                         boolean crewed, List<String> cameHome, List<Honour> honours) {
     }
 
     /**
@@ -299,7 +300,8 @@ public final class Museum {
     }
 
     /**
-     * Returns every configuration that completed a flight, in the pack's order.
+     * Returns every configuration that completed a flight, its own or a client's, in the pack's order.
+     * The animals are honoured by the agency's own flights alone.
      *
      * @param state   the player's state
      * @param catalog the content pack
@@ -309,11 +311,13 @@ public final class Museum {
         List<Flight> flights = new ArrayList<>();
         for (MissionConfiguration configuration : catalog.missionConfigurations()) {
             int count = state.getSuccessfulFlightCounts().getOrDefault(configuration.id(), 0);
-            if (count > 0) {
+            int commercial = state.getCommercialFlightCounts().getOrDefault(configuration.id(), 0);
+            if (count + commercial > 0) {
                 List<MissionConfiguration.Animal> animals = configuration.animalPassengers() == null ? List.of()
                     : configuration.animalPassengers().honouredAfter(count);
                 flights.add(new Flight(configuration.id(), ContentNames.of(configuration.programId()),
-                    MissionControl.missionName(configuration), count, configuration.requiredAstronautCount() > 0,
+                    MissionControl.missionName(configuration), count + commercial, commercial,
+                    configuration.requiredAstronautCount() > 0,
                     animals.stream().map(MissionConfiguration.Animal::name).toList(), honours(animals)));
             }
         }
