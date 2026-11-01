@@ -1421,7 +1421,8 @@ Splash ─► Connect ─► Join game (skipped if already in the game) ─► [
 Space Complex hub
 ├─ VAB
 │   ├─ Open rocket program
-│   ├─ Manage rocket programs ─► Rocket R&D
+│   ├─ Rocket R&D (also from Manage rocket programs)
+│   ├─ Manage rocket programs
 │   └─ (building panel)
 ├─ SET Centre ─► Personnel overview
 │   ├─ Hire SET personnel
@@ -1806,8 +1807,9 @@ them, **confirmed by the user (2026-10-04)**:
   as in the mockup.
 - **The class gate can't show with the real pack,** because every early-era rocket is
   Light. `RocketsTest` proves it on a fixture catalog.
-- **Rocket R&D's breadcrumb** runs through Manage Rocket Programs, and its back button
-  goes there, as in the mockup.
+- **Rocket R&D** has a button on the VAB's landing page as well as on Manage Rocket Programs,
+  as Payload R&D has on the SET Centre's *(user, 2026-11-01)*; its breadcrumb and back button
+  go to the VAB.
 
 ### 4.6 Headquarters: programs and mission planning
 **Purpose:** decide what the agency works on, and plan and launch missions.

@@ -42,6 +42,11 @@ public final class VabScreen extends ChromeScreen {
 
     @Override
     protected void rebuild() {
+        // On the landing page, as the SET Centre's Payload R&D (the user's request, 2026-11-01).
+        titleActions.clearChildren();
+        titleActions.add(actionButton("Rocket R&D", Theme.ButtonKind.PRIMARY,
+            () -> game.setScreen(new RndBoardScreen(game, RndBoardScreen.Board.ROCKET))));
+
         content.clearChildren();
         content.top();
         content.defaults().growX();
@@ -61,8 +66,8 @@ public final class VabScreen extends ChromeScreen {
             () -> game.setScreen(new OpenRocketScreen(game))))
             .expandX().fill().uniformX().padRight(Theme.SPACE_4);
         cards.add(navCard("Currently open · " + open, "Manage Rocket Programs",
-            "Reliability, upkeep, and in-flight missions for every rocket this agency has open. Also reaches "
-                + "Rocket R&D.", "Manage Rocket Programs", () -> game.setScreen(new RocketProgramsScreen(game))))
+            "Reliability, upkeep, and in-flight missions for every rocket this agency has open.",
+            "Manage Rocket Programs", () -> game.setScreen(new RocketProgramsScreen(game))))
             .expandX().fill().uniformX();
         content.add(cards);
     }

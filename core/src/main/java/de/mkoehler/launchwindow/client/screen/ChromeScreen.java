@@ -78,9 +78,6 @@ abstract class ChromeScreen extends SessionScreen {
         static final Crumb ASTRONAUT_COMPLEX = new Crumb("Astronaut Complex", ChromeScreen::goAstronautComplex);
         /** The VAB's landing screen. */
         static final Crumb VAB = new Crumb("VAB", ChromeScreen::goVab);
-        /** The VAB's Manage Rocket Programs. */
-        static final Crumb ROCKET_PROGRAMS = new Crumb("Manage Rocket Programs",
-            screen -> screen.game.setScreen(new RocketProgramsScreen(screen.game)));
     }
 
     /** The screen's own area, between the title row and the footer. */

@@ -44,7 +44,7 @@ public final class RndBoardScreen extends ChromeScreen {
         private List<Crumb> crumbs() {
             return this == PAYLOAD
                 ? List.of(Crumb.SPACE_COMPLEX, Crumb.SET_CENTRE, new Crumb(title, null))
-                : List.of(Crumb.SPACE_COMPLEX, Crumb.VAB, Crumb.ROCKET_PROGRAMS, new Crumb(title, null));
+                : List.of(Crumb.SPACE_COMPLEX, Crumb.VAB, new Crumb(title, null));
         }
     }
 
@@ -85,7 +85,7 @@ public final class RndBoardScreen extends ChromeScreen {
         if (board == Board.PAYLOAD) {
             goSetCentre();
         } else {
-            game.setScreen(new RocketProgramsScreen(game));
+            goVab();
         }
     }
 
