@@ -670,6 +670,12 @@ leading to satellite navigation.
     driven mainly by the schedule, and NASA's own papers from that August focus on the schedule
     and don't mention the press reports of Zond 4. A good note on how sure intelligence ever is. Sources: The Space Review,
     Smithsonian Air and Space.
+  - To the West the R-7 was the SS-6 "Sapwood", a NATO reporting name; the Soviets called it 8K71. The
+    rocket itself was first shown in public in 1967, a full-size Vostok launcher at the Paris Air Show (Le Bourget),
+    and a US report from the show found Western estimates of its size and configuration substantially correct
+    (checked 2026-11-01, for the Foreign hardware tab's history note, ui-spec.md 4.15). Sources: Russian Space Web
+    (Vostok launcher; Le Bourget 2009), GlobalSecurity (Vostok, SL-3), a 1967 report released through ISCAP
+    (archives.gov, 2009-068-doc176).
   - NASA was public: congressional hearings, published budgets, famous faces. The Soviet program
     was secret down to the name of its chief. Still, NASA kept plenty quiet, and the user decided
     against any secrecy bonus (§2.9). The claim that Soviet engineers learned much about Apollo
