@@ -3157,7 +3157,7 @@ binoculars, our own drawing; on the UI Asset Sheet since 2026-10-08). All rules 
 - **Tidbits:** the passive finds, newest first, each dated.
 - **Caught:** agents of yours this rival caught, and theirs you caught.
 
-**Foreign hardware** *(specified 2026-11-01 for `design.md` §2.9; not mocked up, not built)*:
+**Foreign hardware** *(specified 2026-11-01 for `design.md` §2.9; mocked up the same day, not built)*:
 - **Dossiers:** a known item gets a plain role line under its name, and its counterpart ("their
   counterpart to your Mercury") where there is one; clicking it opens the file. An unknown item keeps
   its name alone, with a small "not yet analysed" mark. The same goes for the turn report's
@@ -3177,6 +3177,41 @@ binoculars, our own drawing; on the UI Asset Sheet since 2026-10-08). All rules 
 a known item with no counterpart; the longest role (46 characters) at Large text; the tab with
 one item, with many, and empty (nothing learned yet); the file on a rocket and on a program; the
 turn report's line; the ladder with the passive; a game with no other side.
+
+**Mocked up (2026-11-01)** on the canvas `Launch Window — Intelligence Office`, three new rows (12 boards, every
+one at Large text, 112 %): the R&D dossier from both sides, the file on a program (Voskhod) and a rocket
+(Proton-K with Block D), the tab with nine, one and nothing, the turn report, the ladder, a game with no other side,
+and a sheet of the pieces. Choices the spec left open, all **unconfirmed** (each row's yellow note lists them):
+- **Dossier rows:** a known item's name is a link (navy, the document icon, a quiet underline), the role under it,
+  then "their counterpart to your Gemini", the name as the game shows it ("Project Mercury"); no counterpart, no
+  line. An unknown item is its name in plain ink with a dashed "not yet analysed" mark (the search icon) on the
+  same line. A part that isn't the craft itself (Berkut suit, Agena) shows its program's role, then "part of their
+  Voskhod" where the counterpart goes. The R&D dossier widens to 1.5 of the folder's three columns (about 680 px),
+  so the 46-character role and the longest counterpart line fit on one line each; a full agency's list scrolls
+  in its column. A rival on the player's own side shows roles and no counterparts, and its rival row says "Your
+  side: its hardware is known".
+- **The tab:** fourth, "FOREIGN HARDWARE", with a gold dot while something learned is unseen. A list, newest
+  first: the season learned, the name link with a Program or Rocket tag (and a gold New), the role, the
+  counterpart, a chevron to the file; "9 known" at the top. Beside it, how the analysts work (the chance now and at
+  the next level, a quiet season means nothing) and a history note (the R-7 as the SS-6 "Sapwood", first shown in
+  the West at the 1967 Paris Air Show, `design.md` §1.1). Empty: binoculars, "Nothing learned yet", what will
+  appear.
+- **The file:** a full-width card under a navy strip with faint diagonal hatching, a "Foreign file · read only"
+  stamp and "Soviet hardware · analysed Spring 1965"; art, the Program or Rocket tag and "Their hardware", the
+  role in bold, the counterpart linked to the player's own program; About is the long description, and each part
+  shows its description and blueprint. On the right the history note, a dashed "Theirs, not yours" box (no
+  prices; reliability lives in the dossiers), and the dossiers that list it. Crumbs end in the item; the title
+  row has "All foreign hardware" instead of tabs. **Rockets have no long description** (§4.6.4), so a rocket's
+  About is its short description above the blueprint: the user's call whether to write the 23.
+- **Turn report:** the item learned leads the Intelligence section, tinted as the people news are, with the
+  document glyph: "Foreign hardware · Proton-K with Block D" (a link to the file), the role, "Their counterpart
+  to your Titan IIIC." A season with nothing learned has no line, and with nothing else the section is gone.
+- **Ladder:** a row "Hardware" on every rung, "80 % a season: one piece of their hardware explained" (50, 25,
+  None at level 0); the overview's history-note card gives way to a Foreign hardware card (the count, the newest
+  two, the chance now and at level 3). With no other side: no row, no card, three tabs.
+- **Pieces:** no new colour tokens and no new icons (`search`, `document`, `chevron`, `binoculars` exist). New
+  shapes for `Theme.java` and the UI Asset Sheet: the not-yet-analysed mark, the file link, the kind and New tags,
+  the tab dot, the foreign-file strip and stamp, the dashed read-only box.
 
 **Hire screen addition** (component 14): see there.
 
