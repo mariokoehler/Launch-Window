@@ -2292,9 +2292,11 @@ public final class PersonnelLifecyclePlayouts {
      */
     private static List<AstronautSkill> eligibleExpertAstronautSkills(Astronaut astronaut) {
         List<AstronautSkill> eligible = new ArrayList<>();
+        if (!astronaut.getExpertSkills().isEmpty()) {
+            return eligible;
+        }
         for (AstronautSkill skill : AstronautSkill.values()) {
-            if (astronaut.getSkill(skill) >= SkillGrowth.EXPERT_TRAINING_SKILL_THRESHOLD
-                    && !astronaut.getExpertSkills().contains(skill)) {
+            if (astronaut.getSkill(skill) >= SkillGrowth.EXPERT_TRAINING_SKILL_THRESHOLD) {
                 eligible.add(skill);
             }
         }
@@ -2309,9 +2311,11 @@ public final class PersonnelLifecyclePlayouts {
      */
     private static List<MissionControlSkill> eligibleExpertMissionControlSkills(MissionControlOfficer officer) {
         List<MissionControlSkill> eligible = new ArrayList<>();
+        if (!officer.getExpertSkills().isEmpty()) {
+            return eligible;
+        }
         for (MissionControlSkill skill : MissionControlSkill.values()) {
-            if (officer.getSkill(skill) >= SkillGrowth.EXPERT_TRAINING_SKILL_THRESHOLD
-                    && !officer.getExpertSkills().contains(skill)) {
+            if (officer.getSkill(skill) >= SkillGrowth.EXPERT_TRAINING_SKILL_THRESHOLD) {
                 eligible.add(skill);
             }
         }

@@ -347,6 +347,11 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
   **No Agena for Apollo** (user, `design.md` §5, M3): the converter drops `apollo-docking` (`dropped_configurations`).
   The pack hash changed: reset the dev data root, rebuild client and server together.
 
+- **One Expert skill a person** (the user's decision, 2026-11-01, `design.md` §2.2(c)): those holding more keep
+  them, and someone already training toward a second finishes. The replay's Expert lines stop at the 95 % cap
+  (`ExpertRescueLines`). **All hands on deck** (`ui-spec.md` component 11) pulls a department out of training at
+  once. A changed refusal: rebuild client and server together; no reset.
+
 ## How we work
 
 - **Screens:** Claude writes the spec in `ui-spec.md`, the user mocks it up in Claude Design,

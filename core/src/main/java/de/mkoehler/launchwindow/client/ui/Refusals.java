@@ -63,7 +63,7 @@ public final class Refusals {
         Map.entry("COMPONENT_NOT_AVAILABLE", "That component isn't owned and active."),
         Map.entry("TARGET_NOT_ABOVE_SKILL", "Pick a target above the current skill."),
         Map.entry("SKILL_BELOW_THRESHOLD", "Expert training needs a skill of 80."),
-        Map.entry("ALREADY_EXPERT_IN_SKILL", "Already an Expert."),
+        Map.entry("ALREADY_AN_EXPERT", "Already an Expert: a person can only be one in a single skill."),
         Map.entry("NOT_IN_TRAINING", "They're not in training any more."),
         Map.entry("BASIC_TRAINING", "Basic training can't be cut short."),
         Map.entry("UNKNOWN_EMPLOYEE", "That person isn't on the roster any more."),

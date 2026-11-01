@@ -508,18 +508,20 @@ public final class ReplayScreen extends ChromeScreen {
         result.defaults().growX().left();
         result.add(roll(step.firstRollPassed(), "First roll", String.format(Locale.ROOT, "%.0f%% to pass",
             step.successChance()))).padBottom(4f).row();
+        List<ExpertRescueApplied> rescues = new ArrayList<>();
         for (ResolutionEvent event : report.events()) {
             if (event instanceof ExpertRescueApplied rescue && rescue.missionInstanceId().equals(missionId)
                 && rescue.stepId().equals(step.stepId())) {
-                Table row = new Table();
-                Image star = new Image(ui.icon("prestige"), Scaling.fit);
-                star.setColor(Theme.GOLD_TEXT);
-                row.add(star).size(14f).padRight(Theme.SPACE_2);
-                row.add(ui.paragraph(String.format(Locale.ROOT, "%s, an Expert in %s, raised the saving roll from "
-                    + "%.0f%% to %.0f%%.", rescue.name(), skill(rescue.skillName()), rescue.probabilityBefore(),
-                    rescue.probabilityAfter()), Theme.TextStyle.BODY_SM, Theme.INK)).expandX().fillX();
-                result.add(row).padBottom(4f).row();
+                rescues.add(rescue);
             }
+        }
+        for (String line : de.mkoehler.launchwindow.client.view.ExpertRescueLines.of(rescues)) {
+            Table row = new Table();
+            Image star = new Image(ui.icon("prestige"), Scaling.fit);
+            star.setColor(Theme.GOLD_TEXT);
+            row.add(star).size(14f).padRight(Theme.SPACE_2);
+            row.add(ui.paragraph(line, Theme.TextStyle.BODY_SM, Theme.INK)).expandX().fillX();
+            result.add(row).padBottom(4f).row();
         }
         if (step.savingRollPassed() != null) {
             result.add(roll(step.savingRollPassed(), "Saving roll", String.format(Locale.ROOT, "%.0f%% to pass",
@@ -528,10 +530,6 @@ public final class ReplayScreen extends ChromeScreen {
         result.add(ui.notice(noticeKind(step.outcome()), outcomeTitle(step.outcome()), outcomeText(step.outcome())))
             .padTop(Theme.SPACE_1);
         return result;
-    }
-
-    private String skill(String skill) {
-        return de.mkoehler.launchwindow.client.view.CrewSkills.label(skill);
     }
 
     private Table big(String value, String label) {

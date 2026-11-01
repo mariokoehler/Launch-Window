@@ -270,7 +270,8 @@ final class PersonnelDialogs {
             info.pad(Theme.SPACE_3);
             info.defaults().left().growX();
             String title = skill == null
-                ? department.expertEligible(specialist).isEmpty()
+                ? department.isExpert(specialist) ? "Already an Expert."
+                : department.expertEligible(specialist).isEmpty()
                     ? "No skill can train toward Expert yet."
                     : "Pick a skill at " + (int) SkillGrowth.EXPERT_TRAINING_SKILL_THRESHOLD + " or more."
                 : String.format(Locale.ROOT, "%.0f %% chance each season", SkillGrowth.expertTrainingSuccessChance(
@@ -283,6 +284,8 @@ final class PersonnelDialogs {
                 (int) SkillGrowth.SKILL_CAP), Theme.TextStyle.BODY_SM, Theme.INK_MUTED)).padBottom(2f).row();
             info.add(ui.paragraph("An Expert can save a failed step that relies on their skill: crew aboard, or "
                 + "anyone at home, even off the mission. Each Expert helps at most three times a turn.",
+                Theme.TextStyle.BODY_SM, Theme.INK_MUTED)).padBottom(2f).row();
+            info.add(ui.paragraph("A person can only ever be an Expert in one skill, so choose it well.",
                 Theme.TextStyle.BODY_SM, Theme.INK_MUTED));
             return info;
         }
@@ -367,6 +370,84 @@ final class PersonnelDialogs {
                     Theme.NoticeKind.SUCCESS);
             }))).right().fill(false, false);
         host.showDialog(card);
+    }
+
+    /**
+     * The people an "All hands on deck" would pull out: everyone in training but basic training,
+     * which can't be cut short (PullOutOfTrainingOutcome.BASIC_TRAINING).
+     *
+     * @param roster the department's roster
+     * @return those who can be pulled out
+     */
+    static List<Personnel> pullable(List<? extends Personnel> roster) {
+        return roster.stream().filter(person -> person.getAssignmentState() == AssignmentState.IN_TRAINING
+            && person.getTrainingKind() != TrainingKind.BASIC && person.getTrainingKind() != TrainingKind.NONE)
+            .map(Personnel.class::cast).toList();
+    }
+
+    /**
+     * Adds the "All hands on deck" button (the user's request, 2026-11-01) to a title bar, when
+     * anyone can be pulled out.
+     *
+     * @param titleActions the title bar
+     * @param roster       the department's roster
+     */
+    void addAllHands(Table titleActions, List<? extends Personnel> roster) {
+        List<Personnel> people = pullable(roster);
+        if (!people.isEmpty()) {
+            var button = host.onClick(ui.pageButton("All hands on deck · " + people.size()),
+                () -> confirmAllHands(roster));
+            ui.tooltip(button, "All hands on deck", "Pulls everyone out of training who can be. Basic training "
+                + "can't be cut short.");
+            titleActions.add(button).padRight(10f);
+        }
+    }
+
+    /**
+     * Asks to pull everyone out of training who can be, saying what it costs (component 5).
+     *
+     * @param roster the department's roster
+     */
+    void confirmAllHands(List<? extends Personnel> roster) {
+        List<Personnel> people = pullable(roster);
+        long experts = people.stream().filter(person -> person.getTrainingKind() == TrainingKind.EXPERT).count();
+        long rounds = people.size() - experts;
+        String noun = switch (department) {
+            case ASTRONAUT -> "astronaut";
+            case MISSION_CONTROL -> "controller";
+            case SET -> "engineer";
+        };
+        String who = people.size() + " " + noun + (people.size() == 1 ? "" : "s");
+        Table card = host.dialogCard("Confirm", "Pull " + who + " out of training?");
+        StringBuilder body = new StringBuilder();
+        if (rounds > 0) {
+            body.append(rounds == 1 ? "1 keeps" : rounds + " keep").append(" partial credit for the round in progress.");
+        }
+        if (experts > 0) {
+            body.append(rounds > 0 ? " " : "").append(experts).append(" in Expert training ")
+                .append(experts == 1 ? "gets" : "get").append(" nothing for the seasons so far.");
+        }
+        if (roster.stream().anyMatch(person -> person.getAssignmentState() == AssignmentState.IN_TRAINING
+            && person.getTrainingKind() == TrainingKind.BASIC)) {
+            body.append(" Anyone in basic training stays in it.");
+        }
+        card.add(ui.paragraph(body.toString(), Theme.TextStyle.BODY, Theme.INK_MUTED)).padBottom(Theme.SPACE_4).row();
+        card.add(confirmButtons("Pull Out All", Theme.ButtonKind.PRIMARY, () -> {
+            host.closeDialog();
+            pullOutNext(people, 0, who);
+        })).right().fill(false, false);
+        host.showDialog(card);
+    }
+
+    /** One action per person, each sent when the last one is through; a refusal stops the rest. */
+    private void pullOutNext(List<Personnel> people, int index, String who) {
+        host.submit(new PullOutOfTrainingAction(department.group(), people.get(index).getId()), result -> {
+            if (index + 1 < people.size()) {
+                pullOutNext(people, index + 1, who);
+            } else {
+                host.toast("Pulled " + who + " out of training.", Theme.NoticeKind.SUCCESS);
+            }
+        });
     }
 
     /**

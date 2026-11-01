@@ -216,10 +216,14 @@ On the right:
 
     **Row actions:**
     - **Train:** opens the training dialog (component 12);
-    - **Expert training:** astronauts and controllers only, when a skill is at 80
+    - **Expert training:** astronauts and controllers only, once in a person's
+      career *(user, 2026-11-01)*, when a skill is at 80
       or more; open-ended until the trait is earned;
     - **Pull out of training:** partial credit for fixed-length kinds, nothing for
-      Expert; needs a confirmation;
+      Expert; needs a confirmation. **All hands on deck** *(user, 2026-11-01)*, a
+      title-bar button on the Astronaut Complex, Mission Control and the SET Centre, with a count,
+      shown only when someone can be pulled out, does it for everyone at once, basic
+      training excepted; its confirmation says what the pull costs;
     - **Dismiss:** free, refused for an astronaut or controller on a mission
       (crew, CAPCOM, or controller); SET can be dismissed mid-R&D, which frees the
       slot; needs a confirmation.

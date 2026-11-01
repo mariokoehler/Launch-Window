@@ -70,6 +70,7 @@ public final class MissionControlScreen extends ChromeScreen {
     protected void rebuild() {
         PlayerSnapshot state = session.state();
         titleActions.clearChildren();
+        dialogs.addAllHands(titleActions, state.getMissionControlOfficers());
         titleActions.add(onClick(ui.pageButton("Hire"), () -> game.setScreen(new HireScreen(game,
             Department.MISSION_CONTROL)))).padRight(10f);
         titleActions.add(onClick(ui.pageButton("Manage department"), () -> dialogs.openManageDepartment(0)))
@@ -328,6 +329,13 @@ public final class MissionControlScreen extends ChromeScreen {
         actions.add(actionButton("Dismiss", Theme.ButtonKind.DESTRUCTIVE, () -> dialogs.confirmDismiss(officer)));
         row.add(actions).right();
         return row;
+    }
+
+    /**
+     * Asks to pull everyone out of training, as the All hands on deck button does.
+     */
+    public void confirmAllHands() {
+        dialogs.confirmAllHands(session.state().getMissionControlOfficers());
     }
 
     /**

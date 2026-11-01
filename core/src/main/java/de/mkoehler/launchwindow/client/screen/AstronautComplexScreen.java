@@ -74,6 +74,7 @@ public final class AstronautComplexScreen extends ChromeScreen {
     @Override
     protected void rebuild() {
         titleActions.clearChildren();
+        dialogs.addAllHands(titleActions, session.state().getAstronauts());
         titleActions.add(onClick(ui.pageButton("Hire"), () -> game.setScreen(new HireScreen(game,
             Department.ASTRONAUT)))).padRight(10f);
         titleActions.add(onClick(ui.pageButton("Manage department"), () -> dialogs.openManageDepartment(0)));
@@ -362,6 +363,13 @@ public final class AstronautComplexScreen extends ChromeScreen {
      */
     public void openTraining(Astronaut astronaut, de.mkoehler.launchwindow.model.TrainingKind kind, String skill) {
         dialogs.openTraining(astronaut, kind, skill);
+    }
+
+    /**
+     * Asks to pull everyone out of training, as the All hands on deck button does.
+     */
+    public void confirmAllHands() {
+        dialogs.confirmAllHands(session.state().getAstronauts());
     }
 
     /**

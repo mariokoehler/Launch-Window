@@ -53,10 +53,6 @@ public final class SetCentreScreen extends ChromeScreen {
     public SetCentreScreen(LaunchWindowGame game) {
         super(game, List.of(Crumb.SPACE_COMPLEX, Crumb.SET_CENTRE), "SET Centre",
             "Personnel overview");
-        titleActions.add(onPage(ui.pageButton("Hire"), () -> game.setScreen(new HireScreen(game)))).padRight(10f);
-        titleActions.add(onPage(ui.pageButton("Manage Department"), this::openManageDepartment)).padRight(10f);
-        titleActions.add(button("Payload R&D", Theme.ButtonKind.PRIMARY,
-            () -> game.setScreen(new RndBoardScreen(game, RndBoardScreen.Board.PAYLOAD))));
         rebuild();
     }
 
@@ -67,6 +63,13 @@ public final class SetCentreScreen extends ChromeScreen {
 
     @Override
     protected void rebuild() {
+        titleActions.clearChildren();
+        dialogs.addAllHands(titleActions, session.state().getSetSpecialists());
+        titleActions.add(onPage(ui.pageButton("Hire"), () -> game.setScreen(new HireScreen(game)))).padRight(10f);
+        titleActions.add(onPage(ui.pageButton("Manage Department"), this::openManageDepartment)).padRight(10f);
+        titleActions.add(button("Payload R&D", Theme.ButtonKind.PRIMARY,
+            () -> game.setScreen(new RndBoardScreen(game, RndBoardScreen.Board.PAYLOAD))));
+
         content.clearChildren();
         content.top();
         content.defaults().growX();
@@ -313,7 +316,14 @@ public final class SetCentreScreen extends ChromeScreen {
     }
 
     /**
-     * Asks to pull an engineer out of training (component 5).
+     * Asks to pull everyone out of training, as the All hands on deck button does.
+     */
+    public void confirmAllHands() {
+        dialogs.confirmAllHands(session.state().getSetSpecialists());
+    }
+
+    /**
+     * Asks to pull an engineer out of training, as their Pull out button does.
      *
      * @param specialist the engineer
      */

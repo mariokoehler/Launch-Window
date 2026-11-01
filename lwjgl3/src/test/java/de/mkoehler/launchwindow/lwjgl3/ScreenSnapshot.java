@@ -277,6 +277,10 @@ public final class ScreenSnapshot {
         // The idle tip done: only its own shots show it (groundingShots).
         game.useAdvisorMarksInMemory(new java.util.HashSet<>(java.util.Set.of("idleTipDone")));
         // -Dshots=contracts renders only one group, for a quick look at the screens being worked on.
+        if ("allhands".equals(System.getProperty("shots"))) {
+            allHandsShots(folder, game);
+            return;
+        }
         if ("configcards".equals(System.getProperty("shots"))) {
             configCardShots(folder, game);
             return;
@@ -1581,6 +1585,41 @@ public final class ScreenSnapshot {
      * (no rocket picker) and its gated research flight, and Apollo's own lift easing the Saturn IB's
      * load.
      */
+    /**
+     * All hands on deck: two astronauts and two controllers in training, one of each on Expert.
+     */
+    private static void allHandsShots(File folder, LaunchWindowGame game) {
+        PlayerSnapshot state = missionControlState();
+        List<Astronaut> astronauts = state.getAstronauts().stream()
+            .filter(astronaut -> astronaut.getAssignmentState() == AssignmentState.IDLE).limit(2).toList();
+        List<de.mkoehler.launchwindow.model.MissionControlOfficer> officers = state.getMissionControlOfficers().stream()
+            .filter(officer -> officer.getAssignmentState() == AssignmentState.IDLE).limit(2).toList();
+        for (int i = 0; i < 2; i++) {
+            TrainingKind kind = i == 0 ? TrainingKind.ADVANCED : TrainingKind.EXPERT;
+            Astronaut astronaut = astronauts.get(i);
+            astronaut.setAssignmentState(AssignmentState.IN_TRAINING);
+            astronaut.setTrainingKind(kind);
+            astronaut.setTrainingTargetSkill(AstronautSkill.EVA);
+            astronaut.setTrainingSeasonsTotal(3);
+            var officer = officers.get(i);
+            officer.setAssignmentState(AssignmentState.IN_TRAINING);
+            officer.setTrainingKind(kind);
+            officer.setTrainingTargetSkill(de.mkoehler.launchwindow.model.MissionControlSkill.values()[0]);
+            officer.setTrainingSeasonsTotal(3);
+        }
+        String hash = ContentPackHash.ofClasspath("content/early-era", ScreenSnapshot.class.getClassLoader());
+        startSession(game, state, GameInfoResponse.success("early-era", hash, DECLARED, 23, true,
+            6 * 3_600_000L, 0L, null, List.of(), List.of(), 0));
+        write(folder, "allhands-ac.png", new AstronautComplexScreen(game), null);
+        write(folder, "allhands-ac-confirm.png", new AstronautComplexScreen(game), AstronautComplexScreen::confirmAllHands);
+        write(folder, "allhands-mc.png", new MissionControlScreen(game), null);
+        write(folder, "allhands-mc-confirm.png", new MissionControlScreen(game), MissionControlScreen::confirmAllHands);
+        startSession(game, setCentreState(), GameInfoResponse.success("early-era", hash, DECLARED, 23, true,
+            6 * 3_600_000L, 0L, null, List.of(), List.of(), 0));
+        write(folder, "allhands-set.png", new SetCentreScreen(game), null);
+        write(folder, "allhands-set-confirm.png", new SetCentreScreen(game), SetCentreScreen::confirmAllHands);
+    }
+
     /**
      * Every program's mission cards in the standard pack, for an agency with every program open and
      * no one on staff, so the cards carry their longest lines: text-fit.tsv lists any that overflow.

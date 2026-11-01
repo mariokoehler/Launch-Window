@@ -367,7 +367,7 @@
       "group": "Missions",
       "title": "Experts",
       "body": [
-        "An astronaut or flight controller with a skill of {training.expertSkill} or more can train to become an Expert in it; engineers can't. Each season of Expert training succeeds with a chance from {training.expertBase} % (at {training.expertSkill}) to {training.expertBest} % (at 100), and the skill doesn't grow meanwhile. The Expert mark is for good, and a career can collect several.",
+        "An astronaut or flight controller with a skill of {training.expertSkill} or more can train to become an Expert in it; engineers can't. Each season of Expert training succeeds with a chance from {training.expertBase} % (at {training.expertSkill}) to {training.expertBest} % (at 100), and the skill doesn't grow meanwhile. The Expert mark is for good, and a person can only ever earn one: once they're an Expert in a skill, Expert training is closed to them.",
         "## Rescues",
         "When a step's first roll fails, every Expert in a skill the step involves helps with the saving throw, whether they're aboard, idle or training. Each closes part of the gap to a certain rescue: {missions.expertBoosts} % on their first, second and third use in a turn, then nothing.",
         "- A controller on another mission, or an astronaut on PR duty, helps at {missions.expertAway} %.",

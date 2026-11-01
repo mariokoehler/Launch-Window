@@ -242,17 +242,18 @@ public enum Department {
 
     /**
      * Returns the skills a person could start Expert training in: at or above the threshold
-     * ({@link SkillGrowth#EXPERT_TRAINING_SKILL_THRESHOLD}) and not Expert yet.
+     * ({@link SkillGrowth#EXPERT_TRAINING_SKILL_THRESHOLD}), for someone not an Expert in anything
+     * yet: one Expert skill a person.
      *
      * @param person the person, of this department
      * @return the skill names, in the enum's order; empty for SET
      */
     public List<String> expertEligible(Personnel person) {
-        if (!hasExperts()) {
+        if (!hasExperts() || isExpert(person)) {
             return List.of();
         }
-        return skills.stream().filter(skill -> skill(person, skill) >= SkillGrowth.EXPERT_TRAINING_SKILL_THRESHOLD
-            && !isExpert(person, skill)).toList();
+        return skills.stream().filter(skill -> skill(person, skill) >= SkillGrowth.EXPERT_TRAINING_SKILL_THRESHOLD)
+            .toList();
     }
 
     /**

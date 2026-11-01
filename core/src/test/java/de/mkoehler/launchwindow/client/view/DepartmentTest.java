@@ -36,7 +36,9 @@ class DepartmentTest {
         assertEquals(List.of("LEADERSHIP", "PILOTING", "EVA", "SCIENCE", "FITNESS"), department.skills());
         assertEquals(81.0, department.skill(astronaut, "FITNESS"));
         assertTrue(department.isExpert(astronaut, "LEADERSHIP"));
-        assertEquals(List.of("FITNESS"), department.expertEligible(astronaut));
+        assertEquals(List.of(), department.expertEligible(astronaut), "one Expert skill a person");
+        astronaut.getExpertSkills().clear();
+        assertEquals(List.of("LEADERSHIP", "FITNESS"), department.expertEligible(astronaut));
         assertEquals(50, department.retirementAge());
         assertEquals("AGE 30 · RETIRES IN 20 YRS", department.ageLine(astronaut));
         astronaut.setAge(49);

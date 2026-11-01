@@ -1156,7 +1156,8 @@ season unchanged. Tiger Teams' live per-step choice doesn't fit, so it was redes
 - **Expert trait** (replaces Tiger Teams, user, 2026-09-27 and 2026-10-02): an astronaut or
   controller (never SET) with a skill at 80 or more can train toward Expert in it. Each season
   succeeds with `25 + 10 × (skill − 80) / 20` percent, with no skill growth; success grants the
-  trait for good. Several skills can be earned over a career. Expert training is the fourth kind
+  trait for good. One Expert skill a person, for good (user, 2026-11-01; those who already hold more
+  keep them): an Expert can't start Expert training again. Expert training is the fourth kind
   in the shared training dialog. How Experts rescue steps: §2.5(i).
 - **Rocket-plane wings** (the user's idea, 2026-10-26, `rules.RocketPlaneWings`): a personal mark an astronaut earns
   by flying a rocket plane (the X-15, the MiG E-154; any of their flights) home. It's kept for good
@@ -1607,7 +1608,7 @@ such as letting a brilliant troublemaker go.
     | Astronaut | Fly on a joint flight | flew as crew on a configuration of two launches or more | another astronaut did | such a crewed configuration is open | 14 |
     | Flight controller | Be on the consoles for a crewed orbital flight | flew on a control slot of a crewed orbital mission | another controller did | a crewed orbital configuration is open | 12 |
     | Flight controller | Be on the consoles for a first | on a control slot of a mission that settles a goal first in the game | another controller was | as "be first" | 16 |
-    | Flight controller | Become an Expert | earns the Expert trait in their best skill | (never) | not yet Expert in it | 16 |
+    | Flight controller | Become an Expert | earns the Expert trait in their best skill | (never) | not an Expert in anything yet | 16 |
     | Engineer | Bring a component to its R&D cap | on the team when *that* component reaches its cap | it reaches the cap without them | the component is owned, active and below its cap | 12 |
     | Engineer | Build hardware for a first | a component they ever worked on flies on a mission that settles a goal first in the game | (never) | as "be first" | 16 |
     | Engineer | Be the agency's best | the most skilled engineer in their own best skill (at least three engineers) | (never) | not already the best | 12 |
@@ -1921,7 +1922,8 @@ layouts.
   after. Every consultation counts, even if the step still fails. **Capped at 95 %**, without
   ever lowering a higher natural chance.
 - No extra randomness. `ExpertRescueApplied` reports each consultation; its "after" value doesn't
-  reflect the cap.
+  reflect the cap. The replay holds its lines to it (`ExpertRescueLines`, user, 2026-11-01): an
+  Expert past the cap "couldn't add anything", one out of uses "had nothing left to give".
 
 **(j) A lost crew grounds crewed flights** (the user's decision, 2026-10-12: "gambling with the lives of
 the astronauts should be where the line is drawn"; built the same day, `rules.CrewedGrounding`). The
