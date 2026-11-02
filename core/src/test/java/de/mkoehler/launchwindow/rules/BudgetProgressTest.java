@@ -239,13 +239,17 @@ class BudgetProgressTest {
     }
 
     /**
-     * A conversion brings funds up to two seasons of running costs at most, and
-     * is only available while in debt.
+     * A conversion brings funds up to two seasons of running costs at most, in debt or not.
      */
     @Test
-    void conversionIsOnlyOfferedInDebtAndCappedAtTwoSeasonsOfCosts() {
+    void conversionIsCappedAtTwoSeasonsOfCosts() {
         PlayerSnapshot solvent = player(10, 10_000, 0, 200);
-        assertEquals(PrestigeConversion.Outcome.NOT_IN_DEBT, PrestigeConversion.convert(solvent, EMPTY, SCHEDULE, 5));
+        assertEquals(390, PrestigeConversion.maxConversion(solvent, EMPTY));
+        assertEquals(PrestigeConversion.Outcome.EXCEEDS_CAP, PrestigeConversion.convert(solvent, EMPTY, SCHEDULE, 391));
+        assertEquals(PrestigeConversion.Outcome.CONVERTED, PrestigeConversion.convert(solvent, EMPTY, SCHEDULE, 390));
+        assertEquals(400, solvent.getFunds());
+        assertEquals(0, PrestigeConversion.maxConversion(solvent, EMPTY), "the ceiling is reached");
+        assertFalse(PrestigeConversion.turnLimitReached(solvent, EMPTY), "the ceiling stops it, not the turn");
 
         // Funds -500, running costs 200 -> cap is 2*200 + 500 = 900.
         PlayerSnapshot indebted = player(-500, 10_000, 0, 200);
@@ -256,6 +260,41 @@ class BudgetProgressTest {
         assertEquals(PrestigeConversion.Outcome.CONVERTED, PrestigeConversion.convert(indebted, EMPTY, SCHEDULE, 900));
         assertEquals(400, indebted.getFunds(), "funds end at exactly two seasons of running costs");
         assertEquals(10_000 - 900 / 4, indebted.getPrestige(), "this schedule pays 4 funds per prestige point");
+    }
+
+    /**
+     * The playtest's case: a second conversion in the turn tops up what the debt ate, but the turn's
+     * conversions can't raise more than the first could have.
+     */
+    @Test
+    void aSecondConversionTopsUpWithinTheTurnsLimit() {
+        PlayerSnapshot player = player(-500, 10_000, 0, 200);
+
+        assertEquals(PrestigeConversion.Outcome.CONVERTED, PrestigeConversion.convert(player, EMPTY, SCHEDULE, 600));
+        assertEquals(100, player.getFunds());
+        assertEquals(300, PrestigeConversion.maxConversion(player, EMPTY), "900 for the turn, 600 of it used");
+        assertEquals(PrestigeConversion.Outcome.CONVERTED, PrestigeConversion.convert(player, EMPTY, SCHEDULE, 300));
+        assertEquals(400, player.getFunds());
+    }
+
+    /**
+     * Spending what a conversion raised doesn't open a new one in the same turn, and the next
+     * season starts the limit over.
+     */
+    @Test
+    void spendingDoesNotRefillTheTurnsLimit() {
+        PlayerSnapshot player = player(0, 10_000, 0, 200);
+
+        assertEquals(PrestigeConversion.Outcome.CONVERTED, PrestigeConversion.convert(player, EMPTY, SCHEDULE, 400));
+        player.setFunds(0);
+        assertEquals(0, PrestigeConversion.maxConversion(player, EMPTY));
+        assertTrue(PrestigeConversion.turnLimitReached(player, EMPTY));
+        assertEquals(PrestigeConversion.Outcome.EXCEEDS_CAP, PrestigeConversion.convert(player, EMPTY, SCHEDULE, 1));
+
+        BudgetProgress.advanceSeason(player, EMPTY, SCHEDULE, 1);
+        assertEquals(0, player.getConvertedThisTurn());
+        assertEquals(0, player.getConversionLimitThisTurn());
+        assertTrue(PrestigeConversion.maxConversion(player, EMPTY) > 0);
     }
 
     /**

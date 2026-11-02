@@ -35,7 +35,7 @@ import java.util.Locale;
 /**
  * The Public Affairs Office ({@code ui-spec.md} &sect;4.10): funds and running costs; prestige, the
  * next funding review and the review table; active effects and the news log. Convert prestige
- * to funds while in debt. Every number comes from {@code core}'s rules ({@link BudgetProgress},
+ * to funds. Every number comes from {@code core}'s rules ({@link BudgetProgress},
  * {@link PrestigeConversion}).
  *
  * <p>Reviews and conversions are priced with the game's own budget schedule, which the game info
@@ -353,9 +353,7 @@ public final class PublicAffairsScreen extends ChromeScreen {
             big.add(ui.label(last, Theme.TextStyle.CAPTION, Theme.INK_MUTED)).padTop(2f);
         }
         head.add(big).expandX().left();
-        if (debt) {
-            head.add(actionButton("Convert prestige", Theme.ButtonKind.PRIMARY, this::openConvert)).bottom();
-        }
+        head.add(convertButton(debt)).bottom();
         card.add(head).padBottom(Theme.SPACE_3).row();
         card.add(netLines(funding, costs.total(), net)).row();
         // How long the funds last (the user's request, 2026-10-10); in debt, the notice above says it.
@@ -685,18 +683,48 @@ public final class PublicAffairsScreen extends ChromeScreen {
     // ---- Convert prestige
 
     /**
-     * Opens the Convert prestige dialog, as its button does (only while in debt).
+     * The button that opens the dialog: there at all times, loud in debt, greyed out with the
+     * reason when no conversion is possible.
+     */
+    private TextButton convertButton(boolean debt) {
+        TextButton button = actionButton("Convert prestige",
+            debt ? Theme.ButtonKind.PRIMARY : Theme.ButtonKind.SECONDARY, this::openConvert);
+        String blocked = convertBlocked();
+        button.setDisabled(blocked != null);
+        ui.tooltip(button, "Convert prestige", blocked != null ? blocked : "For emergencies: each point buys "
+            + money(schedule().fundsPerPrestige()) + ", usually far less than it earns at a funding review.");
+        return button;
+    }
+
+    /** Why no conversion is possible now, or {@code null} if one is. */
+    private String convertBlocked() {
+        PlayerSnapshot state = session.state();
+        if (PrestigeConversion.turnLimitReached(state, session.catalog())) {
+            return "This turn's conversions have reached their limit. It starts over next turn.";
+        }
+        if (PrestigeConversion.maxConversion(state, session.catalog()) <= 0) {
+            return String.format(Locale.ROOT, "Funds already cover %d seasons of running costs, as far as a "
+                + "conversion goes.", PrestigeConversion.COVERED_SEASONS);
+        }
+        if (schedule().affordableFunds(state.getPrestige()) <= 0) {
+            return "Not enough prestige to convert.";
+        }
+        return null;
+    }
+
+    /**
+     * Opens the Convert prestige dialog, as its button does.
      */
     public void openConvert() {
+        String blocked = convertBlocked();
+        if (blocked != null) {
+            toast(blocked, Theme.NoticeKind.INFO);
+            return;
+        }
         PlayerSnapshot state = session.state();
         long cap = PrestigeConversion.maxConversion(state, session.catalog());
         long affordable = schedule().affordableFunds(state.getPrestige());
         long max = Math.min(cap, affordable);
-        if (state.getFunds() >= 0 || max <= 0) {
-            toast(state.getFunds() >= 0 ? "Prestige can only be converted while in debt."
-                : "Not enough prestige to convert.", Theme.NoticeKind.INFO);
-            return;
-        }
         showDialog(convertCard(max, max, cap, affordable), 580f);
     }
 
@@ -704,8 +732,8 @@ public final class PublicAffairsScreen extends ChromeScreen {
         PlayerSnapshot state = session.state();
         long perPoint = schedule().fundsPerPrestige();
         Table card = dialogCard("Public Affairs Office", "Convert prestige to funds");
-        card.add(ui.paragraph("Only while in debt. Each prestige point buys " + money(perPoint) + ", and the prestige "
-            + "is gone for good, including at the next funding review.", Theme.TextStyle.BODY, Theme.INK_MUTED))
+        card.add(ui.paragraph("For emergencies. Each prestige point buys " + money(perPoint) + ", usually far less than "
+            + "it earns at a funding review, and the prestige is gone for good.", Theme.TextStyle.BODY, Theme.INK_MUTED))
             .padBottom(Theme.SPACE_4).row();
         Table head = new Table();
         head.add(ui.label("FUNDS TO RAISE", Theme.TextStyle.LABEL, Theme.INK_MUTED)).expandX().left();
@@ -731,6 +759,12 @@ public final class PublicAffairsScreen extends ChromeScreen {
             long price = schedule().prestigeCost(chosen);
             lines.add(row("Funds", money(state.getFunds()) + " → " + money(state.getFunds() + chosen), Theme.INK,
                 Theme.TextStyle.BODY_SM)).row();
+            if (state.getFunds() < 0) {
+                lines.add(row("Goes to the debt", money(Math.min(chosen, -state.getFunds())), Theme.INK,
+                    Theme.TextStyle.BODY_SM)).row();
+                lines.add(row("Left to spend", money(Math.max(0, state.getFunds() + chosen)), Theme.INK,
+                    Theme.TextStyle.BODY_SM)).row();
+            }
             lines.add(row("Prestige, at " + money(perPoint) + " a point", String.format(Locale.ROOT, "%,d → %,d",
                 state.getPrestige(), state.getPrestige() - price), Theme.INK, Theme.TextStyle.BODY_SM)).row();
             BudgetProgress.ReviewForecast after = BudgetProgress.forecast(state, schedule(), state.getPrestige() - price);
@@ -749,9 +783,10 @@ public final class PublicAffairsScreen extends ChromeScreen {
         });
         long running = BudgetProgress.runningCosts(state, session.catalog());
         card.add(ui.notice(Theme.NoticeKind.INFO, "How much you can convert.", String.format(Locale.ROOT,
-            "The %d-season limit allows up to %s: enough to bring funds to %d seasons of running costs (%s a season). "
-                + "Your %,d prestige covers %s.", PrestigeConversion.COVERED_SEASONS, money(cap),
-            PrestigeConversion.COVERED_SEASONS, money(running), state.getPrestige(), money(affordable))))
+            "Up to %s now: a conversion stops at %d seasons of running costs in the bank (%s a season), and this "
+                + "turn's conversions together stop at %s. Your %,d prestige covers %s.", money(cap),
+            PrestigeConversion.COVERED_SEASONS, money(running),
+            money(PrestigeConversion.turnLimit(state, session.catalog())), state.getPrestige(), money(affordable))))
             .padBottom(Theme.SPACE_3).row();
         long shortfall = running - state.getFundingRatePerSeason();
         if (shortfall > 0) {

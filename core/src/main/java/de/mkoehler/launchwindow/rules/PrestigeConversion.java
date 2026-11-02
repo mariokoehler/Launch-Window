@@ -7,12 +7,12 @@ import de.mkoehler.launchwindow.model.PlayerSnapshot;
 import java.util.Objects;
 
 /**
- * <p>The prestige-to-funds conversion a player may take while in debt
- * ({@code design.md} &sect;2.1(d), decided 2026-10-03): the player chooses an
- * amount of funds, paid for in prestige at {@link BudgetSchedule#fundsPerPrestige()}
- * funds per point ({@link BudgetSchedule#prestigeCost(long)}). A player is only offered this while their funds are below
- * zero, and the amount is capped so that the funds end up no higher than two
- * seasons of running costs.</p>
+ * <p>The prestige-to-funds conversion ({@code design.md} &sect;2.1(d), decided 2026-10-03, open
+ * outside debt since 2026-11-02): the player chooses an amount of funds, paid for in prestige at
+ * {@link BudgetSchedule#fundsPerPrestige()} funds per point ({@link BudgetSchedule#prestigeCost(long)}).
+ * Two limits hold: funds end up no higher than two seasons of running costs, and a turn's
+ * conversions together raise no more than its first one could have, so converting and spending in
+ * turns can't empty a player's prestige in one go.</p>
  *
  * <p>Headless: the journaled player action that will call this lands with M4's
  * action dispatch, not here.</p>
@@ -36,19 +36,17 @@ public final class PrestigeConversion {
     public enum Outcome {
         /** The funds were credited and the prestige spent. */
         CONVERTED,
-        /** The player's funds aren't below zero, so nothing may be converted. */
-        NOT_IN_DEBT,
         /** The requested amount isn't positive. */
         NOT_POSITIVE,
-        /** The requested amount would take funds past two seasons of running costs. */
+        /** The requested amount would take funds past two seasons of running costs, or past the turn's limit. */
         EXCEEDS_CAP,
         /** The player doesn't hold enough prestige to pay for the amount. */
         INSUFFICIENT_PRESTIGE
     }
 
     /**
-     * Converts prestige into funds, if the player is in debt and the amount
-     * fits the cap. Changes nothing unless the outcome is {@link Outcome#CONVERTED}.
+     * Converts prestige into funds, if the amount fits the cap. The turn's first conversion sets
+     * the turn's limit. Changes nothing unless the outcome is {@link Outcome#CONVERTED}.
      *
      * @param snapshot the player converting; mutated in place on success
      * @param catalog  the content catalog, for the running costs
@@ -62,9 +60,6 @@ public final class PrestigeConversion {
         Objects.requireNonNull(snapshot, "snapshot must not be null");
         Objects.requireNonNull(catalog, "catalog must not be null");
         Objects.requireNonNull(schedule, "schedule must not be null");
-        if (snapshot.getFunds() >= 0) {
-            return Outcome.NOT_IN_DEBT;
-        }
         if (amount <= 0) {
             return Outcome.NOT_POSITIVE;
         }
@@ -76,21 +71,55 @@ public final class PrestigeConversion {
         if (prestigeCost > snapshot.getPrestige()) {
             return Outcome.INSUFFICIENT_PRESTIGE;
         }
+        if (snapshot.getConversionLimitThisTurn() == 0) {
+            snapshot.setConversionLimitThisTurn(cap);
+        }
+        snapshot.setConvertedThisTurn(snapshot.getConvertedThisTurn() + amount);
         snapshot.setFunds(snapshot.getFunds() + amount);
         snapshot.setPrestige(snapshot.getPrestige() - prestigeCost);
         return Outcome.CONVERTED;
     }
 
     /**
-     * The largest amount one conversion may add: enough to bring funds up to
+     * The largest amount the next conversion may add: enough to bring funds up to
      * {@link #COVERED_SEASONS} seasons of running costs, which from a debt of
-     * {@code D} is {@code D + 2R}. Zero if the funds already cover that.
+     * {@code D} is {@code D + 2R}, and no more than what's left of the turn's limit.
+     * Zero if the funds already cover that or the limit is used up.
      *
      * @param snapshot the player
      * @param catalog  the content catalog, for the running costs
      * @return the cap, non-negative
      */
     public static long maxConversion(PlayerSnapshot snapshot, ContentCatalog catalog) {
+        long room = roomToCeiling(snapshot, catalog);
+        long limit = snapshot.getConversionLimitThisTurn();
+        return limit == 0 ? room : Math.min(room, Math.max(0, limit - snapshot.getConvertedThisTurn()));
+    }
+
+    /**
+     * The turn's limit: what its first conversion set, or, before one, what it could raise now.
+     *
+     * @param snapshot the player
+     * @param catalog  the content catalog, for the running costs
+     * @return the limit on the turn's conversions together, non-negative
+     */
+    public static long turnLimit(PlayerSnapshot snapshot, ContentCatalog catalog) {
+        long limit = snapshot.getConversionLimitThisTurn();
+        return limit == 0 ? roomToCeiling(snapshot, catalog) : limit;
+    }
+
+    /**
+     * Whether the turn's limit, not the funds' ceiling, is what stops the next conversion.
+     *
+     * @param snapshot the player
+     * @param catalog  the content catalog, for the running costs
+     * @return {@code true} if funds have room but the turn's limit is used up
+     */
+    public static boolean turnLimitReached(PlayerSnapshot snapshot, ContentCatalog catalog) {
+        return roomToCeiling(snapshot, catalog) > 0 && maxConversion(snapshot, catalog) == 0;
+    }
+
+    private static long roomToCeiling(PlayerSnapshot snapshot, ContentCatalog catalog) {
         long target = COVERED_SEASONS * BudgetProgress.runningCosts(snapshot, catalog);
         return Math.max(0, target - snapshot.getFunds());
     }

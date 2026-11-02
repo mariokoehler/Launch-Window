@@ -7,7 +7,7 @@ import de.mkoehler.launchwindow.persistence.PlayerAction;
 import de.mkoehler.launchwindow.rules.PrestigeConversion;
 
 /**
- * Converts prestige into funds while in debt ({@link PrestigeConversion#convert}).
+ * Converts prestige into funds ({@link PrestigeConversion#convert}).
  *
  * <p>Journaled as {@code "convertPrestige"}; see {@code design.md} &sect;5, M4.</p>
  *

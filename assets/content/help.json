@@ -114,7 +114,7 @@
       "body": [
         "Your agency starts with {budget.startFunds} in funds, {budget.startPrestige} prestige and {budget.startFunding} in funding a season.",
         "## Income",
-        "Funding is the main income. Missions and goals pay prestige, not money, and prestige sets your funding. Money also comes from contracts, from refunds when you scrub or cancel a mission, and from turning prestige into funds while in debt.",
+        "Funding is the main income. Missions and goals pay prestige, not money, and prestige sets your funding. Money also comes from contracts, from refunds when you scrub or cancel a mission, and from turning prestige into funds.",
         "Every {budget.seasonsPerReview} seasons of your agency, a budget review turns your prestige into the funding rate for the next {budget.seasonsPerReview}. The Public Affairs Office shows your bracket and what the next review would pay.",
         "If your prestige fell short of a review's minimum, the next review's bracket moves down by that shortfall, so one bad stretch isn't counted twice.", "Between reviews, funding follows your prestige up but never down: once the first review has set your rate, each season your prestige is higher than ever since the last review, the review in force pays for the difference straight away. Extra funding from events stays on top.", "When another agency is first to a goal you could have reached, the government wants an answer: the next review counts {budget.rivalShare} % of that goal's first-time prestige on top of yours. It counts once, at that review, and only for goals your agency's programs can reach.",
         "## Running costs",
@@ -124,7 +124,9 @@
         "- each building's upkeep;",
         "- the Intelligence Office at its level.",
         "## Debt",
-        "Funds can go below zero. In debt you can't spend on anything new, and the Intelligence Office loses a level each turn; nothing else happens. While in debt, the Public Affairs Office can turn prestige into funds at {budget.fundsPerPrestige} funds a point, enough to clear the debt and leave {budget.coveredSeasons} seasons of running costs in the bank. Prestige spent this way is missing at the next review, so keep it for emergencies."
+        "Funds can go below zero. In debt you can't spend on anything new, and the Intelligence Office loses a level each turn; nothing else happens.",
+        "## Converting prestige",
+        "At any time the Public Affairs Office can turn prestige into funds at {budget.fundsPerPrestige} funds a point, up to {budget.coveredSeasons} seasons of running costs in the bank. In debt, the money clears the debt first. You can convert more than once a turn, but together a turn's conversions raise no more than the first one could have. It's a poor price: a point usually earns far more at a review, and prestige spent this way is missing there, so keep it for emergencies."
       ],
       "related": ["prestige", "salaries", "random-events"]
     },

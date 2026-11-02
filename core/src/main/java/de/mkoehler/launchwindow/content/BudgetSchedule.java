@@ -19,7 +19,7 @@ import java.util.Objects;
  * @param initialFunds        the funds a new player starts with
  * @param initialPrestige     the prestige a new player starts with
  * @param initialFundingRate  the funding granted per season before the first review
- * @param fundsPerPrestige    funds one prestige point buys when converted while in debt; {@code design.md} &sect;2.1(d)
+ * @param fundsPerPrestige    funds one prestige point buys when converted; {@code design.md} &sect;2.1(d)
  * @param reviews             the bracket table, one entry per successive review; never empty
  * @author Mario Koehler
  */

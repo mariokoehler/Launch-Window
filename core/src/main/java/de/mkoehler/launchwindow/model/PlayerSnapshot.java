@@ -66,6 +66,10 @@ public class PlayerSnapshot {
     private long lastReviewShift;
     /** The highest prestige the funding rate already pays for since the last review ({@code BudgetProgress}). */
     private long fundedPrestige;
+    /** What this turn's conversions may raise together, set by its first ({@code PrestigeConversion}); 0 before one. */
+    private long conversionLimitThisTurn;
+    /** The funds this turn's conversions have raised so far ({@code PrestigeConversion}). */
+    private long convertedThisTurn;
     private double rdResultsMultiplier = 1.0;
     private int rdResultsSeasonsRemaining;
     private double costMultiplier = 1.0;
@@ -1152,6 +1156,42 @@ public class PlayerSnapshot {
      */
     public void setFundedPrestige(long fundedPrestige) {
         this.fundedPrestige = fundedPrestige;
+    }
+
+    /**
+     * Returns what this turn's conversions may raise together, set by the turn's first.
+     *
+     * @return the limit, 0 before the turn's first conversion
+     */
+    public long getConversionLimitThisTurn() {
+        return conversionLimitThisTurn;
+    }
+
+    /**
+     * Sets what this turn's conversions may raise together.
+     *
+     * @param conversionLimitThisTurn the limit, 0 when a new turn opens
+     */
+    public void setConversionLimitThisTurn(long conversionLimitThisTurn) {
+        this.conversionLimitThisTurn = conversionLimitThisTurn;
+    }
+
+    /**
+     * Returns the funds this turn's conversions have raised so far.
+     *
+     * @return the funds
+     */
+    public long getConvertedThisTurn() {
+        return convertedThisTurn;
+    }
+
+    /**
+     * Sets the funds this turn's conversions have raised so far.
+     *
+     * @param convertedThisTurn the funds
+     */
+    public void setConvertedThisTurn(long convertedThisTurn) {
+        this.convertedThisTurn = convertedThisTurn;
     }
 
     /**

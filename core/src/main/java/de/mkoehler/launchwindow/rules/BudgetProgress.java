@@ -157,6 +157,9 @@ public final class BudgetProgress {
         long income = snapshot.getFundingRatePerSeason();
         snapshot.setFunds(snapshot.getFunds() + income);
         events.add(new SeasonFundsSettled(expenses, income, snapshot.getFunds(), costs));
+        // A new turn opens: PrestigeConversion's limit starts over.
+        snapshot.setConversionLimitThisTurn(0);
+        snapshot.setConvertedThisTurn(0);
         return events;
     }
 

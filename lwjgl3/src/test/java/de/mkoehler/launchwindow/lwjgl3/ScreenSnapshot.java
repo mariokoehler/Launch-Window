@@ -3042,6 +3042,12 @@ public final class ScreenSnapshot {
         startSession(game, debt, info);
         write(folder, "pao-debt.png", new PublicAffairsScreen(game), null);
         write(folder, "pao-convert.png", new PublicAffairsScreen(game), PublicAffairsScreen::openConvert);
+        PlayerSnapshot low = missionControlState();
+        low.setFunds(300);
+        low.setPrestige(2_140);
+        startSession(game, low, info);
+        write(folder, "pao-low.png", new PublicAffairsScreen(game), null);
+        write(folder, "pao-convert-low.png", new PublicAffairsScreen(game), PublicAffairsScreen::openConvert);
         PlayerSnapshot effects = missionControlState();
         effects.setCostMultiplier(0.85, 5);
         effects.setRdResults(0.9, 2);

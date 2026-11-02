@@ -15,7 +15,7 @@ import java.util.List;
  * @param initialFunds       the funds a new player starts with
  * @param initialPrestige    the prestige a new player starts with
  * @param initialFundingRate the funding per season before the first review
- * @param fundsPerPrestige   the funds one prestige point buys when converted in debt
+ * @param fundsPerPrestige   the funds one prestige point buys when converted
  * @param reviews            the review brackets, in order
  * @author Mario Koehler
  */

@@ -1054,10 +1054,20 @@ reaches its first review later in real time, which is fine.
   (§5, M3).
 - **Debt is allowed** (user, 2026-10-03; BASPM ends the game below zero): debt blocks new
   spending through the ordinary `INSUFFICIENT_FUNDS` checks and has no other penalty.
-- **Prestige-to-funds conversion, only while in debt** (our own addition): the player picks the
-  amount; one conversion can bring funds up to two seasons of running costs (with funds at −D
-  and running costs R, at most D + 2R). Prestige is spent, which lowers the next review: that's
-  the intended trade-off. Validated when applied, not when submitted.
+- **Prestige-to-funds conversion, at any time** (our own addition; only in debt until the user's
+  decision of 2026-11-02, after a play test where a conversion left them short and the button
+  gone once funds turned positive): the player picks the amount; a conversion can bring funds up
+  to two seasons of running costs (with funds at −D and running costs R, at most D + 2R). Prestige
+  is spent, which lowers the next review: that's the intended trade-off. Validated when applied,
+  not when submitted.
+  **A turn's limit** (2026-11-02): the turn's first conversion records what it could have raised
+  (`PlayerSnapshot.conversionLimitThisTurn`), and the turn's conversions together stop there, cleared
+  by the budget. Topping up stays possible; converting and spending in turns doesn't. The debt rule
+  had been doing this silently: you can't spend below zero, so an agency earning more than it costs
+  never got to convert. Without a limit, prestige, worth nothing once no review will pay in time,
+  could all be turned into money for the last push of the race (a point earns about 25 funds over
+  a review in bracket 2, 6 in bracket 5, 3 in bracket 10, 2 converted). The ceiling is kept for the
+  same reason: nothing dearer than two seasons of running costs can be paid for this way.
   **Rate: 2 funds per prestige** (user, 2026-10-06). A point is worth about 30 funds at the
   first review and is never spent there, so conversion stays an emergency tool; at the old
   0.25 funds per point a 1,000-fund debt cost 4,000 prestige, which made it unusable. A part
@@ -1125,7 +1135,7 @@ so every agency's is a known figure; funds stay secret. Rivals' figures come onl
 never with queued actions, and the race (`RivalSummary.prestige`), the Intelligence Office's rival list
 and the standing charts show them (`ui-spec.md` component 30). No dossier ever reported prestige, so
 Intelligence loses nothing. What it gives away is deliberate: a drop with no failed flight suggests a
-rival converted prestige while in debt, the published brackets give a rough idea of a rival's funding,
+rival converted prestige, the published brackets give a rough idea of a rival's funding,
 and a jump or fall hints at a flight the race table doesn't show.
 
 ### 2.2 Personnel

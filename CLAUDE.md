@@ -369,6 +369,10 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
   filled at startup; nothing saved. `DevClient`'s `standing`. Numbers unconfirmed (40 dots, a window of 120). A changed message:
   rebuild client and server together; no reset.
 
+- **Converting prestige at any time** (the user's decision, 2026-11-02, `design.md` §2.1(d), `ui-spec.md` §4.10): no longer
+  only in debt; two seasons' ceiling kept, and a turn's conversions together stop at what its first could raise
+  (`PrestigeConversion`). Two saved fields and a removed refusal: rebuild client and server together; no reset.
+
 ## How we work
 
 - **Screens:** Claude writes the spec in `ui-spec.md`, the user mocks it up in Claude Design,

@@ -2950,9 +2950,12 @@ building it, **confirmed by the user (2026-10-06)**:
 - the bracket table, and what the current prestige would earn;
 - the news log.
 
-**Actions:** **Convert prestige to funds** (only while in debt, at 2 funds per prestige
-point, decided 2026-10-06, a part point rounded up; capped so funds end at no more than two
-seasons of running costs). Show the cap and the price.
+**Actions:** **Convert prestige to funds** (at any time since 2026-11-02, the button primary in
+debt, secondary otherwise, greyed out with its reason in a tooltip when none is possible; at 2
+funds per prestige point, decided 2026-10-06, a part point rounded up; capped so funds end at no
+more than two seasons of running costs, and a turn's conversions together at what its first could
+raise, `design.md` §2.1(d)). Show the cap and the price. The dialog opens "For emergencies", and in
+debt splits the amount into what goes to the debt and what's left to spend.
 
 **States:** in debt, where new spending is refused; a temporary cost or R&D
 multiplier is active (random event, n seasons left).
@@ -4222,7 +4225,7 @@ for the mockups.
 | MISSION_COMPONENT_UNAVAILABLE | A component is grounded this window. |
 | CREWED_MISSION_IN_FLIGHT | A crewed mission can't be abandoned. |
 | MAX_LEVEL / ALREADY_UPGRADING | Already at the top level. / Already upgrading. |
-| NOT_IN_DEBT / EXCEEDS_CAP / INSUFFICIENT_PRESTIGE | Only possible while in debt. / More than the conversion allows. / Not enough prestige. |
+| EXCEEDS_CAP / INSUFFICIENT_PRESTIGE | More than the conversion allows. / Not enough prestige. |
 | SLOT_CLAIM_REQUIRED | (Client goes to §4.2.) |
 | Launch (added 2026-10-04): PROGRAM_NOT_OPEN / LAUNCH_CAP_REACHED / MISSION_COMPONENT_UNAVAILABLE / WRONG_ROCKET_COUNT, ROCKET_NOT_AVAILABLE / ROCKET_CANNOT_LIFT_PAYLOAD / WRONG_*_COUNT / *_NOT_IDLE / DUPLICATE_* / UNKNOWN_ASTRONAUT, UNKNOWN_MISSION_CONTROL_OFFICER / CAPCOM_NOT_AVAILABLE / UNKNOWN_MISSION_CONFIGURATION | Open the program first. / No more launches this turn: the launch window is full. / A component is grounded this turn. / Pick a rocket for every launch. / That rocket can't fly this launch. / Fill every slot the mission uses. / Someone in a slot isn't free any more. / Someone is in two slots. / Someone in a slot isn't on the roster any more. / CAPCOM needs a free astronaut who isn't in the crew. / That mission doesn't exist in this game. Short of funds reads "Not enough funds: $ N short." |
 | Mission Control (added 2026-10-04): UNKNOWN_MISSION / CREWED_MISSION_IN_FLIGHT / UNKNOWN_SLOT / SLOT_NOT_USED / WRONG_EMPLOYEE_TYPE / PERSON_NOT_AVAILABLE | That mission isn't scheduled or in flight any more. / A crewed mission in flight can't be abandoned. / That console doesn't exist on this mission. / That console isn't needed any more. / That console takes someone of another type. / They're not free any more. |
