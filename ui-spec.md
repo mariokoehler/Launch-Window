@@ -4388,6 +4388,12 @@ current state alone. Each is an M5 task.
   after. Funds only for the asking player's own series. `RivalSummary.prestige` is the latest resolved snapshot's.
   `client.connect.StandingResult`, `ServerGateway.fetchStanding`, `DevClient`'s `standing`. A changed message: rebuild client
   and server together; no reset.
+  **To build with the charts (the user's decision, 2026-11-02):** `handleStanding` reads every report of every player on each
+  request, about 1,200 files at turn 200 with six agencies. Replace that with an in-memory cache of the four numbers per
+  player and turn, filled synchronously during server startup (a few seconds more are fine, user) and updated as each turn
+  resolves, keyed by turn so a retried resolution overwrites its point. Nothing new on disk: rollbacks run with the server
+  stopped, so the next start rebuilds it from the reports. No client-side cache and no curated file (both talked through and
+  dropped). Time the warm-up on realistic data when it's built.
 - **G16. Findings (§4.20, `design.md` §2.13, 2026-10-21). Built.**
   - **Content:** each pack's `findings.json`, a rules file in `ContentPackLoader.FILES` (hashed): a goal and
     the step kinds it makes safer, each with an optional body and crewed flag.
