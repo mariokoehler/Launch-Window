@@ -6,6 +6,8 @@ import de.mkoehler.launchwindow.rules.TurnReport;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.OptionalLong;
@@ -80,6 +82,31 @@ public class TurnReportStore {
      */
     public void delete(long turn) throws IOException {
         Files.deleteIfExists(reportsDir.resolve(turn + SUFFIX));
+    }
+
+    /**
+     * Returns every report, oldest first.
+     *
+     * @return the reports, none before the first resolution
+     * @throws IOException if the folder or a report can't be read
+     */
+    public List<TurnReport> all() throws IOException {
+        if (!Files.isDirectory(reportsDir)) {
+            return List.of();
+        }
+        List<Long> turns = new ArrayList<>();
+        try (Stream<Path> listing = Files.list(reportsDir)) {
+            listing.map(path -> path.getFileName().toString())
+                .filter(name -> name.endsWith(SUFFIX) && !name.startsWith("report-"))
+                .map(name -> Long.parseLong(name.substring(0, name.length() - SUFFIX.length())))
+                .forEach(turns::add);
+        }
+        turns.sort(null);
+        List<TurnReport> reports = new ArrayList<>();
+        for (long turn : turns) {
+            load(turn).ifPresent(reports::add);
+        }
+        return reports;
     }
 
     /**

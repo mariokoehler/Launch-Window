@@ -82,6 +82,7 @@ final class RaceTable {
         }
         if (museum) {
             table.add(head(ui, "Done")).width(90f);
+            table.add(head(ui, "Prestige")).width(120f);
         }
         table.add(head(ui, "Finished")).width(150f);
         table.row();
@@ -126,6 +127,8 @@ final class RaceTable {
             }
             if (museum) {
                 table.add(cell(ui, fill).add(ui.label(row.count() + " of " + row.cells().size(),
+                    Theme.TextStyle.BODY_STRONG, Theme.INK)).expandX().left().getTable()).height(height);
+                table.add(cell(ui, fill).add(ui.label(String.format(Locale.US, "%,d", row.prestige()),
                     Theme.TextStyle.BODY_STRONG, Theme.INK)).expandX().left().getTable()).height(height);
             }
             table.add(cell(ui, fill).add(ui.label(row.finished(), Theme.TextStyle.BODY_SM, Theme.INK)).expandX()

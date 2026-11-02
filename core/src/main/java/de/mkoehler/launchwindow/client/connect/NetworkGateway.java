@@ -29,6 +29,8 @@ import de.mkoehler.launchwindow.net.messages.ResolveTurnNowRequest;
 import de.mkoehler.launchwindow.net.messages.ResolveTurnNowResponse;
 import de.mkoehler.launchwindow.net.messages.RivalsRequest;
 import de.mkoehler.launchwindow.net.messages.RivalsResponse;
+import de.mkoehler.launchwindow.net.messages.StandingRequest;
+import de.mkoehler.launchwindow.net.messages.StandingResponse;
 import de.mkoehler.launchwindow.net.messages.TurnReportRequest;
 import de.mkoehler.launchwindow.net.messages.TurnReportResponse;
 import de.mkoehler.launchwindow.net.messages.TurnResolvedNotice;
@@ -262,6 +264,29 @@ public final class NetworkGateway implements ServerGateway {
         } catch (IOException | RuntimeException e) {
             dropConnection();
             return new RivalsResult(false, e.getMessage(), null);
+        }
+    }
+
+    @Override
+    public void fetchStanding(Credentials credentials, Consumer<StandingResult> done) {
+        run(() -> {
+            StandingResult first = fetchStandingOnce(credentials);
+            return !first.ok() && client == null ? fetchStandingOnce(credentials) : first;
+        }, message -> new StandingResult(false, message, null), done);
+    }
+
+    private StandingResult fetchStandingOnce(Credentials credentials) {
+        Optional<LoginResult> refusal = ensureSession(credentials);
+        if (refusal.isPresent()) {
+            return new StandingResult(false, refusal.get().message(), null);
+        }
+        try {
+            StandingResponse response = client.sendAndReceive(new StandingRequest(), StandingResponse.class);
+            return response.success() ? new StandingResult(true, "", response.agencies())
+                : new StandingResult(false, response.message(), null);
+        } catch (IOException | RuntimeException e) {
+            dropConnection();
+            return new StandingResult(false, e.getMessage(), null);
         }
     }
 

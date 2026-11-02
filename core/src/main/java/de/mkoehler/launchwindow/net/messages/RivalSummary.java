@@ -6,8 +6,8 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * One player's row in the race (gap G3). Only what the race shows: nothing about funds,
- * prestige or the roster.
+ * One player's row in the race (gap G3). Only what the race shows: nothing about funds or the
+ * roster. Prestige is public, an agency's standing with the world ({@code design.md} &sect;2.1(g)).
  *
  * @param agencyName   the agency
  * @param directorName its director
@@ -18,10 +18,11 @@ import java.util.Map;
  * @param playerId     an opaque key for the agency, stable for the game, that intelligence operations
  *                     name their target by ({@code design.md} &sect;2.9); never the account id
  * @param bot          whether the server plays this agency itself, a filler bot ({@code design.md} &sect;5)
+ * @param prestige     its prestige at the latest resolution, never with queued actions applied
  * @author Mario Koehler
  */
 public record RivalSummary(String agencyName, String directorName, Archetype archetype, boolean you,
-                           Map<String, Integer> goalTurns, String playerId, boolean bot) {
+                           Map<String, Integer> goalTurns, String playerId, boolean bot, long prestige) {
 
     /**
      * Creates a summary, copying the goal turns into the {@link LinkedHashMap} Kryo has registered.
@@ -68,7 +69,25 @@ public record RivalSummary(String agencyName, String directorName, Archetype arc
      */
     public static RivalSummary of(String agencyName, String directorName, Archetype archetype, boolean you,
                                   Map<String, Integer> goalTurns, String playerId, boolean bot) {
+        return of(agencyName, directorName, archetype, you, goalTurns, playerId, bot, 0L);
+    }
+
+    /**
+     * Creates a summary with the agency's key, whether it's a filler bot, and its public prestige.
+     *
+     * @param agencyName   the agency
+     * @param directorName its director
+     * @param archetype    its archetype
+     * @param you          whether this is the player who asked
+     * @param goalTurns    the declared goals done, with their turns
+     * @param playerId     the agency's opaque key
+     * @param bot          whether the server plays it
+     * @param prestige     its prestige at the latest resolution
+     * @return the summary
+     */
+    public static RivalSummary of(String agencyName, String directorName, Archetype archetype, boolean you,
+                                  Map<String, Integer> goalTurns, String playerId, boolean bot, long prestige) {
         return new RivalSummary(agencyName, directorName, archetype, you, new LinkedHashMap<>(goalTurns),
-            playerId == null ? "" : playerId, bot);
+            playerId == null ? "" : playerId, bot, prestige);
     }
 }

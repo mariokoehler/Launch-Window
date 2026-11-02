@@ -16,6 +16,9 @@ import de.mkoehler.launchwindow.net.messages.FrontPagesResponse;
 import de.mkoehler.launchwindow.net.messages.GameInfoRequest;
 import de.mkoehler.launchwindow.net.messages.GameInfoResponse;
 import de.mkoehler.launchwindow.net.messages.HandshakeResponse;
+import de.mkoehler.launchwindow.net.messages.StandingRequest;
+import de.mkoehler.launchwindow.net.messages.StandingResponse;
+import de.mkoehler.launchwindow.net.messages.StandingSeries;
 import de.mkoehler.launchwindow.net.messages.SubmitActionRequest;
 import de.mkoehler.launchwindow.net.messages.SubmitActionResponse;
 import de.mkoehler.launchwindow.net.messages.SubmitStatementRequest;
@@ -27,6 +30,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 
 /**
  * <p>Minimal interactive console client for exercising a running
@@ -129,6 +133,8 @@ public final class DevClient {
                 handleClaim(client, line);
             } else if (line.equals("pages")) {
                 handlePages(client);
+            } else if (line.equals("standing")) {
+                handleStanding(client);
             } else if (line.equals("react") || line.startsWith("react ")) {
                 handleReact(client, line);
             } else if (DevViews.isView(line)) {
@@ -138,6 +144,24 @@ public final class DevClient {
             } else {
                 handleAction(client, line);
             }
+        }
+    }
+
+    /**
+     * Prints every agency's prestige curve, and the player's funds: rivals' funds never come.
+     *
+     * @param client the client to send the request on
+     * @throws IOException if the request fails
+     */
+    private static void handleStanding(NetworkClient client) throws IOException {
+        StandingResponse response = client.sendAndReceive(new StandingRequest(), StandingResponse.class);
+        if (!response.success()) {
+            System.out.println("Failed: " + response.message());
+            return;
+        }
+        for (StandingSeries agency : response.agencies()) {
+            System.out.println(agency.agencyName() + " from turn " + agency.firstTurn() + ": prestige "
+                + Arrays.toString(agency.prestige()) + " funds " + Arrays.toString(agency.funds()));
         }
     }
 

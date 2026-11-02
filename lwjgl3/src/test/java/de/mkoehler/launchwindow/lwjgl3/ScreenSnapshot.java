@@ -199,6 +199,11 @@ public final class ScreenSnapshot {
         }
 
         @Override
+        public void fetchStanding(Credentials credentials,
+                                  Consumer<de.mkoehler.launchwindow.client.connect.StandingResult> done) {
+        }
+
+        @Override
         public void previewPublication(Credentials credentials, String goalId,
                 Consumer<de.mkoehler.launchwindow.client.connect.PublishPreviewResult> done) {
             // A fixed answer, for the confirmation dialog's shot: helps two of three rivals.
@@ -2030,7 +2035,7 @@ public final class ScreenSnapshot {
                 de.mkoehler.launchwindow.model.Ambition.Kind.TOP_ENGINEER, "", 9, 12, 26), true, 38, 14, null));
         startSession(game, state, info);
         game.session().keepRivals(List.of(RivalSummary.of("Sever Design Bureau", "Tamara Abenova", Archetype.SOVIET,
-            false, Map.of("earth-orbit-satellite", 8), "kSever")));
+            false, Map.of("earth-orbit-satellite", 8), "kSever", false, 5120)));
         de.mkoehler.launchwindow.client.screen.IntelligenceOfficeScreen.Tab folders =
             de.mkoehler.launchwindow.client.screen.IntelligenceOfficeScreen.Tab.FOLDERS;
         write(folder, "poach-folders-free.png", new de.mkoehler.launchwindow.client.screen.IntelligenceOfficeScreen(game,
@@ -2263,13 +2268,13 @@ public final class ScreenSnapshot {
         startSession(game, state, info);
         List<RivalSummary> rivals = List.of(
             RivalSummary.of("Orion Spaceworks", "A. Reyes", Archetype.NASA, true, Map.of("earth-orbit-satellite", 9),
-                "kMe"),
+                "kMe", false, 3880),
             RivalSummary.of("Sever Design Bureau", "Tamara Abenova", Archetype.SOVIET, false,
-                Map.of("earth-orbit-satellite", 8, "human-in-space", 20), "kSever"),
+                Map.of("earth-orbit-satellite", 8, "human-in-space", 20), "kSever", false, 5120),
             RivalSummary.of("Aurora Bureau", "Levan Gelashvili", Archetype.SOVIET, false,
-                Map.of("earth-orbit-satellite", 10), "kAurora"),
+                Map.of("earth-orbit-satellite", 10), "kAurora", false, 2960),
             RivalSummary.of("Meridian Rocket Society", "Walter Krueger", Archetype.NASA, false,
-                Map.of("earth-orbit-satellite", 12), "kMeridian"));
+                Map.of("earth-orbit-satellite", 12), "kMeridian", false, 3340));
         game.session().keepRivals(rivals);
         TurnReport report = new TurnReport(TurnReport.VERSION, 30, 4_310, 4_310, 21_000, 21_640, List.of(), List.of(),
             List.of(
@@ -2529,9 +2534,9 @@ public final class ScreenSnapshot {
         String hash = ContentPackHash.ofClasspath("content/standard", ScreenSnapshot.class.getClassLoader());
         GameInfoResponse info = GameInfoResponse.success("standard", hash, List.of(), 52, true,
             6 * 3_600_000L, 0L, null, List.of(), List.of(), 0);
-        RivalSummary me = RivalSummary.of("Orion Spaceworks", "A. Reyes", Archetype.NASA, true, Map.of(), "kMe");
+        RivalSummary me = RivalSummary.of("Orion Spaceworks", "A. Reyes", Archetype.NASA, true, Map.of(), "kMe", false, 3880);
         RivalSummary sever = RivalSummary.of("Sever Design Bureau", "Tamara Abenova", Archetype.SOVIET, false,
-            Map.of(), "kSever");
+            Map.of(), "kSever", false, 5120);
         RivalSummary sameSide = RivalSummary.of("Cape Horizon Corporation", "Grace Whitfield", Archetype.NASA, false,
             Map.of(), "kCape");
         List<String> soviet = List.of("r7-vostok", "vostok-capsule", "proton-k-block-d", "voskhod-capsule",
@@ -2580,7 +2585,7 @@ public final class ScreenSnapshot {
             List.of("mercury", "atlas", "saturn-1b", "gemini"), List.of("atlas", "mercury-capsule", "saturn-1b",
                 "saturn-v", "gemini-capsule", "agena-target-vehicle", "apollo-csm", "x-15-aircraft")), info);
         game.session().keepRivals(List.of(RivalSummary.of("Orion Spaceworks", "A. Reyes", Archetype.SOVIET, true,
-            Map.of(), "kMe"), sameSide));
+            Map.of(), "kMe", false, 3880), sameSide));
         write(folder, "fh-dossier-soviet.png", new de.mkoehler.launchwindow.client.screen.IntelligenceOfficeScreen(game,
             folders), screen -> screen.openFolder("kCape"));
 
@@ -2779,11 +2784,11 @@ public final class ScreenSnapshot {
         RivalSummary me = RivalSummary.of(state.getAgencyName(), state.getDirectorName(), Archetype.SOVIET, true,
             Map.of("earth-orbit-satellite", 12, "human-in-space", 24, "human-in-orbit", 24));
         List<RivalSummary> rivals = List.of(me,
-            RivalSummary.of("Orion Spaceworks", "Ana Reyes", Archetype.NASA, false, Map.of("earth-orbit-satellite", 11)),
+            RivalSummary.of("Orion Spaceworks", "Ana Reyes", Archetype.NASA, false, Map.of("earth-orbit-satellite", 11), "", false, 3880),
             RivalSummary.of("Kestrel Aerospace", "Moses Okafor", Archetype.NASA, false,
-                Map.of("earth-orbit-satellite", 13)),
+                Map.of("earth-orbit-satellite", 13), "", false, 2140),
             RivalSummary.of("Polar Star Bureau", "Vera Sedova", Archetype.SOVIET, false,
-                Map.of("earth-orbit-satellite", 14)));
+                Map.of("earth-orbit-satellite", 14), "", false, 1760));
         game.session().keepRivals(rivals);
         write(folder, "museum-race.png", new MuseumScreen(game, MuseumScreen.Tab.RACE), null);
         write(folder, "museum-achievements.png", new MuseumScreen(game, MuseumScreen.Tab.ACHIEVEMENTS), null);
@@ -2801,7 +2806,7 @@ public final class ScreenSnapshot {
         startSession(game, state, medal);
         game.session().keepRivals(List.of(me,
             RivalSummary.of("Orion Spaceworks", "Ana Reyes", Archetype.NASA, false,
-                Map.of("earth-orbit-satellite", 11, "human-in-space", 20, "human-in-orbit", 24)),
+                Map.of("earth-orbit-satellite", 11, "human-in-space", 20, "human-in-orbit", 24), "", false, 3880),
             rivals.get(2), rivals.get(3)));
         write(folder, "result-medal.png", new SpaceComplexScreen(game), SpaceComplexScreen::showResult);
 
@@ -2812,7 +2817,7 @@ public final class ScreenSnapshot {
         startSession(game, state, tie);
         game.session().keepRivals(List.of(me,
             RivalSummary.of("Orion Spaceworks", "Ana Reyes", Archetype.NASA, false,
-                Map.of("earth-orbit-satellite", 12, "human-in-space", 24, "human-in-orbit", 24)),
+                Map.of("earth-orbit-satellite", 12, "human-in-space", 24, "human-in-orbit", 24), "", false, 3880),
             rivals.get(2), rivals.get(3)));
         write(folder, "result-tie.png", new SpaceComplexScreen(game), SpaceComplexScreen::showResult);
 

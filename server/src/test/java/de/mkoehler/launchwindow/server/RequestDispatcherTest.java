@@ -16,6 +16,12 @@ import de.mkoehler.launchwindow.net.messages.ClaimSlotRequest;
 import de.mkoehler.launchwindow.net.messages.ClaimSlotResponse;
 import de.mkoehler.launchwindow.net.messages.CreateAccountRequest;
 import de.mkoehler.launchwindow.net.messages.FetchStateRequest;
+import de.mkoehler.launchwindow.net.messages.RivalsRequest;
+import de.mkoehler.launchwindow.net.messages.StandingRequest;
+import de.mkoehler.launchwindow.net.messages.StandingResponse;
+import de.mkoehler.launchwindow.net.messages.StandingSeries;
+import de.mkoehler.launchwindow.persistence.TurnReportStore;
+import de.mkoehler.launchwindow.rules.TurnReport;
 import de.mkoehler.launchwindow.net.messages.FetchStateResponse;
 import de.mkoehler.launchwindow.net.messages.FrontPagesRequest;
 import de.mkoehler.launchwindow.net.messages.GameInfoRequest;
@@ -51,6 +57,7 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
@@ -255,6 +262,52 @@ class RequestDispatcherTest {
             List.of(), List.of(new FrontPage.Achiever("OKB-1", "Chief", List.of())), List.of());
         FrontPageStore.keep(dataRoot, GameServer.createMapper(), 3, List.of(page));
         assertEquals(List.of(page), dispatcher.handleFrontPages(1, new FrontPagesRequest()).pages());
+    }
+
+    /**
+     * Verifies the standing (G20): refused without a login or a slot; prestige public, in the race and
+     * on the curves, funds for the asking player only; the first point is the value before the first
+     * report's turn, and a late joiner's curve starts late.
+     */
+    @Test
+    void theStandingShowsEveryonesPrestigeAndOnlyYourFunds(@TempDir Path dataRoot) throws Exception {
+        AccountStore store = createAccountStore(dataRoot);
+        RequestDispatcher dispatcher = dispatcher(store, dataRoot, false);
+        assertFalse(dispatcher.handleStanding(1, new StandingRequest()).success());
+        dispatcher.handleCreateAccount(1, new CreateAccountRequest(AppVersion.getVersion(), "mario", "hunter2"));
+        assertEquals(ClaimSlotRequest.SLOT_CLAIM_REQUIRED, dispatcher.handleStanding(1, new StandingRequest()).message());
+        dispatcher.handleClaimSlot(1, new ClaimSlotRequest(Archetype.SOVIET, "OKB-1", "Chief"));
+        dispatcher.handleCreateAccount(2, new CreateAccountRequest(AppVersion.getVersion(), "anna", "hunter2"));
+        dispatcher.handleClaimSlot(2, new ClaimSlotRequest(Archetype.NASA, "Kestrel", "Anna"));
+        Path mine = dataRoot.resolve("players").resolve(store.findByLogin("mario").orElseThrow().getId());
+        Path hers = dataRoot.resolve("players").resolve(store.findByLogin("anna").orElseThrow().getId());
+        TurnReportStore myReports = new TurnReportStore(mine, mapper);
+        myReports.save(report(1, 250, 300, 25_000, 24_000));
+        myReports.save(report(2, 300, 280, 24_000, 26_000));
+        new TurnReportStore(hers, mapper).save(report(2, 250, 400, 25_000, 22_000));
+        PlayerSnapshotStore rivalSnapshots = new PlayerSnapshotStore(hers, mapper);
+        PlayerSnapshot rival = rivalSnapshots.load().orElseThrow();
+        rival.setPrestige(400);
+        rivalSnapshots.save(2, rival, null);
+
+        StandingResponse response = dispatcher.handleStanding(1, new StandingRequest());
+        assertTrue(response.success());
+        StandingSeries you = response.agencies().stream().filter(StandingSeries::you).findFirst().orElseThrow();
+        StandingSeries them = response.agencies().stream().filter(a -> !a.you()).findFirst().orElseThrow();
+        assertEquals(0, you.firstTurn());
+        assertArrayEquals(new long[] {250, 300, 280}, you.prestige());
+        assertArrayEquals(new long[] {25_000, 24_000, 26_000}, you.funds());
+        assertEquals(1, them.firstTurn());
+        assertArrayEquals(new long[] {250, 400}, them.prestige());
+        assertEquals(0, them.funds().length);
+        assertEquals(400, dispatcher.handleRivals(1, new RivalsRequest()).rivals().stream()
+            .filter(r -> !r.you()).findFirst().orElseThrow().prestige());
+    }
+
+    private static TurnReport report(long turn, long prestigeBefore, long prestigeAfter, long fundsBefore,
+                                     long fundsAfter) {
+        return new TurnReport(TurnReport.VERSION, turn, prestigeBefore, prestigeAfter, fundsBefore, fundsAfter,
+            List.of(), List.of(), List.of(), null);
     }
 
     /**

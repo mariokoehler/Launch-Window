@@ -298,6 +298,11 @@ public final class MissionReplayer extends LaunchWindowGame {
         }
 
         @Override
+        public void fetchStanding(Credentials credentials,
+                                  Consumer<de.mkoehler.launchwindow.client.connect.StandingResult> done) {
+        }
+
+        @Override
         public void logOut() {
         }
 

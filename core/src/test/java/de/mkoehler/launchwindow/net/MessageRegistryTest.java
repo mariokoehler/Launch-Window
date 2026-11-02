@@ -42,6 +42,8 @@ import de.mkoehler.launchwindow.net.messages.GameInfoResponse;
 import de.mkoehler.launchwindow.net.messages.ResolveTurnNowRequest;
 import de.mkoehler.launchwindow.net.messages.ResolveTurnNowResponse;
 import de.mkoehler.launchwindow.net.messages.RivalSummary;
+import de.mkoehler.launchwindow.net.messages.StandingResponse;
+import de.mkoehler.launchwindow.net.messages.StandingSeries;
 import de.mkoehler.launchwindow.net.messages.RivalsRequest;
 import de.mkoehler.launchwindow.net.messages.RivalsResponse;
 import de.mkoehler.launchwindow.net.messages.TurnReportRequest;
@@ -63,6 +65,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -83,6 +86,21 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * @author Mario Koehler
  */
 class MessageRegistryTest {
+
+    /**
+     * Verifies the standing's curves survive Kryo, long arrays and all (G20).
+     */
+    @Test
+    void theStandingRoundTrips() {
+        Kryo kryo = new Kryo();
+        MessageRegistry.register(kryo);
+        Output output = new Output(4096, -1);
+        kryo.writeClassAndObject(output, StandingResponse.of(List.of(new StandingSeries("Orion", true, false, "k1",
+            0L, new long[] {250, 300}, new long[] {25_000, 24_000}))));
+        StandingResponse back = (StandingResponse) kryo.readClassAndObject(new Input(output.toBytes()));
+        assertArrayEquals(new long[] {250, 300}, back.agencies().getFirst().prestige());
+        assertArrayEquals(new long[] {25_000, 24_000}, back.agencies().getFirst().funds());
+    }
 
     /**
      * Two independent Kryo instances, registered by the same method, must

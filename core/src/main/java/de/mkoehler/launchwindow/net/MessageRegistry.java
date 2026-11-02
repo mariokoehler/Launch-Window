@@ -332,5 +332,11 @@ public final class MessageRegistry {
 
         // Accounts made on purpose (review.md 2.3, 2026-10-25). Never move this line.
         kryo.register(de.mkoehler.launchwindow.net.messages.CreateAccountRequest.class);
+
+        // The standing charts (ui-spec.md component 30, G20, 2026-11-02). Never move these lines.
+        kryo.register(long[].class);
+        kryo.register(de.mkoehler.launchwindow.net.messages.StandingRequest.class);
+        kryo.register(de.mkoehler.launchwindow.net.messages.StandingResponse.class);
+        kryo.register(de.mkoehler.launchwindow.net.messages.StandingSeries.class);
     }
 }

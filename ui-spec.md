@@ -1410,6 +1410,40 @@ Writing them turned up two things for the rules, recorded in `design.md` §2.2(d
         with "Until the turn resolves". **The rival's line:** first in the News card, "<Agency> has lost the crew
         of <mission>" with one more line and "Send condolences" (secondary), no eyebrow and no colour.
 
+30. **Standing chart** *(the user's idea, 2026-11-02; specified the same day, awaiting its mockup; the numbers are
+    **unconfirmed**; server side built, G20)*. How an agency's prestige and money moved over time: the statistics
+    this kind of player loves. Shared by the Public Affairs Office's Standing tab (§4.10) and the game result
+    (§4.13).
+    - **Two charts stacked on one timeline, never one chart with two Y-axes** (user-approved 2026-11-02): crossings
+      between differently scaled lines mean nothing, and rivals' funds are secret, so a shared chart couldn't take
+      the toggle. Prestige on top, the taller one; funds below, captioned "Yours alone", the same in both modes.
+    - **The toggle:** a segmented control, "Just me" and "Everyone", over the prestige chart. Everyone adds each
+      rival's prestige line, public since `design.md` §2.1(g). "Just me" is the default; the last choice is kept
+      per device.
+    - **The time axis** uses the full width: the first shown point on the far left, the latest on the far right,
+      evenly spaced, so the curve grows denser as points accumulate. Each resolved turn is one point. Year labels
+      on the shared axis, only as many as fit.
+    - **Markers and the window:** dots on the points while at most **40** show, a plain line after that. Past
+      **120** points (30 game years) the window slides: only the latest 120 show, the oldest dropping off the
+      left, and a caption says so ("Latest 30 years"). A game lasts about 80 to 95 seasons, so most never slide.
+      The game result never slides: it always shows the whole game.
+    - **The Y-axis** fits the points in the window, with round tick values and light gridlines. Funds can go below
+      zero: a zero line, and the part below it reads as debt (`danger`), with the danger tag's rule for its value.
+    - **Lines:** yours boldest, in navy, and rivals thinner in distinct muted colours that stay readable on white.
+      Each line is labelled at its right end with the agency and its latest value, instead of a legend; labels
+      that would collide are nudged apart. A filler bot reads "(bot)" as elsewhere. A late joiner's line starts at
+      its first point, not at the left edge.
+    - **Hover:** a crosshair through both charts at the nearest point, with a tooltip: the date, prestige, funds,
+      and with Everyone on, every agency's prestige, highest first.
+    - **Event marks (in the first build):** the player's budget reviews as faint vertical ticks across both charts, and
+      a dot on a line where its agency took a declared goal, gold for a First (`RivalSummary.goalTurns`; rivals'
+      are public). A lost crew of the player's as a small dark mark. The tooltip names them.
+    - **States:** loading; failed ("Couldn't fetch the standing. Open the office again to retry."); before the first
+      resolution, an empty state in the chart's place ("Your first season hasn't resolved yet."), as a line needs
+      two points; with two or three points, the dots carry it, the line spanning the width.
+    - **Data:** resolved turns only, so the latest point can differ from the header's prestige and funds, which
+      include queued actions. The tab says so in a caption: "As of the last resolved season".
+
 ---
 
 
@@ -2919,6 +2953,8 @@ review: when, what it pays, what keeps today's funding) and `PrestigeConversion`
   review #n, raised since" after a raise, and a caption above the last-review line says what 1,000 more
   prestige would add now (or that the bracket's top is reached, or, before the first review, that raises
   start then), and the raise due next season when prestige has already grown. Shot `raise-pao.png`.
+- **The Standing tab** *(the user's idea, 2026-11-02, awaiting its mockup)*: `NavTabs` in the header as in the
+  Museum, Budget (this page, unchanged) and Standing, which is the standing chart (component 30) at full width.
 
 ### 4.11 Museum: goals, history, rivals
 **Purpose:** the scoreboard and the archive. **Ref:** `museum*.png`.
@@ -2929,6 +2965,8 @@ review: when, what it pays, what keeps today's funding) and `PrestigeConversion`
   hold and the turn they got them. **Needs server work:** G3. A filler bot (`design.md` §5) has
   "(bot)" after its agency's name here, in the Intelligence Office's rival list and in the game
   result (2026-10-25, `Museum.name`); the newspaper names it plainly, as it would any agency.
+  A **Prestige** column after Done shows each agency's public prestige at the last resolution (built
+  2026-11-02, `design.md` §2.1(g)), and will link to the Standing tab (§4.10, component 30).
 - **Achievements:** every goal achieved or cancelled, with the turn and the
   prestige.
 - **Flights:** the completed flight count per configuration (`successfulFlightCounts`), commercial flights
@@ -3031,7 +3069,8 @@ player who picked Standard keeps it.
 ### 4.13 Game result
 **Purpose:** announce the winner. **Shows:** an overlay on the hub when a result
 exists: winner or tied winners (agency and director name), the turn decided, and the
-race table. Play continues, so the overlay can be dismissed and is reopenable from
+race table, plus the whole game's prestige chart with everyone on it (component 30, awaiting
+its mockup). Play continues, so the overlay can be dismissed and is reopenable from
 the Museum.
 
 **Mocked up (2026-10-04)** as `GameResult` on the Museum canvas: a `Dialog` over the hub,
@@ -4342,6 +4381,13 @@ current state alone. Each is an M5 task.
     report shows the pages whose unlock turn is its turn (`Archive.openedIn`). A page whose goal the game's
     pack doesn't have isn't shown.
   - **Rebuild client and server together** (a new message); no reset.
+- **G20. The standing (component 30, `design.md` §2.1(g), 2026-11-02). Server side built; the charts await their
+  mockup.** `StandingRequest`/`StandingResponse` with a `StandingSeries` per agency, read from the turn reports, which
+  are never pruned, so nothing new is saved, games already running get their whole history and a rollback rewinds
+  the curves. A point per turn from `firstTurn`: the first report's values before its turn, then each report's values
+  after. Funds only for the asking player's own series. `RivalSummary.prestige` is the latest resolved snapshot's.
+  `client.connect.StandingResult`, `ServerGateway.fetchStanding`, `DevClient`'s `standing`. A changed message: rebuild client
+  and server together; no reset.
 - **G16. Findings (§4.20, `design.md` §2.13, 2026-10-21). Built.**
   - **Content:** each pack's `findings.json`, a rules file in `ContentPackLoader.FILES` (hashed): a goal and
     the step kinds it makes safer, each with an optional body and crewed flag.

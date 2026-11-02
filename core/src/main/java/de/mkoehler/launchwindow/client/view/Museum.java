@@ -55,7 +55,7 @@ public final class Museum {
      * @param finished  the date it finished them all, or "—"
      */
     public record RaceRow(int place, String agency, String director, String archetype, boolean you, boolean winner,
-                          List<Cell> cells, int count, String finished) {
+                          List<Cell> cells, int count, String finished, long prestige) {
     }
 
     /**
@@ -168,7 +168,8 @@ public final class Museum {
             int count = count(rival, declared);
             rows.add(new RaceRow(winner ? 1 : position + 1, name(rival) + (rival.you() ? " (you)" : ""),
                 rival.directorName(), archetype(rival.archetype()), rival.you(), winner, cells, count,
-                WinCondition.completionTurn(rival.goalTurns(), declared).map(Museum::date).orElse("—")));
+                WinCondition.completionTurn(rival.goalTurns(), declared).map(Museum::date).orElse("—"),
+                rival.prestige()));
         }
         return rows;
     }

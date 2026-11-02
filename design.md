@@ -1120,6 +1120,14 @@ Now funding follows prestige up between reviews, never down.
   and the budget review". `BudgetProgress.runway` still assumes a flat rate until the next review:
   with raises only upward it's merely cautious.
 
+**(g) Prestige is public** (the user's decision, 2026-11-02). Prestige is an agency's outward standing,
+so every agency's is a known figure; funds stay secret. Rivals' figures come only from resolved turns,
+never with queued actions, and the race (`RivalSummary.prestige`), the Intelligence Office's rival list
+and the standing charts show them (`ui-spec.md` component 30). No dossier ever reported prestige, so
+Intelligence loses nothing. What it gives away is deliberate: a drop with no failed flight suggests a
+rival converted prestige while in debt, the published brackets give a rough idea of a rival's funding,
+and a jump or fall hints at a flight the race table doesn't show.
+
 ### 2.2 Personnel
 
 **(a) BASPM** (`baspm.md` §9): three groups (Astronauts, Mission Control, SET), five skills each;
@@ -2213,7 +2221,7 @@ No BASPM precedent beyond its 1v1 PBEM mode and rival comparison screen.
     sides, and level changes.
   - **Hidden information stays on the server:** a dossier holds only what the server granted
     and is kept in the player's own state; a rival's real values never travel to the client, as
-    with traits.
+    with traits. Prestige is the one exception: it's public (§2.1(g)).
   - **As built (2026-10-07):**
     - **Rules** (`rules.Intelligence`, `rules.IntelligenceBoard`; state in
       `PlayerSnapshot.intelligence`): a new `INTELLIGENCE` phase of the season pass, before the

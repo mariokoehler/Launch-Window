@@ -111,6 +111,14 @@ public interface ServerGateway {
     void fetchRivals(Credentials credentials, Consumer<RivalsResult> done);
 
     /**
+     * Fetches every agency's prestige curve and the player's own funds ({@code ui-spec.md} component 30).
+     *
+     * @param credentials the player's credentials
+     * @param done        called on the render thread with the result
+     */
+    void fetchStanding(Credentials credentials, Consumer<StandingResult> done);
+
+    /**
      * Fetches every front page printed in the game so far ({@code ui-spec.md} &sect;4.18, G14). A
      * read: retried once if the connection broke. By default it never answers, like a gateway with
      * no server.

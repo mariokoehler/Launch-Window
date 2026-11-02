@@ -32,12 +32,16 @@ import de.mkoehler.launchwindow.net.messages.ResolveTurnNowResponse;
 import de.mkoehler.launchwindow.net.messages.RivalSummary;
 import de.mkoehler.launchwindow.net.messages.RivalsRequest;
 import de.mkoehler.launchwindow.net.messages.RivalsResponse;
+import de.mkoehler.launchwindow.net.messages.StandingRequest;
+import de.mkoehler.launchwindow.net.messages.StandingResponse;
+import de.mkoehler.launchwindow.net.messages.StandingSeries;
 import de.mkoehler.launchwindow.net.messages.SubmitActionRequest;
 import de.mkoehler.launchwindow.net.messages.SubmitActionResponse;
 import de.mkoehler.launchwindow.persistence.ActionContext;
 import de.mkoehler.launchwindow.persistence.ActionResult;
 import de.mkoehler.launchwindow.persistence.PlayerAction;
 import de.mkoehler.launchwindow.persistence.PlayerSnapshotStore;
+import de.mkoehler.launchwindow.persistence.TurnReportStore;
 import de.mkoehler.launchwindow.persistence.PlayerStateService;
 import de.mkoehler.launchwindow.persistence.SetFundsAction;
 import de.mkoehler.launchwindow.rules.FindingPublications;
@@ -180,6 +184,9 @@ public class RequestDispatcher {
         }
         if (message instanceof RivalsRequest request) {
             return new DispatchResult(handleRivals(connectionId, request), false);
+        }
+        if (message instanceof StandingRequest request) {
+            return new DispatchResult(handleStanding(connectionId, request), false);
         }
         if (message instanceof GameInfoRequest request) {
             return new DispatchResult(handleGameInfo(connectionId, request), false);
@@ -614,8 +621,8 @@ public class RequestDispatcher {
 
     /**
      * Handles a {@link RivalsRequest}: every claimed player's summary for the race, read from
-     * each one's latest resolved snapshot. Only the agency, director, archetype and the declared
-     * goals' turns leave the server.
+     * each one's latest resolved snapshot. Only the agency, director, archetype, the declared
+     * goals' turns and the public prestige leave the server.
      *
      * @param connectionId the connection the request arrived on
      * @param request      the request
@@ -643,12 +650,49 @@ public class RequestDispatcher {
                         player.getArchetype(), playerDir.getFileName().toString().equals(accountId),
                         WinCondition.goalTimes(player, declared, context.catalog()),
                         GameSeeds.rivalKey(meta.getGameSeed(), playerDir.getFileName().toString()),
-                        meta.isBot(playerDir.getFileName().toString())));
+                        meta.isBot(playerDir.getFileName().toString()), player.getPrestige()));
                 }
             }
             return RivalsResponse.of(rivals);
         } catch (IOException | RuntimeException e) {
             return RivalsResponse.failure("Failed to read the race: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Handles a {@link StandingRequest}: every claimed player's prestige curve, and the asking
+     * player's funds, read from the turn reports ({@code ui-spec.md} component 30, G20). Reports
+     * hold resolved values only, so nothing queued shows, and a rollback rewinds the curves.
+     *
+     * @param connectionId the connection the request arrived on
+     * @param request      the request
+     * @return the response
+     */
+    public StandingResponse handleStanding(int connectionId, StandingRequest request) {
+        String accountId = connectionAccountIds.get(connectionId);
+        if (accountId == null) {
+            return StandingResponse.failure("Not authenticated - send a HandshakeRequest first.");
+        }
+        try {
+            if (!hasSlot(accountId)) {
+                return StandingResponse.failure(ClaimSlotRequest.SLOT_CLAIM_REQUIRED);
+            }
+            List<StandingSeries> agencies = new ArrayList<>();
+            try (Stream<Path> listing = Files.list(dataRoot.resolve("players"))) {
+                for (Path playerDir : listing.filter(Files::isDirectory).sorted().toList()) {
+                    Optional<PlayerSnapshot> snapshot = new PlayerSnapshotStore(playerDir, mapper).load();
+                    if (snapshot.isEmpty()) {
+                        continue;
+                    }
+                    String id = playerDir.getFileName().toString();
+                    agencies.add(StandingSeries.of(snapshot.get().getAgencyName(), id.equals(accountId),
+                        meta.isBot(id), GameSeeds.rivalKey(meta.getGameSeed(), id),
+                        new TurnReportStore(playerDir, mapper).all()));
+                }
+            }
+            return StandingResponse.of(agencies);
+        } catch (IOException | RuntimeException e) {
+            return StandingResponse.failure("Failed to read the standing: " + e.getMessage());
         }
     }
 
