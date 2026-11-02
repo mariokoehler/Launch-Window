@@ -86,7 +86,8 @@ public final class HelpWiki {
             new Screen("report", "A turn report: the summary across the top, then missions, R&D, people and the budget.",
                 null));
         screens("winning",
-            new Screen("result-won", "The race is decided: the result over the Space Complex.", null));
+            new Screen("result-won", "The race is decided: the result, with the whole game's prestige, over the Space "
+                + "Complex.", null));
         screens("museum",
             new Screen("museum-achievements", "The Museum's Achievements tab: every goal, reached or open.", null),
             new Screen("museum-encyclopedia", "The Encyclopedia tab: explainers on how the real thing works.", null));
@@ -95,7 +96,9 @@ public final class HelpWiki {
         screens("prestige",
             new Screen("plan-configs", "A program's mission configurations, each with the prestige it pays.",
                 "From missions"),
-            new Screen("museum-achievements", "The Museum's Achievements: what each goal paid, or would pay.", "Goals"));
+            new Screen("museum-achievements", "The Museum's Achievements: what each goal paid, or would pay.", "Goals"),
+            new Screen("standing-everyone", "The Standing tab with everyone on: your prestige beside your rivals', and "
+                + "your funds below.", "Over time"));
         screens("random-events",
             new Screen("report-news", "Random events in the turn report's news, under the season's real story.", null));
         screens("contracts",

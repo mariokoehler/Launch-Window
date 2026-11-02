@@ -144,9 +144,11 @@
         "On a crewed flight a goal counts only if the crew comes home. If the crew is lost later in the flight, the flight earns none of the goals it reached, and the next agency to reach them can still be first. A flight cut short with the crew safe keeps what it reached, and so does an uncrewed one.",
         "Goals open programs, and they change how missions fly. A mission can name goals that make one of its components fly less reliably until you reach them: a penalty, sometimes a large one. It can also name goals that make a component fly a little more reliably once you have them: a boost, earned by related work such as an earlier probe or another program. Both apply only to that mission, on every step. Each mission's steps screen lists them, and the plan shows the ones in play.",
         "## Elsewhere",
-        "Astronauts on PR duty earn prestige, publishing a finding earns some, and random events can add or take some. An intelligence operation caught in the act, a lapsed contract, a crew lost on a contract flight and cancelling a mission in flight cost some; turning prestige into funds spends it."
+        "Astronauts on PR duty earn prestige, publishing a finding earns some, and random events can add or take some. An intelligence operation caught in the act, a lapsed contract, a crew lost on a contract flight and cancelling a mission in flight cost some; turning prestige into funds spends it.",
+        "## Over time",
+        "The Public Affairs Office's Standing tab draws your prestige and funds season by season, with the race's goals, your budget reviews and any crews you lost marked on the lines. Everyone adds your rivals' prestige, which is public, and only ever from resolved seasons. Their funds stay secret."
       ],
-      "related": ["budget", "winning", "pr-duty"]
+      "related": ["budget", "winning", "pr-duty", "the-race"]
     },
     {
       "id": "random-events",

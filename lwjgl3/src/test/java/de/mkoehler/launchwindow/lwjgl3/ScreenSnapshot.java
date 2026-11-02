@@ -2534,6 +2534,19 @@ public final class ScreenSnapshot {
         return state;
     }
 
+    /** An agency's curve for the result shots: 25 points, ending on the figure the race table shows. */
+    private static de.mkoehler.launchwindow.net.messages.StandingSeries resultStanding(RivalSummary agency) {
+        long[][] steps = agency.goalTurns().values().stream().map(turn -> new long[] {turn, 700L})
+            .toArray(long[][]::new);
+        long[] raw = curve(25, 250, 60, steps, agency.agencyName().hashCode());
+        long[] prestige = new long[raw.length];
+        for (int i = 0; i < raw.length; i++) {
+            prestige[i] = 250L + (raw[i] - 250L) * (agency.prestige() - 250L) / Math.max(1L, raw[raw.length - 1] - 250L);
+        }
+        return new de.mkoehler.launchwindow.net.messages.StandingSeries(agency.agencyName(), agency.you(), agency.bot(),
+            agency.playerId(), 0, prestige, agency.you() ? funds(25, -1) : new long[0], new long[0], new long[0]);
+    }
+
     /** A stepped curve: climbs at the steps, drifts between them, the same every run. */
     private static long[] curve(int points, long start, long perSeason, long[][] steps, int seed) {
         long[] values = new long[points];
@@ -2916,14 +2929,18 @@ public final class ScreenSnapshot {
             24);
         startSession(game, state, won);
         RivalSummary me = RivalSummary.of(state.getAgencyName(), state.getDirectorName(), Archetype.SOVIET, true,
-            Map.of("earth-orbit-satellite", 12, "human-in-space", 24, "human-in-orbit", 24));
+            Map.of("earth-orbit-satellite", 12, "human-in-space", 24, "human-in-orbit", 24), "kMe", false,
+            state.getPrestige());
         List<RivalSummary> rivals = List.of(me,
-            RivalSummary.of("Orion Spaceworks", "Ana Reyes", Archetype.NASA, false, Map.of("earth-orbit-satellite", 11), "", false, 3880),
+            RivalSummary.of("Orion Spaceworks", "Ana Reyes", Archetype.NASA, false, Map.of("earth-orbit-satellite", 11), "kOrion", false, 3880),
             RivalSummary.of("Kestrel Aerospace", "Moses Okafor", Archetype.NASA, false,
-                Map.of("earth-orbit-satellite", 13), "", false, 2140),
+                Map.of("earth-orbit-satellite", 13), "kKestrel", false, 2140),
             RivalSummary.of("Polar Star Bureau", "Vera Sedova", Archetype.SOVIET, false,
-                Map.of("earth-orbit-satellite", 14), "", false, 1760));
+                Map.of("earth-orbit-satellite", 14), "kPolar", false, 1760));
+        List<de.mkoehler.launchwindow.net.messages.StandingSeries> standing = rivals.stream()
+            .map(ScreenSnapshot::resultStanding).toList();
         game.session().keepRivals(rivals);
+        game.session().keepStanding(standing);
         write(folder, "museum-race.png", new MuseumScreen(game, MuseumScreen.Tab.RACE), null);
         write(folder, "museum-achievements.png", new MuseumScreen(game, MuseumScreen.Tab.ACHIEVEMENTS), null);
         write(folder, "museum-flights.png", new MuseumScreen(game, MuseumScreen.Tab.FLIGHTS), null);
@@ -2940,8 +2957,9 @@ public final class ScreenSnapshot {
         startSession(game, state, medal);
         game.session().keepRivals(List.of(me,
             RivalSummary.of("Orion Spaceworks", "Ana Reyes", Archetype.NASA, false,
-                Map.of("earth-orbit-satellite", 11, "human-in-space", 20, "human-in-orbit", 24), "", false, 3880),
+                Map.of("earth-orbit-satellite", 11, "human-in-space", 20, "human-in-orbit", 24), "kOrion", false, 3880),
             rivals.get(2), rivals.get(3)));
+        game.session().keepStanding(standing);
         write(folder, "result-medal.png", new SpaceComplexScreen(game), SpaceComplexScreen::showResult);
 
         // An exact tie: level on every place of the medal table.
@@ -2951,8 +2969,9 @@ public final class ScreenSnapshot {
         startSession(game, state, tie);
         game.session().keepRivals(List.of(me,
             RivalSummary.of("Orion Spaceworks", "Ana Reyes", Archetype.NASA, false,
-                Map.of("earth-orbit-satellite", 12, "human-in-space", 24, "human-in-orbit", 24), "", false, 3880),
+                Map.of("earth-orbit-satellite", 12, "human-in-space", 24, "human-in-orbit", 24), "kOrion", false, 3880),
             rivals.get(2), rivals.get(3)));
+        game.session().keepStanding(standing);
         write(folder, "result-tie.png", new SpaceComplexScreen(game), SpaceComplexScreen::showResult);
 
         // No losses yet: the memorial's empty state.
