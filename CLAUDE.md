@@ -362,10 +362,12 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
   for the opposite kind, ±4 % output for each shown relationship in a team, hidden rapport counting for nothing.
   Nothing saved changed; rebuild client and server together, no reset. The wiki follows `help.json`.
 
-- **Public prestige and the standing charts** (the user's idea, 2026-11-02, `design.md` §2.1(g), `ui-spec.md` component 30, G20):
-  prestige is public (the race's column, the Intelligence Office's rival list); funds stay secret. The curves' server side is
-  built (`StandingRequest`, read from the turn reports, nothing saved; `DevClient`'s `standing`); the charts await the canvas
-  `Launch Window — Standing`. Their numbers are unconfirmed. A changed message: rebuild client and server together; no reset.
+- **Public prestige and the standing charts** (the user's idea, 2026-11-02, `design.md` §2.1(g), `ui-spec.md` component 30, G20,
+  from the canvas `Launch Window — Standing`): prestige is public (the race's column, the Intelligence Office's rival list); funds
+  stay secret. The Public Affairs Office's Standing tab and the game result chart it (`client.screen.StandingChart`,
+  `client.view.Standing`, `-Dshots=standing`). The curves come from the turn reports through `server.StandingCache`, in memory,
+  filled at startup; nothing saved. `DevClient`'s `standing`. Numbers unconfirmed (40 dots, a window of 120). A changed message:
+  rebuild client and server together; no reset.
 
 ## How we work
 

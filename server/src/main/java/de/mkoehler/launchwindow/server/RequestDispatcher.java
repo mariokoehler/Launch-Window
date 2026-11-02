@@ -41,7 +41,6 @@ import de.mkoehler.launchwindow.persistence.ActionContext;
 import de.mkoehler.launchwindow.persistence.ActionResult;
 import de.mkoehler.launchwindow.persistence.PlayerAction;
 import de.mkoehler.launchwindow.persistence.PlayerSnapshotStore;
-import de.mkoehler.launchwindow.persistence.TurnReportStore;
 import de.mkoehler.launchwindow.persistence.PlayerStateService;
 import de.mkoehler.launchwindow.persistence.SetFundsAction;
 import de.mkoehler.launchwindow.rules.FindingPublications;
@@ -105,6 +104,7 @@ public class RequestDispatcher {
     static final int MAX_REPORT_BYTES = NetworkConstants.OBJECT_BUFFER_SIZE - 1_024;
 
     private final AccountStore accountStore;
+    private final StandingCache standing;
     private final Path dataRoot;
     private final ObjectMapper mapper;
     private final ActionContext context;
@@ -129,6 +129,7 @@ public class RequestDispatcher {
     public RequestDispatcher(AccountStore accountStore, Path dataRoot, ObjectMapper mapper, ActionContext context,
             GameMeta meta, GameInfoService gameInfo) {
         this.accountStore = Objects.requireNonNull(accountStore, "accountStore must not be null");
+        this.standing = new StandingCache(dataRoot, mapper);
         this.dataRoot = Objects.requireNonNull(dataRoot, "dataRoot must not be null");
         this.mapper = Objects.requireNonNull(mapper, "mapper must not be null");
         this.context = Objects.requireNonNull(context, "context must not be null");
@@ -660,9 +661,18 @@ public class RequestDispatcher {
     }
 
     /**
+     * Brings the standing's cache up to date: at server start, and as each turn resolves.
+     *
+     * @throws IOException if a report can't be read
+     */
+    public void refreshStanding() throws IOException {
+        standing.catchUp();
+    }
+
+    /**
      * Handles a {@link StandingRequest}: every claimed player's prestige curve, and the asking
-     * player's funds, read from the turn reports ({@code ui-spec.md} component 30, G20). Reports
-     * hold resolved values only, so nothing queued shows, and a rollback rewinds the curves.
+     * player's funds and marks, from the {@link StandingCache} ({@code ui-spec.md} component 30, G20).
+     * Reports hold resolved values only, so nothing queued shows.
      *
      * @param connectionId the connection the request arrived on
      * @param request      the request
@@ -677,6 +687,7 @@ public class RequestDispatcher {
             if (!hasSlot(accountId)) {
                 return StandingResponse.failure(ClaimSlotRequest.SLOT_CLAIM_REQUIRED);
             }
+            standing.catchUp();
             List<StandingSeries> agencies = new ArrayList<>();
             try (Stream<Path> listing = Files.list(dataRoot.resolve("players"))) {
                 for (Path playerDir : listing.filter(Files::isDirectory).sorted().toList()) {
@@ -686,8 +697,7 @@ public class RequestDispatcher {
                     }
                     String id = playerDir.getFileName().toString();
                     agencies.add(StandingSeries.of(snapshot.get().getAgencyName(), id.equals(accountId),
-                        meta.isBot(id), GameSeeds.rivalKey(meta.getGameSeed(), id),
-                        new TurnReportStore(playerDir, mapper).all()));
+                        meta.isBot(id), GameSeeds.rivalKey(meta.getGameSeed(), id), standing.turns(id)));
                 }
             }
             return StandingResponse.of(agencies);

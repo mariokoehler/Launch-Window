@@ -58,6 +58,7 @@ public final class ClientSession {
     private final Map<Long, TurnReport> reports = new HashMap<>();
     private long lastTurnWithoutReport;
     private List<RivalSummary> rivals;
+    private List<de.mkoehler.launchwindow.net.messages.StandingSeries> standing;
     private List<FrontPage> frontPages;
     private List<FrontPage.Statement> statements = List.of();
     private List<FrontPage.Loss> losses = List.of();
@@ -247,6 +248,24 @@ public final class ClientSession {
      */
     public List<RivalSummary> rivals() {
         return rivals;
+    }
+
+    /**
+     * Returns the latest standing curves ({@code ui-spec.md} component 30).
+     *
+     * @return every agency's curves, or {@code null} before the first fetch
+     */
+    public List<de.mkoehler.launchwindow.net.messages.StandingSeries> standing() {
+        return standing;
+    }
+
+    /**
+     * Keeps freshly fetched standing curves.
+     *
+     * @param standing every agency's curves
+     */
+    public void keepStanding(List<de.mkoehler.launchwindow.net.messages.StandingSeries> standing) {
+        this.standing = List.copyOf(standing);
     }
 
     /**

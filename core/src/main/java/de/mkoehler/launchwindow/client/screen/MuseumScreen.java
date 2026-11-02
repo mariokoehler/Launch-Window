@@ -235,7 +235,10 @@ public final class MuseumScreen extends ChromeScreen {
         String count = rivals == null ? "" : " · " + rivals.size() + (rivals.size() == 1 ? " agency" : " agencies");
         head.add(ui.label(("The race" + count).toUpperCase(Locale.ROOT), Theme.TextStyle.EYEBROW, Theme.NAVY))
             .expandX().left();
-        head.add(ui.label("Dates are the turn each goal was done", Theme.TextStyle.CAPTION, Theme.INK_MUTED));
+        head.add(ui.label("Dates are the turn each goal was done", Theme.TextStyle.CAPTION, Theme.INK_MUTED))
+            .padRight(Theme.SPACE_4);
+        head.add(actionButton("Prestige over time", Theme.ButtonKind.SECONDARY,
+            () -> game.setScreen(new PublicAffairsScreen(game, PublicAffairsScreen.Tab.STANDING))));
         raceCard.add(head).padBottom(Theme.SPACE_3).row();
         if (rivals == null) {
             raceCard.add(ui.paragraph(rivalsFailed ? "Couldn't fetch the race. Open the Museum again to retry."

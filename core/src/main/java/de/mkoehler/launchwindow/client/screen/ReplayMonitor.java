@@ -554,24 +554,7 @@ public final class ReplayMonitor extends WidgetGroup {
      * arc's segments overlap. Colours must be opaque, or the overlaps show.
      */
     private void line(Batch batch, float x1, float y1, float x2, float y2, float width, Color color, float extend) {
-        int texels = Math.round(width) + 2;
-        float thick = width * texels / (texels - 2f);
-        TextureRegion brush = ui.brush(texels);
-        float dx = x2 - x1;
-        float dy = y2 - y1;
-        float length = (float) Math.hypot(dx, dy);
-        if (length == 0f) {
-            return;
-        }
-        float ux = dx / length;
-        float uy = dy / length;
-        float startX = x1 - ux * extend;
-        float startY = y1 - uy * extend;
-        batch.setColor(color);
-        batch.draw(brush, startX, startY - thick / 2f, 0f, thick / 2f, length + 2 * extend, thick, 1f, 1f,
-            (float) Math.toDegrees(Math.atan2(dy, dx)));
-        // Drawables multiply by the batch's colour: leave it white for them.
-        batch.setColor(Color.WHITE);
+        ui.line(batch, x1, y1, x2, y2, width, color, extend);
     }
 
     private static Color mix(Color base, Color over, float amount) {

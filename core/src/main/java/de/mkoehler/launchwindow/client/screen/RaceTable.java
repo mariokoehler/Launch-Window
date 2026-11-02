@@ -33,7 +33,8 @@ final class RaceTable {
     /** A row's height: room for a patch in the Museum, the old compact height in the result dialog. */
     private static final float MUSEUM_CELL_HEIGHT = PATCH_SIZE + 16f;
 
-    private static final float CELL_HEIGHT = 60f;
+    /** The result dialog's rows: compact, with the whole game's chart under them (ui-spec.md 4.13). */
+    private static final float CELL_HEIGHT = 44f;
 
     /** An open goal's greyed patch is also faded, so it reads as not yet earned. */
     private static final float OPEN_ALPHA = 0.6f;
@@ -82,8 +83,8 @@ final class RaceTable {
         }
         if (museum) {
             table.add(head(ui, "Done")).width(90f);
-            table.add(head(ui, "Prestige")).width(120f);
         }
+        table.add(head(ui, "Prestige")).width(museum ? 120f : 96f);
         table.add(head(ui, "Finished")).width(150f);
         table.row();
         Color mine = new Color(Theme.SURFACE_CARD).lerp(Theme.GOLD, 0.12f);
@@ -98,7 +99,13 @@ final class RaceTable {
             Table agency = cell(ui, fill);
             Table who = new Table();
             who.defaults().left();
-            who.add(ui.label(row.agency(), Theme.TextStyle.BODY_STRONG, Theme.INK)).padBottom(2f).row();
+            Table named = new Table();
+            if (!museum) {
+                // The swatch ties the row to the chart below, which needs no legend (ui-spec.md 4.13).
+                named.add(new Image(ui.solid(StandingChart.colour(row.colour())))).size(14f, 3f).padRight(6f);
+            }
+            named.add(ui.label(row.agency(), Theme.TextStyle.BODY_STRONG, Theme.INK));
+            who.add(named).padBottom(museum ? 2f : 0f).row();
             Table line = new Table();
             line.add(ui.label("Dir. " + row.director(), Theme.TextStyle.CAPTION, Theme.INK_MUTED)).padRight(6f);
             Table archetype = new Table();
@@ -128,9 +135,10 @@ final class RaceTable {
             if (museum) {
                 table.add(cell(ui, fill).add(ui.label(row.count() + " of " + row.cells().size(),
                     Theme.TextStyle.BODY_STRONG, Theme.INK)).expandX().left().getTable()).height(height);
-                table.add(cell(ui, fill).add(ui.label(String.format(Locale.US, "%,d", row.prestige()),
-                    Theme.TextStyle.BODY_STRONG, Theme.INK)).expandX().left().getTable()).height(height);
             }
+            table.add(cell(ui, fill).add(ui.label(String.format(Locale.US, "%,d", row.prestige()),
+                museum ? Theme.TextStyle.BODY_STRONG : Theme.TextStyle.BODY_SM, Theme.INK)).expandX().left().getTable())
+                .height(height);
             table.add(cell(ui, fill).add(ui.label(row.finished(), Theme.TextStyle.BODY_SM, Theme.INK)).expandX()
                 .left().getTable()).height(height);
             table.row();

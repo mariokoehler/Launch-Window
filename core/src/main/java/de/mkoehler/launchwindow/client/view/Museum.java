@@ -55,7 +55,7 @@ public final class Museum {
      * @param finished  the date it finished them all, or "—"
      */
     public record RaceRow(int place, String agency, String director, String archetype, boolean you, boolean winner,
-                          List<Cell> cells, int count, String finished, long prestige) {
+                          List<Cell> cells, int count, String finished, long prestige, int colour) {
     }
 
     /**
@@ -154,6 +154,7 @@ public final class Museum {
         order.sort(Comparator.<Integer>comparingInt(i -> winners.contains(String.valueOf(i)) ? 0 : 1)
             .thenComparing(i -> -count(rivals.get(i), declared))
             .thenComparingInt(i -> lastDone(rivals.get(i), declared)));
+        int[] colours = Standing.colours(rivals);
         List<RaceRow> rows = new ArrayList<>();
         for (int position = 0; position < order.size(); position++) {
             int index = order.get(position);
@@ -169,7 +170,7 @@ public final class Museum {
             rows.add(new RaceRow(winner ? 1 : position + 1, name(rival) + (rival.you() ? " (you)" : ""),
                 rival.directorName(), archetype(rival.archetype()), rival.you(), winner, cells, count,
                 WinCondition.completionTurn(rival.goalTurns(), declared).map(Museum::date).orElse("—"),
-                rival.prestige()));
+                rival.prestige(), colours[index]));
         }
         return rows;
     }

@@ -400,6 +400,28 @@ public class LaunchWindowGame extends Game {
         return preferences.contains(key(name)) ? preferences.getString(key(name)) : null;
     }
 
+    /**
+     * Returns whether the standing chart last showed everyone, on this device ({@code ui-spec.md} component 30).
+     *
+     * @return whether it did
+     */
+    public boolean standingEveryone() {
+        return session != null && preferences().getBoolean(key("standingEveryone"), false);
+    }
+
+    /**
+     * Remembers the standing chart's toggle on this device.
+     *
+     * @param everyone whether it shows everyone
+     */
+    public void setStandingEveryone(boolean everyone) {
+        if (session != null) {
+            com.badlogic.gdx.Preferences preferences = preferences();
+            preferences.putBoolean(key("standingEveryone"), everyone);
+            preferences.flush();
+        }
+    }
+
     private static java.util.List<String> ids(String value) {
         return value.isEmpty() ? java.util.List.of() : java.util.List.of(value.split(","));
     }

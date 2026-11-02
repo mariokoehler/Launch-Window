@@ -14,9 +14,11 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import de.mkoehler.launchwindow.actions.ConvertPrestigeAction;
 import de.mkoehler.launchwindow.client.LaunchWindowGame;
+import de.mkoehler.launchwindow.client.ui.DashedBox;
 import de.mkoehler.launchwindow.client.ui.Theme;
 import de.mkoehler.launchwindow.client.view.Help;
 import de.mkoehler.launchwindow.client.view.Outlook;
+import de.mkoehler.launchwindow.client.view.Standing;
 import de.mkoehler.launchwindow.client.view.TurnReportView;
 import de.mkoehler.launchwindow.content.BudgetSchedule;
 import de.mkoehler.launchwindow.model.GameDate;
@@ -43,8 +45,27 @@ import java.util.Locale;
  */
 public final class PublicAffairsScreen extends ChromeScreen {
 
+    /** The office's tabs. */
+    public enum Tab {
+        /** Funds, costs, the next review and the news. */
+        BUDGET("Budget"),
+        /** Prestige and funds over time (ui-spec.md component 30). */
+        STANDING("Standing");
+
+        private final String label;
+
+        Tab(String label) {
+            this.label = label;
+        }
+    }
+
+    private static final float TOGGLE_WIDTH = 260f;
 
     private TurnReport lastReport;
+    private Tab tab;
+    private boolean everyone;
+    private boolean standingFailed;
+    private StandingChart chart;
 
     /** The game's budget schedule, from the game info. */
     /** A runway this short or shorter is shown in red. */
@@ -60,9 +81,24 @@ public final class PublicAffairsScreen extends ChromeScreen {
      * @param game the game, in a session
      */
     public PublicAffairsScreen(LaunchWindowGame game) {
+        this(game, Tab.BUDGET);
+    }
+
+    /**
+     * Builds the screen on a tab.
+     *
+     * @param game the game, in a session
+     * @param tab  the tab to open
+     */
+    public PublicAffairsScreen(LaunchWindowGame game, Tab tab) {
         super(game, List.of(Crumb.SPACE_COMPLEX, new Crumb("Public Affairs Office", null)), "Public Affairs Office",
-            "Budget and prestige");
+            title(tab));
+        this.tab = tab;
+        everyone = game.standingEveryone();
         lastReport = session.report(session.latestResolvedTurn());
+        if (tab == Tab.STANDING) {
+            fetchStanding();
+        }
         rebuild();
         if (lastReport == null && session.latestResolvedTurn() >= 1) {
             game.gateway().fetchTurnReport(session.credentials(), -1, result -> {
@@ -73,6 +109,43 @@ public final class PublicAffairsScreen extends ChromeScreen {
                 }
             });
         }
+    }
+
+    private static String title(Tab tab) {
+        return tab == Tab.BUDGET ? "Budget and prestige" : "Standing";
+    }
+
+    /**
+     * Switches tabs.
+     *
+     * @param tab the tab to show
+     */
+    public void select(Tab tab) {
+        this.tab = tab;
+        setTitles("Public Affairs Office", title(tab));
+        if (tab == Tab.STANDING) {
+            fetchStanding();
+        }
+        rebuild();
+    }
+
+    private void fetchStanding() {
+        game.gateway().fetchStanding(session.credentials(), result -> {
+            if (!isShowing()) {
+                return;
+            }
+            standingFailed = !result.ok();
+            if (result.ok()) {
+                session.keepStanding(result.agencies());
+            }
+            rebuild();
+        });
+        game.gateway().fetchRivals(session.credentials(), result -> {
+            if (isShowing() && result.ok()) {
+                session.keepRivals(result.rivals());
+                rebuild();
+            }
+        });
     }
 
     @Override
@@ -87,14 +160,158 @@ public final class PublicAffairsScreen extends ChromeScreen {
 
     @Override
     protected void rebuild() {
+        titleActions.clearChildren();
+        for (Tab each : Tab.values()) {
+            titleActions.add(tabButton(each)).padLeft(Theme.SPACE_2);
+        }
         content.clearChildren();
         content.top();
+        chart = null;
+        if (tab == Tab.STANDING) {
+            content.add(standing()).expand().fill();
+            return;
+        }
         Table columns = new Table();
         columns.top();
         columns.add(fundsColumn()).width(560f).top().fillY().padRight(Theme.SPACE_4);
         columns.add(reviewColumn()).expandX().fillX().top().fillY().padRight(Theme.SPACE_4);
         columns.add(newsColumn()).width(500f).top().fillY();
         content.add(columns).expand().fill();
+    }
+
+    private Table tabButton(Tab each) {
+        boolean active = each == tab;
+        Table button = new Table();
+        button.setBackground(ui.navTab(active));
+        button.pad(Theme.SPACE_2, Theme.SPACE_4, Theme.SPACE_2, Theme.SPACE_4);
+        button.add(ui.label(each.label.toUpperCase(Locale.ROOT), Theme.TextStyle.LABEL,
+            active ? Theme.NAVY : Theme.ON_PAGE_STRONG));
+        button.setTouchable(com.badlogic.gdx.scenes.scene2d.Touchable.enabled);
+        button.addListener(clicked(() -> select(each)));
+        return button;
+    }
+
+    // ---- The Standing tab (ui-spec.md component 30)
+
+    private Table standing() {
+        Table card = ui.card();
+        card.defaults().growX();
+        List<de.mkoehler.launchwindow.net.messages.StandingSeries> series = session.standing();
+        Standing.Model model = series == null ? null : Standing.of(series, session.rivals(), false);
+        Table prestigeHead = prestigeHead(model);
+        Table fundsHead = fundsHead();
+        if (model == null || model.empty()) {
+            card.add(prestigeHead).padBottom(Theme.SPACE_2).row();
+            card.add(blank(standingEmptyTitle(model), standingEmptyBody(model))).expand().fill()
+                .padBottom(Theme.SPACE_3).row();
+            card.add(fundsHead).padBottom(Theme.SPACE_2).row();
+            card.add(blank(null, standingFailed || model == null ? "" : "Your funds will show here too."))
+                .height(160f);
+            return card;
+        }
+        chart = new StandingChart(ui, model, everyone, true, prestigeHead, fundsHead);
+        card.add(chart).expand().fill().row();
+        card.add(ruleLine()).height(Theme.BORDER_THIN).padTop(Theme.SPACE_2).padBottom(Theme.SPACE_2).row();
+        card.add(StandingChart.key(ui, "As of the last resolved season, " + Standing.date(model.to())));
+        return card;
+    }
+
+    /**
+     * Puts the chart's crosshair on a turn, as the pointer does: for the shots.
+     *
+     * @param turn the turn
+     */
+    public void hoverChart(long turn) {
+        if (chart != null) {
+            chart.hover(turn);
+        }
+    }
+
+    /**
+     * Shows or hides the rivals' lines.
+     *
+     * @param on whether everyone's on
+     */
+    public void showEveryone(boolean on) {
+        everyone = on;
+        rebuild();
+    }
+
+    private String standingEmptyTitle(Standing.Model model) {
+        return standingFailed || model == null ? null : "Your first season hasn't resolved yet.";
+    }
+
+    private String standingEmptyBody(Standing.Model model) {
+        if (standingFailed) {
+            return "Couldn't fetch the standing. Open the office again to retry.";
+        }
+        return model == null ? "Fetching the standing…" : "A line needs two points. The chart starts after the first "
+            + "resolution, with your prestige and funds before and after it.";
+    }
+
+    private Table blank(String title, String body) {
+        Table box = new Table();
+        box.setBackground(new DashedBox(ui.solid(Theme.SURFACE_CARD), ui.solid(Theme.NAVY_BORDER),
+            ui.solid(new Color(Theme.NAVY).lerp(Theme.SURFACE_CARD, 0.96f))));
+        if (title != null) {
+            box.add(ui.label(title, Theme.TextStyle.HEADING_SM, Theme.INK)).padBottom(Theme.SPACE_2).row();
+        }
+        Label words = ui.label(body, Theme.TextStyle.BODY, standingFailed ? Theme.DANGER : Theme.INK_MUTED);
+        box.add(words);
+        return box;
+    }
+
+    private Actor ruleLine() {
+        return new Image(ui.solid(Theme.NAVY_BORDER));
+    }
+
+    private Table prestigeHead(Standing.Model model) {
+        Table head = new Table();
+        head.add(ui.label("PRESTIGE", Theme.TextStyle.LABEL, Theme.INK_MUTED)).padRight(Theme.SPACE_3);
+        head.add(ui.label("Public: every agency's figure, from resolved seasons", Theme.TextStyle.CAPTION,
+            Theme.INK_MUTED)).padRight(Theme.SPACE_3);
+        if (model != null && model.windowed()) {
+            Table chip = new Table();
+            chip.setBackground(ui.solid(Theme.SKILL_TRACK));
+            chip.pad(2f, 7f, 2f, 7f);
+            chip.add(ui.label("LATEST " + Standing.WINDOW / 4 + " YEARS", Theme.TextStyle.LABEL, Theme.NAVY));
+            head.add(chip).padRight(Theme.SPACE_3);
+            head.add(ui.label("The oldest seasons drop off the left after " + Standing.WINDOW,
+                Theme.TextStyle.CAPTION, Theme.INK_MUTED));
+        }
+        head.add().expandX();
+        Table toggle = new Table();
+        toggle.defaults().growX().uniformX().height(28f);
+        toggle.add(toggleOption("Just me", !everyone, false));
+        toggle.add(toggleOption("Everyone", everyone, true));
+        head.add(toggle).width(TOGGLE_WIDTH);
+        return head;
+    }
+
+    private Table toggleOption(String text, boolean on, boolean choice) {
+        Table option = new Table();
+        option.setBackground(ui.rect(on ? Theme.NAVY : Theme.SURFACE_CARD, Theme.NAVY, Theme.BORDER_THIN));
+        option.add(ui.label(text, Theme.TextStyle.LABEL, on ? Theme.ON_FILL : Theme.NAVY));
+        option.setTouchable(com.badlogic.gdx.scenes.scene2d.Touchable.enabled);
+        option.addListener(clicked(() -> {
+            game.setStandingEveryone(choice);
+            showEveryone(choice);
+        }));
+        return option;
+    }
+
+    private Table fundsHead() {
+        Table head = new Table();
+        head.add(ui.label("FUNDS", Theme.TextStyle.LABEL, Theme.INK_MUTED)).padRight(Theme.SPACE_3);
+        Table tag = new Table();
+        tag.setBackground(ui.rect(Theme.SURFACE_CARD, Theme.NAVY, Theme.BORDER_THIN));
+        tag.pad(2f, 7f, 2f, 7f);
+        tag.add(ui.label("YOURS ALONE", Theme.TextStyle.LABEL, Theme.NAVY));
+        head.add(tag).padRight(Theme.SPACE_3);
+        head.add(ui.label("Rivals' funds are secret, so this chart never shows them", Theme.TextStyle.CAPTION,
+            Theme.INK_MUTED));
+        head.add().expandX();
+        return head;
     }
 
     // ---- Column 1: funds and running costs

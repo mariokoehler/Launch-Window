@@ -1,5 +1,7 @@
 package de.mkoehler.launchwindow.client.screen;
 
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.ui.Container;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Scaling;
@@ -8,6 +10,7 @@ import de.mkoehler.launchwindow.client.ui.Theme;
 import de.mkoehler.launchwindow.client.ui.UiKit;
 import de.mkoehler.launchwindow.client.view.ContentNames;
 import de.mkoehler.launchwindow.client.view.Museum;
+import de.mkoehler.launchwindow.client.view.Standing;
 import de.mkoehler.launchwindow.net.messages.GameInfoResponse;
 import de.mkoehler.launchwindow.net.messages.RivalSummary;
 import de.mkoehler.launchwindow.rules.WinCondition;
@@ -29,6 +32,8 @@ final class GameResultDialog {
 
     /** The dialog's width, from the mockup. */
     static final float WIDTH = 980f;
+
+    private static final float CHART_HEIGHT = 250f;
 
     private static final String[] ORDINALS = {"1st", "2nd", "3rd", "4th", "5th", "6th", "7th", "8th"};
 
@@ -113,6 +118,16 @@ final class GameResultDialog {
         if (!rivals.isEmpty()) {
             card.add(RaceTable.build(ui, Museum.race(rivals, declared), declared, false)).padBottom(Theme.SPACE_4)
                 .row();
+            Container<Actor> slot = new Container<>();
+            slot.fill();
+            card.add(slot).padBottom(Theme.SPACE_4).row();
+            fillChart(slot, rivals);
+            game.gateway().fetchStanding(host.session.credentials(), result -> {
+                if (host.isShowing() && result.ok()) {
+                    host.session.keepStanding(result.agencies());
+                    fillChart(slot, rivals);
+                }
+            });
         }
         medals.ifPresent(table -> card.add(medalTable(table, rivals, goalNames)).padBottom(Theme.SPACE_4).row());
 
@@ -129,6 +144,26 @@ final class GameResultDialog {
         footer.add(ChromeScreen.onClick(ui.button("Keep playing", Theme.ButtonKind.PRIMARY), this::keepPlaying));
         card.add(footer).row();
         return card;
+    }
+
+    /** Prestige, the whole game (ui-spec.md 4.13): every agency, never windowed; left out until it's fetched. */
+    private void fillChart(Container<Actor> slot, List<RivalSummary> rivals) {
+        if (host.session.standing() == null) {
+            return;
+        }
+        Standing.Model model = Standing.of(host.session.standing(), rivals, true);
+        if (model.empty()) {
+            return;
+        }
+        Table block = new Table();
+        block.defaults().growX().left();
+        Table head = new Table();
+        head.add(ui.label("PRESTIGE, THE WHOLE GAME", Theme.TextStyle.LABEL, Theme.INK_MUTED)).expandX().left();
+        head.add(ui.label(Standing.date(model.from()) + " to " + Standing.date(model.to()) + " · every agency",
+            Theme.TextStyle.CAPTION, Theme.INK_MUTED));
+        block.add(head).padBottom(Theme.SPACE_2).row();
+        block.add(new StandingChart(ui, model, true, false, null, null)).height(CHART_HEIGHT);
+        slot.setActor(block);
     }
 
     private void keepPlaying() {

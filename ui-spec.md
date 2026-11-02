@@ -1410,8 +1410,9 @@ Writing them turned up two things for the rules, recorded in `design.md` §2.2(d
         with "Until the turn resolves". **The rival's line:** first in the News card, "<Agency> has lost the crew
         of <mission>" with one more line and "Send condolences" (secondary), no eyebrow and no colour.
 
-30. **Standing chart** *(the user's idea, 2026-11-02; specified the same day, awaiting its mockup; the numbers are
-    **unconfirmed**; server side built, G20)*. How an agency's prestige and money moved over time: the statistics
+30. **Standing chart** *(the user's idea, 2026-11-02; specified, mocked up on the canvas `Launch Window — Standing`
+    and built the same day; the numbers and the canvas's choices are **unconfirmed**; G20; `client.screen.StandingChart`,
+    the numbers in `client.view.Standing`; `-Dshots=standing` renders the canvas's boards)*. How an agency's prestige and money moved over time: the statistics
     this kind of player loves. Shared by the Public Affairs Office's Standing tab (§4.10) and the game result
     (§4.13).
     - **Two charts stacked on one timeline, never one chart with two Y-axes** (user-approved 2026-11-02): crossings
@@ -1443,6 +1444,24 @@ Writing them turned up two things for the rules, recorded in `design.md` §2.2(d
       two points; with two or three points, the dots carry it, the line spanning the width.
     - **Data:** resolved turns only, so the latest point can differ from the header's prestige and funds, which
       include queued actions. The tab says so in a caption: "As of the last resolved season".
+    - **The canvas's choices, built:** one card, prestige over funds at about 68 to 32 %, one axis, a key row of the
+      four marks; gutters 64 px left, 236 px right; own line 3 px, rivals 1.75; dots r 3.5 and 2.75, r 6 and 5 with six
+      points or fewer, when the axis names each season; goal r 6, First r 7 gold ringed in the agency's colour; end
+      labels at least 34 px apart with a thin leader; prestige axis from 0; funds fit both ends and always show zero,
+      labelled "Zero" in debt; below zero the line and dots are danger, over a 14 % fill, the end label a danger tag. A
+      fifth rival repeats the colours, dashed. The toggle is the design system's segmented control, 260 px. The hover
+      tooltip is 300 px, right of the crosshair, left where it wouldn't fit. New in `Theme.java`: `CHART_RIVAL_1` to `4`,
+      `CHART_GRID`, `CHART_AXIS`, `CHART_REVIEW`, `CHART_DEBT_FILL`. No new icons: the marks are drawn shapes.
+    - **Where the build differs from the canvas:**
+      - **The first point reads "Start",** not "Winter 1955": a report's turn is the season it resolved, so the point
+        after turn 1 is Winter 1955, and a goal's mark sits on the season the race dates it.
+      - **A rival's colour goes by the agencies' order** on the server, which the race table shares, not by when they
+        joined.
+      - **The tooltip names no prestige conversion** ("Converted 600 prestige to funds"): the turn report has no event for
+        one, and adding one wasn't worth a saved format for a line the player already knows. The dip still shows.
+      - **No small drawing** in the empty state, and it leaves out the starting figures.
+      - **The result dialog stays 980 px,** with the race table as built (no check marks); rows are 44 px, as the canvas
+        asks.
 
 ---
 
@@ -2953,8 +2972,9 @@ review: when, what it pays, what keeps today's funding) and `PrestigeConversion`
   review #n, raised since" after a raise, and a caption above the last-review line says what 1,000 more
   prestige would add now (or that the bracket's top is reached, or, before the first review, that raises
   start then), and the raise due next season when prestige has already grown. Shot `raise-pao.png`.
-- **The Standing tab** *(the user's idea, 2026-11-02, awaiting its mockup)*: `NavTabs` in the header as in the
-  Museum, Budget (this page, unchanged) and Standing, which is the standing chart (component 30) at full width.
+- **The Standing tab** *(the user's idea, 2026-11-02, built the same day)*: `NavTabs` in the title row as in the
+  Museum, Budget (this page, unchanged) and Standing, which is the standing chart (component 30) at full width. Shots
+  `standing-*.png`.
 
 ### 4.11 Museum: goals, history, rivals
 **Purpose:** the scoreboard and the archive. **Ref:** `museum*.png`.
@@ -2966,7 +2986,8 @@ review: when, what it pays, what keeps today's funding) and `PrestigeConversion`
   "(bot)" after its agency's name here, in the Intelligence Office's rival list and in the game
   result (2026-10-25, `Museum.name`); the newspaper names it plainly, as it would any agency.
   A **Prestige** column after Done shows each agency's public prestige at the last resolution (built
-  2026-11-02, `design.md` §2.1(g)), and will link to the Standing tab (§4.10, component 30).
+  2026-11-02, `design.md` §2.1(g)), and "Prestige over time" above the table opens the Standing tab (§4.10, component
+  30).
 - **Achievements:** every goal achieved or cancelled, with the turn and the
   prestige.
 - **Flights:** the completed flight count per configuration (`successfulFlightCounts`), commercial flights
@@ -3069,8 +3090,9 @@ player who picked Standard keeps it.
 ### 4.13 Game result
 **Purpose:** announce the winner. **Shows:** an overlay on the hub when a result
 exists: winner or tied winners (agency and director name), the turn decided, and the
-race table, plus the whole game's prestige chart with everyone on it (component 30, awaiting
-its mockup). Play continues, so the overlay can be dismissed and is reopenable from
+race table, with a Prestige column and a colour swatch tying each agency to the chart below it,
+the whole game's prestige with everyone on it, never windowed (component 30; no funds, reviews or crews: the
+dialog is about everyone). Play continues, so the overlay can be dismissed and is reopenable from
 the Museum.
 
 **Mocked up (2026-10-04)** as `GameResult` on the Museum canvas: a `Dialog` over the hub,
@@ -4381,19 +4403,19 @@ current state alone. Each is an M5 task.
     report shows the pages whose unlock turn is its turn (`Archive.openedIn`). A page whose goal the game's
     pack doesn't have isn't shown.
   - **Rebuild client and server together** (a new message); no reset.
-- **G20. The standing (component 30, `design.md` §2.1(g), 2026-11-02). Server side built; the charts await their
-  mockup.** `StandingRequest`/`StandingResponse` with a `StandingSeries` per agency, read from the turn reports, which
-  are never pruned, so nothing new is saved, games already running get their whole history and a rollback rewinds
-  the curves. A point per turn from `firstTurn`: the first report's values before its turn, then each report's values
+- **G20. The standing (component 30, `design.md` §2.1(g), 2026-11-02). Built.**
+  `StandingRequest`/`StandingResponse` with a `StandingSeries` per agency, from the turn reports, which are never
+  pruned, so nothing new is saved and games already running get their whole history. The player's series also carries
+  the turns of their reviews (`BudgetReviewed`) and lost crews (`CrewedFlightsGrounded`). A point per turn from `firstTurn`: the first report's values before its turn, then each report's values
   after. Funds only for the asking player's own series. `RivalSummary.prestige` is the latest resolved snapshot's.
   `client.connect.StandingResult`, `ServerGateway.fetchStanding`, `DevClient`'s `standing`. A changed message: rebuild client
   and server together; no reset.
-  **To build with the charts (the user's decision, 2026-11-02):** `handleStanding` reads every report of every player on each
-  request, about 1,200 files at turn 200 with six agencies. Replace that with an in-memory cache of the four numbers per
-  player and turn, filled synchronously during server startup (a few seconds more are fine, user) and updated as each turn
-  resolves, keyed by turn so a retried resolution overwrites its point. Nothing new on disk: rollbacks run with the server
-  stopped, so the next start rebuilds it from the reports. No client-side cache and no curated file (both talked through and
-  dropped). Time the warm-up on realistic data when it's built.
+  **The cache (the user's decision, 2026-11-02, `server.StandingCache`):** the few numbers per player and turn, in memory,
+  filled synchronously during server startup (a few seconds more are fine, user), caught up as each turn resolves and
+  on each request, which then only lists each player's folder. Nothing new on disk: rollbacks run with the server stopped,
+  so the next start rebuilds it from the reports. No client-side cache and no curated file (both talked through and
+  dropped). Measured on this PC (2026-11-02, 6 agencies, 240 turns, 1,440 of the dev data's reports): about 2.8 s on a cold
+  JVM, about 3 ms a catch-up with nothing new. Late-game reports are bigger than those, and the NAS slower.
 - **G16. Findings (§4.20, `design.md` §2.13, 2026-10-21). Built.**
   - **Content:** each pack's `findings.json`, a rules file in `ContentPackLoader.FILES` (hashed): a goal and
     the step kinds it makes safer, each with an optional body and crewed flag.
@@ -4468,6 +4490,9 @@ current state alone. Each is an M5 task.
    mission (§4.6.5 to §4.6.8), Mission Control (§4.7), the turn report (§4.4).
 4. **The rest:** Astronaut Complex (§4.9), Public Affairs Office (§4.10), Museum
    (§4.11), settings (§4.12), game result (§4.13).
+
+**Mocked up and built (2026-11-02, canvas `Launch Window — Standing`):** the standing chart (component 30): 11 boards, choices
+listed under component 30. New for `Theme.java`: four rival line colours and four chart tones. No new icons.
 
 **Mocked up and built (2026-10-26, canvas `Launch Window — Roads to the Moon`):** Roads to the Moon (§4.21): 7 artboards (NASA,
 Gemini open, Apollo chosen, Soviet, locked, a pinned note, the new pieces), choices in the canvas's notes. New for

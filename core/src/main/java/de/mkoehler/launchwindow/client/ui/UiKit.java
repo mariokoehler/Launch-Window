@@ -316,6 +316,39 @@ public final class UiKit implements Disposable {
     }
 
     /**
+     * Draws an anti-aliased line with a brush; {@code extend} lengthens it at both ends, so a curve's
+     * segments overlap. Colours must be opaque, or the overlaps show.
+     *
+     * @param batch  the batch
+     * @param x1     the start's x
+     * @param y1     the start's y
+     * @param x2     the end's x
+     * @param y2     the end's y
+     * @param width  the width
+     * @param color  the colour
+     * @param extend how far to lengthen it at each end
+     */
+    public void line(com.badlogic.gdx.graphics.g2d.Batch batch, float x1, float y1, float x2, float y2, float width,
+                     Color color, float extend) {
+        int texels = Math.round(width) + 2;
+        float thick = width * texels / (texels - 2f);
+        TextureRegion brush = brush(texels);
+        float dx = x2 - x1;
+        float dy = y2 - y1;
+        float length = (float) Math.hypot(dx, dy);
+        if (length == 0f) {
+            return;
+        }
+        float ux = dx / length;
+        float uy = dy / length;
+        batch.setColor(color);
+        batch.draw(brush, x1 - ux * extend, y1 - uy * extend - thick / 2f, 0f, thick / 2f, length + 2 * extend, thick,
+            1f, 1f, (float) Math.toDegrees(Math.atan2(dy, dx)));
+        // Drawables multiply by the batch's colour: leave it white for them.
+        batch.setColor(Color.WHITE);
+    }
+
+    /**
      * Returns a brush for anti-aliased lines ({@link Theme.Shapes#brush}), built once per height.
      *
      * @param texels the brush's height in texels

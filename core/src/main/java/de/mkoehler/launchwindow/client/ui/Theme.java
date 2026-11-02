@@ -270,6 +270,30 @@ public final class Theme {
      */
     public static final Color SKILL_TRACK = Color.valueOf("#16305c24");
 
+    /** The standing chart's first rival line, teal (ui-spec.md component 30): 5 : 1 or more on white, like the next three. */
+    public static final Color CHART_RIVAL_1 = Color.valueOf("#0b7480");
+
+    /** The second rival line, plum. */
+    public static final Color CHART_RIVAL_2 = Color.valueOf("#8a3d82");
+
+    /** The third rival line, sky blue. */
+    public static final Color CHART_RIVAL_3 = Color.valueOf("#2c6fba");
+
+    /** The fourth rival line, slate; a fifth rival repeats the first, dashed. */
+    public static final Color CHART_RIVAL_4 = Color.valueOf("#5a6678");
+
+    /** A chart's gridlines: navy at 10 %. */
+    public static final Color CHART_GRID = new Color(NAVY.r, NAVY.g, NAVY.b, 0.10f);
+
+    /** A chart's axis, ticks and zero line: navy at 45 %. */
+    public static final Color CHART_AXIS = new Color(NAVY.r, NAVY.g, NAVY.b, 0.45f);
+
+    /** A budget review's line: navy at 30 %. */
+    public static final Color CHART_REVIEW = new Color(NAVY.r, NAVY.g, NAVY.b, 0.30f);
+
+    /** The area of funds below zero: danger at 14 %. */
+    public static final Color CHART_DEBT_FILL = new Color(DANGER.r, DANGER.g, DANGER.b, 0.14f);
+
     // --------------------------------------------------------------- spacing
 
     /** Tight gaps: icon-to-label, a badge's own padding. */

@@ -21,6 +21,7 @@ import de.mkoehler.launchwindow.net.messages.StandingRequest;
 import de.mkoehler.launchwindow.net.messages.StandingResponse;
 import de.mkoehler.launchwindow.net.messages.StandingSeries;
 import de.mkoehler.launchwindow.persistence.TurnReportStore;
+import de.mkoehler.launchwindow.rules.BudgetReviewed;
 import de.mkoehler.launchwindow.rules.TurnReport;
 import de.mkoehler.launchwindow.net.messages.FetchStateResponse;
 import de.mkoehler.launchwindow.net.messages.FrontPagesRequest;
@@ -300,6 +301,14 @@ class RequestDispatcherTest {
         assertEquals(1, them.firstTurn());
         assertArrayEquals(new long[] {250, 400}, them.prestige());
         assertEquals(0, them.funds().length);
+        assertEquals(0, them.reviewTurns().length);
+        // The cache catches up with a later report, a review in it, and keeps what it read.
+        myReports.save(new TurnReport(TurnReport.VERSION, 3, 280, 500, 26_000, 27_000, List.of(), List.of(),
+            List.of(new BudgetReviewed(1, 280, 0, 3_000, 0)), null));
+        you = dispatcher.handleStanding(1, new StandingRequest()).agencies().stream()
+            .filter(StandingSeries::you).findFirst().orElseThrow();
+        assertArrayEquals(new long[] {250, 300, 280, 500}, you.prestige());
+        assertArrayEquals(new long[] {3}, you.reviewTurns());
         assertEquals(400, dispatcher.handleRivals(1, new RivalsRequest()).rivals().stream()
             .filter(r -> !r.you()).findFirst().orElseThrow().prestige());
     }

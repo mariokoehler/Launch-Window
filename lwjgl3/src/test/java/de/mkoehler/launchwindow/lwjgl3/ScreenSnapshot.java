@@ -286,6 +286,10 @@ public final class ScreenSnapshot {
             allHandsShots(folder, game);
             return;
         }
+        if ("standing".equals(System.getProperty("shots"))) {
+            standingShots(folder, game);
+            return;
+        }
         if ("foreign".equals(System.getProperty("shots"))) {
             foreignHardwareShots(folder, game);
             return;
@@ -592,6 +596,7 @@ public final class ScreenSnapshot {
         memorialShots(folder, game);
         progressionShots(folder, game);
         roadsShots(folder, game);
+        standingShots(folder, game);
     }
 
     /**
@@ -2527,6 +2532,135 @@ public final class ScreenSnapshot {
             new de.mkoehler.launchwindow.model.Dossier(de.mkoehler.launchwindow.model.IntelArea.PLANS, 49, List.of(
                 fact("OPEN_PROGRAM", dossier.isEmpty() ? "" : "vostok", 0, 0, 0)), 1));
         return state;
+    }
+
+    /** A stepped curve: climbs at the steps, drifts between them, the same every run. */
+    private static long[] curve(int points, long start, long perSeason, long[][] steps, int seed) {
+        long[] values = new long[points];
+        long value = start;
+        java.util.Random random = new java.util.Random(seed);
+        for (int i = 0; i < points; i++) {
+            value += i == 0 ? 0 : perSeason + random.nextInt(21) * 10L - 100L;
+            for (long[] step : steps) {
+                if (step[0] == i) {
+                    value += step[1];
+                }
+            }
+            values[i] = Math.max(0L, value);
+        }
+        return values;
+    }
+
+    private static long[] funds(int points, long dipAt) {
+        long[] values = new long[points];
+        long value = 25_000L;
+        java.util.Random random = new java.util.Random(5);
+        for (int i = 0; i < points; i++) {
+            value += i == 0 ? 0 : i < 5 ? -4_500L + random.nextInt(1_000) : -300L + random.nextInt(2_000) - 500L;
+            if (i == dipAt) {
+                value -= 12_000L;
+            }
+            values[i] = value;
+        }
+        return values;
+    }
+
+    /** The standing's series as the canvas's boards have them; the last turn is {@code points - 1}. */
+    private static List<de.mkoehler.launchwindow.net.messages.StandingSeries> standing(int points, long dipAt,
+            boolean rivals, long[] reviews, long[] lost) {
+        List<de.mkoehler.launchwindow.net.messages.StandingSeries> series = new java.util.ArrayList<>();
+        long[] you = curve(points, 250, 60, new long[][] {{4, 400}, {7, 900}, {23, 800}, {60, 1_500}}, 1);
+        if (rivals) {
+            series.add(new de.mkoehler.launchwindow.net.messages.StandingSeries("Meridian Rocket Society", false, false,
+                "kMeridian", 0, curve(points, 250, 70, new long[][] {{6, 300}, {21, 2_000}, {70, 1_000}}, 2),
+                new long[0], new long[0], new long[0]));
+            int late = Math.min(8, points - 2);
+            series.add(new de.mkoehler.launchwindow.net.messages.StandingSeries("Cape Horizon Corporation", false, false,
+                "kCape", late, curve(points - late, 250, 40, new long[][] {{6, 400}}, 3), new long[0], new long[0],
+                new long[0]));
+            series.add(new de.mkoehler.launchwindow.net.messages.StandingSeries("Juniper Aerospace", false, true,
+                "kJuniper", 0, curve(points, 250, 55, new long[][] {{8, 300}, {28, 900}}, 4), new long[0], new long[0],
+                new long[0]));
+        }
+        series.add(1 >= series.size() ? series.size() : 1, new de.mkoehler.launchwindow.net.messages.StandingSeries(
+            "Zarya Design Bureau", true, false, "kMe", 0, you, funds(points, dipAt), reviews, lost));
+        return series;
+    }
+
+    private static void writeStanding(File folder, String name, LaunchWindowGame game, boolean everyone, long hover) {
+        write(folder, name, new de.mkoehler.launchwindow.client.screen.PublicAffairsScreen(game,
+            de.mkoehler.launchwindow.client.screen.PublicAffairsScreen.Tab.STANDING), screen -> {
+                screen.showEveryone(everyone);
+                screen.render(0f);
+                if (hover >= 0) {
+                    screen.hoverChart(hover);
+                }
+            });
+    }
+
+    /** The standing chart (ui-spec.md component 30, 2026-11-02), alone with {@code -Dshots=standing}: the canvas's boards. */
+    private static void standingShots(File folder, LaunchWindowGame game) {
+        String hash = ContentPackHash.ofClasspath("content/standard", ScreenSnapshot.class.getClassLoader());
+        List<String> declared = List.of("earth-orbit-satellite", "human-in-space", "human-in-orbit");
+        GameInfoResponse info = GameInfoResponse.success("standard", hash, declared, 32, true, 6 * 3_600_000L, 0L, null,
+            List.of(), List.of(), 0);
+        PlayerSnapshot state = new PlayerSnapshot("Zarya Design Bureau", Archetype.SOVIET, 21_640, 4_520, 3_000, 31);
+        state.setDirectorName("Nina Tarasova");
+        startSession(game, state, info);
+        List<RivalSummary> rivals = List.of(
+            RivalSummary.of("Meridian Rocket Society", "Walter Krueger", Archetype.NASA, false,
+                Map.of("earth-orbit-satellite", 6, "human-in-space", 21), "kMeridian", false, 5_030),
+            RivalSummary.of("Zarya Design Bureau", "Nina Tarasova", Archetype.SOVIET, true,
+                Map.of("earth-orbit-satellite", 4, "human-in-orbit", 23), "kMe", false, 4_400),
+            RivalSummary.of("Cape Horizon Corporation", "Grace Whitfield", Archetype.NASA, false,
+                Map.of("earth-orbit-satellite", 14), "kCape", false, 1_210),
+            RivalSummary.of("Juniper Aerospace", "Samuel Oduya", Archetype.SOVIET, false,
+                Map.of("earth-orbit-satellite", 12, "human-in-space", 28), "kJuniper", true, 4_040));
+        game.session().keepRivals(rivals);
+        long[] twoReviews = {16, 31};
+        game.session().keepStanding(standing(32, 24, true, twoReviews, new long[0]));
+        writeStanding(folder, "standing-me.png", game, false, -1);
+        writeStanding(folder, "standing-everyone.png", game, true, -1);
+        writeStanding(folder, "standing-hover.png", game, true, 21);
+        writeStanding(folder, "standing-hover-me.png", game, false, 23);
+        writeStanding(folder, "standing-hover-edge.png", game, true, 30);
+
+        game.session().keepStanding(standing(3, -1, false, new long[0], new long[0]));
+        game.session().keepRivals(List.of());
+        writeStanding(folder, "standing-early.png", game, false, -1);
+        game.session().keepStanding(List.of(de.mkoehler.launchwindow.net.messages.StandingSeries.of(
+            "Zarya Design Bureau", true, false, "kMe", List.of())));
+        writeStanding(folder, "standing-empty.png", game, false, -1);
+
+        game.session().keepRivals(rivals);
+        long[] sevenReviews = {16, 32, 48, 64, 80, 96, 112, 128};
+        game.session().keepStanding(standing(137, 24, true, sevenReviews, new long[0]));
+        writeStanding(folder, "standing-dense.png", game, true, -1);
+
+        game.session().keepStanding(standing(44, 24, true, twoReviews, new long[] {27}));
+        writeStanding(folder, "standing-marks.png", game, true, -1);
+
+        List<de.mkoehler.launchwindow.net.messages.StandingSeries> debt = new java.util.ArrayList<>();
+        for (de.mkoehler.launchwindow.net.messages.StandingSeries each : standing(32, 26, false, twoReviews,
+                new long[0])) {
+            long[] funds = each.funds().clone();
+            for (int i = 24; i < funds.length; i++) {
+                funds[i] -= 9_000L + (i - 24) * 700L;
+            }
+            debt.add(new de.mkoehler.launchwindow.net.messages.StandingSeries(each.agencyName(), true, false, "kMe", 0,
+                each.prestige(), funds, each.reviewTurns(), each.lostCrewTurns()));
+        }
+        game.session().keepStanding(debt);
+        writeStanding(folder, "standing-debt.png", game, false, -1);
+        writeStanding(folder, "standing-debt-hover.png", game, false, 29);
+
+        GameInfoResponse decided = GameInfoResponse.success("standard", hash, declared, 86, true, 23 * 3_600_000L, 0L,
+            "WON", List.of("Zarya Design Bureau"), List.of("Nina Tarasova"), 84);
+        startSession(game, state, decided);
+        game.session().keepRivals(rivals);
+        game.session().keepStanding(standing(86, -1, true, twoReviews, new long[0]));
+        write(folder, "standing-result.png", new SpaceComplexScreen(game), SpaceComplexScreen::showResult);
+        write(folder, "standing-museum.png", new MuseumScreen(game, MuseumScreen.Tab.RACE), null);
     }
 
     /** Foreign hardware (ui-spec.md 4.15, 2026-11-01), alone with {@code -Dshots=foreign}: the canvas's boards. */

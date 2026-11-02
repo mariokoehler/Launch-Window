@@ -119,9 +119,11 @@ public class GameServer extends ApplicationAdapter {
         scheduler = new TurnScheduler(dataRoot, mapper, Clock.systemDefaultZone(), context,
             RandomEventRoster.baspmClose());
         dispatcher.setTurnForcer(scheduler::resolveNow);
+        refreshStanding();
         networkServer = new NetworkServer();
         // Everyone online hears at once that the turn resolved (on this thread, after it's saved).
         scheduler.setOnResolved(turn -> {
+            refreshStanding();
             for (int connectionId : dispatcher.loggedInConnections()) {
                 networkServer.send(connectionId, new TurnResolvedNotice(turn));
             }
@@ -205,5 +207,14 @@ public class GameServer extends ApplicationAdapter {
     public void dispose() {
         networkServer.stop();
         accountStore.close();
+    }
+
+    /** Reads what the standing charts need; a failure only costs the first request the same read. */
+    private void refreshStanding() {
+        try {
+            dispatcher.refreshStanding();
+        } catch (java.io.IOException | RuntimeException e) {
+            Gdx.app.error(TAG, "Couldn't read the standing: " + e.getMessage());
+        }
     }
 }

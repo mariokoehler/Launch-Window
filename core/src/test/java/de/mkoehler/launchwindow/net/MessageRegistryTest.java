@@ -96,7 +96,7 @@ class MessageRegistryTest {
         MessageRegistry.register(kryo);
         Output output = new Output(4096, -1);
         kryo.writeClassAndObject(output, StandingResponse.of(List.of(new StandingSeries("Orion", true, false, "k1",
-            0L, new long[] {250, 300}, new long[] {25_000, 24_000}))));
+            0L, new long[] {250, 300}, new long[] {25_000, 24_000}, new long[] {1}, new long[0]))));
         StandingResponse back = (StandingResponse) kryo.readClassAndObject(new Input(output.toBytes()));
         assertArrayEquals(new long[] {250, 300}, back.agencies().getFirst().prestige());
         assertArrayEquals(new long[] {25_000, 24_000}, back.agencies().getFirst().funds());
