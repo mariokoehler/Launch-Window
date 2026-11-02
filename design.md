@@ -1163,9 +1163,25 @@ season unchanged. Tiger Teams' live per-step choice doesn't fit, so it was redes
 - **Retire on release:** a crew member or controller released from a mission at or past
   retirement age retires on the spot (otherwise back-to-back launches would keep them forever).
 - **Skills** are doubles, capped at 100. **Growth** (`rules.SkillGrowth`): diminishing returns,
-  `distanceToCap × factor × learningPotential / 100`, training factor 0.25–0.55 (ours); SET's
-  R&D gain is flat, factor 0.15–0.35 (ours), clamped at the cap. Pulling out of training
-  credits `fullGain × completed / total`.
+  `distanceToCap × factor × learningPotential / 100`, training factor 0.175–0.385 (ours); SET's
+  R&D gain is flat, factor 0.105–0.245 (ours), clamped at the ceiling. Flying's factor is
+  0.035–0.105. All three were cut by 30 % (user, 2026-11-02: staff grew too fast), which makes a
+  skill about 45 % slower to reach 90, as each gain is a share of the gap. Pulling out of
+  training credits `fullGain × completed / total`.
+- **A personal ceiling: specialists, not everything-experts** (the user's decision, 2026-11-02;
+  `SkillGrowth.ceiling`, numbers unconfirmed): the distance above runs to a ceiling of its own for
+  each skill, `100 − 0.5 × (points the person's other skills hold above 75, added up)`, so the better
+  someone gets at one thing, the slower and shorter the rest. Two skills stop at about 91.7 (a second
+  90 needs the first at 95 or lower), five even ones at about 83.3, and three skills can't all reach 90
+  through growth. Computed, never saved: people above it keep what they have and just stop gaining.
+  It holds for all three groups, and **Flight Directors follow the same rule** (user: capped near 83
+  is fine, "broad, not deep", §1.1): the seat's one gain still comes from the average, each fifth
+  stopping at that skill's ceiling. New hires are fitted to it from their best skill down, so the pool
+  can't hand out what growth can't reach. The flat gains (R&D, R&D decisions, press stories) stop at it
+  too (`SkillGrowth.withinCeiling`). Measured with `ContentPackPlayouts standard smart`, the whole
+  change (the 30 % cut, the ceiling, flying's growth, §2.5(g)): average completion 78.8 to 85.9 seasons,
+  a crewed mission's median chance at launch 0.64 to 0.59, astronauts lost 315 to 447 in 200 games. Without
+  flying's change: 82.5 seasons, 376 lost, the same 0.59. The filler bots' early race slowed more: `BotPlayersTest` went from 60 to 90 turns.
 - **Training** (`TrainingProgress`): lengths are **BASPM's** (user, 2026-10-05): basic 4
   (astronauts) / 2 (SET) / 2 (Mission Control), advanced 3. **Basic training follows BASPM's
   shape:** it starts automatically after hiring, the player can't start it or cut it short, so
@@ -1940,8 +1956,10 @@ layouts.
   success, catastrophic as failure). Success and minor glitch grow toward `maxReliability` with
   diminishing returns (factors 0.05–0.15 and 0.02–0.06, ours); failure shrinks toward the floor,
   scaled by the failing step's involvement.
-- **Skill growth from flying:** every astronaut on the mission grows all five skills; each
-  controller grows the skills their console used.
+- **Skill growth from flying:** every astronaut on the mission grows the skills their seat used in
+  full and the others by a third (`SkillGrowth.FLIGHT_UNUSED_SKILL_SHARE`, user, 2026-11-02; unconfirmed):
+  without it, a flight drifts everyone evenly toward the ceiling of an all-rounder. Each controller grows
+  the skills their console used.
 - Both run before the retire-on-release check, so a final season still counts.
 
 **(h) Mission cost:** see (f).

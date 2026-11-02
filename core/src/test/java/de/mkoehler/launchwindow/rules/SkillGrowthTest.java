@@ -2,7 +2,9 @@ package de.mkoehler.launchwindow.rules;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -16,6 +18,77 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * @author Mario Koehler
  */
 class SkillGrowthTest {
+
+    private static Map<String, Double> skills(double... values) {
+        Map<String, Double> skills = new LinkedHashMap<>();
+        for (int i = 0; i < values.length; i++) {
+            skills.put("s" + i, values[i]);
+        }
+        return skills;
+    }
+
+    /** Skills at or below the floor take no room; each point above it takes half a point. */
+    @Test
+    void ceilingFallsWithThePointsOtherSkillsHoldAboveTheFloor() {
+        assertEquals(100.0, SkillGrowth.ceiling(skills(50, 75, 75, 60, 10), "s0"));
+        assertEquals(92.5, SkillGrowth.ceiling(skills(50, 90, 50, 50, 50), "s0"));
+        assertEquals(90.0, SkillGrowth.ceiling(skills(50, 95, 50, 50, 50), "s0"));
+        assertEquals(85.0, SkillGrowth.ceiling(skills(50, 90, 90, 50, 50), "s0"));
+        assertEquals(100.0, SkillGrowth.ceiling(skills(99, 50, 50, 50, 50), "s0"), "its own value doesn't count");
+    }
+
+    /** The user's rule: growth alone can't put three skills at 90. */
+    @Test
+    void repeatedGrowthNeverReachesThreeSkillsAtNinety() {
+        Random random = new Random(5L);
+        for (int run = 0; run < 200; run++) {
+            Map<String, Double> skills = skills(60, 60, 60, 60, 60);
+            for (int round = 0; round < 400; round++) {
+                String skill = "s" + random.nextInt(5);
+                double gain = SkillGrowth.diminishingReturnsGain(skills.get(skill),
+                    SkillGrowth.ceiling(skills, skill), 100, SkillGrowth.TRAINING_FACTOR_MAX);
+                skills.put(skill, skills.get(skill) + gain);
+            }
+            assertTrue(skills.values().stream().filter(value -> value >= 90).count() < 3, skills::toString);
+        }
+    }
+
+    /** Two specialists grown in turn stop close to 91.7, five all-rounders close to 83.3. */
+    @Test
+    void equalSkillsSettleAtTheAgreedLevels() {
+        for (int spread : new int[] {2, 5}) {
+            Map<String, Double> skills = skills(0, 0, 0, 0, 0);
+            for (int round = 0; round < 2000; round++) {
+                String skill = "s" + round % spread;
+                skills.put(skill, skills.get(skill) + 0.25 * Math.max(0, SkillGrowth.ceiling(skills, skill) - skills.get(skill)));
+            }
+            double average = skills.values().stream().limit(spread).mapToDouble(Double::doubleValue).average().orElseThrow();
+            assertEquals(spread == 2 ? 91.67 : 83.33, average, 0.5);
+        }
+    }
+
+    /** A rise stops at the ceiling, someone above it stays put, and a fall always passes. */
+    @Test
+    void withinCeilingLimitsRisesOnly() {
+        Map<String, Double> skills = skills(80, 95, 50, 50, 50);
+        assertEquals(85.0, SkillGrowth.withinCeiling(skills, "s0", 85));
+        assertEquals(90.0, SkillGrowth.withinCeiling(skills, "s0", 93));
+        assertEquals(70.0, SkillGrowth.withinCeiling(skills, "s0", 70));
+        Map<String, Double> above = skills(92, 95, 50, 50, 50);
+        assertEquals(92.0, SkillGrowth.withinCeiling(above, "s0", 94), "no gain, and no loss");
+    }
+
+    /** A candidate's best skill stands; the next ones get what room it leaves. */
+    @Test
+    void candidatesAreFittedFromTheBestDown() {
+        Map<String, Double> fitted = SkillGrowth.fittedToCeilings(skills(85, 95, 90, 70, 92));
+        assertEquals(95.0, fitted.get("s1"));
+        assertEquals(90.0, fitted.get("s4"));
+        assertEquals(82.5, fitted.get("s2"));
+        assertEquals(78.75, fitted.get("s0"));
+        assertEquals(70.0, fitted.get("s3"));
+        assertEquals(List.of("s0", "s1", "s2", "s3", "s4"), List.copyOf(fitted.keySet()));
+    }
 
     /**
      * Verifies a full team's expected raw R&amp;D amount is the middle of each slot's band, summed:

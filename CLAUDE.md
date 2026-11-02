@@ -373,6 +373,12 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
   only in debt; two seasons' ceiling kept, and a turn's conversions together stop at what its first could raise
   (`PrestigeConversion`). Two saved fields and a removed refusal: rebuild client and server together; no reset.
 
+- **Specialists, not everything-experts** (the user's decision, 2026-11-02, `design.md` §2.2(c), `ui-spec.md` component
+  31; numbers unconfirmed): skill growth cut by 30 % (training, flying, R&D), and each skill grows toward a personal ceiling,
+  `100 − 0.5 × (points the other skills hold above 75)` (`SkillGrowth.ceiling`), computed, not saved. Flight Directors too (near
+  83), and hires are fitted to it. A flight grows the seat's skills in full, the others by a third. The smart bot's average game goes
+  from 78.8 to 85.9 seasons. `-Dshots=focus`. Rebuild client and server together; no reset. The wiki follows `help.json`.
+
 ## How we work
 
 - **Screens:** Claude writes the spec in `ui-spec.md`, the user mocks it up in Claude Design,

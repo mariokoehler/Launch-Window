@@ -220,7 +220,8 @@ public final class TrainingProgress {
         var targetSkill = astronaut.getTrainingTargetSkill();
         double factor = SkillGrowth.drawTrainingFactor(random);
         double currentSkill = astronaut.getSkill(targetSkill);
-        double gain = SkillGrowth.diminishingReturnsGain(currentSkill, astronaut.getLearningPotential(), factor)
+        double gain = SkillGrowth.diminishingReturnsGain(currentSkill,
+            SkillGrowth.ceiling(astronaut.getSkills(), targetSkill), astronaut.getLearningPotential(), factor)
             * TraitEffects.trainingGain(astronaut);
         double newSkill = currentSkill + gain;
         astronaut.setSkill(targetSkill, newSkill);
@@ -247,7 +248,8 @@ public final class TrainingProgress {
         var targetSkill = specialist.getTrainingTargetSkill();
         double factor = SkillGrowth.drawTrainingFactor(random);
         double currentSkill = specialist.getSkill(targetSkill);
-        double gain = SkillGrowth.diminishingReturnsGain(currentSkill, specialist.getLearningPotential(), factor)
+        double gain = SkillGrowth.diminishingReturnsGain(currentSkill,
+            SkillGrowth.ceiling(specialist.getSkills(), targetSkill), specialist.getLearningPotential(), factor)
             * TraitEffects.trainingGain(specialist);
         double newSkill = currentSkill + gain;
         specialist.setSkill(targetSkill, newSkill);
@@ -279,7 +281,8 @@ public final class TrainingProgress {
         var targetSkill = officer.getTrainingTargetSkill();
         double factor = SkillGrowth.drawTrainingFactor(random);
         double currentSkill = officer.getSkill(targetSkill);
-        double gain = SkillGrowth.diminishingReturnsGain(currentSkill, officer.getLearningPotential(), factor)
+        double gain = SkillGrowth.diminishingReturnsGain(currentSkill,
+            SkillGrowth.ceiling(officer.getSkills(), targetSkill), officer.getLearningPotential(), factor)
             * TraitEffects.trainingGain(officer);
         double newSkill = currentSkill + gain;
         officer.setSkill(targetSkill, newSkill);
@@ -506,8 +509,8 @@ public final class TrainingProgress {
             AstronautSkill targetSkill = astronaut.getTrainingTargetSkill();
             double factor = SkillGrowth.drawTrainingFactor(random);
             double fullGain =
-                SkillGrowth.diminishingReturnsGain(astronaut.getSkill(targetSkill), astronaut.getLearningPotential(),
-                    factor) * TraitEffects.trainingGain(astronaut);
+                SkillGrowth.diminishingReturnsGain(astronaut.getSkill(targetSkill),
+                    SkillGrowth.ceiling(astronaut.getSkills(), targetSkill), astronaut.getLearningPotential(), factor) * TraitEffects.trainingGain(astronaut);
             double creditedGain =
                 SkillGrowth.partialCredit(fullGain, astronaut.getTrainingSeasonsCompleted(),
                     astronaut.getTrainingSeasonsTotal());
@@ -528,7 +531,7 @@ public final class TrainingProgress {
         var targetSkill = specialist.getTrainingTargetSkill();
         double factor = SkillGrowth.drawTrainingFactor(random);
         double fullGain = SkillGrowth.diminishingReturnsGain(specialist.getSkill(targetSkill),
-            specialist.getLearningPotential(), factor) * TraitEffects.trainingGain(specialist);
+            SkillGrowth.ceiling(specialist.getSkills(), targetSkill), specialist.getLearningPotential(), factor) * TraitEffects.trainingGain(specialist);
         double creditedGain = SkillGrowth.partialCredit(fullGain, specialist.getTrainingSeasonsCompleted(),
             specialist.getTrainingSeasonsTotal());
         specialist.setSkill(targetSkill, specialist.getSkill(targetSkill) + creditedGain);
@@ -549,8 +552,8 @@ public final class TrainingProgress {
             MissionControlSkill targetSkill = officer.getTrainingTargetSkill();
             double factor = SkillGrowth.drawTrainingFactor(random);
             double fullGain =
-                SkillGrowth.diminishingReturnsGain(officer.getSkill(targetSkill), officer.getLearningPotential(),
-                    factor) * TraitEffects.trainingGain(officer);
+                SkillGrowth.diminishingReturnsGain(officer.getSkill(targetSkill),
+                    SkillGrowth.ceiling(officer.getSkills(), targetSkill), officer.getLearningPotential(), factor) * TraitEffects.trainingGain(officer);
             double creditedGain =
                 SkillGrowth.partialCredit(fullGain, officer.getTrainingSeasonsCompleted(),
                     officer.getTrainingSeasonsTotal());

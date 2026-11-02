@@ -2,6 +2,7 @@ package de.mkoehler.launchwindow.rules;
 
 import de.mkoehler.launchwindow.model.Archetype;
 import de.mkoehler.launchwindow.model.AssignmentState;
+import de.mkoehler.launchwindow.model.Astronaut;
 import de.mkoehler.launchwindow.model.PlayerSnapshot;
 import de.mkoehler.launchwindow.model.SetSkill;
 import de.mkoehler.launchwindow.model.SetSpecialist;
@@ -24,6 +25,16 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * @author Mario Koehler
  */
 class TrainingPlanningTest {
+
+    /** A target above the person's ceiling is out of reach, and the estimate says where it stalls. */
+    @Test
+    void targetAboveTheCeilingStallsBelowIt() {
+        Astronaut astronaut = new Astronaut("a", "Test", 30, 80, 60);
+        TrainingPlanning.Estimate estimate = TrainingPlanning.permanent(astronaut, 60, 85, 90);
+        assertFalse(estimate.reaches());
+        assertTrue(estimate.finalSkill() <= 85.0);
+        assertTrue(TrainingPlanning.permanent(astronaut, 60, 90).reaches());
+    }
 
     private static SetSpecialist engineer(double rockets, int learningPotential) {
         SetSpecialist specialist = new SetSpecialist("e", "e", 30, 70, learningPotential);

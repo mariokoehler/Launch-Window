@@ -225,16 +225,21 @@ final class PersonnelDialogs {
                 return "Pick a skill to see how long it takes.";
             }
             double current = department.skill(specialist, skill);
-            TrainingPlanning.Estimate estimate = TrainingPlanning.permanent(specialist, current, target);
+            double ceiling = department.ceiling(specialist, skill);
+            TrainingPlanning.Estimate estimate = TrainingPlanning.permanent(specialist, current, ceiling, target);
             String text;
             if (estimate.reaches()) {
-                TrainingPlanning.Range range = TrainingPlanning.range(specialist, current, target);
+                TrainingPlanning.Range range = TrainingPlanning.range(specialist, current, ceiling, target);
                 String spread = range.high() == Integer.MAX_VALUE ? "; in some runs it stalls short of it"
                     : range.low() == range.high() ? "" : "; " + range.low() + " to " + seasons(range.high())
                     + " in 8 runs of 10";
                 text = "About " + seasons(estimate.seasons()) + " (" + estimate.rounds() + " "
                     + (estimate.rounds() == 1 ? "round" : "rounds") + " of " + TrainingProgress.ADVANCED_TRAINING_SEASONS
                     + "), done by " + Outlook.by(host.session.openTurn(), estimate.seasons()) + spread + ".";
+            } else if (ceiling < SkillGrowth.SKILL_CAP) {
+                text = String.format(Locale.ROOT, "Their other skills leave room up to %.1f, so training stops "
+                    + "at about %.1f after %s.", Math.max(current, ceiling), estimate.finalSkill(),
+                    seasons(estimate.seasons()));
             } else {
                 text = String.format(Locale.ROOT, "Gains shrink toward %d, so training stops at about %.1f after %s.",
                     (int) SkillGrowth.SKILL_CAP, estimate.finalSkill(), seasons(estimate.seasons()));

@@ -2,7 +2,11 @@ package de.mkoehler.launchwindow.rules;
 
 import de.mkoehler.launchwindow.content.MissionComponent;
 
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.random.RandomGenerator;
 
 /**
@@ -60,28 +64,28 @@ public final class SkillGrowth {
     public static final double LEARNING_POTENTIAL_MAX = 100.0;
 
     /** The lowest random factor a full (not pulled-out-early) training round can draw. */
-    public static final double TRAINING_FACTOR_MIN = 0.25;
+    public static final double TRAINING_FACTOR_MIN = 0.175;
 
     /** The highest random factor a full training round can draw. */
-    public static final double TRAINING_FACTOR_MAX = 0.55;
+    public static final double TRAINING_FACTOR_MAX = 0.385;
 
     /** The lowest random factor a season of flat SET R&D growth can draw. */
-    public static final double RD_GAIN_FACTOR_MIN = 0.15;
+    public static final double RD_GAIN_FACTOR_MIN = 0.105;
 
     /** The highest random factor a season of flat SET R&D growth can draw. */
-    public static final double RD_GAIN_FACTOR_MAX = 0.35;
+    public static final double RD_GAIN_FACTOR_MAX = 0.245;
 
     /**
      * The lowest random factor one season of mission-based astronaut/
      * controller skill growth can draw - see {@link MissionProgress}.
      */
-    public static final double MISSION_SKILL_GROWTH_FACTOR_MIN = 0.05;
+    public static final double MISSION_SKILL_GROWTH_FACTOR_MIN = 0.035;
 
     /**
      * The highest random factor one season of mission-based astronaut/
      * controller skill growth can draw.
      */
-    public static final double MISSION_SKILL_GROWTH_FACTOR_MAX = 0.15;
+    public static final double MISSION_SKILL_GROWTH_FACTOR_MAX = 0.105;
 
     /**
      * The lowest random factor a component's post-mission-season
@@ -116,6 +120,25 @@ public final class SkillGrowth {
 
     /** The highest random factor for the failure case - see {@link #MISSION_RELIABILITY_FAILURE_FACTOR_MIN}. */
     public static final double MISSION_RELIABILITY_FAILURE_FACTOR_MAX = 0.25;
+
+    /**
+     * Above this, a skill starts to take room from the person's other skills - see
+     * {@link #ceiling} (the user's decision, 2026-11-02; unconfirmed).
+     */
+    public static final double FOCUS_FLOOR = 75.0;
+
+    /**
+     * How many points of {@link #ceiling} each point another skill holds above
+     * {@link #FOCUS_FLOOR} takes away. With 75 and 0.5, two equal skills stop at about 91.7, five at
+     * about 83.3, and three skills can never all reach 90 through growth.
+     */
+    public static final double FOCUS_SHARE = 0.5;
+
+    /**
+     * What share of a flight's skill growth an astronaut gets in a skill their seat didn't use
+     * (the user's decision, 2026-11-02; unconfirmed). The seat's own skills grow in full.
+     */
+    public static final double FLIGHT_UNUSED_SKILL_SHARE = 1.0 / 3.0;
 
     /**
      * The minimum skill value (on {@link #SKILL_CAP}'s own scale) an
@@ -169,9 +192,86 @@ public final class SkillGrowth {
      *     {@code [0, 1]}-normalized range
      */
     public static double diminishingReturnsGain(double currentSkill, double learningPotential, double factor) {
-        double distanceToCap = Math.max(0.0, SKILL_CAP - currentSkill);
+        return diminishingReturnsGain(currentSkill, SKILL_CAP, learningPotential, factor);
+    }
+
+    /**
+     * {@link #diminishingReturnsGain(double, double, double)} against a person's own {@link #ceiling}
+     * for the skill instead of {@link #SKILL_CAP}: every gain tapers toward it, and a skill already
+     * above it gains nothing and loses nothing.
+     *
+     * @param currentSkill      the skill's current value before this gain
+     * @param ceiling           the highest this skill can grow to
+     * @param learningPotential the employee's learning-potential stat
+     * @param factor            the random factor for this round
+     * @return the gain to add to {@code currentSkill}; never negative
+     */
+    public static double diminishingReturnsGain(double currentSkill, double ceiling, double learningPotential,
+            double factor) {
+        double distanceToCap = Math.max(0.0, ceiling - currentSkill);
         double learningFraction = clamp(learningPotential / LEARNING_POTENTIAL_MAX, 0.0, 1.0);
         return distanceToCap * factor * learningFraction;
+    }
+
+    /**
+     * Returns how high one skill can grow, given the person's other skills: {@link #SKILL_CAP} less
+     * {@link #FOCUS_SHARE} of every point the others hold above {@link #FOCUS_FLOOR}. The better
+     * someone gets at one thing, the less room is left for the rest: nobody is world-class at
+     * everything (the user's decision, 2026-11-02, {@code design.md} &sect;2.2(c)). Worked out from the
+     * skills as they stand, so nothing is saved, and someone already above it keeps what they have.
+     *
+     * @param skills the person's skills
+     * @param skill  the skill to work the ceiling out for
+     * @param <K>    the skill enum
+     * @return the ceiling, at most {@link #SKILL_CAP}
+     */
+    public static <K> double ceiling(Map<K, Double> skills, K skill) {
+        double taken = 0;
+        for (Map.Entry<K, Double> other : skills.entrySet()) {
+            if (!other.getKey().equals(skill)) {
+                taken += Math.max(0.0, other.getValue() - FOCUS_FLOOR);
+            }
+        }
+        return SKILL_CAP - FOCUS_SHARE * taken;
+    }
+
+    /**
+     * Limits a new value of a skill to its {@link #ceiling}. A rise stops there, or where the skill
+     * already stands if it's above it; a fall passes untouched. For the gains that don't taper by
+     * themselves: flat ones, and those multiplied after the taper.
+     *
+     * @param skills the person's skills, before the change
+     * @param skill  the skill changing
+     * @param value  the value it would get
+     * @param <K>    the skill enum
+     * @return the value it gets
+     */
+    public static <K> double withinCeiling(Map<K, Double> skills, K skill, double value) {
+        double current = skills.getOrDefault(skill, 0.0);
+        return value <= current ? value : Math.min(value, Math.max(current, ceiling(skills, skill)));
+    }
+
+    /**
+     * Fits a new candidate's skills to the same rule: from the best down, each is held to the
+     * ceiling the skills above it leave. So the pool can't hand out what growth can't reach, and it
+     * draws nothing, so the pool's random stream stays as it was.
+     *
+     * @param skills the drawn skills
+     * @param <K>    the skill enum
+     * @return the fitted skills, in the same order
+     */
+    public static <K> Map<K, Double> fittedToCeilings(Map<K, Double> skills) {
+        List<K> bestFirst = new ArrayList<>(skills.keySet());
+        bestFirst.sort(Comparator.comparingDouble((K key) -> skills.get(key)).reversed());
+        Map<K, Double> placed = new LinkedHashMap<>();
+        for (K skill : bestFirst) {
+            placed.put(skill, Math.min(skills.get(skill), ceiling(placed, skill)));
+        }
+        Map<K, Double> fitted = new LinkedHashMap<>();
+        for (K skill : skills.keySet()) {
+            fitted.put(skill, placed.get(skill));
+        }
+        return fitted;
     }
 
     /**

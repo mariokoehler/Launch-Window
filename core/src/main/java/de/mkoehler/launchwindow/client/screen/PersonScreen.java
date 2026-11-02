@@ -287,11 +287,12 @@ public final class PersonScreen extends ChromeScreen {
             name.add(ui.badge(Theme.BadgeKind.ACTIVE, "Expert")).padLeft(Theme.SPACE_2);
         }
         row.add(name).width(220f).left();
-        row.add(new SkillBar(ui, value)).expandX().fillX().height(6f).padRight(Theme.SPACE_4);
+        double ceiling = department.ceiling(person, skill);
+        row.add(new SkillBar(ui, value, ceiling)).expandX().fillX().height(6f).padRight(Theme.SPACE_4);
         row.add(ui.label(String.format(Locale.ROOT, "%.1f", value), Theme.TextStyle.BODY_SM, Theme.INK)).width(44f)
             .right();
         Tips.Tip tip = Tips.skill(label, skill);
-        ui.tooltip(row, tip.title() + (expert ? " · Expert" : ""), tip.text());
+        ui.tooltip(row, tip.title() + (expert ? " · Expert" : ""), tip.text() + Tips.ceiling(value, ceiling));
         return row;
     }
 

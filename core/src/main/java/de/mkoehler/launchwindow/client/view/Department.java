@@ -205,6 +205,27 @@ public enum Department {
     }
 
     /**
+     * Returns how high a person's skill can grow, given their other skills
+     * ({@link SkillGrowth#ceiling}). The Flight Director value is an average with no ceiling of its
+     * own, so it reads the cap.
+     *
+     * @param person the person
+     * @param skill  the skill's name
+     * @return the ceiling, at most {@link SkillGrowth#SKILL_CAP}
+     */
+    public double ceiling(Personnel person, String skill) {
+        if (StaffingSlot.FLIGHT_DIRECTOR.equals(skill)) {
+            return SkillGrowth.SKILL_CAP;
+        }
+        return switch (this) {
+            case SET -> SkillGrowth.ceiling(((SetSpecialist) person).getSkills(), SetSkill.valueOf(skill));
+            case ASTRONAUT -> SkillGrowth.ceiling(((Astronaut) person).getSkills(), AstronautSkill.valueOf(skill));
+            case MISSION_CONTROL -> SkillGrowth.ceiling(((MissionControlOfficer) person).getSkills(),
+                MissionControlSkill.valueOf(skill));
+        };
+    }
+
+    /**
      * Returns whether this department's people can hold the Expert trait (astronauts and
      * controllers; SET never does), so the training dialog offers Expert training.
      *

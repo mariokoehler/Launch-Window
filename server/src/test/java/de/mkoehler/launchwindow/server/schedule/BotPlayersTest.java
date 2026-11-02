@@ -33,7 +33,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 class BotPlayersTest {
 
-    private static final int TURNS = 60;
+    private static final int TURNS = 90;
 
     private final ObjectMapper mapper = GameServer.createMapper();
 

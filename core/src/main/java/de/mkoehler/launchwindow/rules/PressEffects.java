@@ -118,8 +118,11 @@ public final class PressEffects {
                 }
                 case ASTRONAUT_SKILL -> {
                     AstronautSkill skill = AstronautSkill.valueOf(effect.target());
-                    astronaut.setSkill(skill, Math.max(0.0, astronaut.getSkill(skill) + effect.amount()));
-                    applied.add(effect);
+                    double before = astronaut.getSkill(skill);
+                    astronaut.setSkill(skill, Math.max(0.0, SkillGrowth.withinCeiling(astronaut.getSkills(), skill,
+                        before + effect.amount())));
+                    applied.add(new Effect(effect.kind(), effect.target(), astronaut.getSkill(skill) - before,
+                        effect.seasons()));
                 }
                 case FUNDS -> {
                     long money = Math.round(snapshot.getFundingRatePerSeason() * effect.amount());

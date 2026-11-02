@@ -300,6 +300,7 @@ public final class HiringPool {
             for (AstronautSkill skill : AstronautSkill.values()) {
                 candidate.setSkill(skill, randomSkill(random, quality, bonus));
             }
+            candidate.setSkills(SkillGrowth.fittedToCeilings(candidate.getSkills()));
             astronautBatch.add(candidate);
         }
         snapshot.setAstronautCandidates(astronautBatch);
@@ -326,6 +327,7 @@ public final class HiringPool {
             for (SetSkill skill : SetSkill.values()) {
                 candidate.setSkill(skill, randomSkill(random, quality, bonus));
             }
+            candidate.setSkills(SkillGrowth.fittedToCeilings(candidate.getSkills()));
             setBatch.add(candidate);
         }
         snapshot.setSetSpecialistCandidates(setBatch);
@@ -352,6 +354,7 @@ public final class HiringPool {
             for (MissionControlSkill skill : MissionControlSkill.values()) {
                 candidate.setSkill(skill, randomSkill(random, quality, bonus));
             }
+            candidate.setSkills(SkillGrowth.fittedToCeilings(candidate.getSkills()));
             missionControlBatch.add(candidate);
         }
         snapshot.setMissionControlCandidates(missionControlBatch);

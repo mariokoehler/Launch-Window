@@ -173,7 +173,7 @@ public final class ResearchProgress {
                     person -> ((SetSpecialist) person).getSkill(group));
                 double skillGain = SkillGrowth.flatRdGain(skillBefore, skillFactor) * snapshot.getRdResultsMultiplier()
                     * mentored;
-                specialist.setSkill(group, Math.min(SkillGrowth.SKILL_CAP, skillBefore + skillGain));
+                specialist.setSkill(group, SkillGrowth.withinCeiling(specialist.getSkills(), group, skillBefore + skillGain));
             }
         }
 

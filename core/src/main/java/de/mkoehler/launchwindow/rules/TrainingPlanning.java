@@ -63,9 +63,24 @@ public final class TrainingPlanning {
      * @throws NullPointerException if {@code person} is {@code null}
      */
     public static Estimate permanent(Personnel person, double current, double target) {
+        return permanent(person, current, SkillGrowth.SKILL_CAP, target);
+    }
+
+    /**
+     * {@link #permanent(Personnel, double, double)} toward the person's own ceiling for the skill
+     * ({@link SkillGrowth#ceiling}). It stays put while they train: the other skills don't move.
+     *
+     * @param person  the employee, for learning potential and revealed traits
+     * @param current the skill now
+     * @param ceiling the highest this skill can grow to
+     * @param target  the target level
+     * @return the estimate
+     * @throws NullPointerException if {@code person} is {@code null}
+     */
+    public static Estimate permanent(Personnel person, double current, double ceiling, double target) {
         Objects.requireNonNull(person, "person must not be null");
         double average = (SkillGrowth.TRAINING_FACTOR_MIN + SkillGrowth.TRAINING_FACTOR_MAX) / 2.0;
-        return run(person, current, target, null, average);
+        return run(person, current, ceiling, target, null, average);
     }
 
     /**
@@ -80,25 +95,40 @@ public final class TrainingPlanning {
      * @throws NullPointerException if {@code person} is {@code null}
      */
     public static Range range(Personnel person, double current, double target) {
+        return range(person, current, SkillGrowth.SKILL_CAP, target);
+    }
+
+    /**
+     * {@link #range(Personnel, double, double)} toward the person's own ceiling for the skill.
+     *
+     * @param person  the employee
+     * @param current the skill now
+     * @param ceiling the highest this skill can grow to
+     * @param target  the target level
+     * @return the range
+     * @throws NullPointerException if {@code person} is {@code null}
+     */
+    public static Range range(Personnel person, double current, double ceiling, double target) {
         Objects.requireNonNull(person, "person must not be null");
         int[] seasons = new int[RANGE_RUNS];
         SplittableRandom random = new SplittableRandom(RANGE_SEED);
         for (int i = 0; i < RANGE_RUNS; i++) {
-            Estimate estimate = run(person, current, target, random, 0);
+            Estimate estimate = run(person, current, ceiling, target, random, 0);
             seasons[i] = estimate.reaches() ? estimate.seasons() : Integer.MAX_VALUE;
         }
         Arrays.sort(seasons);
         return new Range(seasons[RANGE_RUNS / 10], seasons[RANGE_RUNS - 1 - RANGE_RUNS / 10]);
     }
 
-    private static Estimate run(Personnel person, double current, double target, RandomGenerator random,
-                                double fixedFactor) {
+    private static Estimate run(Personnel person, double current, double ceiling, double target,
+                                RandomGenerator random, double fixedFactor) {
         double traits = knownTrainingGain(person);
         double skill = current;
         int rounds = 0;
         while (skill < target && rounds < MAX_ROUNDS) {
             double factor = random == null ? fixedFactor : SkillGrowth.drawTrainingFactor(random);
-            double gain = SkillGrowth.diminishingReturnsGain(skill, person.getLearningPotential(), factor) * traits;
+            double gain = SkillGrowth.diminishingReturnsGain(skill, ceiling, person.getLearningPotential(), factor)
+                * traits;
             skill += gain;
             rounds++;
             if (skill < target && gain < TrainingProgress.PERMANENT_TRAINING_GAIN_EPSILON) {

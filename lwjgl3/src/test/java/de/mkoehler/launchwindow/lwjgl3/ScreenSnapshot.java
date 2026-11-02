@@ -286,6 +286,10 @@ public final class ScreenSnapshot {
             allHandsShots(folder, game);
             return;
         }
+        if ("focus".equals(System.getProperty("shots"))) {
+            focusShots(folder, game);
+            return;
+        }
         if ("standing".equals(System.getProperty("shots"))) {
             standingShots(folder, game);
             return;
@@ -1603,6 +1607,26 @@ public final class ScreenSnapshot {
      * (no rocket picker) and its gated research flight, and Apollo's own lift easing the Saturn IB's
      * load.
      */
+    /**
+     * The skill ceiling: a specialist's person page with its ticks, and permanent training aimed
+     * past the ceiling.
+     */
+    private static void focusShots(File folder, LaunchWindowGame game) {
+        PlayerSnapshot state = missionControlState();
+        Astronaut astronaut = state.getAstronauts().stream()
+            .filter(each -> each.getAssignmentState() == AssignmentState.IDLE).findFirst().orElseThrow();
+        astronaut.setSkill(AstronautSkill.PILOTING, 95);
+        astronaut.setSkill(AstronautSkill.EVA, 82);
+        astronaut.setSkill(AstronautSkill.LEADERSHIP, 71);
+        String hash = ContentPackHash.ofClasspath("content/early-era", ScreenSnapshot.class.getClassLoader());
+        startSession(game, state, GameInfoResponse.success("early-era", hash, DECLARED, 23, true,
+            6 * 3_600_000L, 0L, null, List.of(), List.of(), 0));
+        write(folder, "focus-person.png", new de.mkoehler.launchwindow.client.screen.PersonScreen(game, astronaut,
+            () -> new AstronautComplexScreen(game)), null);
+        write(folder, "focus-training.png", new AstronautComplexScreen(game), screen -> screen.openTraining(astronaut,
+            TrainingKind.PERMANENT, AstronautSkill.EVA.name()));
+    }
+
     /**
      * All hands on deck: two astronauts and two controllers in training, one of each on Expert.
      */

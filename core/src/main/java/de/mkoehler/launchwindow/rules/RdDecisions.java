@@ -508,8 +508,8 @@ public final class RdDecisions {
                     return null;
                 }
                 double before = engineer.getSkill(component.associatedSkill());
-                engineer.setSkill(component.associatedSkill(),
-                    clamp(before + effect.amount(), 0, SkillGrowth.SKILL_CAP));
+                engineer.setSkill(component.associatedSkill(), Math.max(0, SkillGrowth.withinCeiling(
+                    engineer.getSkills(), component.associatedSkill(), before + effect.amount())));
                 return new DecisionEffect(DecisionEffect.Kind.SKILL, engineer.getSkill(component.associatedSkill())
                     - before, 0, person);
             }

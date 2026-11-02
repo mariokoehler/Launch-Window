@@ -361,7 +361,7 @@
         "- a catastrophe ({missions.catastrophic} %): on a step that puts the crew at risk, the mission ends, the whole crew is lost, and the flight's goals don't count. On other steps it counts as a failure. Losing a crew grounds your crewed flights for the next {missions.grounding} turns while the accident is investigated; uncrewed flights go on, as Apollo 4, 5 and 6 did after the Apollo 1 fire.",
         "Experts can improve the saving throw, and so can the trait Cool under pressure. Each team's chemistry scales what it brings: the crew's skill in the first roll, the controllers' and CAPCOM's in the saving throw.",
         "## After each season",
-        "Each component's reliability moves with how it did: success and minor glitches raise it toward its maximum, a failure lowers it, never below where it started. Every astronaut aboard grows all their skills, and each controller the skills their console used."
+        "Each component's reliability moves with how it did: success and minor glitches raise it toward its maximum, a failure lowers it, never below where it started. Every astronaut aboard grows the skills their seat used, and the others by {training.flightUnused} % of that; each controller grows the skills their console used."
       ],
       "related": ["experts", "mission-control", "chemistry", "prestige", "findings", "traits"],
       "explainers": ["reliability", "launch-escape"]
@@ -386,7 +386,7 @@
       "group": "Missions",
       "title": "Flight controllers and CAPCOM",
       "body": [
-        "Flight controllers sit at consoles during a mission. Each console reads one controller's skill: Propulsion, Trajectory & guidance, Spacecraft systems, Crew & payload, or Mission operations; a Flight Director's console reads the average of all five, and grows all five a little. Their skills set the saving throw when a step goes wrong.",
+        "Flight controllers sit at consoles during a mission. Each console reads one controller's skill: Propulsion, Trajectory & guidance, Spacecraft systems, Crew & payload, or Mission operations; a Flight Director's console reads the average of all five, and grows all five a little, so the room people leave themselves applies: a Flight Director is broad, not deep. Their skills set the saving throw when a step goes wrong.",
         "CAPCOM, the capsule communicator, is an astronaut on the ground who talks to the crew. CAPCOM's Leadership counts in the saving throw beside the controllers'. For chemistry CAPCOM counts with the crew, and grows the skills used, as a controller does.",
         "Controllers are never at risk. A controller grows only in seasons when a step uses their console. A console is released after its last season, and while a mission flies Mission Control can swap who sits at each one, at no cost.",
         "Mission Control's level caps the roster: {buildings.controllers} controllers."
@@ -420,7 +420,7 @@
         "Every new hire starts with it, and you can't skip it or cut it short, though bad luck can add a season or make a trainee fail and leave: {training.basicAstronaut} seasons for astronauts, {training.basicEngineer} for engineers and {training.basicController} for controllers. When it ends, one of their skills grows.",
         "## Advanced and permanent training",
         "Advanced training takes {training.advanced} seasons and raises the skill you choose. Permanent training repeats advanced rounds until the skill reaches the level you set, and stops early once a round gains next to nothing. Pulling someone out pays the share of the round done; Expert training pays nothing. Training is free.",
-        "Growth slows as a skill nears 100, and a higher learning potential makes it faster.",
+        "Growth slows as a skill nears its ceiling, and a higher learning potential makes it faster. The ceiling is personal: 100 at first, then lower by {training.focusShare} % of every point their other skills hold above {training.focusFloor}, added up. So someone can become the best there is at one thing, or be very good at a couple, but never world-class at everything. Nobody ever loses a skill to it; a skill above its ceiling just stops growing. On a person's page, a tick on the skill's bar marks the ceiling.",
         "## On the job",
         "Skills also grow at work: engineers on R&D, astronauts aboard a mission, controllers and CAPCOM at their consoles. Training keeps people busy, which is good for morale, but nobody in training can work.",
         "Someone sidelined by a random event or an R&D decision can't train, work, fly or go on tour until it ends, and their morale holds meanwhile. The rosters show the seasons left."
@@ -532,7 +532,7 @@
       "group": "People",
       "title": "Astronauts",
       "body": [
-        "Astronauts fly crewed missions and sit at CAPCOM. Each crew seat reads one person's skill, and everyone aboard grows all five of their skills from the flight.",
+        "Astronauts fly crewed missions and sit at CAPCOM. Each crew seat reads one person's skill. Everyone aboard grows the skills their seat used, and their other skills by {training.flightUnused} % of that.",
         "When not flying they can train, or go on PR duty to earn prestige.",
       "## Rocket-plane wings",
       "An astronaut who flies a rocket plane and lands it earns their wings, for good. Every capsule step they pilot gains {missions.wingsBonus} points on its success chance (no more with two such pilots on one step). The mission plan marks those steps, and the Astronaut Complex the pilots who have them.",

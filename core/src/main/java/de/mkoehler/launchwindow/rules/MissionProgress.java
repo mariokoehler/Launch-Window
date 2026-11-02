@@ -21,6 +21,7 @@ import de.mkoehler.launchwindow.model.Personnel;
 import de.mkoehler.launchwindow.model.PlayerSnapshot;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -1053,8 +1054,10 @@ public final class MissionProgress {
 
     /**
      * Applies this season's mission-based skill growth ({@code design.md}
-     * &sect;2.5(g), {@code baspm.md} &sect;9.3): every astronaut aboard grows all five
-     * skills; everyone in a control slot some executed step involved grows that
+     * &sect;2.5(g), {@code baspm.md} &sect;9.3): every astronaut aboard grows the skills
+     * their seat used in full and the rest by {@link SkillGrowth#FLIGHT_UNUSED_SKILL_SHARE};
+     * every gain tapers toward the person's own {@link SkillGrowth#ceiling}.
+     * Everyone in a control slot some executed step involved grows that
      * slot's one skill - a CAPCOM astronaut its astronaut skill, and a Flight
      * Director one gain computed from their Flight Director value, spread evenly over
      * their five skills, as BASPM does. Someone in a slot no executed step involved
@@ -1076,14 +1079,17 @@ public final class MissionProgress {
                 // Lost this season's CATASTROPHIC step; loseCrew already removed them.
                 continue;
             }
+            Set<AstronautSkill> used = skillsUsedInSeat(mission, astronautId, executedSteps);
             double totalGain = 0;
             // A Glory seeker learns more from flying, and a more skilled Mentor aboard speeds everyone.
             double traits = TraitEffects.flightGrowth(astronaut)
                 * TraitEffects.mentored(astronaut, missionTeam(snapshot, mission), Chemistry::bestSkill);
             for (AstronautSkill skill : AstronautSkill.values()) {
                 double factor = SkillGrowth.drawMissionSkillGrowthFactor(random);
+                double share = used.contains(skill) ? 1.0 : SkillGrowth.FLIGHT_UNUSED_SKILL_SHARE;
                 double gain = SkillGrowth.diminishingReturnsGain(astronaut.getSkill(skill),
-                    astronaut.getLearningPotential(), factor) * traits;
+                    SkillGrowth.ceiling(astronaut.getSkills(), skill), astronaut.getLearningPotential(), factor)
+                    * traits * share;
                 astronaut.setSkill(skill, astronaut.getSkill(skill) + gain);
                 totalGain += gain;
             }
@@ -1113,7 +1119,7 @@ public final class MissionProgress {
                 if (astronaut != null) {
                     AstronautSkill skill = AstronautSkill.valueOf(slot.skill());
                     double gain = SkillGrowth.diminishingReturnsGain(astronaut.getSkill(skill),
-                        astronaut.getLearningPotential(), factor);
+                        SkillGrowth.ceiling(astronaut.getSkills(), skill), astronaut.getLearningPotential(), factor);
                     astronaut.setSkill(skill, astronaut.getSkill(skill) + gain);
                     events.add(new MissionSkillGrowthApplied(mission.getId(), astronaut.getId(),
                         astronaut.getName(), PersonnelGroup.ASTRONAUT, gain));
@@ -1126,21 +1132,39 @@ public final class MissionProgress {
             }
             double gain;
             if (slot.flightDirectorSlot()) {
-                gain = SkillGrowth.diminishingReturnsGain(officer.flightDirectorSkill(),
-                    officer.getLearningPotential(), factor);
+                // One gain from the average, a fifth to each skill, each stopping at its own ceiling.
+                double share = SkillGrowth.diminishingReturnsGain(officer.flightDirectorSkill(),
+                    officer.getLearningPotential(), factor) / MissionControlSkill.values().length;
+                gain = 0;
                 for (MissionControlSkill skill : MissionControlSkill.values()) {
-                    officer.setSkill(skill, Math.min(SkillGrowth.SKILL_CAP,
-                        officer.getSkill(skill) + gain / MissionControlSkill.values().length));
+                    double before = officer.getSkill(skill);
+                    double after = SkillGrowth.withinCeiling(officer.getSkills(), skill, before + share);
+                    officer.setSkill(skill, after);
+                    gain += after - before;
                 }
             } else {
                 MissionControlSkill skill = MissionControlSkill.valueOf(slot.skill());
-                gain = SkillGrowth.diminishingReturnsGain(officer.getSkill(skill), officer.getLearningPotential(),
-                    factor);
+                gain = SkillGrowth.diminishingReturnsGain(officer.getSkill(skill),
+                    SkillGrowth.ceiling(officer.getSkills(), skill), officer.getLearningPotential(), factor);
                 officer.setSkill(skill, officer.getSkill(skill) + gain);
             }
             events.add(new MissionSkillGrowthApplied(mission.getId(), officer.getId(), officer.getName(),
                 PersonnelGroup.MISSION_CONTROL, gain));
         }
+    }
+
+    /** The skills this season's executed steps read from this astronaut's crew seat. */
+    private static Set<AstronautSkill> skillsUsedInSeat(InProgressMission mission, String astronautId,
+            List<MissionStep> executedSteps) {
+        Set<AstronautSkill> used = EnumSet.noneOf(AstronautSkill.class);
+        for (MissionStep step : executedSteps) {
+            for (MissionStep.CrewInvolvement involvement : step.crewInvolvements()) {
+                if (astronautId.equals(slotHolder(mission.getCrewSlotIds(), involvement.slot()))) {
+                    used.add(involvement.skill());
+                }
+            }
+        }
+        return used;
     }
 
     /**

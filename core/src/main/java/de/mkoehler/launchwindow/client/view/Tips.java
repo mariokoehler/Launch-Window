@@ -5,7 +5,9 @@ import de.mkoehler.launchwindow.content.StaffingSlot;
 import de.mkoehler.launchwindow.rules.HiringPool;
 import de.mkoehler.launchwindow.rules.PersonnelLifecycle;
 import de.mkoehler.launchwindow.rules.RocketPlaneWings;
+import de.mkoehler.launchwindow.rules.SkillGrowth;
 
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -58,6 +60,23 @@ public final class Tips {
      */
     public static Tip skill(String label, String skill) {
         return new Tip(label, SKILL_USES.get(skill));
+    }
+
+    /**
+     * Returns the line a skill's tooltip gains when the person's other skills limit it: how high it
+     * can grow, from the rules ({@code SkillGrowth.ceiling}).
+     *
+     * @param value   the skill now
+     * @param ceiling how high it can grow
+     * @return the line with its leading space, or an empty string with nothing limiting it
+     */
+    public static String ceiling(double value, double ceiling) {
+        if (ceiling >= SkillGrowth.SKILL_CAP) {
+            return "";
+        }
+        return value >= ceiling
+            ? " Their other skills leave no more room: this one has stopped growing."
+            : String.format(Locale.ROOT, " Their other skills leave room up to %.1f (the tick).", ceiling);
     }
 
     /**

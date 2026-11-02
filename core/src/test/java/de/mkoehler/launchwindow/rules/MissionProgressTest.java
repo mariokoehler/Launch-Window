@@ -914,17 +914,16 @@ class MissionProgressTest {
 
     /**
      * Verifies mission-based skill growth bumps all five
-     * {@link AstronautSkill} values for an assigned astronaut, not just
-     * whichever skill a step happened to involve - re-deriving
-     * {@code baspm.md} &sect;9.3/&sect;9.4's "flying is what matters"
-     * shape.
+     * {@link AstronautSkill} values for an assigned astronaut: the skill their
+     * seat used in full, the others by {@link SkillGrowth#FLIGHT_UNUSED_SKILL_SHARE}
+     * (the user's decision, 2026-11-02).
      */
     @Test
     void skillGrowthBumpsAllFiveAstronautSkills() {
         MissionStep step = new MissionStep("ops", List.of(new MissionStep.ComponentInvolvement("capsule-mercury", 100)),
-            List.of(), List.of(), false);
+            List.of(), List.of(new MissionStep.CrewInvolvement(0, AstronautSkill.PILOTING, 100)), false);
         MissionConfiguration configuration = new MissionConfiguration("skill-growth-std", "mercury-program",
-            List.of(new MissionSeason(List.of(step))), 0, 0, 0);
+            List.of(new MissionSeason(List.of(step))), 1, 0, 0);
         ContentCatalog catalog = catalogWith(configuration);
 
         PlayerSnapshot snapshot = snapshotWithOwnedCapsule(90.0);
@@ -937,18 +936,17 @@ class MissionProgressTest {
             new InProgressMission("m0", "skill-growth-std", List.of("astro-1"), List.of()));
 
         // step roll (99, succeeds) + 1 reliability factor (0.1) + 5 skill-growth factors, all
-        // 0.1: gain = (100 - currentSkill) * 0.1 * (60/100) for each of the five skills -
-        // PILOTING (50) -> (100-50)*0.1*0.6 = 3.0 -> 53.0; every other skill (0) ->
-        // (100-0)*0.1*0.6 = 6.0 -> 6.0.
+        // 0.1: gain = (100 - currentSkill) * 0.1 * (60/100) - the seat's PILOTING (50) in full,
+        // (100-50)*0.1*0.6 = 3.0 -> 53.0; every other skill (0) a third of it, 6.0 / 3 = 2.0.
         ScriptedRandomGenerator random = new ScriptedRandomGenerator(99.0, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1);
         MissionProgress.advanceSeason(snapshot, catalog, random);
 
         Astronaut grown = snapshot.getAstronauts().get(0);
         assertEquals(53.0, grown.getSkill(AstronautSkill.PILOTING), 1e-9);
-        assertEquals(6.0, grown.getSkill(AstronautSkill.LEADERSHIP), 1e-9);
-        assertEquals(6.0, grown.getSkill(AstronautSkill.EVA), 1e-9);
-        assertEquals(6.0, grown.getSkill(AstronautSkill.SCIENCE), 1e-9);
-        assertEquals(6.0, grown.getSkill(AstronautSkill.FITNESS), 1e-9);
+        assertEquals(2.0, grown.getSkill(AstronautSkill.LEADERSHIP), 1e-9);
+        assertEquals(2.0, grown.getSkill(AstronautSkill.EVA), 1e-9);
+        assertEquals(2.0, grown.getSkill(AstronautSkill.SCIENCE), 1e-9);
+        assertEquals(2.0, grown.getSkill(AstronautSkill.FITNESS), 1e-9);
     }
 
     /**

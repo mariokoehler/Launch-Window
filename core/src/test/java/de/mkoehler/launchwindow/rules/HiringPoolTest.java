@@ -6,6 +6,7 @@ import de.mkoehler.launchwindow.model.Building;
 import de.mkoehler.launchwindow.model.Astronaut;
 import de.mkoehler.launchwindow.model.AssignmentState;
 import de.mkoehler.launchwindow.model.HiringPoolBonus;
+import de.mkoehler.launchwindow.model.MissionControlOfficer;
 import de.mkoehler.launchwindow.model.PlayerSnapshot;
 import de.mkoehler.launchwindow.model.SetSkill;
 import de.mkoehler.launchwindow.model.SetSpecialist;
@@ -216,6 +217,21 @@ class HiringPoolTest {
      * fixture (that {@code expectedMax} is strictly below it, so this test
      * would actually fail if the wrong, higher band were selected).
      */
+    /** The pool can't hand out what growth can't reach: nobody arrives with three skills at 90. */
+    @Test
+    void noCandidateHasThreeSkillsAtNinety() {
+        Random random = new Random(9L);
+        for (int run = 0; run < 400; run++) {
+            PlayerSnapshot snapshot = new PlayerSnapshot("Agency", Archetype.NASA, 0, 0, 0, 1);
+            MissionControlOfficer roster = new MissionControlOfficer("m", "Roster", 30, 95, 50);
+            snapshot.getMissionControlOfficers().add(roster);
+            HiringPool.refreshCandidates(snapshot, random);
+            for (MissionControlOfficer candidate : snapshot.getMissionControlCandidates()) {
+                assertTrue(candidate.getSkills().values().stream().filter(value -> value >= 90).count() < 3);
+            }
+        }
+    }
+
     private static void assertCandidateSkillsWithinBand(int rosterMorale, double expectedMin, double expectedMax,
             double otherBandCeiling) {
         assertTrue(expectedMax <= otherBandCeiling);

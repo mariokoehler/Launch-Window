@@ -420,7 +420,9 @@ public final class ResearchPlanning {
                     }
                 }
                 double draw = random == null ? averageFactor : SkillGrowth.drawRdGainFactor(random);
-                skills[slot] = Math.min(SkillGrowth.SKILL_CAP,
+                // Only this skill moves, so the engineer's ceiling for it stands all the way.
+                double ceiling = SkillGrowth.ceiling(team[slot].getSkills(), component.associatedSkill());
+                skills[slot] = Math.min(Math.max(before[slot], ceiling),
                     before[slot] + SkillGrowth.flatRdGain(before[slot], draw) * event * mentored);
             }
         }
