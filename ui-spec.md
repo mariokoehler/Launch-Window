@@ -1410,7 +1410,7 @@ Writing them turned up two things for the rules, recorded in `design.md` §2.2(d
         with "Until the turn resolves". **The rival's line:** first in the News card, "<Agency> has lost the crew
         of <mission>" with one more line and "Send condolences" (secondary), no eyebrow and no colour.
 
-30. **Standing chart** *(the user's idea, 2026-11-02; specified the same day, awaiting its mockup; the numbers are
+30. **Standing chart** *(the user's idea, 2026-11-02; specified and mocked up the same day; the numbers are
     **unconfirmed**; server side built, G20)*. How an agency's prestige and money moved over time: the statistics
     this kind of player loves. Shared by the Public Affairs Office's Standing tab (§4.10) and the game result
     (§4.13).
@@ -1443,6 +1443,37 @@ Writing them turned up two things for the rules, recorded in `design.md` §2.2(d
       two points; with two or three points, the dots carry it, the line spanning the width.
     - **Data:** resolved turns only, so the latest point can differ from the header's prestige and funds, which
       include queued actions. The tab says so in a caption: "As of the last resolved season".
+    - **Mocked up (2026-11-02)** on the canvas `Launch Window — Standing` (the Artifact tool's list finds it): the tab in
+      Just me and Everyone, three points, the empty state, 136 seasons windowed, hover, debt, the event marks, the game
+      result, the pieces and the new tokens, with each board's choices in the note under it. All **unconfirmed**:
+      - **Layout:** one white card at full width, prestige 470 px over funds 220 px, one year axis under both, a key row
+        for the marks at the foot with "As of the last resolved season, Fall 1962" at its right. The toggle
+        (`SegmentedControl`, 260 px) sits at the right of the prestige heading; FUNDS has an outlined navy
+        "YOURS ALONE" tag and a caption that rivals' funds are secret.
+      - **Axes:** the prestige axis starts at 0 and fits the top (a small early step never looks like a cliff); funds fit
+        both ends and always show zero. Year labels at each Winter, at least 64 px apart; with six points or fewer the
+        axis names each season instead, and the dots grow (r 6) to carry the shape.
+      - **Lines and labels:** yours navy 3 px, rivals 1.75 px in four new tokens by joining order; each ends in its agency's
+        name in its colour (yours bold) over the latest value in ink; labels closer than 34 px are pushed apart in order,
+        with a thin leader. Gutters 64 px left, 236 px right.
+      - **Window:** past 120 points a "LATEST 30 YEARS" chip (skill-track fill) beside the prestige caption.
+      - **Debt:** a darker zero line labelled "Zero"; below it the line and dots turn `danger` over a 14 % danger fill, and the
+        end label is the danger tag ("−2,860").
+      - **Marks:** a declared goal is a dot in its line's colour with a white ring (r 6); a First is gold ringed in the agency's
+        colour (r 7); your lost crew an ink diamond on your line; your reviews navy 30 % dashed through both plots, with
+        "Review n" at the top. Only declared goals are marked.
+      - **Hover:** a navy crosshair through both plots, a white ring on each line's point, and component 21's white popover:
+        the date, your prestige and funds, with Everyone every agency's prestige highest first with a colour swatch, then
+        the event there.
+      - **Empty:** the card keeps its headings and toggle; each chart's place is a hatched dashed box with the spec's line,
+        why (a line needs two points) and the starting figures.
+      - **Game result:** the race table gains a Prestige column and a line swatch before each agency, rows 44 px; under it
+        "Prestige, the whole game", 250 px, every agency, no funds or review lines. The dialog stays about 720 px tall.
+      - **New tokens for `Theme.java`:** `CHART_RIVAL_1` #0b7480 (teal), `CHART_RIVAL_2` #8a3d82 (plum), `CHART_RIVAL_3`
+        #2c6fba (sky blue), `CHART_RIVAL_4` #5a6678 (slate), each 5 : 1 or more on white, none gold, green or red (a fifth
+        rival repeats them dashed); `CHART_GRID` navy 10 %, `CHART_AXIS` navy 45 %, `CHART_REVIEW` navy 30 %,
+        `CHART_DEBT_FILL` danger 14 %. New components: the standing chart, its tooltip, the YOURS ALONE tag, the LATEST 30
+        YEARS chip, the marks key. No new icons for the UI Asset Sheet: the marks are drawn shapes.
 
 ---
 
@@ -2953,7 +2984,7 @@ review: when, what it pays, what keeps today's funding) and `PrestigeConversion`
   review #n, raised since" after a raise, and a caption above the last-review line says what 1,000 more
   prestige would add now (or that the bracket's top is reached, or, before the first review, that raises
   start then), and the raise due next season when prestige has already grown. Shot `raise-pao.png`.
-- **The Standing tab** *(the user's idea, 2026-11-02, awaiting its mockup)*: `NavTabs` in the header as in the
+- **The Standing tab** *(the user's idea, 2026-11-02, mocked up the same day on `Launch Window — Standing`)*: `NavTabs` in the header as in the
   Museum, Budget (this page, unchanged) and Standing, which is the standing chart (component 30) at full width.
 
 ### 4.11 Museum: goals, history, rivals
@@ -3069,8 +3100,8 @@ player who picked Standard keeps it.
 ### 4.13 Game result
 **Purpose:** announce the winner. **Shows:** an overlay on the hub when a result
 exists: winner or tied winners (agency and director name), the turn decided, and the
-race table, plus the whole game's prestige chart with everyone on it (component 30, awaiting
-its mockup). Play continues, so the overlay can be dismissed and is reopenable from
+race table, plus the whole game's prestige chart with everyone on it (component 30, mocked
+up 2026-11-02 on `Launch Window — Standing`). Play continues, so the overlay can be dismissed and is reopenable from
 the Museum.
 
 **Mocked up (2026-10-04)** as `GameResult` on the Museum canvas: a `Dialog` over the hub,

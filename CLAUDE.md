@@ -364,8 +364,8 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
 
 - **Public prestige and the standing charts** (the user's idea, 2026-11-02, `design.md` §2.1(g), `ui-spec.md` component 30, G20):
   prestige is public (the race's column, the Intelligence Office's rival list); funds stay secret. The curves' server side is
-  built (`StandingRequest`, read from the turn reports, nothing saved; `DevClient`'s `standing`); the charts await the canvas
-  `Launch Window — Standing`. Their numbers are unconfirmed. A changed message: rebuild client and server together; no reset.
+  built (`StandingRequest`, read from the turn reports, nothing saved; `DevClient`'s `standing`); the charts are mocked up on the
+  canvas `Launch Window — Standing` (2026-11-02; new chart tokens listed in component 30). Their numbers are unconfirmed. A changed message: rebuild client and server together; no reset.
 
 ## How we work
 
