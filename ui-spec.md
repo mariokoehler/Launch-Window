@@ -1444,14 +1444,37 @@ Writing them turned up two things for the rules, recorded in `design.md` §2.2(d
       two points; with two or three points, the dots carry it, the line spanning the width.
     - **Data:** resolved turns only, so the latest point can differ from the header's prestige and funds, which
       include queued actions. The tab says so in a caption: "As of the last resolved season".
-    - **The canvas's choices, built:** one card, prestige over funds at about 68 to 32 %, one axis, a key row of the
-      four marks; gutters 64 px left, 236 px right; own line 3 px, rivals 1.75; dots r 3.5 and 2.75, r 6 and 5 with six
-      points or fewer, when the axis names each season; goal r 6, First r 7 gold ringed in the agency's colour; end
-      labels at least 34 px apart with a thin leader; prestige axis from 0; funds fit both ends and always show zero,
-      labelled "Zero" in debt; below zero the line and dots are danger, over a 14 % fill, the end label a danger tag. A
-      fifth rival repeats the colours, dashed. The toggle is the design system's segmented control, 260 px. The hover
-      tooltip is 300 px, right of the crosshair, left where it wouldn't fit. New in `Theme.java`: `CHART_RIVAL_1` to `4`,
-      `CHART_GRID`, `CHART_AXIS`, `CHART_REVIEW`, `CHART_DEBT_FILL`. No new icons: the marks are drawn shapes.
+    - **Mocked up (2026-11-02)** on the canvas `Launch Window — Standing` (the Artifact tool's list finds it): the tab in
+      Just me and Everyone, three points, the empty state, 136 seasons windowed, hover, debt, the event marks, the game
+      result, the pieces and the new tokens, with each board's choices in the note under it. All **unconfirmed**:
+      - **Layout:** one white card at full width, prestige 470 px over funds 220 px, one year axis under both, a key row
+        for the marks at the foot with "As of the last resolved season, Fall 1962" at its right. The toggle
+        (`SegmentedControl`, 260 px) sits at the right of the prestige heading; FUNDS has an outlined navy
+        "YOURS ALONE" tag and a caption that rivals' funds are secret.
+      - **Axes:** the prestige axis starts at 0 and fits the top (a small early step never looks like a cliff); funds fit
+        both ends and always show zero. Year labels at each Winter, at least 64 px apart; with six points or fewer the
+        axis names each season instead, and the dots grow (r 6) to carry the shape.
+      - **Lines and labels:** yours navy 3 px, rivals 1.75 px in four new tokens by joining order; each ends in its agency's
+        name in its colour (yours bold) over the latest value in ink; labels closer than 34 px are pushed apart in order,
+        with a thin leader. Gutters 64 px left, 236 px right.
+      - **Window:** past 120 points a "LATEST 30 YEARS" chip (skill-track fill) beside the prestige caption.
+      - **Debt:** a darker zero line labelled "Zero"; below it the line and dots turn `danger` over a 14 % danger fill, and the
+        end label is the danger tag ("−2,860").
+      - **Marks:** a declared goal is a dot in its line's colour with a white ring (r 6); a First is gold ringed in the agency's
+        colour (r 7); your lost crew an ink diamond on your line; your reviews navy 30 % dashed through both plots, with
+        "Review n" at the top. Only declared goals are marked.
+      - **Hover:** a navy crosshair through both plots, a white ring on each line's point, and component 21's white popover:
+        the date, your prestige and funds, with Everyone every agency's prestige highest first with a colour swatch, then
+        the event there.
+      - **Empty:** the card keeps its headings and toggle; each chart's place is a hatched dashed box with the spec's line,
+        why (a line needs two points) and the starting figures.
+      - **Game result:** the race table gains a Prestige column and a line swatch before each agency, rows 44 px; under it
+        "Prestige, the whole game", 250 px, every agency, no funds or review lines. The dialog stays about 720 px tall.
+      - **New tokens for `Theme.java`:** `CHART_RIVAL_1` #0b7480 (teal), `CHART_RIVAL_2` #8a3d82 (plum), `CHART_RIVAL_3`
+        #2c6fba (sky blue), `CHART_RIVAL_4` #5a6678 (slate), each 5 : 1 or more on white, none gold, green or red (a fifth
+        rival repeats them dashed); `CHART_GRID` navy 10 %, `CHART_AXIS` navy 45 %, `CHART_REVIEW` navy 30 %,
+        `CHART_DEBT_FILL` danger 14 %. New components: the standing chart, its tooltip, the YOURS ALONE tag, the LATEST 30
+        YEARS chip, the marks key. No new icons for the UI Asset Sheet: the marks are drawn shapes.
     - **Where the build differs from the canvas:**
       - **The first point reads "Start",** not "Winter 1955": a report's turn is the season it resolved, so the point
         after turn 1 is Winter 1955, and a goal's mark sits on the season the race dates it.
