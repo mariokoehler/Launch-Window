@@ -59,7 +59,9 @@ public final class Advisor {
         /** The latest turn report. */
         TURN_REPORT,
         /** The roads to the Moon compared (ui-spec.md 4.21). */
-        ROADS_TO_THE_MOON
+        ROADS_TO_THE_MOON,
+        /** The explainer the explainer tip points to ({@link #TIP_EXPLAINER}). */
+        EXPLAINER
     }
 
     /** Where an item stands. */
@@ -187,6 +189,32 @@ public final class Advisor {
             + " morale a season and resigns at " + de.mkoehler.launchwindow.rules.PersonnelLifecycle.RESIGNATION_MORALE_FLOOR
             + ". Training is free and raises skills: send whoever waits for work to training, or put engineers on R&D.",
         "Their building", Destination.SET_CENTRE, List.of("morale", "training"));
+
+    /** The explainer the explainer tip opens (E-01): every agency starts by putting a satellite in orbit. */
+    public static final String TIP_EXPLAINER = "suborbital-vs-orbital";
+
+    /**
+     * A one-off tip apart from the first steps (the user's idea, 2026-11-03): while the first engineers are in
+     * basic training, with nothing else to do, the card points to the explainers, which a new player would
+     * otherwise find only through the concept chips or the Museum. It goes once any explainer is read or on
+     * Got it, and never counts toward {@link #finished}.
+     */
+    public static final Item EXPLAINER_TIP = new Item("explainers", "Read while you wait",
+        "How does a satellite stay up? \"Suborbital vs orbital\" explains it in three pages. The Concepts chips on "
+            + "program and rocket screens open more like it, and the Museum keeps them all.",
+        "Read it", Destination.EXPLAINER, List.of("museum"));
+
+    /**
+     * Returns whether the explainer tip is due now: engineers are hired, so the wait for basic training has
+     * begun. The client keeps it until the player reads an explainer or puts it away, so a player who missed
+     * the wait still sees it, after the first steps on the card.
+     *
+     * @param state the player's state
+     * @return whether it's due
+     */
+    public static boolean explainerTipDue(PlayerSnapshot state) {
+        return !state.getSetSpecialists().isEmpty();
+    }
 
     /**
      * Returns whether the idle tip is due now: the agency is past its first steps (someone is on R&amp;D

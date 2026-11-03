@@ -741,6 +741,24 @@ public class LaunchWindowGame extends Game {
     }
 
     /**
+     * Returns whether the advisor's explainer tip is done for this player on this device: put away, or any
+     * explainer read from anywhere ({@code Advisor.EXPLAINER_TIP}).
+     *
+     * @return whether it's done
+     */
+    public boolean explainerTipDone() {
+        return flag("explainerTipDone") || de.mkoehler.launchwindow.client.view.Explainers.standard().explainers()
+            .stream().anyMatch(explainer -> explainerRead(explainer.id()));
+    }
+
+    /**
+     * Marks the advisor's explainer tip as done: it never shows again.
+     */
+    public void markExplainerTipDone() {
+        setFlag("explainerTipDone");
+    }
+
+    /**
      * Returns whether the advisor's card is minimized to its head. Kept for this client run only,
      * so a fresh start shows the whole card again.
      *

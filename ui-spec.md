@@ -853,6 +853,16 @@ Writing them turned up two things for the rules, recorded in `design.md` §2.2(d
       after it was shown (someone sent to training, or nobody idle), or on Got it (client marks
       `idleTipShown`, `idleTipDone`). Its timing (as soon as someone out of basic training sits idle, even during the first steps) is confirmed by the user (2026-10-12). Shots
       `advisor-idle-tip.png` (retired) and `advisor-idle-tip-first-steps.png`.
+    - **The explainer tip** (the user's idea, 2026-11-03; built without a mockup, like the idle tip): "Read while
+      you wait", so new players learn the explainers exist (component 18), which they'd otherwise only find through
+      the concept chips or the Museum. It fills the wait while the first engineers are in basic training, when the
+      card says "All set for now": the tip goes under that line. Its Go link ("Read it") opens E-01 "Suborbital vs
+      orbital" (`Advisor.TIP_EXPLAINER`), coming back to the hub; its text names the Concepts chips and the Museum;
+      Rules opens the Museum topic; **Got it** puts it away. A one-off like the idle tip (`Advisor.EXPLAINER_TIP`,
+      never in `ITEMS`, never counted toward retiring): due once an engineer is hired (`Advisor.explainerTipDue`),
+      it stays until any explainer is read, from anywhere, or Got it (client mark `explainerTipDone`). A player who
+      leaves the wait without it finds it after the first steps on the card. Shots `advisor-explainer-tip*.png`
+      (`-Dshots=advisor`).
 25. **Looking ahead** *(the user's idea, 2026-10-10: "thinking ahead gives you a big advantage in this
     game"; the user liked all seven proposals and asked for them built at once, without a mockup,
     since each extends a component that exists).* Every season count comes from the rules, never the

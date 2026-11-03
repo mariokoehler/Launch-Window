@@ -365,10 +365,14 @@ public final class SpaceComplexScreen extends SessionScreen {
         }
         // Retired, the card comes back for the idle tip alone.
         boolean tipOnly = game.advisorRetired();
-        List<Advisor.Item> open = new java.util.ArrayList<>(tipOnly ? List.of()
-            : Advisor.open(state, session.catalog(), marks));
+        List<Advisor.Item> steps = tipOnly ? List.of() : Advisor.open(state, session.catalog(), marks);
+        List<Advisor.Item> open = new java.util.ArrayList<>(steps);
         if (tip) {
             open.add(0, Advisor.IDLE_TIP);
+        }
+        // The explainer tip fills the wait for basic training; missed, it comes after the first steps.
+        if (!tipOnly && !game.explainerTipDone() && Advisor.explainerTipDue(state)) {
+            open.add(Advisor.EXPLAINER_TIP);
         }
         float inner = ADVISOR_WIDTH - 2 * Theme.SPACE_4;
 
@@ -408,14 +412,16 @@ public final class SpaceComplexScreen extends SessionScreen {
         Table body = new Table();
         body.top().left();
         body.pad(Theme.SPACE_4, Theme.SPACE_4, Theme.SPACE_3, Theme.SPACE_4);
-        if (open.isEmpty()) {
+        // With no first step to do, the card says what it waits for, above any tip.
+        if (steps.isEmpty() && !tipOnly) {
             Advisor.Item next = Advisor.later(state, session.catalog(), marks).get(0);
             body.add(ui.label("All set for now", Theme.TextStyle.BODY_STRONG, Theme.INK)).left().row();
             String title = Advisor.title(next, state, session.catalog());
             body.add(ui.paragraph(Advisor.waitingFor(next, state) + ": " + Character.toLowerCase(title.charAt(0))
                 + title.substring(1) + ".", Theme.TextStyle.BODY_SM, Theme.INK_MUTED)).width(inner).left()
                 .padBottom(Theme.SPACE_3).row();
-        } else {
+        }
+        if (!open.isEmpty()) {
             for (int i = 0; i < Math.min(Advisor.SHOWN, open.size()); i++) {
                 body.add(advisorItem(open.get(i), inner)).width(inner).left().padBottom(Theme.SPACE_3).row();
             }
@@ -492,12 +498,16 @@ public final class SpaceComplexScreen extends SessionScreen {
         rules.addListener(clicked(() -> openHelp(advisorTopics(item,
             Advisor.title(item, session.state(), session.catalog())))));
         links.add(rules);
-        // The idle tip is a one-off: it can be put away without acting on it.
-        if (item == Advisor.IDLE_TIP) {
+        // The tips are one-offs: they can be put away without acting on them.
+        if (item == Advisor.IDLE_TIP || item == Advisor.EXPLAINER_TIP) {
             Label gotIt = ui.label("GOT IT", Theme.TextStyle.LABEL, Theme.NAVY);
             gotIt.setTouchable(Touchable.enabled);
             gotIt.addListener(clicked(() -> {
-                game.markIdleTipDone();
+                if (item == Advisor.IDLE_TIP) {
+                    game.markIdleTipDone();
+                } else {
+                    game.markExplainerTipDone();
+                }
                 rebuildAdvisor(session.state());
             }));
             links.add(gotIt).padLeft(Theme.SPACE_4);
@@ -540,6 +550,9 @@ public final class SpaceComplexScreen extends SessionScreen {
             case ASTRONAUT_COMPLEX -> goAstronautComplex();
             case TURN_REPORT -> openReportFromHub();
             case ROADS_TO_THE_MOON -> game.setScreen(new RoadsToMoonScreen(game));
+            case EXPLAINER -> de.mkoehler.launchwindow.client.view.Explainers.standard().byId(Advisor.TIP_EXPLAINER)
+                .ifPresent(explainer -> game.setScreen(new ExplainerScreen(game, explainer, 0,
+                    () -> new SpaceComplexScreen(game))));
         }
     }
 

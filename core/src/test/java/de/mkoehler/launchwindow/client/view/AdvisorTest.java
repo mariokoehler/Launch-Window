@@ -244,4 +244,24 @@ class AdvisorTest {
         spare.setTrainingKind(TrainingKind.ADVANCED);
         assertFalse(Advisor.idleTipDue(state), "someone in training: the player knows, though an astronaut waits");
     }
+
+    /**
+     * The explainer tip (2026-11-03) comes with the first engineers, whose basic training is the wait it fills,
+     * opens an explainer that exists, and is never one of the steps.
+     */
+    @Test
+    void explainerTipComesWithTheFirstEngineers() throws java.io.IOException {
+        PlayerSnapshot state = soviet();
+        assertFalse(Advisor.explainerTipDue(state), "nobody hired: no wait yet");
+        SetSpecialist recruit = new SetSpecialist("e1", "A. Engineer", 30, 70, 50);
+        recruit.setTrainingKind(TrainingKind.BASIC);
+        state.getSetSpecialists().add(recruit);
+        assertTrue(Advisor.explainerTipDue(state));
+        Explainers explainers = Explainers.parse(java.nio.file.Files.readString(
+            java.nio.file.Path.of("..", "assets", "content", Explainers.FILE)));
+        assertTrue(explainers.byId(Advisor.TIP_EXPLAINER).filter(explainer -> explainer.lockedUntil().isEmpty())
+            .isPresent(), "the explainer it opens exists and is never locked");
+        assertFalse(Advisor.ITEMS.contains(Advisor.EXPLAINER_TIP), "never one of the first steps");
+        assertFalse(Advisor.ROAD_AHEAD.contains(Advisor.EXPLAINER_TIP), "never on the road ahead");
+    }
 }

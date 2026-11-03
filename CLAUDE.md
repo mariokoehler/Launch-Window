@@ -90,7 +90,9 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
 - **The README** (2026-10-29): its screenshots are `docs/screenshots/`, made from a shots folder by
   `docs/screenshots/make_screenshots.py <shots>` (its `PICKS`). It says the game has no licence yet and takes no contributions (user).
 - **The advisor is built** (2026-10-08, `ui-spec.md` component 24): a hub card with a new agency's
-  first steps, ticked off from the state, until all are done or the player hides it.
+  first steps, ticked off from the state, until all are done or the player hides it. A one-off tip
+  points to the explainers while the first engineers train (user, 2026-11-03, `Advisor.EXPLAINER_TIP`,
+  `-Dshots=advisor`). Client only.
 - **The full content pack is built** (2026-10-08, `design.md` §5, M3): `assets/content/standard`,
   BASPM's whole tree (55 programs, 189 configurations; 187 since the E-154 became the Soviet X-15, 186 without Apollo's Agena docking), with its text and art, beside `early-era`.
   **It is the server's default since 2026-10-09** (`GameMeta.DEFAULT_CONTENT_PACK`; tests still pin
