@@ -508,6 +508,67 @@ On the right:
         standard pack's step names ("Transposition and docking", "Cruise to Mars", "Venus flyby":
         the pack has no "Lunar slingshot" or "transit" step); Mars's air "less than 1 %" of Earth's,
         not "about 1 %"; the X-15's height "about 108 km", not 107.8 (354,200 ft).
+    - **E-31 "Cabin air"** (topic: Breathing in space) *(the user's idea, 2026-11-04; brief written and every
+      figure checked the same day, `design.md` §1.1; not yet mocked up)*. Same look as E-01 to E-30, one new canvas
+      row on `Launch Window — Explainers`, two sheets. Id `cabin-air`. Summary: "Why the American capsules breathed
+      pure oxygen at a third of the pressure, why the Soviet ones carried air, and what each choice cost."
+      - **Sheet 1, *A third of an atmosphere*** (scale "Pressures to scale"). Drawing: pressure as height, one scale
+        throughout (1 atm = the tallest column).
+        - Left, two columns side by side: *Air at sea level*, 1 atm, a tall nitrogen block (0.78, hatched) under a
+          gold oxygen block (0.21); *An American capsule*, 0.34 atm, all gold oxygen. A dashed line from the top of
+          the air's oxygen block across to the capsule's column shows the capsule's oxygen standing higher: "more
+          oxygen than at sea level, a third of the push".
+        - Right, *Inside the lungs*: three short bars, each with a grey cap of the same height for the share water
+          vapour and carbon dioxide always take (about 0.11 atm) and the oxygen left below it: air at sea level 0.13
+          atm; pure oxygen at 0.21 atm (dashed, "never flown") 0.10; the capsule 0.22. A thin red line low on the scale
+          at 0.06 atm: "Below this, water boils at body heat (about 19 km up)".
+        - Points: **What partial pressure is** (air pushes with all its gases at once; each gas's part of the push is
+          its partial pressure; at sea level oxygen pushes with 0.21 of an atmosphere, and that, not the total, is what
+          the lungs need); **Why a third** (the hull holds a third of the load, so it can be lighter; one gas means one
+          tank and one gauge, no mixing; a leak bleeds slower; Mercury chose it and Gemini and Apollo kept it);
+          **Why more oxygen than the air has** (in the lungs water vapour and carbon dioxide always take their share, so
+          pure oxygen at the air's 0.21 would leave less in the lungs than a sea-level breath; 0.34 leaves more, with a
+          margin for a leak and for the suits, which ran lower still; not, as often said, to stop blood boiling: that
+          takes under 0.06 atm).
+        - In Launch Window: "Mercury, Gemini and Apollo capsules breathe pure oxygen at about a third of an atmosphere;
+          Vostok, Voskhod and Soyuz carry air at sea-level pressure."
+      - **Sheet 2, *Two answers, and their price*** (scale "Not to scale"). Drawing: two cabins side by side, cut open:
+        an American cone with a thin wall, "Pure oxygen, 0.34 atm", and a Soviet sphere with a thicker wall, "Air,
+        1 atm"; under each, two short tags, gold for what it gave and red for what it cost (American: *lighter,
+        simpler* / *fire, prebreathing*; Soviet: *no fire worry, ordinary air* / *heavier hull, prebreathing before
+        a spacewalk*). Below both, a small timeline: 1961 Bondarenko's chamber fire, 1965 Leonov's spacewalk, 1967
+        Apollo 1, 1975 Apollo-Soyuz's airlock.
+        - Points: **Light, but it burns** (in pure oxygen almost anything burns fiercely; on 27 January 1967 a test on
+          the pad in pure oxygen at a little above outside pressure killed Grissom, White and Chaffee in Apollo 1;
+          afterwards Apollo launched on 60 % oxygen and 40 % nitrogen, changed to pure oxygen in orbit, and lost most
+          of what could burn); **Heavy, but it's air** (the Soviet cabins held a full atmosphere of air: no special fire
+          danger and no prebreathing before launch, but a stronger, heavier hull; a spacewalk meant breathing pure
+          oxygen first, then a suit at less than half an atmosphere: Leonov, March 1965, had to let his suit down
+          further still to bend it back into the airlock); **Meeting in the middle** (in July 1975 Apollo and Soyuz
+          docked with a module between them as an airlock, and Soyuz lowered its cabin to about two-thirds of an
+          atmosphere with more oxygen, so the crews could cross without long prebreathing).
+        - In Launch Window: "Spacewalk steps: an American crew opens the hatch from its own cabin; a Soviet one goes
+          out through an airlock or the orbital module."
+      - **Concept chip** (proposed, unconfirmed): "Cabin air" → E-31 sheet 1 on the capsules (`mercury-capsule`,
+        `gemini-capsule`, `apollo-csm`, `vostok-capsule`, `voskhod-capsule`, `soyuz-7k-ok-spacecraft`,
+        `soyuz-7k-l1-spacecraft`, `soyuz-7k-lok-spacecraft`), within `ConceptsTest`'s six-chip limit.
+      - **Prompt for the mockup session** (Claude Design, on the canvas `Launch Window — Explainers`):
+
+        > Add a new row to this canvas for explainer **E-31 "Cabin air"** (topic: Breathing in space), two sheets,
+        > in the same template, type and colours as E-20 to E-30 (title block, eyebrow with topic and sheet count, a
+        > drawing on the left, three numbered points on the right, a scale note and an "In Launch Window" strip).
+        > The brief, with every drawing, point and figure, is in `ui-spec.md` component 18, under "E-31 'Cabin air'",
+        > in the GitHub repo `mariokoehler/Launch-Window` (master). Use its text and numbers as written: they have
+        > been checked (`design.md` §1.1, "E-31"), so don't round them differently or add figures of your own.
+        > Sheet 1, *A third of an atmosphere*: draw pressure as height on one scale, with sea-level air (nitrogen
+        > 0.78 hatched, oxygen 0.21 gold) beside the capsule's 0.34 atm of pure oxygen, and the *Inside the lungs*
+        > bars (a grey cap of about 0.11 atm for water vapour and carbon dioxide on each; oxygen left: 0.13, 0.10
+        > dashed for "pure oxygen at 0.21, never flown", and 0.22), with the thin red 0.06 atm line for boiling at
+        > body heat. Sheet 2, *Two answers, and their price*: the American cone (thin wall) and the Soviet sphere
+        > (thicker wall) cut open, gold and red tags for what each gave and cost, and the four-event timeline (1961,
+        > 1965, 1967, 1975). Keep drawing labels short (they become real labels in the game, set at 13 to 15 px) and
+        > leave room for the halo outline where a label crosses hatching. Add a yellow note on the row listing any
+        > text you had to shorten or change and anything that didn't fit, as the earlier rows do.
     - **Locked until its theory is settled** (user, 2026-10-27, straight in libGDX): an explainer that answers a
       theory of the day (§4.18.2) names it in `lockedUntil` and stays locked until a flight in the game settles
       every one of them (its science page is printed), the race is decided, or the game's pack can't settle it

@@ -245,6 +245,47 @@ engineering problem or tidbit, note it here the same session.
   2018 without changing. The curve is the standard atmosphere's densities (1976) and one wing loading
   set to cross at 84 km; a tenth to ten times that loading crosses between 69 and 91 km, which is why
   the line hardly depends on the craft. At 50 km the air is about 1,200 times thinner than at sea level.
+- **E-31 "Cabin air"** (the user's idea, 2026-11-04; the brief and the mockup prompt in `ui-spec.md` component 18,
+  not yet mocked up): why the American capsules breathed pure oxygen at a third of an atmosphere, what partial
+  pressure is, and why the share was set well above the air's. **Corrections to the user's account:**
+  - *Not both sides.* Only the American capsules (Mercury, Gemini, Apollo) flew pure oxygen at low pressure. Vostok,
+    Voskhod and Soyuz carried a nitrogen-oxygen mix like air at about one atmosphere (760 mmHg, about 80/20; NASA
+    SP-4209, *The Partnership*, ch. 3-3).
+  - *The pressure:* 258 mmHg, about 5 psi, 0.34 atm (SP-4209), so "about 30 %" is close. Its oxygen is about 13
+    points above the air's 21 %, which is about 1.6 times the oxygen pressure a person breathes at sea level, not 10 %
+    more.
+  - *Not boiling blood.* Water boils at body temperature only below about 0.062 atm (47 mmHg, 6.3 kPa, the Armstrong
+    limit, about 19 km up), a fifth of the cabin's pressure; even then blood in the vessels doesn't boil, only exposed
+    fluids (saliva, tears, the lungs' moisture). The real reason for the margin is the lungs: inside them water vapour
+    (47 mmHg) and carbon dioxide (about 40 mmHg) always take a fixed share, about 0.11 atm, whatever is breathed
+    (the alveolar gas equation). Air at sea level leaves about 100 mmHg (0.13 atm) of oxygen in the lungs; pure oxygen
+    at the air's 0.21 atm would leave only about 72 mmHg (0.095 atm), less than at sea level; matching sea level takes
+    about 187 mmHg (0.25 atm, 3.6 psi); the cabin's 0.34 atm leaves about 171 mmHg (0.22 atm). Our arithmetic, from the
+    textbook equation (lungs' CO2 40 mmHg, water vapour 47). The margin also covers a slow leak and the suits, which
+    ran lower (Apollo's about 3.7 to 3.85 psi in EVA; the Smithsonian gives 3.0 psi as the minimum safe oxygen pressure).
+  - *Why low pressure:* weight above all; the hull carries a third of the load, one gas needs one tank and a simple
+    pressure gauge instead of a mixing system, a small leak bleeds slower, and the suits ran at nearly cabin pressure,
+    so a crew could switch to suit oxygen without the bends (SP-4209; Discover, "Why Apollo had a flammable pure
+    oxygen environment"). Apollo's command and service module couldn't hold more than 414 mmHg (8 psi) for
+    structural reasons, which shaped Apollo-Soyuz (SP-4209 ch. 5-2). The 1961 Apollo request asked for a mixed
+    atmosphere; Gilruth signed the change to pure oxygen on 28 August 1962 (Discover); a 1964 NASA paper gives
+    "simplicity of control engineering and minimization of weight" for Mercury's choice.
+  - *The price:* fire, and prebreathing. US crews breathed pure oxygen before launch to wash the nitrogen out of their
+    blood (SP-4209). Apollo 1 (27 January 1967): a pad test in pure oxygen at 16.7 psi, about 2 psi above the outside
+    air, killed Grissom, White and Chaffee; afterwards the cabin launched on 60 % oxygen and 40 % nitrogen, changing to
+    pure oxygen in orbit, and flammable materials were cut (NASA's *Biomedical Results of Apollo*, as quoted). Bondarenko
+    died in 1961 in a low-pressure, oxygen-rich chamber (checked 2026-10-05: at least 50 %, not pure).
+  - *The Soviet price:* a heavier hull for the higher pressure, and prebreathing before a spacewalk. Leonov
+    (18 March 1965) and Belyayev prebreathed oxygen; his suit ran at about 0.4 atm (5.8 psi) and he let it down to about
+    0.27 atm (3.9 psi) to bend it back into the airlock (Smithsonian NASM, 2015; Wikipedia says below the safety limit,
+    the Smithsonian within the limit for the lungs: the sheet says neither).
+  - *Apollo-Soyuz* (July 1975): a docking module served as an airlock between the two atmospheres, and Soyuz lowered
+    its cabin to about two-thirds of an atmosphere with more oxygen, so crews could cross without long prebreathing.
+    Figures vary by source (10 to 10.2 psi; 500 to 540 mmHg; about 30 % oxygen in flight, 40 % in the Soyuz 16 plan),
+    so the sheet says "about two-thirds of an atmosphere".
+  - *To check at the build:* the Mercury capsule's `longDescription` says "about 0.38 bar" (5.5 psi); SP-4209 gives
+    258 mmHg (0.34 bar) for Mercury, Gemini and Apollo alike. Find a primary figure for Mercury before the build and
+    fix whichever is wrong.
 - **Concepts: linking game content to the explainers** (user's idea, 2026-10-07; specified in
   `ui-spec.md` component 19, mocked up the same day). Programs, configurations, steps, rockets and
   capsules each list the real-world concepts behind them; a Concepts section on their screens
