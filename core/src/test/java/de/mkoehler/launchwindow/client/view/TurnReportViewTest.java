@@ -2,7 +2,10 @@ package de.mkoehler.launchwindow.client.view;
 
 import de.mkoehler.launchwindow.content.ContentCatalog;
 import de.mkoehler.launchwindow.content.ContentPackLoader;
+import de.mkoehler.launchwindow.model.RandomEventKind;
 import de.mkoehler.launchwindow.rules.BudgetProgress;
+import de.mkoehler.launchwindow.rules.ContractSettled;
+import de.mkoehler.launchwindow.rules.RandomEventOccurred;
 import de.mkoehler.launchwindow.rules.GoalSettled;
 import de.mkoehler.launchwindow.rules.MissionStepOutcome;
 import de.mkoehler.launchwindow.rules.MissionStepResolved;
@@ -51,6 +54,24 @@ class TurnReportViewTest {
         long sum = TurnReportView.budget(report).stream().mapToLong(TurnReportView.BudgetLine::amount).sum();
         assertEquals(3_000 - 1_600, sum);
         assertEquals(sum, TurnReportView.net(report));
+    }
+
+    @Test
+    void theCardAccountsForEverythingThePassDidToTheFunds() {
+        BudgetProgress.RunningCosts costs = new BudgetProgress.RunningCosts(900, 12, 300, 2, 150, 3, 250, 1_600, 0);
+        // Funding and costs +1,400, a contract fee +2,000, an unexpected cost of 500: +2,900 in all.
+        TurnReport report = new TurnReport(TurnReport.VERSION, 5, 300, 340, 20_000, 22_900, List.of(), List.of(),
+            List.of(new SeasonFundsSettled(1_600, 3_000, 21_400, costs),
+                new ContractSettled(ContractSettled.Kind.PAID, "l-1", "line", "client", "prog", "config", 1, 2_000,
+                    2_000, 0, "m-1", 800, 1),
+                new RandomEventOccurred(RandomEventKind.UNEXPECTED_COST, null, 2.0, 5)));
+        List<TurnReportView.BudgetLine> lines = TurnReportView.budget(report);
+        assertEquals(2_000, lines.stream().filter(line -> line.label().equals("Commercial contracts")).findFirst()
+            .orElseThrow().amount());
+        assertEquals(-500, lines.get(lines.size() - 1).amount());
+        assertEquals("Unexpected cost (random event)", lines.get(lines.size() - 1).label());
+        assertEquals(2_900, lines.stream().mapToLong(TurnReportView.BudgetLine::amount).sum());
+        assertEquals(2_900, TurnReportView.net(report));
     }
 
     @Test

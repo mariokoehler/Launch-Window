@@ -1846,6 +1846,13 @@ and Buildings. With one component or none they stay under R&D. Shot `report.png`
 - departures (retired, resigned, dismissed, perished, lost in an accident),
   hires;
 - the budget: running costs, funding, and a review if one happened (new rate);
+  *(user, 2026-11-04)* it accounts for **what the turn's resolution did to the money**, so its lines add up to
+  the change in funds (its Net is the Funds cell of the strip). After funding and running costs come commercial
+  contracts (fees and refunds), press coverage (a press story's money), signing bonuses (engineers poached), an
+  R&D decision left to the team (its money), and a random event's unexpected cost, which records only its share
+  and so takes what's left; a remainder with no such event reads "Other". The player's own orders (launches,
+  openings, hiring, conversions, decisions made) are applied before the resolution and are on no line: what
+  they spend during the turn is theirs to watch (`TurnReportView.budget`);
 - random events (`newsLog` entries);
 - building upgrades finished.
 
@@ -3677,8 +3684,8 @@ tokens). As built, against the mockup:
   active missions).
 - The score's tooltip is the kit's tooltip with the breakdown as lines; the record table has no
   dotted underline but a thin rule under the score.
-- The report's strip gets an eighth cell beside a waiting decision's seventh; the budget card has no
-  Contracts line yet (the fee is in the Contracts card and the funds). The sixth state, an
+- The report's strip gets an eighth cell beside a waiting decision's seventh; the budget card has a
+  Commercial contracts line since 2026-11-04 (the fee is in the Contracts card too). The sixth state, an
   application whose program closed, reads "Came to nothing".
 - No new tokens and no new `Theme` components: the badge, listing card, switch and stepper are built
   in `ContractsScreen` and `ContractMarker` from the existing tokens.

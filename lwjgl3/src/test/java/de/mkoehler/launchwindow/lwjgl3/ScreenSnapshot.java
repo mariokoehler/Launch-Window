@@ -895,8 +895,25 @@ public final class ScreenSnapshot {
             new de.mkoehler.launchwindow.rules.FundingRaised(1, 2_140, 4_620, 6_020),
             new de.mkoehler.launchwindow.rules.SeasonFundsSettled(5_100, 6_020, 25_000, null)), 21,
             game.session().catalog());
+        report = fundsMoved(report);
         game.session().keepReport(report);
         write(folder, "raise-report.png", new TurnReportScreen(game, report), null);
+    }
+
+    /**
+     * A report built from one state for both sides, with its funds before set back by the season's
+     * settlement and any contract fee, so the budget card adds up to the funds' change as a real pass's would.
+     */
+    private static TurnReport fundsMoved(TurnReport report) {
+        long net = report.events().stream()
+            .filter(de.mkoehler.launchwindow.rules.SeasonFundsSettled.class::isInstance)
+            .map(de.mkoehler.launchwindow.rules.SeasonFundsSettled.class::cast)
+            .mapToLong(settled -> settled.income() - settled.expenses()).sum()
+            + report.events().stream().filter(de.mkoehler.launchwindow.rules.ContractSettled.class::isInstance)
+            .map(de.mkoehler.launchwindow.rules.ContractSettled.class::cast)
+            .mapToLong(de.mkoehler.launchwindow.rules.ContractSettled::funds).sum();
+        return new TurnReport(report.version(), report.gameTurn(), report.prestigeBefore(), report.prestigeAfter(),
+            report.fundsAfter() - net, report.fundsAfter(), report.components(), report.missions(), report.events());
     }
 
     /**
@@ -919,6 +936,7 @@ public final class ScreenSnapshot {
                 2_375),
             new de.mkoehler.launchwindow.rules.SeasonFundsSettled(9_800, 10_800, 25_000, null)), 22,
             game.session().catalog());
+        report = fundsMoved(report);
         game.session().keepReport(report);
         write(folder, "rival-firsts-report.png", new TurnReportScreen(game, report), null);
         TurnReport reviewed = TurnReport.build(behind, behind, List.of(
@@ -926,6 +944,7 @@ public final class ScreenSnapshot {
             new de.mkoehler.launchwindow.rules.BudgetReviewed(2, 5_900, 0, 12_700, 2_375),
             new de.mkoehler.launchwindow.rules.SeasonFundsSettled(9_800, 12_700, 25_000, null)), 32,
             game.session().catalog());
+        reviewed = fundsMoved(reviewed);
         game.session().keepReport(reviewed);
         write(folder, "rival-firsts-review.png", new TurnReportScreen(game, reviewed), null);
     }
@@ -1599,7 +1618,10 @@ public final class ScreenSnapshot {
         de.mkoehler.launchwindow.rules.ContractSettled paid = new de.mkoehler.launchwindow.rules.ContractSettled(
             de.mkoehler.launchwindow.rules.ContractSettled.Kind.PAID, physics.id(), line, "sat-s-physics",
             "sputnik-1", "sputnik-1-orbit", 1, 3_390, 3_390, 0, "m7", 2_113, 3);
-        TurnReport paidReport = TurnReport.build(live, live, List.of(paid), 22, game.session().catalog());
+        // With the season's settlement, so the budget card shows the fee beside it (user, 2026-11-04).
+        TurnReport paidReport = fundsMoved(TurnReport.build(live, live, List.of(paid,
+            new de.mkoehler.launchwindow.rules.SeasonFundsSettled(5_100, 6_020, live.getFunds(), null)), 22,
+            game.session().catalog()));
         write(folder, "contracts-report-paid.png", new TurnReportScreen(game, paidReport), null);
 
         PlayerSnapshot fresh = planningState(11, 25_000);

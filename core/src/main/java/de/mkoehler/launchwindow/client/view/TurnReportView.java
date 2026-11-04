@@ -15,6 +15,11 @@ import de.mkoehler.launchwindow.model.Trait;
 import de.mkoehler.launchwindow.model.TrainingKind;
 import de.mkoehler.launchwindow.rules.BudgetReviewed;
 import de.mkoehler.launchwindow.rules.BuildingUpgraded;
+import de.mkoehler.launchwindow.rules.ContractSettled;
+import de.mkoehler.launchwindow.rules.DecisionSettled;
+import de.mkoehler.launchwindow.rules.OfferSettled;
+import de.mkoehler.launchwindow.rules.OfferResult;
+import de.mkoehler.launchwindow.model.DecisionEffect;
 import de.mkoehler.launchwindow.rules.ExpertTrainingCompleted;
 import de.mkoehler.launchwindow.rules.GoalSettled;
 import de.mkoehler.launchwindow.rules.MissionPrestigeChanged;
@@ -870,18 +875,57 @@ public final class TurnReportView {
         } else {
             lines.add(new BudgetLine("Running costs", -settled.get().expenses()));
         }
+        // Everything else the season pass did to the money (user, 2026-11-04): the card accounts for what
+        // happened to the funds while the player wasn't looking, so its lines add up to the funds' change.
+        // The player's own orders are applied before the pass and are in neither figure.
+        long contracts = events(report, ContractSettled.class).stream().mapToLong(ContractSettled::funds).sum();
+        if (contracts != 0) {
+            lines.add(new BudgetLine("Commercial contracts", contracts));
+        }
+        long press = events(report, PrDutyPerformed.class).stream()
+            .flatMap(pr -> pr.pressEffects() == null ? Stream.empty() : pr.pressEffects().stream())
+            .filter(effect -> effect.kind() == PrPress.EffectKind.FUNDS)
+            .mapToLong(effect -> Math.round(effect.amount())).sum();
+        if (press != 0) {
+            lines.add(new BudgetLine("Press coverage", press));
+        }
+        long bonuses = events(report, OfferSettled.class).stream()
+            .filter(offer -> offer.made() && offer.outcome() == OfferResult.Outcome.JOINED)
+            .mapToLong(OfferSettled::signingBonus).sum();
+        if (bonuses != 0) {
+            lines.add(new BudgetLine("Signing bonuses", -bonuses));
+        }
+        // A decision left open settles on its default in the pass; one decided was paid when decided.
+        long decisions = events(report, DecisionSettled.class).stream()
+            .filter(DecisionSettled::lapsed)
+            .flatMap(decision -> decision.effects() == null ? Stream.empty() : decision.effects().stream())
+            .filter(effect -> effect.kind() == DecisionEffect.Kind.FUNDS)
+            .mapToLong(effect -> Math.round(effect.amount())).sum();
+        if (decisions != 0) {
+            lines.add(new BudgetLine("R&D decision (left to the team)", decisions));
+        }
+        // What no event names an amount for: a random event's unexpected cost (it records a share).
+        long listed = lines.stream().mapToLong(BudgetLine::amount).sum();
+        long rest = report.fundsAfter() - report.fundsBefore() - listed;
+        if (rest != 0) {
+            boolean unexpected = events(report, RandomEventOccurred.class).stream()
+                .anyMatch(event -> event.kind() == RandomEventKind.UNEXPECTED_COST
+                    || event.kind() == RandomEventKind.UNEXPECTED_COST_AND_NO_LAUNCHES);
+            lines.add(new BudgetLine(unexpected ? "Unexpected cost (random event)" : "Other", rest));
+        }
         return lines;
     }
 
     /**
-     * Returns the season's net: funding less running costs.
+     * Returns the season's net: the change in funds over the season pass, every {@link #budget} line
+     * together (the player's own orders came before it).
      *
      * @param report the report
      * @return the net
      */
     public static long net(TurnReport report) {
-        return events(report, SeasonFundsSettled.class).stream().findFirst()
-            .map(settled -> settled.income() - settled.expenses()).orElse(0L);
+        return events(report, SeasonFundsSettled.class).isEmpty() ? 0L
+            : report.fundsAfter() - report.fundsBefore();
     }
 
     /**
