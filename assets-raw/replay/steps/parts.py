@@ -1509,20 +1509,56 @@ def planet_descent_parts():
 AC = (700, 772)
 
 
+def _pod(xf, yc, length, h, twin=True):
+    """A jet engine pod in side view, intake to the right at xf, its middle at yc: the lip, the body tapering to its
+    nozzles, and (twin) the seam between the pair of engines it holds."""
+    xb, t, b = xf - length, yc - h / 2, yc + h / 2
+    out = (f'<path d="M{xf} {t + 2} L{xb + 34} {t} Q{xb + 8} {t + 3} {xb} {yc - h * 0.22} L{xb} {yc + h * 0.22} '
+           f'Q{xb + 8} {b - 3} {xb + 34} {b} L{xf} {b - 2} Z" fill="#ffffff" {LINE} stroke-width="3"/>'
+           f'<ellipse cx="{xf}" cy="{yc}" rx="5" ry="{h / 2 - 2}" fill="#ffffff" {LINE} stroke-width="2.4"/>'
+           f'<path d="M{xb} {yc - h * 0.18} L{xb - 10} {yc - h * 0.12} L{xb - 10} {yc + h * 0.12} L{xb} {yc + h * 0.18}" '
+           f'fill="#ffffff" {LINE} stroke-width="2.4"/>')
+    if twin:
+        out += f'<path d="M{xf - 14} {yc} L{xb + 30} {yc}" fill="none" {LINE} stroke-width="1.6" opacity="0.5"/>'
+    return out
+
+
 def air_parts():
     grey = "rgba(22,48,92,0.22)"
-    body = (f'<path d="M330 380 L400 380 L470 525 L330 525 Z" fill="#ffffff" {LINE} stroke-width="3"/>'
-            f'<path d="M300 525 L1420 525 Q1500 530 1520 560 Q1500 590 1420 595 L300 595 Q280 560 300 525 Z" fill="#ffffff" {LINE} stroke-width="3"/>'
-            + "".join(f'<rect x="{x}" y="538" width="16" height="12" rx="2" fill="#ffffff" {LINE} stroke-width="2"/>' for x in (1420, 1444, 1468))
-            + f'<path d="M640 586 L1080 600 L1100 612 L660 600 Z" fill="url(#hatch)" {LINE} stroke-width="2.4"/>'
-            + "".join(f'<path d="M{x} 604 L{x} 624" fill="none" {LINE} stroke-width="3"/>'
-                      f'<ellipse cx="{x}" cy="636" rx="44" ry="14" fill="#ffffff" {LINE} stroke-width="3"/>' for x in (760, 1000))
-            + f'<path d="M940 604 L940 664" fill="none" {LINE} stroke-width="4"/>')
+    # The B-52 (2026-11-04, redrawn from its proportions: it read as a tube with a flag on it): a long body with an
+    # upswept tail, a stepped cockpit hump and a blunt, drooping nose; a tall fin, its trailing edge near upright; the
+    # near wing seen edge on, swept and drooping toward its tip; its two twin-engine pods hanging ahead of the leading
+    # edge, the outboard one further back by the sweep. The X-15's pylon hangs from the wing by the root, behind the
+    # inboard pod (the X-15 hung between the body and that pod; its fin sat in a notch cut in the carrier's flap).
+    le = lambda x: 524 + (1100 - x) * 52 / 480
+    fin = (f'<path d="M660 521 C610 519 572 508 546 488 L410 314 Q404 308 396 308 L352 308 Q342 309 341 318 L326 521 Z" '
+           f'fill="#ffffff" {LINE} stroke-width="3"/>'
+           f'<path d="M374 322 L360 512" fill="none" {LINE} stroke-width="1.6" opacity="0.6"/>')
+    tail = f'<path d="M478 538 L300 548 L286 556 L334 557 L486 546 Z" fill="url(#hatch)" {LINE} stroke-width="2.4"/>'
+    hull = (f'<path d="M312 520 L1330 520 C1350 520 1362 502 1388 499 L1410 499 L1452 525 C1492 535 1522 549 1530 566 '
+            f'C1530 584 1506 598 1468 600 L560 600 C480 600 380 568 312 548 Z" fill="#ffffff" {LINE} stroke-width="3"/>'
+            f'<path d="M312 521 L298 525 L296 545 L312 548" fill="#ffffff" {LINE} stroke-width="2.4"/>'
+            + "".join(f'<path d="M{x} {y} L{x + 14} {y} L{x + 24} {y + 11} L{x + 10} {y + 11} Z" fill="#ffffff" {LINE} stroke-width="2"/>'
+                      for x, y in ((1408, 504), (1428, 508)))
+            + "".join(f'<rect x="{x}" y="506" width="11" height="9" rx="1.5" fill="#ffffff" {LINE} stroke-width="2"/>'
+                      for x in (1370, 1388))
+            + f'<path d="M1300 522 L1300 598 M760 522 L760 598" fill="none" {LINE} stroke-width="1.6" opacity="0.4"/>')
+    wing = (f'<path d="M1100 524 L620 572 Q588 575 536 580 L550 586 L1070 543 Z" fill="url(#hatch)" {LINE} stroke-width="2.4"/>')
+    pylon = (f'<path d="M920 {le(920) + 6} L1004 {le(1004) + 6} L992 670 L934 670 Z" fill="#ffffff" {LINE} stroke-width="3"/>'
+             f'<path d="M930 650 L996 650" fill="none" {LINE} stroke-width="1.6" opacity="0.5"/>')
+    strut = lambda x0, x1, xp0, xp1, yp: (f'<path d="M{x0} {le(x0) + 4} L{x1} {le(x1) + 4} L{xp1} {yp} L{xp0} {yp} Z" '
+                                          f'fill="url(#hatch)" {LINE} stroke-width="2.4"/>')
+    pods = (strut(968, 1000, 990, 1046, 581) + _pod(1080, 597, 170, 34)
+            + strut(796, 826, 820, 870, 588) + _pod(888, 603, 160, 32))
+    body = fin + hull + tail + wing + pylon + pods
     layer("a-carrier", body, AC)
-    # Its landing gear, its own part so it can be put away once it's flying.
-    layer("a-gear", "".join(f'<path d="M{x} 595 L{x} 754" fill="none" {LINE} stroke-width="4"/>'
-                            f'<circle cx="{x - 12}" cy="760" r="12" fill="#ffffff" {LINE} stroke-width="3"/>'
-                            f'<circle cx="{x + 12}" cy="760" r="12" fill="#ffffff" {LINE} stroke-width="3"/>' for x in (700, 1220)), AC)
+    # Its landing gear, its own part so it can be put away once it's flying: the B-52's tandem trucks under the body,
+    # each with its door.
+    layer("a-gear", "".join(f'<path d="M{x} 600 L{x} 748" fill="none" {LINE} stroke-width="5"/>'
+                            f'<path d="M{x - 18} 748 L{x + 18} 748" fill="none" {LINE} stroke-width="4"/>'
+                            f'<path d="M{x + 8} 602 L{x + 14} 660 L{x + 24} 660 L{x + 20} 602 Z" fill="#ffffff" {LINE} stroke-width="2"/>'
+                            f'<circle cx="{x - 15}" cy="760" r="12" fill="#ffffff" {LINE} stroke-width="3"/>'
+                            f'<circle cx="{x + 15}" cy="760" r="12" fill="#ffffff" {LINE} stroke-width="3"/>' for x in (700, 1220)), AC)
     # A long runway for the takeoff (the camera rides along): flat to the horizon, its marks, low hills.
     g = AC[1]
     hills = " ".join(f"Q{x + 90} {g - (10 + (x * 7) % 23)} {x + 180} {g}" for x in range(-2000, 9000, 180))
@@ -1533,7 +1569,7 @@ def air_parts():
                                 for x in range(-2000, 9000, 220)), (960, g))
     # Smoke from the inboard engine, and the speed lines of the air going by.
     layer("a-smoke", "".join(f'<circle cx="{x}" cy="{y}" r="{r}" fill="{grey}" {LINE} stroke-width="2"/>'
-                             for x, y, r in ((700, 636, 18), (670, 628, 14), (640, 640, 12))), (716, 636))
+                             for x, y, r in ((886, 598, 16), (856, 590, 13), (826, 602, 11))), (900, 597))
     for i in range(1, 9):
         layer(f"a-flow-{i}", f'<path d="M960 540 L1080 540" fill="none" {LINE} stroke-width="2.4" opacity="0.5"/>', (960, 540))
     # The rocket plane's engine flame, back from its nozzle (in the rocket plane's own drawing).
@@ -1581,29 +1617,51 @@ def e154_parts():
           (1170, 820))
     layer("e154-hot", f'<circle cx="980" cy="838" r="16" fill="{GOLD_FILL}" stroke="{GOLD}" stroke-width="3"/>', (980, 838))
 
-    # The carrier, a Soviet four-turboprop bomber (fictional, as the E-154 is), standing on its main wheels at AC.
-    disc = lambda x, y, r: (f'<ellipse cx="{x}" cy="{y}" rx="7" ry="{r}" fill="rgba(22,48,92,0.08)" {LINE} stroke-width="2"/>'
-                            f'<path d="M{x - 6} {y - 5} L{x + 12} {y} L{x - 6} {y + 5} Z" fill="#ffffff" {LINE} stroke-width="2"/>')
-    carrier = (f'<path d="M500 525 L420 392 L370 392 L410 525 Z" fill="#ffffff" {LINE} stroke-width="3"/>'
-               f'<path d="M300 540 Q290 528 330 525 L1400 525 Q1470 530 1500 556 Q1470 588 1400 592 L330 592 Q290 588 300 540 Z" '
-               f'fill="#ffffff" {LINE} stroke-width="3"/>'
-               f'<path d="M1430 540 Q1470 546 1488 558 M1440 572 Q1468 566 1488 558" fill="none" {LINE} stroke-width="2"/>'
-               + "".join(f'<rect x="{x}" y="534" width="14" height="10" rx="2" fill="#ffffff" {LINE} stroke-width="2"/>'
-                         for x in (1360, 1382))
-               + f'<path d="M332 566 L430 562 L442 574 L320 576 Z" fill="url(#hatch)" {LINE} stroke-width="2.4"/>'
-               f'<path d="M780 572 L1080 580 L1100 592 L800 594 Z" fill="url(#hatch)" {LINE} stroke-width="2.4"/>'
-               f'<rect x="900" y="590" width="108" height="24" rx="10" fill="#ffffff" {LINE} stroke-width="3"/>'
-               f'<rect x="1040" y="584" width="92" height="20" rx="9" fill="#ffffff" {LINE} stroke-width="3"/>'
-               + disc(1014, 602, 34) + disc(1138, 594, 30)
-               + f'<path d="M862 592 L862 636" fill="none" {LINE} stroke-width="4"/>')
+    # The carrier, a Soviet four-turboprop bomber (fictional, as the E-154 is), standing on its main wheels at AC. Redrawn
+    # 2026-11-04 after the long-range turboprop bombers of the day: a glazed nose under a stepped cockpit, a tail turret,
+    # a tall fin swept far back, the near wing edge on, and its two near nacelles slung under it, reaching well ahead
+    # of the leading edge with their contra-rotating propellers (two discs each, a spinner in front); the inboard one
+    # runs on back past the wing, where the main wheels fold away. The E-154 hangs on a short pylon under the belly.
+    def nacelle(xf, xb, yc, h, r):
+        t, b = yc - h / 2, yc + h / 2
+        return (f'<path d="M{xf} {yc - h * 0.36} L{xf - 26} {t} L{xb + 70} {t} C{xb + 26} {t + 2} {xb} {yc - 2} {xb - 14} {yc + 4} '
+                f'C{xb + 16} {b} {xb + 40} {b} {xb + 70} {b} L{xf - 26} {b} L{xf} {yc + h * 0.36} Z" fill="#ffffff" {LINE} stroke-width="3"/>'
+                f'<path d="M{xf - 70} {yc + 2} L{xf - 104} {yc + 6}" fill="none" {LINE} stroke-width="4"/>'
+                + "".join(f'<ellipse cx="{x}" cy="{yc}" rx="5" ry="{r}" fill="rgba(22,48,92,0.08)" {LINE} stroke-width="2"/>'
+                          for x in (xf + 8, xf + 22))
+                + f'<path d="M{xf + 2} {yc - 11} L{xf + 26} {yc - 9} Q{xf + 40} {yc - 5} {xf + 46} {yc} Q{xf + 40} {yc + 5} '
+                  f'{xf + 26} {yc + 9} L{xf + 2} {yc + 11} Z" fill="#ffffff" {LINE} stroke-width="2.4"/>')
+    le = lambda x: 548 + (1060 - x) * 24 / 460
+    fin = (f'<path d="M660 526 C600 524 560 514 528 494 L436 338 Q432 332 424 332 L380 332 Q372 333 372 340 L340 526 Z" '
+           f'fill="#ffffff" {LINE} stroke-width="3"/>'
+           f'<path d="M398 346 L368 516" fill="none" {LINE} stroke-width="1.6" opacity="0.6"/>')
+    tail = f'<path d="M488 548 L316 562 L304 568 L352 568 L496 556 Z" fill="url(#hatch)" {LINE} stroke-width="2.4"/>'
+    hull = (f'<path d="M330 525 L1384 525 C1400 525 1408 513 1424 511 L1442 511 L1468 529 C1500 535 1518 548 1522 561 '
+            f'C1518 579 1496 592 1460 592 L560 592 C480 592 390 580 330 568 Q300 562 296 547 Q300 528 330 525 Z" '
+            f'fill="#ffffff" {LINE} stroke-width="3"/>'
+            f'<path d="M318 528 Q308 547 318 566 M306 534 L330 534 M304 558 L330 560" fill="none" {LINE} stroke-width="1.6" opacity="0.6"/>'
+            f'<ellipse cx="540" cy="546" rx="12" ry="8" fill="#ffffff" {LINE} stroke-width="2"/>'
+            f'<path d="M1480 534 Q1494 560 1484 590 M1500 540 Q1510 560 1502 584" fill="none" {LINE} stroke-width="1.6" opacity="0.6"/>'
+            + "".join(f'<path d="M{x} {y} L{x + 12} {y} L{x + 21} {y + 10} L{x + 9} {y + 10} Z" fill="#ffffff" {LINE} stroke-width="2"/>'
+                      for x, y in ((1430, 515), (1447, 520)))
+            + "".join(f'<rect x="{x}" y="516" width="10" height="8" rx="1.5" fill="#ffffff" {LINE} stroke-width="2"/>'
+                      for x in (1396, 1412))
+            + f'<path d="M1300 527 L1300 590 M740 527 L740 590" fill="none" {LINE} stroke-width="1.6" opacity="0.4"/>')
+    wing = f'<path d="M1060 547 L600 571 Q570 573 520 577 L534 583 L1030 565 Z" fill="url(#hatch)" {LINE} stroke-width="2.4"/>'
+    hook = (f'<path d="M842 592 L892 592 L882 638 L850 638 Z" fill="#ffffff" {LINE} stroke-width="3"/>'
+            f'<path d="M848 620 L886 620" fill="none" {LINE} stroke-width="1.6" opacity="0.5"/>')
+    carrier = fin + hull + tail + hook + wing + nacelle(1160, 960, 578, 36, 60) + nacelle(1040, 900, 592, 30, 54)
     layer("su-carrier", carrier, AC)
-    layer("su-gear", "".join(f'<path d="M{x} {y0} L{x} 754" fill="none" {LINE} stroke-width="4"/>'
-                             f'<circle cx="{x - 12}" cy="760" r="12" fill="#ffffff" {LINE} stroke-width="3"/>'
-                             f'<circle cx="{x + 12}" cy="760" r="12" fill="#ffffff" {LINE} stroke-width="3"/>'
-                             for x, y0 in ((1086, 604), (1420, 592))), AC)
+    # Its wheels: the main bogie folding back into the inboard nacelle, the nose gear's pair under the cockpit.
+    layer("su-gear", "".join(f'<path d="M{x} {y0} L{x} 748" fill="none" {LINE} stroke-width="5"/>'
+                             f'<path d="M{x - 18} 748 L{x + 18} 748" fill="none" {LINE} stroke-width="4"/>'
+                             f'<circle cx="{x - 15}" cy="760" r="12" fill="#ffffff" {LINE} stroke-width="3"/>'
+                             f'<circle cx="{x + 15}" cy="760" r="12" fill="#ffffff" {LINE} stroke-width="3"/>'
+                             for x, y0 in ((1086, 596), (1420, 592))), AC)
     grey = "rgba(22,48,92,0.22)"
+    # Smoke from the inboard engine's exhaust, on the nacelle's side, trailing back.
     layer("su-smoke", "".join(f'<circle cx="{x}" cy="{y}" r="{r}" fill="{grey}" {LINE} stroke-width="2"/>'
-                    for x, y, r in ((890, 604, 18), (860, 596, 14), (830, 608, 12))), (906, 604))
+                    for x, y, r in ((1036, 586, 16), (1006, 578, 13), (976, 590, 11))), (1052, 584))
 
 
 def departure_parts():

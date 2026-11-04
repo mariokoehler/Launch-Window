@@ -392,6 +392,10 @@ leading to satellite navigation.
   ramjet under its tail. On 15 November 1967 Mike Adams's X-15 drifted off heading at its peak, spun, and broke up in
   the pull-out on the way down. Before landing the pilot dropped the lower half of the ventral fin, which came down on
   its own parachute, so the skids could reach the lakebed. The replay's `x15-peak`, `x15-fast` and `x15-descent`.
+- **The X-15's mother ships** (2026-11-04, from memory; verify before a note uses it): two B-52s, NASA's NB-52A
+  "The High and Mighty One" and NB-52B "Balls 8", carried it on a pylon under the right wing, between the body and the
+  inboard engine pod; a notch was cut in the wing's flap to clear the X-15's fin. The NB-52B went on dropping research
+  craft until 2004. The replay's carrier (`a-carrier`) follows that arrangement.
 - **Astronaut wings from a rocket plane** (2026-10-26, from Wikipedia's X-15 flight list, NASA and Space.com): of the
   X-15's 199 flights, 13 by eight pilots went above 50 miles, the US Air Force's line for an astronaut; the five Air
   Force pilots got their wings at the time, and the three NASA civilians only in August 2005: Bill Dana in person, Joe

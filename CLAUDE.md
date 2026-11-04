@@ -210,7 +210,8 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
 - **Vehicles as themselves in the replay** (user, 2026-10-17, `ui-spec.md` §4.7.3): Surveyor, Pioneer Venus
   Multiprobe (its own six clips), Viking's separation, PrOP-M on Mars 2's third season, the X-15's peak, fast run and
   descent (and a drop that clears the carrier), and a slower Mars orbit insertion (`loi.jsx`'s `SLOW`; every approach now
-  arrives at the insertion's speed). Client only.
+  arrives at the insertion's speed). Client only. Both air-launch carriers were redrawn from their real proportions (user,
+  2026-11-04, `parts.py`'s `a-carrier` and `su-carrier`): the B-52 and a Tu-95-like turboprop. Client only.
 - **The OKB-MiG E-154 is the Soviet X-15** (user, 2026-10-17, `design.md` §1): the converter rebuilds it from the X-15
   (`baspm_pack.py`'s `e154_from_x15`), three configurations where it had five (187 in the pack), its own art carried
   over, its speed flight's patch made (2026-10-17). Its clips are the X-15's timelines with its own craft
