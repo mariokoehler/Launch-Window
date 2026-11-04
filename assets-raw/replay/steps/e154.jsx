@@ -5,5 +5,7 @@ var CRAFT = {
     plane: "e154-plane", skid: "e154-gear", nose: "e154-nose", flame: "e154-flame", carrier: "su-carrier", gear: "su-gear", smoke: "su-smoke",
     ventral: "e154-strake", shock: "e154-shock", heat: "e154-heat", hot: "e154-hot", rcsUp: "e154-rcs-up", rcsDown: "e154-rcs-down",
     hang: [760, 684], V: [826, 847],
+    // Its carrier's pivot, at its main wheels (2026-11-04: further back than the B-52's forward pair).
+    ac: [820, 772],
     x15: false
 };

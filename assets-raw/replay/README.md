@@ -242,7 +242,7 @@ Each folder's `build/` is regenerated on every run and stays out of git.
     Both carriers redrawn (user, 2026-11-04; the tube with a flat fin read as comical): the B-52 with its tall fin,
     stepped cockpit, drooping swept wing, two twin-engine pods ahead of the leading edge (`_pod`) and the X-15's pylon
     behind the inboard one; the Soviet `su-carrier` with a glazed nose, tail turret and long nacelles with contra-rotating
-    props. Pivot, gear and hang points are unchanged; `a-smoke` and `su-smoke` moved to the inboard engines' exhausts.
+    props, its main wheels near the balance point behind the wing (its own pivot, `e154.jsx`'s `ac`). The X-15's pivot, gear and hang points are unchanged; `a-smoke` and `su-smoke` moved to the inboard engines' exhausts.
   - **Checks** (`check.py`, after `build.py`): `python check.py spoilers <step> ...` says where the
     variants first differ before their reveals (glitch and failure share their first sign of trouble,
     so every pair should part only at the moment that decides it), and `python check.py handoffs

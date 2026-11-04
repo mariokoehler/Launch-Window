@@ -1617,11 +1617,14 @@ def e154_parts():
           (1170, 820))
     layer("e154-hot", f'<circle cx="980" cy="838" r="16" fill="{GOLD_FILL}" stroke="{GOLD}" stroke-width="3"/>', (980, 838))
 
-    # The carrier, a Soviet four-turboprop bomber (fictional, as the E-154 is), standing on its main wheels at AC. Redrawn
+    # The carrier, a Soviet four-turboprop bomber (fictional, as the E-154 is), standing on its main wheels at SC. Redrawn
     # 2026-11-04 after the long-range turboprop bombers of the day: a glazed nose under a stepped cockpit, a tail turret,
     # a tall fin swept far back, the near wing edge on, and its two near nacelles slung under it, reaching well ahead
     # of the leading edge with their contra-rotating propellers (two discs each, a spinner in front); the inboard one
     # runs on back past the wing, where the main wheels fold away. The E-154 hangs on a short pylon under the belly.
+    # The main wheels stand near the balance point, behind the wing (2026-11-04: under the nacelle's front it looked
+    # ready to sit back on its tail), so its pivot is its own, SC, not the B-52's AC (e154.jsx's ac).
+    SC = (820, 772)
     def nacelle(xf, xb, yc, h, r):
         t, b = yc - h / 2, yc + h / 2
         return (f'<path d="M{xf} {yc - h * 0.36} L{xf - 26} {t} L{xb + 70} {t} C{xb + 26} {t + 2} {xb} {yc - 2} {xb - 14} {yc + 4} '
@@ -1650,14 +1653,14 @@ def e154_parts():
     wing = f'<path d="M1060 547 L600 571 Q570 573 520 577 L534 583 L1030 565 Z" fill="url(#hatch)" {LINE} stroke-width="2.4"/>'
     hook = (f'<path d="M842 592 L892 592 L882 638 L850 638 Z" fill="#ffffff" {LINE} stroke-width="3"/>'
             f'<path d="M848 620 L886 620" fill="none" {LINE} stroke-width="1.6" opacity="0.5"/>')
-    carrier = fin + hull + tail + hook + wing + nacelle(1160, 960, 578, 36, 60) + nacelle(1040, 900, 592, 30, 54)
-    layer("su-carrier", carrier, AC)
+    carrier = fin + hull + tail + hook + wing + nacelle(1160, 760, 578, 36, 60) + nacelle(1040, 900, 592, 30, 54)
+    layer("su-carrier", carrier, SC)
     # Its wheels: the main bogie folding back into the inboard nacelle, the nose gear's pair under the cockpit.
     layer("su-gear", "".join(f'<path d="M{x} {y0} L{x} 748" fill="none" {LINE} stroke-width="5"/>'
                              f'<path d="M{x - 18} 748 L{x + 18} 748" fill="none" {LINE} stroke-width="4"/>'
                              f'<circle cx="{x - 15}" cy="760" r="12" fill="#ffffff" {LINE} stroke-width="3"/>'
                              f'<circle cx="{x + 15}" cy="760" r="12" fill="#ffffff" {LINE} stroke-width="3"/>'
-                             for x, y0 in ((1086, 596), (1420, 592))), AC)
+                             for x, y0 in ((820, 596), (1420, 592))), SC)
     grey = "rgba(22,48,92,0.22)"
     # Smoke from the inboard engine's exhaust, on the nacelle's side, trailing back.
     layer("su-smoke", "".join(f'<circle cx="{x}" cy="{y}" r="{r}" fill="{grey}" {LINE} stroke-width="2"/>'

@@ -1,7 +1,8 @@
 // The air launch's scenes (after moon.jsx, for the lamp): the carrier plane with the rocket plane on a pylon
 // under its wing, seen from further out (0.7), the camera riding along with the carrier. The rocket plane
 // (w-plane at 0.6) is placed from the carrier's pose: where it hangs, plus its own offset once dropped.
-var AC = [700, 772], WS = [830, 880], HANG = K.hang, XK = 0.6, ZOOM = 0.7;
+// AC: the carrier's pivot, at its main wheels; a craft's own carrier may stand elsewhere (e154.jsx's ac).
+var AC = K.ac || [700, 772], WS = [830, 880], HANG = K.hang, XK = 0.6, ZOOM = 0.7;
 
 // ground: the runway (takeoff) or clouds below (in flight). Then the carrier, the rocket plane and its
 // flame, the smoke, the speed lines.
