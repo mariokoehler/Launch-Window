@@ -509,7 +509,7 @@ On the right:
         the pack has no "Lunar slingshot" or "transit" step); Mars's air "less than 1 %" of Earth's,
         not "about 1 %"; the X-15's height "about 108 km", not 107.8 (354,200 ft).
     - **E-31 "Cabin air"** (topic: Breathing in space) *(the user's idea, 2026-11-04; brief written and every
-      figure checked the same day, `design.md` §1.1; not yet mocked up)*. Same look as E-01 to E-30, one new canvas
+      figure checked the same day, `design.md` §1.1; mocked up the same day, not built)*. Same look as E-01 to E-30, one new canvas
       row on `Launch Window — Explainers`, two sheets. Id `cabin-air`. Summary: "Why the American capsules breathed
       pure oxygen at a third of the pressure, why the Soviet ones carried air, and what each choice cost."
       - **Sheet 1, *A third of an atmosphere*** (scale "Pressures to scale"). Drawing: pressure as height, one scale
@@ -549,6 +549,16 @@ On the right:
           atmosphere with more oxygen, so the crews could cross without long prebreathing).
         - In Launch Window: "Spacewalk steps: an American crew opens the hatch from its own cabin; a Soviet one goes
           out through an airlock or the orbital module."
+      - **Mocked up (2026-11-04)** on `Launch Window — Explainers`, a row of its own under the concept chips
+        (`CabinAir`, `CabinAirPrice`), in E-20 to E-30's template, every figure as written. The row's yellow note lists
+        what changed (all **unconfirmed**): the points join the brief's lists into sentences ("with", "It is not" and "in"
+        added); sheet 1's dashed line starts from the air's oxygen standing alone (a dashed outline 0.21 tall beside the
+        air column), since the oxygen block's own top sits at 0.99 with the nitrogen under it, and an arrow shows the 0.34
+        above it; the last 0.01 of the air column is an unlabelled grey sliver; the grey cap is labelled once
+        ("Water vapour and carbon dioxide: about 0.11"), with keys "Grey:" and "Gold: the oxygen left"; the red line's text
+        runs on three lines; the scale has only "0" and "1 atm"; the drawing headings, "Cone", "Sphere", "Thin wall" and
+        "Thicker wall" are new short labels; the timeline's dots are red for the two fires, navy for Leonov, gold for
+        Apollo-Soyuz. Labels over hatching carry the halo outline. Nothing was cut.
       - **Concept chip** (proposed, unconfirmed): "Cabin air" → E-31 sheet 1 on the capsules (`mercury-capsule`,
         `gemini-capsule`, `apollo-csm`, `vostok-capsule`, `voskhod-capsule`, `soyuz-7k-ok-spacecraft`,
         `soyuz-7k-l1-spacecraft`, `soyuz-7k-lok-spacecraft`), within `ConceptsTest`'s six-chip limit.
