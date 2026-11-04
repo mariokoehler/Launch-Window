@@ -172,6 +172,9 @@ abstract class ChromeScreen extends SessionScreen {
     private static final float ROCKET_ART_WIDTH = 140f;
     private static final float ROCKET_ART_HEIGHT = 90f;
 
+    /** Where a rocket row's text column starts, past the row's padding and the art: for lines under the row. */
+    protected static final float ROCKET_TEXT_INDENT = Theme.SPACE_4 + ROCKET_ART_WIDTH + Theme.SPACE_4;
+
     protected TextButton actionButton(String text, Theme.ButtonKind kind, Runnable action) {
         return onClick(ui.button(text, kind), action);
     }

@@ -168,6 +168,12 @@ public final class OpenRocketScreen extends ChromeScreen {
         row.add(action).width(240f).right();
         Table block = new Table();
         block.add(row).growX().row();
+        // Its long description, as the foreign file shows it, on a line of its own (user, 2026-11-04).
+        String description = ContentNames.longDescription(rocket.id());
+        if (description != null) {
+            block.add(ui.paragraph(description, Theme.TextStyle.BODY_SM, Theme.INK_MUTED)).growX().padLeft(ROCKET_TEXT_INDENT)
+                .padRight(Theme.SPACE_4).padBottom(Theme.SPACE_3).row();
+        }
         List<Concepts.Concept> concepts = Concepts.standard().forComponent(rocket.id());
         if (!concepts.isEmpty()) {
             // Six chips don't fit in the row, so they get a line of their own, under the name.

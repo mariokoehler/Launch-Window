@@ -124,7 +124,15 @@ public final class RocketProgramsScreen extends ChromeScreen {
                 Theme.NoticeKind.INFO)));
         }
         row.add(close).width(120f).right();
-        return row;
+        Table block = new Table();
+        block.add(row).growX().row();
+        // Its long description, as the foreign file shows it, on a line of its own (user, 2026-11-04).
+        String description = ContentNames.longDescription(rocket.id());
+        if (description != null) {
+            block.add(ui.paragraph(description, Theme.TextStyle.BODY_SM, Theme.INK_MUTED)).growX().padLeft(ROCKET_TEXT_INDENT)
+                .padRight(Theme.SPACE_4).padBottom(Theme.SPACE_3);
+        }
+        return block;
     }
 
     private Table chip(String text) {

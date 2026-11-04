@@ -1953,6 +1953,11 @@ picture at 140 x 90, from `assets/ui/rockets/<id>.jpg` (`make_content_art.py`, f
 `assets-raw/Rocket Programs/`). A rocket without art yet keeps its skill glyph in the same space,
 so the columns line up (`ChromeScreen.addRocketPicture`).
 
+*Long descriptions (user, 2026-11-04, built straight in libGDX):* both lists (§4.5.1 and §4.5.2) show each
+rocket's long description (`longDescription` in `strings.json`, written for the foreign file, §4.15) on a line
+of its own under the row, aligned with the name (`ChromeScreen.ROCKET_TEXT_INDENT`); on §4.5.1 the Concepts line
+follows it. Shots: `vab-open*.png`, `vab-manage*.png`, `standard-vab-manage.png`.
+
 **4.5.2 Manage rocket programs.** The open rockets with reliability bars, which
 in-flight missions use them, upkeep, and links to Rocket R&D. **Close** needs a
 confirmation: "kept with its reliability, no upkeep; reopening costs the creation
