@@ -520,7 +520,7 @@ Sources abbreviated below:
 - Unknowns about swallowing and vision in weightlessness: widely documented concern of the period (e.g. Glenn ate applesauce on MA-6 to test it); general phrasing kept.
 
 ## mercury-capsule
-- Length 3.3 m, pure oxygen at 5.5 psi (0.38 bar), heaviest flight version about 1,400 kg, hydrogen peroxide thrusters, three retrorockets, landing bag deployed by lowering the heat shield: WP-MercSC.
+- Length 3.3 m, pure oxygen at 5 psi (0.34 bar; WP-MercSC says 5.5 psi, but NASA's own papers give 5 psia, corrected 2026-11-04 for E-31), heaviest flight version about 1,400 kg, hydrogen peroxide thrusters, three retrorockets, landing bag deployed by lowering the heat shield: WP-MercSC.
 - Base diameter: WP-MercSC says 6.0 ft (1.8 m); Smithsonian lists 73 in (1.85 m) (https://si.edu/object/capsule-mercury-17:nasm_A19680570000). Rounded to "about 1.9 m"; could read "about 1.85 m" if preferred.
 - Ablative fiberglass heat shield for orbital flights: WP-MercSC, NASA NTRS heat shield papers (https://ntrs.nasa.gov/citations/19660006061).
 - Contoured couch "shaped to his body": well documented (individually molded couches); not separately sourced.

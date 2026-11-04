@@ -51,7 +51,7 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
   is in `design.md` §1.1). The chips are mocked up on the same canvas's bottom row and built in
   libGDX (2026-10-07); their look is confirmed. E-20 to E-30, for the full content pack, are
   built and linked too (2026-10-09). E-31 "Cabin air" (the user's idea, 2026-11-04): facts checked
-  (`design.md` §1.1), brief and mockup prompt in `ui-spec.md` component 18; awaiting the mockup.
+  (`design.md` §1.1), mocked up and built the same day; its chip sits on the six first crewed programs.
 - **People worth caring about** (`design.md` §2.2(d), the user's idea, 2026-10-07): team chemistry
   from pair rapport and hidden traits, ambitions, career records, later poaching. The rules for
   phases 1 to 3 and the personal traits are built (2026-10-07), and so are their screens, from

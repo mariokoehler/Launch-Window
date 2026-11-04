@@ -66,7 +66,8 @@ class ConceptsTest {
         // The mockups' lists, re-homed (2026-10-07) when E-06 to E-19 got their explainers: flight ideas
         // on steps, capsule ideas on capsules, rocket ideas on rockets.
         Concepts concepts = concepts();
-        assertEquals(List.of("Orbital speed", "Retrofire", "One-shot retrorocket", "Steering jets", "Launch escape"),
+        assertEquals(List.of("Orbital speed", "Retrofire", "One-shot retrorocket", "Steering jets", "Launch escape",
+            "Cabin air"),
             labels(concepts.forProgram(PACK.program("vostok").orElseThrow())));
         assertEquals(List.of("Orbit", "Retrofire", "Heat shield", "The odds multiply", "Land or sea"),
             labels(concepts.forConfiguration(PACK.missionConfiguration("vostok-orbital").orElseThrow())));

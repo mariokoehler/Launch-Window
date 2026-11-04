@@ -246,7 +246,7 @@ engineering problem or tidbit, note it here the same session.
   set to cross at 84 km; a tenth to ten times that loading crosses between 69 and 91 km, which is why
   the line hardly depends on the craft. At 50 km the air is about 1,200 times thinner than at sea level.
 - **E-31 "Cabin air"** (the user's idea, 2026-11-04; the brief and the mockup prompt in `ui-spec.md` component 18,
-  not yet mocked up): why the American capsules breathed pure oxygen at a third of an atmosphere, what partial
+  mocked up and built the same day): why the American capsules breathed pure oxygen at a third of an atmosphere, what partial
   pressure is, and why the share was set well above the air's. **Corrections to the user's account:**
   - *Not both sides.* Only the American capsules (Mercury, Gemini, Apollo) flew pure oxygen at low pressure. Vostok,
     Voskhod and Soyuz carried a nitrogen-oxygen mix like air at about one atmosphere (760 mmHg, about 80/20; NASA
@@ -283,9 +283,10 @@ engineering problem or tidbit, note it here the same session.
     its cabin to about two-thirds of an atmosphere with more oxygen, so crews could cross without long prebreathing.
     Figures vary by source (10 to 10.2 psi; 500 to 540 mmHg; about 30 % oxygen in flight, 40 % in the Soyuz 16 plan),
     so the sheet says "about two-thirds of an atmosphere".
-  - *To check at the build:* the Mercury capsule's `longDescription` says "about 0.38 bar" (5.5 psi); SP-4209 gives
-    258 mmHg (0.34 bar) for Mercury, Gemini and Apollo alike. Find a primary figure for Mercury before the build and
-    fix whichever is wrong.
+  - *Mercury's cabin, settled at the build:* the Mercury capsule's `longDescription` said "about 0.38 bar" (5.5 psi,
+    from a secondary source); SP-4209 gives 258 mmHg (0.34 bar) for Mercury, Gemini and Apollo alike, and NASA's own
+    papers give Mercury 5 psia of nearly pure oxygen (NTRS 19620004471, 19640020431, 19760005585). The description now
+    says "about 0.34 bar" in both packs.
 - **Concepts: linking game content to the explainers** (user's idea, 2026-10-07; specified in
   `ui-spec.md` component 19, mocked up the same day). Programs, configurations, steps, rockets and
   capsules each list the real-world concepts behind them; a Concepts section on their screens

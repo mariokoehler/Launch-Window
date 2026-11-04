@@ -67,6 +67,8 @@
     {"id": "launch-escape", "label": "Launch escape", "explainer": "launch-escape", "sheet": 1,
       "components": ["vostok-capsule", "mercury-capsule", "gemini-capsule", "apollo-csm",
         "soyuz-7k-ok-spacecraft", "soyuz-7k-l1-spacecraft", "soyuz-7k-lok-spacecraft"]},
+    {"id": "cabin-air", "label": "Cabin air", "explainer": "cabin-air", "sheet": 1,
+      "programs": ["vostok", "mercury", "voskhod", "gemini", "apollo-earth-orbit", "soyuz-7k-ok"]},
     {"id": "land-or-sea", "label": "Land or sea", "explainer": "coming-home", "sheet": 1,
       "steps": ["descent-and-landing", "descent-and-splashdown", "landing-and-recovery"]},
     {"id": "tracking", "label": "Tracking", "explainer": "tracking", "sheet": 1,

@@ -1,0 +1,321 @@
+{
+ "width": 1060,
+ "height": 660,
+ "labels": [
+  {
+   "x": 24.0,
+   "y": 44.0,
+   "anchor": "start",
+   "kind": "d-head",
+   "size": 13.0,
+   "color": "#16305c",
+   "text": "A · Air and the capsule"
+  },
+  {
+   "x": 544.0,
+   "y": 44.0,
+   "anchor": "start",
+   "kind": "d-head",
+   "size": 13.0,
+   "color": "#16305c",
+   "text": "B · Inside the lungs"
+  },
+  {
+   "x": 48.0,
+   "y": 572.0,
+   "anchor": "end",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "0"
+  },
+  {
+   "x": 48.0,
+   "y": 102.0,
+   "anchor": "end",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "1 atm"
+  },
+  {
+   "x": 148.0,
+   "y": 146.7,
+   "anchor": "middle",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "Oxygen"
+  },
+  {
+   "x": 148.0,
+   "y": 164.7,
+   "anchor": "middle",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "0.21"
+  },
+  {
+   "x": 148.0,
+   "y": 380.0,
+   "anchor": "middle",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "Nitrogen"
+  },
+  {
+   "x": 148.0,
+   "y": 398.0,
+   "anchor": "middle",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "0.78"
+  },
+  {
+   "x": 148.0,
+   "y": 590.0,
+   "anchor": "middle",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "Air at sea level"
+  },
+  {
+   "x": 148.0,
+   "y": 606.0,
+   "anchor": "middle",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "1 atm"
+  },
+  {
+   "x": 342.0,
+   "y": 432.2,
+   "anchor": "middle",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "Pure oxygen"
+  },
+  {
+   "x": 342.0,
+   "y": 450.2,
+   "anchor": "middle",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "0.34"
+  },
+  {
+   "x": 342.0,
+   "y": 590.0,
+   "anchor": "middle",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "An American"
+  },
+  {
+   "x": 342.0,
+   "y": 606.0,
+   "anchor": "middle",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "capsule, 0.34 atm"
+  },
+  {
+   "x": 426.0,
+   "y": 427.0,
+   "anchor": "start",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "More oxygen than"
+  },
+  {
+   "x": 426.0,
+   "y": 444.0,
+   "anchor": "start",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "at sea level,"
+  },
+  {
+   "x": 426.0,
+   "y": 461.0,
+   "anchor": "start",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "a third of the push"
+  },
+  {
+   "x": 648.0,
+   "y": 445.2,
+   "anchor": "middle",
+   "kind": "d-lbl-gold",
+   "size": 14.0,
+   "color": "#8a5d12",
+   "text": "0.13"
+  },
+  {
+   "x": 648.0,
+   "y": 590.0,
+   "anchor": "middle",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "Air at"
+  },
+  {
+   "x": 648.0,
+   "y": 606.0,
+   "anchor": "middle",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "sea level"
+  },
+  {
+   "x": 792.0,
+   "y": 459.3,
+   "anchor": "middle",
+   "kind": "d-lbl-gold",
+   "size": 14.0,
+   "color": "#8a5d12",
+   "text": "0.10"
+  },
+  {
+   "x": 792.0,
+   "y": 590.0,
+   "anchor": "middle",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "Pure oxygen"
+  },
+  {
+   "x": 792.0,
+   "y": 606.0,
+   "anchor": "middle",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "at 0.21 atm"
+  },
+  {
+   "x": 936.0,
+   "y": 402.9,
+   "anchor": "middle",
+   "kind": "d-lbl-gold",
+   "size": 14.0,
+   "color": "#8a5d12",
+   "text": "0.22"
+  },
+  {
+   "x": 936.0,
+   "y": 590.0,
+   "anchor": "middle",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "The"
+  },
+  {
+   "x": 936.0,
+   "y": 606.0,
+   "anchor": "middle",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "capsule"
+  },
+  {
+   "x": 792.0,
+   "y": 441.3,
+   "anchor": "middle",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "Never flown"
+  },
+  {
+   "x": 560.0,
+   "y": 335.2,
+   "anchor": "start",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "Water vapour and"
+  },
+  {
+   "x": 560.0,
+   "y": 352.2,
+   "anchor": "start",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "carbon dioxide: about 0.11"
+  },
+  {
+   "x": 560.0,
+   "y": 317.2,
+   "anchor": "start",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "Grey:"
+  },
+  {
+   "x": 1040.0,
+   "y": 80.0,
+   "anchor": "end",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "Gold: the oxygen left"
+  },
+  {
+   "x": 410.0,
+   "y": 493.79,
+   "anchor": "start",
+   "kind": "d-lbl-red",
+   "size": 14.0,
+   "color": "#c6402b",
+   "text": "0.06 atm: below this,"
+  },
+  {
+   "x": 410.0,
+   "y": 510.79,
+   "anchor": "start",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "water boils at body heat"
+  },
+  {
+   "x": 410.0,
+   "y": 526.8,
+   "anchor": "start",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "(about 19 km up)"
+  },
+  {
+   "x": 24.0,
+   "y": 640.0,
+   "anchor": "start",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "Pressures to scale · 1 atm = the tallest column"
+  }
+ ]
+}

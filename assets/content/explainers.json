@@ -1480,6 +1480,55 @@
           "inGame": "Lunar missions come home in the Approach and reentry step, and the Gemini lunar-speed reentry and Apollo lunar-speed reentry goals test the heat shield at that speed."
         }
       ]
+    },
+    {
+      "id": "cabin-air",
+      "code": "E-31",
+      "title": "Cabin air",
+      "topic": "Breathing in space",
+      "summary": "Why the American capsules breathed pure oxygen at a third of the pressure, why the Soviet ones carried air, and what each choice cost.",
+      "sheets": [
+        {
+          "title": "A third of an atmosphere",
+          "drawing": "e31-1",
+          "scale": "Pressures to scale",
+          "points": [
+            {
+              "title": "What partial pressure is",
+              "text": "Air pushes with all its gases at once. Each gas’s part of the push is its partial pressure. At sea level oxygen pushes with 0.21 of an atmosphere, and that, not the total, is what the lungs need."
+            },
+            {
+              "title": "Why a third",
+              "text": "The hull holds a third of the load, so it can be lighter. One gas means one tank and one gauge, with no mixing, and a leak bleeds slower. Mercury chose it, and Gemini and Apollo kept it."
+            },
+            {
+              "title": "Why more oxygen than the air has",
+              "text": "In the lungs, water vapour and carbon dioxide always take their share, so pure oxygen at the air’s 0.21 would leave less in the lungs than a sea-level breath. 0.34 leaves more, with a margin for a leak and for the suits, which ran lower still. It is not, as often said, to stop blood boiling: that takes under 0.06 atm."
+            }
+          ],
+          "inGame": "The Mercury, Gemini and Apollo capsules breathe pure oxygen at about a third of an atmosphere; Vostok, Voskhod and Soyuz carry air at sea-level pressure."
+        },
+        {
+          "title": "Two answers, and their price",
+          "drawing": "e31-2",
+          "scale": "Not to scale",
+          "points": [
+            {
+              "title": "Light, but it burns",
+              "text": "In pure oxygen almost anything burns fiercely. On 27 January 1967 a test on the pad in pure oxygen at a little above outside pressure killed Grissom, White and Chaffee in Apollo 1. Afterwards Apollo launched on 60 % oxygen and 40 % nitrogen, changed to pure oxygen in orbit, and lost most of what could burn."
+            },
+            {
+              "title": "Heavy, but it’s air",
+              "text": "The Soviet cabins held a full atmosphere of air: no special fire danger and no prebreathing before launch, but a stronger, heavier hull. A spacewalk meant breathing pure oxygen first, then a suit at less than half an atmosphere. Leonov, in March 1965, had to let his suit down further still to bend it back into the airlock."
+            },
+            {
+              "title": "Meeting in the middle",
+              "text": "In July 1975 Apollo and Soyuz docked with a module between them as an airlock, and Soyuz lowered its cabin to about two-thirds of an atmosphere with more oxygen, so the crews could cross without long prebreathing."
+            }
+          ],
+          "inGame": "Spacewalk steps: an American crew opens the hatch from its own cabin; a Soviet one goes out through an airlock or the orbital module."
+        }
+      ]
     }
   ]
 }

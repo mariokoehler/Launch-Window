@@ -414,7 +414,7 @@
       "name": "Mercury capsule",
       "description": "A small cone for one astronaut, with an escape tower on top, a heat shield at the base and a pack of retrorockets strapped over it.",
       "historyNote": "The first Mercury capsules had two small portholes and a side hatch held by 70 bolts, and the astronaut was meant to climb out through the nose. The astronauts pushed for a real window above their heads and a hatch they could blow off with explosive charges. Both arrived with Liberty Bell 7, the second crewed capsule.",
-      "longDescription": "A cone about 3.3 m tall and 1.9 m across the base, holding one astronaut in pure oxygen at about 0.38 bar. The heaviest flight version weighed about 1.4 tonnes. An escape tower could pull it off a failing rocket, hydrogen peroxide thrusters turned it, and three solid retrorockets in a pack over the heat shield slowed it for reentry. The fiberglass shield, charring away to carry off the heat, then dropped on a skirt that filled with air to cushion the splashdown."
+      "longDescription": "A cone about 3.3 m tall and 1.9 m across the base, holding one astronaut in pure oxygen at about 0.34 bar. The heaviest flight version weighed about 1.4 tonnes. An escape tower could pull it off a failing rocket, hydrogen peroxide thrusters turned it, and three solid retrorockets in a pack over the heat shield slowed it for reentry. The fiberglass shield, charring away to carry off the heat, then dropped on a skirt that filled with air to cushion the splashdown."
     },
     "r7-sputnik": {
       "name": "R-7 (Sputnik)",

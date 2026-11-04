@@ -509,7 +509,7 @@ On the right:
         the pack has no "Lunar slingshot" or "transit" step); Mars's air "less than 1 %" of Earth's,
         not "about 1 %"; the X-15's height "about 108 km", not 107.8 (354,200 ft).
     - **E-31 "Cabin air"** (topic: Breathing in space) *(the user's idea, 2026-11-04; brief written and every
-      figure checked the same day, `design.md` §1.1; mocked up the same day, not built)*. Same look as E-01 to E-30, one new canvas
+      figure checked the same day, `design.md` §1.1; mocked up and built the same day, drawings `e31-1` and `e31-2`)*. Same look as E-01 to E-30, one new canvas
       row on `Launch Window — Explainers`, two sheets. Id `cabin-air`. Summary: "Why the American capsules breathed
       pure oxygen at a third of the pressure, why the Soviet ones carried air, and what each choice cost."
       - **Sheet 1, *A third of an atmosphere*** (scale "Pressures to scale"). Drawing: pressure as height, one scale
@@ -559,9 +559,10 @@ On the right:
         runs on three lines; the scale has only "0" and "1 atm"; the drawing headings, "Cone", "Sphere", "Thin wall" and
         "Thicker wall" are new short labels; the timeline's dots are red for the two fires, navy for Leonov, gold for
         Apollo-Soyuz. Labels over hatching carry the halo outline. Nothing was cut.
-      - **Concept chip** (proposed, unconfirmed): "Cabin air" → E-31 sheet 1 on the capsules (`mercury-capsule`,
-        `gemini-capsule`, `apollo-csm`, `vostok-capsule`, `voskhod-capsule`, `soyuz-7k-ok-spacecraft`,
-        `soyuz-7k-l1-spacecraft`, `soyuz-7k-lok-spacecraft`), within `ConceptsTest`'s six-chip limit.
+      - **Concept chip** (built, unconfirmed): "Cabin air" → E-31 sheet 1 on the first crewed program of each line
+        (`vostok`, `mercury`, `voskhod`, `gemini`, `apollo-earth-orbit`, `soyuz-7k-ok`), as Orbit and Retrofire sit on
+        the early flights. On the capsules, as proposed, it would have put Apollo, Gemini EOR and Circumlunar Gemini at
+        seven chips, over `ConceptsTest`'s six.
       - **Prompt for the mockup session** (Claude Design, on the canvas `Launch Window — Explainers`):
 
         > Add a new row to this canvas for explainer **E-31 "Cabin air"** (topic: Breathing in space), two sheets,
