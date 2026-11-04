@@ -28,14 +28,19 @@ import de.mkoehler.launchwindow.client.view.MoonRoads;
 import de.mkoehler.launchwindow.client.view.Outlook;
 import de.mkoehler.launchwindow.client.view.PayloadRnd;
 import de.mkoehler.launchwindow.client.view.Programs;
+import de.mkoehler.launchwindow.client.view.SetDepartment;
+import de.mkoehler.launchwindow.client.view.SetSkills;
 import de.mkoehler.launchwindow.content.CelestialBody;
 import de.mkoehler.launchwindow.content.MissionComponent;
 import de.mkoehler.launchwindow.content.Program;
 import de.mkoehler.launchwindow.model.GameDate;
 import de.mkoehler.launchwindow.model.OwnedMissionComponent;
 import de.mkoehler.launchwindow.model.PlayerSnapshot;
+import de.mkoehler.launchwindow.model.SetSkill;
+import de.mkoehler.launchwindow.model.SetSpecialist;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
@@ -251,6 +256,7 @@ public final class ProgramDetailsScreen extends ChromeScreen {
         }
         head.add(ui.label(status, Theme.TextStyle.CAPTION, Theme.INK_MUTED)).right();
         block.add(head).padBottom(4f).row();
+        block.add(skillLine(component, state)).padBottom(Theme.SPACE_2).row();
         String description = ContentNames.longDescription(componentId);
         if (description != null) {
             block.add(ui.paragraph(description, Theme.TextStyle.BODY_SM, Theme.INK_MUTED)).padBottom(Theme.SPACE_2)
@@ -272,6 +278,31 @@ public final class ProgramDetailsScreen extends ChromeScreen {
                 component.maxRdReliability()), Theme.TextStyle.CAPTION, Theme.INK_MUTED));
         }
         return block;
+    }
+
+    /**
+     * The SET skill a component's R&amp;D needs, with the agency's best engineer in it, so the player can
+     * judge the staffing before opening the program ({@code ui-spec.md} &sect;4.6.4).
+     *
+     * @param component the component
+     * @param state     the player's state
+     * @return the line
+     */
+    private Table skillLine(MissionComponent component, PlayerSnapshot state) {
+        SetSkill skill = component.associatedSkill();
+        Table line = new Table();
+        String icon = SetSkills.icon(skill);
+        Image glyph = new Image(ui.icon(icon), Scaling.fit);
+        glyph.setColor(Theme.NAVY);
+        line.add(glyph).height(16f).width(16f * Math.min(1f, ui.iconAspect(icon))).padRight(Theme.SPACE_2);
+        String best = state.getSetSpecialists().stream()
+            .max(Comparator.comparingDouble((SetSpecialist engineer) -> SetDepartment.skill(engineer, skill)))
+            .map(engineer -> "your best engineer in it: " + engineer.getName() + ", "
+                + Math.round(SetDepartment.skill(engineer, skill)))
+            .orElse("no engineers hired yet");
+        line.add(ui.label("R&D skill: " + SetSkills.label(skill) + " · " + best, Theme.TextStyle.CAPTION,
+            Theme.INK)).expandX().left();
+        return line;
     }
 
     /**

@@ -2054,6 +2054,11 @@ open program, a dash for a discount; the total is `Outlook.openingUpkeep`; the c
 its rows striped light navy and white. Each component shows its **blueprint drawing** (the turn
 report's, `FullWidthPicture`) at the card's width, under its description.
 
+*(User's play-test request, 2026-11-04, built straight in libGDX:)* under each component's name, a line with
+its **R&D skill**: the skill's icon, "R&D skill: Crewed spacecraft", and the agency's best engineer in it ("your
+best engineer in it: A. Name, 62", busy or not; "no engineers hired yet" without any), so a player can judge the
+staffing before opening the program. Shots: `hq-details-*.png`.
+
 **Actions:** Open (shows the price; refused if Headquarters is full, the goals
 aren't met, or funds are short). Close, which needs a confirmation: "no refund;
 its components go inactive and their researchers are released; refused while one
