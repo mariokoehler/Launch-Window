@@ -383,6 +383,11 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
   83), and hires are fitted to it. A flight grows the seat's skills in full, the others by a third. The smart bot's average game goes
   from 78.8 to 85.9 seasons. `-Dshots=focus`. Rebuild client and server together; no reset. The wiki follows `help.json`.
 
+- **Finishing training pays** (the user's decision, 2026-11-05, `design.md` §2.2(c)): a round's last season
+  pays 60 % of its gain (`SkillGrowth.TRAINING_LAST_SEASON_SHARE`), 20 / 20 / 60 % for an advanced round, so
+  pulling out early costs skill; the pull-out dialogs name the share kept. Rebuild client and server
+  together; no reset. The wiki follows `help.json`.
+
 ## How we work
 
 - **Screens:** Claude writes the spec in `ui-spec.md`, the user mocks it up in Claude Design,

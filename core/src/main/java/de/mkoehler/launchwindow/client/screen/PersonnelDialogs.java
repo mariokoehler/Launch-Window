@@ -366,15 +366,45 @@ final class PersonnelDialogs {
         Table card = host.dialogCard("Confirm", "Pull " + specialist.getName() + " out of training?");
         boolean expert = specialist.getTrainingKind() == TrainingKind.EXPERT;
         card.add(ui.paragraph(expert ? "Expert training gives nothing for the seasons so far."
-            : "They keep partial credit for the round in progress.", Theme.TextStyle.BODY,
-            Theme.INK_MUTED)).padBottom(Theme.SPACE_4).row();
+            : roundCredit(specialist), Theme.TextStyle.BODY,
+            Theme.INK_MUTED)).growX().padBottom(Theme.SPACE_4).row();
         card.add(confirmButtons("Pull Out", Theme.ButtonKind.PRIMARY, () -> host.submit(
             new PullOutOfTrainingAction(department.group(), specialist.getId()), result -> {
                 host.closeDialog();
-                host.toast("Pulled " + specialist.getName() + " out of training — partial credit applied.",
-                    Theme.NoticeKind.SUCCESS);
+                host.toast("Pulled " + specialist.getName() + " out of training.", Theme.NoticeKind.SUCCESS);
             }))).right().fill(false, false);
         host.showDialog(card);
+    }
+
+    /**
+     * The percentage of a fixed-length round's gain a pull-out now keeps
+     * ({@link SkillGrowth#partialCreditShare}).
+     *
+     * @param person someone in a fixed-length training round
+     * @return the share kept, in whole percent
+     */
+    static int keptPercent(Personnel person) {
+        if (person.getTrainingSeasonsTotal() <= 0) {
+            return 0;
+        }
+        return (int) Math.round(SkillGrowth.partialCreditShare(person.getTrainingSeasonsCompleted(),
+            person.getTrainingSeasonsTotal()) * 100);
+    }
+
+    /**
+     * What pulling someone out of a fixed-length round costs, in words: the share of the
+     * round's gain they keep, and that the last season pays the most (user, 2026-11-05).
+     *
+     * @param person someone in a fixed-length training round
+     * @return the sentence
+     */
+    static String roundCredit(Personnel person) {
+        int kept = keptPercent(person);
+        String last = Math.round(SkillGrowth.TRAINING_LAST_SEASON_SHARE * 100)
+            + " % of the gain comes with the round's last season.";
+        return kept == 0
+            ? "They keep nothing of this round yet. " + last
+            : "They keep " + kept + " % of this round's gain. " + last;
     }
 
     /**
@@ -426,7 +456,14 @@ final class PersonnelDialogs {
         Table card = host.dialogCard("Confirm", "Pull " + who + " out of training?");
         StringBuilder body = new StringBuilder();
         if (rounds > 0) {
-            body.append(rounds == 1 ? "1 keeps" : rounds + " keep").append(" partial credit for the round in progress.");
+            var kept = people.stream().filter(person -> person.getTrainingKind() != TrainingKind.EXPERT)
+                .mapToInt(PersonnelDialogs::keptPercent).summaryStatistics();
+            String share = kept.getMin() == kept.getMax() ? kept.getMax() + " %"
+                : kept.getMin() + " to " + kept.getMax() + " %";
+            body.append(rounds == 1 ? "1 keeps " : rounds + " keep ").append(share)
+                .append(" of the round in progress: ")
+                .append(Math.round(SkillGrowth.TRAINING_LAST_SEASON_SHARE * 100))
+                .append(" % of the gain comes with a round's last season.");
         }
         if (experts > 0) {
             body.append(rounds > 0 ? " " : "").append(experts).append(" in Expert training ")

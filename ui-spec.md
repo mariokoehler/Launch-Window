@@ -223,7 +223,8 @@ On the right:
       career *(user, 2026-11-01)*, when a skill is at 80
       or more; open-ended until the trait is earned;
     - **Pull out of training:** partial credit for fixed-length kinds, nothing for
-      Expert; needs a confirmation. **All hands on deck** *(user, 2026-11-01)*, a
+      Expert; needs a confirmation, which says the share kept ("They keep 20 % of this round's
+      gain. 60 % of the gain comes with the round's last season.", user, 2026-11-05). **All hands on deck** *(user, 2026-11-01)*, a
       title-bar button on the Astronaut Complex, Mission Control and the SET Centre, with a count,
       shown only when someone can be pulled out, does it for everyone at once, basic
       training excepted; its confirmation says what the pull costs;
@@ -2962,7 +2963,8 @@ toast and dialogs). Decisions made while building them, **all confirmed by the u
 - **Pull out copy corrected.** The mockup says Permanent earns no partial credit, but
   the rules credit the current round of Basic, Advanced *and* Permanent; only Expert
   gets nothing. The dialog now says "They keep partial credit for the round in
-  progress." The mockup should be fixed to match.
+  progress." The mockup should be fixed to match. (Since 2026-11-05 it names the share kept,
+  component 11.)
 - **Training lengths and limits come from `core`**, not the mockup: Advanced is
   `ADVANCED_TRAINING_SEASONS` (Basic left the dialog on 2026-10-05), and Permanent's
   target slider starts one above the employee's current value in the chosen skill

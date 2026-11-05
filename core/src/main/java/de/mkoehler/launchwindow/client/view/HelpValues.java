@@ -115,6 +115,9 @@ public final class HelpValues {
         v.put("training.basicEngineer", whole(TrainingProgress.SET_BASIC_TRAINING_SEASONS));
         v.put("training.basicController", whole(TrainingProgress.MISSION_CONTROL_BASIC_TRAINING_SEASONS));
         v.put("training.advanced", whole(TrainingProgress.ADVANCED_TRAINING_SEASONS));
+        v.put("training.lastSeasonShare", whole(Math.round(SkillGrowth.TRAINING_LAST_SEASON_SHARE * 100)));
+        v.put("training.earlySeasonShare", whole(Math.round(
+            SkillGrowth.partialCreditShare(1, TrainingProgress.ADVANCED_TRAINING_SEASONS) * 100)));
         v.put("training.focusFloor", whole(Math.round(SkillGrowth.FOCUS_FLOOR)));
         v.put("training.focusShare", whole(Math.round(SkillGrowth.FOCUS_SHARE * 100)));
         v.put("training.flightUnused", whole(Math.round(SkillGrowth.FLIGHT_UNUSED_SKILL_SHARE * 100)));

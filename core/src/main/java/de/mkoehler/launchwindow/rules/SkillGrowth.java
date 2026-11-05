@@ -275,9 +275,17 @@ public final class SkillGrowth {
     }
 
     /**
-     * The linear partial-credit rule for pulling an employee out of training
-     * early ({@code baspm.md} &sect;9.3): exactly {@code fullGain} scaled by
-     * how much of the training was actually completed.
+     * The share of a training round's gain its last season pays: finishing is worth most of
+     * it, so pulling someone out early costs something (the user's decision, 2026-11-05;
+     * BASPM credits the seasons evenly, {@code baspm.md} &sect;9.3). The seasons before it
+     * share the rest evenly: 20 / 20 / 60 % for a three-season round.
+     */
+    public static final double TRAINING_LAST_SEASON_SHARE = 0.6;
+
+    /**
+     * The partial-credit rule for pulling an employee out of training early: the share of
+     * the round's gain the seasons done have earned. Each season before the last earns an
+     * even part of {@code 1 - }{@link #TRAINING_LAST_SEASON_SHARE}; the last pays the rest.
      *
      * @param fullGain         the gain a completed training round would have
      *                         produced
@@ -285,13 +293,29 @@ public final class SkillGrowth {
      *                         completed before the pull-out
      * @param totalSeasons     that training type's normal total length in
      *                         seasons
-     * @return {@code fullGain * seasonsCompleted / totalSeasons}
+     * @return {@code fullGain * }{@link #partialCreditShare}
      * @throws IllegalArgumentException if {@code totalSeasons} is not
      *                                   positive, or {@code seasonsCompleted}
      *                                   is negative or greater than
      *                                   {@code totalSeasons}
      */
     public static double partialCredit(double fullGain, int seasonsCompleted, int totalSeasons) {
+        return fullGain * partialCreditShare(seasonsCompleted, totalSeasons);
+    }
+
+    /**
+     * The share of a round's gain a pull-out after {@code seasonsCompleted} seasons keeps
+     * (see {@link #partialCredit}); the client shows it before the pull-out.
+     *
+     * @param seasonsCompleted how many seasons of the round are done
+     * @param totalSeasons     the round's length in seasons
+     * @return the share, from 0 to 1: 1 only for a finished round
+     * @throws IllegalArgumentException if {@code totalSeasons} is not
+     *                                   positive, or {@code seasonsCompleted}
+     *                                   is negative or greater than
+     *                                   {@code totalSeasons}
+     */
+    public static double partialCreditShare(int seasonsCompleted, int totalSeasons) {
         if (totalSeasons <= 0) {
             throw new IllegalArgumentException("totalSeasons must be positive: " + totalSeasons);
         }
@@ -299,7 +323,13 @@ public final class SkillGrowth {
             throw new IllegalArgumentException(
                 "seasonsCompleted must be between 0 and totalSeasons: " + seasonsCompleted);
         }
-        return fullGain * seasonsCompleted / (double) totalSeasons;
+        if (seasonsCompleted == totalSeasons) {
+            return 1.0;
+        }
+        if (totalSeasons == 1) {
+            return 0.0;
+        }
+        return (1.0 - TRAINING_LAST_SEASON_SHARE) * seasonsCompleted / (totalSeasons - 1);
     }
 
     /**

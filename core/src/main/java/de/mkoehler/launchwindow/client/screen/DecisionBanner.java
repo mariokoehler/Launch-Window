@@ -658,7 +658,7 @@ final class DecisionBanner {
 
     private void confirmPullOut(SetSpecialist engineer) {
         Table card = host.dialogCard("Confirm", "Pull " + People.surname(engineer.getName()) + " out of training?");
-        card.add(ui.paragraph("They keep partial credit for the round in progress and are free to oversee.",
+        card.add(ui.paragraph(PersonnelDialogs.roundCredit(engineer) + " They're free to oversee at once.",
             Theme.TextStyle.BODY, Theme.INK_MUTED)).growX().padBottom(Theme.SPACE_4).row();
         Table buttons = new Table();
         buttons.add(host.actionButton("Cancel", Theme.ButtonKind.SECONDARY, host::closeDialog)).padRight(10f);

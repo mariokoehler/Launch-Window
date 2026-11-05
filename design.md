@@ -1213,7 +1213,11 @@ season unchanged. Tiger Teams' live per-step choice doesn't fit, so it was redes
   R&D gain is flat, factor 0.105–0.245 (ours), clamped at the ceiling. Flying's factor is
   0.035–0.105. All three were cut by 30 % (user, 2026-11-02: staff grew too fast), which makes a
   skill about 45 % slower to reach 90, as each gain is a share of the gap. Pulling out of
-  training credits `fullGain × completed / total`.
+  training credits a share of the round's gain: its last season pays 60 %, the seasons before it share
+  the rest evenly, so 20 / 20 / 60 % for an advanced round (the user's decision, 2026-11-05, after a play
+  test: training is free, and pulling out had cost nothing, as BASPM's even credit does;
+  `SkillGrowth.TRAINING_LAST_SEASON_SHARE`, `partialCreditShare`). The pull-out dialogs say what the
+  person keeps.
 - **A personal ceiling: specialists, not everything-experts** (the user's decision, 2026-11-02;
   `SkillGrowth.ceiling`, numbers unconfirmed): the distance above runs to a ceiling of its own for
   each skill, `100 − 0.5 × (points the person's other skills hold above 75, added up)`, so the better

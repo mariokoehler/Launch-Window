@@ -156,12 +156,16 @@ class SkillGrowthTest {
     }
 
     /**
-     * Verifies partial credit is exactly the full gain scaled by the
-     * completed/total ratio.
+     * Verifies a three-season round pays 20 / 20 / 60 %: the last season carries most of
+     * the gain (user, 2026-11-05).
      */
     @Test
-    void partialCreditIsExactlyFullGainTimesCompletedOverTotal() {
-        assertEquals(10.0 / 3.0, SkillGrowth.partialCredit(10.0, 1, 3));
+    void partialCreditPaysMostOfTheGainInTheLastSeason() {
+        assertEquals(2.0, SkillGrowth.partialCredit(10.0, 1, 3), 1e-9);
+        assertEquals(4.0, SkillGrowth.partialCredit(10.0, 2, 3), 1e-9);
+        assertEquals(10.0, SkillGrowth.partialCredit(10.0, 3, 3), 1e-9);
+        assertEquals(0.0, SkillGrowth.partialCreditShare(0, 1));
+        assertEquals(1.0, SkillGrowth.partialCreditShare(1, 1));
     }
 
     /**

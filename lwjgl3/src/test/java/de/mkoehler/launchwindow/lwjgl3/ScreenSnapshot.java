@@ -1670,17 +1670,21 @@ public final class ScreenSnapshot {
             astronaut.setTrainingKind(kind);
             astronaut.setTrainingTargetSkill(AstronautSkill.EVA);
             astronaut.setTrainingSeasonsTotal(3);
+            astronaut.setTrainingSeasonsCompleted(i == 0 ? 1 : 0);
             var officer = officers.get(i);
             officer.setAssignmentState(AssignmentState.IN_TRAINING);
             officer.setTrainingKind(kind);
             officer.setTrainingTargetSkill(de.mkoehler.launchwindow.model.MissionControlSkill.values()[0]);
             officer.setTrainingSeasonsTotal(3);
+            officer.setTrainingSeasonsCompleted(i == 0 ? 2 : 0);
         }
         String hash = ContentPackHash.ofClasspath("content/early-era", ScreenSnapshot.class.getClassLoader());
         startSession(game, state, GameInfoResponse.success("early-era", hash, DECLARED, 23, true,
             6 * 3_600_000L, 0L, null, List.of(), List.of(), 0));
         write(folder, "allhands-ac.png", new AstronautComplexScreen(game), null);
         write(folder, "allhands-ac-confirm.png", new AstronautComplexScreen(game), AstronautComplexScreen::confirmAllHands);
+        write(folder, "pullout-ac-confirm.png", new AstronautComplexScreen(game),
+            screen -> screen.confirmPullOut(astronauts.get(0)));
         write(folder, "allhands-mc.png", new MissionControlScreen(game), null);
         write(folder, "allhands-mc-confirm.png", new MissionControlScreen(game), MissionControlScreen::confirmAllHands);
         startSession(game, setCentreState(), GameInfoResponse.success("early-era", hash, DECLARED, 23, true,
