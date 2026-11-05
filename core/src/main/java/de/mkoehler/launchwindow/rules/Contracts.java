@@ -40,6 +40,13 @@ public final class Contracts {
 
     /** Each tier's margin over the launch cost, in percent, tier 1 first. */
     public static final List<Integer> MARGIN_PERCENTS = List.of(60, 40, 25);
+    /**
+     * Each tier's crew premium, per crew seat of the contract flight, tier 1 first: what a client
+     * pays on top for the risk to a crew (the user's decision, 2026-11-05, unconfirmed numbers: the
+     * margin alone made the cheap X-15 pay the least of all while risking a pilot). Scaled like the
+     * margins.
+     */
+    public static final List<Integer> CREW_PREMIUMS = List.of(1000, 670, 420);
     /** The tiers a listing awards; a fourth applicant and later get nothing. */
     public static final int TIERS = 3;
     /** What a contract flown successfully adds to the line's record. */
@@ -333,14 +340,28 @@ public final class Contracts {
     }
 
     /**
-     * Returns a tier's fee for a launch cost: the cost plus the tier's margin.
+     * Returns a tier's fee: the launch cost plus the tier's margin, plus the tier's
+     * {@link #CREW_PREMIUMS crew premium} for each crew seat.
      *
      * @param launchCost the launch cost
+     * @param crewSeats  the contract flight's crew seats, 0 uncrewed
      * @param tier       the tier, 1 to {@link #TIERS}
      * @return the fee
      */
-    public static long fee(long launchCost, int tier) {
-        return launchCost * (100 + MARGIN_PERCENTS.get(tier - 1)) / 100;
+    public static long fee(long launchCost, int crewSeats, int tier) {
+        return launchCost * (100 + MARGIN_PERCENTS.get(tier - 1)) / 100
+            + (long) crewSeats * CREW_PREMIUMS.get(tier - 1);
+    }
+
+    /**
+     * Returns a configuration's crew seats, for its crew premium.
+     *
+     * @param configurationId the configuration
+     * @param catalog         the content pack
+     * @return the seats, 0 uncrewed
+     */
+    public static int crewSeats(String configurationId, ContentCatalog catalog) {
+        return catalog.missionConfiguration(configurationId).orElseThrow().crewSlots().size();
     }
 
     /**

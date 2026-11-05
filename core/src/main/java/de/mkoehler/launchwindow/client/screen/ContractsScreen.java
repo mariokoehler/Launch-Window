@@ -129,7 +129,8 @@ public final class ContractsScreen extends ChromeScreen {
                 "One application a turn, and one contract at a time.",
                 "The best " + Contracts.TIERS + " scores win tiers 1 to " + Contracts.TIERS + ": "
                     + Contracts.MARGIN_PERCENTS.stream().map(margin -> "+" + margin + " %").toList()
-                    .toString().replace("[", "").replace("]", "") + " over the launch cost.",
+                    .toString().replace("[", "").replace("]", "") + " over the launch cost; a crewed flight "
+                    + "adds a crew premium a seat: " + ContractsView.crewPremiums() + ".",
                 "On failure the insurer refunds the launch cost; the failure costs its prestige as usual.")) {
                 card.add(bullet(rule)).padBottom(Theme.SPACE_1).row();
             }
@@ -520,6 +521,7 @@ public final class ContractsScreen extends ChromeScreen {
             .padBottom(Theme.SPACE_3).row();
         for (Commercial commercial : programs) {
             long cost = Contracts.launchCost(state, commercial.contractConfigurationId(), catalog);
+            int seats = Contracts.crewSeats(commercial.contractConfigurationId(), catalog);
             Table choice = new Table();
             choice.setBackground(ui.optionCard(false));
             choice.pad(10f, 12f, 10f, 12f);
@@ -528,8 +530,9 @@ public final class ContractsScreen extends ChromeScreen {
             words.add(ui.label(ContentNames.of(commercial.contractConfigurationId()), Theme.TextStyle.BODY_STRONG,
                 Theme.INK)).row();
             words.add(ui.label("Launch cost " + ContractsView.money(cost) + " · fees "
-                + ContractsView.money(Contracts.fee(cost, 1)) + " / " + ContractsView.money(Contracts.fee(cost, 2))
-                + " / " + ContractsView.money(Contracts.fee(cost, 3)) + " · score "
+                + ContractsView.money(Contracts.fee(cost, seats, 1)) + " / "
+                + ContractsView.money(Contracts.fee(cost, seats, 2)) + " / "
+                + ContractsView.money(Contracts.fee(cost, seats, 3)) + " · score "
                 + Contracts.score(state, commercial.programId(), catalog), Theme.TextStyle.CAPTION, Theme.INK_MUTED));
             choice.add(words).expandX().left();
             choice.add(actionButton("Next: the terms", Theme.ButtonKind.SECONDARY, () -> {
@@ -547,15 +550,17 @@ public final class ContractsScreen extends ChromeScreen {
     private void confirm(ContractsView.Offer offer, Commercial commercial, PlayerSnapshot state,
             ContentCatalog catalog) {
         long cost = Contracts.launchCost(state, commercial.contractConfigurationId(), catalog);
+        int seats = Contracts.crewSeats(commercial.contractConfigurationId(), catalog);
         Table card = dialogCard("Apply · " + offer.client(), "Apply for " + offer.title() + "?");
         Table terms = new Table();
         terms.setBackground(ui.rect(new Color(Theme.SURFACE_CARD).lerp(Theme.NAVY, 0.04f), Theme.NAVY_BORDER,
             Theme.BORDER_THIN));
         terms.pad(10f, 12f, 10f, 12f);
         terms.defaults().growX().left().padBottom(6f);
-        terms.add(bullet("Fee by tier: " + ContractsView.money(Contracts.fee(cost, 1)) + " / "
-            + ContractsView.money(Contracts.fee(cost, 2)) + " / " + ContractsView.money(Contracts.fee(cost, 3))
-            + ", over a launch cost now of " + ContractsView.money(cost) + ".")).row();
+        terms.add(bullet("Fee by tier: " + ContractsView.money(Contracts.fee(cost, seats, 1)) + " / "
+            + ContractsView.money(Contracts.fee(cost, seats, 2)) + " / " + ContractsView.money(Contracts.fee(cost, seats, 3))
+            + ", over a launch cost now of " + ContractsView.money(cost)
+            + (seats == 0 ? "." : ", with a crew premium for " + (seats == 1 ? "1 seat." : seats + " seats.")))).row();
         terms.add(bullet("Tiers go to the best record; a fourth applicant gets nothing. Your score now: "
             + Contracts.score(state, commercial.programId(), catalog) + ".")).row();
         terms.add(bullet("Flies: " + ContentNames.of(commercial.contractConfigurationId()) + ". Pays money only: no "

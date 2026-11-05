@@ -43,11 +43,12 @@ public final class ContractsView {
      * @param story      the order's story
      * @param commercial the program the agency would fly it with, or the line's first of its side
      * @param launchCost the launch cost now, with the cheapest rocket the agency could use
+     * @param crewSeats  the contract flight's crew seats, for the crew premium
      * @param outcome    whether the agency could apply, or why not
      * @param applied    whether the agency's application this turn is for it
      */
     public record Offer(ContractListing listing, String client, String title, String story, Commercial commercial,
-                        long launchCost, ContractOutcome outcome, boolean applied) {
+                        long launchCost, int crewSeats, ContractOutcome outcome, boolean applied) {
 
         /**
          * Returns whether the agency can fly it at all: the line is unlocked and a program open. A
@@ -66,8 +67,17 @@ public final class ContractsView {
          * @return the fee
          */
         public long fee(int tier) {
-            return Contracts.fee(launchCost, tier);
+            return Contracts.fee(launchCost, crewSeats, tier);
         }
+    }
+
+    /**
+     * Returns the crew premiums a seat, tier 1 first, in words.
+     *
+     * @return the premiums, as "$ 1,000 / $ 670 / $ 420"
+     */
+    public static String crewPremiums() {
+        return String.join(" / ", Contracts.CREW_PREMIUMS.stream().map(premium -> money(premium)).toList());
     }
 
     /**
@@ -105,6 +115,7 @@ public final class ContractsView {
         return new Offer(listing, client.map(CommercialClients.Client::name).orElse("A client"),
             client.map(CommercialClients.Client::title).orElse(ContentNames.of(listing.lineId())),
             client.map(CommercialClients.Client::story).orElse(""), commercial, cost,
+            commercial == null ? 0 : Contracts.crewSeats(commercial.contractConfigurationId(), catalog),
             Contracts.check(state, listing.id(), null, catalog), applied);
     }
 

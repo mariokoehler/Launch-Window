@@ -141,7 +141,8 @@ public final class ContractMarket {
                     .contractConfigurationId();
                 if (i < Contracts.TIERS) {
                     int tier = i + 1;
-                    long fee = Contracts.fee(Contracts.launchCost(agency, configuration, catalog), tier);
+                    long fee = Contracts.fee(Contracts.launchCost(agency, configuration, catalog),
+                        Contracts.crewSeats(configuration, catalog), tier);
                     findings.get(applicant.key()).add(new ContractFinding(ContractFinding.Kind.AWARDED, listing,
                         tier, fee, applicant.programId(), configuration, List.of()));
                     awardedAgencies.add(applicant.key());

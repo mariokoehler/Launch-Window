@@ -1045,7 +1045,8 @@ public final class ContentPackPlayouts {
                     finding.programId(), finding.configurationId(), List.of())
                 : new de.mkoehler.launchwindow.rules.ContractFinding(finding.kind(), finding.listing(), rank,
                     de.mkoehler.launchwindow.rules.Contracts.fee(de.mkoehler.launchwindow.rules.Contracts.launchCost(
-                        snapshot, finding.configurationId(), catalog), rank), finding.programId(),
+                        snapshot, finding.configurationId(), catalog), de.mkoehler.launchwindow.rules.Contracts.crewSeats(
+                        finding.configurationId(), catalog), rank), finding.programId(),
                     finding.configurationId(), List.of()));
         }
         return new de.mkoehler.launchwindow.rules.Contracts.Turn(findings, settlement.board(), settlement.posted());

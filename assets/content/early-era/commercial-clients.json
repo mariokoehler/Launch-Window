@@ -41,6 +41,86 @@
       "story": "A ship that hears a satellite's radio note change pitch as it passes overhead can work out where it is. The Navy wants a beacon in orbit to test the idea."
     },
     {
+      "id": "sat-n-ionosphere",
+      "lineId": "earth-orbit-satellites",
+      "side": "NASA",
+      "name": "Central Radio Propagation Laboratory",
+      "title": "Sounding the ionosphere",
+      "story": "Shortwave radio fades without warning when the ionosphere shifts. The laboratory wants a sounder above the layer, listening from the top down, to forecast the fades for airlines and ships."
+    },
+    {
+      "id": "sat-n-ice",
+      "lineId": "earth-orbit-satellites",
+      "side": "NASA",
+      "name": "International Ice Patrol",
+      "title": "Icebergs from orbit",
+      "story": "Since the Titanic sank, ships and aircraft have patrolled the North Atlantic for icebergs every spring. The Patrol wants to try spotting the ice from orbit, over water its aircraft can't reach."
+    },
+    {
+      "id": "sat-n-television",
+      "lineId": "earth-orbit-satellites",
+      "side": "NASA",
+      "name": "Continental Broadcasting Company",
+      "title": "Live across the ocean",
+      "story": "News film still crosses the Atlantic by aeroplane and airs a day late. The network wants a satellite to carry a live picture between Europe and America, and will pay for the launch."
+    },
+    {
+      "id": "sat-n-sun",
+      "lineId": "earth-orbit-satellites",
+      "side": "NASA",
+      "name": "High Altitude Observatory",
+      "title": "Watching the Sun's flares",
+      "story": "Solar flares black out radio, and the air hides their X-rays from every telescope on the ground. The Observatory wants detectors above the atmosphere to watch the outbursts as they happen."
+    },
+    {
+      "id": "sat-n-drag",
+      "lineId": "earth-orbit-satellites",
+      "side": "NASA",
+      "name": "Smithsonian Astrophysical Observatory",
+      "title": "Weighing the upper air",
+      "story": "A satellite slows as it brushes the thin upper air. The Observatory's camera stations want a bright sphere to track, so that its slow fall measures how dense the air is up there."
+    },
+    {
+      "id": "sat-n-dust",
+      "lineId": "earth-orbit-satellites",
+      "side": "NASA",
+      "name": "Spacecraft Structures Laboratory",
+      "title": "Counting dust strikes",
+      "story": "Nobody knows how often grains of dust strike a spacecraft, or how hard. The laboratory wants panels in orbit that count every hit, so designers know how thick to build a hull."
+    },
+    {
+      "id": "sat-n-radar",
+      "lineId": "earth-orbit-satellites",
+      "side": "NASA",
+      "name": "Air Defense Command",
+      "title": "A target for the radars",
+      "story": "Radar crews need a target whose size and path they know exactly. Air Defense Command wants a calibration sphere in orbit to check its tracking radars against, pass after pass."
+    },
+    {
+      "id": "sat-n-magnetism",
+      "lineId": "earth-orbit-satellites",
+      "side": "NASA",
+      "name": "Department of Terrestrial Magnetism",
+      "title": "The Earth's field",
+      "story": "Magnetic charts drift year by year, and ships take decades to survey the oceans. The Department wants a magnetometer in orbit to measure the Earth's field all round the globe in days."
+    },
+    {
+      "id": "sat-n-forest",
+      "lineId": "earth-orbit-satellites",
+      "side": "NASA",
+      "name": "Forest Service",
+      "title": "Smoke over the West",
+      "story": "A fire lookout sees as far as the next ridge. The Forest Service wants to learn whether a camera in orbit can spot smoke and burned land across the whole West in a single pass."
+    },
+    {
+      "id": "sat-n-time",
+      "lineId": "earth-orbit-satellites",
+      "side": "NASA",
+      "name": "Naval Observatory",
+      "title": "One clock for two continents",
+      "story": "Clocks on either side of the ocean disagree by thousandths of a second, too much for navigation. The Observatory wants a satellite to send one time signal to stations on both shores."
+    },
+    {
       "id": "sat-s-relay",
       "lineId": "earth-orbit-satellites",
       "side": "SOVIET",
@@ -73,6 +153,94 @@
       "story": "A country this size is mapped piece by piece, and the pieces don't quite fit. The Directorate orders a satellite to track from stations across the Union."
     },
     {
+      "id": "sat-s-ionosphere",
+      "lineId": "earth-orbit-satellites",
+      "side": "SOVIET",
+      "name": "Institute of Terrestrial Magnetism",
+      "title": "Radio to the Arctic",
+      "story": "Shortwave links to the Arctic stations fade for days at a time. The institute wants a sounder above the ionosphere to learn why, and to warn the radio services before the fades come."
+    },
+    {
+      "id": "sat-s-ice",
+      "lineId": "earth-orbit-satellites",
+      "side": "SOVIET",
+      "name": "Arctic and Antarctic Research Institute",
+      "title": "Ice on the northern route",
+      "story": "Icebreakers on the Northern Sea Route sail on ice reports days old. The institute wants pictures of the ice from orbit, so convoys can be steered along the open leads."
+    },
+    {
+      "id": "sat-s-television",
+      "lineId": "earth-orbit-satellites",
+      "side": "SOVIET",
+      "name": "State Committee for Radio and Television",
+      "title": "The evening programme",
+      "story": "Moscow's television reaches only as far as the relay towers run. The Committee wants a satellite to carry the evening programme to Siberia and the Far East as it goes out."
+    },
+    {
+      "id": "sat-s-sun",
+      "lineId": "earth-orbit-satellites",
+      "side": "SOVIET",
+      "name": "Crimean Astrophysical Observatory",
+      "title": "The Sun above the air",
+      "story": "The Sun's flares upset radio and the magnetic field, and the air hides their X-rays from the ground. The observatory wants detectors above the atmosphere to catch the flares as they happen."
+    },
+    {
+      "id": "sat-s-drag",
+      "lineId": "earth-orbit-satellites",
+      "side": "SOVIET",
+      "name": "Astronomical Council",
+      "title": "How thin the air is",
+      "story": "Observing stations across the Union track satellites by eye and camera. The Council wants a bright target whose slow descent will show how thin the upper air is, and how it swells with the Sun."
+    },
+    {
+      "id": "sat-s-dust",
+      "lineId": "earth-orbit-satellites",
+      "side": "SOVIET",
+      "name": "Committee on Meteorites",
+      "title": "Cosmic dust",
+      "story": "Grains of cosmic dust strike anything in orbit. The Committee on Meteorites wants counters and thin foils flown, to learn how many there are and what a hull must withstand."
+    },
+    {
+      "id": "sat-s-radar",
+      "lineId": "earth-orbit-satellites",
+      "side": "SOVIET",
+      "name": "Air Defence Forces",
+      "title": "A sphere for the radars",
+      "story": "The radar stations need a target in orbit of a known size to test themselves on. The Air Defence Forces want a calibration sphere put up and left there for years."
+    },
+    {
+      "id": "sat-s-magnetism",
+      "lineId": "earth-orbit-satellites",
+      "side": "SOVIET",
+      "name": "Ministry of Geology",
+      "title": "A magnetic map of the Union",
+      "story": "Magnetic surveys find ore, but a survey party covers a few hundred kilometres a season. The Ministry wants a magnetometer in orbit to chart the field across the whole Union."
+    },
+    {
+      "id": "sat-s-forest",
+      "lineId": "earth-orbit-satellites",
+      "side": "SOVIET",
+      "name": "Aerial Forest Protection Service",
+      "title": "Fires in the taiga",
+      "story": "Fires in the taiga can burn for weeks before a patrol plane finds them. The Service wants to learn whether a camera in orbit can spot the smoke across Siberia."
+    },
+    {
+      "id": "sat-s-time",
+      "lineId": "earth-orbit-satellites",
+      "side": "SOVIET",
+      "name": "Committee of Standards",
+      "title": "A clean time signal",
+      "story": "Time signals from Moscow reach the far observatories blurred by the ionosphere. The Committee wants a satellite to send one clean signal to stations across the Union."
+    },
+    {
+      "id": "sat-s-fisheries",
+      "lineId": "earth-orbit-satellites",
+      "side": "SOVIET",
+      "name": "Ministry of Fisheries",
+      "title": "Where the fish are",
+      "story": "The fishing fleets follow the cold currents where the fish feed. The Ministry wants the ocean's surface temperature measured from orbit, to send the trawlers where the catch is."
+    },
+    {
       "id": "moon-n-photo",
       "lineId": "lunar-probes",
       "side": "NASA",
@@ -97,6 +265,30 @@
       "story": "Does the Moon have a magnetic field? A group of observatories has built the instruments to find out, and asks the agency to carry them there."
     },
     {
+      "id": "moon-n-radio",
+      "lineId": "lunar-probes",
+      "side": "NASA",
+      "name": "Radio Astronomy Laboratory",
+      "title": "A quiet place to listen",
+      "story": "The Moon's far side may be the quietest place to listen to the sky, shielded from the Earth's radio noise. The laboratory wants receivers flown out to the Moon to find out."
+    },
+    {
+      "id": "moon-n-dust",
+      "lineId": "lunar-probes",
+      "side": "NASA",
+      "name": "Lunar Landing Studies Office",
+      "title": "Will the ground hold?",
+      "story": "Some astronomers fear the Moon's plains are deep dust that would swallow a lander. The office will pay for a probe to show what the surface will bear."
+    },
+    {
+      "id": "moon-n-tracking",
+      "lineId": "lunar-probes",
+      "side": "NASA",
+      "name": "Tracking and Data Office",
+      "title": "Proving the big dishes",
+      "story": "The new dish antennas have to be proven at the Moon's distance. The office wants a probe to follow out there, to measure how well the network can track it and talk to it."
+    },
+    {
       "id": "moon-s-photo",
       "lineId": "lunar-probes",
       "side": "SOVIET",
@@ -111,6 +303,38 @@
       "name": "Vernadsky Institute of Geochemistry",
       "title": "What the Moon is made of",
       "story": "The Institute's geochemists have built instruments to study the Moon's rock. They need a probe to carry them there."
+    },
+    {
+      "id": "moon-s-radiation",
+      "lineId": "lunar-probes",
+      "side": "SOVIET",
+      "name": "Institute of Nuclear Physics",
+      "title": "Radiation on the way",
+      "story": "Beyond the radiation belts, nobody has measured what a crew bound for the Moon would meet. The institute wants its counters flown all the way out."
+    },
+    {
+      "id": "moon-s-farside",
+      "lineId": "lunar-probes",
+      "side": "SOVIET",
+      "name": "Sternberg Astronomical Institute",
+      "title": "Beyond the edge",
+      "story": "The atlases show one face of the Moon and only guesses for the rest. The institute wants a closer look at the regions round the edge, to name what it finds there."
+    },
+    {
+      "id": "moon-s-gravity",
+      "lineId": "lunar-probes",
+      "side": "SOVIET",
+      "name": "Institute of Applied Mathematics",
+      "title": "The Moon's pull",
+      "story": "Every path near the Moon is bent by lumps in its gravity that nobody has charted. The institute wants a probe tracked closely there, to fix the Moon's field for later flights."
+    },
+    {
+      "id": "moon-s-gas",
+      "lineId": "lunar-probes",
+      "side": "SOVIET",
+      "name": "Lebedev Physical Institute",
+      "title": "A trace of air",
+      "story": "Does the Moon keep any air at all, or a haze of charged gas? The Lebedev Institute wants its instruments carried there to look for the faintest trace."
     },
     {
       "id": "plane-n-materials",
@@ -137,6 +361,30 @@
       "story": "The Institute has built traps for the dust that falls into the upper atmosphere from space. It needs a flight high enough to open them."
     },
     {
+      "id": "plane-n-ultraviolet",
+      "lineId": "space-planes",
+      "side": "NASA",
+      "name": "University Observatory",
+      "title": "Ultraviolet stars",
+      "story": "Stars shine in ultraviolet light that the air never lets through. A university observatory wants a small camera carried above most of the atmosphere for a few minutes of looking."
+    },
+    {
+      "id": "plane-n-horizon",
+      "lineId": "space-planes",
+      "side": "NASA",
+      "name": "Horizon Instrument Corporation",
+      "title": "Finding the horizon",
+      "story": "Spacecraft will steer by the Earth's horizon seen in infrared, but nobody knows how sharp that edge looks from high up. The company wants its sensor flown to the edge of space."
+    },
+    {
+      "id": "plane-n-medicine",
+      "lineId": "space-planes",
+      "side": "NASA",
+      "name": "School of Aviation Medicine",
+      "title": "The pilot's heart",
+      "story": "A pilot's heart and breathing through the boost, the weightless arc and the return have never been recorded in detail. The school wants its sensors on the next flight."
+    },
+    {
       "id": "plane-s-materials",
       "lineId": "space-planes",
       "side": "SOVIET",
@@ -151,6 +399,38 @@
       "name": "Central Aerological Observatory",
       "title": "The upper atmosphere",
       "story": "The Observatory's samplers have flown on balloons and sounding rockets. It orders a piloted flight to carry them higher."
+    },
+    {
+      "id": "plane-s-heat",
+      "lineId": "space-planes",
+      "side": "SOVIET",
+      "name": "Central Aerohydrodynamic Institute",
+      "title": "Heat on the skin",
+      "story": "Above three times the speed of sound an aircraft's skin glows. The institute wants the heating measured on a real flight, to check what its wind tunnels predict."
+    },
+    {
+      "id": "plane-s-camera",
+      "lineId": "space-planes",
+      "side": "SOVIET",
+      "name": "Air Force Research Institute",
+      "title": "A camera for high flight",
+      "story": "Cameras for high reconnaissance blur in the shaking and the heat. The institute wants its new camera flown as high and as fast as anything can go."
+    },
+    {
+      "id": "plane-s-medicine",
+      "lineId": "space-planes",
+      "side": "SOVIET",
+      "name": "Institute of Aviation Medicine",
+      "title": "The body at the edge",
+      "story": "Doctors want to know what the edge of space does to a pilot: the climb, the weightless moments and the return. The institute wants its sensors on the next flight."
+    },
+    {
+      "id": "plane-s-ultraviolet",
+      "lineId": "space-planes",
+      "side": "SOVIET",
+      "name": "Pulkovo Observatory",
+      "title": "Light the air hides",
+      "story": "The air absorbs the stars' ultraviolet light before it reaches any telescope. Pulkovo wants a small camera carried above most of the atmosphere to catch it."
     },
     {
       "id": "one-n-medicine",
@@ -169,6 +449,38 @@
       "story": "A photograph taken from orbit shows a whole mountain range at once. The Survey wants a trained eye and a good camera in orbit."
     },
     {
+      "id": "one-n-weather",
+      "lineId": "one-crew-capsules",
+      "side": "NASA",
+      "name": "Meteorological Satellite Laboratory",
+      "title": "Storms seen by eye",
+      "story": "A camera shows clouds, but a trained eye sees more. The laboratory wants an astronaut to describe and photograph the weather passing below, to teach its forecasters what to look for."
+    },
+    {
+      "id": "one-n-sky",
+      "lineId": "one-crew-capsules",
+      "side": "NASA",
+      "name": "University Observatory",
+      "title": "The night side",
+      "story": "From orbit the airglow, the zodiacal light and the stars look like nothing seen from the ground. An observatory wants an astronaut to watch and photograph them on the night side."
+    },
+    {
+      "id": "one-n-food",
+      "lineId": "one-crew-capsules",
+      "side": "NASA",
+      "name": "Army Food Laboratories",
+      "title": "Lunch in orbit",
+      "story": "Can a person swallow and digest weightless? The Army's food laboratories want their tubes and bite-sized cubes tried in orbit, with notes on what works and what floats away."
+    },
+    {
+      "id": "one-n-camera",
+      "lineId": "one-crew-capsules",
+      "side": "NASA",
+      "name": "Meridian Camera Works",
+      "title": "Pictures for the catalogue",
+      "story": "A camera maker wants to show its film and lenses working in space, with a person to frame the shots. It will pay for a flight and a handful of colour pictures of the Earth."
+    },
+    {
       "id": "one-s-medicine",
       "lineId": "one-crew-capsules",
       "side": "SOVIET",
@@ -183,6 +495,38 @@
       "name": "Ministry of Geology",
       "title": "The Union from orbit",
       "story": "Photographs from orbit could show where to look for oil and ore. The Ministry orders a flight with a cosmonaut and a camera."
+    },
+    {
+      "id": "one-s-weather",
+      "lineId": "one-crew-capsules",
+      "side": "SOVIET",
+      "name": "Hydrometeorological Service",
+      "title": "Weather from above",
+      "story": "A cosmonaut sees the shape of a storm front as no weather map draws it. The Service wants reports and photographs of the cloud systems passing over the Union."
+    },
+    {
+      "id": "one-s-sky",
+      "lineId": "one-crew-capsules",
+      "side": "SOVIET",
+      "name": "Abastumani Astrophysical Observatory",
+      "title": "The glow of the night sky",
+      "story": "The upper air glows faintly at night, and from orbit the glow lies below you as a band. The observatory wants a cosmonaut to watch it and photograph it on every night pass."
+    },
+    {
+      "id": "one-s-food",
+      "lineId": "one-crew-capsules",
+      "side": "SOVIET",
+      "name": "Institute of Nutrition",
+      "title": "Food for a long flight",
+      "story": "Longer flights will need real meals. The Institute of Nutrition wants its tubes and small loaves tried in orbit, and a report on appetite, taste and crumbs."
+    },
+    {
+      "id": "one-s-shipping",
+      "lineId": "one-crew-capsules",
+      "side": "SOVIET",
+      "name": "Ministry of the Merchant Marine",
+      "title": "A voice for the ships",
+      "story": "Ships far out on the oceans lose touch with port for days. The Ministry wants to know whether a cosmonaut in orbit can reach a ship's radio and pass its messages on."
     },
     {
       "id": "two-n-experiments",
@@ -201,6 +545,38 @@
       "story": "Can a crew in orbit spot and photograph ships and airfields? The Air Force wants to know before it builds a station of its own."
     },
     {
+      "id": "two-n-medicine",
+      "lineId": "two-crew-capsules",
+      "side": "NASA",
+      "name": "Public Health Service",
+      "title": "Heart and bone",
+      "story": "A day weightless is one thing, but longer flights may weaken the heart and bones. The Public Health Service wants two crew members measured before, during and after the flight."
+    },
+    {
+      "id": "two-n-ocean",
+      "lineId": "two-crew-capsules",
+      "side": "NASA",
+      "name": "Naval Oceanographic Office",
+      "title": "Currents from orbit",
+      "story": "Ocean currents show from high up as bands of colour and calm water. The office wants a crew to photograph the Gulf Stream and the coasts, with notes on what the eye can see."
+    },
+    {
+      "id": "two-n-sextant",
+      "lineId": "two-crew-capsules",
+      "side": "NASA",
+      "name": "Polaris Instrument Company",
+      "title": "A navigator's sextant",
+      "story": "Could a crew find their own position from the stars, as a ship's navigator does? An instrument maker wants its sextant tried in orbit, the sightings checked against the tracking."
+    },
+    {
+      "id": "two-n-chores",
+      "lineId": "two-crew-capsules",
+      "side": "NASA",
+      "name": "Human Factors Laboratory",
+      "title": "Timing the chores",
+      "story": "Simple tasks, turning a bolt or writing a note, take longer weightless, and nobody knows by how much. The laboratory wants a crew to time a list of chores for it."
+    },
+    {
       "id": "two-s-experiments",
       "lineId": "two-crew-capsules",
       "side": "SOVIET",
@@ -215,6 +591,38 @@
       "name": "Ministry of Defence",
       "title": "Reconnaissance from orbit",
       "story": "The Ministry orders a crewed flight to test whether cosmonauts can observe and photograph from orbit."
+    },
+    {
+      "id": "two-s-medicine",
+      "lineId": "two-crew-capsules",
+      "side": "SOVIET",
+      "name": "Military Medical Academy",
+      "title": "A doctor aboard",
+      "story": "The Academy wants one of the crew to examine the other in flight: pulse, blood pressure, reflexes and a blood sample, taken by hand in a weightless cabin."
+    },
+    {
+      "id": "two-s-ocean",
+      "lineId": "two-crew-capsules",
+      "side": "SOVIET",
+      "name": "Institute of Oceanology",
+      "title": "The colour of the sea",
+      "story": "Plankton, silt and currents tint the sea in ways a ship can't see. The Institute of Oceanology wants a crew to photograph the oceans and describe their colours."
+    },
+    {
+      "id": "two-s-navigation",
+      "lineId": "two-crew-capsules",
+      "side": "SOVIET",
+      "name": "Long-Range Aviation",
+      "title": "Steering by the stars",
+      "story": "Bomber navigators fix their position by the stars. Long-Range Aviation wants a crew to try the same from orbit, so a spacecraft could find its way if radio contact were lost."
+    },
+    {
+      "id": "two-s-psychology",
+      "lineId": "two-crew-capsules",
+      "side": "SOVIET",
+      "name": "Institute of Psychology",
+      "title": "Two in a small cabin",
+      "story": "How do two people share a cramped cabin, and how well do they think in it? The institute wants tests of attention and memory run in flight."
     },
     {
       "id": "three-n-station",
@@ -233,6 +641,38 @@
       "story": "Photographs from orbit in several colours could show diseased crops and polluted coasts. The Program wants a crew to take them."
     },
     {
+      "id": "three-n-medicine",
+      "lineId": "three-crew-capsules",
+      "side": "NASA",
+      "name": "National Institutes of Health",
+      "title": "A medical log",
+      "story": "Three people for days in one cabin: what happens to sleep, appetite and blood? The Institutes want a full medical log of the flight, and samples to take home."
+    },
+    {
+      "id": "three-n-telescope",
+      "lineId": "three-crew-capsules",
+      "side": "NASA",
+      "name": "Space Telescope Study Group",
+      "title": "Aiming by hand",
+      "story": "Astronomers dream of a telescope in orbit. A study group wants a crew to aim a small one by hand at stars and nebulae, to learn what a person adds."
+    },
+    {
+      "id": "three-n-metals",
+      "lineId": "three-crew-capsules",
+      "side": "NASA",
+      "name": "Allied Metals Corporation",
+      "title": "A furnace in orbit",
+      "story": "Weightless, molten metal neither settles nor stirs. A metals company wants a small furnace flown, to see whether the alloys made there come out purer."
+    },
+    {
+      "id": "three-n-pollution",
+      "lineId": "three-crew-capsules",
+      "side": "NASA",
+      "name": "Water Pollution Control Administration",
+      "title": "Plumes and haze",
+      "story": "Smoke and silt spread farther than anyone on the ground can see. The Administration wants photographs of river plumes, spills and city haze, taken by a crew who know what to look for."
+    },
+    {
       "id": "three-s-station",
       "lineId": "three-crew-capsules",
       "side": "SOVIET",
@@ -247,6 +687,38 @@
       "name": "State Committee for Science and Technology",
       "title": "Resources from orbit",
       "story": "The Committee wants a crew to survey forests, fields and ice from orbit, for the planners in Moscow."
+    },
+    {
+      "id": "three-s-medicine",
+      "lineId": "three-crew-capsules",
+      "side": "SOVIET",
+      "name": "Ministry of Health",
+      "title": "Days in orbit",
+      "story": "A longer flight raises new questions about sleep, appetite and blood. The Ministry of Health wants a full medical log of the crew, kept day by day."
+    },
+    {
+      "id": "three-s-telescope",
+      "lineId": "three-crew-capsules",
+      "side": "SOVIET",
+      "name": "Byurakan Astrophysical Observatory",
+      "title": "Stars in ultraviolet",
+      "story": "A telescope above the air would see stars in ultraviolet light. Byurakan wants a crew to aim a small one by hand and photograph what it finds."
+    },
+    {
+      "id": "three-s-welding",
+      "lineId": "three-crew-capsules",
+      "side": "SOVIET",
+      "name": "Paton Electric Welding Institute",
+      "title": "Welding in a vacuum",
+      "story": "Can metal be welded in a vacuum, weightless? The Paton Institute wants its welding unit run aboard by remote control, the crew watching from the next compartment."
+    },
+    {
+      "id": "three-s-harvest",
+      "lineId": "three-crew-capsules",
+      "side": "SOVIET",
+      "name": "Ministry of Agriculture",
+      "title": "The virgin lands' wheat",
+      "story": "Harvest forecasts from the virgin lands come late. The Ministry wants photographs of the wheat fields from orbit, to judge the crop before it is cut."
     }
   ]
 }

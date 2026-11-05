@@ -102,6 +102,15 @@ class ContractsTest {
         assertEquals(ContractOutcome.NOT_QUALIFIED, Contracts.apply(soviet, LISTING.id(), null, CATALOG));
     }
 
+    /** A crewed contract flight pays the tier's crew premium a seat on top of the margin (user, 2026-11-05). */
+    @Test
+    void aCrewedFlightPaysACrewPremiumASeat() {
+        assertEquals(1, Contracts.crewSeats("mercury-orbital", CATALOG));
+        assertEquals(1600 + 1000, Contracts.fee(1000, 1, 1));
+        assertEquals(1400 + 2 * 670, Contracts.fee(1000, 2, 2));
+        assertEquals(1250, Contracts.fee(1000, 0, 3));
+    }
+
     @Test
     void theBestRecordsWinTheTiersAndTheFourthMissesOut() {
         Map<String, PlayerSnapshot> agencies = new LinkedHashMap<>();

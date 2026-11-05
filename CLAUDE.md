@@ -132,6 +132,10 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
   first measurement says they fill the lulls but don't speed the race. The pack hash changed and
   saved classes gained fields: reset the dev data root, and rebuild client and server together (a new
   action).
+- **A crew premium and 90 clients for contracts** (the user's decisions, 2026-11-05, `design.md` §2.11): a crewed
+  contract flight's fee adds 1,000 / 670 / 420 a crew seat by tier (`Contracts.CREW_PREMIUMS`, unconfirmed), and
+  `commercial-clients.json` grew from 31 to 90 (15 a side for satellites, 6 for the other lines). The pack hash
+  changed: reset the dev data root, rebuild client and server together. The wiki follows `help.json`.
 - **Front pages for the Firsts are built** (the user's idea, 2026-10-11, `ui-spec.md` §4.18 and G14):
   a fictional newspaper's page on login, before the turn report, printed by the server
   (`rules.FrontPagePrinter`, `frontpages.json`), the words in `assets/content/front-pages.json`

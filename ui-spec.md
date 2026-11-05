@@ -3610,7 +3610,8 @@ mission called off before it flies brings it back. A help topic "Contracts" (com
   - the line's category art, the client's name, the story (two or three lines);
   - the terms: three tier chips "+60 % · +40 % · +25 %" with **your fee at each** ("2,340 · 2,048 ·
     1,829") for the contract configuration with the cheapest rocket you could use, and the launch
-    cost under them;
+    cost under them; a crewed flight's fee includes the crew premium a seat (2026-11-05), which the
+    contract card's rules and the apply confirmation name;
   - the flight it takes ("Flies: Explorer 1 · Orbital flight"), with the component 27 icon;
   - "Posted Spring 1962 · expires in 2 turns";
   - **Apply**, or the reason you can't, in place of the button: "Needs the Earth-orbit satellites

@@ -272,6 +272,7 @@ public final class HelpValues {
         v.put("contracts.recordCap", whole(Contracts.RECORD_CAP));
         v.put("contracts.tiers", whole(Contracts.TIERS));
         v.put("contracts.margins", and(Contracts.MARGIN_PERCENTS.stream().map(HelpValues::whole).toList()));
+        v.put("contracts.crewPremiums", and(Contracts.CREW_PREMIUMS.stream().map(HelpValues::whole).toList()));
         v.put("contracts.window", whole(Contracts.LAUNCH_WINDOW_TURNS));
         v.put("contracts.lapsePrestige", whole(Contracts.LAPSE_PRESTIGE));
         v.put("contracts.crewLossPrestige", whole(Contracts.CREW_LOSS_PRESTIGE));

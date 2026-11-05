@@ -563,6 +563,13 @@ leading to satellite navigation.
   ("Happy Birthday, Telstar"), Space.com ("Telstar: Satellites Beamed 1st TV Signals Across the
   Sea", the $6 million): ebsco.com/research-starters/communication-and-mass-media/first-commercial-communications-satellite-launched,
   spectrum.ieee.org/happy-birthday-telstar, www.space.com/19756-telstar.html. Fits the first contract line's history note.
+- **Real precedents behind some contract clients** (2026-11-05, §2.11; **sources not yet checked**, from
+  memory, so none of it goes into in-game history notes until it is): the Paton Electric Welding Institute's
+  Vulkan unit welded in vacuum on Soyuz 6 (October 1969), run from the descent module; Byurakan's Orion-2
+  ultraviolet telescope flew on Soyuz 13 (December 1973); the X-15 carried ultraviolet star cameras and
+  horizon-sensor tests; Thomas Gold argued the lunar plains might be deep dust, which Surveyor and Luna 9
+  disproved; John Glenn ate applesauce from a tube on Friendship 7; Telstar was used to compare American
+  and British clocks in 1962. The client stories state none of these as facts, only the needs behind them.
 - **Space insurance is as old as commercial satellites:** Lloyd's of London wrote the first
   satellite policy in 1965, pre-launch cover for Intelsat I "Early Bird", the first commercial
   satellite in geostationary orbit; COMSAT never claimed on it. Cover for the launch itself came
@@ -2596,7 +2603,12 @@ ours, a default and **unconfirmed** unless a line says otherwise.
   share applies).
 - **Money** (user): the agency pays the launch cost up front as usual. **On success** the client
   pays the **fee**: the launch cost times (1 + the tier's margin), **+60 / +40 / +25 %** for tiers
-  1 to 3. The fee is fixed at the award, from the contract configuration with the cheapest of the
+  1 to 3, plus a **crew premium** for each crew seat of the contract flight, **1,000 / 670 / 420** by
+  tier (the user's decision, 2026-11-05, unconfirmed numbers; `Contracts.CREW_PREMIUMS`). The margin alone
+  made the X-15's air-dropped research flight (launch cost 683) pay a tier-1 profit of 409, the least of
+  any line, while risking a pilot, against 1,053 for Explorer 1; with the premium it pays about 1,400,
+  Mercury 3,560, Gemini 6,690 and Apollo 10,340. A crewed contract is the riskier job (an extra 50
+  prestige for a lost crew, the grounding of §2.5(j), the person), and now pays for it. The fee is fixed at the award, from the contract configuration with the cheapest of the
   agency's open rockets that can fly it, or the cheapest of its side's when none of its open ones can
   (built default); a dearer rocket only lowers the profit. **On failure** the
   insurer pays back the launch cost actually paid (break even), and the agency loses the prestige
@@ -2648,7 +2660,9 @@ ours, a default and **unconfirmed** unless a line says otherwise.
   its own file so the BASPM converter, which writes `programs.json`, never touches it): per program,
   the unlock set and the contract configuration. The margins and record weights are rules constants
   (read by help's tokens, never written into text). Clients and their stories by line and side go in
-  each pack's `commercial-clients.json` (31, at least two per line a side flies), one of
+  each pack's `commercial-clients.json` (90 since 2026-11-05, the user's request after a play test, where the
+  early satellite contracts came round again too soon: 15 a side for the satellites, 6 a side for every other
+  line; 31 before), one of
   `ContentPackLoader.FILES` since 2026-10-25 (the market draws from them; review.md 2.2), no repeats until
   a line's have all run. A listing
   names one client per side, so each side reads its own.
