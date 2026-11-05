@@ -1,7 +1,8 @@
 // Ascent: the camera rides along as the rocket pitches over on its planned path (dashed), climbs
 // past the clouds, and stages: the first engine cuts at 2.8, the lower stage falls away at 2.9, the
 // upper engine lights at 3.2.
-// Glitch: after staging the upper stage swings off the path from 3.3 and is steered back by 4.9.
+// Glitch: after staging the upper stage swings off the path from 3.3 and is steered back by 4.9; what
+// it has let go of (the lower stage, the escape tower) no longer swings with it (free).
 // Failure: the stages don't part; the upper engine lights into the lower stage at 3.2 and the rocket
 // breaks up at 3.3.
 var glitch = VARIANT === "glitch", failure = VARIANT === "failure";
@@ -21,10 +22,6 @@ hide("debris-5"); hide("debris-6"); hide("burst");
 // goes with the capsule.
 var LES = 3.7;
 put("a-les", "debris-1");
-if (!failure) {
-    move("a-les", function (t) { var u = Math.max(0, t - LES); return [40 * u + 60 * u * u, -(120 * u + 700 * u * u)]; });
-    turn("a-les", function (t) { return 25 * Math.max(0, t - LES); });
-}
 
 // The planned path (parts.py draws the same arc): 8° off vertical, turning right on a 5200 px radius.
 var P0 = [860, 200], TH0 = 8, R = 5200;
@@ -45,6 +42,28 @@ function pose(t) {
 }
 move("carrier", function (t) { var p = pose(t); return [p[0] - 960, p[1] - 600]; });
 turn("carrier", function (t) { return pose(t)[2]; });
+// A part the rocket lets go of at time r (2026-11-05, user: the dropped stage swung with the glitch):
+// it is still the carrier's child, so from r on it takes back the glitch's side offset and swing, keeping
+// what they were at r. off and rot are its own motion, as move and turn take them; shift moves its
+// parent's space into the carrier's (a grandchild through a part that stays put).
+function free(name, r, off, rot, shift) {
+    var l = layers[name], a = tf(layers["carrier"], "Anchor Point").value, k = shift || [0, 0];
+    var base = [l.rest[0] + k[0], l.rest[1] + k[1]], o0 = side(r), w0 = swing(r);
+    move(name, function (t) {
+        var o = off(t), x = base[0] + o[0] - a[0], y = base[1] + o[1] - a[1];
+        if (t < r) return o;
+        var c = Math.cos(w0 * RAD), sn = Math.sin(w0 * RAD);
+        var px = c * x - sn * y + o0 - side(t), py = sn * x + c * y;
+        var w = -swing(t) * RAD; c = Math.cos(w); sn = Math.sin(w);
+        return [c * px - sn * py + a[0] - base[0], sn * px + c * py + a[1] - base[1]];
+    });
+    turn(name, function (t) { return rot(t) + (t < r ? 0 : w0 - swing(t)); });
+}
+if (!failure) {
+    var d1 = layers["debris-1"], d1a = tf(d1, "Anchor Point").value;
+    free("a-les", LES, function (t) { var u = Math.max(0, t - LES); return [40 * u + 60 * u * u, -(120 * u + 700 * u * u)]; },
+        function (t) { return 25 * Math.max(0, t - LES); }, [d1.rest[0] - d1a[0], d1.rest[1] - d1a[1]]);
+}
 // The camera keeps the rocket a little left of centre, shaking while an engine burns.
 bake(tf(world, "Position"), function (t) {
     var p = pose(t), burn = t < MECO || (t >= IGN && !(failure && t >= BREAK)) ? 2 : 0;
@@ -59,10 +78,9 @@ flicker(["flame-full", "flame-upper"]);
 if (!failure) {
     // The lower stage drops back along the rocket's axis, turning slowly.
     var lower = function (t) { var u = Math.max(0, t - SEP); return [-20 * u, 40 * u + 260 * u * u]; };
-    move("debris-3", lower);
-    move("debris-4", lower);
-    turn("debris-3", function (t) { return -16 * Math.max(0, t - SEP); });
-    turn("debris-4", function (t) { return -16 * Math.max(0, t - SEP); });
+    var tumble = function (t) { return -16 * Math.max(0, t - SEP); };
+    free("debris-3", SEP, lower, tumble);
+    free("debris-4", SEP, lower, tumble);
 } else {
     // The break: a burst at the interstage, and every piece thrown, falling behind.
     move("burst", function () { return [0, 30]; });

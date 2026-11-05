@@ -64,7 +64,13 @@ fade("m-puff", track([[PUFF, 0, "snap"], [PUFF + 0.02, 1, "snap"], [PUFF + 0.5, 
 if (DROP) {
     // In the craft's frame (nose up, so its base ahead): off the base, and turning.
     var GO = 0.6;
-    move("o-stage", function (t) { var u = Math.max(0, t - GO); return [5 * u, 30 * u + 8 * u * u]; });
+    // Let go, it no longer drifts with the craft (2026-11-05, user): the drift's lift is taken back, in the craft's
+    // frame (the craft's heading is fixed until ARRIVE, after the stage has faded).
+    var H = (HEAD - 90) * RAD;
+    move("o-stage", function (t) {
+        var u = Math.max(0, t - GO), d = t < GO ? 0 : shallow(t);
+        return [5 * u + d * Math.sin(H), 30 * u + 8 * u * u + d * Math.cos(H)];
+    });
     turn("o-stage", function (t) { return -18 * Math.max(0, t - GO); });
     fade("o-stage", track([[2.0, 1], [2.8, 0, "lin"]]));
 }
