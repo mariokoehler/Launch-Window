@@ -1226,8 +1226,11 @@ season unchanged. Tiger Teams' live per-step choice doesn't fit, so it was redes
   through growth. Computed, never saved: people above it keep what they have and just stop gaining.
   It holds for all three groups, and **Flight Directors follow the same rule** (user: capped near 83
   is fine, "broad, not deep", §1.1): the seat's one gain still comes from the average, each fifth
-  stopping at that skill's ceiling. New hires are fitted to it from their best skill down, so the pool
-  can't hand out what growth can't reach. The flat gains (R&D, R&D decisions, press stories) stop at it
+  stopping at that skill's ceiling. New hires are fitted to it, so the pool can't hand out what growth
+  can't reach: a candidate over any ceiling has every skill's points above 75 scaled down by one factor
+  until each fits (user, 2026-11-05: the roll keeps its shape and leaves room to train; until then the
+  best skill stood and the rest were cut to the room it left, which let a Mission Control candidate show
+  92.2 and 91.4 with three more skills above 75). The flat gains (R&D, R&D decisions, press stories) stop at it
   too (`SkillGrowth.withinCeiling`). Measured with `ContentPackPlayouts standard smart`, the whole
   change (the 30 % cut, the ceiling, flying's growth, §2.5(g)): average completion 78.8 to 85.9 seasons,
   a crewed mission's median chance at launch 0.64 to 0.59, astronauts lost 315 to 447 in 200 games. Without

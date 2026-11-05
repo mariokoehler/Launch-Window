@@ -78,16 +78,31 @@ class SkillGrowthTest {
         assertEquals(92.0, SkillGrowth.withinCeiling(above, "s0", 94), "no gain, and no loss");
     }
 
-    /** A candidate's best skill stands; the next ones get what room it leaves. */
+    /**
+     * A candidate over the ceilings has every point above the floor scaled by one factor (user,
+     * 2026-11-05): each skill ends at or under its own ceiling, the tightest one on it, the shape
+     * kept, a skill under the floor untouched.
+     */
     @Test
-    void candidatesAreFittedFromTheBestDown() {
+    void candidatesAreScaledEvenlyUnderTheirCeilings() {
         Map<String, Double> fitted = SkillGrowth.fittedToCeilings(skills(85, 95, 90, 70, 92));
-        assertEquals(95.0, fitted.get("s1"));
-        assertEquals(90.0, fitted.get("s4"));
-        assertEquals(82.5, fitted.get("s2"));
-        assertEquals(78.75, fitted.get("s0"));
+        for (String skill : fitted.keySet()) {
+            assertTrue(fitted.get(skill) <= SkillGrowth.ceiling(fitted, skill) + 1e-9, skill);
+        }
+        assertEquals(SkillGrowth.ceiling(fitted, "s1"), fitted.get("s1"), 1e-9, "the best skill is on its ceiling");
+        double factor = (fitted.get("s1") - 75) / 20;
+        assertEquals(75 + 10 * factor, fitted.get("s0"), 1e-9);
+        assertEquals(75 + 15 * factor, fitted.get("s2"), 1e-9);
+        assertEquals(75 + 17 * factor, fitted.get("s4"), 1e-9);
         assertEquals(70.0, fitted.get("s3"));
         assertEquals(List.of("s0", "s1", "s2", "s3", "s4"), List.copyOf(fitted.keySet()));
+        // The play test's candidate (Mission Control, 2026-11-05): 92.2 and 91.4 with three more above 75.
+        Map<String, Double> seen = SkillGrowth.fittedToCeilings(skills(79.1, 83.2, 92.2, 76.7, 91.4));
+        for (String skill : seen.keySet()) {
+            assertTrue(seen.get(skill) <= SkillGrowth.ceiling(seen, skill) + 1e-9, skill);
+        }
+        Map<String, Double> within = skills(80, 90, 60, 50, 70);
+        assertEquals(within, SkillGrowth.fittedToCeilings(within), "a candidate within the ceilings is left alone");
     }
 
     /**

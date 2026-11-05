@@ -252,24 +252,35 @@ public final class SkillGrowth {
     }
 
     /**
-     * Fits a new candidate's skills to the same rule: from the best down, each is held to the
-     * ceiling the skills above it leave. So the pool can't hand out what growth can't reach, and it
-     * draws nothing, so the pool's random stream stays as it was.
+     * Fits a new candidate's skills to the same rule, so the pool can't hand out what growth can't
+     * reach: if any skill is above its {@link #ceiling}, every skill's points above
+     * {@link #FOCUS_FLOOR} are scaled down by one factor, the largest that puts each skill at or
+     * under its ceiling. The roll keeps its shape, and the candidate still has room to train
+     * (the user's decision, 2026-11-05; until then the best skill stood and the rest were cut to
+     * the room it left, which let the best ones break their own ceilings). It draws nothing, so the
+     * pool's random stream stays as it was.
      *
      * @param skills the drawn skills
      * @param <K>    the skill enum
      * @return the fitted skills, in the same order
      */
     public static <K> Map<K, Double> fittedToCeilings(Map<K, Double> skills) {
-        List<K> bestFirst = new ArrayList<>(skills.keySet());
-        bestFirst.sort(Comparator.comparingDouble((K key) -> skills.get(key)).reversed());
-        Map<K, Double> placed = new LinkedHashMap<>();
-        for (K skill : bestFirst) {
-            placed.put(skill, Math.min(skills.get(skill), ceiling(placed, skill)));
+        double total = 0;
+        for (double value : skills.values()) {
+            total += Math.max(0.0, value - FOCUS_FLOOR);
+        }
+        // A skill with e points above the floor fits at a factor k when FLOOR + k e <= CAP - SHARE k (total - e).
+        double factor = 1.0;
+        for (double value : skills.values()) {
+            double excess = Math.max(0.0, value - FOCUS_FLOOR);
+            if (excess > 0) {
+                factor = Math.min(factor, (SKILL_CAP - FOCUS_FLOOR) / (excess + FOCUS_SHARE * (total - excess)));
+            }
         }
         Map<K, Double> fitted = new LinkedHashMap<>();
-        for (K skill : skills.keySet()) {
-            fitted.put(skill, placed.get(skill));
+        for (Map.Entry<K, Double> skill : skills.entrySet()) {
+            double value = skill.getValue();
+            fitted.put(skill.getKey(), value <= FOCUS_FLOOR ? value : FOCUS_FLOOR + factor * (value - FOCUS_FLOOR));
         }
         return fitted;
     }
