@@ -94,33 +94,21 @@ public final class RocketProgramsScreen extends ChromeScreen {
             chips.add(chip("Human-rated")).padLeft(4f);
         }
         about.add(chips);
-        row.add(about).width(150f).left().padRight(Theme.SPACE_4);
+        // The top line: name, lift, the mission badge and Close; under it, reliability and upkeep, so a long
+        // mission badge never runs into Close (user, 2026-11-06).
+        Table top = new Table();
+        top.add(about).width(150f).left().padRight(Theme.SPACE_4);
         // What it can lift, as Open Rocket Program shows it (user, 2026-11-06: which ones to keep open).
-        row.add(rocketPayload(rocket)).left().padRight(Theme.SPACE_4);
-
-        Table reliability = new Table();
-        reliability.defaults().growX().left();
-        reliability.add(new ReliabilityBar(ui, owned.getCurrentReliability(), rocket.maxRdReliability(),
-            rocket.maxReliability(), owned.getFloorReliability())).height(14f).padBottom(4f).row();
-        reliability.add(ui.label(String.format(Locale.ROOT, "%.1f%% (R&D cap %.1f)", owned.getCurrentReliability(),
-            rocket.maxRdReliability()), Theme.TextStyle.CAPTION, Theme.INK_MUTED));
-        row.add(reliability).expandX().fillX().padRight(Theme.SPACE_5);
-
-        Table upkeep = new Table();
-        upkeep.left();
-        upkeep.defaults().left();
-        upkeep.add(ui.label("UPKEEP", Theme.TextStyle.CAPTION, Theme.INK_MUTED)).padBottom(2f).row();
-        upkeep.add(ui.label(money(rocket.maintenanceCost()) + "/season", Theme.TextStyle.BODY_SM, Theme.INK));
-        row.add(upkeep).width(150f).left().padRight(Theme.SPACE_4);
+        top.add(rocketPayload(rocket)).left().padRight(Theme.SPACE_4);
 
         Table flight = new Table();
-        flight.left();
+        flight.right();
         List<String> missions = Rockets.missionsUsing(rocket.id(), session.state());
         if (!missions.isEmpty()) {
             flight.add(ui.badge(Theme.BadgeKind.ACTIVE, "On " + ContentNames.of(missions.get(0))
-                + (missions.size() > 1 ? " +" + (missions.size() - 1) : ""))).left();
+                + (missions.size() > 1 ? " +" + (missions.size() - 1) : "")));
         }
-        row.add(flight).width(220f).left().padRight(Theme.SPACE_4);
+        top.add(flight).expandX().right().padRight(Theme.SPACE_4);
 
         TextButton close;
         if (missions.isEmpty()) {
@@ -131,7 +119,31 @@ public final class RocketProgramsScreen extends ChromeScreen {
             close.addListener(clicked(() -> toast(Refusals.text(RocketProgramOutcome.MISSIONS_IN_FLIGHT.name()),
                 Theme.NoticeKind.INFO)));
         }
-        row.add(close).width(120f).right();
+        top.add(close).width(120f).right();
+
+        Table reliability = new Table();
+        reliability.defaults().growX().left();
+        reliability.add(new ReliabilityBar(ui, owned.getCurrentReliability(), rocket.maxRdReliability(),
+            rocket.maxReliability(), owned.getFloorReliability())).height(14f).padBottom(4f).row();
+        reliability.add(ui.label(String.format(Locale.ROOT, "%.1f%% (R&D cap %.1f)", owned.getCurrentReliability(),
+            rocket.maxRdReliability()), Theme.TextStyle.CAPTION, Theme.INK_MUTED));
+
+        Table upkeep = new Table();
+        upkeep.left();
+        upkeep.defaults().left();
+        upkeep.add(ui.label("UPKEEP", Theme.TextStyle.CAPTION, Theme.INK_MUTED)).padBottom(2f).row();
+        upkeep.add(ui.label(money(rocket.maintenanceCost()) + "/season", Theme.TextStyle.BODY_SM, Theme.INK));
+
+        Table bottom = new Table();
+        bottom.left();
+        bottom.add(reliability).width(RELIABILITY_WIDTH).left().padRight(Theme.SPACE_6);
+        bottom.add(upkeep).left();
+
+        Table text = new Table();
+        text.defaults().growX().left();
+        text.add(top).row();
+        text.add(bottom).padTop(Theme.SPACE_3);
+        row.add(text).expandX().fillX();
         Table block = new Table();
         block.add(row).growX().row();
         // Its long description, as the foreign file shows it, on a line of its own (user, 2026-11-04).
@@ -142,6 +154,9 @@ public final class RocketProgramsScreen extends ChromeScreen {
         }
         return block;
     }
+
+    /** The reliability bar's width, on the row's second line. */
+    private static final float RELIABILITY_WIDTH = 480f;
 
     private Table chip(String text) {
         Table chip = new Table();
