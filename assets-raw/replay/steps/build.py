@@ -2256,13 +2256,18 @@ def render(step, variant, project_, out, kbps, extra):
 def main():
     step = sys.argv[1]
     spec = STEPS[step]
-    projects = {v: project(step, v) for v in VARIANTS}
+    # "only:<variant>" (2026-11-06): build, sheet and publish just that variant (more than one may be named), so a
+    # change to one variant's drawing leaves the others' projects and renders untouched (effects.py skips a clip whose
+    # project is newer than its render).
+    only = [a[len("only:"):] for a in sys.argv if a.startswith("only:")]
+    built = [v for v in VARIANTS if not only or v in only]
+    projects = {v: project(step, v) for v in built}
     rows = []
     for t in spec["times"]:
         row = []
         for v in VARIANTS:
             out = os.path.join(BUILD, f"{step}-{v}_{t}.png")
-            if t <= spec[v][0]:
+            if v in projects and t <= spec[v][0]:
                 # The last frame starts one frame before the end.
                 subprocess.run([CLI, "render-frame", "--project", projects[v], "--comp", f"{step} {v}",
                                 "--time", str(min(t, round(spec[v][0] - 1 / 30, 3))), "--max-side", "640", "--out", out], check=True, capture_output=True)
@@ -2280,7 +2285,7 @@ def main():
         for i, im in enumerate(row):
             sheet.paste(im, (60 + i * 650, 30 + r * 370))
     sheet.save(os.path.join(BUILD, f"sheet_{step}.png"))
-    for v in VARIANTS:
+    for v in built:
         if "render" in sys.argv:
             render(step, v, projects[v], os.path.join(BUILD, f"{step}-{v}.webm"), 1500, [])
         if "publish" in sys.argv:

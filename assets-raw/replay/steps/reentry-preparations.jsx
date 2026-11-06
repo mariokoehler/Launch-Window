@@ -56,7 +56,8 @@ puffAt("r-jet-r", failure ? [] : glitch ? [3.0, 3.7, 4.2] : [STOP]);
 // The stuck jet: a plume from 2.6 on, flickering.
 if (failure) {
     fade("r-jet-stuck", function (t) { return t >= STOP ? 1 : 0; });
-    grow("r-jet-stuck", function (t) { return 1 + 0.08 * jitter(t, 5); });
+    // It shoots out of the nozzle in a fifth of a second, then sputters (anchored at the nozzle).
+    grow("r-jet-stuck", function (t) { return Math.min(1, Math.max(0.1, (t - STOP) / 0.2)) * (1 + 0.12 * jitter(t, 5)); });
 } else {
     hide("r-jet-stuck");
 }

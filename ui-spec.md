@@ -2715,6 +2715,10 @@ sound placements keep their own flags.
   There they play `reentry-trim` (after the turn) or `reentry-trim-burn` (after the burn, the Earth held where the
   retrofire left it): no turn, the jets trimming its attitude, and Mercury's periscope sliding in, as it did about half
   a minute after Freedom 7's retrofire. Glitch: the trim overshoots and rocks; failure: a jet sticks open.
+- **The stuck jet reads as thrust (user, 2026-11-06):** in the failures of `reentry-preparations`, `reentry-trim` and
+  `suborbital-flight` (every craft's copy, 35 clips) the jet stuck open was a long bar of even width, which read as a
+  boom. It's a plume now (`parts.py`'s `plume()`): pinched at the nozzle, flaring to a ragged tip, with a solid core,
+  anchored at the nozzle so it shoots out in a fifth of a second and then sputters as the capsule spins away.
 - **The OKB-MiG E-154 (user, 2026-10-17):** it's the Soviet X-15 now (`design.md` §1), and flies the X-15's steps with
   its own clips (`e154-takeoff`, `-cruise`, `-drop`, `-climb`, `-peak`, `-fast`, `-descent`, `-landing`): the X-15's
   timelines and stories, with the E-154 from the user's art (a needle nose, a tall swept fin, four nozzles, wheels)

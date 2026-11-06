@@ -94,6 +94,24 @@ def puff(cx, cy, r):
     return out + "".join(f'<circle cx="{x}" cy="{y}" r="{rr - 1.6}" fill="#ffffff"/>' for x, y, rr in c)
 
 
+def plume(x0, y0, dx=102, dy=-26):
+    """A jet stuck open: a cone of exhaust from the nozzle at (x0, y0) along (dx, dy), pinched at the nozzle
+    and flaring to a ragged tip, with a solid core near the nozzle, so it reads as thrust, not a bar (user,
+    2026-11-06). Anchor its layer at the nozzle (RT_AT(x0, y0)), so a flicker grows it from the jet."""
+    length = math.hypot(dx, dy)
+    ux, uy = dx / length, dy / length
+    nx, ny = -uy, ux
+
+    def at(a, b):
+        return f"{x0 + ux * a * length + nx * b:.1f} {y0 + uy * a * length + ny * b:.1f}"
+
+    outer = (f'M{at(0, -3)} L{at(0.82, -24)} Q{at(1.0, -17)} {at(0.92, -8)} Q{at(1.06, 0)} {at(0.92, 8)} '
+             f'Q{at(1.0, 17)} {at(0.82, 24)} L{at(0, 3)} Z')
+    core = f'M{at(0, -1.6)} L{at(0.42, -6)} Q{at(0.52, 0)} {at(0.42, 6)} L{at(0, 1.6)} Z'
+    return (f'<path d="{outer}" fill="{GOLD_FILL}" stroke="{GOLD}" stroke-width="2" stroke-linejoin="round"/>'
+            f'<path d="{core}" fill="{GOLD}"/>')
+
+
 # --- On the pad: launch preparations and countdown -------------------------------------------
 
 def pad_parts():
@@ -315,8 +333,7 @@ def return_parts():
     # The attitude jets at the nose, a puff each side, and one jet stuck open (a long plume).
     layer("r-jet-l", RT(puff(912, 378, 10)), RT_AT(926, 378))
     layer("r-jet-r", RT(puff(1008, 378, 10)), RT_AT(994, 378))
-    layer("r-jet-stuck", RT(f'<path d="M986 376 C1016 368 1050 358 1086 350 L1090 366 C1054 372 1018 384 988 392 Z" '
-                            f'fill="{GOLD_FILL}" stroke="{GOLD}" stroke-width="2" stroke-linejoin="round"/>'), RC)
+    layer("r-jet-stuck", RT(plume(987, 384)), RT_AT(987, 384))
     # Reentry: the glow at the base (a bow of hot air, two shells), the air streaming past, and the
     # pieces of a break-up.
     glow = (f'<path d="M906 516 C920 560 1000 560 1014 516" fill="none" stroke="{GOLD}" stroke-width="4" stroke-linecap="round"/>'
@@ -1795,8 +1812,7 @@ def mercury_parts():
     # The attitude jets, on the recovery compartment.
     layer("mc-r-jet-l", RT(puff(927, 400, 9)), RT_AT(936, 400))
     layer("mc-r-jet-r", RT(puff(993, 400, 9)), RT_AT(984, 400))
-    layer("mc-r-jet-stuck", RT(f'<path d="M980 398 C1010 390 1044 380 1080 372 L1084 388 C1048 394 1012 406 982 414 Z" '
-                               f'fill="{GOLD_FILL}" stroke="{GOLD}" stroke-width="2" stroke-linejoin="round"/>'), RC)
+    layer("mc-r-jet-stuck", RT(plume(981, 406)), RT_AT(981, 406))
     # The periscope: out from the cone's side near the shield, its head turned forward; it slides in
     # along its own length (reentry-trim.jsx), its pivot at its root.
     layer("mc-r-periscope", RT(f'<path d="M921 480 L903 480 L903 470" fill="none" {LINE} stroke-width="3.2"/>'
@@ -2048,8 +2064,7 @@ def vostok_parts():
     # The attitude jets, on the module's forward cone.
     layer("vk-r-jet-l", RT(puff(896, 540, 10)), RT_AT(906, 540))
     layer("vk-r-jet-r", RT(puff(1024, 540, 10)), RT_AT(1014, 540))
-    layer("vk-r-jet-stuck", RT(f'<path d="M1016 536 C1046 528 1080 518 1116 510 L1120 526 C1084 532 1048 544 1018 552 Z" '
-                               f'fill="{GOLD_FILL}" stroke="{GOLD}" stroke-width="2" stroke-linejoin="round"/>'), RC)
+    layer("vk-r-jet-stuck", RT(plume(1017, 544)), RT_AT(1017, 544))
     layer("vk-r-glow-side", RT(f'<path d="M1012 372 C1034 396 1042 430 1034 466 C1052 430 1040 392 1012 372 Z" fill="{GOLD_FILL}" '
                                f'stroke="{GOLD}" stroke-width="2" stroke-linejoin="round"/>'), RC)
     # Voskhod (2026-10-18, user): Vostok's parts with the backup retro on the sphere's top while in orbit; it's
@@ -2328,8 +2343,7 @@ def soyuz_parts():
     layer("sy-r-flame-3", "", RT_AT(960, 668))
     layer("sy-r-jet-l", RT(puff(880, 540, 10)), RT_AT(890, 540))
     layer("sy-r-jet-r", RT(puff(1040, 540, 10)), RT_AT(1030, 540))
-    layer("sy-r-jet-stuck", RT(f'<path d="M1034 536 C1064 528 1098 518 1134 510 L1138 526 C1102 532 1066 544 1036 552 Z" '
-                               f'fill="{GOLD_FILL}" stroke="{GOLD}" stroke-width="2" stroke-linejoin="round"/>'), RC)
+    layer("sy-r-jet-stuck", RT(plume(1035, 544)), RT_AT(1035, 544))
     layer("sy-r-glow-side", RT(f'<path d="M1000 366 C1024 396 1036 440 1036 496 C1050 440 1030 392 1000 366 Z" fill="{GOLD_FILL}" '
                                f'stroke="{GOLD}" stroke-width="2" stroke-linejoin="round"/>'), RC)
     layer("sy-r-half-nose", RT(small(f'<path d="M928 352 C904 384 892 420 891 440 L1029 440 C1028 420 1016 384 992 352 Z" '
@@ -2576,8 +2590,7 @@ def ofo_bios_parts():
     # The attitude jets, on the bell's shoulders.
     layer("bs-r-jet-l", RT(puff(922, 430, 9)), RT_AT(932, 430))
     layer("bs-r-jet-r", RT(puff(998, 430, 9)), RT_AT(988, 430))
-    layer("bs-r-jet-stuck", RT(f'<path d="M986 432 C1016 424 1050 414 1086 406 L1090 422 C1054 428 1018 440 988 448 Z" '
-                               f'fill="{GOLD_FILL}" stroke="{GOLD}" stroke-width="2" stroke-linejoin="round"/>'), RC)
+    layer("bs-r-jet-stuck", RT(plume(987, 440)), RT_AT(987, 440))
     # The break-up: the neck and canister from the bell.
     layer("bs-r-half-nose", RT(small(f'<path d="M927 430 C935 396 948 372 960 372 C972 372 985 396 993 430 Q960 438 927 430 Z" fill="#ffffff" {LINE} stroke-width="3"/>'
                                      f'<rect x="952" y="356" width="16" height="18" rx="2" fill="#ffffff" {LINE} stroke-width="2.2"/>')),
@@ -2706,9 +2719,7 @@ def apollo_parts():
     quad = 500 + 0.35 * 4.6 * K
     layer("ap-r-jet-l", RT(puff(886, quad, 10)), RT_AT(896, quad))
     layer("ap-r-jet-r", RT(puff(1034, quad, 10)), RT_AT(1024, quad))
-    layer("ap-r-jet-stuck", RT(f'<path d="M1030 {quad - 4:.0f} C1060 {quad - 12:.0f} 1094 {quad - 22:.0f} 1130 {quad - 30:.0f} '
-                               f'L1134 {quad - 14:.0f} C1098 {quad - 8:.0f} 1062 {quad + 4:.0f} 1032 {quad + 12:.0f} Z" '
-                               f'fill="{GOLD_FILL}" stroke="{GOLD}" stroke-width="2" stroke-linejoin="round"/>'), RC)
+    layer("ap-r-jet-stuck", RT(plume(1031, quad + 4)), RT_AT(1031, quad + 4))
     layer("ap-r-glow-side", RT(f'<path d="M972 410 C996 440 1016 470 1024 500 C1032 466 1006 434 972 410 Z" fill="{GOLD_FILL}" '
                                f'stroke="{GOLD}" stroke-width="2" stroke-linejoin="round"/>'), RC)
     layer("ap-r-half-nose", RT(small(f'<path d="M951 401 L969 401 L996 450 L924 450 Z" fill="#ffffff" {LINE} stroke-width="3"/>')),
@@ -3273,10 +3284,7 @@ def lk700_parts():
     jy = 500 - 0.5 * L7_CYL * R
     layer("l7-r-jet-l", RT(puff(960 - rr - 12, jy, 10)), RT_AT(960 - rr - 2, jy))
     layer("l7-r-jet-r", RT(puff(960 + rr + 12, jy, 10)), RT_AT(960 + rr + 2, jy))
-    layer("l7-r-jet-stuck", RT(f'<path d="M{960 + rr:.1f} {jy - 4:.1f} C{960 + rr + 30:.1f} {jy - 12:.1f} {960 + rr + 64:.1f} {jy - 22:.1f} '
-                               f'{960 + rr + 100:.1f} {jy - 30:.1f} L{960 + rr + 104:.1f} {jy - 14:.1f} C{960 + rr + 68:.1f} {jy - 8:.1f} '
-                               f'{960 + rr + 32:.1f} {jy + 4:.1f} {960 + rr + 2:.1f} {jy + 12:.1f} Z" fill="{GOLD_FILL}" stroke="{GOLD}" '
-                               f'stroke-width="2" stroke-linejoin="round"/>'), RC)
+    layer("l7-r-jet-stuck", RT(plume(960 + rr + 1, jy + 4)), RT_AT(960 + rr + 1, jy + 4))
     layer("l7-r-glow-side", RT(f'<path d="M{960 + 0.45 * R + 4:.1f} {500 - (L7_CYL + L7_CONE) * R:.1f} C{960 + rr + 10:.1f} '
                                f'{500 - L7_CYL * R:.1f} {960 + rr + 12:.1f} 460 {960 + rr + 4:.1f} 500 C{960 + rr + 24:.1f} 460 '
                                f'{960 + rr + 14:.1f} {500 - L7_CYL * R - 10:.1f} {960 + 0.45 * R + 4:.1f} {500 - (L7_CYL + L7_CONE) * R:.1f} Z" '
@@ -3569,9 +3577,7 @@ def gemini_parts():
     jy = 500 - 1.98 * GM_R[3]
     layer("gm-r-jet-l", RT(puff(930, jy, 9)), RT_AT(939, jy))
     layer("gm-r-jet-r", RT(puff(990, jy, 9)), RT_AT(981, jy))
-    layer("gm-r-jet-stuck", RT(f'<path d="M981 {jy - 4:.1f} C1010 {jy - 12:.1f} 1044 {jy - 22:.1f} 1080 {jy - 30:.1f} L1084 {jy - 14:.1f} '
-                               f'C1048 {jy - 8:.1f} 1012 {jy + 4:.1f} 983 {jy + 12:.1f} Z" fill="{GOLD_FILL}" stroke="{GOLD}" '
-                               f'stroke-width="2" stroke-linejoin="round"/>'), RC)
+    layer("gm-r-jet-stuck", RT(plume(982, jy + 4)), RT_AT(982, jy + 4))
     layer("gm-r-glow-side", RT(f'<path d="M984 430 C1000 456 1012 480 1016 504 C1022 476 1006 450 984 430 Z" fill="{GOLD_FILL}" '
                                f'stroke="{GOLD}" stroke-width="2" stroke-linejoin="round"/>'), RC)
     # The break-up: the nose (R&R and RCS sections) from the cabin, at the generic seam's pivots.

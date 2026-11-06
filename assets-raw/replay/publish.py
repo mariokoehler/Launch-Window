@@ -1,4 +1,4 @@
-"""Publishes a batch of replay clips, several at a time: python publish.py [-j N] [--dry-run] <clip> ...
+"""Publishes a batch of replay clips, several at a time: python publish.py [-j N] [--dry-run] [only:<variant>] <clip> ...
 
 A clip is a step clip's name (steps/build.py's STEPS), or launch:<skin> for a craft's launch (launch-storyboard/build.py's
 SKINS; its three variants). Each runs its builder with "publish nocues", logged to steps/build/logs/<clip>.log; the
@@ -15,8 +15,9 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 LOGS = os.path.join(HERE, "steps", "build", "logs")
 
 
-def jobs(clips):
-    """(log name, working folder, command) for each clip; a launch is three, one a variant."""
+def jobs(clips, only=()):
+    """(log name, working folder, command) for each clip; a launch is three, one a variant. "only:<variant>" arguments
+    go on to every step clip's builder (steps/build.py), which then publishes just those variants."""
     out = []
     for clip in clips:
         if clip.startswith("launch:"):
@@ -25,7 +26,8 @@ def jobs(clips):
                 out.append((f"launch-{skin}-{v}", os.path.join(HERE, "launch-storyboard"),
                             [sys.executable, "build.py", v, skin, "publish", "nocues"]))
         else:
-            out.append((clip, os.path.join(HERE, "steps"), [sys.executable, "build.py", clip, "publish", "nocues"]))
+            out.append((clip, os.path.join(HERE, "steps"), [sys.executable, "build.py", clip, "publish", "nocues"]
+                        + list(only)))
     return out
 
 
@@ -45,8 +47,9 @@ def main():
         n = int(args[i + 1])
         del args[i:i + 2]
     dry = "--dry-run" in args
-    clips = [a for a in args if a != "--dry-run"]
-    todo = jobs(clips)
+    only = [a for a in args if a.startswith("only:")]
+    clips = [a for a in args if a != "--dry-run" and not a.startswith("only:")]
+    todo = jobs(clips, only)
     if dry:
         for name, cwd, cmd in todo:
             print(f"{name}: {os.path.relpath(cwd, HERE)}> {' '.join(cmd[1:])}")
