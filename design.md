@@ -946,6 +946,18 @@ leading to satellite navigation.
   2 September 1958, and NASA opened on 1 October 1958. On the other side, Kennedy's call to land on the
   Moon (25 May 1961) went unanswered for three years: the Soviet decree committing to a crewed Moon
   landing came on 3 August 1964.
+- **Failures in public and in secret** (checked 2026-11-06, for rivals' failed attempts, §2.9): America's
+  failures were public. Vanguard TV3 (6 December 1957), the first American satellite attempt, rose about
+  four feet, fell back onto its pad and exploded in front of the press's cameras; papers called it
+  "Flopnik" and "Kaputnik" (NASA), and its little satellite, thrown clear, is in the National Air and Space
+  Museum. The Soviet Union announced only successes: a planetary probe stranded in Earth orbit got a
+  "Kosmos" number to hide it, from Kosmos 21 (November 1963) on, and Kosmos 27 (March 1964) would have
+  been a Venera had its upper stage worked. The four N1 Moon rocket failures (1969 to 1972) were not
+  admitted until glasnost, but American reconnaissance satellites photographed the launch complex wrecked
+  by the second (3 July 1969), when the rocket fell back onto its pad. Sources: NASA ("60 years ago,
+  Vanguard fails to reach orbit"), Wikipedia ("Kosmos 21", "Kosmos 27"), The Space Review (Day and Vick
+  on the N1 in CIA imagery). Whether Vanguard's explosion went out live on television is told often but
+  unchecked here: say "in front of the cameras".
 - **Stand-downs after a lost crew** (checked 2026-10-12, for the grounding, §2.5(j)): after the Apollo 1
   fire (27 January 1967, a ground test) no crew flew until Apollo 7 (11 October 1968), about 20 months,
   while Apollo 4 (November 1967), Apollo 5 (January 1968) and Apollo 6 (April 1968) flew uncrewed and
@@ -2249,6 +2261,28 @@ No BASPM precedent beyond its 1v1 PBEM mode and rival comparison screen.
     passive's ladder line and the Foreign hardware tab are hidden, as are counterpart lines. Once the
     race is decided, everything opens. The roles and counterparts go in a text file outside the pack,
     with a test that holds every program and rocket to an entry.
+  - **Failed attempts** (the user's idea, 2026-11-06; built the same day; the user picked "the same for
+    everyone", with each side's flavour in the words only). A program can be developed in secret, but a
+    rocket that fails on the pad or in flight can't be hidden (history in §1.1, "Failures in public and in
+    secret"). **From level 1 every rival's failed attempt is reported, no roll,** and counter-intelligence
+    plays no part. **A failed attempt** is a mission that ended on a failing step (`FAILURE` or
+    `CATASTROPHIC`), whatever it was: pad, launch, flight or the way home, crewed or not, contract flights
+    too. A glitch the mission survives stays secret. A crew lost is reported here too, besides its memorial
+    page. **When:** the turn after; the board settles before anyone's season pass, so it reads
+    every agency's report of the turn before (`rules.RivalFailures`, from `TurnScheduler`), like the
+    memorial's losses. **Detail by level** (stripped when seen, never growing later): level 1 the program
+    and roughly where (`RivalFailure.Phase`: on the pad, during launch, in flight, on the way home);
+    level 2 the configuration and the step; level 3 the suspected component, the one with the largest
+    share of the step's risk (involvement × unreliability as flown). **Where:** the phase comes from the
+    step's place in its season: preparations and countdown are the pad, and they (or the season's start)
+    open a launch that lasts while each step involves a rocket slot (or an air drop's carrier: takeoff,
+    pre-launch, the drop); after that a step on the way home (retrofire, reentry, recovery and the like)
+    and every step after it in the season is the way home; the rest is flight. **Words:** a NASA-side
+    rival's failure is read in the press ("The press reports that…"), a Soviet-side one picked up by
+    tracking stations ("Tracking stations report that…"), the same for both sides otherwise (user). It
+    shows in the turn report's Intelligence section and in the rival's folder, which keeps the last
+    **24** (`Intelligence.FAILURES_KEPT`, unconfirmed; the folders' other lists are capped too). No number
+    here is a balance one beyond that cap; it gives level 1 a second reason besides background checks.
   - **Background check** (the decided feature above, now concrete). The **active check answers
     at once**: the server replies during the season with one of the candidate's traits, or "no
     notable traits", and the action is used. It's desk work, so instant fits, and an answer at

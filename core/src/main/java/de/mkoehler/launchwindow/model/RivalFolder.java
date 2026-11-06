@@ -8,7 +8,7 @@ import java.util.Map;
 /**
  * Everything an agency's intelligence service knows about one rival ({@code design.md} &sect;2.9,
  * {@code ui-spec.md} &sect;4.15's folders): the newest dossier per area, personnel files, tidbits,
- * catches both ways, and the rival's Intelligence level as last learned.
+ * catches both ways, the rival's failed attempts, and the rival's Intelligence level as last learned.
  *
  * @author Mario Koehler
  */
@@ -29,6 +29,7 @@ public class RivalFolder {
     private List<PersonnelFile> personnelFiles = new ArrayList<>();
     private List<Tidbit> tidbits = new ArrayList<>();
     private List<IntelCatch> catches = new ArrayList<>();
+    private List<RivalFailure> failures = new ArrayList<>();
 
     /**
      * No-argument constructor for Jackson and Kryo.
@@ -202,5 +203,24 @@ public class RivalFolder {
      */
     public void setCatches(List<IntelCatch> catches) {
         this.catches = catches == null ? new ArrayList<>() : new ArrayList<>(catches);
+    }
+
+    /**
+     * Returns the rival's failed attempts seen, oldest first, the newest {@code Intelligence.FAILURES_KEPT}
+     * kept ({@code design.md} &sect;2.9).
+     *
+     * @return the failures, live
+     */
+    public List<RivalFailure> getFailures() {
+        return failures;
+    }
+
+    /**
+     * Sets the failed attempts.
+     *
+     * @param failures the failures
+     */
+    public void setFailures(List<RivalFailure> failures) {
+        this.failures = failures == null ? new ArrayList<>() : new ArrayList<>(failures);
     }
 }

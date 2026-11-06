@@ -1,6 +1,8 @@
 package de.mkoehler.launchwindow.client.view;
 
+import de.mkoehler.launchwindow.model.Archetype;
 import de.mkoehler.launchwindow.model.Dossier;
+import de.mkoehler.launchwindow.model.RivalFailure;
 import de.mkoehler.launchwindow.model.GameDate;
 import de.mkoehler.launchwindow.model.IntelArea;
 import de.mkoehler.launchwindow.model.IntelFact;
@@ -132,9 +134,12 @@ public final class IntelTexts {
      */
     public static String passive(int level) {
         return switch (level) {
-            case 1 -> Intelligence.PASSIVE_CANDIDATE_PERCENT + " % per candidate: a trait shows on the hire screen";
-            case 2 -> Intelligence.TIDBIT_PERCENT[2] + " % a season: a tidbit about a rival's R&D or plans";
-            case 3 -> "Tidbits " + Intelligence.TIDBIT_PERCENT[3] + " % a season, from any area, people included";
+            case 1 -> Intelligence.PASSIVE_CANDIDATE_PERCENT + " % per candidate: a trait shows on the hire screen. "
+                + "Every rival's failed attempt, and roughly where";
+            case 2 -> Intelligence.TIDBIT_PERCENT[2] + " % a season: a tidbit about a rival's R&D or plans. "
+                + "Failed attempts: the flight and the step";
+            case 3 -> "Tidbits " + Intelligence.TIDBIT_PERCENT[3] + " % a season, from any area, people included. "
+                + "Failed attempts: the suspected part";
             default -> "None";
         };
     }
@@ -466,6 +471,72 @@ public final class IntelTexts {
             // Offers report through their own line (OfferSettled), never as a finding.
             case OFFER_MADE, OFFER_RECEIVED -> new String[] {rival + what, ""};
             case FOREIGN_HARDWARE -> new String[] {"Foreign hardware", tidbit(finding.tidbit().fact())};
+            case FAILED_ATTEMPT -> new String[] {"Failed attempt · " + rival, failure(finding.failure(), true)};
+        };
+    }
+
+    /**
+     * Words a rival's failed attempt ({@code design.md} &sect;2.9): read in the press for a NASA-side
+     * agency, picked up by tracking stations for a Soviet-side one, with as much as the service's level
+     * learned when it was seen.
+     *
+     * @param failure the failure
+     * @return the text, such as "The press reports that their Mercury flight failed during launch.", or with
+     *         a level 2 service's detail "Tracking stations report that their Vostok flight (Orbital flight)
+     *         failed on the way home, on the retrofire step."
+     */
+    public static String failure(RivalFailure failure) {
+        return failure(failure, false);
+    }
+
+    /**
+     * Words a rival's failed attempt, with when it happened for a line without a date beside it: it
+     * arrives a turn late, so the turn report's line names the season ("…report that in Winter 1962
+     * their Vostok flight failed…").
+     *
+     * @param failure the failure
+     * @param dated   whether to name the season it failed in
+     * @return the text
+     */
+    public static String failure(RivalFailure failure, boolean dated) {
+        StringBuilder text = new StringBuilder(failure.side() == Archetype.NASA ? "The press reports"
+            : "Tracking stations report");
+        boolean detailed = failure.configurationId() != null && failure.stepId() != null;
+        text.append(" that ");
+        if (dated) {
+            text.append("in ").append(GameDate.ofTurn(failure.turn()).label()).append(' ');
+        }
+        text.append("their ").append(name(failure.programId())).append(" flight ");
+        if (detailed) {
+            text.append('(').append(ContentNames.configuration(failure.configurationId())).append(") ");
+        }
+        text.append(failure.crewLost() ? "was lost " : "failed ").append(phase(failure.phase()));
+        if (failure.crewLost()) {
+            text.append(", with its crew");
+        }
+        if (detailed) {
+            text.append(", on the ").append(TurnReportView.stepInSentence(failure.configurationId(), failure.stepId()))
+                .append(" step");
+        }
+        text.append('.');
+        if (failure.componentId() != null) {
+            text.append(" Analysts suspect the ").append(name(failure.componentId())).append('.');
+        }
+        return text.toString();
+    }
+
+    /**
+     * Words roughly where a mission failed.
+     *
+     * @param phase the phase
+     * @return the words, such as "during launch"
+     */
+    public static String phase(RivalFailure.Phase phase) {
+        return switch (phase) {
+            case PAD -> "on the pad";
+            case LAUNCH -> "during launch";
+            case FLIGHT -> "in flight";
+            case RETURN -> "on the way home";
         };
     }
 

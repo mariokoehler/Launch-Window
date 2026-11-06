@@ -4,6 +4,7 @@ import de.mkoehler.launchwindow.model.Dossier;
 import de.mkoehler.launchwindow.model.IntelArea;
 import de.mkoehler.launchwindow.model.IntelOperation;
 import de.mkoehler.launchwindow.model.PersonnelFile;
+import de.mkoehler.launchwindow.model.RivalFailure;
 import de.mkoehler.launchwindow.model.Tidbit;
 
 import java.util.Objects;
@@ -25,11 +26,12 @@ import java.util.Objects;
  * @param level         the rival's level learned: their counter-intelligence for {@link Kind#CAUGHT},
  *                      their Intelligence level for {@link Kind#CAUGHT_THEIRS} and a plans dossier; else -1
  * @param offer         a poaching offer's result, for {@link Kind#OFFER_MADE} and {@link Kind#OFFER_RECEIVED}
+ * @param failure       a rival's failed attempt as seen, for {@link Kind#FAILED_ATTEMPT}
  * @author Mario Koehler
  */
 public record IntelFinding(Kind kind, String operationId, IntelOperation.Kind operationKind, String rivalId,
                            String rivalAgency, IntelArea area, Dossier dossier, PersonnelFile file, Tidbit tidbit,
-                           int level, OfferResult offer) {
+                           int level, OfferResult offer, RivalFailure failure) {
 
     /**
      * What happened.
@@ -56,7 +58,9 @@ public record IntelFinding(Kind kind, String operationId, IntelOperation.Kind op
         /** A rival's offer to one of our people was settled. */
         OFFER_RECEIVED,
         /** One piece of the other side's hardware explained: the {@code tidbit}'s fact names it. */
-        FOREIGN_HARDWARE
+        FOREIGN_HARDWARE,
+        /** A rival's mission failed last turn: seen from level 1, no roll ({@code design.md} &sect;2.9). */
+        FAILED_ATTEMPT
     }
 
     /**
@@ -85,6 +89,40 @@ public record IntelFinding(Kind kind, String operationId, IntelOperation.Kind op
     public IntelFinding(Kind kind, String operationId, IntelOperation.Kind operationKind, String rivalId,
             String rivalAgency, IntelArea area, Dossier dossier, PersonnelFile file, Tidbit tidbit, int level) {
         this(kind, operationId, operationKind, rivalId, rivalAgency, area, dossier, file, tidbit, level, null);
+    }
+
+    /**
+     * A finding without a failed attempt.
+     *
+     * @param kind          what happened
+     * @param operationId   the operation it settles
+     * @param operationKind the operation's kind
+     * @param rivalId       the rival's player id
+     * @param rivalAgency   the rival's agency name
+     * @param area          an assessment's area
+     * @param dossier       the new dossier
+     * @param file          the new personnel file
+     * @param tidbit        the tidbit
+     * @param level         the rival's level learned, or -1
+     * @param offer         a poaching offer's result
+     */
+    public IntelFinding(Kind kind, String operationId, IntelOperation.Kind operationKind, String rivalId,
+            String rivalAgency, IntelArea area, Dossier dossier, PersonnelFile file, Tidbit tidbit, int level,
+            OfferResult offer) {
+        this(kind, operationId, operationKind, rivalId, rivalAgency, area, dossier, file, tidbit, level, offer, null);
+    }
+
+    /**
+     * A rival's failed attempt, as a service saw it.
+     *
+     * @param rivalId     the rival's player id
+     * @param rivalAgency the rival's agency name
+     * @param failure     the failure, stripped to the service's level
+     * @return the finding
+     */
+    public static IntelFinding failedAttempt(String rivalId, String rivalAgency, RivalFailure failure) {
+        return new IntelFinding(Kind.FAILED_ATTEMPT, null, null, rivalId, rivalAgency, null, null, null, null, -1, null,
+            Objects.requireNonNull(failure, "failure must not be null"));
     }
 
     /**

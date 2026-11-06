@@ -74,6 +74,10 @@ public final class Intelligence {
     public static final int FILES_KEPT = 8;
     /** The catches kept per folder, both ways; the oldest drops off. */
     public static final int CATCHES_KEPT = 10;
+    /** The level from which every rival's failed attempt is reported, no roll ({@code design.md} &sect;2.9). */
+    public static final int FAILURES_LEVEL = 1;
+    /** The failed attempts kept per folder (unconfirmed); the oldest drops off. */
+    public static final int FAILURES_KEPT = 24;
 
     private static final long CANDIDATE_SALT = 0x1A7E_5EC0_C0DE_1961L;
 
@@ -475,6 +479,10 @@ public final class Intelligence {
                     finding.level()));
                 folder.learnLevel(finding.level(), gameTurn, RivalFolder.FROM_A_CATCH);
                 trim(folder.getCatches(), CATCHES_KEPT);
+            }
+            case FAILED_ATTEMPT -> {
+                folder.getFailures().add(finding.failure());
+                trim(folder.getFailures(), FAILURES_KEPT);
             }
             case FAILED, NO_TARGET, NOT_SETTLED, OFFER_MADE, OFFER_RECEIVED -> {
                 // Nothing learned (offers are applied by Poaching).

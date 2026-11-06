@@ -74,6 +74,11 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
   (`Intelligence.HARDWARE_PERCENT`, kept in `IntelligenceState.foreignHardware`), its words in
   `assets/content/foreign-hardware.json` (outside the pack, `ForeignHardwareTest` holds every program and rocket to an entry,
   a role to 46 characters). `-Dshots=foreign`. Every number and the counterparts await the user's review. A saved field and a new finding: rebuild client and server together; no reset.
+- **Rivals' failed attempts are reported** (the user's idea, 2026-11-06, `design.md` §2.9 and §1.1, `ui-spec.md` §4.15): from
+  level 1, every rival mission that ended on a failing step reaches the turn report the turn after, no roll (`rules.RivalFailures`
+  reads last turn's reports in `TurnScheduler`; `IntelFinding.Kind.FAILED_ATTEMPT`), detail by level (program and phase; step;
+  suspected part), kept in the folder (`RivalFolder.failures`, last 24). The press for NASA-side, tracking stations for Soviet-side
+  (wording only). `-Dshots=intel`. Saved fields added: rebuild client and server together; no reset. The wiki follows `help.json`.
 - **Help is built** (2026-10-08, `ui-spec.md` component 23): a help button and F1 open the rules
   by topic over the current screen, filtered to the screen's topics. 34 topics (synced with the code 2026-10-29: hands-on campaigns got their own). Numbers in
   `help.json` are tokens filled from the rules (`HelpValues`); a new rule number goes there, never

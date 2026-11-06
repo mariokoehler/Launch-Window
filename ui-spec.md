@@ -3348,6 +3348,12 @@ binoculars, our own drawing; on the UI Asset Sheet since 2026-10-08). All rules 
   have changed since".
 - **Personnel files:** a small card per person (portrait, name, skills as ranges, loyalty band,
   ambition, one trait as component 20).
+- **Failed attempts** *(2026-11-06, `design.md` §2.9; straight in libGDX)*: above the tidbits in the
+  third column, newest first, each dated with the turn it failed, in the turn report's words
+  (`IntelTexts.failure`): "Tracking stations report that their Vostok flight (Uncrewed orbital test)
+  failed on the way home, on the retrofire step." Empty: "None seen. Every one of theirs is reported the
+  season after." (below level 1, "From level 1 every one of theirs…"). The folder list's card counts them
+  ("3 failed attempts").
 - **Tidbits:** the passive finds, newest first, each dated.
 - **Caught:** agents of yours this rival caught, and theirs you caught.
 
@@ -3424,8 +3430,10 @@ of Theme tokens). Defaults taken where the mockup left a gap or the client diffe
 
 **Hire screen addition** (component 14): see there.
 
-**Turn report:** an "Intelligence" section (level changes, reveals, dossiers, tidbits, catches),
-each line linking to its folder.
+**Turn report:** an "Intelligence" section (level changes, reveals, dossiers, tidbits, catches,
+rivals' failed attempts as "Failed attempt · Sever Design Bureau", naming the season it failed in since it
+arrives a turn late: "…report that in Winter 1962 their Vostok flight…"), each line linking to its folder.
+The ladder's passive lines name what each level learns of a failed attempt.
 
 **Mocked up (2026-10-07)** on the canvas `Launch Window — Intelligence Office` (the Artifact tool's
 list finds it): the overview at level 2 climbing to 3 and at level 0, operations, the folder of one

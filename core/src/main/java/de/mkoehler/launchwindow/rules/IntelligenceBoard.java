@@ -11,6 +11,7 @@ import de.mkoehler.launchwindow.model.OwnedMissionComponent;
 import de.mkoehler.launchwindow.model.Personnel;
 import de.mkoehler.launchwindow.model.PersonnelFile;
 import de.mkoehler.launchwindow.model.PlayerSnapshot;
+import de.mkoehler.launchwindow.model.RivalFailure;
 import de.mkoehler.launchwindow.model.RivalFolder;
 import de.mkoehler.launchwindow.model.SetSpecialist;
 import de.mkoehler.launchwindow.model.Tidbit;
@@ -58,8 +59,27 @@ public final class IntelligenceBoard {
      */
     public static Map<String, List<IntelFinding>> settle(Map<String, PlayerSnapshot> agencies, ContentCatalog catalog,
             long gameSeed, long gameTurn) {
+        return settle(agencies, catalog, gameSeed, gameTurn, Map.of());
+    }
+
+    /**
+     * Settles the turn, with the failed attempts of the turn before: every agency's service at level 1
+     * or more learns each rival's, no roll and no counter-intelligence, stripped to its level
+     * ({@code design.md} &sect;2.9, "Failed attempts"). They come after everything rolled, so they
+     * shift no draw.
+     *
+     * @param agencies every agency's state, by player id, the turn's actions applied
+     * @param catalog  the content catalog
+     * @param gameSeed the game's seed
+     * @param gameTurn the turn being resolved
+     * @param failures last turn's failed attempts in full detail, by player id ({@link RivalFailures#byAgency})
+     * @return each agency's findings, by player id; agencies with none are left out
+     */
+    public static Map<String, List<IntelFinding>> settle(Map<String, PlayerSnapshot> agencies, ContentCatalog catalog,
+            long gameSeed, long gameTurn, Map<String, List<RivalFailure>> failures) {
         Objects.requireNonNull(agencies, "agencies must not be null");
         Objects.requireNonNull(catalog, "catalog must not be null");
+        Objects.requireNonNull(failures, "failures must not be null");
         Map<String, PlayerSnapshot> sorted = new TreeMap<>(agencies);
         Map<String, List<IntelFinding>> findings = new LinkedHashMap<>();
         for (Map.Entry<String, PlayerSnapshot> spy : sorted.entrySet()) {
@@ -125,6 +145,23 @@ public final class IntelligenceBoard {
             findings.computeIfAbsent(spy.getKey(), id -> new ArrayList<>()).add(new IntelFinding(
                 IntelFinding.Kind.FOREIGN_HARDWARE, null, null, null, null, null, null, null,
                 new Tidbit((int) gameTurn, fact), -1));
+        }
+        // Failed attempts: nobody hides a rocket that fails in public, so no roll.
+        for (Map.Entry<String, PlayerSnapshot> spy : sorted.entrySet()) {
+            int level = spy.getValue().getIntelligence().getLevel();
+            if (level < Intelligence.FAILURES_LEVEL) {
+                continue;
+            }
+            for (Map.Entry<String, List<RivalFailure>> rival : new TreeMap<>(failures).entrySet()) {
+                PlayerSnapshot agency = sorted.get(rival.getKey());
+                if (rival.getKey().equals(spy.getKey()) || agency == null) {
+                    continue;
+                }
+                for (RivalFailure failure : rival.getValue()) {
+                    findings.computeIfAbsent(spy.getKey(), id -> new ArrayList<>()).add(IntelFinding.failedAttempt(
+                        rival.getKey(), agency.getAgencyName(), failure.seenAt(level)));
+                }
+            }
         }
         return findings;
     }

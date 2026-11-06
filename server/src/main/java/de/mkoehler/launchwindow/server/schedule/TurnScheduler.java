@@ -23,8 +23,11 @@ import de.mkoehler.launchwindow.rules.FrontPagePrinter;
 import de.mkoehler.launchwindow.rules.GoalTally;
 import de.mkoehler.launchwindow.rules.IntelFinding;
 import de.mkoehler.launchwindow.rules.IntelligenceBoard;
+import de.mkoehler.launchwindow.rules.RivalFailures;
 import de.mkoehler.launchwindow.rules.RivalFirsts;
+import de.mkoehler.launchwindow.rules.TurnReport;
 import de.mkoehler.launchwindow.rules.WinCondition;
+import de.mkoehler.launchwindow.model.Archetype;
 import de.mkoehler.launchwindow.server.GameSeeds;
 
 import java.io.IOException;
@@ -254,7 +257,7 @@ public class TurnScheduler {
         GoalTally tally = GoalTally.fromPlayers(startOfTurn);
         // Last turn's Firsts, read from the start of this turn, so a retry answers the same ones (design.md 2.1(e)).
         List<String> rivalFirsts = RivalFirsts.settledFirstOn(startOfTurn, Math.toIntExact(gameTurn - 1));
-        Map<String, List<IntelFinding>> intelligence = intelligence(gameTurn, meta, withActions);
+        Map<String, List<IntelFinding>> intelligence = intelligence(gameTurn, meta, withActions, services);
         ContractMarket.Settlement market = market(gameTurn, meta, withActions, startByKey);
         FindingPublications.Settlement publications = publications(gameTurn, withActions);
         for (Map.Entry<String, PlayerStateService> player : services.entrySet()) {
@@ -362,22 +365,36 @@ public class TurnScheduler {
      * it in {@code intelligence/turn-N.json}, so a retry after a crash halfway through applies the
      * same findings, even to players whose actions were already archived. Settled from each player's
      * state with the turn's actions applied, keyed by the opaque key operations name their target by.
+     * The failed attempts come from every player's report of the turn before, which is on disk and
+     * never changes, so a retry finds the same ones.
      *
      * @param gameTurn    the turn
      * @param meta        the game's configuration, for its seed
      * @param withActions every player's state with the turn's actions applied, by key
+     * @param services    every player's state service, by account directory
      * @return each player's findings, by key
      * @throws IOException if the file can't be read or written
      */
     private Map<String, List<IntelFinding>> intelligence(long gameTurn, GameMeta meta,
-            Map<String, PlayerSnapshot> withActions) throws IOException {
+            Map<String, PlayerSnapshot> withActions, Map<String, PlayerStateService> services) throws IOException {
         Path file = dataRoot.resolve("intelligence").resolve("turn-" + gameTurn + ".json");
         TypeReference<Map<String, List<IntelFinding>>> type = new TypeReference<>() { };
         if (Files.exists(file)) {
             return mapper.readValue(file.toFile(), type);
         }
+        // Last turn's failed attempts (design.md 2.9): public from this turn, seen by every service at level 1 or more.
+        Map<String, TurnReport> lastReports = new LinkedHashMap<>();
+        Map<String, Archetype> sides = new LinkedHashMap<>();
+        for (Map.Entry<String, PlayerStateService> player : services.entrySet()) {
+            String key = GameSeeds.rivalKey(meta.getGameSeed(), player.getKey());
+            PlayerSnapshot state = withActions.get(key);
+            if (state != null && gameTurn > 1) {
+                player.getValue().turnReport(gameTurn - 1).ifPresent(report -> lastReports.put(key, report));
+                sides.put(key, state.getArchetype());
+            }
+        }
         Map<String, List<IntelFinding>> findings = IntelligenceBoard.settle(withActions, context.catalog(),
-            meta.getGameSeed(), gameTurn);
+            meta.getGameSeed(), gameTurn, RivalFailures.byAgency(lastReports, sides, context.catalog()));
         Files.createDirectories(file.getParent());
         Path temp = Files.createTempFile(file.getParent(), "turn-", ".json.tmp");
         mapper.writerWithDefaultPrettyPrinter().writeValue(temp.toFile(), findings);

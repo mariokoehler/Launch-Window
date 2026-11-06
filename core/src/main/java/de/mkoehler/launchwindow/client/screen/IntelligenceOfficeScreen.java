@@ -34,6 +34,7 @@ import de.mkoehler.launchwindow.model.IntelFact;
 import de.mkoehler.launchwindow.model.IntelOperation;
 import de.mkoehler.launchwindow.model.IntelligenceState;
 import de.mkoehler.launchwindow.model.PersonnelFile;
+import de.mkoehler.launchwindow.model.RivalFailure;
 import de.mkoehler.launchwindow.model.RivalFolder;
 import de.mkoehler.launchwindow.model.Tidbit;
 import de.mkoehler.launchwindow.net.messages.RivalSummary;
@@ -1023,6 +1024,9 @@ public final class IntelligenceOfficeScreen extends ChromeScreen {
                 parts.add(IntelTexts.areaTitle(each) + " " + Museum.date(dossier.turn()));
             }
         }
+        if (!folder.getFailures().isEmpty()) {
+            parts.add(folder.getFailures().size() + " failed attempt" + (folder.getFailures().size() == 1 ? "" : "s"));
+        }
         if (parts.isEmpty()) {
             return folder.getTidbits().isEmpty() ? "Nothing on file" : "Tidbits only · newest "
                 + Museum.date(folder.getTidbits().getLast().turn());
@@ -1058,6 +1062,7 @@ public final class IntelligenceOfficeScreen extends ChromeScreen {
         second.add(dossierCard(folder, IntelArea.PERSONNEL)).padBottom(COLUMN_GAP).row();
         second.add(filesBlock(key, folder)).row();
         Table third = column();
+        third.add(failuresCard(folder)).padBottom(COLUMN_GAP).row();
         third.add(tidbitsCard(folder)).padBottom(COLUMN_GAP).row();
         third.add(caughtCard(folder)).row();
         grid.add(first).width(RND_DOSSIER_WIDTH).top().padRight(COLUMN_GAP);
@@ -1606,6 +1611,30 @@ public final class IntelligenceOfficeScreen extends ChromeScreen {
         });
     }
 
+    /** The rival's failed attempts, newest first ({@code design.md} &sect;2.9). */
+    private Table failuresCard(RivalFolder folder) {
+        Table card = ui.card();
+        card.top();
+        card.defaults().growX().left();
+        card.add(sectionTitle("Failed attempts")).padBottom(Theme.SPACE_3).row();
+        List<RivalFailure> failures = folder == null ? List.of() : folder.getFailures();
+        if (failures.isEmpty()) {
+            card.add(ui.paragraph(intel().getLevel() >= Intelligence.FAILURES_LEVEL
+                ? "None seen. Every one of theirs is reported the season after."
+                : "From level " + Intelligence.FAILURES_LEVEL + " every one of theirs is reported the season after.",
+                Theme.TextStyle.BODY_SM, Theme.INK_MUTED)).row();
+        }
+        for (int i = failures.size() - 1; i >= 0; i--) {
+            RivalFailure failure = failures.get(i);
+            Table line = new Table();
+            line.add(ui.label(Museum.date(failure.turn()), Theme.TextStyle.CAPTION, Theme.INK_MUTED)).width(90f).top()
+                .left().padRight(Theme.SPACE_2);
+            line.add(ui.paragraph(IntelTexts.failure(failure), Theme.TextStyle.BODY_SM, Theme.INK)).expandX().fillX();
+            card.add(line).padBottom(Theme.SPACE_2).row();
+        }
+        return card;
+    }
+
     private Table tidbitsCard(RivalFolder folder) {
         Table card = ui.card();
         card.top();
@@ -1882,6 +1911,9 @@ public final class IntelligenceOfficeScreen extends ChromeScreen {
         }
         for (Tidbit tidbit : folder.getTidbits()) {
             newest = Math.max(newest, tidbit.turn());
+        }
+        for (RivalFailure failure : folder.getFailures()) {
+            newest = Math.max(newest, failure.turn());
         }
         return newest;
     }

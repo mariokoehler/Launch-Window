@@ -2334,7 +2334,22 @@ public final class ScreenSnapshot {
             fact("COMPONENT_RELIABILITY", "r7-sputnik", 72, 92, 0)));
         sever.getCatches().add(new de.mkoehler.launchwindow.model.IntelCatch(28, true,
             de.mkoehler.launchwindow.model.IntelOperation.Kind.PERSONNEL_FILE, null, 1));
+        // Failed attempts (design.md 2.9): one seen at each level's detail, the newest from this turn's report.
+        de.mkoehler.launchwindow.model.RivalFailure padFailure = new de.mkoehler.launchwindow.model.RivalFailure(24,
+            "sputnik-2", "sputnik-2-orbit", "02-countdown", "r7-sputnik",
+            de.mkoehler.launchwindow.model.RivalFailure.Phase.PAD, false, Archetype.SOVIET);
+        de.mkoehler.launchwindow.model.RivalFailure launchFailure = new de.mkoehler.launchwindow.model.RivalFailure(27,
+            "vostok", null, null, null, de.mkoehler.launchwindow.model.RivalFailure.Phase.LAUNCH, false,
+            Archetype.SOVIET);
+        de.mkoehler.launchwindow.model.RivalFailure returnFailure = new de.mkoehler.launchwindow.model.RivalFailure(29,
+            "vostok", "vostok-uncrewed-orbital", "08-retrofire", null,
+            de.mkoehler.launchwindow.model.RivalFailure.Phase.RETURN, false, Archetype.SOVIET);
+        sever.getFailures().addAll(List.of(padFailure, launchFailure, returnFailure));
         de.mkoehler.launchwindow.model.RivalFolder meridian = intel.folder("kMeridian", "Meridian Rocket Society");
+        de.mkoehler.launchwindow.model.RivalFailure pressFailure = new de.mkoehler.launchwindow.model.RivalFailure(29,
+            "mercury", "mercury-suborbital", "04-ascent", null, de.mkoehler.launchwindow.model.RivalFailure.Phase.LAUNCH,
+            false, Archetype.NASA);
+        meridian.getFailures().add(pressFailure);
         meridian.getCatches().add(new de.mkoehler.launchwindow.model.IntelCatch(29, false,
             de.mkoehler.launchwindow.model.IntelOperation.Kind.ASSESSMENT, de.mkoehler.launchwindow.model.IntelArea.RND, 1));
         meridian.learnLevel(1, 29, de.mkoehler.launchwindow.model.RivalFolder.FROM_A_CATCH);
@@ -2371,7 +2386,11 @@ public final class ScreenSnapshot {
                 new de.mkoehler.launchwindow.rules.IntelligenceFound(new de.mkoehler.launchwindow.rules.IntelFinding(
                     de.mkoehler.launchwindow.rules.IntelFinding.Kind.TIDBIT, null, null, "kSever",
                     "Sever Design Bureau", de.mkoehler.launchwindow.model.IntelArea.RND, null, null,
-                    sever.getTidbits().getLast(), -1))));
+                    sever.getTidbits().getLast(), -1)),
+                new de.mkoehler.launchwindow.rules.IntelligenceFound(de.mkoehler.launchwindow.rules.IntelFinding
+                    .failedAttempt("kSever", "Sever Design Bureau", returnFailure)),
+                new de.mkoehler.launchwindow.rules.IntelligenceFound(de.mkoehler.launchwindow.rules.IntelFinding
+                    .failedAttempt("kMeridian", "Meridian Rocket Society", pressFailure))));
         game.session().keepReport(report);
         write(folder, "intel-overview.png", new de.mkoehler.launchwindow.client.screen.IntelligenceOfficeScreen(game,
             de.mkoehler.launchwindow.client.screen.IntelligenceOfficeScreen.Tab.OVERVIEW), null);
@@ -2383,6 +2402,9 @@ public final class ScreenSnapshot {
         write(folder, "intel-folders.png", new de.mkoehler.launchwindow.client.screen.IntelligenceOfficeScreen(game,
             de.mkoehler.launchwindow.client.screen.IntelligenceOfficeScreen.Tab.FOLDERS),
             screen -> screen.openFolder("kSever"));
+        write(folder, "intel-folders-press.png", new de.mkoehler.launchwindow.client.screen.IntelligenceOfficeScreen(game,
+            de.mkoehler.launchwindow.client.screen.IntelligenceOfficeScreen.Tab.FOLDERS),
+            screen -> screen.openFolder("kMeridian"));
         write(folder, "intel-folders-tidbits-only.png", new de.mkoehler.launchwindow.client.screen.IntelligenceOfficeScreen(
             game, de.mkoehler.launchwindow.client.screen.IntelligenceOfficeScreen.Tab.FOLDERS),
             screen -> screen.openFolder("kAurora"));

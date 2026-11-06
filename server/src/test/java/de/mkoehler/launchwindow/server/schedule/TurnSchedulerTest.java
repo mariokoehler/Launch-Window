@@ -8,7 +8,13 @@ import de.mkoehler.launchwindow.model.Archetype;
 import de.mkoehler.launchwindow.model.PlayerSnapshot;
 import de.mkoehler.launchwindow.persistence.PlayerSnapshotStore;
 import de.mkoehler.launchwindow.persistence.PlayerStateService;
+import de.mkoehler.launchwindow.model.RivalFailure;
+import de.mkoehler.launchwindow.persistence.TurnReportStore;
 import de.mkoehler.launchwindow.rules.IntelligenceFound;
+import de.mkoehler.launchwindow.rules.MissionStepOutcome;
+import de.mkoehler.launchwindow.rules.MissionStepResolved;
+import de.mkoehler.launchwindow.rules.ResolutionEvent;
+import de.mkoehler.launchwindow.rules.TurnReport;
 import de.mkoehler.launchwindow.server.GameSeeds;
 import de.mkoehler.launchwindow.persistence.ResolvedSnapshot;
 import de.mkoehler.launchwindow.server.GameServer;
@@ -144,6 +150,46 @@ class TurnSchedulerTest {
         String before = Files.readString(kept);
         scheduler(dataRoot, Clock.fixed(Instant.parse("2026-09-30T08:00:00Z"), ZONE)).checkAndResolveIfDue();
         assertEquals(before, Files.readString(kept), "a turn's findings are written once");
+    }
+
+    /**
+     * Verifies a rival's failed attempt, read from its report of the turn before, reaches every
+     * other agency's folder from level 1, to that level's detail, and never its own
+     * ({@code design.md} &sect;2.9, "Failed attempts").
+     */
+    @Test
+    void aRivalsFailedAttemptReachesTheSpyTheTurnAfter(@TempDir Path dataRoot) throws IOException {
+        Path targetRoot = dataRoot.resolve("players").resolve("acct-target");
+        new PlayerSnapshotStore(targetRoot, mapper).save(0,
+            new PlayerSnapshot("Sever", Archetype.SOVIET, 10_000, 100, 0, 1), null);
+        Path spyRoot = dataRoot.resolve("players").resolve("acct-spy");
+        PlayerSnapshot spy = new PlayerSnapshot("Spy Bureau", Archetype.NASA, 10_000, 100, 0, 1);
+        spy.getIntelligence().setLevel(1);
+        spy.getIntelligence().setTargetLevel(1);
+        new PlayerSnapshotStore(spyRoot, mapper).save(0, spy, null);
+        scheduler(dataRoot, Clock.fixed(Instant.parse("2026-09-28T08:00:00Z"), ZONE)).checkAndResolveIfDue();
+        scheduler(dataRoot, Clock.fixed(Instant.parse("2026-09-29T08:00:00Z"), ZONE)).checkAndResolveIfDue();
+
+        // The target's turn 1 lost a Vostok on its ascent (written in, as the season pass would have).
+        TurnReportStore reports = new TurnReportStore(targetRoot, mapper);
+        TurnReport flown = reports.load(1).orElseThrow();
+        List<ResolutionEvent> events = new java.util.ArrayList<>(flown.events());
+        events.add(new MissionStepResolved("m1", "vostok-orbital", 0, "04-ascent", MissionStepOutcome.FAILURE,
+            List.of(new MissionStepResolved.ComponentFlown("r7-vostok", 90, 70)), 70, false, 30.0, 30.0, false, -10));
+        reports.save(new TurnReport(flown.version(), flown.gameTurn(), flown.prestigeBefore(), flown.prestigeAfter(),
+            flown.fundsBefore(), flown.fundsAfter(), flown.components(), flown.missions(), events,
+            flown.newsStoryId()));
+
+        scheduler(dataRoot, Clock.fixed(Instant.parse("2026-09-30T08:00:00Z"), ZONE)).checkAndResolveIfDue();
+
+        long seed = GameMetaStore.loadOrCreateDefault(dataRoot.resolve("game-meta.json"), mapper).meta().getGameSeed();
+        PlayerSnapshot resolved = new PlayerSnapshotStore(spyRoot, mapper).load(2).orElseThrow();
+        List<RivalFailure> seen = resolved.getIntelligence().getFolders()
+            .get(GameSeeds.rivalKey(seed, "acct-target")).getFailures();
+        assertEquals(List.of(new RivalFailure(1, "vostok", null, null, null, RivalFailure.Phase.LAUNCH, false,
+            Archetype.SOVIET)), seen, "level 1: the program and roughly where");
+        PlayerSnapshot target = new PlayerSnapshotStore(targetRoot, mapper).load(2).orElseThrow();
+        assertTrue(target.getIntelligence().getFolders().values().stream().allMatch(f -> f.getFailures().isEmpty()));
     }
 
     /**

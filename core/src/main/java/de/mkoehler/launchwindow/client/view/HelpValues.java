@@ -252,6 +252,8 @@ public final class HelpValues {
         v.put("intelligence.followUpSeasons", whole(Intelligence.FOLLOW_UP_SEASONS));
         v.put("intelligence.followUpNarrowing", whole(Intelligence.FOLLOW_UP_NARROWING));
         v.put("intelligence.minHalfWidth", whole(Intelligence.MIN_HALF_WIDTH));
+        v.put("intelligence.failuresLevel", whole(Intelligence.FAILURES_LEVEL));
+        v.put("intelligence.failuresKept", whole(Intelligence.FAILURES_KEPT));
 
         // A campaign's shape is its level's; help quotes the first one shipped.
         de.mkoehler.launchwindow.content.HandsOnLevel campaign = de.mkoehler.launchwindow.content.Decisions.standard()
