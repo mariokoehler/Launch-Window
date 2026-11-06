@@ -13,6 +13,7 @@ import de.mkoehler.launchwindow.actions.MakeOfferAction;
 import de.mkoehler.launchwindow.actions.QueueIntelOperationAction;
 import de.mkoehler.launchwindow.actions.SetIntelligenceTargetAction;
 import de.mkoehler.launchwindow.client.LaunchWindowGame;
+import de.mkoehler.launchwindow.client.ui.HistoryNote;
 import de.mkoehler.launchwindow.client.ui.HistoryNotes;
 import de.mkoehler.launchwindow.client.ui.ReliabilityBar;
 import de.mkoehler.launchwindow.client.ui.DashedBox;
@@ -1616,7 +1617,11 @@ public final class IntelligenceOfficeScreen extends ChromeScreen {
         Table card = ui.card();
         card.top();
         card.defaults().growX().left();
-        card.add(sectionTitle("Failed attempts")).padBottom(Theme.SPACE_3).row();
+        Table title = new Table();
+        title.add(sectionTitle("Failed attempts")).left();
+        title.add(new HistoryNote(ui, HistoryNotes.FAILURES)).size(HistoryNote.ICON_SIZE).padLeft(Theme.SPACE_2).left()
+            .expandX();
+        card.add(title).padBottom(Theme.SPACE_3).row();
         List<RivalFailure> failures = folder == null ? List.of() : folder.getFailures();
         if (failures.isEmpty()) {
             card.add(ui.paragraph(intel().getLevel() >= Intelligence.FAILURES_LEVEL

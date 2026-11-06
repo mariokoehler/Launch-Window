@@ -957,7 +957,8 @@ leading to satellite navigation.
   by the second (3 July 1969), when the rocket fell back onto its pad. Sources: NASA ("60 years ago,
   Vanguard fails to reach orbit"), Wikipedia ("Kosmos 21", "Kosmos 27"), The Space Review (Day and Vick
   on the N1 in CIA imagery). Whether Vanguard's explosion went out live on television is told often but
-  unchecked here: say "in front of the cameras".
+  unchecked here: say "in front of the cameras". In the game as the history note on a rival folder's Failed
+  attempts card (`HistoryNotes.FAILURES`, user, 2026-11-06); Vanguard is also a space-race news story.
 - **Stand-downs after a lost crew** (checked 2026-10-12, for the grounding, §2.5(j)): after the Apollo 1
   fire (27 January 1967, a ground test) no crew flew until Apollo 7 (11 October 1968), about 20 months,
   while Apollo 4 (November 1967), Apollo 5 (January 1968) and Apollo 6 (April 1968) flew uncrewed and

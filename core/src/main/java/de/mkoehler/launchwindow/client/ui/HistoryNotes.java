@@ -41,6 +41,17 @@ public final class HistoryNotes {
         + "walkie-talkie's transmit button, switching ground-station radio transmitters on and off via ordinary "
         + "telephone lines. A tiny piece of engineering that helped humanity reach the Moon.";
 
+    /**
+     * On a rival's folder, beside the Failed attempts card's title ({@code design.md} &sect;1.1, "Failures in
+     * public and in secret", checked 2026-11-06).
+     */
+    public static final String FAILURES = "America's failures were public: in December 1957 the first Vanguard rose "
+        + "about four feet, fell back onto its pad and exploded in front of the press's cameras, and the papers called "
+        + "it \"Flopnik\". The Soviet Union announced only its successes, and a probe stranded in Earth orbit was given "
+        + "a \"Kosmos\" number to hide what it had been meant to do. The four failures of the N1 Moon rocket were not "
+        + "admitted until glasnost, two decades later, but American reconnaissance satellites had photographed the "
+        + "launch complex it wrecked in July 1969.";
+
     /** On the Intelligence Office's offer dialog, beside its title (checked 2026-10-08 and 2026-10-21). */
     public static final String POACHING = "Both sides began with poached engineers. After the war about 120 of "
         + "Wernher von Braun's Peenemünde team came to Texas under Operation Paperclip. Before dawn on 22 October "

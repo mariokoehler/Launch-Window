@@ -2402,6 +2402,11 @@ public final class ScreenSnapshot {
         write(folder, "intel-folders.png", new de.mkoehler.launchwindow.client.screen.IntelligenceOfficeScreen(game,
             de.mkoehler.launchwindow.client.screen.IntelligenceOfficeScreen.Tab.FOLDERS),
             screen -> screen.openFolder("kSever"));
+        write(folder, "intel-folders-failures-note.png", new de.mkoehler.launchwindow.client.screen.IntelligenceOfficeScreen(
+            game, de.mkoehler.launchwindow.client.screen.IntelligenceOfficeScreen.Tab.FOLDERS), screen -> {
+                screen.openFolder("kSever");
+                pinLastHistoryNote(screen.stage().getRoot());
+            });
         write(folder, "intel-folders-press.png", new de.mkoehler.launchwindow.client.screen.IntelligenceOfficeScreen(game,
             de.mkoehler.launchwindow.client.screen.IntelligenceOfficeScreen.Tab.FOLDERS),
             screen -> screen.openFolder("kMeridian"));

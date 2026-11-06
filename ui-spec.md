@@ -3353,7 +3353,8 @@ binoculars, our own drawing; on the UI Asset Sheet since 2026-10-08). All rules 
   (`IntelTexts.failure`): "Tracking stations report that their Vostok flight (Uncrewed orbital test)
   failed on the way home, on the retrofire step." Empty: "None seen. Every one of theirs is reported the
   season after." (below level 1, "From level 1 every one of theirs…"). The folder list's card counts them
-  ("3 failed attempts").
+  ("3 failed attempts"). A history note (component 15) beside the title tells Vanguard, the Kosmos cover
+  names and the N1 seen from orbit (`HistoryNotes.FAILURES`, 2026-11-06).
 - **Tidbits:** the passive finds, newest first, each dated.
 - **Caught:** agents of yours this rival caught, and theirs you caught.
 
