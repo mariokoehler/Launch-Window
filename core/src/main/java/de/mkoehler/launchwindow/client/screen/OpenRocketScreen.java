@@ -113,30 +113,7 @@ public final class OpenRocketScreen extends ChromeScreen {
         about.add(chips);
         row.add(about).width(150f).left().padRight(Theme.SPACE_4);
 
-        Table payload = new Table();
-        payload.left();
-        String[][] stats = {
-            {"Suborbital", kg(rocket.rocket().payloadToSuborbital()), "Suborbital: up and back down",
-                "The most this rocket can lift on a hop into space that falls back without circling the Earth, "
-                    + "like the first Mercury and Vostok tests."},
-            {"LEO", kg(rocket.rocket().payloadToLeo()), "LEO: low Earth orbit",
-                "The most this rocket can put into orbit a few hundred kilometres up, where satellites and the "
-                    + "first crewed flights circled the Earth."},
-            {"TLI", kg(rocket.rocket().payloadToTli()), "TLI: trans-lunar injection",
-                "The most this rocket can send from Earth onto a path to the Moon."},
-            {"TPI", kg(rocket.rocket().payloadToTpi()), "TPI: trans-planetary injection",
-                "The most this rocket can send onto a path to another planet."}};
-        for (String[] stat : stats) {
-            Table cell = new Table();
-            cell.left();
-            cell.defaults().left();
-            cell.add(ui.label(stat[0].toUpperCase(Locale.ROOT), Theme.TextStyle.CAPTION, Theme.INK_MUTED))
-                .padBottom(2f).row();
-            cell.add(ui.label(stat[1], Theme.TextStyle.BODY_SM, Theme.INK));
-            ui.tooltip(cell, stat[2], stat[3]);
-            payload.add(cell).width(84f).padRight(Theme.SPACE_3);
-        }
-        row.add(payload).expandX().left().padRight(Theme.SPACE_4);
+        row.add(rocketPayload(rocket)).expandX().left().padRight(Theme.SPACE_4);
 
         row.add(reliability(rocket)).width(RELIABILITY_WIDTH).left().padRight(Theme.SPACE_4);
 
@@ -257,10 +234,6 @@ public final class OpenRocketScreen extends ChromeScreen {
         chip.pad(2f, Theme.SPACE_2, 2f, Theme.SPACE_2);
         chip.add(ui.label(text, Theme.TextStyle.CAPTION, Theme.INK_MUTED));
         return chip;
-    }
-
-    private static String kg(double amount) {
-        return String.format(Locale.ROOT, "%,.0f kg", amount);
     }
 
     /**

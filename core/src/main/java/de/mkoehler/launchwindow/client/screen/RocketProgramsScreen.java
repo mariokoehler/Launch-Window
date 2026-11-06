@@ -14,6 +14,7 @@ import de.mkoehler.launchwindow.client.view.ContentNames;
 import de.mkoehler.launchwindow.client.view.Help;
 import de.mkoehler.launchwindow.client.view.Rockets;
 import de.mkoehler.launchwindow.content.MissionComponent;
+import de.mkoehler.launchwindow.model.SetSkill;
 import de.mkoehler.launchwindow.model.OwnedMissionComponent;
 import de.mkoehler.launchwindow.rules.RocketProgramOutcome;
 import de.mkoehler.launchwindow.rules.RocketPrograms;
@@ -87,8 +88,15 @@ public final class RocketProgramsScreen extends ChromeScreen {
         about.left();
         about.defaults().left();
         about.add(ui.label(ContentNames.of(rocket.id()), Theme.TextStyle.HEADING_SM, Theme.INK)).padBottom(4f).row();
-        about.add(chip(Rockets.className(rocket.rocket().rocketClass())));
+        Table chips = new Table();
+        chips.add(chip(Rockets.className(rocket.rocket().rocketClass())));
+        if (rocket.associatedSkill() == SetSkill.HUMAN_RATED_ROCKETS) {
+            chips.add(chip("Human-rated")).padLeft(4f);
+        }
+        about.add(chips);
         row.add(about).width(150f).left().padRight(Theme.SPACE_4);
+        // What it can lift, as Open Rocket Program shows it (user, 2026-11-06: which ones to keep open).
+        row.add(rocketPayload(rocket)).left().padRight(Theme.SPACE_4);
 
         Table reliability = new Table();
         reliability.defaults().growX().left();

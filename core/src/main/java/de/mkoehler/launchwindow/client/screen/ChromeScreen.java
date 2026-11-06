@@ -168,6 +168,47 @@ abstract class ChromeScreen extends SessionScreen {
         row.add(frame).size(ROCKET_ART_WIDTH, ROCKET_ART_HEIGHT).padRight(Theme.SPACE_4);
     }
 
+    /**
+     * A rocket's lift to each destination, four columns with their tooltips: the same on Open Rocket Program and
+     * Manage Rocket Programs (user, 2026-11-06: deciding which to keep open means comparing what each can lift).
+     *
+     * @param rocket the rocket
+     * @return the columns
+     */
+    protected Table rocketPayload(MissionComponent rocket) {
+        Table payload = new Table();
+        payload.left();
+        String[][] stats = {
+            {"Suborbital", kg(rocket.rocket().payloadToSuborbital()), "Suborbital: up and back down",
+                "The most this rocket can lift on a hop into space that falls back without circling the Earth, "
+                    + "like the first Mercury and Vostok tests."},
+            {"LEO", kg(rocket.rocket().payloadToLeo()), "LEO: low Earth orbit",
+                "The most this rocket can put into orbit a few hundred kilometres up, where satellites and the "
+                    + "first crewed flights circled the Earth."},
+            {"TLI", kg(rocket.rocket().payloadToTli()), "TLI: trans-lunar injection",
+                "The most this rocket can send from Earth onto a path to the Moon."},
+            {"TPI", kg(rocket.rocket().payloadToTpi()), "TPI: trans-planetary injection",
+                "The most this rocket can send onto a path to another planet."}};
+        for (String[] stat : stats) {
+            Table cell = new Table();
+            cell.left();
+            cell.defaults().left();
+            cell.add(ui.label(stat[0].toUpperCase(Locale.ROOT), Theme.TextStyle.CAPTION, Theme.INK_MUTED))
+                .padBottom(2f).row();
+            cell.add(ui.label(stat[1], Theme.TextStyle.BODY_SM, Theme.INK));
+            ui.tooltip(cell, stat[2], stat[3]);
+            payload.add(cell).width(ROCKET_PAYLOAD_COLUMN).padRight(Theme.SPACE_3);
+        }
+        return payload;
+    }
+
+    /** One payload column's width in the VAB's lists. */
+    protected static final float ROCKET_PAYLOAD_COLUMN = 84f;
+
+    private static String kg(double amount) {
+        return String.format(Locale.ROOT, "%,.0f kg", amount);
+    }
+
     /** A rocket's picture in the VAB's lists. */
     private static final float ROCKET_ART_WIDTH = 140f;
     private static final float ROCKET_ART_HEIGHT = 90f;

@@ -1963,6 +1963,10 @@ follows it. Shots: `vab-open*.png`, `vab-manage*.png`, `standard-vab-manage.png`
 in-flight missions use them, upkeep, and links to Rocket R&D. **Close** needs a
 confirmation: "kept with its reliability, no upkeep; reopening costs the creation
 cost again; refused while a mission uses it".
+*(user, 2026-11-06, built straight in libGDX)* Each row also shows what the rocket can lift, the same four
+columns as §4.5.1 with their tooltips (`ChromeScreen.rocketPayload`), and the Human-rated chip beside its
+class, so deciding which programs to keep open ("can my Redstone do what my Jupiter-C does?") needs no trip to
+Open rocket program.
 
 **4.5.3 Rocket R&D** *(decided: split from payload R&D)*. The R&D board
 (component 10) for rocket components. **Ref:**
