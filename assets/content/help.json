@@ -274,7 +274,7 @@
         "## Deciding",
         "Each option says what it shows in advance; some show nothing. Choose one and the outcome is worked out at once: the card shows what happened, and the reliability bar moves with it. The luck is drawn when the decision comes, so it can't be rerolled; the option and the people you pick set the odds it's read against.",
         "Where the odds depend on someone, such as an overseer's skill or a pair's rapport, or on your Intelligence Office's level, the option shows them for the people you pick. If the component's team is gone, only the option marked “If you don't decide” is left.",
-        "Reliability effects are measured in seasons of the component's R&D, and costs in shares of a season's funding, so a decision weighs the same on a small satellite as on a big rocket. Some outcomes touch morale, rapport, skills or the pace of R&D for a while. Some options take an engineer: an idle one to oversee a test, two to pair up, one to send away for a while.",
+        "Reliability effects are measured in seasons of the component's R&D, sized by the team on it when the decision came up (moving engineers onto it before deciding changes nothing), and costs in shares of a season's funding, so a decision weighs the same on a small satellite as on a big rocket. Some outcomes touch morale, rapport, skills or the pace of R&D for a while. Some options take an engineer: an idle one to oversee a test, two to pair up, one to send away for a while.",
         "## If you don't decide",
         "When the turn resolves, an open decision takes the option marked “If you don't decide”. After that no new decision comes until you do something again, so a decision never piles up while you're away.",
         "## Story arcs",

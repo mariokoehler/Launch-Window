@@ -370,8 +370,7 @@ final class DecisionBanner {
             return null;
         }
         PlayerSnapshot state = host.session.state();
-        double gain = Math.max(1.0, ResearchPlanning.expectedSeasonGain(state, host.session.catalog(),
-            pending.componentId()));
+        double gain = RdDecisions.seasonGain(state, host.session.catalog(), pending);
         ResearchPlanning.Projection now = ResearchPlanning.project(state, host.session.catalog(),
             pending.componentId());
         ResearchPlanning.Projection then = ResearchPlanning.projectWith(state, host.session.catalog(),

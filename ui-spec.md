@@ -1308,7 +1308,9 @@ Writing them turned up two things for the rules, recorded in `design.md` §2.2(d
     - **Odds:** an overseer's chance is 0.25 + 0.007 x skill (0.3 to 0.95); a pair's 0.5 + rapport / 200
       (0.15 to 0.9); an intelligence tip's 0.35 + 0.15 x the office's level (to 0.9); a trait an outcome
       names (`favouredBy`) doubles its weight when anyone involved has it, revealed or not. Reliability
-      effects are seasons of `ResearchPlanning.expectedSeasonGain`, at least 1 point a season.
+      effects are seasons of `ResearchPlanning.expectedSeasonGain`, at least 1 point a season, read when the
+      decision is offered and kept on it (`PendingDecision.seasonGain`, 2026-11-11), so the banner's preview
+      and the outcome don't change when engineers move before deciding.
     - **Deferred:** the trade-off's lower cap (the mockup's "cap 3 points lower"): the trade-offs use an
       R&D factor on the component for some seasons (`OwnedMissionComponent.rdFactor`, read by the season
       pass and the projection) and a reliability change now instead.

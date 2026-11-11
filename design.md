@@ -4066,6 +4066,12 @@ bot.
     9. *Intelligence tip:* adopt a rival's approach, right more often the higher the Intelligence
        Office's level.
     10. *Story arcs:* a good outcome opens a follow-up in a later quiet season, with higher stakes.
+  - **The season's gain is fixed when a decision is offered** (the user's play-test find, 2026-11-11): a
+    reliability effect's "seasons of R&D" are the gain of the team that did the season's work, kept on the
+    pending decision (`PendingDecision.seasonGain`, `RdDecisions.seasonGain`). Before, it was read when the
+    player decided, so moving the best engineers onto the component, deciding and moving them back in the
+    same turn grew the effect for free. Staffing a component up over real seasons still pays: the decision
+    after that is sized from the bigger team.
     11. *Hands-on* (the user's idea, 2026-10-11, from the "Probe Command Minigame" spec doc; specified,
         not built): instead of options, a short resource puzzle the player can play, or leave to the
         team. Specified below and in `ui-spec.md` component 26, type 11.

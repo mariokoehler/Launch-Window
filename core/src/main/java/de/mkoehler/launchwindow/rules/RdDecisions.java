@@ -38,7 +38,9 @@ import java.util.SplittableRandom;
  *
  * <p>Sizes are relative: a reliability effect is seasons of the component's expected R&amp;D gain
  * ({@link ResearchPlanning#expectedSeasonGain}), a cost or funds effect a share of a season's
- * funding.</p>
+ * funding. The season's gain is fixed when the decision is offered, from the team that did that
+ * season's work ({@link PendingDecision#seasonGain()}): engineers moved onto the component just before
+ * deciding and moved back after would otherwise grow the effects for nothing (user, 2026-11-11).</p>
  *
  * @author Mario Koehler
  */
@@ -62,6 +64,24 @@ public final class RdDecisions {
 
     /** The smallest season's gain a reliability effect is sized from, for a component nobody works on. */
     static final double MIN_SEASON_GAIN = 1.0;
+
+    /**
+     * Returns the season's gain a decision's reliability effects are sized from: the one fixed when it
+     * was offered, or for a decision saved before that was kept, the team's now.
+     *
+     * @param snapshot the player
+     * @param catalog  the content
+     * @param pending  the decision
+     * @return the gain in reliability points, at least {@link #MIN_SEASON_GAIN}
+     */
+    public static double seasonGain(PlayerSnapshot snapshot, ContentCatalog catalog, PendingDecision pending) {
+        double fixed = pending.seasonGain();
+        return fixed > 0 ? Math.max(MIN_SEASON_GAIN, fixed) : liveSeasonGain(snapshot, catalog, pending.componentId());
+    }
+
+    private static double liveSeasonGain(PlayerSnapshot snapshot, ContentCatalog catalog, String componentId) {
+        return Math.max(MIN_SEASON_GAIN, ResearchPlanning.expectedSeasonGain(snapshot, catalog, componentId));
+    }
 
     private static final long OFFER_SALT = 0x0DEC_1510L;
 
@@ -404,8 +424,10 @@ public final class RdDecisions {
             applied.add(new DecisionEffect(DecisionEffect.Kind.FUNDS, -cost, 0, null));
         }
         if (outcome != null) {
+            // Read once, before any effect: an outcome's own skill or R&D-pace change doesn't resize it.
+            double gain = seasonGain(snapshot, catalog, pending);
             for (Decisions.Effect effect : outcome.effects()) {
-                DecisionEffect done = apply(snapshot, catalog, pending.componentId(), effect, person, second);
+                DecisionEffect done = apply(snapshot, catalog, pending.componentId(), effect, person, second, gain);
                 if (done != null) {
                     applied.add(done);
                 }
@@ -439,7 +461,8 @@ public final class RdDecisions {
 
     /** Applies one written effect and returns what it really did, or {@code null} when nothing. */
     private static DecisionEffect apply(PlayerSnapshot snapshot, ContentCatalog catalog, String componentId,
-                                        Decisions.Effect effect, String person, String second) {
+                                        Decisions.Effect effect, String person, String second,
+                                        double gain) {
         OwnedMissionComponent owned = snapshot.getMissionComponents().get(componentId);
         MissionComponent component = catalog.missionComponent(componentId).orElse(null);
         switch (effect.kind()) {
@@ -447,8 +470,6 @@ public final class RdDecisions {
                 if (owned == null || component == null) {
                     return null;
                 }
-                double gain = Math.max(MIN_SEASON_GAIN, ResearchPlanning.expectedSeasonGain(snapshot, catalog,
-                    componentId));
                 double cap = TraitEffects.effectiveCap(snapshot, component, List.of(), false);
                 double before = owned.getCurrentReliability();
                 double after = effect.amount() >= 0 ? Math.max(before, Math.min(cap, before + effect.amount() * gain))
@@ -672,7 +693,9 @@ public final class RdDecisions {
             return;
         }
         long seed = Intelligence.seed(snapshot.getAgencyName(), "decision-outcome/" + gameTurn + "/" + decision.id());
-        snapshot.setPendingDecision(PendingDecision.offered(decision.id(), componentId, gameTurn, seed));
+        // After the season's R&D, so the team that just did a season's work sizes it.
+        snapshot.setPendingDecision(PendingDecision.offered(decision.id(), componentId, gameTurn, seed,
+            liveSeasonGain(snapshot, catalog, componentId)));
         snapshot.setLastDecisionTurn(gameTurn);
         events.add(new DecisionOffered(decision.id(), componentId, gameTurn));
     }

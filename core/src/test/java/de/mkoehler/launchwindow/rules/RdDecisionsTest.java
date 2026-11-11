@@ -116,6 +116,36 @@ class RdDecisionsTest {
             null));
     }
 
+    /**
+     * A decision's season of R&amp;D is fixed when it's offered: an engineer moved onto the component
+     * before deciding doesn't grow the effect (user, 2026-11-11).
+     */
+    @Test
+    void seasonGainFixedWhenOffered() {
+        PlayerSnapshot snapshot = agency();
+        double offeredGain = ResearchPlanning.expectedSeasonGain(snapshot, PACK, CAPSULE);
+        snapshot.setPendingDecision(PendingDecision.offered("extra-inspections", CAPSULE, 5, 12345L, offeredGain));
+        assertEquals(PersonnelActions.ResearchOutcome.ASSIGNED,
+            PersonnelActions.assignResearch(snapshot, "e3", CAPSULE, PACK));
+        assertTrue(ResearchPlanning.expectedSeasonGain(snapshot, PACK, CAPSULE) > offeredGain);
+        assertEquals(RdDecisions.Outcome.DECIDED, RdDecisions.decide(snapshot, PACK, DECISIONS, "inspect", null, null));
+        assertEquals(30 + offeredGain, snapshot.getMissionComponents().get(CAPSULE).getCurrentReliability(), 1e-9);
+    }
+
+    /** The season pass offers a decision with the gain of the team that did the season's work. */
+    @Test
+    void offerRecordsTheSeasonGain() {
+        PlayerSnapshot snapshot = agency();
+        for (int turn = 10; turn < 30 && snapshot.getPendingDecision() == null; turn++) {
+            RdDecisions.advanceSeason(snapshot, PACK, DECISIONS, turn);
+        }
+        PendingDecision pending = snapshot.getPendingDecision();
+        assertNotNull(pending);
+        assertEquals(ResearchPlanning.expectedSeasonGain(snapshot, PACK, pending.componentId()), pending.seasonGain(),
+            1e-9);
+        assertEquals(pending.seasonGain(), pending.withoutSeed().seasonGain(), 0);
+    }
+
     /** An overseer must be idle; a busy engineer is refused. */
     @Test
     void overseerMustBeIdle() {

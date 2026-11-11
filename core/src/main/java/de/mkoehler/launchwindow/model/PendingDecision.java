@@ -20,11 +20,15 @@ import java.util.Objects;
  * @param secondPersonId the second of a pair, or {@code null}
  * @param effects        what the outcome did, empty while open
  * @param handsOn        a hands-on decision's puzzle once the player started it, else {@code null}
+ * @param seasonGain     a season of the component's R&amp;D in reliability points, fixed when it was offered
+ *                       from the team that did that season's work, so moving engineers onto the component
+ *                       before deciding doesn't grow its effects; 0 in a decision saved before it was kept
  * @author Mario Koehler
  */
 public record PendingDecision(String decisionId, String componentId, int offeredTurn, long seed, boolean decided,
                               String optionId, String outcomeId, String personId, String secondPersonId,
-                              List<DecisionEffect> effects, HandsOnState handsOn) {
+                              List<DecisionEffect> effects, HandsOnState handsOn,
+                              double seasonGain) {
 
     /**
      * Checks the ids and copies the effects.
@@ -44,10 +48,26 @@ public record PendingDecision(String decisionId, String componentId, int offered
      * @param componentId the component
      * @param turn        the turn
      * @param seed        its seed
-     * @return the open decision
+     * @return the open decision, its season's gain left to be read live
      */
     public static PendingDecision offered(String decisionId, String componentId, int turn, long seed) {
-        return new PendingDecision(decisionId, componentId, turn, seed, false, null, null, null, null, List.of(), null);
+        return offered(decisionId, componentId, turn, seed, 0);
+    }
+
+    /**
+     * Returns a decision just offered, with its season's gain fixed.
+     *
+     * @param decisionId  the decision
+     * @param componentId the component
+     * @param turn        the turn
+     * @param seed        its seed
+     * @param seasonGain  a season of the component's R&amp;D now, in reliability points
+     * @return the open decision
+     */
+    public static PendingDecision offered(String decisionId, String componentId, int turn, long seed,
+                                          double seasonGain) {
+        return new PendingDecision(decisionId, componentId, turn, seed, false, null, null, null, null, List.of(), null,
+            seasonGain);
     }
 
     /**
@@ -63,7 +83,7 @@ public record PendingDecision(String decisionId, String componentId, int offered
     public PendingDecision decide(String option, String outcome, String person, String second,
                                   List<DecisionEffect> applied) {
         return new PendingDecision(decisionId, componentId, offeredTurn, seed, true, option, outcome, person, second,
-            applied, handsOn);
+            applied, handsOn, seasonGain);
     }
 
     /**
@@ -73,7 +93,7 @@ public record PendingDecision(String decisionId, String componentId, int offered
      */
     public PendingDecision withoutSeed() {
         return new PendingDecision(decisionId, componentId, offeredTurn, 0, decided, optionId, outcomeId, personId,
-            secondPersonId, effects, handsOn);
+            secondPersonId, effects, handsOn, seasonGain);
     }
 
     /**
@@ -84,7 +104,7 @@ public record PendingDecision(String decisionId, String componentId, int offered
      */
     public PendingDecision withHandsOn(HandsOnState state) {
         return new PendingDecision(decisionId, componentId, offeredTurn, seed, decided, optionId, outcomeId, personId,
-            secondPersonId, effects, state);
+            secondPersonId, effects, state, seasonGain);
     }
 
     /**
