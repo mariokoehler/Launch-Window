@@ -138,6 +138,16 @@ public final class AssembleMissionScreen extends ChromeScreen {
         });
         clear.setDisabled(!editable());
         auto.setDisabled(!editable());
+        // Only when the free staff fall short and people in training make up the rest (the user's request, 2026-11-11).
+        List<MissionStaffing.Fill> fills = editable() ? fillsFromTraining(draft) : List.of();
+        if (!fills.isEmpty()) {
+            long pulls = fills.stream().filter(MissionStaffing.Fill::fromTraining).count();
+            TextButton pull = onClick(ui.pageButton("Pull from training · " + pulls),
+                () -> confirmPullFromTraining(draft()));
+            ui.tooltip(pull, "Pull from training", "Not enough staff are free. Fills the empty slots, pulling the "
+                + "best people out of training where nobody free is left.");
+            toolbar.add(pull).padRight(Theme.SPACE_2);
+        }
         toolbar.add(clear).padRight(Theme.SPACE_2);
         toolbar.add(auto);
         content.add(toolbar).padBottom(Theme.SPACE_3).row();
@@ -710,6 +720,91 @@ public final class AssembleMissionScreen extends ChromeScreen {
         List<String> ids = new ArrayList<>(draft.crewSlotIds());
         ids.addAll(draft.controlSlotIds());
         return ids;
+    }
+
+    // ---- Pull from training
+
+    private List<MissionStaffing.Fill> fillsFromTraining(MissionDraft draft) {
+        return MissionStaffing.fillFromTraining(session.state(), configuration, draft.crewSlotIds(),
+            draft.controlSlotIds());
+    }
+
+    private Personnel person(String id) {
+        Personnel astronaut = find(session.state().getAstronauts(), id);
+        return astronaut != null ? astronaut : find(session.state().getMissionControlOfficers(), id);
+    }
+
+    private String slotTitle(MissionStaffing.Fill fill) {
+        return fill.crew() ? configuration.crewSlots().get(fill.slot())
+            : configuration.controlSlots().get(fill.slot()).title();
+    }
+
+    /**
+     * Asks to fill the empty slots, pulling people out of training where nobody free is left,
+     * naming who leaves training for which slot and what it costs them (component 5).
+     *
+     * @param draft the plan
+     */
+    public void confirmPullFromTraining(MissionDraft draft) {
+        List<MissionStaffing.Fill> fills = fillsFromTraining(draft);
+        if (fills.isEmpty()) {
+            toast("Nothing to fill from training any more.", Theme.NoticeKind.INFO);
+            return;
+        }
+        List<MissionStaffing.Fill> pulls = fills.stream().filter(MissionStaffing.Fill::fromTraining).toList();
+        Table card = dialogCard("Confirm", "Pull " + pulls.size() + (pulls.size() == 1 ? " person" : " people")
+            + " out of training?");
+        card.add(ui.paragraph("Not enough staff are free for this mission. These leave training for it:",
+            Theme.TextStyle.BODY, Theme.INK_MUTED)).growX().padBottom(Theme.SPACE_2).row();
+        for (MissionStaffing.Fill fill : pulls) {
+            Personnel person = person(fill.personId());
+            String cost = person.getTrainingKind() == de.mkoehler.launchwindow.model.TrainingKind.EXPERT
+                ? "Expert training, gets nothing for the seasons so far"
+                : "keeps " + PersonnelDialogs.keptPercent(person) + " % of the round in progress";
+            card.add(ui.paragraph(person.getName() + " → " + slotTitle(fill) + " (" + cost + ").",
+                Theme.TextStyle.BODY_SM, Theme.INK)).growX().padBottom(Theme.SPACE_1).row();
+        }
+        int free = fills.size() - pulls.size();
+        card.add(ui.paragraph((free == 0 ? "" : free + (free == 1 ? " free person fills" : " free people fill")
+            + " the other empty " + (free == 1 ? "slot. " : "slots. ")) + Math.round(
+            de.mkoehler.launchwindow.rules.SkillGrowth.TRAINING_LAST_SEASON_SHARE * 100)
+            + " % of a round's gain comes with its last season.", Theme.TextStyle.BODY_SM, Theme.INK_MUTED))
+            .growX().padTop(Theme.SPACE_2).padBottom(Theme.SPACE_4).row();
+        Table buttons = new Table();
+        buttons.add(actionButton("Cancel", Theme.ButtonKind.SECONDARY, this::closeDialog)).padRight(10f);
+        buttons.add(actionButton("Pull Out and Assign", Theme.ButtonKind.PRIMARY, () -> {
+            closeDialog();
+            pullNext(fills, pulls, 0);
+        }));
+        card.add(buttons).right().fill(false, false);
+        showDialog(card);
+    }
+
+    /**
+     * One pull-out at a time, each sent when the last is through; a refusal stops the rest. The slots
+     * are filled only after the last, since every rebuild drops from the draft whoever isn't free yet.
+     */
+    private void pullNext(List<MissionStaffing.Fill> fills, List<MissionStaffing.Fill> pulls, int index) {
+        if (index == pulls.size()) {
+            MissionDraft draft = draft();
+            for (MissionStaffing.Fill fill : fills) {
+                if (fill.crew()) {
+                    draft.setCrew(fill.slot(), fill.personId());
+                } else {
+                    draft.setControl(fill.slot(), fill.personId());
+                }
+            }
+            rebuild();
+            toast("Pulled " + pulls.size() + (pulls.size() == 1 ? " person" : " people")
+                + " out of training and filled every slot.", Theme.NoticeKind.SUCCESS);
+            return;
+        }
+        Personnel person = person(pulls.get(index).personId());
+        de.mkoehler.launchwindow.rules.PersonnelGroup group = person instanceof Astronaut
+            ? de.mkoehler.launchwindow.rules.PersonnelGroup.ASTRONAUT
+            : de.mkoehler.launchwindow.rules.PersonnelGroup.MISSION_CONTROL;
+        submit(new de.mkoehler.launchwindow.actions.PullOutOfTrainingAction(group, person.getId()),
+            result -> pullNext(fills, pulls, index + 1));
     }
 
     // ---- Launch

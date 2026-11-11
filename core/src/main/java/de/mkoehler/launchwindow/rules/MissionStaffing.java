@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Stream;
 
 /**
  * <p>Staffing a mission's slots ({@code baspm.md} &sect;10.11, {@code design.md}
@@ -230,6 +231,119 @@ public final class MissionStaffing {
             }
         }
         return weights;
+    }
+
+    /**
+     * One slot {@link #fillFromTraining} would fill.
+     *
+     * @param crew         whether a crew seat (else a control slot)
+     * @param slot         the seat's or control slot's index
+     * @param personId     who goes in
+     * @param fromTraining whether they're pulled out of training first
+     */
+    public record Fill(boolean crew, int slot, String personId, boolean fromTraining) {
+    }
+
+    /**
+     * Whether someone could be pulled out of training and then staff a mission: in training other
+     * than basic training (which can't be cut short), and available this season, so that the
+     * pull-out leaves them {@link MissionLaunch#isAvailable}.
+     *
+     * @param person the person
+     * @return whether they can be pulled out for a mission
+     */
+    public static boolean pullableForMission(Personnel person) {
+        return person.getAssignmentState() == de.mkoehler.launchwindow.model.AssignmentState.IN_TRAINING
+            && person.getTrainingKind() != de.mkoehler.launchwindow.model.TrainingKind.BASIC
+            && person.getTrainingKind() != de.mkoehler.launchwindow.model.TrainingKind.NONE
+            && person.getUnavailableSeasons() <= 0;
+    }
+
+    /**
+     * Fills a draft's open slots when the free staff can't, by pulling people out of training (the
+     * user's request, 2026-11-11, {@code ui-spec.md} &sect;4.6.8). The open slots are the used ones
+     * nobody holds yet, taken in {@link #autoAssign}'s order (crew seats, Flight Director slots, the
+     * other control slots). Each gets the best free person of its type; once a type has nobody free
+     * left, the best of its people who can be pulled out ({@link #pullableForMission}), so only the
+     * shortfall leaves training. Astronaut-type control slots (CAPCOM) draw on the astronauts.
+     *
+     * @param snapshot       the player
+     * @param configuration  the configuration
+     * @param crewSlotIds    the draft's crew seats, {@code null} or empty where nobody sits
+     * @param controlSlotIds the draft's control slots, likewise
+     * @return the fills, or an empty list when the free staff fill every open slot by themselves, or
+     *     the free staff and those in training together can't fill them all
+     */
+    public static List<Fill> fillFromTraining(PlayerSnapshot snapshot, MissionConfiguration configuration,
+            List<String> crewSlotIds, List<String> controlSlotIds) {
+        Objects.requireNonNull(snapshot, "snapshot must not be null");
+        Objects.requireNonNull(configuration, "configuration must not be null");
+        Set<String> taken = new HashSet<>();
+        Stream.concat(crewSlotIds.stream(), controlSlotIds.stream())
+            .filter(id -> id != null && !id.isEmpty()).forEach(taken::add);
+
+        List<Fill> fills = new ArrayList<>();
+        boolean pulled = false;
+        for (int slot : configuration.usedCrewSlots()) {
+            if (isEmpty(crewSlotIds, slot)) {
+                int seat = slot;
+                Fill fill = best(snapshot.getAstronauts(), taken, true, slot,
+                    person -> seatFit((Astronaut) person, configuration, seat));
+                if (fill == null) {
+                    return List.of();
+                }
+                fills.add(fill);
+                pulled |= fill.fromTraining();
+            }
+        }
+        for (boolean directors : new boolean[] {true, false}) {
+            for (int slot : configuration.usedControlSlots()) {
+                StaffingSlot staffingSlot = configuration.controlSlots().get(slot);
+                if (staffingSlot.flightDirectorSlot() != directors || !isEmpty(controlSlotIds, slot)) {
+                    continue;
+                }
+                List<? extends Personnel> roster = staffingSlot.kind() == StaffingSlot.Kind.ASTRONAUT
+                    ? snapshot.getAstronauts() : snapshot.getMissionControlOfficers();
+                Fill fill = best(roster, taken, false, slot,
+                    person -> MissionProgress.slotValue(snapshot, staffingSlot, person.getId()));
+                if (fill == null) {
+                    return List.of();
+                }
+                fills.add(fill);
+                pulled |= fill.fromTraining();
+            }
+        }
+        return pulled ? List.copyOf(fills) : List.of();
+    }
+
+    /** The best free person for a slot, else the best who can be pulled out; {@code null} for nobody. */
+    private static Fill best(List<? extends Personnel> roster, Set<String> taken, boolean crew, int slot,
+            java.util.function.ToDoubleFunction<Personnel> value) {
+        for (boolean fromTraining : new boolean[] {false, true}) {
+            Personnel best = null;
+            double bestValue = -1;
+            for (Personnel person : roster) {
+                boolean fits = fromTraining ? pullableForMission(person) : MissionLaunch.isAvailable(person);
+                if (!fits || taken.contains(person.getId())) {
+                    continue;
+                }
+                double score = value.applyAsDouble(person);
+                if (score > bestValue) {
+                    best = person;
+                    bestValue = score;
+                }
+            }
+            if (best != null) {
+                taken.add(best.getId());
+                return new Fill(crew, slot, best.getId(), fromTraining);
+            }
+        }
+        return null;
+    }
+
+    private static boolean isEmpty(List<String> slotIds, int slot) {
+        String id = slot < slotIds.size() ? slotIds.get(slot) : null;
+        return id == null || id.isEmpty();
     }
 
     private static List<String> nulls(int size) {

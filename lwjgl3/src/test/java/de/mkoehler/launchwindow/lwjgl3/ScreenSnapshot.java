@@ -286,6 +286,10 @@ public final class ScreenSnapshot {
             advisorShots(folder, game);
             return;
         }
+        if ("pulltraining".equals(System.getProperty("shots"))) {
+            pullFromTrainingShots(folder, game);
+            return;
+        }
         if ("allhands".equals(System.getProperty("shots"))) {
             allHandsShots(folder, game);
             return;
@@ -1652,6 +1656,32 @@ public final class ScreenSnapshot {
             () -> new AstronautComplexScreen(game)), null);
         write(folder, "focus-training.png", new AstronautComplexScreen(game), screen -> screen.openTraining(astronaut,
             TrainingKind.PERMANENT, AstronautSkill.EVA.name()));
+    }
+
+    /**
+     * Pull from training on the assembly (2026-11-11): four controllers and an astronaut in training leave
+     * the free staff short, and the button and its confirmation offer to fill the rest from training.
+     */
+    private static void pullFromTrainingShots(File folder, LaunchWindowGame game) {
+        String hash = ContentPackHash.ofClasspath("content/early-era", ScreenSnapshot.class.getClassLoader());
+        GameInfoResponse info = GameInfoResponse.success("early-era", hash, List.of(), 1, true,
+            6 * 3_600_000L + 12 * 60_000L + 30_000L, 0L, null, List.of(), List.of(), 0);
+        PlayerSnapshot planning = planningState(11, 25_000);
+        List<de.mkoehler.launchwindow.model.Personnel> trainees = new ArrayList<>(planning.getMissionControlOfficers()
+            .subList(planning.getMissionControlOfficers().size() - 4, planning.getMissionControlOfficers().size()));
+        trainees.add(planning.getAstronauts().get(planning.getAstronauts().size() - 1));
+        for (int i = 0; i < trainees.size(); i++) {
+            var person = trainees.get(i);
+            person.setAssignmentState(AssignmentState.IN_TRAINING);
+            person.setTrainingKind(i == 0 ? TrainingKind.EXPERT : TrainingKind.PERMANENT);
+            person.setTrainingSeasonsTotal(i == 0 ? 0 : 3);
+            person.setTrainingSeasonsCompleted(i % 3);
+        }
+        startSession(game, planning, info);
+        write(folder, "pulltraining-assemble.png", new AssembleMissionScreen(game, "vostok-orbital"), null);
+        write(folder, "pulltraining-confirm.png", new AssembleMissionScreen(game, "vostok-orbital"),
+            screen -> screen.confirmPullFromTraining(game.session().draft(game.session().catalog()
+                .missionConfiguration("vostok-orbital").orElseThrow())));
     }
 
     /**

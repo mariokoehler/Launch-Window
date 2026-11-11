@@ -22,6 +22,7 @@ import org.junit.jupiter.api.Test;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -112,6 +113,47 @@ class MissionStaffingTest {
 
         assertEquals("only", staffing.controlSlotIds().get(1));
         assertNull(staffing.controlSlotIds().get(0));
+    }
+
+    private static MissionControlOfficer trainee(String id, double propulsion, double others,
+            de.mkoehler.launchwindow.model.TrainingKind kind) {
+        MissionControlOfficer officer = controller(id, propulsion, others);
+        officer.setAssignmentState(AssignmentState.IN_TRAINING);
+        officer.setTrainingKind(kind);
+        return officer;
+    }
+
+    @Test
+    void fillFromTrainingPullsOnlyTheShortfallAndTheBestTrainee() {
+        // One free controller for two used slots: "free" takes FLIGHT (Flight Director slots first), and the
+        // better trainee at propulsion takes BOOSTER. The unused SYSTEMS slot stays empty.
+        MissionControlOfficer free = controller("free", 50, 50);
+        MissionControlOfficer good = trainee("good", 80, 40, de.mkoehler.launchwindow.model.TrainingKind.PERMANENT);
+        MissionControlOfficer weak = trainee("weak", 60, 90, de.mkoehler.launchwindow.model.TrainingKind.ADVANCED);
+        PlayerSnapshot snapshot = player(weak, free, good);
+        List<String> empty = Arrays.asList(null, null, null);
+
+        assertEquals(List.of(new MissionStaffing.Fill(false, 1, "free", false),
+                new MissionStaffing.Fill(false, 0, "good", true)),
+            MissionStaffing.fillFromTraining(snapshot, TWO_SLOTS, List.of(), empty));
+    }
+
+    @Test
+    void fillFromTrainingOffersNothingWhenFreeStaffSufficeOrTraineesFallShort() {
+        List<String> empty = Arrays.asList(null, null, null);
+        // Enough free people: nothing to pull.
+        assertEquals(List.of(), MissionStaffing.fillFromTraining(player(controller("a", 50, 50),
+            controller("b", 50, 50)), TWO_SLOTS, List.of(), empty));
+        // Basic training can't be cut short, and someone unavailable can't fly: one slot stays open.
+        MissionControlOfficer away = trainee("away", 90, 90, de.mkoehler.launchwindow.model.TrainingKind.PERMANENT);
+        away.setUnavailableSeasons(1);
+        assertEquals(List.of(), MissionStaffing.fillFromTraining(player(controller("a", 50, 50),
+            trainee("basic", 90, 90, de.mkoehler.launchwindow.model.TrainingKind.BASIC), away), TWO_SLOTS,
+            List.of(), empty));
+        // A slot already held counts as filled: only BOOSTER is open, and the one trainee fills it.
+        assertEquals(List.of(new MissionStaffing.Fill(false, 0, "t", true)), MissionStaffing.fillFromTraining(
+            player(controller("held", 50, 50), trainee("t", 70, 70, de.mkoehler.launchwindow.model.TrainingKind.EXPERT)),
+            TWO_SLOTS, List.of(), Arrays.asList(null, "held", null)));
     }
 
     @Test

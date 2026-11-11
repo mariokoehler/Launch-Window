@@ -2179,6 +2179,15 @@ does (`baspm.md` §10.11), plus the chosen rocket per launch:
   Flight Director slots, then every other used slot, each with the best available
   person at the slot's skill. Nobody is placed twice; a slot nobody is left for stays
   empty.
+- **Pull from training · N** *(user, 2026-11-11)*: beside Clear all and Auto-assign, shown only
+  when the free staff can't fill every empty used slot and people in training (not basic
+  training, available this season) can make up the rest; N is how many would leave training.
+  It fills the empty slots in Auto-assign's order, each with the best free person of its type,
+  and once a type has nobody free left, with the best of its people in training
+  (`MissionStaffing.fillFromTraining`), so only the shortfall is pulled. CAPCOM draws on the
+  astronauts. A confirmation (component 5) names who leaves training for which slot and the
+  share of the round each keeps (nothing for Expert training); then the pull-outs go one by
+  one and the slots are filled after the last.
 - A slot that can't be filled says why ("only 5 flight controllers; this mission
   needs 9. Upgrade Mission Control and hire").
 - **Confirm & pay**: a price breakdown (configuration cost + the rockets' unit

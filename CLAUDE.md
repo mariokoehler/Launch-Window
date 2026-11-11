@@ -401,6 +401,11 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
   personnel screens puts everyone idle into permanent training to 90 in their highest skill below 90
   (`client.view.KeepBusy`). Client only: no reset, no server rebuild.
 
+- **Pull from training** (the user's request, 2026-11-11, `ui-spec.md` §4.6.8): on the mission assembly, when the
+  free staff fall short and people in training can make up the rest, a button fills the empty slots, pulling only
+  the shortfall out of training, best first (`MissionStaffing.fillFromTraining`), after a confirmation that names
+  the cost. `-Dshots=pulltraining`. Client only: no reset, no server rebuild.
+
 ## How we work
 
 - **Screens:** Claude writes the spec in `ui-spec.md`, the user mocks it up in Claude Design,
