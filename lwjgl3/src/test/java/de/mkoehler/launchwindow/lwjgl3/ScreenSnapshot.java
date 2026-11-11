@@ -1550,7 +1550,7 @@ public final class ScreenSnapshot {
             live.setPendingDecision(new de.mkoehler.launchwindow.model.PendingDecision("big-test-stand", "r7-vostok",
                 22, 7L, true, "run", ending[1], null, null, gain == 0 ? List.of()
                 : List.of(new de.mkoehler.launchwindow.model.DecisionEffect(
-                    de.mkoehler.launchwindow.model.DecisionEffect.Kind.RELIABILITY, gain, 0, null)), finished));
+                    de.mkoehler.launchwindow.model.DecisionEffect.Kind.RELIABILITY, gain, 0, null)), finished, 0.0));
             write(folder, "handson-result-" + ending[1] + ".png",
                 new de.mkoehler.launchwindow.client.screen.HandsOnScreen(game), null);
         }
@@ -3031,6 +3031,21 @@ public final class ScreenSnapshot {
         startSession(game, after, next);
         game.session().keepReport(report);
         write(folder, "report.png", new TurnReportScreen(game, report), null);
+        // A long flight's step squares wrap instead of widening the column (the user's play test, 2026-11-11):
+        // every step event copied until a mission has 33 steps, as Gemini EOR's lunar-orbit lander test does.
+        List<de.mkoehler.launchwindow.rules.ResolutionEvent> longEvents = new java.util.ArrayList<>(report.events());
+        List<de.mkoehler.launchwindow.rules.MissionStepResolved> steps = report.events().stream()
+            .filter(de.mkoehler.launchwindow.rules.MissionStepResolved.class::isInstance)
+            .map(de.mkoehler.launchwindow.rules.MissionStepResolved.class::cast)
+            .filter(step -> step.missionInstanceId().equals(report.missions().getFirst().missionInstanceId()))
+            .toList();
+        for (int i = steps.size(); i < 33; i++) {
+            longEvents.add(steps.get(i % steps.size()));
+        }
+        TurnReport longFlight = new TurnReport(report.version(), report.gameTurn(), report.prestigeBefore(),
+            report.prestigeAfter(), report.fundsBefore(), report.fundsAfter(), report.components(), report.missions(),
+            longEvents, report.newsStoryId());
+        write(folder, "report-long-flight.png", new TurnReportScreen(game, longFlight), null);
         // The news, with each random event's story (2026-10-10): every column scrolled to its end.
         write(folder, "report-news.png", new TurnReportScreen(game, report), screen -> scrollToEnd(screen.stage()
             .getRoot()));

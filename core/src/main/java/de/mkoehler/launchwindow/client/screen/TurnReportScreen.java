@@ -435,6 +435,9 @@ public final class TurnReportScreen extends ChromeScreen {
         return card;
     }
 
+    /** The most step squares in a row of a mission's line; more wrap into even rows. */
+    private static final int SQUARES_PER_ROW = 20;
+
     private Table missions(ContentCatalog catalog) {
         Table card = section("Missions flown", "Each square is one step");
         List<TurnReportView.MissionLine> lines = TurnReportView.missions(report, catalog);
@@ -450,10 +453,19 @@ public final class TurnReportScreen extends ChromeScreen {
             text.defaults().left().growX();
             text.add(ui.label(line.name(), Theme.TextStyle.BODY_STRONG, Theme.INK)).padBottom(2f).row();
             text.add(ui.paragraph(line.result(), Theme.TextStyle.CAPTION, Theme.INK_MUTED)).padBottom(4f).row();
+            // A long flight's squares wrap into even rows, so they never widen the column (a 33-step Moon
+            // flight pushed the report's columns off the screen, the user's play test, 2026-11-11).
             Table dots = new Table();
             dots.left();
-            for (MissionStepOutcome outcome : line.outcomes()) {
-                dots.add(new Image(ui.solid(OutcomeBar.COLORS[outcome.ordinal()]))).size(10f).padRight(3f);
+            List<MissionStepOutcome> outcomes = line.outcomes();
+            int rows = Math.max(1, (outcomes.size() + SQUARES_PER_ROW - 1) / SQUARES_PER_ROW);
+            int perRow = (outcomes.size() + rows - 1) / rows;
+            for (int i = 0; i < outcomes.size(); i++) {
+                if (i > 0 && i % perRow == 0) {
+                    dots.row();
+                }
+                dots.add(new Image(ui.solid(OutcomeBar.COLORS[outcomes.get(i).ordinal()]))).size(10f).padRight(3f)
+                    .padBottom(i < (rows - 1) * perRow ? 3f : 0f).left();
             }
             text.add(dots).padBottom(Theme.SPACE_2).row();
             text.add(actionButton("Watch replay", Theme.ButtonKind.SECONDARY,

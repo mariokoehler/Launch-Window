@@ -1853,6 +1853,8 @@ sees on login (§4.18: Firsts, follow-ups, public science pages, memorials), the
 Zenith ran a front page this season." (or "ran N front pages") and a secondary "Read the paper" button, which
 reopens them all in order (`FrontPageScreen.ofTurn`, reopened: "Next front page", then "Close", back to the
 report). Shot `theories-report.png`.
+*Long flights (the user's play test, 2026-11-11):* a mission's step squares wrap into even rows of at most 20, so a
+33-step Moon flight no longer widens its column and pushes the others off the screen. Shot `report-long-flight.png`.
 
 **Shows, grouped:**
 - missions flown this season, with step outcomes (success, glitch solved, minor
