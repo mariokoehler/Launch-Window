@@ -267,6 +267,8 @@ On the right:
     check box, "Signing bonus · $ 48 once · morale 71 → 78": a one-off payment of one season's
     salary that multiplies the new hire's morale by 1.1 (at most 100). The footer adds up the
     bonuses next to the added fixed costs. A hire whose bonus the funds can't cover is refused.
+    *The Recruits panel scrolls* (the user's play test, 2026-11-11), as the candidates do, so a long
+    selection never pushes the Hire Recruits row off the screen. Shot `hire-many.png`.
     *Specified 2026-10-07 (`design.md` §2.2(d)):* each candidate shows **one hint** from a former
     colleague, such as "driven", "calm" or "reliable", in a quote style ("A former colleague:
     “driven”"); no pronouns, since names don't say how someone wants to be referred to. Traits

@@ -350,6 +350,11 @@ public final class HireScreen extends ChromeScreen {
             empty.add(text).width(320f);
             card.add(empty).expand().center();
         }
+        // The recruits scroll, so a long selection never pushes the actions row off the screen (the user's play
+        // test, 2026-11-11); a pick rebuilds the screen, and the list stays where the player scrolled it.
+        Table list = new Table();
+        list.top();
+        list.defaults().growX();
         for (Personnel recruit : chosen) {
             Table entry = new Table();
             entry.setBackground(ui.rect(Theme.SURFACE_CARD, Theme.SURFACE_CARD, 0f));
@@ -374,7 +379,10 @@ public final class HireScreen extends ChromeScreen {
             inner.add(button("Remove", Theme.ButtonKind.DESTRUCTIVE, () -> toggle(recruit.getId()))).row();
             inner.add(bonusToggle(recruit)).colspan(3).left().padTop(Theme.SPACE_2);
             entry.add(inner).expandX().fillX();
-            card.add(entry).padBottom(Theme.SPACE_3).row();
+            list.add(entry).padBottom(Theme.SPACE_3).row();
+        }
+        if (!chosen.isEmpty()) {
+            card.add(keptScrollPane(list, "recruits")).expand().fill();
         }
         panel.add(card).expand().fill();
         return panel;

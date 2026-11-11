@@ -500,6 +500,17 @@ public final class ScreenSnapshot {
             screen.toggleBonus(pool.get(1).getId());
         });
         write(folder, "hire-none-selected.png", new HireScreen(game), null);
+        // Every candidate selected: the recruits scroll, the actions row stays on screen (user, 2026-11-11).
+        List<SetSpecialist> manyPool = game.session().state().getSetSpecialistCandidates();
+        int fixturePool = manyPool.size();
+        for (int i = fixturePool; i < 12; i++) {
+            SetSpecialist extra = new SetSpecialist("many" + i, "Extra Candidate " + i, 30 + i, 60, 50);
+            extra.setSalary(40);
+            manyPool.add(extra);
+        }
+        write(folder, "hire-many.png", new HireScreen(game), screen -> manyPool
+            .forEach(candidate -> screen.toggle(candidate.getId())));
+        manyPool.subList(fixturePool, manyPool.size()).clear();
 
         PlayerSnapshot fresh = new PlayerSnapshot("Baltic Star Agency", Archetype.SOVIET, 25_000, 250, 3_000, 1);
         fresh.setDirectorName("A. Reyes");
