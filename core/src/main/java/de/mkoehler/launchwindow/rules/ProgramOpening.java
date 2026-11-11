@@ -243,6 +243,54 @@ public final class ProgramOpening {
     }
 
     /**
+     * Returns the upkeep a season that closing an open program would save, as {@link #close} would leave
+     * things: the program's own maintenance, plus every component it requires that no other open program
+     * requires, scaled by the player's cost multiplier as {@link BudgetProgress#runningCosts} does.
+     *
+     * @param snapshot  the player
+     * @param programId the open program
+     * @param catalog   the content catalog
+     * @return the saving a season
+     */
+    public static long upkeepSaved(PlayerSnapshot snapshot, String programId, ContentCatalog catalog) {
+        Objects.requireNonNull(snapshot, "snapshot must not be null");
+        Program program = catalog.program(programId).orElseThrow();
+        long saved = program.maintenanceCost();
+        for (String componentId : program.requiredMissionComponentIds()) {
+            boolean stillUsed = snapshot.getOpenedProgramIds().stream()
+                .filter(id -> !id.equals(programId))
+                .map(id -> catalog.program(id).orElseThrow())
+                .anyMatch(other -> other.requiredMissionComponentIds().contains(componentId));
+            OwnedMissionComponent owned = snapshot.getMissionComponents().get(componentId);
+            if (!stillUsed && owned != null && owned.isActive()) {
+                saved += catalog.missionComponent(componentId).orElseThrow().maintenanceCost();
+            }
+        }
+        return Math.round(saved * snapshot.getCostMultiplier());
+    }
+
+    /**
+     * Returns the player's unopened programs whose opening cost would rise if an open program closed,
+     * because it gives them a discount ({@link #effectiveOpeningCost}) that no other open program makes up.
+     *
+     * @param snapshot  the player
+     * @param programId the open program
+     * @param catalog   the content catalog
+     * @return those programs' ids, in the pack's order
+     */
+    public static List<String> discountsLostByClosing(PlayerSnapshot snapshot, String programId,
+            ContentCatalog catalog) {
+        Objects.requireNonNull(snapshot, "snapshot must not be null");
+        List<String> open = snapshot.getOpenedProgramIds();
+        List<String> without = open.stream().filter(id -> !id.equals(programId)).toList();
+        return catalog.programs().stream()
+            .filter(other -> other.availableTo(snapshot.getArchetype()) && !open.contains(other.id()))
+            .filter(other -> effectiveOpeningCost(other, without) > effectiveOpeningCost(other, open))
+            .map(Program::id)
+            .toList();
+    }
+
+    /**
      * Closes an open program, as BASPM's {@code Player.CloseProgram}
      * ({@code baspm.md} &sect;10.9): the program stops counting against
      * Headquarters and stops paying upkeep, and every component it required that

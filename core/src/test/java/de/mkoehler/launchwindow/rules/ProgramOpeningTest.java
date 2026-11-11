@@ -294,4 +294,38 @@ class ProgramOpeningTest {
         assertEquals(95, owned.getCurrentReliability());
         assertEquals(95, owned.getFloorReliability());
     }
+
+    /**
+     * Closing saves the program's upkeep and its components' only where no other open program needs them,
+     * and costs an unopened program the discount it would have had (the advisor's close tip, 2026-11-11).
+     */
+    @Test
+    void closingSavesOnlyWhatNothingElseNeedsAndKnowsTheDiscountsItCosts() {
+        ContentCatalog standard = de.mkoehler.launchwindow.content.ContentPackLoader.load(
+            java.nio.file.Path.of("..", "assets", "content", "standard"));
+        PlayerSnapshot snapshot = new PlayerSnapshot("Agency", Archetype.NASA, 0, 0, 0, 1);
+        snapshot.setOpenedProgramIds(new java.util.ArrayList<>(List.of("gemini-eor-earth-orbit", "gemini-eor")));
+        java.util.Map<String, OwnedMissionComponent> owned = new java.util.HashMap<>();
+        for (String id : standard.program("gemini-eor").orElseThrow().requiredMissionComponentIds()) {
+            OwnedMissionComponent component = new OwnedMissionComponent(80, 50);
+            component.setActive(true);
+            owned.put(id, component);
+        }
+        snapshot.setMissionComponents(owned);
+        // Every component is Gemini EOR's too: only the test program's own upkeep goes.
+        assertEquals(Math.round(standard.program("gemini-eor-earth-orbit").orElseThrow().maintenanceCost()
+            * snapshot.getCostMultiplier()), ProgramOpening.upkeepSaved(snapshot, "gemini-eor-earth-orbit", standard));
+        snapshot.setOpenedProgramIds(new java.util.ArrayList<>(List.of("gemini-eor")));
+        long all = standard.program("gemini-eor").orElseThrow().maintenanceCost();
+        for (String id : standard.program("gemini-eor").orElseThrow().requiredMissionComponentIds()) {
+            all += standard.missionComponent(id).orElseThrow().maintenanceCost();
+        }
+        assertEquals(Math.round(all * snapshot.getCostMultiplier()),
+            ProgramOpening.upkeepSaved(snapshot, "gemini-eor", standard));
+        assertTrue(ProgramOpening.discountsLostByClosing(snapshot, "gemini-eor", standard).isEmpty(),
+            "Gemini EOR gives no discount");
+        snapshot.setOpenedProgramIds(new java.util.ArrayList<>(List.of("gemini")));
+        assertTrue(ProgramOpening.discountsLostByClosing(snapshot, "gemini", standard)
+            .contains("gemini-eor-earth-orbit"), "Gemini open makes the EOR tests free");
+    }
 }

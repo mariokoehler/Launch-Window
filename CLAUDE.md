@@ -406,6 +406,11 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
   the shortfall out of training, best first (`MissionStaffing.fillFromTraining`), after a confirmation that names
   the cost. `-Dshots=pulltraining`. Client only: no reset, no server rebuild.
 
+- **The advisor's close tip** (the user's idea, 2026-11-11, `ui-spec.md` component 24): the first time an open program
+  has flown everything, has no contract line, nothing in flight, and gives no unopened program a discount, the card
+  (retired or not) suggests closing it, with the upkeep saved (`Advisor.CLOSE_TIP`, `ProgramOpening.upkeepSaved`).
+  `-Dshots=closetip`. Client only: no reset, no server rebuild.
+
 ## How we work
 
 - **Screens:** Claude writes the spec in `ui-spec.md`, the user mocks it up in Claude Design,

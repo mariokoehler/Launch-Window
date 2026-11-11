@@ -61,7 +61,9 @@ public final class Advisor {
         /** The roads to the Moon compared (ui-spec.md 4.21). */
         ROADS_TO_THE_MOON,
         /** The explainer the explainer tip points to ({@link #TIP_EXPLAINER}). */
-        EXPLAINER
+        EXPLAINER,
+        /** The details of the program the close tip names ({@link #closeTipProgram}), where Close is. */
+        PROGRAM
     }
 
     /** Where an item stands. */
@@ -203,6 +205,53 @@ public final class Advisor {
         "How does a satellite stay up? \"Suborbital vs orbital\" explains it in three pages. The Concepts chips on "
             + "program and rocket screens open more like it, and the Museum keeps them all.",
         "Read it", Destination.EXPLAINER, List.of("museum"));
+
+    /**
+     * A one-off tip apart from the first steps (the user's idea, 2026-11-11): the first time an open program has
+     * flown every one of its missions and has no contract line, the card suggests closing it to save its upkeep.
+     * Like the idle tip it shows on a retired advisor too, and never counts toward {@link #finished}.
+     */
+    public static final Item CLOSE_TIP = new Item("close-program", "Close {program}?",
+        "Every {program} mission has flown, and it has no contracts to fly. Closing it saves its upkeep; its "
+            + "components are kept, so reopening costs only the opening cost. A repeat flight still pays "
+            + de.mkoehler.launchwindow.rules.MissionPrestige.LATER_TIME_PERCENT + " % of its prestige.",
+        "The program", Destination.PROGRAM, List.of("programs", "budget"));
+
+    /**
+     * Returns the program the close tip names: the first open program, in the order opened, that has flown
+     * every one of its configurations at least once, has no commercial line, has nothing in flight (closing
+     * is refused then), and whose closing would raise no unopened program's opening cost (a test program
+     * often makes its Moon program free while it stays open).
+     *
+     * @param state   the player's state
+     * @param catalog the content pack
+     * @return the program, or {@code null} for none
+     */
+    public static Program closeTipProgram(PlayerSnapshot state, ContentCatalog catalog) {
+        for (Program program : Programs.open(state, catalog)) {
+            List<MissionConfiguration> configurations = Missions.of(program, catalog);
+            if (!configurations.isEmpty()
+                && configurations.stream().allMatch(configuration -> Missions.flown(configuration, state) > 0)
+                && catalog.commercial(program.id()).isEmpty()
+                && Programs.missionsInFlight(program, state, catalog) == 0
+                && de.mkoehler.launchwindow.rules.ProgramOpening.discountsLostByClosing(state, program.id(), catalog)
+                    .isEmpty()) {
+                return program;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Returns whether the close tip is due now ({@link #closeTipProgram}).
+     *
+     * @param state   the player's state
+     * @param catalog the content pack
+     * @return whether it's due
+     */
+    public static boolean closeTipDue(PlayerSnapshot state, ContentCatalog catalog) {
+        return closeTipProgram(state, catalog) != null;
+    }
 
     /**
      * Returns whether the explainer tip is due now: engineers are hired, so the wait for basic training has
@@ -424,6 +473,10 @@ public final class Advisor {
     }
 
     private static String named(String text, PlayerSnapshot state, ContentCatalog catalog) {
+        if (text.contains("{program}")) {
+            Program program = closeTipProgram(state, catalog);
+            text = text.replace("{program}", program == null ? "the program" : ContentNames.of(program.id()));
+        }
         return text.replace("{capsule}", firstName(state, catalog, ONE_CREW, "a one-crew capsule"))
             .replace("{plane}", firstName(state, catalog, SPACE_PLANES, "rocket plane"));
     }
@@ -458,6 +511,11 @@ public final class Advisor {
      * @return the line, or {@code null}
      */
     public static String progress(Item item, PlayerSnapshot state, ContentCatalog catalog) {
+        if (item == CLOSE_TIP) {
+            Program program = closeTipProgram(state, catalog);
+            return program == null ? null : "Saves " + ContractsView.money(de.mkoehler.launchwindow.rules.ProgramOpening
+                .upkeepSaved(state, program.id(), catalog)) + " a season.";
+        }
         if (!item.id().equals("raise-reliability")) {
             return null;
         }

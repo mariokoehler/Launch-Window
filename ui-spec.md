@@ -941,6 +941,17 @@ Writing them turned up two things for the rules, recorded in `design.md` §2.2(d
       it stays until any explainer is read, from anywhere, or Got it (client mark `explainerTipDone`). A player who
       leaves the wait without it finds it after the first steps on the card. Shots `advisor-explainer-tip*.png`
       (`-Dshots=advisor`).
+    - **The close tip** (the user's idea, 2026-11-11; built without a mockup, like the idle tip): "Close
+      {program}?", the first time an open program has flown every one of its configurations and has no contract
+      line (`commercial.json`), nothing in flight (Close is refused then), and no unopened program whose opening
+      cost its closing would raise (`ProgramOpening.discountsLostByClosing`: an Earth-orbit test program often makes
+      its Moon program free while open). Its text says the components are kept, reopening costs only the opening
+      cost, and a repeat flight still pays 30 % of its prestige; its progress line the upkeep saved a season
+      (`ProgramOpening.upkeepSaved`: the program's own, plus components no other open program needs). Go ("The
+      program") opens the program's details, where Close is; Rules opens Programs and Budget; **Got it** puts it
+      away. A one-off with the idle tip's lifecycle (`Advisor.CLOSE_TIP`, `closeTipDue`, client marks
+      `closeTipShown` / `closeTipDone`): done once it stops qualifying after showing (closed, say), and like the idle
+      tip it brings back a retired card. Shots `advisor-close-tip*.png` (`-Dshots=closetip`).
 25. **Looking ahead** *(the user's idea, 2026-10-10: "thinking ahead gives you a big advantage in this
     game"; the user liked all seven proposals and asked for them built at once, without a mockup,
     since each extends a component that exists).* Every season count comes from the rules, never the

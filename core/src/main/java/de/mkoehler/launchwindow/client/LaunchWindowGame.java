@@ -741,6 +741,39 @@ public class LaunchWindowGame extends Game {
     }
 
     /**
+     * Returns whether the advisor's close tip is done for this player on this device: shown and acted on,
+     * or dismissed ({@code Advisor.CLOSE_TIP}).
+     *
+     * @return whether it's done
+     */
+    public boolean closeTipDone() {
+        return flag("closeTipDone");
+    }
+
+    /**
+     * Returns whether the advisor's close tip has been shown.
+     *
+     * @return whether it has
+     */
+    public boolean closeTipShown() {
+        return flag("closeTipShown");
+    }
+
+    /**
+     * Marks the advisor's close tip as shown.
+     */
+    public void markCloseTipShown() {
+        setFlag("closeTipShown");
+    }
+
+    /**
+     * Marks the advisor's close tip as done: it never shows again.
+     */
+    public void markCloseTipDone() {
+        setFlag("closeTipDone");
+    }
+
+    /**
      * Returns whether the advisor's explainer tip is done for this player on this device: put away, or any
      * explainer read from anywhere ({@code Advisor.EXPLAINER_TIP}).
      *

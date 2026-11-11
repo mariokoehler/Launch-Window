@@ -351,7 +351,9 @@ public final class SpaceComplexScreen extends SessionScreen {
         if (session.gameInfo().response().decided()) {
             return;
         }
-        boolean tip = idleTip(state);
+        boolean idleTip = idleTip(state);
+        boolean closeTip = closeTip(state);
+        boolean tip = idleTip || closeTip;
         if (game.advisorRetired() && !tip) {
             return;
         }
@@ -363,11 +365,14 @@ public final class SpaceComplexScreen extends SessionScreen {
                 return;
             }
         }
-        // Retired, the card comes back for the idle tip alone.
+        // Retired, the card comes back for the idle and close tips alone.
         boolean tipOnly = game.advisorRetired();
         List<Advisor.Item> steps = tipOnly ? List.of() : Advisor.open(state, session.catalog(), marks);
         List<Advisor.Item> open = new java.util.ArrayList<>(steps);
-        if (tip) {
+        if (closeTip) {
+            open.add(0, Advisor.CLOSE_TIP);
+        }
+        if (idleTip) {
             open.add(0, Advisor.IDLE_TIP);
         }
         // The explainer tip fills the wait for basic training; missed, it comes after the first steps.
@@ -465,6 +470,24 @@ public final class SpaceComplexScreen extends SessionScreen {
         return false;
     }
 
+    /**
+     * Whether the advisor's close tip shows now: the first time an open program has flown everything and has no
+     * contract line, until it's closed (or no longer qualifies) or the player puts it away; then never again.
+     */
+    private boolean closeTip(PlayerSnapshot state) {
+        if (game.closeTipDone()) {
+            return false;
+        }
+        if (Advisor.closeTipDue(state, session.catalog())) {
+            game.markCloseTipShown();
+            return true;
+        }
+        if (game.closeTipShown()) {
+            game.markCloseTipDone();
+        }
+        return false;
+    }
+
     private Table advisorItem(Advisor.Item item, float width) {
         Table row = new Table();
         row.top().left();
@@ -499,12 +522,14 @@ public final class SpaceComplexScreen extends SessionScreen {
             Advisor.title(item, session.state(), session.catalog())))));
         links.add(rules);
         // The tips are one-offs: they can be put away without acting on them.
-        if (item == Advisor.IDLE_TIP || item == Advisor.EXPLAINER_TIP) {
+        if (item == Advisor.IDLE_TIP || item == Advisor.EXPLAINER_TIP || item == Advisor.CLOSE_TIP) {
             Label gotIt = ui.label("GOT IT", Theme.TextStyle.LABEL, Theme.NAVY);
             gotIt.setTouchable(Touchable.enabled);
             gotIt.addListener(clicked(() -> {
                 if (item == Advisor.IDLE_TIP) {
                     game.markIdleTipDone();
+                } else if (item == Advisor.CLOSE_TIP) {
+                    game.markCloseTipDone();
                 } else {
                     game.markExplainerTipDone();
                 }
@@ -553,6 +578,15 @@ public final class SpaceComplexScreen extends SessionScreen {
             case EXPLAINER -> de.mkoehler.launchwindow.client.view.Explainers.standard().byId(Advisor.TIP_EXPLAINER)
                 .ifPresent(explainer -> game.setScreen(new ExplainerScreen(game, explainer, 0,
                     () -> new SpaceComplexScreen(game))));
+            case PROGRAM -> {
+                de.mkoehler.launchwindow.content.Program program = Advisor.closeTipProgram(session.state(),
+                    session.catalog());
+                if (program == null) {
+                    goHeadquarters();
+                } else {
+                    game.setScreen(new ProgramDetailsScreen(game, program.id(), null));
+                }
+            }
         }
     }
 

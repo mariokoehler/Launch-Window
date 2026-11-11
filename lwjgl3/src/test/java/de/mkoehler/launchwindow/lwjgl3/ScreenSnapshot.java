@@ -280,10 +280,14 @@ public final class ScreenSnapshot {
         game.useExplainerReadMarksInMemory(new java.util.HashSet<>());
         // The advisor's marks too: every run starts with help unopened and the advisor on duty.
         // The idle tip done: only its own shots show it (groundingShots).
-        game.useAdvisorMarksInMemory(new java.util.HashSet<>(java.util.Set.of("idleTipDone", "explainerTipDone")));
+        game.useAdvisorMarksInMemory(new java.util.HashSet<>(java.util.Set.of("idleTipDone", "explainerTipDone", "closeTipDone")));
         // -Dshots=contracts renders only one group, for a quick look at the screens being worked on.
         if ("advisor".equals(System.getProperty("shots"))) {
             advisorShots(folder, game);
+            return;
+        }
+        if ("closetip".equals(System.getProperty("shots"))) {
+            closeTipShots(folder, game);
             return;
         }
         if ("pulltraining".equals(System.getProperty("shots"))) {
@@ -999,7 +1003,7 @@ public final class ScreenSnapshot {
         // A crewed flight's goals count only if the crew comes home (design.md 2.6).
         write(folder, "grounding-steps.png", new MissionStepsScreen(game, "vostok-orbital"), null);
 
-        java.util.Set<String> marks = new java.util.HashSet<>(java.util.Set.of("helpOpened", "advisorRetired", "explainerTipDone"));
+        java.util.Set<String> marks = new java.util.HashSet<>(java.util.Set.of("helpOpened", "advisorRetired", "explainerTipDone", "closeTipDone"));
         game.useAdvisorMarksInMemory(marks);
         PlayerSnapshot idle = new PlayerSnapshot("Orion Spaceworks", Archetype.NASA, 23_350, 250, 3_000, 1);
         idle.setDirectorName("A. Reyes");
@@ -1016,9 +1020,10 @@ public final class ScreenSnapshot {
         marks.clear();
         marks.add("helpOpened");
         marks.add("explainerTipDone");
+        marks.add("closeTipDone");
         startSession(game, idle, info);
         write(folder, "advisor-idle-tip-first-steps.png", new SpaceComplexScreen(game), null);
-        game.useAdvisorMarksInMemory(new java.util.HashSet<>(java.util.Set.of("idleTipDone", "explainerTipDone")));
+        game.useAdvisorMarksInMemory(new java.util.HashSet<>(java.util.Set.of("idleTipDone", "explainerTipDone", "closeTipDone")));
     }
 
     /**
@@ -1118,7 +1123,7 @@ public final class ScreenSnapshot {
         String hash = ContentPackHash.ofClasspath("content/standard", ScreenSnapshot.class.getClassLoader());
         GameInfoResponse info = GameInfoResponse.success("standard", hash, List.of(), 6, true,
             6 * 3_600_000L + 12 * 60_000L + 30_000L, 0L, null, List.of(), List.of(), 0);
-        game.useAdvisorMarksInMemory(new java.util.HashSet<>(java.util.Set.of("idleTipDone", "explainerTipDone", "helpOpened",
+        game.useAdvisorMarksInMemory(new java.util.HashSet<>(java.util.Set.of("idleTipDone", "explainerTipDone", "closeTipDone", "helpOpened",
             "reportRead")));
         PlayerSnapshot nasa = new PlayerSnapshot("Orion Spaceworks", Archetype.NASA, 21_400, 1_150, 3_000, 6);
         nasa.setDirectorName("A. Reyes");
@@ -1155,7 +1160,7 @@ public final class ScreenSnapshot {
             walker, () -> new AstronautComplexScreen(game)), null);
         write(folder, "progression-wings-plan.png", new MissionPlanScreen(game, "mercury-suborbital",
             MissionPlanScreen.Tab.ASSESSMENT), null);
-        game.useAdvisorMarksInMemory(new java.util.HashSet<>(java.util.Set.of("idleTipDone", "explainerTipDone")));
+        game.useAdvisorMarksInMemory(new java.util.HashSet<>(java.util.Set.of("idleTipDone", "explainerTipDone", "closeTipDone")));
     }
 
     /**
@@ -1659,6 +1664,30 @@ public final class ScreenSnapshot {
     }
 
     /**
+     * The advisor's close tip (2026-11-11): Mariner 5 has flown its one mission and has no contract line, so the
+     * card, retired, comes back to suggest closing it; then the same on a card still walking the road ahead.
+     */
+    private static void closeTipShots(File folder, LaunchWindowGame game) {
+        String hash = ContentPackHash.ofClasspath("content/standard", ScreenSnapshot.class.getClassLoader());
+        GameInfoResponse info = GameInfoResponse.success("standard", hash, List.of(), 31, true,
+            6 * 3_600_000L, 0L, null, List.of(), List.of(), 0);
+        PlayerSnapshot nasa = new PlayerSnapshot("Orion Spaceworks", Archetype.NASA, 60_000, 2_140, 3_000, 31);
+        nasa.setDirectorName("A. Reyes");
+        nasa.getOpenedProgramIds().add("mariner-5");
+        nasa.getMissionComponents().put("mariner-5-probe", new OwnedMissionComponent(88, 40));
+        nasa.getSuccessfulFlightCounts().put("mariner-5-flyby", 1);
+        java.util.Set<String> marks = new java.util.HashSet<>(java.util.Set.of("helpOpened", "advisorRetired",
+            "idleTipDone", "explainerTipDone"));
+        game.useAdvisorMarksInMemory(marks);
+        startSession(game, nasa, info);
+        write(folder, "advisor-close-tip.png", new SpaceComplexScreen(game), null);
+        marks.remove("advisorRetired");
+        marks.remove("closeTipDone");
+        startSession(game, nasa, info);
+        write(folder, "advisor-close-tip-steps.png", new SpaceComplexScreen(game), null);
+    }
+
+    /**
      * Pull from training on the assembly (2026-11-11): four controllers and an astronaut in training leave
      * the free staff short, and the button and its confirmation offer to fill the rest from training.
      */
@@ -2000,7 +2029,7 @@ public final class ScreenSnapshot {
         String hash = ContentPackHash.ofClasspath("content/early-era", ScreenSnapshot.class.getClassLoader());
         GameInfoResponse info = GameInfoResponse.success("early-era", hash, List.of(), 1, true,
             6 * 3_600_000L + 12 * 60_000L + 30_000L, 0L, null, List.of(), List.of(), 0);
-        java.util.Set<String> marks = new java.util.HashSet<>(java.util.Set.of("idleTipDone", "explainerTipDone"));
+        java.util.Set<String> marks = new java.util.HashSet<>(java.util.Set.of("idleTipDone", "explainerTipDone", "closeTipDone"));
         game.useAdvisorMarksInMemory(marks);
         PlayerSnapshot fresh = new PlayerSnapshot("Baltic Star Agency", Archetype.SOVIET, 25_000, 250, 3_000, 1);
         fresh.setDirectorName("A. Reyes");
@@ -2045,7 +2074,7 @@ public final class ScreenSnapshot {
 
         // The explainer tip (2026-11-03): engineers in basic training and nothing else to do, so the card
         // sends the player to E-01; then the explainer its Go link opens. No explainer read yet.
-        game.useAdvisorMarksInMemory(new java.util.HashSet<>(java.util.Set.of("idleTipDone", "helpOpened")));
+        game.useAdvisorMarksInMemory(new java.util.HashSet<>(java.util.Set.of("idleTipDone", "closeTipDone", "helpOpened")));
         game.useExplainerReadMarksInMemory(new java.util.HashSet<>());
         PlayerSnapshot waiting = new PlayerSnapshot("Orion Spaceworks", Archetype.NASA, 23_350, 250, 3_000, 1);
         waiting.setDirectorName("A. Reyes");

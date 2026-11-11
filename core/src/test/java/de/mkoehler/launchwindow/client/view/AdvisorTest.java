@@ -18,6 +18,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
@@ -142,13 +143,60 @@ class AdvisorTest {
     }
 
     /**
+     * The close tip (2026-11-11) names an open program that has flown everything, has no contract line,
+     * has nothing in flight and gives no unopened program a discount, with the upkeep its closing saves.
+     */
+    @Test
+    void closeTipNamesAFinishedProgramWithoutContracts() {
+        ContentCatalog standard = ContentPackLoader.load(Path.of("..", "assets", "content", "standard"));
+        PlayerSnapshot state = soviet();
+        state.setOpenedProgramIds(new java.util.ArrayList<>(List.of("sputnik-1", "venera-7")));
+        java.util.Map<String, de.mkoehler.launchwindow.model.OwnedMissionComponent> owned = new java.util.HashMap<>();
+        for (String id : List.of("sputnik-1-satellite", "venera-7-probe", "soyuz-7k-l1-spacecraft")) {
+            var component = new de.mkoehler.launchwindow.model.OwnedMissionComponent(80, 50);
+            component.setActive(true);
+            owned.put(id, component);
+        }
+        state.setMissionComponents(owned);
+        java.util.Map<String, Integer> flown = new java.util.HashMap<>(java.util.Map.of("sputnik-1-orbit", 2));
+        state.setSuccessfulFlightCounts(flown);
+        assertNull(Advisor.closeTipProgram(state, standard), "Venera 7 hasn't flown; Sputnik 1 has contracts");
+
+        state.getSuccessfulFlightCounts().put("venera-7-landing", 1);
+        assertEquals("venera-7", Advisor.closeTipProgram(state, standard).id());
+        assertTrue(Advisor.closeTipDue(state, standard));
+        long saved = Math.round((standard.program("venera-7").orElseThrow().maintenanceCost()
+            + standard.missionComponent("venera-7-probe").orElseThrow().maintenanceCost()) * state.getCostMultiplier());
+        assertEquals("Saves " + ContractsView.money(saved) + " a season.", Advisor.progress(Advisor.CLOSE_TIP, state,
+            standard));
+        assertTrue(Advisor.title(Advisor.CLOSE_TIP, state, standard).contains(ContentNames.of("venera-7")));
+        assertEquals(Advisor.Destination.PROGRAM, Advisor.destination(Advisor.CLOSE_TIP, state, standard));
+
+        state.getInProgressMissions().put("m1", new de.mkoehler.launchwindow.model.InProgressMission("m1",
+            "venera-7-landing", List.of(), List.of()));
+        assertNull(Advisor.closeTipProgram(state, standard), "closing is refused while a mission flies");
+        state.getInProgressMissions().clear();
+
+        // Soyuz 7K-L1 open makes its Earth-orbit tests free to open: closing it would throw that away.
+        state.setOpenedProgramIds(new java.util.ArrayList<>(List.of("soyuz-7k-l1")));
+        state.getSuccessfulFlightCounts().put("soyuz-7k-l1-uncrewed-flyby", 1);
+        state.getSuccessfulFlightCounts().put("soyuz-7k-l1-flyby", 1);
+        assertNull(Advisor.closeTipProgram(state, standard), "an unopened program would lose its discount");
+        state.setOpenedProgramIds(new java.util.ArrayList<>(List.of("soyuz-7k-l1-earth-orbit", "soyuz-7k-l1")));
+        assertEquals("soyuz-7k-l1", Advisor.closeTipProgram(state, standard).id(), "the tests, unflown, stay");
+
+        assertFalse(Advisor.ITEMS.contains(Advisor.CLOSE_TIP), "never one of the first steps");
+        assertFalse(Advisor.ROAD_AHEAD.contains(Advisor.CLOSE_TIP), "never on the road ahead");
+    }
+
+    /**
      * Every item's "?" opens on topics the help has.
      */
     @Test
     void topicsExist() throws IOException {
         Help help = Help.parse(Files.readString(Path.of("..", "assets", "content", Help.FILE)));
-        for (Advisor.Item item : java.util.stream.Stream.concat(Advisor.ITEMS.stream(), Advisor.ROAD_AHEAD.stream())
-                .toList()) {
+        for (Advisor.Item item : java.util.stream.Stream.of(Advisor.ITEMS, Advisor.ROAD_AHEAD,
+                List.of(Advisor.IDLE_TIP, Advisor.EXPLAINER_TIP, Advisor.CLOSE_TIP)).flatMap(List::stream).toList()) {
             assertFalse(item.topicIds().isEmpty(), item.id());
             for (String id : item.topicIds()) {
                 assertTrue(help.byId(id).isPresent(), item.id() + " names a missing topic " + id);
