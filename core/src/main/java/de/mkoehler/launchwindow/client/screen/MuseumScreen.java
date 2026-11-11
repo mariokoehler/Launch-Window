@@ -787,8 +787,9 @@ public final class MuseumScreen extends ChromeScreen {
             text.top().left();
             text.pad(14f, 14f, 14f, 14f);
             text.defaults().left().growX();
-            text.add(ui.label((page.agency() + " · " + page.date()).toUpperCase(Locale.ROOT), Theme.TextStyle.EYEBROW,
-                Theme.INK_MUTED)).padBottom(4f).row();
+            // Wraps: a long date ("March and June 1965") would otherwise widen the card past its border.
+            text.add(ui.paragraph((page.agency() + " · " + page.date()).toUpperCase(Locale.ROOT),
+                Theme.TextStyle.EYEBROW, Theme.INK_MUTED)).padBottom(4f).row();
             text.add(ui.paragraph(page.title(), Theme.TextStyle.ARCHIVE_CARD_TITLE, Theme.INK_MUTED)).row();
             text.add().expandY().row();
             text.add(new Image(ui.solid(Theme.NAVY_BORDER))).height(Theme.BORDER_THIN).padBottom(10f).row();
@@ -808,8 +809,9 @@ public final class MuseumScreen extends ChromeScreen {
         text.top().left();
         text.pad(14f, 14f, 14f, 14f);
         text.defaults().left().growX();
-        text.add(ui.label((page.agency() + " · " + page.date()).toUpperCase(Locale.ROOT), Theme.TextStyle.EYEBROW,
-            Theme.NAVY)).padBottom(4f).row();
+        // Wraps: a long date ("March and June 1965") would otherwise widen the card past its border.
+        text.add(ui.paragraph((page.agency() + " · " + page.date()).toUpperCase(Locale.ROOT),
+            Theme.TextStyle.EYEBROW, Theme.NAVY)).padBottom(4f).row();
         text.add(ui.paragraph(page.title(), Theme.TextStyle.ARCHIVE_CARD_TITLE, Theme.INK)).padBottom(6f).row();
         text.add(ui.paragraph(page.summary(), Theme.TextStyle.BODY_SM, Theme.INK_MUTED)).row();
         text.add().expandY().row();
