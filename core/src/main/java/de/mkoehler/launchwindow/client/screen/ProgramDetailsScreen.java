@@ -56,6 +56,8 @@ import java.util.Objects;
 public final class ProgramDetailsScreen extends ChromeScreen {
 
     private static final float ART_WIDTH = 620f;
+    /** Where the goal chips wrap: inside the details card, beside the art. */
+    private static final float GOAL_CHIPS_WIDTH = 1100f;
     private static final float PRICE_COLUMN = 180f;
 
     private final String programId;
@@ -166,6 +168,20 @@ public final class ProgramDetailsScreen extends ChromeScreen {
                 card.add(ui.paragraph(ContentNames.of(goal) + ": " + Outlook.sourceLine(goal, state, session.catalog()),
                     Theme.TextStyle.BODY_SM, Theme.INK)).padBottom(i == missing.size() - 1 ? 22f : 4f).row();
             }
+        }
+
+        // What its missions can reach (the user's request, 2026-11-11): chips, those still to reach first.
+        List<String> reach = Programs.goals(program, state, session.catalog());
+        if (!reach.isEmpty()) {
+            String line = Programs.goalsLine(program, state, session.catalog());
+            card.add(caption("Goals its missions can reach")).padBottom(4f).row();
+            card.add(ui.label(line + ". A goal also credits the smaller ones it includes; reached ones are ticked.",
+                Theme.TextStyle.BODY_SM, Theme.INK_MUTED)).padBottom(10f).row();
+            List<Table> chips = new ArrayList<>();
+            for (String goal : reach) {
+                chips.add(goalChip(goal, state.hasAchievedOrCancelledGoal(goal)));
+            }
+            card.add(de.mkoehler.launchwindow.client.ui.TraitChip.flow(chips, GOAL_CHIPS_WIDTH)).padBottom(22f).row();
         }
 
         Programs.Price price = Programs.price(program, state, session.catalog());
@@ -369,6 +385,25 @@ public final class ProgramDetailsScreen extends ChromeScreen {
                 + "under Mission configurations has its own checks.", Theme.TextStyle.CAPTION, Theme.INK_MUTED));
         }
         return block;
+    }
+
+    /** A goal its missions can reach, as a quiet chip; a reached one ticked and muted. */
+    private Table goalChip(String goalId, boolean reached) {
+        Table chip = new Table() {
+            @Override
+            public float getPrefHeight() {
+                return de.mkoehler.launchwindow.client.ui.TraitChip.HEIGHT;
+            }
+        };
+        chip.setBackground(ui.solid(Theme.SKILL_TRACK));
+        chip.pad(0f, 8f, 0f, 8f);
+        if (reached) {
+            Image tick = new Image(ui.icon("check"), Scaling.fit);
+            tick.setColor(Theme.SUCCESS);
+            chip.add(tick).size(10f).padRight(5f);
+        }
+        chip.add(ui.label(ContentNames.of(goalId), Theme.TextStyle.BODY_SM, reached ? Theme.INK_MUTED : Theme.INK));
+        return chip;
     }
 
     private Table goalBadge(String goalId, PlayerSnapshot state) {

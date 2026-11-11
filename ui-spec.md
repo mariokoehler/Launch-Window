@@ -2065,7 +2065,10 @@ body (category art); then the programs in a category (program art), each with it
 state: open, closed (components kept, inactive), available, or locked (with the
 missing goals). Other agencies' programs are hidden entirely. *Looking ahead (2026-10-10,
 component 25):* each card shows the astronauts and controllers its missions need, coloured against
-the roster, and a locked card's "Needs:" line says in its tooltip where each goal is earned.
+the roster, and a locked card's "Needs:" line says in its tooltip where each goal is earned. *(User,
+2026-11-11:)* each card says what its missions can reach, "Achieves up to 10 goals", then "· 3 left" or
+"· all reached" once some are reached (`Programs.goalsLine`); its tooltip, "Goals it can reach", lists those
+still to reach one a line and those reached in one line (`Programs.goalsDetail`).
 
 **4.6.4 Program details.** Shows:
 - state, upkeep per season;
@@ -2074,6 +2077,11 @@ the roster, and a locked card's "Needs:" line says in its tooltip where each goa
   closed program is free);
 - the required goals as goal badges (a goal credited through another goal's
   cascade reads "Achieved", without a date);
+- *(user, 2026-11-11)* under them, **Goals its missions can reach**: the union over its configurations of
+  the goals their steps achieve, with the goals each credits (`Programs.goals`, through `GoalCascade`: Apollo's
+  steps name only their own "flown" goals, and the crewed landing comes through the credit), the card's line
+  above them, then a wrapping row of quiet chips (component 20's look), those still to reach first, reached
+  ones ticked and muted. Up to 32 for Apollo, which is why chips, not the badges above;
 - the components it grants, each with its reliability bar if owned;
 - a link to mission configuration selection;
 - *(specified 2026-10-07)* a Concepts section (component 19) with the program's concepts.

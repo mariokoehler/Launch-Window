@@ -227,6 +227,13 @@ public final class BodyProgramsScreen extends ChromeScreen {
                 + String.join("\n", rockets.lines()));
             body.add(line).padBottom(Theme.SPACE_2).row();
         }
+        // What its missions can reach (the user's request, 2026-11-11), the goals in a tooltip.
+        String goalsLine = Programs.goalsLine(program, session.state(), session.catalog());
+        if (goalsLine != null) {
+            Label reach = ui.label(goalsLine, Theme.TextStyle.CAPTION, Theme.INK_MUTED);
+            ui.tooltip(reach, "Goals it can reach", Programs.goalsDetail(program, session.state(), session.catalog()));
+            body.add(reach).padBottom(Theme.SPACE_2).row();
+        }
         if (state == Programs.State.LOCKED) {
             Label needs = ui.paragraph("Needs: " + String.join(", ", Programs.missingGoals(program, session.state())
                 .stream().map(ContentNames::of).toList()), Theme.TextStyle.BODY_SM, Theme.INK);

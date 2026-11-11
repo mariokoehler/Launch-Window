@@ -131,4 +131,28 @@ class ProgramsTest {
         ContentCatalog pack = ContentPackLoader.load(Path.of("..", "assets", "content", "early-era"));
         assertTrue(pack.categories().stream().allMatch(category -> category.body() == CelestialBody.EARTH));
     }
+
+    /**
+     * A program's goals (2026-11-11) are every goal its missions reach, with the goals they credit: Apollo's
+     * steps name only their own "flown" goals, and the crewed landing comes through the credit. Unreached first.
+     */
+    @Test
+    void goalsUniteEveryMissionsGoalsWithTheirCredits() {
+        ContentCatalog standard = ContentPackLoader.load(Path.of("..", "assets", "content", "standard"));
+        PlayerSnapshot state = new PlayerSnapshot("Agency", Archetype.NASA, 0, 0, 0, 1);
+        Program apollo = standard.program("apollo").orElseThrow();
+        List<String> goals = Programs.goals(apollo, state, standard);
+        assertTrue(goals.contains("apollo-landing-flown"));
+        assertTrue(goals.contains("crewed-lunar-landing"), "credited by the landing");
+        assertEquals(goals.size(), goals.stream().distinct().count());
+        assertEquals("Achieves up to " + goals.size() + " goals", Programs.goalsLine(apollo, state, standard));
+
+        state.getAchievedGoals().put("earth-orbit-satellite", 1);
+        List<String> after = Programs.goals(apollo, state, standard);
+        assertEquals("earth-orbit-satellite", after.getLast(), "reached goals come last");
+        assertEquals("Achieves up to " + goals.size() + " goals · " + (goals.size() - 1) + " left",
+            Programs.goalsLine(apollo, state, standard));
+        assertTrue(Programs.goalsDetail(apollo, state, standard).contains("Already reached: "
+            + ContentNames.of("earth-orbit-satellite")));
+    }
 }

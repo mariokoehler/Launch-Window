@@ -228,6 +228,79 @@ public final class Programs {
     }
 
     /**
+     * Returns every goal a program's missions can reach (the user's request, 2026-11-11): the union over its
+     * configurations of the goals their steps achieve, each with the goals it credits ({@code GoalCascade}),
+     * since a step often names only its own goal ("Apollo landing flown") and the big one ("Crewed lunar
+     * landing") comes through the credit. Goals not yet achieved or cancelled come first, then the rest, each
+     * group in the pack's order.
+     *
+     * @param program the program
+     * @param state   the player's state
+     * @param catalog the content pack
+     * @return the goal ids
+     */
+    public static List<String> goals(Program program, PlayerSnapshot state, ContentCatalog catalog) {
+        java.util.Set<String> all = new java.util.LinkedHashSet<>();
+        for (MissionConfiguration configuration : Missions.of(program, catalog)) {
+            for (MissionSeason season : configuration.seasons()) {
+                for (MissionStep step : season.steps()) {
+                    for (String goal : step.goalIdsAchieved()) {
+                        all.addAll(de.mkoehler.launchwindow.rules.GoalCascade.unheld(goal, held -> false, catalog));
+                    }
+                }
+            }
+        }
+        List<String> ordered = new ArrayList<>(all.stream().filter(goal -> !state.hasAchievedOrCancelledGoal(goal))
+            .toList());
+        ordered.addAll(all.stream().filter(state::hasAchievedOrCancelledGoal).toList());
+        return List.copyOf(ordered);
+    }
+
+    /**
+     * Words what a program's missions can reach for its card ({@link #goals}): "Achieves up to 10 goals",
+     * then how many are left once some are reached.
+     *
+     * @param program the program
+     * @param state   the player's state
+     * @param catalog the content pack
+     * @return the line, or {@code null} for a program whose missions reach no goal
+     */
+    public static String goalsLine(Program program, PlayerSnapshot state, ContentCatalog catalog) {
+        List<String> goals = goals(program, state, catalog);
+        if (goals.isEmpty()) {
+            return null;
+        }
+        long left = goals.stream().filter(goal -> !state.hasAchievedOrCancelledGoal(goal)).count();
+        String line = "Achieves up to " + goals.size() + (goals.size() == 1 ? " goal" : " goals");
+        return left == goals.size() ? line : left == 0 ? line + " · all reached" : line + " · " + left + " left";
+    }
+
+    /**
+     * Lists a program's goals for a tooltip ({@link #goals}): those still to reach, one a line, then those
+     * already reached in one line.
+     *
+     * @param program the program
+     * @param state   the player's state
+     * @param catalog the content pack
+     * @return the text
+     */
+    public static String goalsDetail(Program program, PlayerSnapshot state, ContentCatalog catalog) {
+        List<String> goals = goals(program, state, catalog);
+        List<String> left = goals.stream().filter(goal -> !state.hasAchievedOrCancelledGoal(goal))
+            .map(ContentNames::of).toList();
+        List<String> reached = goals.stream().filter(state::hasAchievedOrCancelledGoal).map(ContentNames::of)
+            .toList();
+        StringBuilder text = new StringBuilder("Every goal its missions can reach, with those a goal also credits.");
+        if (!left.isEmpty()) {
+            text.append("\n\nStill to reach:\n").append(String.join("\n", left));
+        }
+        if (!reached.isEmpty()) {
+            text.append("\n\nAlready reached: ").append(String.join(", ", reached)).append('.');
+        }
+        return text.toString();
+    }
+
+    /**
      * Returns the first goal a program's missions can achieve that the player hasn't achieved or
      * cancelled yet.
      *

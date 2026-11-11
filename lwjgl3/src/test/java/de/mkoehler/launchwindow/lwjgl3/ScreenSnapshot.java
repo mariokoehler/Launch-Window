@@ -1786,6 +1786,9 @@ public final class ScreenSnapshot {
         nasa.getMissionComponents().put("titan-2", new OwnedMissionComponent(66.0, 3.0));
         startSession(game, nasa, info);
         write(folder, "standard-body-moon.png", new BodyProgramsScreen(game, CelestialBody.MOON), null);
+        // The goals a program can reach, in its card's tooltip (2026-11-11).
+        write(folder, "standard-body-moon-goals.png", new BodyProgramsScreen(game, CelestialBody.MOON),
+            screen -> showTooltip(screen.stage().getRoot(), "Goals it can reach"));
         write(folder, "standard-x15-configs.png", new MissionConfigsScreen(game, "x-15"), null);
         write(folder, "standard-x15-gated.png", new MissionStepsScreen(game, "x-15-research-flight-1"), null);
         write(folder, "standard-x15-air-drop.png", new MissionPlanScreen(game, "x-15-flight-test",
