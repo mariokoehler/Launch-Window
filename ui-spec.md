@@ -1848,6 +1848,11 @@ end-of-season news screen. **Ref:** `bulletin_news_*.png`,
 so when it shows more than one component the News card (with the real-timeline story and the random
 events) and the Intelligence card move to the left column, right under Missions flown, ahead of Goals
 and Buildings. With one component or none they stay under R&D. Shot `report.png`.
+*Read the paper (the user's request, 2026-11-11):* when the turn's resolution printed front pages the player
+sees on login (§4.18: Firsts, follow-ups, public science pages, memorials), the News card opens with "The Daily
+Zenith ran a front page this season." (or "ran N front pages") and a secondary "Read the paper" button, which
+reopens them all in order (`FrontPageScreen.ofTurn`, reopened: "Next front page", then "Close", back to the
+report). Shot `theories-report.png`.
 
 **Shows, grouped:**
 - missions flown this season, with step outcomes (success, glitch solved, minor

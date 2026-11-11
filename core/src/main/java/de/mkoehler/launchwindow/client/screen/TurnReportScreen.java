@@ -609,6 +609,18 @@ public final class TurnReportScreen extends ChromeScreen {
 
     private Table news(ContentCatalog catalog) {
         Table card = section("News", "This season");
+        // Back to the paper the player read on login, to read it again (the user's request, 2026-11-11).
+        List<FrontPage> paper = FrontPageScreen.ofTurn(game, report.gameTurn());
+        if (!paper.isEmpty()) {
+            Table row = new Table();
+            row.add(ui.paragraph(paper.size() == 1 ? "The Daily Zenith ran a front page this season."
+                : "The Daily Zenith ran " + paper.size() + " front pages this season.", Theme.TextStyle.BODY_SM,
+                Theme.INK_MUTED)).expandX().fillX().left().padRight(Theme.SPACE_3);
+            TurnReportScreen self = this;
+            row.add(onClick(ui.button("Read the paper", Theme.ButtonKind.SECONDARY), () -> game.visit(new FrontPageScreen(game, paper,
+                () -> game.setScreen(self), true)))).right();
+            card.add(row).padBottom(Theme.SPACE_4).row();
+        }
         // Another agency's crew lost this turn, first in the news, with "Send condolences" (ui-spec.md 4.18.3).
         for (de.mkoehler.launchwindow.model.FrontPage.Loss loss : PressCards.others(this)) {
             if (loss.gameTurn() == report.gameTurn()) {

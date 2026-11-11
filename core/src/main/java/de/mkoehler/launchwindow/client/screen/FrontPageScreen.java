@@ -170,19 +170,36 @@ public class FrontPageScreen extends SessionScreen {
         long joined = game.session().joinedTurn();
         List<FrontPage> unseen = new ArrayList<>();
         for (FrontPage page : all) {
-            if (page.gameTurn() < joined) {
-                continue;
-            }
-            // A science page shows only for a theory the public followed (ui-spec.md 4.18.2).
-            boolean words = page.science() ? Theories.standard().theory(page.storyId())
-                .map(t -> t.reach() == Theories.Reach.PUBLIC).orElse(false)
-                : page.memorialPage() ? page.memorial() != null
-                : FrontPages.standard().first(page.goalId()).isPresent();
-            if (!game.frontPageSeen(page.id()) && words) {
+            if (page.gameTurn() >= joined && !game.frontPageSeen(page.id()) && shows(page)) {
                 unseen.add(page);
             }
         }
         return unseen;
+    }
+
+    /**
+     * Returns the pages a turn printed that this player saw (or would have seen) on login, oldest first, for
+     * the turn report's "Read the paper" ({@code ui-spec.md} &sect;4.4).
+     *
+     * @param game the game, in a session
+     * @param turn the turn whose resolution printed them
+     * @return the pages; empty if none, or if the pages aren't fetched
+     */
+    public static List<FrontPage> ofTurn(LaunchWindowGame game, long turn) {
+        List<FrontPage> all = game.session().frontPages();
+        if (all == null || turn < game.session().joinedTurn()) {
+            return List.of();
+        }
+        return all.stream().filter(page -> page.gameTurn() == turn && shows(page)).toList();
+    }
+
+    /** Whether a page has its words, so it shows at all. */
+    private static boolean shows(FrontPage page) {
+        // A science page shows only for a theory the public followed (ui-spec.md 4.18.2).
+        return page.science() ? Theories.standard().theory(page.storyId())
+            .map(t -> t.reach() == Theories.Reach.PUBLIC).orElse(false)
+            : page.memorialPage() ? page.memorial() != null
+            : FrontPages.standard().first(page.goalId()).isPresent();
     }
 
     /**
@@ -984,7 +1001,7 @@ public class FrontPageScreen extends SessionScreen {
         statementButton(page).ifPresent(extra -> strip.add(extra).padRight(Theme.SPACE_4));
         memorialButton(page).ifPresent(extra -> strip.add(extra).padRight(Theme.SPACE_4));
         String next = sheet == 0 && !carried.isEmpty() ? "Turn to page 2"
-            : reopened ? "Close" : index + 1 < pages.size() ? "Next front page" : "Continue";
+            : index + 1 < pages.size() ? "Next front page" : reopened ? "Close" : "Continue";
         TextButton button = ui.pageButton(next);
         button.addListener(clicked(this::next));
         strip.add(button).right();
