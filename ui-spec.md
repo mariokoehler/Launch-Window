@@ -1587,7 +1587,8 @@ Writing them turned up two things for the rules, recorded in `design.md` §2.2(d
         one, and adding one wasn't worth a saved format for a line the player already knows. The dip still shows.
       - **No small drawing** in the empty state, and it leaves out the starting figures.
       - **The result dialog stays 980 px,** with the race table as built (no check marks); rows are 44 px, as the canvas
-        asks.
+        asks. *Widened to 1280 px* (the user's play test, 2026-11-11): bots' long names spilled the race table out of
+        the card. 32-character names with "(bot)" fit at Large text (`result-long-names.png`).
 31. **Skill ceiling** *(the user's decision, 2026-11-02, built straight in libGDX, `design.md` §2.2(c)):* how high a skill
    can still grow, given the person's other skills. On the person page a `SkillBar` gains a 2 px `INK_MUTED` tick at
    the ceiling, none at 100; the skill's tooltip adds "Their other skills leave room up to 87.5 (the tick)." or, at or above it,

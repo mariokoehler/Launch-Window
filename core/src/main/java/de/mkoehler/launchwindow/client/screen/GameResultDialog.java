@@ -30,8 +30,11 @@ import java.util.Optional;
  */
 final class GameResultDialog {
 
-    /** The dialog's width, from the mockup. */
-    static final float WIDTH = 980f;
+    /**
+     * The dialog's width: the mockup's 980 widened (the user's play test, 2026-11-11), so the race table holds a
+     * 32-character agency name with "(bot)" at the Large text size without spilling out of the card.
+     */
+    static final float WIDTH = 1280f;
 
     private static final float CHART_HEIGHT = 250f;
 

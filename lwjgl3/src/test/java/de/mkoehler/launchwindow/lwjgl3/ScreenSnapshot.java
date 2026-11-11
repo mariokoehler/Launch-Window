@@ -3153,6 +3153,19 @@ public final class ScreenSnapshot {
         game.session().keepStanding(standing);
         write(folder, "result-tie.png", new SpaceComplexScreen(game), SpaceComplexScreen::showResult);
 
+        // The longest names the join screen takes, as bots (the user's play test, 2026-11-11).
+        startSession(game, state, won);
+        List<RivalSummary> longNames = List.of(me,
+            RivalSummary.of("Northern Interplanetary Ventures", "Dulma Namsarayeva", Archetype.SOVIET, false,
+                Map.of("earth-orbit-satellite", 11, "human-in-space", 20), "kOrion", true, 3880),
+            RivalSummary.of("Pathfinder Space Administration", "Mary Yellowhair", Archetype.NASA, false,
+                Map.of("earth-orbit-satellite", 13), "kKestrel", true, 2140),
+            RivalSummary.of("People's Cosmonautics Bureau", "Vera Sedova", Archetype.SOVIET, false,
+                Map.of("earth-orbit-satellite", 14), "kPolar", true, 1760));
+        game.session().keepRivals(longNames);
+        game.session().keepStanding(longNames.stream().map(ScreenSnapshot::resultStanding).toList());
+        write(folder, "result-long-names.png", new SpaceComplexScreen(game), SpaceComplexScreen::showResult);
+
         // No losses yet: the memorial's empty state.
         PlayerSnapshot spared = museumState();
         spared.setMemorial(List.of());
