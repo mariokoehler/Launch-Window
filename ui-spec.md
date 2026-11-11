@@ -228,6 +228,11 @@ On the right:
       title-bar button on the Astronaut Complex, Mission Control and the SET Centre, with a count,
       shown only when someone can be pulled out, does it for everyone at once, basic
       training excepted; its confirmation says what the pull costs;
+    - **Keep Busy** *(user, 2026-11-11)*: a title-bar button beside Hire on the same three
+      screens, shown only when someone idle and available has a skill below 90. One click, no
+      confirmation: everyone idle goes into permanent training to 90 in their highest skill
+      still below 90 (ties to the skill first in the department's order); anyone at 90 or more
+      in every skill is left alone (`client.view.KeepBusy`). A toast says how many started;
     - **Dismiss:** free, refused for an astronaut or controller on a mission
       (crew, CAPCOM, or controller); SET can be dismissed mid-R&D, which frees the
       slot; needs a confirmation.

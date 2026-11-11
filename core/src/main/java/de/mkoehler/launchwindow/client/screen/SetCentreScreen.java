@@ -65,6 +65,7 @@ public final class SetCentreScreen extends ChromeScreen {
     protected void rebuild() {
         titleActions.clearChildren();
         dialogs.addAllHands(titleActions, session.state().getSetSpecialists());
+        dialogs.addKeepBusy(titleActions, session.state().getSetSpecialists());
         titleActions.add(onPage(ui.pageButton("Hire"), () -> game.setScreen(new HireScreen(game)))).padRight(10f);
         titleActions.add(onPage(ui.pageButton("Manage Department"), this::openManageDepartment)).padRight(10f);
         titleActions.add(button("Payload R&D", Theme.ButtonKind.PRIMARY,

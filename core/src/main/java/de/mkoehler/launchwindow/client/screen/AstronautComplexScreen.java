@@ -75,6 +75,7 @@ public final class AstronautComplexScreen extends ChromeScreen {
     protected void rebuild() {
         titleActions.clearChildren();
         dialogs.addAllHands(titleActions, session.state().getAstronauts());
+        dialogs.addKeepBusy(titleActions, session.state().getAstronauts());
         titleActions.add(onClick(ui.pageButton("Hire"), () -> game.setScreen(new HireScreen(game,
             Department.ASTRONAUT)))).padRight(10f);
         titleActions.add(onClick(ui.pageButton("Manage department"), () -> dialogs.openManageDepartment(0)));

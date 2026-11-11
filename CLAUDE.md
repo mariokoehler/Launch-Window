@@ -397,6 +397,10 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
   pulling out early costs skill; the pull-out dialogs name the share kept. Rebuild client and server
   together; no reset. The wiki follows `help.json`.
 
+- **Keep Busy** (the user's request, 2026-11-11, `ui-spec.md` component 11): a title-bar button on the three
+  personnel screens puts everyone idle into permanent training to 90 in their highest skill below 90
+  (`client.view.KeepBusy`). Client only: no reset, no server rebuild.
+
 ## How we work
 
 - **Screens:** Claude writes the spec in `ui-spec.md`, the user mocks it up in Claude Design,

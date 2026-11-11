@@ -21,6 +21,7 @@ import de.mkoehler.launchwindow.client.ui.Theme;
 import de.mkoehler.launchwindow.client.ui.UiKit;
 import de.mkoehler.launchwindow.client.view.ContentNames;
 import de.mkoehler.launchwindow.client.view.Department;
+import de.mkoehler.launchwindow.client.view.KeepBusy;
 import de.mkoehler.launchwindow.client.view.Outlook;
 import de.mkoehler.launchwindow.client.view.People;
 import de.mkoehler.launchwindow.client.view.Tips;
@@ -479,6 +480,53 @@ final class PersonnelDialogs {
             pullOutNext(people, 0, who);
         })).right().fill(false, false);
         host.showDialog(card);
+    }
+
+    /**
+     * Adds the "Keep Busy" button (the user's request, 2026-11-11) to a title bar, when anyone idle
+     * has a skill below {@link KeepBusy#TARGET}.
+     *
+     * @param titleActions the title bar
+     * @param roster       the department's roster
+     */
+    void addKeepBusy(Table titleActions, List<? extends Personnel> roster) {
+        if (!KeepBusy.plan(department, roster).isEmpty()) {
+            var button = host.onClick(ui.pageButton("Keep Busy"), () -> keepBusy(roster));
+            ui.tooltip(button, "Keep Busy", "Puts everyone idle into permanent training to " + KeepBusy.TARGET
+                + " in their highest skill below it, as far as their other skills allow.");
+            titleActions.add(button).padRight(10f);
+        }
+    }
+
+    /**
+     * Starts permanent training for everyone idle, as the Keep Busy button does.
+     *
+     * @param roster the department's roster
+     */
+    void keepBusy(List<? extends Personnel> roster) {
+        List<KeepBusy.Assignment> plan = KeepBusy.plan(department, roster);
+        if (!plan.isEmpty()) {
+            trainNext(plan, 0);
+        }
+    }
+
+    /** One action per person, each sent when the last one is through; a refusal stops the rest. */
+    private void trainNext(List<KeepBusy.Assignment> plan, int index) {
+        KeepBusy.Assignment next = plan.get(index);
+        host.submit(new StartTrainingAction(department.group(), next.person().getId(), TrainingKind.PERMANENT,
+            next.skill(), KeepBusy.TARGET), result -> {
+                if (index + 1 < plan.size()) {
+                    trainNext(plan, index + 1);
+                } else {
+                    String noun = switch (department) {
+                        case ASTRONAUT -> "astronaut";
+                        case MISSION_CONTROL -> "controller";
+                        case SET -> "engineer";
+                    };
+                    host.toast("Started permanent training for " + plan.size() + " " + noun
+                        + (plan.size() == 1 ? "" : "s") + ".", Theme.NoticeKind.SUCCESS);
+                }
+            });
     }
 
     /** One action per person, each sent when the last one is through; a refusal stops the rest. */

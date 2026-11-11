@@ -77,6 +77,7 @@ public final class MissionControlScreen extends ChromeScreen {
         PlayerSnapshot state = session.state();
         titleActions.clearChildren();
         dialogs.addAllHands(titleActions, state.getMissionControlOfficers());
+        dialogs.addKeepBusy(titleActions, state.getMissionControlOfficers());
         titleActions.add(onClick(ui.pageButton("Hire"), () -> game.setScreen(new HireScreen(game,
             Department.MISSION_CONTROL)))).padRight(10f);
         titleActions.add(onClick(ui.pageButton("Manage department"), () -> dialogs.openManageDepartment(0)))
