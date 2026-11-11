@@ -241,6 +241,13 @@ class AdvisorTest {
         state.getOpenedProgramIds().add("mercury");
         state.getAstronauts().add(new Astronaut("a1", "C. Astronaut", 30, 70, 50));
         assertEquals(List.of("rocket-plane"), open.get());
+
+        // Flown and closed again (play test, 2026-11-11): the capsule step stays done. Opened but never flown, it
+        // would come back, since nothing was started.
+        state.getSuccessfulFlightCounts().put("mercury-uncrewed-suborbital", 1);
+        state.getOpenedProgramIds().remove("mercury");
+        assertEquals(List.of("rocket-plane"), open.get(), "closing a flown capsule program brings nothing back");
+        state.getOpenedProgramIds().add("mercury");
         state.getAstronauts().getFirst().setRocketPlaneWings(true);
         assertEquals(List.of(), open.get());
         assertEquals(List.of("bigger-capsules", "lunar-probe", "moon"), Advisor.later(state, standard, done).stream()

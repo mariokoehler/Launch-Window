@@ -870,8 +870,10 @@ Writing them turned up two things for the rules, recorded in `design.md` §2.2(d
       once the capsule was open and read as a third program to run beside the capsule and the rocket plane;
       a pack without bigger capsules keeps the old timing); "Go to the Moon" (once a probe has reached it and a person has orbited the Earth). Each comes when
       its programs can be opened (the first two also wait for a first flight, as in the ungated early-era
-      pack), goes once one of them is open or the player has moved past it (the rocket plane once a pilot
-      has wings or a bigger capsule is open), and is "not needed" for an agency without such programs.
+      pack), goes once one of them is open or has flown a mission (a program closed after flying, as the close
+      tip suggests, mustn't bring its step back: play test, 2026-11-11), or the player has moved past it (the
+      rocket plane once a pilot has wings or a bigger capsule is begun), and is "not needed" for an agency without
+      such programs.
       Waiting on one, the card says "All set for now" and when it comes ("Once your first satellite
       reaches orbit: start on a person in space."). Once the first steps are done the head reads "The
       road ahead". `Advisor.title`/`text` put the agency's own program names in. "Choose your road to the Moon"'s Go link

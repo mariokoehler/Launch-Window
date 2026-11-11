@@ -339,11 +339,12 @@ public final class Advisor {
             case "read-report" -> marks.reportRead() ? Status.DONE : marks.reportResolved() ? Status.OPEN
                 : Status.LATER;
             // The road ahead. The first two wait for a first flight too, as in a pack without the gates.
+            // Begun, not only open: a program closed once it has flown mustn't bring these back (play test, 2026-11-11).
             case "next-crew" -> !exists(state, catalog, ONE_CREW) ? Status.NOT_NEEDED
-                : opened(state, catalog, ONE_CREW) || opened(state, catalog, BIGGER_CAPSULES) ? Status.DONE
+                : begun(state, catalog, ONE_CREW) || begun(state, catalog, BIGGER_CAPSULES) ? Status.DONE
                 : available(state, catalog, ONE_CREW) && flown(state) ? Status.OPEN : Status.LATER;
             case "rocket-plane" -> !exists(state, catalog, SPACE_PLANES) ? Status.NOT_NEEDED
-                : opened(state, catalog, SPACE_PLANES) || opened(state, catalog, BIGGER_CAPSULES)
+                : begun(state, catalog, SPACE_PLANES) || begun(state, catalog, BIGGER_CAPSULES)
                     || state.getAstronauts().stream().anyMatch(Astronaut::isRocketPlaneWings) ? Status.DONE
                 : available(state, catalog, SPACE_PLANES) && flown(state) ? Status.OPEN : Status.LATER;
             // With the bigger capsules, once a person has been in space (user, 2026-10-27); a pack without
@@ -357,10 +358,10 @@ public final class Advisor {
                     : opened(state, catalog, ONE_CREW))
                 ? Status.OPEN : Status.LATER;
             case "bigger-capsules" -> !exists(state, catalog, BIGGER_CAPSULES) ? Status.NOT_NEEDED
-                : opened(state, catalog, BIGGER_CAPSULES) ? Status.DONE
+                : begun(state, catalog, BIGGER_CAPSULES) ? Status.DONE
                 : available(state, catalog, BIGGER_CAPSULES) ? Status.OPEN : Status.LATER;
             case "moon" -> !exists(state, catalog, MOON) ? Status.NOT_NEEDED
-                : opened(state, catalog, MOON) ? Status.DONE
+                : begun(state, catalog, MOON) ? Status.DONE
                 : available(state, catalog, MOON) ? Status.OPEN : Status.LATER;
             default -> throw new IllegalArgumentException("Unknown advisor item: " + item.id());
         };
@@ -494,6 +495,17 @@ public final class Advisor {
 
     private static boolean opened(PlayerSnapshot state, ContentCatalog catalog, List<String> categories) {
         return Programs.open(state, catalog).stream().anyMatch(program -> categories.contains(program.categoryId()));
+    }
+
+    /**
+     * Whether the agency has started on the categories: a program of them is open, or one has flown a mission
+     * (it may since have been closed, as the close tip suggests).
+     */
+    private static boolean begun(PlayerSnapshot state, ContentCatalog catalog, List<String> categories) {
+        return opened(state, catalog, categories) || Programs.visible(state, catalog).stream()
+            .filter(program -> categories.contains(program.categoryId()))
+            .flatMap(program -> Missions.of(program, catalog).stream())
+            .anyMatch(configuration -> Missions.flown(configuration, state) > 0);
     }
 
     private static boolean available(PlayerSnapshot state, ContentCatalog catalog, List<String> categories) {
