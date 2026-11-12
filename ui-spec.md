@@ -1699,7 +1699,8 @@ field, and Enter logs in. A failed login is never saved. Log out and Switch serv
 in Settings keep the login and password and save the server chosen there.
 **Known servers (user, 2026-11-12; built straight in libGDX):** an icon-only button (the
 `restart` arrow) beside the server field, which it shortens, puts the next known server into the
-field on each press, this machine (`localhost:45825`) first, then the public server
+field on each press: the one after the server the field shows, or this machine
+(`localhost:45825`) if it shows neither, so every press changes the field; then the public server
 (`nas5714.myqnapcloud.com:45825`), round and round (`ClientSettings.SERVER_PRESETS`). With nothing
 saved yet, the field starts on the public server (`ClientSettings.defaults()`).
 

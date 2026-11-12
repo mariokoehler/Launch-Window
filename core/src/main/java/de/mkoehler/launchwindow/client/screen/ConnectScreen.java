@@ -18,6 +18,7 @@ import de.mkoehler.launchwindow.client.ui.FormField;
 import de.mkoehler.launchwindow.client.ui.Theme;
 import de.mkoehler.launchwindow.net.LoginNames;
 
+import java.util.List;
 import java.util.function.Consumer;
 
 /**
@@ -38,7 +39,6 @@ public final class ConnectScreen extends StageScreen {
     private final FormField password;
     private final TextButton connect;
     private final Cell<Actor> bannerCell;
-    private int nextPreset;
 
     /**
      * Builds the screen, prefilled with the server, login and password of the last successful login
@@ -218,7 +218,7 @@ public final class ConnectScreen extends StageScreen {
 
     /**
      * Builds the icon button beside the server field: each press puts the next of
-     * {@link ClientSettings#SERVER_PRESETS} into the field, this machine first (user, 2026-11-12).
+     * {@link ClientSettings#SERVER_PRESETS} into the field (user, 2026-11-12).
      *
      * @return the button
      */
@@ -230,17 +230,19 @@ public final class ConnectScreen extends StageScreen {
         button.add(glyph).size(16f).padLeft(Theme.SPACE_3).padRight(Theme.SPACE_3);
         button.setTouchable(Touchable.enabled);
         button.addListener(SessionScreen.clicked(this::nextServerPreset));
-        ui.tooltip(button, "Known servers", "Fills in a known server: this machine first, then the public "
-            + "server. Press again for the next.");
+        ui.tooltip(button, "Known servers", "Switches between the known servers: this machine and the "
+            + "public server.");
         return button;
     }
 
     /**
-     * Puts the next known server into the server field.
+     * Puts the next known server into the server field: the one after the server the field shows, or
+     * the first if it shows none of them, so every press visibly changes the field.
      */
     public void nextServerPreset() {
-        String preset = ClientSettings.SERVER_PRESETS.get(nextPreset);
-        nextPreset = (nextPreset + 1) % ClientSettings.SERVER_PRESETS.size();
+        List<String> presets = ClientSettings.SERVER_PRESETS;
+        int current = presets.indexOf(server.text());
+        String preset = presets.get((current + 1) % presets.size());
         server.input().setText(preset);
         server.input().setCursorPosition(preset.length());
         server.setError(null);
