@@ -1,14 +1,16 @@
 # Launch Window — Design Document
 
 What the game is, how each system works, the architecture, and the roadmap. It describes the
-game **as decided or built now**; how decisions were reached belongs in git history.
-**The full history up to 2026-10-06** (every trace, rejected proposal and harness run) is in
-`git show 6fc7af5:design.md`. Update this file the same session a decision is made. Section
-numbers are stable anchors (code and the other docs cite them): never renumber.
+game **as decided or built now**; how decisions were reached belongs in git history: the full
+text up to 2026-10-06 (every trace, rejected proposal and harness run) is in
+`git show 6fc7af5:design.md`, and the text before the 2026-11-12 prune (build narratives,
+superseded measurements) in `git show 5c95135b:design.md`. Update this file the same session a
+decision is made. Section numbers are stable anchors (code and the other docs cite them): never
+renumber.
 
 **Markers.** **(unconfirmed)** is a concrete default proposed to keep work moving, not yet
-signed off. **(from BASPM)** is carried over from the original game. `baspm.md` has how BASPM
-does each thing.
+signed off; §4 lists the numbers still awaiting the user's review. **(from BASPM)** is carried
+over from the original game. `baspm.md` has how BASPM does each thing.
 
 ## 1. Concept
 
@@ -42,13 +44,13 @@ engineering problem or tidbit, note it here the same session.
   value; hovering shows two to four sentences of real history or engineering, a click pins the
   card (`ui-spec.md` component 15). Always optional, never rules help. The join screen's
   Director field has the first, so players learn the icon there. Content history notes live in
-  `assets/content/early-era/strings.json` (G4).
+  each pack's `strings.json` (G4); others in `client.ui.HistoryNotes`.
 - **Long descriptions (user, 2026-10-27):** every program and every component a program grants has a
   paragraph on Program details (`longDescription` in `strings.json`, `ui-spec.md` §4.6.4): what it was
   for, how it worked and what it had to prove, never repeating its history note. Written from checked
   facts, each figure's source in `assets-raw/strings/LONG_DESCRIPTIONS.md`. Projects that never flew
   are written as proposals.
-- **Space-race news in the turn report (user 2026-10-04, built 2026-10-06):** real events from
+- **Space-race news in the turn report (user, 2026-10-04):** real events from
   the same three months as the turn's game date open the report's news.
   - **The stories:** `assets/content/space-race-news.json`, 47 stories from Winter 1955 to
     Spring 1963, keyed by year and season (Winter is January to March), each with a headline,
@@ -65,15 +67,15 @@ engineering problem or tidbit, note it here the same session.
   - **Writing rules:** our own words from checked facts (§1.2). A side's view is paraphrased
     framing that's documented, never an invented quote. When the game runs past 1963, add stories
     for the later seasons.
-- **Explainers (user's idea, 2026-10-06; mocked up; E-01 built in libGDX the same day, E-02 to
-  E-05 on 2026-10-07; triggers unconfirmed):** short full-screen "infographic" series that explain *how and why* an
-  aerospace idea works, offered (never forced) when it first comes up in play and kept in the
-  Museum (`ui-spec.md` component 18, with each sheet's content and the proposed triggers). Canvas `Launch Window — Explainers`
-  (private; ask the user for the link), one row per explainer with a yellow note of what to verify.
-  - **E-01 Suborbital vs orbital** (3 sheets, built, in the Museum's Encyclopedia tab): Newton's
+- **Explainers (user's idea, 2026-10-06; E-01 to E-31 built; triggers unconfirmed):** short
+  full-screen "infographic" series that explain *how and why* an aerospace idea works, offered (never
+  forced) when it first comes up in play through concept chips, and kept in the Museum's Encyclopedia
+  tab (`ui-spec.md` component 18, with each sheet's content). Canvas `Launch Window — Explainers`, one
+  row per explainer with a yellow note of what to verify.
+  - **E-01 Suborbital vs orbital** (3 sheets): Newton's
     cannon and the 8-kilometre rule; Freedom 7 against Friendship 7 to scale; the rocket
     equation's propellant share, staging, re-entry.
-  - **E-02 Rendezvous** (2, built 2026-10-07, like E-03 to E-05): brake into a lower, quicker orbit to catch up (drawn true to
+  - **E-02 Rendezvous** (2): brake into a lower, quicker orbit to catch up (drawn true to
     Kepler); Vostok 3/4, Gemini 4, Aldrin's doctorate and Gemini 12, Gemini 6A/7, the first dockings.
   - **E-03 Going to the Moon** (2): the trip priced in delta-v; Redstone to Saturn V and N1 to
     scale, lunar orbit rendezvous.
@@ -149,18 +151,13 @@ engineering problem or tidbit, note it here the same session.
       class, Payload R&D in the SET Centre, Vostok's single retrorocket, the R-7's and Faith 7's
       history notes. Jupiter-C's upper stages are solid, so E-05 says every early-era rocket
       burns liquid oxygen "in its main stages".
-  - **E-06 to E-19 are built** (mocked up and built 2026-10-07 from the user's brief), one per
-    candidate in the concept audit below: Weightlessness, Heat shields, Reliability, Launch
-    escape, Coming home, Tracking, Space environment, Human rating, Launch latitude, Max Q (one
-    sheet), Power, Guidance, Orbital decay and Balloon tanks (one sheet). Sheet titles in
-    `ui-spec.md` component 18. E-14's "In Launch Window" strips say the latitude is already
-    counted in every rocket's lift, since each side's rockets only ever fly from their own site
-    (user, 2026-10-08, when the latitude mechanic was dropped).
-  - **E-20 to E-30 were mocked up and then checked and built (2026-10-09)**, for the full content
-    pack: Three ways to the Moon, Docking, Spacewalks, Launch windows, Gravity assists, Landing on
-    other worlds, Far from home, Pictures before digital cameras, Moon rock by robot, Rocket planes,
-    Around the Moon and back. The checks are in the "Explainers for the standard pack" item below
-    (sheet titles and the changes from the brief and the mockups in `ui-spec.md` component 18).
+  - **E-06 to E-19** (from the user's brief), one per candidate in the concept audit below:
+    Weightlessness, Heat shields, Reliability, Launch escape, Coming home, Tracking, Space
+    environment, Human rating, Launch latitude, Max Q (one sheet), Power, Guidance, Orbital decay and
+    Balloon tanks (one sheet). Sheet titles in `ui-spec.md` component 18. E-14's "In Launch Window"
+    strips say the latitude is already counted in every rocket's lift, since each side's rockets only
+    ever fly from their own site (user, 2026-10-08, when the latitude mechanic was dropped).
+  - **E-20 to E-30**, for the standard pack: see "Explainers for the standard pack" below.
   - **E-06 to E-19, checked (2026-10-07).** Corrections to the mockups' text:
     - E-06: Gagarin ate paste from tubes on Vostok 1 (whether he drank isn't sourced, so the
       sheet says only that he ate). Gravity at 300 km is 91 % ((6,371 / 6,671)²). Titov's
@@ -208,8 +205,8 @@ engineering problem or tidbit, note it here the same session.
     - "In Launch Window" lines checked against the pack: the steps named, Explorer 1 reaching
       Space environment measured (its plain flight in Earth orbit, its extended one in the
       experiments step, hence "Explorer 1's flights"), the Launch step's crew risk.
-- **Explainers for the standard pack (proposed, mocked up and built 2026-10-09; `ui-spec.md`
-  component 18):** the full tree brings ideas no explainer covers yet. E-20 Three ways to the
+- **Explainers for the standard pack (`ui-spec.md` component 18, with the changes from the brief and
+  the mockups):** E-20 Three ways to the
   Moon (direct ascent, Earth-orbit and lunar-orbit rendezvous), E-21 Docking, E-22 Spacewalks, E-23
   Launch windows to the planets, E-24 Gravity assists, E-25 Landing without air, or with too much
   (Moon, Venus, Mars), E-26 Far from home (power and signals), E-27 Pictures before digital cameras,
@@ -230,11 +227,10 @@ engineering problem or tidbit, note it here the same session.
   arm stuck on a locking pin that should have dropped out, and commands from Earth freed it (the
   replay's probe landing and surface work); the planetary window marks on E-23 sheet 2
   match the launches (Venera 1 February 1961, Mariner 4 November 1964, Mars 4 July 1973). The
-  sunlight shares, signal delays and "twice the energy" are arithmetic. The concept chips
-  don't reach the standard pack's new programs and components yet either; the existing 19
-  explainers already cover many of them (staging, delta-v, cryogenics, rocket classes).
-- **E-29's second sheet, "Where does space begin?"** (the user's idea, 2026-10-23, built straight in
-  libGDX, drawn by `assets-raw/explainers/make_e29_2.py`): why the edge of space is drawn at 100 km.
+  sunlight shares, signal delays and "twice the energy" are arithmetic. The concept chips reach the
+  standard pack's programs and components too (2026-10-09).
+- **E-29's second sheet, "Where does space begin?"** (the user's idea, 2026-10-23, drawn by
+  `assets-raw/explainers/make_e29_2.py`): why the edge of space is drawn at 100 km.
   The user's account, checked: the higher a plane flies, the faster it must go to hold its height, and
   where that speed would pass orbital speed, flying has turned into orbiting. Corrections to it: the
   crossing isn't slightly below 100 km but well below, von Kármán's 1956 chart giving about 275,000 ft
@@ -245,8 +241,8 @@ engineering problem or tidbit, note it here the same session.
   2018 without changing. The curve is the standard atmosphere's densities (1976) and one wing loading
   set to cross at 84 km; a tenth to ten times that loading crosses between 69 and 91 km, which is why
   the line hardly depends on the craft. At 50 km the air is about 1,200 times thinner than at sea level.
-- **E-31 "Cabin air"** (the user's idea, 2026-11-04; the brief and the mockup prompt in `ui-spec.md` component 18,
-  mocked up and built the same day): why the American capsules breathed pure oxygen at a third of an atmosphere, what partial
+- **E-31 "Cabin air"** (the user's idea, 2026-11-04; the brief in `ui-spec.md` component 18; its chip on
+  the six first crewed programs): why the American capsules breathed pure oxygen at a third of an atmosphere, what partial
   pressure is, and why the share was set well above the air's. **Corrections to the user's account:**
   - *Not both sides.* Only the American capsules (Mercury, Gemini, Apollo) flew pure oxygen at low pressure. Vostok,
     Voskhod and Soyuz carried a nitrogen-oxygen mix like air at about one atmosphere (760 mmHg, about 80/20; NASA
@@ -287,13 +283,14 @@ engineering problem or tidbit, note it here the same session.
     from a secondary source); SP-4209 gives 258 mmHg (0.34 bar) for Mercury, Gemini and Apollo alike, and NASA's own
     papers give Mercury 5 psia of nearly pure oxygen (NTRS 19620004471, 19640020431, 19760005585). The description now
     says "about 0.34 bar" in both packs.
-- **Concepts: linking game content to the explainers** (user's idea, 2026-10-07; specified in
-  `ui-spec.md` component 19, mocked up the same day). Programs, configurations, steps, rockets and
+- **Concepts: linking game content to the explainers** (user's idea, 2026-10-07; `ui-spec.md`
+  component 19). Programs, configurations, steps, rockets and
   capsules each list the real-world concepts behind them; a Concepts section on their screens
   shows them as chips that open the right explainer sheet, with a gold dot until the player
   has read it. This replaces the proposed "New idea" notices. No inline links in text (user,
   2026-10-07); if other text should link, it gets the same chip row below it.
-  - **Audit of the early era** (2026-10-07; a first pass, unconfirmed). Step ids without season
+  - **Audit of the early era** (2026-10-07; a first pass, unconfirmed; `assets/content/concepts.json`
+    is the source of truth, this audit its rationale). Step ids without season
     numbers; "all orbital" means every configuration whose flight step is `earth-orbit`,
     `earth-orbital` or `orbital-flight`.
     - *With an explainer today:*
@@ -320,7 +317,7 @@ engineering problem or tidbit, note it here the same session.
         boils away), `countdown`, every rocket.
       - **Steering jets** → E-05 sheet 2: step `reentry-preparations`, the Vostok and Mercury
         capsules.
-    - *Explainers E-06 to E-19, built 2026-10-07 (chips re-homed then, see `concepts.json`):*
+    - *Explainers E-06 to E-19:*
       - **Weightlessness** (they're falling, not out of gravity): steps `duration-level-i` and
         `-ii`, `biometric-data-transmission`, goals Life in weightlessness, A day in space, Days
         in space, Sputnik 2, Korabl-Sputnik 2, the duration configurations.
@@ -344,15 +341,9 @@ engineering problem or tidbit, note it here the same session.
         Jupiter-C, step `ascent`.
       - **Orbits decay** (thin air drags a satellite down): Sputnik 1, the extended
         configurations.
-      - **Balloon tanks** (Atlas's pressure-stiffened skin): Atlas. Small; its history note may
-        be enough.
-    - *Since the build (2026-10-07), `assets/content/concepts.json` is the source of truth;*
-      *this audit is its rationale.*
-    - *First impressions:* weightlessness and the heat shield would each attach to most
-      crewed content, and "the odds multiply" ties straight to how the game resolves a
-      mission, so those three (E-06 to E-08) are the first to build.
-- **A Museum encyclopedia** (started 2026-10-06): the deeper version of the same content; its
-  first entries are the explainers above (`ui-spec.md` §4.11).
+      - **Balloon tanks** (Atlas's pressure-stiffened skin): Atlas.
+- **A Museum encyclopedia:** the deeper version of the same content; its entries are the
+  explainers above (`ui-spec.md` §4.11).
 - **Real images:** NASA photos are US government works and normally public domain. Soviet and
   other imagery needs a per-image rights check, and every third-party image gets an entry in
   `assets/CREDITS.md`.
@@ -399,16 +390,12 @@ leading to satellite navigation.
   its "retrofire jettison" as `retro-shutdown`, the burn's end.
 - **Soyuz comes home in one piece of three** (2026-10-16, from memory; verify before a note uses it):
   after the deorbit burn the orbital module at the front and the instrument module at the back let go
-  of the descent module, which alone has a heat shield. Soyuz 5 (January 1969, Boris Volynov): the
-  instrument module stayed on, the craft hit the air nose first with its hatch taking the heat, until
-  the struts burned through and it swung round; a hard landing broke his teeth. The replay's
-  `orbital-module-separation` drops the front module (the pack, standing for the back one, went in
-  the jettison before). Fits the 7K-OK's history note, or that clip's failure.
-- **Gemini's adapter came off in two pieces** (2026-10-16, from memory; verify before a note uses it):
-  the white adapter behind the capsule held an equipment section (fuel cells, oxygen, the manoeuvring
-  thrusters' propellant) and a retrograde section with four solid retro motors. Coming home, the
-  equipment section went first, then the four retros fired one after another, then the retro section
-  was dropped. The replay's `equipment-section-separation` plays the first of these for Gemini EOR.
+  of the descent module, which alone has a heat shield. Soyuz 5's failure to separate is under
+  "Soyuz 7K-OK" below (checked). The replay's `orbital-module-separation` drops the front module (the
+  pack, standing for the back one, went in the jettison before). Fits the 7K-OK's history note, or
+  that clip's failure.
+- **Gemini's adapter came off in two pieces:** checked under "How a Gemini came home" below. The
+  replay's `equipment-section-separation` plays the first of these for Gemini EOR.
 - **Lunokhod's lid and how Lunokhod 2 died** (2026-10-16, from memory; verify before a note uses it): the
   rovers' lids opened in the lunar day to charge the solar cells on their underside, and closed at night over
   the radiator to keep the heat in (a polonium-210 heater kept the instruments warm). In May 1973 Lunokhod 2
@@ -555,7 +542,7 @@ leading to satellite navigation.
 - **Prime vs extended objectives:** real missions are graded against must-achieve and bonus
   objectives. For wherever a mission's extended phase is explained.
 - **Astronauts as PR:** the Mercury Seven's *Life* magazine deal and tours were a deliberate
-  strategy to build support. Fits the PR-duty idea (§2.2).
+  strategy to build support. Behind PR duty (§2.2(c)).
 - **Commercial launches began with Telstar** (for the contracts, §2.11): AT&T built Telstar 1 and
   paid NASA about $3 million a launch, the first commercial payload, launched on a Thor-Delta on
   10 July 1962; with Telstar 2 in 1963 that was about $6 million for both. Sources: EBSCO's
@@ -935,8 +922,6 @@ leading to satellite navigation.
   compact, 3.05 m across and 4.57 m long, with two Aerojet AJ10-138 engines of about 36 kN each, burning fuels that
   light on contact. Sources disagree on its length (one gives 7.6 m, which may count the interstage); the replay
   draws 4.57. Sources: Wikipedia ("Transtage", "Titan IIIC").
-- **Rendezvous is counterintuitive** and **restarting an engine in zero-g is hard:** both now
-  explainers (E-02, E-04 above).
 - **The R-16 disaster** (Baikonur, 24 October 1960) for a later memorial or news context,
   handled with care; **Apollo-Soyuz's crew breathing nitrogen tetroxide fumes** on the way
   down (1975). Both turned up while writing E-05.
@@ -1109,47 +1094,43 @@ reaches its first review later in real time, which is fine.
 
 **(d) Budget, as built** (values from BASPM, §1.2):
 - **Start:** 25,000 funds, 250 prestige, 3,000 funding per season.
-- **Reviews:** every 16 of the *player's own* seasons (M4 decision; a late joiner starts at the
-  initial rate). `BudgetSchedule.baspmClose()`: BASPM's ten Normal-difficulty brackets, linear
-  between each bracket's ends, ceiling-rounded, flat at the ends. **After the tenth review the
-  last bracket repeats** (confirmed 2026-10-06). **Catch-up** (`baspm.md` §11.7): if prestige
-  at the previous review fell short of that review's raw minimum, this review's bracket shifts
-  down by the shortfall, so shortfalls don't compound.
+- **Reviews:** every 16 of the *player's own* seasons (a late joiner starts at the initial rate).
+  `BudgetSchedule.baspmClose()`: BASPM's ten Normal-difficulty brackets, linear between each
+  bracket's ends, ceiling-rounded, flat at the ends. **After the tenth review the last bracket
+  repeats** (confirmed 2026-10-06). **Catch-up** (`baspm.md` §11.7): if prestige at the previous
+  review fell short of that review's raw minimum, this review's bracket shifts down by the
+  shortfall, so shortfalls don't compound.
 - **Running costs each season:** every employee's own salary (drawn from BASPM's 25–60 when the
   person is created), program maintenance, mission-component maintenance, and building upkeep
   (§5, M3).
 - **Debt is allowed** (user, 2026-10-03; BASPM ends the game below zero): debt blocks new
   spending through the ordinary `INSUFFICIENT_FUNDS` checks and has no other penalty.
-- **Prestige-to-funds conversion, at any time** (our own addition; only in debt until the user's
-  decision of 2026-11-02, after a play test where a conversion left them short and the button
-  gone once funds turned positive): the player picks the amount; a conversion can bring funds up
-  to two seasons of running costs (with funds at −D and running costs R, at most D + 2R). Prestige
-  is spent, which lowers the next review: that's the intended trade-off. Validated when applied,
-  not when submitted.
-  **A turn's limit** (2026-11-02): the turn's first conversion records what it could have raised
-  (`PlayerSnapshot.conversionLimitThisTurn`), and the turn's conversions together stop there, cleared
-  by the budget. Topping up stays possible; converting and spending in turns doesn't. The debt rule
-  had been doing this silently: you can't spend below zero, so an agency earning more than it costs
-  never got to convert. Without a limit, prestige, worth nothing once no review will pay in time,
-  could all be turned into money for the last push of the race (a point earns about 25 funds over
-  a review in bracket 2, 6 in bracket 5, 3 in bracket 10, 2 converted). The ceiling is kept for the
-  same reason: nothing dearer than two seasons of running costs can be paid for this way.
-  **Rate: 2 funds per prestige** (user, 2026-10-06). A point is worth about 30 funds at the
-  first review and is never spent there, so conversion stays an emergency tool; at the old
-  0.25 funds per point a 1,000-fund debt cost 4,000 prestige, which made it unusable. A part
-  point is rounded up (`BudgetSchedule.fundsPerPrestige`, `prestigeCost`).
+- **Prestige-to-funds conversion, at any time** (our own addition; at any time, not only in debt,
+  since user, 2026-11-02): the player picks the amount; a conversion can bring funds up to two
+  seasons of running costs (with funds at −D and running costs R, at most D + 2R). Prestige is
+  spent, which lowers the next review: the intended trade-off. Validated when applied, not when
+  submitted.
+  **A turn's limit:** the turn's first conversion records what it could have raised
+  (`PlayerSnapshot.conversionLimitThisTurn`), and the turn's conversions together stop there,
+  cleared by the budget. Topping up stays possible; converting and spending in turns doesn't.
+  Without a limit, prestige, worth nothing once no review will pay in time, could all be turned
+  into money for the last push of the race (a point earns about 25 funds over a review in bracket
+  2, 6 in bracket 5, 3 in bracket 10, 2 converted). The ceiling is kept for the same reason.
+  **Rate: 2 funds per prestige** (user, 2026-10-06). A point is worth about 30 funds at the first
+  review, so conversion stays an emergency tool (the old 0.25 funds per point made a 1,000-fund
+  debt cost 4,000 prestige). A part point is rounded up (`BudgetSchedule.fundsPerPrestige`, `prestigeCost`).
 - **Budget order inside `BudgetProgress`** (`baspm.md` §11.7): fixed costs, count the season,
   run a review if due (new rate), then grant this season's funding at the new rate.
 - **The game info carries the game's budget schedule** (`BudgetScheduleInfo` in
-  `GameInfoResponse`, 2026-10-06), so the client prices reviews and conversions with the game's
-  own numbers. Today every game uses `BudgetSchedule.baspmClose()`; a configurable schedule would
-  only need the server to load it.
+  `GameInfoResponse`), so the client prices reviews and conversions with the game's own numbers.
+  Every game uses `BudgetSchedule.baspmClose()`; a configurable schedule would only need the
+  server to load it.
 
-**(e) The answer to a rival's First, the "Sputnik shock"** (the user's decision, 2026-10-12: "give
-other players a bit of a boost once they miss out on a first"; built the same day,
-`rules.RivalFirsts`). The slow-game analysis (§2.9, "A smarter bot") found a budget snowball: a bad
-start means a low review, which pays less for 16 seasons, which delays the next goals and lowers the
-next review. The answer acts on the review, where the snowball turns, not on today's funds.
+**(e) The answer to a rival's First, the "Sputnik shock"** (user, 2026-10-12: "give other players a
+bit of a boost once they miss out on a first"; `rules.RivalFirsts`). The slow-game analysis (§2.9, "A
+smarter bot") found a budget snowball: a bad start means a low review, which pays less for 16 seasons,
+which delays the next goals and lowers the next review. The answer acts on the review, where the
+snowball turns, not on today's funds.
 - **What counts:** a goal another agency settled first in the game last turn (achieved, or credited
   through its cascade), that pays first-time prestige, that this player doesn't hold, and that a
   program open to their agency can reach (`ContentCatalog.reachableGoals`: an Apollo-only goal never
@@ -1159,50 +1140,48 @@ next review. The answer acts on the review, where the snowball turns, not on tod
   *unconfirmed*) goes onto `PlayerSnapshot.rivalFirstsCredit`. The next review reads the player's
   prestige plus the credit (the bracket shifted down, like the catch-up shift), then clears it. It
   counts once, never carries past that review (*unconfirmed*: keeping it longer is the next knob if
-  it's too weak), and the catch-up baseline stays the player's own prestige, so it doesn't eat the
-  catch-up shift.
+  it's too weak), and the catch-up baseline stays the player's own prestige.
 - **When:** a phase of its own just before the budget (`SeasonResolver.Phase.RIVAL_FIRSTS`), so a
   First in the turn before a review counts at that review. The server reads last turn's Firsts from
   every player's goal records at the start of the turn (`RivalFirsts.settledFirstOn`), so a retry
   after a crash answers the same ones and a late joiner isn't paid for Firsts from before they joined.
 - **Shown:** the turn report's budget card ("Beaten to it: the government answers.", the
-  `RivalFirstsAnswered` event), the review notice when a review counted it ("and N more for rivals'
-  Firsts"), the Public Affairs Office's review card (the bracket's ends already include it, and a
-  line says so), and the help topic "Money and the budget review" (token `budget.rivalShare`).
+  `RivalFirstsAnswered` event), the review notice ("and N more for rivals' Firsts"), the Public
+  Affairs Office's review card (the bracket's ends include it, and a line says so), and the help
+  topic "Money and the budget review" (token `budget.rivalShare`).
 - **History** (§1.1): Sputnik 1 brought NASA, ARPA and a science-education act within a year; the
   Soviet Moon landing program was approved in 1964, three years after Kennedy's challenge.
 - **Measured:** see §2.9, "The Sputnik shock, measured".
 
-**(f) Raises between reviews** (the user's decision, 2026-10-12, the "gentler review", option 1 of
-four laid out that day; built the same day in `BudgetProgress`). A review's rate used to hold for 16
-seasons, so an agency that recovered from a bad start waited for the next review to be paid for it.
-Now funding follows prestige up between reviews, never down.
+**(f) Raises between reviews** (user, 2026-10-12, the "gentler review", option 1 of four). A
+review's rate used to hold for 16 seasons, so an agency that recovered from a bad start waited for
+the next review to be paid for it. Now funding follows prestige up between reviews, never down.
 - **Rule:** in every season that isn't a review season, once the first review has set the rate, if the
   player's prestige is above the highest prestige the rate already pays for
   (`PlayerSnapshot.fundedPrestige`, set by each review and each raise), the rate gains what the review
   in force pays for the difference: its bracket, with the shift it used (`lastReviewShift`: catch-up
   plus rivals' Firsts), at today's prestige less at the funded prestige. The raise is added, so an
   extra-funding event's raise stays on top. It runs inside the budget phase before the funding is
-  granted, so the season pays the new rate. The next review sets the rate as before, and can cut it
-  (the next bracket asks for more prestige).
-- **Before the first review** the starting 3,000 holds (decided: bracket 1 pays 3,800 at its bottom,
-  so raises from season 1 would hand every agency +800 on its first turn).
+  granted, so the season pays the new rate. The next review sets the rate as before, and can cut it.
+- **Before the first review** the starting 3,000 holds (bracket 1 pays 3,800 at its bottom, so
+  raises from season 1 would hand every agency +800 on its first turn).
 - **Share:** `BudgetProgress.RAISE_SHARE` = 1, all of the difference (*unconfirmed*; 0.5 measured
   nearly as well, see §2.9).
 - **The catch-up baseline** (`prestigeAtLastReview`) stays the review's own prestige.
-- **Shown:** the turn report's budget card ("Funding raised", the `FundingRaised` event, and the
-  funding line reads "new rate"); the Public Affairs Office ("set by review #n, raised since", and a
-  caption: what 1,000 more prestige would add, and a raise due next season); the help topic "Money
-  and the budget review". `BudgetProgress.runway` still assumes a flat rate until the next review:
-  with raises only upward it's merely cautious.
+- **Shown:** the turn report's budget card ("Funding raised", the `FundingRaised` event, "new
+  rate"); the Public Affairs Office ("set by review #n, raised since", what 1,000 more prestige
+  would add, a raise due next season); the help topic "Money and the budget review".
+  `BudgetProgress.runway` still assumes a flat rate until the next review: with raises only upward
+  it's merely cautious.
 
-**(g) Prestige is public** (the user's decision, 2026-11-02). Prestige is an agency's outward standing,
-so every agency's is a known figure; funds stay secret. Rivals' figures come only from resolved turns,
-never with queued actions, and the race (`RivalSummary.prestige`), the Intelligence Office's rival list
-and the standing charts show them (`ui-spec.md` component 30). No dossier ever reported prestige, so
-Intelligence loses nothing. What it gives away is deliberate: a drop with no failed flight suggests a
-rival converted prestige, the published brackets give a rough idea of a rival's funding,
-and a jump or fall hints at a flight the race table doesn't show.
+**(g) Prestige is public** (user, 2026-11-02). Prestige is an agency's outward standing, so every
+agency's is a known figure; funds stay secret. Rivals' figures come only from resolved turns, never
+with queued actions, and the race (`RivalSummary.prestige`), the Intelligence Office's rival list and
+the standing charts show them (`ui-spec.md` component 30; curves from the turn reports through
+`server.StandingCache`, in memory, nothing saved; 40 dots and a window of 120, *unconfirmed*). No
+dossier ever reported prestige, so Intelligence loses nothing. What it gives away is deliberate: a
+drop with no failed flight suggests a rival converted prestige, the published brackets give a rough
+idea of a rival's funding, and a jump or fall hints at a flight the race table doesn't show.
 
 ### 2.2 Personnel
 
@@ -1231,56 +1210,56 @@ season unchanged. Tiger Teams' live per-step choice doesn't fit, so it was redes
 - **Skills** are doubles, capped at 100. **Growth** (`rules.SkillGrowth`): diminishing returns,
   `distanceToCap × factor × learningPotential / 100`, training factor 0.175–0.385 (ours); SET's
   R&D gain is flat, factor 0.105–0.245 (ours), clamped at the ceiling. Flying's factor is
-  0.035–0.105. All three were cut by 30 % (user, 2026-11-02: staff grew too fast), which makes a
-  skill about 45 % slower to reach 90, as each gain is a share of the gap. Pulling out of
-  training credits a share of the round's gain: its last season pays 60 %, the seasons before it share
-  the rest evenly, so 20 / 20 / 60 % for an advanced round (the user's decision, 2026-11-05, after a play
-  test: training is free, and pulling out had cost nothing, as BASPM's even credit does;
+  0.035–0.105. All three were cut by 30 % (user, 2026-11-02: staff grew too fast; *unconfirmed*),
+  about 45 % slower to reach 90. **A flight** grows the seat's skills in full, the others by a third
+  (§2.5(g)). **Pulling out of training** credits a share of the round's gain: its last season pays
+  60 %, the seasons before it share the rest evenly, so 20 / 20 / 60 % for an advanced round (user,
+  2026-11-05: training is free, and pulling out had cost nothing, as BASPM's even credit does;
   `SkillGrowth.TRAINING_LAST_SEASON_SHARE`, `partialCreditShare`). The pull-out dialogs say what the
   person keeps.
-- **A personal ceiling: specialists, not everything-experts** (the user's decision, 2026-11-02;
-  `SkillGrowth.ceiling`, numbers unconfirmed): the distance above runs to a ceiling of its own for
-  each skill, `100 − 0.5 × (points the person's other skills hold above 75, added up)`, so the better
-  someone gets at one thing, the slower and shorter the rest. Two skills stop at about 91.7 (a second
-  90 needs the first at 95 or lower), five even ones at about 83.3, and three skills can't all reach 90
-  through growth. Computed, never saved: people above it keep what they have and just stop gaining.
-  It holds for all three groups, and **Flight Directors follow the same rule** (user: capped near 83
-  is fine, "broad, not deep", §1.1): the seat's one gain still comes from the average, each fifth
-  stopping at that skill's ceiling. New hires are fitted to it, so the pool can't hand out what growth
-  can't reach: a candidate over any ceiling has every skill's points above 75 scaled down by one factor
-  until each fits (user, 2026-11-05: the roll keeps its shape and leaves room to train; until then the
-  best skill stood and the rest were cut to the room it left, which let a Mission Control candidate show
-  92.2 and 91.4 with three more skills above 75). The flat gains (R&D, R&D decisions, press stories) stop at it
-  too (`SkillGrowth.withinCeiling`). Measured with `ContentPackPlayouts standard smart`, the whole
-  change (the 30 % cut, the ceiling, flying's growth, §2.5(g)): average completion 78.8 to 85.9 seasons,
-  a crewed mission's median chance at launch 0.64 to 0.59, astronauts lost 315 to 447 in 200 games. Without
-  flying's change: 82.5 seasons, 376 lost, the same 0.59. The filler bots' early race slowed more: `BotPlayersTest` went from 60 to 90 turns.
+- **A personal ceiling: specialists, not everything-experts** (user, 2026-11-02;
+  `SkillGrowth.ceiling`, *numbers unconfirmed*): growth runs to a ceiling of its own for each skill,
+  `100 − 0.5 × (points the person's other skills hold above 75, added up)`, so the better someone
+  gets at one thing, the slower and shorter the rest. Two skills stop at about 91.7 (a second 90
+  needs the first at 95 or lower), five even ones at about 83.3, and three skills can't all reach 90
+  through growth. Computed, never saved: people above it keep what they have and stop gaining. It
+  holds for all three groups, and **Flight Directors follow the same rule** (user: capped near 83 is
+  fine, "broad, not deep", §1.1): the seat's one gain still comes from the average, each fifth
+  stopping at that skill's ceiling. **New hires are fitted to it** (user, 2026-11-05): a candidate
+  over any ceiling has every skill's points above 75 scaled down by one factor until each fits, so
+  the roll keeps its shape and leaves room to train. The flat gains (R&D, R&D decisions, press
+  stories) stop at it too (`SkillGrowth.withinCeiling`). Measured (`ContentPackPlayouts standard
+  smart`, the 30 % cut, the ceiling and flying's growth together): average completion 78.8 to 85.9
+  seasons, a crewed mission's median chance at launch 0.64 to 0.59, astronauts lost 315 to 447 in
+  200 games; `BotPlayersTest`'s early race went from 60 to 90 turns.
 - **Training** (`TrainingProgress`): lengths are **BASPM's** (user, 2026-10-05): basic 4
   (astronauts) / 2 (SET) / 2 (Mission Control), advanced 3. **Basic training follows BASPM's
   shape:** it starts automatically after hiring, the player can't start it or cut it short, so
   a hire can't be bought the season it's needed. Unlike BASPM, it grows one **random** skill of
-  the group on completion (user's choice, kept 2026-10-06). **Engineers hired on the agency's first
-  turn** (its season 1, a late joiner's too) train one season, not two, so they're ready on the
-  second turn, a program can open, and the advisor moves on to flight directors (user, 2026-10-23:
-  the second day had nothing to do). A quiet gift: nothing on screen says so, and the hire screen
-  still quotes two seasons. To keep it certain, neither basic-training event (extended, failed) can
-  happen on that first season (`RandomEvents.firstSeason`); the roll passes to the pool's next event. **Permanent** training repeats
-  advanced-length rounds until a target level, stopping when a round gains less than 0.05.
+  the group on completion (user, kept 2026-10-06). **Engineers hired on the agency's first turn**
+  (its season 1, a late joiner's too) train one season, not two, so a program can open on the
+  second turn (user, 2026-10-23: the second day had nothing to do). A quiet gift: the hire screen
+  still quotes two seasons, and neither basic-training event (extended, failed) can happen on that
+  first season (`RandomEvents.firstSeason`; the roll passes to the pool's next event).
+  **Permanent** training repeats advanced-length rounds until a target level, stopping when a
+  round gains less than 0.05.
 - **Expert trait** (replaces Tiger Teams, user, 2026-09-27 and 2026-10-02): an astronaut or
   controller (never SET) with a skill at 80 or more can train toward Expert in it. Each season
   succeeds with `25 + 10 × (skill − 80) / 20` percent, with no skill growth; success grants the
-  trait for good. One Expert skill a person, for good (user, 2026-11-01; those who already hold more
-  keep them): an Expert can't start Expert training again. Expert training is the fourth kind
-  in the shared training dialog. How Experts rescue steps: §2.5(i).
-- **Rocket-plane wings** (the user's idea, 2026-10-26, `rules.RocketPlaneWings`): a personal mark an astronaut earns
-  by flying a rocket plane (the X-15, the MiG E-154; any of their flights) home. It's kept for good
-  (`Astronaut.rocketPlaneWings`) and makes every capsule step they pilot safer: a step whose crew work reads piloting
-  from a seat held by a pilot with wings gains **4 points** on its base chance, once however many such pilots share it
-  (unconfirmed; the findings' size, §2.13). Any crewed flight outside the rocket planes counts as a capsule. The season
-  pass and the planning odds read it alike (`MissionAssessment.StepOdds.wings`). It gives the rocket plane a reason to
-  fly while the capsule is in R&D, beyond prestige and contracts (its `space-plane` goal only boosts Mercury's
-  capsule by 1). Shown: a "WINGS +4" badge on the mission plan's step, "Rocket-plane wings" under the astronaut on the
-  roster and on the person page, a People line in the turn report (`RocketPlaneWingsEarned`), a career entry
+  trait for good. **One Expert skill a person** (user, 2026-11-01; those who already hold more keep
+  them, and someone already training toward a second finishes): an Expert can't start Expert
+  training again. Expert training is the fourth kind in the shared training dialog. How Experts
+  rescue steps: §2.5(i).
+- **Rocket-plane wings** (user, 2026-10-26, `rules.RocketPlaneWings`): a personal mark an astronaut
+  earns by flying a rocket plane (the X-15, the MiG E-154; any of their flights) home. Kept for good
+  (`Astronaut.rocketPlaneWings`), it makes every capsule step they pilot safer: a step whose crew work
+  reads piloting from a seat held by a pilot with wings gains **4 points** on its base chance, once
+  however many such pilots share it (*unconfirmed*; the findings' size, §2.13). Any crewed flight
+  outside the rocket planes counts as a capsule. The season pass and the planning odds read it alike
+  (`MissionAssessment.StepOdds.wings`). It gives the rocket plane a reason to fly while the capsule is
+  in R&D, beyond prestige and contracts (its `space-plane` goal only boosts Mercury's capsule by 1).
+  Shown: a "WINGS +4" badge on the mission plan's step, "Rocket-plane wings" on the roster and the
+  person page, a People line in the turn report (`RocketPlaneWingsEarned`), a career entry
   (`CareerEntry.Kind.WINGS`), the help topic "Astronauts" (token `missions.wingsBonus`). History: §1.1.
 - **Hiring** (`HiringPool`): each season every group gets a fresh batch of candidates, quality
   banded by the group's average morale. **Batch size: 10, as in BASPM** (user, 2026-10-06).
@@ -1305,36 +1284,38 @@ season unchanged. Tiger Teams' live per-step choice doesn't fit, so it was redes
   (`ALREADY_ADJUSTED`), and the season pass clears the record.
 - **CAPCOM:** the astronaut on CAPCOM grows the skills they used that season, as a controller
   does (confirmed 2026-10-06).
-- **PR duty for astronauts** (user decisions 2026-10-06, built the same day; `rules.PrDuty`): a
-  **standing order** for an idle astronaut to tour and appear in public instead of training,
-  until recalled. Real precedent: the Mercury Seven's *Life* deal and Gagarin's world tours (§1.1).
+- **PR duty for astronauts** (user, 2026-10-06; `rules.PrDuty`): a **standing order** for an idle
+  astronaut to tour and appear in public instead of training, until recalled. Real precedent: the
+  Mercury Seven's *Life* deal and Gagarin's world tours (§1.1). Every number here is our own,
+  confirmed by the user on 2026-10-06; tune in play.
   - **Astronauts only** (user: the public wanted the people with "the right stuff").
   - **Busy, not protected:** state `PR_DUTY` counts as busy for morale (+3 a season, as training)
     but never protects from departure. No skill growth. An astronaut on tour can't fly or sit at
     CAPCOM; recalling is free and immediate. An Expert on tour still helps rescue steps, at 75 %
-    (user, 2026-10-06), like a controller on another mission. A touring astronaut can resign, retire or be dismissed, but random
-    events that sideline or remove staff only pick idle astronauts, so they never hit one on tour.
-  - **Yield with fame** (user: keep fame): Leadership / 10, plus 3 per completed flight and 5 per
-    completed flight that set a first in the game, at most 25 a season. A flight credits its crew
-    (never CAPCOM) when it completes; a first counts once per flight however many goals the
-    cascade credits (`Astronaut.flightsFlown`, `firstsFlown`).
-  - **Diminishing returns** (user: yes): ranked by yield, the astronauts on tour earn 100 %, 60 %,
+    (user, 2026-10-06), like a controller on another mission. A touring astronaut can resign,
+    retire or be dismissed, but random events that sideline or remove staff only pick idle
+    astronauts.
+  - **Yield with fame** (user): Leadership / 10, plus 3 per completed flight and 5 per completed
+    flight that set a first in the game, at most 25 a season. A flight credits its crew (never
+    CAPCOM) when it completes; a first counts once per flight however many goals the cascade
+    credits (`Astronaut.flightsFlown`, `firstsFlown`).
+  - **Diminishing returns** (user): ranked by yield, the astronauts on tour earn 100 %, 60 %,
     30 %, then nothing (ties keep roster order). One function serves the season pass, the
     dialog's projection, the badge and the Public Affairs Office.
-  - **Rust** (user: yes): from the third season in a row on tour, Piloting and Fitness each lose 1
+  - **Rust** (user): from the third season in a row on tour, Piloting and Fitness each lose 1
     a season, floored at 0. The count lives in the season pass (`prDutySeasons`), so a recall and
     restart on the same day doesn't reset it; a pass that finds the astronaut off duty does. An
     Expert keeps the trait even below 80.
   - **Press stories:** each season on tour has a 10 % chance of making the papers, 70 % of them
     good. A good story adds half the season's yield, a bad one turns the season into a loss of
-    half of it. Stories live in each pack's `pr-press.json` (ids never reused); since 2026-10-25 it is
-    one of the pack's hashed, frozen files (review.md 2.2). No randomness is drawn while nobody is on tour.
+    half of it. Stories live in each pack's `pr-press.json`, a hashed, frozen pack file (ids never
+    reused; an edit reaches new games only). No randomness is drawn while nobody is on tour.
   - **No repeats** (user, 2026-10-06): `PlayerSnapshot.usedPressStoryIds` records the stories a
     player has seen; a draw picks only unseen ones of its tone, and once every story of a tone has
     run that tone starts over. Per player, not per astronaut: the player reads them all.
-  - **Effects beyond prestige** (user idea and confirmation, 2026-10-06; `rules.PressEffects`,
-    authored in the JSON as `effects`, kinds in `PrPress.EffectKind`; the turn report adds one
-    sentence per effect). 16 of the 39 stories carry one:
+  - **Effects beyond prestige** (user, 2026-10-06; `rules.PressEffects`, authored in the JSON as
+    `effects`, kinds in `PrPress.EffectKind`; the turn report adds one sentence per effect). 16 of
+    the 39 stories carry one:
 
     | Story | Effect |
     |---|---|
@@ -1371,443 +1352,218 @@ season unchanged. Tiger Teams' live per-step choice doesn't fit, so it was redes
       When the only unseen stories of a tone can't run, the usable one seen longest ago runs
       again and moves to the back of the record, so the usable ones keep cycling without repeats
       and the others keep their turn.
-    - **Effects live in the JSON** (user, 2026-10-06). Until 2026-10-25 the file sat outside the frozen
-      pack, so an edit changed the rules of a running game; now each game keeps its own copy (review.md
-      2.2), and an edit reaches new games only. Applied effects are stored in the turn report
-      (`PrDutyPerformed.pressEffects`), so old reports still read right.
-  - **The stories** (written 2026-10-06; user: a good variety, mostly fictional, some real events
-    with the player's astronaut in the historical person's place as an easter egg): 27 good and
-    12 bad, about the same 70/30 split as the draw, so each story turns up about as often. That
-    is roughly 5 to 20 stories per player in an early-era game, so repeats stay rare; add more any
-    time. Each story reads for either agency and any astronaut (no pronouns, no country-specific
-    terms), models nothing the rules don't (no grounding injuries, no dismissals) and can happen
-    twice to the same person. Ten are nods to history (§1.1).
+    - Applied effects are stored in the turn report (`PrDutyPerformed.pressEffects`), so old
+      reports still read right.
+  - **The stories** (user: a good variety, mostly fictional, some real events with the player's
+    astronaut in the historical person's place as an easter egg): 27 good and 12 bad, about the
+    same 70/30 split as the draw, so each story turns up about as often; roughly 5 to 20 stories
+    per player in an early-era game, so repeats stay rare. Each story reads for either agency and
+    any astronaut (no pronouns, no country-specific terms), models nothing the rules don't (no
+    grounding injuries, no dismissals) and can happen twice to the same person. Ten are nods to
+    history (§1.1).
   - **Timing:** the phase runs before the budget, so PR prestige counts at a review that season,
     as mission prestige does.
-  - Every number and default here is our own, confirmed by the user on 2026-10-06; tune in play.
 
-**(d) People worth caring about** *(user's idea, 2026-10-07; designed, not built. Decided: the
-split between morale and chemistry, pair rapport that builds over years, hidden traits with
-ambiguous hints, the background check through intelligence, ambitions, career records and
-poaching. Confirmed the same day: none to two traits per person, chemistry's ±15 % band, and
-rapport's range, drift and threshold; ambitions in every group, for some people only. The rest
-are proposed defaults, unconfirmed.)* The aim: employees
-stop being a commodity. Players learn who their people are, care about them, and face hard calls
-such as letting a brilliant troublemaker go.
-- **Morale stays personal and public** (decided). It moves with what happens to the person and
-  the agency (a successful flight lifts everyone, even a quarrelsome crew), and it keeps driving
-  resignation and the hiring pool's quality, as now (c).
-- **Chemistry is per team and short-lived** (decided). A team is the engineers on one
-  component's R&D, or the crew and controllers of one mission. Its chemistry comes from the pair
-  rapport inside it plus its members' traits, and is worked out again whenever the team changes:
-  a new project, a new team, a new chemistry. **It scales the team's output:** R&D gain, the
-  crew's and controllers' contributions to a step's odds, and the controllers' rescue roll, within
-  a band of about ±15 % (confirmed). Training is done alone, so chemistry doesn't touch it.
-- **Rapport between two people** (decided) lasts across projects and years. Each season two
-  people share a team, their rapport drifts toward liking or friction, biased by their traits; it
-  never resets, so old colleagues meet again as friends or enemies. Confirmed: a range of −100 to
-  +100, a drift of about 5 a season, shown once past ±30 ("work well together", "clash"),
-  lost when either leaves.
-- **Traits** (decided): **none, one or two** per person (confirmed, user 2026-10-07; default
-  split 20 / 50 / 30 %, unconfirmed), hidden when hired. A person without traits is the safe,
-  unremarkable hire: rapport still drifts (unbiased), chemistry still forms, the base ambition
-  chance applies. A trait shows itself
-  after the person has worked in teams for a while (default: 2 to 4 seasons, drawn per trait),
-  or sooner when it matters (an Abrasive member's first clash), and the turn report says so
-  ("After two seasons on the Atlas team, Kowalski turns out to be a workaholic"). Once someone has
-  worked long enough for every trait to have shown (the end of the reveal window), their page
-  says **"nothing more to discover"**, whether they turned out to have two traits, one or none. Most traits cut
-  both ways. Proposed list, to cut down in play:
-  - *Personal:* **Workaholic** (more R&D gain; morale falls fast when idle) · **Steady** (morale
-    changes halved, both ways) · **Ambitious** (trains faster; morale falls without training or a
-    new skill level for long) · **Glory seeker** (astronauts: skills grow more on flights; morale
-    falls each time someone else flies) · **Perfectionist** (engineers: less R&D gain, but their
-    component's failed steps are milder) · **Cool under pressure** (astronauts, controllers: a
-    bonus on rescue rolls) · **Restless** (a bonus on a new project, a penalty after many seasons
-    on one) · **Quick study** (more training gain).
-  - *In a team:* **Mentor** (younger or less skilled teammates learn faster) · **Loner** (a bonus
-    alone, a penalty in a full team) · **Easy-going** (rapport drifts up faster with everyone) ·
-    **Abrasive** (rapport drifts down faster, whatever their skill) · **Must be the best** (works
-    harder as the team's most skilled, sulks when not) · **Team player** (lifts the whole team's
-    chemistry a little).
-- **Hints at hiring** (decided): each candidate shows one vague hint from a colleague
-  ("colleagues call her driven"). A telling hint is always true to one of the person's traits,
-  but every hint is shared by several traits, so a player can't learn a code. There are also
-  **bland hints** ("reliable", "pleasant to work with"): a candidate without traits always gets
-  one, and a candidate with traits sometimes does too (default: 1 in 4), so a bland hint never
-  proves a candidate has none. Proposed hints: *driven*
-  (Workaholic, Ambitious, Must be the best), *calm* (Steady, Cool under pressure, Loner),
-  *sociable* (Easy-going, Team player, Glory seeker), *exacting* (Perfectionist, Abrasive, Must be
-  the best), *independent* (Loner, Restless, Abrasive), *keen to learn* (Quick study, Ambitious,
-  Mentor), *patient* (Mentor, Steady, Perfectionist).
-- **Background check** (decided): reveals one of a candidate's traits before hiring (or reports
-  "no notable traits"), but only for
-  an agency that keeps an intelligence service (§2.9, Intelligence: a guaranteed active check and a
+**(d) People worth caring about** (user's idea, 2026-10-07; built 2026-10-07 to 10-09 in five
+**phases**: (1) chemistry scales output; (2) traits, reveals and hints; (3) rapport and the chemistry
+preview in the assignment dialogs; (4) ambitions, loyalty and the career page; (5) poaching and the
+background check, with intelligence). The aim: employees stop
+being a commodity. Players learn who their people are, care about them, and face hard calls such as
+letting a brilliant troublemaker go. Decided by the user: the split between morale and chemistry,
+rapport that builds over years, hidden traits with ambiguous hints, the background check through
+intelligence, ambitions in every group for some people only, career records, poaching; none to two
+traits a person, chemistry's ±15 % band, and rapport's range (−100..+100) and threshold (±30), all
+confirmed 2026-10-07; the drift of 10 (user, 2026-10-08). Phases 1 to 3's other numbers are our
+defaults, accepted for play testing (2026-10-07) and *unconfirmed*; phase 4's (ambitions, windows,
+outcomes, loyalty) are **confirmed as defaults** (user, 2026-10-08), to tune after the play test;
+poaching's and the 2026-11-01 relationship rules' are *unconfirmed*. Rules in `rules.Personality`, `Teams` (the TEAMS phase
+after RESEARCH), `Chemistry`, `TraitEffects`, `Careers` (a CAREERS phase after TEAMS), `Poaching`;
+model `Trait`, `TraitState`, `Rapport`, `Ambition`, `CareerEntry`; events `TraitRevealed`,
+`RelationshipShown`, `AmbitionSettled`, `OfferSettled`; screens in `ui-spec.md` components 20 to 22,
+§4.14 and §4.16 (canvases `Launch Window — People` and `Launch Window — Poaching`), the known-only
+numbers in `client.view.People`, words in `client.view.TraitTexts`.
+- **Morale stays personal and public.** It moves with what happens to the person and the agency (a
+  successful flight lifts everyone, even a quarrelsome crew), and keeps driving resignation and the
+  hiring pool's quality (c).
+- **Teams.** A team is the engineers on one component's R&D this season, or one of a mission in
+  flight's two teams: its crew with CAPCOM, or its flight controllers (user, 2026-10-08). Someone
+  working alone is a team of one. A **work season** is a season spent in a team; training and PR duty
+  don't count. Teams are captured after departures and before missions resolve (a finishing mission
+  releases its crew); the TEAMS phase skips anyone lost meanwhile. A person's **project** (what they
+  last worked on, and for how many seasons in a row) feeds Restless.
+- **Rapport** is kept per pair in `PlayerSnapshot` (both ids, the rapport, a hidden affinity, the
+  seasons shared), lasts across projects and years, and is lost when either leaves. When two people
+  first share a team, the pair gets an **affinity**: a random draw from −1 to +1, plus +0.5 for each
+  Easy-going member, −0.6 for each Abrasive one, +0.2 for each Team player, −0.2 for each Loner, and
+  −0.4 if both are Must be the best, clamped to −1..+1. Each work season they share, rapport moves by
+  **10 × affinity** (`RAPPORT_DRIFT`, user, 2026-10-08, so the strongest pair shows in 3 seasons,
+  before a reveal due in 4), within −100..+100, only within each team. It shows once past ±30
+  ("work well together", "clash").
+- **Few relationships, each one felt** (user, 2026-11-01; *every number unconfirmed*): with 31 shown
+  among 19 people by season 37 of a play test, relationships had become noise. Someone can have one
+  friendship and one clash (`Personality.RELATIONSHIPS_OF_A_KIND`); Easy-going two friendships,
+  Abrasive two clashes. If either of a pair already has the opposite kind, it shows only on the
+  pair's own 35 % roll, drawn after its affinity from the pair's stream. A pair held back stays just
+  short of showing and nothing is saved: it shows if what held it goes. Relationships from R&D
+  decisions ignore all this (they're the player's doing); those already over the limit keep them.
+- **Chemistry** of a team is a number from −1 to +1: **±4 % output for each shown relationship in
+  the team** (`Chemistry.RELATIONSHIP_OUTPUT`, user, 2026-11-01, whatever the team's size; hidden
+  rapport counts for nothing), plus the team traits, clamped. It scales the team's output by
+  **1 + 0.15 × chemistry**: the component's R&D reliability gain, and the mission's crew and
+  controller contribution sums (each still capped at 100). On a mission each team scales its own
+  people's share of a step: the crew's the crew sum and CAPCOM's share of the controller sum, the
+  controllers' the rest (`Chemistry.MissionChemistry`, used alike by the resolution and
+  `MissionAssessment`). Training is done alone, so chemistry doesn't touch it. Team traits: **Team
+  player** +0.15 for each one; **Loner** +0.6 when alone, 0 in a pair, −0.3 each in a team of three
+  or more; **Must be the best** +0.2 when they're the team's most skilled, else −0.3 (R&D: the
+  component's skill; missions: within their own group by their best skill used). Heads are counted
+  per team (a solo cosmonaut with no CAPCOM is a team of one); Cool under pressure and Mentor read
+  the whole mission. Measured (2026-11-01): relationships shown in 24 seasons 6.4 to 3.7 a game, the
+  race within noise (the bots never choose teams for chemistry).
+- **Traits:** **none, one or two** per person (user, 2026-10-07; 20 / 50 / 30 %, *unconfirmed*),
+  distinct, from those the group can have, hidden when hired. A person without traits is the safe,
+  unremarkable hire. Each trait gets a **reveal point** of 2 to 4 work seasons; Abrasive also shows
+  when one of their pairs first passes −30, Easy-going when one passes +30. The turn report says so ("After two seasons on the Atlas team, Kowalski turns
+  out to be a workaholic"); after 4 work seasons the page reads **"nothing more to discover"**.
+  Effects (personal):
+  - **Workaholic** R&D gain ×1.1, idle morale loss ×3 · **Steady** the season's morale change halved
+    (rounded toward zero) · **Ambitious** training gain ×1.2, −2 morale a season once 6 seasons have
+    passed without training · **Glory seeker** (astronauts) flight skill growth ×1.5, −4 morale each
+    time a crewed mission launches without them (not on it as crew or CAPCOM, nor assigned to another
+    one) · **Perfectionist** (engineers) R&D gain ×0.85, but while on its team the component's R&D cap
+    is 3 points higher (what's gained above the normal cap stays) · **Cool under pressure**
+    (astronauts, controllers) +0.03 on the saving throw for each one on the mission · **Restless** R&D
+    gain ×1.15 in their first 2 seasons on a component, ×0.85 from their 9th season on the same one ·
+    **Quick study** training gain ×1.25 · **Mentor** teammates less skilled than the mentor gain skill
+    ×1.2 (R&D skill gain and flight skill growth).
+  - In a team: **Loner**, **Easy-going**, **Abrasive**, **Must be the best**, **Team player** (above).
+  - Glory seeker is astronauts only, Perfectionist engineers only, Cool under pressure astronauts
+    and controllers; every other trait any group.
+  - Workaholic, Steady and Ambitious act on the season's own morale change only, not on salary
+    changes, press stories or random events. **Early tells are welcome** (user, 2026-10-07):
+    Workaholic and Steady change the visible morale numbers before they're revealed.
+  - Every rule that checks an R&D cap reads `TraitEffects.effectiveCap` (R&D, the release after a
+    flight, the refusal to assign at the cap, which counts only a revealed Perfectionist).
+- **Hints at hiring:** each candidate shows one vague hint from a colleague ("colleagues call her
+  driven"). A telling hint is always true to one of the person's traits, but every hint is shared by
+  several traits, so a player can't learn a code. A candidate without traits always gets a **bland
+  hint** (reliable, pleasant to work with, hard-working), one with traits 1 in 4, so a bland hint
+  never proves there are none. Hints: *driven* (Workaholic, Ambitious, Must be the best), *calm*
+  (Steady, Cool under pressure, Loner), *sociable* (Easy-going, Team player, Glory seeker),
+  *exacting* (Perfectionist, Abrasive, Must be the best), *independent* (Loner, Restless, Abrasive),
+  *keen to learn* (Quick study, Ambitious, Mentor), *patient* (Mentor, Steady, Perfectionist).
+- **Background check:** reveals one of a candidate's traits before hiring (or "no notable traits"),
+  only for an agency with an intelligence service (§2.9, Intelligence: an active check, and a
   passive 20 % per candidate from level 1). Without one, the hint is all there is.
-- **Ambitions** (decided, user 2026-10-07): in **every group**, but **only some people have
-  one**, so there are only a few to keep track of. Traits shape who: **Ambitious practically
-  guarantees one**, **Glory seeker** makes one much more likely, and others start with a modest
-  chance (defaults: Ambitious 100 %, Glory seeker 70 %, anyone else 25 %, all unconfirmed). One
-  ambition at a time; a fulfilled one may be followed by a new one, likelier for the Ambitious.
-  An ambition shows in the turn report once the person has said so (default: after their first
-  season of work). Proposed ambitions, tied to goals, flights and R&D:
-  - *Astronauts:* fly in space, fly to orbit, spend a day in orbit, be first at something (a goal
-    no agency has reached yet), fly on a joint flight.
-  - *Mission Control:* be on the consoles for a crewed orbital flight, or for a first; reach
-    Expert in their best skill.
-  - *Engineers (SET):* bring a component to its R&D cap; work on the rocket or capsule of a flight
-    that reaches a first; be the most skilled engineer on a component.
+- **What the player sees stays honest about what's hidden.** The client's previews (the R&D board,
+  mission assessment and staffing) count only revealed traits and shown relationships, and say
+  "unknown factors" while any member is inside the reveal window; the season resolves with the real
+  values. **The server strips hidden information** (unrevealed traits, affinities, rapport not yet
+  shown, candidates' traits, unsaid ambitions) from the player state before sending it
+  (`Personality.forClient`); only the player state carries hidden traits. The report's exact step
+  odds (`MissionStepResolved`) include hidden chemistry; the client never shows them (accepted).
+  Traits and affinities come from streams seeded by the agency and the person's or pair's ids, off
+  the season's stream.
+- **Ambitions** (user, 2026-10-07): in every group, only for some people. Decided when a candidate
+  is drawn, from their own seed: Ambitious 100 %, Glory seeker 70 %, anyone else 25 %. Hidden until
+  the person **says so after two seasons with the agency, once out of basic training**; which
+  ambition is then drawn from those the agency can reach now (if none, it tries again next season).
+  One at a time. "Flew" means: on a mission in flight whose season ended without a failed step.
+  Windows are in seasons (doubled on 2026-10-08, user, after 1,310 of 1,852 ambitions ran out in the
+  playouts):
 
-  **Deadlines** (user's question, 2026-10-07; defaults unconfirmed): each ambition has a
-  **patience window** in seasons, shown as a number on the person's page and the personnel
-  overview ("4 seasons left"). It's sized by how hard the ambition is (fly in space short, be
-  first at something long; default 4 to 8 seasons, short because a default game lasts about 24)
-  and by traits: **Ambitious** is impatient (shorter window, bigger loyalty gain when met),
-  **Steady** waits longer. Only ambitions the agency can currently reach are drawn (a component
-  that's open, a program with a fitting configuration), so the clock is fair without pauses.
-  - **Fulfilled:** builds **loyalty**, and may be followed by a new ambition.
-  - **Passed over** (someone else in the agency gets it: flies the flight they wanted, or the
-    component reaches its cap without them): costs morale and loyalty and shortens the window,
-    but the ambition stays open.
-  - **No longer possible** (a rival reaches the first they wanted): a mild loss, since it wasn't
-    the player's fault; a new ambition may follow.
-  - **Runs out:** the biggest loss of loyalty and morale, and the person stays **disappointed**
-    for a while (default 4 seasons), easy to poach; then a new ambition may follow.
+  | Group | Ambition | Fulfilled when | Passed over when | Reachable while | Window |
+  |---|---|---|---|---|---|
+  | Astronaut | Fly in space | flew as crew on a crewed mission | another astronaut flew as crew | an open program has a crewed configuration | 10 |
+  | Astronaut | Fly to orbit | flew as crew, crewed orbital launch | another astronaut did | a crewed orbital configuration is open | 12 |
+  | Astronaut | Spend days in orbit | flew as crew in the second season or later of a crewed orbital mission | another astronaut did | a crewed orbital configuration of two seasons or more is open | 14 |
+  | Astronaut | Be first at something | aboard (crew or CAPCOM) a mission that settles a goal first in the game | someone else in the agency was | an open configuration still grants a goal no agency has | 16 |
+  | Astronaut | Fly on a joint flight | flew as crew on a configuration of two launches or more | another astronaut did | such a crewed configuration is open | 14 |
+  | Flight controller | Be on the consoles for a crewed orbital flight | flew on a control slot of a crewed orbital mission | another controller did | a crewed orbital configuration is open | 12 |
+  | Flight controller | Be on the consoles for a first | on a control slot of a mission that settles a goal first in the game | another controller was | as "be first" | 16 |
+  | Flight controller | Become an Expert | earns the Expert trait in their best skill | (never) | not an Expert in anything yet | 16 |
+  | Engineer | Bring a component to its R&D cap | on the team when *that* component reaches its cap | it reaches the cap without them | the component is owned, active and below its cap | 12 |
+  | Engineer | Build hardware for a first | a component they ever worked on flies on a mission that settles a goal first in the game | (never) | as "be first" | 16 |
+  | Engineer | Be the agency's best | the most skilled engineer in their own best skill (at least three engineers) | (never) | not already the best | 12 |
 
-  Loyalty also grows with tenure and raises, and is what resists poaching.
-- **Career record** (decided): a page per person with a timeline of hiring, training, flights,
-  the R&D they worked on, firsts, near misses, revealed traits, relationships and ambitions met.
-  The Memorial's living counterpart; it makes a loss mean something.
-- **Poaching** (decided, with the player interaction work, §2.9): a rival agency can make an offer
-  to one of your people. Its chance rises with low loyalty, low morale and frustrated ambition, and
-  with the offer's size; a nurtured star is hard to take, someone passed over again and again is
-  easy. The target's agency is told in its turn report and can match, and because players log in
-  at different times, matching has to work as a standing order ("match offers up to N %") so it
-  never punishes whoever logs in less.
-  - **Decided (user, 2026-10-08):** **engineers and flight controllers only, never astronauts** (a
-    Soviet crew flying a NASA astronaut is silly; an engineer changing sides is history: see the
-    note below). **Offers come only from a personnel file** (Intelligence level 3, §2.9): no
-    file, no offer. **Defence is an agency default plus a per-person override.**
-  - **First-pass rules (2026-10-08; every number and detail below is a proposed default,
-    unconfirmed):**
-    - **Who can be approached:** an engineer or flight controller you hold a personnel file on,
-      still with that rival at the resolution, not on a mission in flight that season, with the
-      agency at least 4 seasons, and not approached by anyone in the last 4 seasons.
-    - **The offer:** made from the file, **one a season** per agency (no intelligence action
-      used), queued and cancellable until the resolution like an operation. Its one term is a
-      **raise over the person's current salary: +25, +50 or +100 %**. Nothing is paid unless they
-      come: then the poacher pays the new salary from the next season, and a **signing bonus of one
-      season's new salary** at once. The poacher needs room in that roster (its building's cap) at
-      the resolution, or the offer lapses unanswered. An offer isn't secret: counter-intelligence
-      plays no part.
-    - **The defence**, a standing order:
-      - **Agency default** per group: match offers up to **0 (never), +25, +50 or +100 %**.
-        Default for a new agency: +25 %.
-      - **Per person**: **Agency default**, **Keep at any price** (matches anything), or **Let go**
-        (never matches).
-      - **A matched offer** fails: the person's salary rises to the offered one for good, loyalty
-        +5. Both agencies' reports say so. Matching ignores funds: a raise is a running cost, not a
-        payment, and a game in debt already has its own rules.
-    - **Unmatched, the person chooses.** Chance to accept, clamped to 0–90 %: base by raise (+25 %:
-      15, +50 %: 30, +100 %: 50) × a loyalty factor (100 − loyalty) ÷ 50 (loyalty 50 gives × 1,
-      loyalty 100 gives 0), then +20 if disappointed, +10 if morale is under 40, +10 for Restless,
-      −10 for Steady. Rolled from its own salted seed, settled once a turn with the intelligence
-      (`IntelligenceBoard`), never on the season's stream.
-    - **A person who leaves** moves to the poacher's roster at the resolution. They keep their
-      skills, traits (revealed to the new agency: only the one the file showed; the rest hidden
-      again with fresh reveal points), Expert marks and career record, with a line "Joined X from
-      Y". Their old agency loses their R&D slot or console assignment at once, and their rapport
-      pairs. They start at loyalty 50 and keep any open ambition with its seasons left.
-    - **A person who stays** (matched or turned it down) gets a career line ("Turned down an
-      offer from X", "Stayed: the agency matched X's offer").
-    - **Reports:** the target's turn report always names the poacher and the offer. The poacher's
-      says matched, turned down, joined or lapsed.
-  - **History note to go with it (verify before use, §1.1):** after the war, the US brought
-    German rocket engineers over under Operation Paperclip (von Braun's team), and the Soviets
-    took others to the USSR (Gröttrup's group on Gorodomlya island). Both programs started from
-    poached engineers.
-  - **Mocked up (2026-10-08)** on the canvas `Launch Window — Poaching` (`ui-spec.md` §4.16). The
-    canvas added to the rules, all unconfirmed: a file records the person's **salary, seasons with
-    the agency and the last approach** (a file card can then say why someone can't be approached
-    yet, with the date it ends); "on a mission in flight" is a reason too; **the offer stays
-    possible with the roster full** (it lapses at the resolution unless a place frees up); and the
-    **answer range counts only what the file shows** (the loyalty band's bounds, disappointment,
-    the one trait), never morale or unshown traits, and the dialog says so.
-  - **As built (2026-10-08):** `rules.Poaching` (numbers, the offer, the standing orders, the
-    answer, and each side's apply), offers settled with the intelligence by `IntelligenceBoard`
-    (an offer is an `IntelOperation` of kind `OFFER` with its raise; it uses no action, and
-    cancelling one gives none back), each side applied by its own `Intelligence` pass, and the
-    report line `OfferSettled` (event and `IntelFinding` kinds appended). Choices made while
-    building, all unconfirmed:
-    - **Who can be approached** is decided at the resolution: the file only tells as of its date,
-      so queuing checks the level, the file, the group, the raise and the one offer a season, and
-      the resolution checks tenure, the cooldown, training (excluded too) and, for controllers,
-      being on a mission (any assignment). An offer that fails these lapses, and the target is
-      never told.
-    - **One approach per agency per person, and a ceiling on matches** (the user's catch,
-      2026-10-09, built the same day). A rival paid nothing for a matched offer, so one with a file
-      could offer +100 % every 4 seasons to someone kept "at any price" (or under a +100 % default)
-      and double their salary each time, without limit. Now:
-      - **One shot:** once a person has answered an agency's offer, matched or turned down, that
-        agency can never approach them again, wherever they work (`Personnel.approachedBy`, by
-        player id, travels with them). A lapsed offer doesn't count: the target never heard of it.
-        The poacher's file says so (`PersonnelFile.approachedByYou`): the card reads "You made them
-        an offer in [date]. They won't hear another from you", queuing is refused
-        (`ALREADY_APPROACHED`), and an offer from an older file lapses untold.
-      - **Ceiling:** a match never takes a salary past 3 times what it was before the first matched
-        offer (`Poaching.MATCH_CEILING_FACTOR`, `Personnel.salaryBeforeMatches`), and never cuts one
-        raised some other way. With about ten players, nine rivals each taking their one shot at
-        +100 % could otherwise multiply a salary by 512.
-      - The 4-season cooldown stays, so offers can't land back to back. **Reset the dev data root**
-        before the next play test (new fields on employees and files).
-    - **Two offers to one person in one turn:** the highest raise settles first (then the
-      agency key, then the offer id), the others lapse, whatever order agencies resolve in.
-    - **The person who comes over** travels whole in the turn's intelligence file (concrete
-      engineer and controller fields, never sent to a client: the report line is built from plain
-      fields). They get a new id in the poacher's agency, the filed trait revealed and the rest
-      hidden again (work seasons back to 0, so the reveals re-arm), idle, tenure 0, loyalty 50,
-      the agency default, and the new salary; the poacher's file on them is dropped. They're on
-      the roster before the budget, so the new salary is paid from that resolution; the signing
-      bonus is paid at once, even into debt.
-    - **The person who leaves** is taken off the roster like a dismissal (an R&D slot frees up).
-      If they already left that season another way (retired, resigned), only the line remains.
-    - **Career:** `JOINED` and `OFFER` lines; the 30-line cap keeps every `JOINED` line, and the
-      page prefixes each earlier line with the agency it happened at.
-    - **Measured:** the bot playouts are unchanged (no bot makes offers); `PoachingTest` runs the
-      board and both passes through the saved findings' JSON.
-    - **Reset the dev data root** before the next play test (new fields on employees, files and
-      the snapshot).
-- **First-pass rules for phases 1 to 3** (2026-10-07; the user accepted the proposed defaults for
-  play testing; every number is ours and to be tuned):
-  - **A team** is the engineers working on one component's R&D this season, or one of a mission
-    in flight's two teams: its crew with CAPCOM, or its flight controllers (user, 2026-10-08; it
-    was one team of crew and controllers before). Someone working alone is a team of one. A **work
-    season** is a season spent in a team (R&D or a mission in flight); training and PR duty
-    don't count.
-  - **Rapport** is kept per pair in `PlayerSnapshot` (both ids, the rapport, a hidden affinity,
-    the seasons they shared). When two people first share a team, the pair gets an **affinity**:
-    a random draw from −1 to +1, plus +0.5 for each Easy-going member, −0.6 for each Abrasive
-    one, +0.2 for each Team player, −0.2 for each Loner, and −0.4 if both are Must be the best,
-    clamped to −1..+1. Each work season they share, rapport moves by **10 × affinity** (5 until
-    2026-10-08), within
-    −100..+100. It shows once past ±30 ("work well together", "clash").
-  - **Few relationships, each one felt** (user, 2026-11-01; every number unconfirmed): relationships had
-    become background noise, 31 shown among 19 people by season 37 of a play test. Someone can have one
-    friendship and one clash (`Personality.RELATIONSHIPS_OF_A_KIND`); Easy-going two friendships, Abrasive two
-    clashes. If either of a pair already has the opposite kind, it shows only on the pair's own 35 % roll,
-    drawn after its affinity from the pair's stream, so off the season's stream. A pair held back stays just
-    short of showing and nothing is saved: it shows if what held it goes, not never. Relationships from R&D
-    decisions ignore all this (they're the player's doing). Those already over the limit keep them.
-    **Chemistry no longer averages pairs:** each shown relationship in a team is ±4 % output
-    (`Chemistry.RELATIONSHIP_OUTPUT`), whatever the team's size, and hidden rapport counts for nothing; the
-    average below is the old rule.
-    Measured (`ContentPackPlayouts standard smart`, 2026-11-01, before and after): relationships shown in 24
-    seasons 6.4 to 3.7 a game (friendships 2.5 to 1.7); average completion season 79.7 to 78.8, medians NASA 76 to
-    79, Soviet 78 to 75: within noise, though the bots never choose teams for chemistry.
-  - **Chemistry** of a team is a number from −1 to +1: the average rapport / 100 over all its
-    pairs (0 for a team of one), plus the team traits below, clamped. It scales the team's output
-    by **1 + 0.15 × chemistry**: the component's R&D reliability gain, and the mission's crew and
-    controller contribution sums (each still capped at 100). Team traits: **Team player** +0.15
-    for each one in the team; **Loner** +0.6 when alone, 0 in a pair, −0.3 each in a team of three
-    or more; **Must be the best** +0.2 when they're the team's most skilled, else −0.3 (R&D: the
-    component's skill; missions: compared within their own group by their best skill used on the
-    mission).
-  - **Personal traits** change the person's own numbers: **Workaholic** R&D gain ×1.1, idle morale
-    loss ×3; **Steady** the season's morale change halved (rounded toward zero); **Ambitious**
-    training gain ×1.2, and −2 morale a season once 6 seasons have passed without training;
-    **Glory seeker** (astronauts) flight skill growth ×1.5, and −4 morale each time a crewed
-    mission of the agency launches without them; **Perfectionist** (engineers) R&D gain ×0.85,
-    but while they're on its team the component's R&D cap is 3 points higher (reliability gained
-    above the normal cap stays); **Cool under pressure** (astronauts, controllers) +0.03 on the
-    saving throw for each one on the mission; **Restless** R&D gain ×1.15 in their first 2 seasons
-    on a component, ×0.85 from their 9th season on the same one; **Quick study** training gain
-    ×1.25; **Mentor** teammates less skilled than the mentor gain skill ×1.2 (R&D skill gain and
-    flight skill growth). *Changed from the first list:* Perfectionist's "milder failed steps"
-    became the higher cap, which is simpler and easy to see.
-  - **Which group can have which trait:** Glory seeker astronauts only; Perfectionist engineers
-    only; Cool under pressure astronauts and controllers; every other trait any group.
-  - **Drawing traits** when a candidate is generated: 0 / 1 / 2 traits at 20 / 50 / 30 %, distinct,
-    from the traits the group can have. Each trait gets a **reveal point** of 2 to 4 work seasons;
-    it shows when the person's work seasons reach it. Two shortcuts: Abrasive shows when one of
-    their pairs first passes −30, Easy-going when one passes +30. After 4 work seasons the person
-    reads "nothing more to discover".
-  - **Hints:** a candidate without traits gets a bland hint; one with traits gets a bland one 1 in
-    4, else a hint that fits one of their traits at random. Hints and their traits: driven
-    (Workaholic, Ambitious, Must be the best), calm (Steady, Cool under pressure, Loner), sociable
-    (Easy-going, Team player, Glory seeker), exacting (Perfectionist, Abrasive, Must be the best),
-    independent (Loner, Restless, Abrasive), keen to learn (Quick study, Ambitious, Mentor),
-    patient (Mentor, Steady, Perfectionist); bland: reliable, pleasant to work with, hard-working.
-  - **What the player sees stays honest about what's hidden.** The client's previews (the R&D
-    board, mission assessment and staffing) count only revealed traits and shown relationships, and
-    say "unknown factors" when the team's real chemistry may differ; the season resolves with the
-    real values. **The server strips hidden information** (unrevealed traits, affinities, rapport
-    not yet shown, candidates' traits) from the player state before sending it, so it can't be read
-    out of the client.
-  - **Turn report** lines: a trait revealed; a relationship shown (passed ±30); with the person,
-    the trait or partner, and what they were working on.
-  - **As built, phases 1 to 3 and the personal traits** (2026-10-07; rules only, the screens wait
-    for mockups): `model.Trait`, `TraitState`, `Rapport`; `rules.Personality` (trait draws, hints,
-    affinity, `forClient`), `rules.Teams` (the TEAMS phase after RESEARCH), `rules.Chemistry`,
-    `rules.TraitEffects`; events `TraitRevealed` and `RelationshipShown` with turn report lines
-    (`client.view.TraitTexts` has the words). Notes on how it came out:
-    - **Separate random streams:** traits come from a stream seeded by the agency and the
-      candidate's id, and a pair's affinity from one seeded by the agency and both ids, so no
-      other random draw moved (seeded tests and screenshots unchanged).
-    - **Teams are captured** after departures and before missions resolve, because a finishing
-      mission releases its crew; the TEAMS phase then skips anyone lost meanwhile. A person's
-      **project** (what they last worked on, and for how many seasons in a row) feeds Restless.
-    - **"Unknown factors"** shows while any member is still inside the reveal window (fewer
-      than 4 work seasons). A pair's rapport below ±30 isn't shown and counts as known noise: it
-      moves chemistry by at most ±0.3 (±4.5 % output).
-    - **The report's exact step odds** (`MissionStepResolved`) include hidden chemistry. The
-      client never displays them, so only someone reading the report's raw JSON could work it out;
-      accepted for now.
-    - **Morale effects, first pass:** Workaholic, Steady and Ambitious act on the season's own
-      morale change only, not on salary changes, press stories or random events.
-    - **Early tells are welcome** (user decision 2026-10-07): Workaholic and Steady change the
-      visible morale numbers before they're revealed, so an attentive player can guess them.
-      That rewards perception; hidden traits don't have to leave no trace.
-    - **Perfectionist's cap:** reliability gained above the normal cap stays when they leave; the
-      rest of the team is then released once, as at any cap. Every rule that checks the cap reads
-      `TraitEffects.effectiveCap` (R&D, the release after a flight, and the refusal to assign at
-      the cap, which counts only a revealed Perfectionist so it never gives a hidden one away).
-      The client's "cap reached" captions and the reliability bar's cap marker still show the
-      normal cap; they change with the screens.
-    - **Glory seeker** loses morale only when left on the ground: not on that mission (crew or
-      CAPCOM) and not assigned to another one.
-    - **Hidden data audit:** only the player state carried hidden traits; the turn report, the
-      rivals and the game info take names, goals and directors only.
-    - **Measured** (`ContentPackPlayouts.people`, 200 bot games of 24 seasons): 8.7 traits revealed
-      and 5.1 relationships shown per game (2.2 friendships), from 8.5 pairs. The bots finish in
-      55.0 seasons on average, against 56.7 before personalities; step outcomes within noise.
-  - **Screens mocked up (2026-10-07)** on the canvas `Launch Window — People`: components 20 to 22,
-    the person page in four states, the R&D board and assign dialog, assemble mission and its
-    picker, the roster, the hire screen and the turn report (`ui-spec.md`, the note after
-    component 22). Their look is unconfirmed. Two findings for the rules, from working out the
-    samples. **Decided (user, 2026-10-08) and built the same day:** `RAPPORT_DRIFT` 10, so the
-    most strongly matched pair (affinity ±1) shows in 3 seasons, before a reveal due in 4
-    (`TeamsTest`); and a mission as two teams, the crew with CAPCOM and the controllers. Each
-    team's chemistry scales its own people's share of a step: the crew's the crew sum and
-    CAPCOM's share of the controller sum, the controllers' the rest (`Chemistry.MissionChemistry`,
-    used alike by the resolution and `MissionAssessment`). Rapport drifts only within each team.
-    Trait effects that count heads now count per team: a solo cosmonaut with no CAPCOM is a team
-    of one, so a Loner there gets +0.6 (+9 % output) instead of −0.3 among eleven. Cool under
-    pressure and Mentor still read the whole mission. The findings were:
-    - **The Abrasive and Easy-going shortcuts can never fire first.** Rapport moves at most
-      `RAPPORT_DRIFT` (5) a shared season and shows past `RAPPORT_SHOWN_AT` (30), so a pair needs at
-      least 6 shared work seasons to show (30 ÷ 5 at the largest affinity; the mockup said 7).
-      Every trait shows by `REVEAL_MAX_SEASONS` (4) work seasons anyway, so the first clash or friendship always comes after the normal reveal. To make
-      the shortcuts matter, the reveal window would have to be longer, or the drift faster.
-    - **On a mission, relationships barely count.** Chemistry averages rapport over all pairs, and a
-      crewed Vostok or Mercury flight has 11 people (55 pairs), so one shown clash at −34 moves the
-      mission's chemistry by about 0.006 (0.1 % output), while one Loner moves it by 0.3. If crew
-      friendships and feuds should matter, weight the pairs involving the crew, or count the crew
-      and CAPCOM as their own small team.
-  - **The screens** (built 2026-10-07 from the People canvas; `ui-spec.md` components 20 to 22,
-    §4.14): trait chips on rosters and pickers, a person page, chemistry on the R&D boards and
-    Assemble mission with previews in the pickers, hire hints, and people news in the turn
-    report. Every number they show is the known-only one (`client.view.People`).
-  - **The memorial's person page waits for phase 4.** A memorial entry keeps a name, age, cause
-    and portrait, but no id, skills or traits, and rapport with the dead is dropped. Default:
-    build it with the career record, capturing the id, skills and *revealed* traits at death
-    (never hidden ones, so `Personality.forClient` needn't change).
-  - **The Background check** stays out until espionage; the hire rows leave room for it.
-- **First-pass rules for phase 4** (2026-10-07, written while the user was away). Ambitions, loyalty, the
-  career record and the memorial's person page. **The numbers and reinterpretations below are
-  confirmed as defaults (user, 2026-10-08)**, to tune after the play test, except the windows,
-  which are doubled (see "Measured" below).
-  - **Who gets an ambition:** decided when a candidate is drawn, from the candidate's own seed
-    (Ambitious 100 %, Glory seeker 70 %, anyone else 25 %, as above). It stays hidden, and the
-    server strips it, until the person **says so after two seasons with the agency, once out of
-    basic training** (astronauts train for four). Which ambition is drawn then, from those the agency can reach
-    now, again from the person's own seed. If none can be reached, it waits a season and tries
-    again.
-  - **The ambitions and their checks** ("flew" means: on a mission in flight whose season ended
-    without a failed step; "this season" is the season pass):
-
-    | Group | Ambition | Fulfilled when | Passed over when | Reachable while | Window |
-    |---|---|---|---|---|---|
-    | Astronaut | Fly in space | flew as crew on a crewed mission | another astronaut flew as crew | an open program has a crewed configuration | 10 |
-    | Astronaut | Fly to orbit | flew as crew, crewed orbital launch | another astronaut did | a crewed orbital configuration is open | 12 |
-    | Astronaut | Spend days in orbit | flew as crew in the second season or later of a crewed orbital mission | another astronaut did | a crewed orbital configuration of two seasons or more is open | 14 |
-    | Astronaut | Be first at something | aboard (crew or CAPCOM) a mission that settles a goal first in the game | someone else in the agency was | an open configuration still grants a goal no agency has | 16 |
-    | Astronaut | Fly on a joint flight | flew as crew on a configuration of two launches or more | another astronaut did | such a crewed configuration is open | 14 |
-    | Flight controller | Be on the consoles for a crewed orbital flight | flew on a control slot of a crewed orbital mission | another controller did | a crewed orbital configuration is open | 12 |
-    | Flight controller | Be on the consoles for a first | on a control slot of a mission that settles a goal first in the game | another controller was | as "be first" | 16 |
-    | Flight controller | Become an Expert | earns the Expert trait in their best skill | (never) | not an Expert in anything yet | 16 |
-    | Engineer | Bring a component to its R&D cap | on the team when *that* component reaches its cap | it reaches the cap without them | the component is owned, active and below its cap | 12 |
-    | Engineer | Build hardware for a first | a component they ever worked on flies on a mission that settles a goal first in the game | (never) | as "be first" | 16 |
-    | Engineer | Be the agency's best | the most skilled engineer in their own best skill (at least three engineers) | (never) | not already the best | 12 |
-
-    *Reinterpreted from the list above:* "spend a day in orbit" became days (a second season)
-    in orbit, since the game counts seasons, not hours; "be the most skilled engineer on a
-    component" became the agency's most skilled engineer in their best skill. The component for
-    "bring a component to its cap" is the one they work on when they say it, else a random owned
-    one below its cap.
-  - **"Bring a component to its cap" fits what the agency can do** (user, 2026-10-23, after a play test:
-    an engineer had 11 seasons for a Sputnik cap that four engineers would reach in 26). When it's
-    drawn, `Careers.seasonsToCap` projects the R&D (`ResearchPlanning.project`, the average) with the
-    agency's best team: the engineer and its three most skilled others in the component's skill, busy
-    or not. The window is the table's 12 (traits applied) or the projection plus 2 (`CAP_SLACK`),
-    whichever is longer, up to 20 (`CAP_WINDOW_MAX`); a cap further off is out of reach, so another
-    owned component in reach is taken, else the ambition isn't on offer and another kind is drawn.
-    Both numbers are unconfirmed defaults. The measured counts below predate this, for engineers.
-  - **Everyone of the group not on the flight is passed over,** busy elsewhere or not; Assemble mission's
-    warning lists them all, "is free and" or "is busy but wants to ..." (2026-10-22: it had left out anyone in
-    training, on another mission or sidelined, the user asked to fix the undercount, keeping the rule).
-  - **A flight passes others over once,** in its first season (its second, for days in orbit),
-    however many seasons it lasts.
-  - **The window** counts down once the ambition is said: the table's seasons, −1 for Ambitious
-    (at least 3), +2 for Steady. Each season, in this order: fulfilled; else passed over; else no
-    longer possible (it can't be reached any more: a program closed, no goal left unreached,
-    the component capped or gone); else the window counts down and may run out.
+  - "Bring a component to its cap" takes the component they work on when they say it, else a
+    random owned one below its cap, and **fits what the agency can do** (user, 2026-10-23: an
+    engineer had 11 seasons for a cap four engineers would reach in 26): `Careers.seasonsToCap`
+    projects the R&D with the agency's best team (the engineer and the three most skilled others,
+    busy or not); the window is the table's 12 or the projection plus 2 (`CAP_SLACK`), whichever is
+    longer, up to 20 (`CAP_WINDOW_MAX`; both *unconfirmed*). A cap further off is out of reach:
+    another owned component in reach is taken, else another kind is drawn.
+  - **Everyone of the group not on the flight is passed over,** busy elsewhere or not; Assemble
+    mission's warning lists them all (2026-10-22). A flight passes others over once, in its first
+    season (its second, for days in orbit).
+  - **The window** counts down once the ambition is said: the table's seasons, −1 for Ambitious (at
+    least 3), +2 for Steady. Each season, in this order: fulfilled; else passed over; else no longer
+    possible (a program closed, no goal left unreached, the component capped or gone); else the
+    window counts down and may run out.
   - **Outcomes** (morale, loyalty): **fulfilled** +5, +15 (Ambitious +20); **passed over** −5, −5,
-    and the window shortens by one more season, the ambition stays; **no longer possible** −2, −3;
-    **runs out** −10, −15, and the person stays **disappointed** for 4 seasons. After fulfilled, no
-    longer possible or disappointment, a new ambition may follow: Ambitious 75 %, anyone else 30 %.
-  - **Loyalty**, 0 to 100: starts at 50 on hiring, +1 for each season with the agency, and moves by
-    half a department salary change (+10 % salary: +5 loyalty; a cut takes it down the same way).
-    **Loyalty and disappointment do nothing else yet:** the design ties them to poaching (phase
-    5); they show on the person page and in intelligence personnel files.
-  - **The career record**, per person, newest first on the page, at most 30 lines (the oldest
-    drop off, the hiring line always stays): hired (with the colleague's hint); training done;
-    each R&D stint when it ends (component, seasons, reliability gained; the one still running
-    shows as "so far"); each flight or console shift when the mission ends (configuration, role:
-    crew, CAPCOM or flight controller, and success or the step it failed at); a goal first in the
-    game; traits that came out; relationships shown; the Expert trait; ambitions said, met,
-    passed over, impossible and run out.
-  - **The memorial** keeps the person's id, skills, *revealed* traits (never hidden ones), the
-    year they joined, and the career record at death, so its person page reads like the living
-    one.
-  - **Rules as built** (2026-10-07; `rules.Careers`, a `CAREERS` phase after `TEAMS`; `model.Ambition`,
-    `CareerEntry`, new `Personnel` and `MemorialEntry` fields; event `AmbitionSettled`). Flights are
-    captured with the teams, before missions resolve; every draw uses the person's own seed. With
-    every ambition chance at 0 the bot playouts match the old output exactly, so the rest of the
-    phase changes nothing. Careers stay in the player state: a full agency with every record full
-    is about 22 KB zipped (`StateSizeTest`). The hiring line is written at the first resolution
-    after hiring, and an R&D stint's reliability is what the person added (`ResearchCompleted`).
-  - **Measured, and worth deciding** (`ContentPackPlayouts`, 200 bot games, after counting a pass-over
-    once per flight and waiting out basic training): over 24 seasons the bots' people said 1,852
-    ambitions; **122 were fulfilled and 1,310 ran out** (astronauts: none fulfilled, 107 ran out,
-    50 became impossible). Over 80 seasons, before those two fixes, it was 520 fulfilled to 2,429.
-    Morale at season 24 averages 81 (lowest 36), loyalty 65. The bots are slow (a first crewed orbit around season
-    56), but people even in a quick human game will mostly see ambitions run out: crewed flights
-    are few, and 5 to 8 seasons of patience is short. Options: longer windows (say 10 to 16), a
-    window that only counts down while the ambition can be acted on (a crewed configuration ready
-    to fly, an R&D slot on the component), or milder run-out losses. **Decided (user, 2026-10-08):
-    longer windows, the table's seasons doubled (10 to 16)**, with Ambitious still −1 and Steady
-    still +2. Built the same day, with the faster rapport and the split mission teams; the same
-    200 games of 24 seasons then gave 1,790 ambitions said, **253 fulfilled, 486 run out** and 108
-    no longer possible (about 1 to 2 instead of 1 to 11); the rest were still open at season 24.
-    Astronauts still fulfilled none (104 no longer possible, 22 run out): the bots fly their first
-    crewed mission long after season 24. 8.8 traits revealed and 6.2 relationships shown per game
-    (2.5 friendships); morale at season 24 averages 82 (lowest 36), loyalty 67; the bots finish in
-    56.4 seasons.
-  - **Screens as built** (2026-10-07): the person page's story column (ambition, career record)
-    and loyalty bar, the memorial's person page from the Museum, ambition lines on the rosters and
-    in the turn report, and loyalty and the said ambition in intelligence personnel files
-    (`ui-spec.md` §4.14, §4.15). **Reset the dev data root** before the next play test (new saved
-    fields).
+    and the window shortens by one more season; **no longer possible** −2, −3; **runs out** −10,
+    −15, and the person stays **disappointed** for 4 seasons. After fulfilled, no longer possible or
+    disappointment, a new ambition may follow: Ambitious 75 %, anyone else 30 %.
+  - Measured after the doubling (200 bot games of 24 seasons): 1,790 said, 253 fulfilled, 486 run
+    out, 108 no longer possible; the bots' astronauts fulfil none, flying their first crew long
+    after season 24.
+- **Loyalty**, 0 to 100: starts at 50 on hiring, +1 for each season with the agency, and moves by
+  half a department salary change (+10 % salary: +5 loyalty; a cut the same way down). With
+  disappointment, it is what resists poaching; both show on the person page and in intelligence
+  personnel files.
+- **The career record**, per person, newest first, at most 30 lines (the oldest drop off; the
+  hiring line and every `JOINED` line stay): hired (with the colleague's hint); training done; each
+  R&D stint when it ends (component, seasons, reliability the person added; the running one "so
+  far"); each flight or console shift when the mission ends (configuration, role, success or the
+  step it failed at); a goal first in the game; traits that came out; relationships shown; the
+  Expert trait; wings; ambitions said, met, passed over, impossible and run out; offers and moves.
+  Careers stay in the player state (`StateSizeTest`).
+- **The memorial** keeps the person's id, skills, *revealed* traits (never hidden ones), the year
+  they joined and the career record at death, so its person page reads like the living one.
+- **Poaching** (user, 2026-10-08; `rules.Poaching`, `ui-spec.md` §4.16; *every number below
+  unconfirmed*): a rival agency can make an offer to one of your people. **Engineers and flight
+  controllers only, never astronauts** (a Soviet crew flying a NASA astronaut is silly; an engineer
+  changing sides is history, §1.1). **Offers come only from a personnel file** (Intelligence level
+  3, §2.9): no file, no offer. Matching works as a standing order, so it never punishes whoever logs
+  in less.
+  - **Who can be approached:** an engineer or flight controller with that rival at the resolution,
+    not in training or (controllers) on a mission, with the agency at least 4 seasons, and not
+    approached by anyone in the last 4 seasons. Queuing checks the level, the file, the group, the
+    raise and the one offer a season; the resolution checks the rest, and an offer that fails lapses
+    untold. A file records the person's salary, seasons with the agency and the last approach, so
+    its card can say why someone can't be approached yet and until when.
+  - **The offer:** from the file, **one a season** per agency, no intelligence action used (an
+    `IntelOperation` of kind `OFFER`), queued and cancellable until the resolution. Its one term is
+    a **raise over the current salary: +25, +50 or +100 %**. Nothing is paid unless they come: then
+    the poacher pays the new salary from that resolution and a **signing bonus of one season's new
+    salary** at once, even into debt. The poacher needs room in that roster at the resolution, or
+    the offer lapses unanswered (it can be made with the roster full). Not secret:
+    counter-intelligence plays no part. Two offers to one person in a turn: the highest raise
+    settles first (then the agency key, then the offer id), the others lapse.
+  - **The defence**, a standing order: an **agency default** per group, match offers up to **0
+    (never), +25, +50 or +100 %** (new agency: +25 %); **per person**: Agency default, **Keep at any
+    price**, or **Let go**. **A matched offer** fails: the salary rises to the offered one for good,
+    loyalty +5, both reports say so. Matching ignores funds (a raise is a running cost).
+  - **One approach per agency per person, and a ceiling on matches** (the user's catch, 2026-10-09:
+    a rival could otherwise double a salary every 4 seasons for nothing). Once a person has answered
+    an agency's offer, matched or turned down, that agency can never approach them again, wherever
+    they work (`Personnel.approachedBy`; `PersonnelFile.approachedByYou`, refused as
+    `ALREADY_APPROACHED`); a lapsed offer doesn't count. A match never takes a salary past 3 times
+    what it was before the first matched offer (`Poaching.MATCH_CEILING_FACTOR`,
+    `Personnel.salaryBeforeMatches`), and never cuts one raised some other way.
+  - **Unmatched, the person chooses.** Chance to accept, clamped to 0–90 %: base by raise (15, 30,
+    50) × (100 − loyalty) ÷ 50, then +20 if disappointed, +10 if morale is under 40, +10 for
+    Restless, −10 for Steady. Rolled from its own salted seed, settled once a turn with the
+    intelligence (`IntelligenceBoard`), never on the season's stream. The dialog's answer range
+    counts only what the file shows (the loyalty band, disappointment, the one trait).
+  - **A person who leaves** travels whole in the turn's intelligence file (never sent to a client)
+    and joins the poacher's roster before the budget: a new id, skills, Expert marks, career record
+    ("Joined X from Y"), the filed trait revealed and the rest hidden again (work seasons back to 0),
+    idle, tenure 0, loyalty 50, the agency default, any open ambition kept; the poacher's file on them
+    is dropped. The old agency takes them off like a dismissal (an R&D slot frees), with their
+    rapport pairs. **A person who stays** gets a career line ("Turned down an offer from X", "Stayed:
+    the agency matched X's offer"). The target's report names the poacher and the offer; the
+    poacher's says matched, turned down, joined or lapsed (`OfferSettled`).
 - **History notes to go with it** (checked 2026-10-08):
   - **Gagarin over Titov:** both were picked for their training results and for being short enough
     for the cramped Vostok. In a secret vote, 17 of the 20 cosmonaut candidates named Gagarin to fly
@@ -1825,16 +1581,9 @@ such as letting a brilliant troublemaker go.
     part** ("one man chose the crews") until *Deke!* is read. Also from his memoir, via a secondary
     source: the Gemini 9 crew's death in 1966 moved the backups along, which is how Buzz Aldrin came
     to fly Gemini 12 and, Slayton said, to be in line for the first landing.
-- **Phases:** (1) chemistry scales output; (2) traits, reveals and hints; (3) rapport and the
-  chemistry preview in the assignment dialogs; (4) ambitions, loyalty and the career page; (5)
-  poaching and the background check, with espionage.
-- **What it touches:** new fields on `Personnel` (traits, revealed traits, ambition, loyalty) and
-  a rapport table in `PlayerSnapshot` (a dev data reset); new `ResolutionEvent` types, appended
-  (§3.7); screens: revealed traits on the personnel overviews, the hint on the hire screen, a
-  chemistry preview where teams are formed (R&D slots, mission staffing), the career page, and
-  the turn report's lines. Effects read their numbers from the rules' constants (`Tips`).
-- **Open:** which traits suit which group, whether a trait can be misleading at first, the
-  ambition chances, list, windows and losses, and when an ambition shows.
+  - Poaching's: both space programs began with poached engineers (§1.1, `HistoryNotes.POACHING`).
+- **Open:** whether a trait can be misleading at first; the ambition chances, list, windows and
+  losses, after play.
 
 ### 2.3 Programs & mission configurations
 
@@ -1853,8 +1602,8 @@ BASPM does (confirmed 2026-10-06). Programs gate on `requiredGoalIds` (an AND li
 can be closed (§5, M3). BASPM's unbuilt scope (asteroids, stations, Mars expeditions) is fair
 roadmap inspiration, since those are real domains.
 
-**(d) A guided progression** (the user's decision, 2026-10-26): BASPM opened a dozen programs on day one, so a new
-player could pick Gemini first, a poor choice nothing warned of. The standard pack now opens in stages, the goals
+**(d) A guided progression** (user, 2026-10-26): BASPM opened a dozen programs on day one, so a new
+player could pick Gemini first, a poor choice nothing warned of. The standard pack opens in stages, the goals
 added on top of BASPM's by the converter (`baspm_pack.py`'s `progression_gates`, full scope only; early-era unchanged):
 - **At first:** only the first satellite (Explorer 1, Sputnik 1).
 - **A satellite in orbit** (`earth-orbit-satellite`): the other satellites, the rocket plane (X-15, MiG E-154) and the
@@ -1869,62 +1618,47 @@ added on top of BASPM's by the converter (`baspm_pack.py`'s `progression_gates`,
   open; their goal dependencies order them.
 - **The X-15 never earns `human-in-space`** (its research flights earn `space-plane`), so it's no side door to the
   bigger capsules. It gets its own reason to fly instead: rocket-plane wings (§2.2(c)).
-- **Shown:** Headquarters lists locked programs with what they need, as before; the advisor walks the stages
-  (`ui-spec.md` component 24); the help topic "Programs" lists them. The filler bots' plans already fly in this order.
+- **Shown:** Headquarters lists locked programs with what they need; the advisor walks the stages
+  (`ui-spec.md` component 24); the help topic "Programs" lists them. The filler bots' plans fly in this order.
+- Measured: the smart bot's landing moved from season 84.2 to 85.0 on average.
 
-**(e) The roads to the Moon, measured** (2026-10-26, for the comparison the user wants to show players; the smart bot,
-200 games, seed 42; `ContentPackPlayouts standard smart` with `-Dbot.roads=<nasa>,<soviet>`, plans in its `ROADS`).
-Median season of the landing (quartiles), before the Nova:
-
-| Road | Median | Quartiles |
-|---|---|---|
-| Apollo (lunar-orbit rendezvous) | 81 | 76 / 81 / 87 |
-| Gemini then Apollo (`gemini-apollo`) | 83 | 79 / 83 / 88 |
-| Gemini EOR | 74 | 69 / 74 / 79 |
-| Gemini direct ascent | 71 | 68 / 71 / 76 |
-| Soyuz 7K-L3 on the N1 | 81 | 75 / 81 / 88 |
-| LK-700 on the UR-700 | 70 to 73 | 64 / 70 / 80 |
-
-Runs with no change on one side moved that side's median by up to 3 seasons: read differences below that as noise.
-- **Why Apollo is slowest:** not money (half its 22,012 opening gained one season) but time. Its first flight waits
-  14 seasons as the bot's target (Gemini's 6): the CSM gets 10 % of Mercury's reliability and develops at half
-  Gemini's rate (R&D bands 2/4/5/7 against 4/7/10/14), Gemini 35 %. Then the lunar module's tests (about 8 seasons) and
-  the Saturn V, started only when the Moon flights need it (7 seasons at the first). The roads whose Earth-orbit
-  tests already need the heavy rocket (direct ascent, the LK-700) build it alongside the craft. Flying Gemini first
-  gives the CSM 35 % from Gemini, but the bot flies one plan entry at a time, so Gemini's 13 seasons come on top; a
-  player can overlap them.
-- **The Nova** (the user's idea, 2026-10-26; its art the user's, 2026-10-28): BASPM's direct-ascent craft weighed 42 t, so its
-  stack fit the Saturn V's 47 t toward the Moon. The converter (`baspm_pack.py`'s `nova_rocket`) makes it 63.5 t, the
-  stack about 67.5 t, and adds **Nova** (`nova`): heavy, 68 t toward the Moon (the eight-F-1 8L study), 15,000 to
-  create, 1,500 upkeep, an R&D ceiling of 91 %, reliability carried over from the Saturn family (the Saturn V 30 %, C-3B
-  25 %, IB 15 %, I 10 %, Titan IIIC 5 %). All its numbers are ours and unconfirmed. Gemini direct ascent's median moves
-  from 71 to **78** (a 20,000 Nova measured the same). The Earth-orbit tests still fly on the Saturn V.
-- **The lunar-orbit craft inherit like Gemini** (the user's decision, 2026-10-26): Apollo's CSM now carries over 35 % of
-  the Mercury capsule's reliability (was 10 %) and the 7K-L3's LOK 35 % of Vostok's (was 7.5 %), what Gemini takes from
-  Mercury (`baspm_pack.py`'s `capsule_heritage`). Measured at 20 / 30 / 40 %: Apollo 80 / 79 / 77, the 7K-L3 78 / 78 / 76;
-  the first flight's wait 12.3 / 11.1 / 9.2 seasons (was 14.2). At 35 %: **Apollo 77, the 7K-L3 78.**
-- **Where it stands:** Gemini EOR 74, the LK-700 70 to 73, Apollo 77, the 7K-L3 78, Gemini direct ascent 78. Gemini EOR and
-  the LK-700 keep a lead for now; the comparison screen (`ui-spec.md` §4.21, built 2026-10-26) shows the trade-offs, never
-  a ranking.
-- **Gemini EOR's Moon discount fixed** (found by the mockup; the user's decision, 2026-10-26: "probably a data error in
-  BASPM"): BASPM discounted its Moon program 100 % through Apollo's Earth-orbit tests, unlike every other road. The
-  converter points it at its own tests (`baspm_pack.py`'s `discount_fixes`), so its Moon flights are free once
-  `gemini-eor-earth-orbit` is open. To start from Mercury alone it now costs 22,483 (was 32,543); the smart bot lands it
-  at a median of 73 (was 74, within noise).
-- **No Agena for Apollo** (the user's decision, 2026-10-27: a goal mustn't come from hardware a program never flew):
-  BASPM's Apollo Earth-orbit tests had a docking flight with an Agena, which no Apollo flew. The converter drops the
-  configuration and the Agena from the program (`baspm_pack.py`'s `dropped_configurations`); the docking goal stays
-  earnable through Gemini, the 7K-OK and circumlunar Gemini, and inside Apollo through its lunar module tests (Apollo 9's
-  CSM-LM docking: `apollo-lunar-module-test-flown` credits `docking`). No goal was the docking flight's alone. Kept out after a second look (user, 2026-10-27): its
-  picture showed two CSMs nose to nose, which probe-and-drogue docking can't do (both carry the probe), and Apollo's
-  real Earth-orbit dockings were with its lunar module (Apollo 9), Skylab and Soyuz 19, never an Agena or another CSM. Apollo's road from Mercury costs 45,412 (was 46,987), 4 parts to develop, 21 flights on the way.
-  Its `splashdown` step type, the configuration's art and the Agena's Apollo clip rules went with it. Kontakt in place of
-  Igla on the lunar Soyuz stays as BASPM has it (user): Igla serves the 7K-OK too, one component to develop.
-- **Accepted as the status quo** (the user's decision, 2026-10-26): Gemini EOR 73, the LK-700 70 to 73, Apollo 77, the
-  7K-L3 78, Gemini direct ascent 78, the spread 5 seasons on each side (was 10 and 8 to 11). The clever roads keep a small
-  lead, paid for in risk. Levers not pulled, for a later look: the LK-700's R&D or a dearer UR-700, more weight on Gemini
-  EOR's two launches. Play tests may still move it; the bot flies its plan one flight at a time, so it undervalues
-  overlapping roads (Gemini, then Apollo).
+**(e) The roads to the Moon, measured** (2026-10-26; the smart bot, 200 games, seed 42; `ContentPackPlayouts
+standard smart` with `-Dbot.roads=<nasa>,<soviet>`, plans in its `ROADS`). Runs with no change on one side moved
+that side's median by up to 3 seasons: read differences below that as noise. The comparison screen (`ui-spec.md`
+§4.21) shows the trade-offs, never a ranking.
+- **Accepted as the status quo** (user, 2026-10-26), median landing season: Gemini EOR 73, the LK-700 70 to 73,
+  Apollo 77, the 7K-L3 78, Gemini direct ascent 78; the spread 5 seasons on each side (was 10 and 8 to 11). The clever
+  roads keep a small lead, paid for in risk. Levers not pulled, for a later look: the LK-700's R&D or a dearer UR-700,
+  more weight on Gemini EOR's two launches. The bot flies its plan one flight at a time, so it undervalues
+  overlapping roads (Gemini, then Apollo); play tests may still move it.
+- **Why Apollo was slowest** (81 before the changes below): not money (half its 22,012 opening gained one season) but
+  time. Its first flight waited 14 seasons (Gemini's 6): the CSM developed at half Gemini's rate (R&D bands 2/4/5/7
+  against 4/7/10/14), then the lunar module's tests (about 8 seasons) and the Saturn V, started only when the Moon
+  flights need it. The roads whose Earth-orbit tests already need the heavy rocket (direct ascent, the LK-700) build
+  it alongside the craft.
+- **The lunar-orbit craft inherit like Gemini** (user, 2026-10-26): Apollo's CSM carries over 35 % of the Mercury
+  capsule's reliability (was 10 %) and the 7K-L3's LOK 35 % of Vostok's (was 7.5 %), what Gemini takes from Mercury
+  (`baspm_pack.py`'s `capsule_heritage`): Apollo 81 to 77, the 7K-L3 81 to 78.
+- **The Nova** (user, 2026-10-26; its art the user's, 2026-10-28): BASPM's direct-ascent craft weighed 42 t, so its
+  stack fit the Saturn V's 47 t toward the Moon (it landed at 71). The converter (`baspm_pack.py`'s `nova_rocket`)
+  makes it 63.5 t, the stack about 67.5 t, and adds **Nova** (`nova`): heavy, 68 t toward the Moon (the eight-F-1 8L
+  study), 15,000 to create, 1,500 upkeep, an R&D ceiling of 91 %, reliability carried over from the Saturn family (the
+  Saturn V 30 %, C-3B 25 %, IB 15 %, I 10 %, Titan IIIC 5 %). *All its numbers are ours and unconfirmed.* The
+  Earth-orbit tests still fly on the Saturn V. History: §1.1.
+- **Gemini EOR's Moon discount fixed** (user, 2026-10-26: "probably a data error in BASPM"): BASPM discounted its Moon
+  program 100 % through Apollo's Earth-orbit tests, unlike every other road. The converter points it at its own tests
+  (`baspm_pack.py`'s `discount_fixes`), so its Moon flights are free once `gemini-eor-earth-orbit` is open; from
+  Mercury alone it costs 22,483 (was 32,543).
+- **No Agena for Apollo** (user, 2026-10-27: a goal mustn't come from hardware a program never flew): BASPM's Apollo
+  Earth-orbit tests had a docking flight with an Agena, which no Apollo flew. The converter drops the configuration
+  and the Agena from the program (`baspm_pack.py`'s `dropped_configurations`); the docking goal stays earnable
+  through Gemini, the 7K-OK and circumlunar Gemini, and inside Apollo through its lunar module tests (Apollo 9's
+  CSM-LM docking: `apollo-lunar-module-test-flown` credits `docking`). No goal was the docking flight's alone. Kept
+  out after a second look (user): its picture showed two CSMs nose to nose, which probe-and-drogue docking can't do,
+  and Apollo's real Earth-orbit dockings were with its lunar module, Skylab and Soyuz 19. Apollo's road from Mercury
+  costs 45,412, 4 parts to develop, 21 flights on the way. Its `splashdown` step type, the configuration's art and
+  the Agena's Apollo clip rules went with it. Kontakt in place of Igla on the lunar Soyuz stays as BASPM has it
+  (user): Igla serves the 7K-OK too, one component to develop.
 
 ### 2.4 Mission components & reliability
 
@@ -1971,11 +1705,8 @@ ours and confirmed for play testing (2026-10-06).
   each component's reliability (`InProgressMission.launchReliability`), and every step of that
   flight reads it (`MissionProgress.flyingReliability`). Ground R&D, a random setback, and every
   flight's own results, failures included, change only the component on the ground, for later
-  missions; never a copy already flying, whether on this mission or one in parallel. Missions
-  saved before this read the component as it is now. The client's odds and component list for a
-  launched mission read the launch values too. Today it only matters for the two extended
-  satellite missions (three seasons) and for two flights sharing a component in one turn; the
-  bot playouts, which fly neither, came out identical.
+  missions; never a copy already flying, whether on this mission or one in parallel. The client's
+  odds and component list for a launched mission read the launch values too.
 
 **(e) Content shape** (`MissionStep`, `MissionSeason`, `MissionConfiguration`): a step lists
 component involvements (summing to exactly 100), crew involvements (none, or summing to exactly
@@ -2005,19 +1736,19 @@ layouts.
   2026-10-06).
   - **Sputnik 2:** Laika, on the first flight; later flights add "An unnamed dog" each
     (confirmed 2026-10-06).
-  - **Korabl-Sputnik 2** (built 2026-10-06): Belka and Strelka really came home, so a *failed*
+  - **Korabl-Sputnik 2:** Belka and Strelka really came home, so a *failed*
     flight remembers Chaika (also recorded as Bars) and Lisichka, the dogs really lost on 28
-    July 1960. No photos yet; the user is looking for licensed ones.
+    July 1960. No photos of them yet.
   - **Animals that came home are honoured** in the Museum's Flights tab (user, 2026-10-06):
     `animalPassengers.cameHome` lists them per successful flight, in order, and the count of
     completed flights says which are earned. Belka and Strelka (Korabl-Sputnik 2), Ham (the
     uncrewed suborbital Mercury test), Enos (the uncrewed orbital Mercury test), Chernushka and
     then Zvezdochka (the uncrewed orbital Vostok test, first and second flight). A flight that
     honours someone may remember nobody on failure; no real animal is invented a death.
-    **Photos** (2026-10-06, found by the user): Belka and Strelka (one photo of both), Ham, Enos
+    **Photos** (found by the user): Belka and Strelka (one photo of both), Ham, Enos
     and Chernushka show theirs on the Flights tab. Zvezdochka has none: her only known photo is
     non-free (fair use on Russian Wikipedia only), so it can't go in the repo.
-    **A failed uncrewed test remembers an unnamed animal** (user, built 2026-10-06):
+    **A failed uncrewed test remembers an unnamed animal** (user):
     `animalPassengers.unnamedLostOnFailure` puts one "An unnamed chimpanzee" (uncrewed Mercury
     tests) or "An unnamed dog" (the uncrewed orbital Vostok test) on the memorial per failure,
     with the step and no photo, and the turn report says so. The uncrewed suborbital Vostok test
@@ -2053,8 +1784,8 @@ layouts.
   reflect the cap. The replay holds its lines to it (`ExpertRescueLines`, user, 2026-11-01): an
   Expert past the cap "couldn't add anything", one out of uses "had nothing left to give".
 
-**(j) A lost crew grounds crewed flights** (the user's decision, 2026-10-12: "gambling with the lives of
-the astronauts should be where the line is drawn"; built the same day, `rules.CrewedGrounding`). The
+**(j) A lost crew grounds crewed flights** (user, 2026-10-12: "gambling with the lives of
+the astronauts should be where the line is drawn"; `rules.CrewedGrounding`). The
 first of the "failures should be a bit more punishing" adjustments (§2.9, "A smarter bot"), kept small
 on purpose: the user wants calculated risk to stay part of the game ("the right stuff"), and a harsher
 failure would steer players into longer R&D waits, which lengthens the lulls again.
@@ -2074,11 +1805,9 @@ failure would steer players into longer R&D waits, which lengthens the lulls aga
   steps are decided" (token `missions.grounding`).
 - **History** (§1.1): the real stand-downs ran 18 to 27 months (6 to 9 seasons). 4 is short of that on
   purpose; it's the first, small step.
-- **Measured** (the smart bot, 200 games, seed 42; about 1.5 astronauts lost a game, 1.6 crewed launches
-  refused a game): at 4 turns the average landing moves from 98.8 to 100.5 seasons (with R&D decisions
-  93.7 to 96.9) and the lulls don't change (longest gap a median of 10). At 6 turns, 104.2 (97.2), and
-  the longest gap's upper quartile goes from 13 to 15. The bot doesn't play around it (it would fly
-  uncrewed work meanwhile only by its plan); a player can.
+- **Measured** (the smart bot, 200 games, 2026-10-12): at 4 turns the average landing moved by about
+  2 to 3 seasons and the lulls didn't change; 6 turns lengthened the longest gaps. The bot doesn't play
+  around it; a player can.
 
 ### 2.6 Prestige, goals & scoring
 
@@ -2148,24 +1877,19 @@ which would reveal a rival's setbacks.
 applied event carries a little story: a headline and a sentence or two that say what happened, then
 the event's own line with the figures. 105 stories in `assets/content/event-stories.json`
 (`EventStories`), our own text, fictional, and neutral between the agencies. Sized per event from the
-bot playouts (`ContentPackPlayouts`, which now counts random events): a Moon race with side missions
-runs about 150 seasons and sees about 30 good and 8 bad events, the plain bot's 237 seasons 47 and
-12; prestige and R&D boosts come 10 to 17 times a game each, reduced expenditures 6 to 10, every
-other event at most about 3. So: 18 stories each for prestige and R&D boosts, 12 for reduced
-expenditures, 6 for morale boosts, 5 for extra funding, 4 for reliability setbacks and 3 for every
-other bad event (`EventStories.SIZED`). No player sees a story twice until every story of its event
-has run; then that event starts over (`PlayerSnapshot.usedEventStoryIds`). A story can wait for a goal
-(`requiresGoal`, 2026-10-27, after a play test's first turn told of the agency's hardware overhead):
-four prestige stories that need something in orbit (the sighting, the radio amateurs, the photos from
-above, the tracking prize) wait for `earth-orbit-satellite`, in both packs; until then they keep their
-turn, as the press stories' unusable ones do. Stories whose event already needs a flight (morale,
-extra funding) need no gate. The pick uses its own
-salted seed (agency, turn, event), so the season's draws, and the playouts, are unchanged. The
-event (`RandomEventOccurred`) and the news log entry store the story's id and the struck person's
-name, since the person may be gone when the report is read; the text stays in the client. Placeholders:
-`{name}`, `{component}` (reliability setbacks), `{group}` (morale). The same pass fixed the event
-lines' figures: prestige, cost and funding magnitudes are percentages, and were worded as points
-and dollars.
+bot playouts (a Moon race with side missions sees about 30 good and 8 bad events in 150 seasons;
+prestige and R&D boosts come 10 to 17 times a game each, reduced expenditures 6 to 10, every other
+event at most about 3): 18 stories each for prestige and R&D boosts, 12 for reduced expenditures, 6
+for morale boosts, 5 for extra funding, 4 for reliability setbacks and 3 for every other bad event
+(`EventStories.SIZED`). No player sees a story twice until every story of its event has run; then
+that event starts over (`PlayerSnapshot.usedEventStoryIds`). A story can wait for a goal
+(`requiresGoal`, 2026-10-27, after a first turn told of the agency's hardware overhead): four prestige
+stories that need something in orbit wait for `earth-orbit-satellite`, in both packs, keeping their
+turn meanwhile. The pick uses its own salted seed (agency, turn, event), so the season's draws, and the
+playouts, are unchanged. The event (`RandomEventOccurred`) and the news log entry store the story's id
+and the struck person's name (the person may be gone when the report is read); the text stays in the
+client. Placeholders: `{name}`, `{component}` (reliability setbacks), `{group}` (morale). Prestige,
+cost and funding magnitudes are percentages.
 
 **As built** (`RandomEvents`, `RandomEventRoster.baspmClose()`): rolled after the budget pass; in
 each roll the first event of a shuffled pool whose gate passes is applied. Timed effects age at
@@ -2205,34 +1929,34 @@ AI rival to one milestone goal.
 ### 2.9 Multiplayer interaction model
 
 No BASPM precedent beyond its 1v1 PBEM mode and rival comparison screen.
-- **Decided:** start with **passive competition** (the race, rival summaries in the Museum) plus
-  **in-game messages** between players over the game connection, never email (user,
-  2026-09-28). Espionage, sabotage and interference come later, once the daily loop is proven
-  fun and fair; they must not just punish whoever logs in less. Cooperation's first piece is
-  publishing findings (§2.13, designed 2026-10-19, built 2026-10-21). Cooperative modes are a later
-  idea. Two pieces are already designed for it (§2.2(d), user 2026-10-07): an **intelligence
-  service** that can run background checks on job candidates, and **poaching** other agencies'
-  employees, with matching as a standing order.
-- **Intelligence** (designed with the user, 2026-10-07; every number is ours, a default and
-  unconfirmed). Espionage here buys **information, never damage**: **no sabotage** (user,
-  2026-10-07), since a rival breaking your hardware overnight can't be answered until morning and
-  a player-caused death would kill the fun. No BASPM precedent (its source has no espionage).
-  - **Async rules it keeps:** every operation is settled in the season pass (except the background
-    check below), defence is passive, and the service's level is a standing order. Nothing asks a
-    player to react, so logging in less never costs anything here.
+- **Decided:** start with **passive competition** (the race, rival summaries, public prestige
+  §2.1(g), the standing charts) plus **in-game messages** over the game connection, never email
+  (user, 2026-09-28). Interaction must never punish whoever logs in less. What exists beyond that:
+  **intelligence** (below), **poaching** with matching as a standing order (§2.2(d)), **publishing
+  findings** (§2.13, cooperation's first piece), rivals' **statements and condolences** on Firsts and
+  losses (`ui-spec.md` §4.18.1 and §4.18.3), and a shared **contract marketplace** (§2.11).
+  Cooperative modes are a later idea.
+- **Intelligence** (designed with the user, 2026-10-07; `rules.Intelligence`,
+  `rules.IntelligenceBoard`, state in `PlayerSnapshot.intelligence`, screens in `ui-spec.md` §4.15,
+  canvas `Launch Window — Intelligence Office`;
+  *every number is ours and unconfirmed*). Espionage here buys **information, never damage**: **no
+  sabotage** (user, 2026-10-07), since a rival breaking your hardware overnight can't be answered
+  until morning and a player-caused death would kill the fun. No BASPM precedent.
+  - **Async rules it keeps:** every operation is settled with the turn (except the background
+    check), defence is passive, and the service's level is a standing order. Nothing asks a player
+    to react.
   - **The Intelligence Office**, an **eighth hub building** (user, 2026-10-07), because the feature
-    will grow. It holds the level dial, the operations, the folders on rivals, and later perhaps
-    intelligence officers as a fourth roster (the building's level would cap it, like the others).
-    No building upgrade for now. One name for both archetypes. The user draws its hotspot polygon
-    (`INTELLIGENCE_OFFICE`) on both hub images.
-  - **The level** (0 to 3) is a **budget dial**, no staff for now. The player sets a **target
-    level**; at each resolution the level moves **one step** toward it (user, 2026-10-07: a
-    network takes time to spool up and to dismantle), so a change only ever takes effect next
-    season and nobody can sit at 0 and spike to 3 when a need arises. The level steps first in the
-    season pass, so the candidate pool drawn that resolution and the next season's actions use
-    the new level. **Cost per season** at the level in effect, paid with the fixed costs: 0 / 150
-    / 350 / 700 (against a starting funding of 3,000). Winding down costs the levels on the way.
-    If funds don't cover it (in debt), the level drops one step that season.
+    may grow: the level dial, the operations, the folders on rivals (later perhaps intelligence
+    officers as a fourth roster). No building upgrade. One name for both archetypes. A new hub
+    building needs its `Hub.Place` before its hotspot reaches `assets/` (`Place.valueOf` throws on
+    an unknown name).
+  - **The level** (0 to 3) is a **budget dial**, no staff. The player sets a **target level**; at
+    each resolution the level moves **one step** toward it (user, 2026-10-07: a network takes time to
+    spool up and to dismantle), so nobody can sit at 0 and spike to 3 when a need arises. The level
+    steps first in the season pass, so the candidate pool drawn that resolution and the next
+    season's actions use the new level. **Cost per season** at the level in effect, paid with the
+    fixed costs: 0 / 150 / 350 / 700 (against a starting funding of 3,000). Winding down costs the
+    levels on the way. If funds don't cover it (in debt), the level drops one step that season.
   - **What each level brings.** A level keeps everything the levels below it bring. **Actions per
     season** equal the level; unused ones don't carry over. **Passives** are independent of the
     actions: using an action never cancels a passive roll (user, 2026-10-07).
@@ -2240,65 +1964,61 @@ No BASPM precedent beyond its 1v1 PBEM mode and rival comparison screen.
     | Level | Active (unlocked) | Passive |
     |---|---|---|
     | 0 | none | none; a small baseline counter-intelligence |
-    | 1 · Security office | **Background check** on one candidate | **20 %** per candidate to reveal a trait; counter-intelligence I |
-    | 2 · Analysis section | **Agency assessment** of a chosen rival, one area | **25 %** per season: a tidbit about a random rival (R&D or plans); counter-intelligence II |
-    | 3 · Field network | **Personnel file** on a rival's employee | the tidbit chance rises to **40 %** (user: fine to start with, 2026-10-07) and can come from any area, people included; counter-intelligence III |
+    | 1 · Security office | **Background check** on one candidate | **20 %** per candidate to reveal a trait; rivals' failed attempts; foreign hardware 25 %; counter-intelligence I |
+    | 2 · Analysis section | **Agency assessment** of a chosen rival, one area | **25 %** per season: a tidbit about a random rival (R&D or plans); foreign hardware 50 %; counter-intelligence II |
+    | 3 · Field network | **Personnel file** on a rival's employee | the tidbit chance rises to **40 %** (user, 2026-10-07) and can come from any area, people included; foreign hardware 80 %; counter-intelligence III |
 
     The ladder is people, then agencies, then rivals' people (user, 2026-10-07); level 3's
     personnel file is what makes a poaching offer an informed one.
-  - **Foreign hardware** (the user's idea, 2026-11-01; built the same day; every number unconfirmed).
-    Rival hardware means little to a player who isn't a space nerd, so analysts explain it, a piece at a
-    time. **Pool:** every program and rocket program that an agency of the other side has open now,
-    minus what the player already knows; a closed program leaves the pool until it is opened again.
-    **Passive:** each season, a **25 / 50 / 80 %** chance at levels 1 / 2 / 3 (0 at level 0) to learn one
-    random item of the pool, independent of the actions and on its own salted seed. No lag: the chance
-    is what keeps a player behind (a single new item takes about 4 / 2 / 1.25 seasons on average), and
-    a season with no news means nothing, since a failed roll and an empty pool look alike. So the
-    report says nothing then. What is learned is kept for good, a dropped level included. It opens a
-    role line, the counterpart on the player's side where there is one, and a read-only file; a
-    component is known once any program needing it is. Dossiers show unknown items by name only, with a
-    "not yet analysed" mark. **Your own side's hardware is always known,** so a game with no agency on
-    the other side (bots count as agencies) needs no special rules: the pool stays empty, and the
-    passive's ladder line and the Foreign hardware tab are hidden, as are counterpart lines. Once the
-    race is decided, everything opens. The roles and counterparts go in a text file outside the pack,
-    with a test that holds every program and rocket to an entry.
-  - **Failed attempts** (the user's idea, 2026-11-06; built the same day; the user picked "the same for
-    everyone", with each side's flavour in the words only). A program can be developed in secret, but a
-    rocket that fails on the pad or in flight can't be hidden (history in §1.1, "Failures in public and in
-    secret"). **From level 1 every rival's failed attempt is reported, no roll,** and counter-intelligence
-    plays no part. **A failed attempt** is a mission that ended on a failing step (`FAILURE` or
-    `CATASTROPHIC`), whatever it was: pad, launch, flight or the way home, crewed or not, contract flights
-    too. A glitch the mission survives stays secret. A crew lost is reported here too, besides its memorial
-    page. **When:** the turn after; the board settles before anyone's season pass, so it reads
-    every agency's report of the turn before (`rules.RivalFailures`, from `TurnScheduler`), like the
-    memorial's losses. **Detail by level** (stripped when seen, never growing later): level 1 the program
-    and roughly where (`RivalFailure.Phase`: on the pad, during launch, in flight, on the way home);
-    level 2 the configuration and the step; level 3 the suspected component, the one with the largest
-    share of the step's risk (involvement × unreliability as flown). **Where:** the phase comes from the
-    step's place in its season: preparations and countdown are the pad, and they (or the season's start)
-    open a launch that lasts while each step involves a rocket slot (or an air drop's carrier: takeoff,
-    pre-launch, the drop); after that a step on the way home (retrofire, reentry, recovery and the like)
-    and every step after it in the season is the way home; the rest is flight. **Words:** a NASA-side
-    rival's failure is read in the press ("The press reports that…"), a Soviet-side one picked up by
-    tracking stations ("Tracking stations report that…"), the same for both sides otherwise (user). It
+  - **Foreign hardware** (user, 2026-11-01; *every number and the counterparts await the user's
+    review*). Rival hardware means little to a player who isn't a space nerd, so analysts explain it,
+    a piece at a time. **Pool:** every program and rocket program that an agency of the other side
+    has open now, minus what the player already knows; a closed program leaves the pool until it is
+    opened again. **Passive:** each season, a **25 / 50 / 80 %** chance at levels 1 / 2 / 3
+    (`Intelligence.HARDWARE_PERCENT`) to learn one random item of the pool, on its own salted seed. No
+    lag: the chance is what keeps a player behind (a new item takes about 4 / 2 / 1.25 seasons on
+    average), and a failed roll and an empty pool look alike, so the report says nothing then. What
+    is learned is kept for good (`IntelligenceState.foreignHardware`), a dropped level included. It
+    opens a role line, the counterpart on the player's side where there is one, and a read-only file;
+    a component is known once any program needing it is. Dossiers show unknown items by name only,
+    "not yet analysed". **Your own side's hardware is always known,** so a game with no agency on the
+    other side (bots count) needs no special rules: the pool stays empty, and the passive's ladder
+    line, the Foreign hardware tab and counterpart lines are hidden. Once the race is decided,
+    everything opens. The words are in `assets/content/foreign-hardware.json` (outside the pack;
+    `ForeignHardwareTest` holds every program and rocket to an entry, a role to 46 characters).
+  - **Failed attempts** (user, 2026-11-06; "the same for everyone", each side's flavour in the words
+    only). A program can be developed in secret, but a rocket that fails can't be hidden (history in
+    §1.1, "Failures in public and in secret"). **From level 1 every rival's failed attempt is
+    reported, no roll,** and counter-intelligence plays no part. **A failed attempt** is a mission
+    that ended on a failing step (`FAILURE` or `CATASTROPHIC`), whatever it was: pad, launch, flight
+    or the way home, crewed or not, contract flights too. A glitch the mission survives stays secret.
+    A crew lost is reported here too, besides its memorial page. **When:** the turn after; the board
+    settles before anyone's season pass and reads every agency's report of the turn before
+    (`rules.RivalFailures`, from `TurnScheduler`; `IntelFinding.Kind.FAILED_ATTEMPT`). **Detail by
+    level** (stripped when seen, never growing later): level 1 the program and roughly where
+    (`RivalFailure.Phase`: on the pad, during launch, in flight, on the way home); level 2 the
+    configuration and the step; level 3 the suspected component, the one with the largest share of
+    the step's risk (involvement × unreliability as flown). **Where:** preparations and countdown are
+    the pad, and they (or the season's start) open a launch that lasts while each step involves a
+    rocket slot (or an air drop's carrier); after that a step on the way home (retrofire, reentry,
+    recovery and the like) and every step after it in the season is the way home; the rest is
+    flight. **Words:** a NASA-side rival's failure is read in the press ("The press reports that…"),
+    a Soviet-side one picked up by tracking stations ("Tracking stations report that…") (user). It
     shows in the turn report's Intelligence section and in the rival's folder, which keeps the last
-    **24** (`Intelligence.FAILURES_KEPT`, unconfirmed; the folders' other lists are capped too). No number
-    here is a balance one beyond that cap; it gives level 1 a second reason besides background checks.
-  - **Background check** (the decided feature above, now concrete). The **active check answers
-    at once**: the server replies during the season with one of the candidate's traits, or "no
-    notable traits", and the action is used. It's desk work, so instant fits, and an answer at
-    resolution would arrive just as the pool refreshes. It never fails and isn't against a rival,
-    so counter-intelligence plays no part. A second check on the same candidate (a second
-    action, level 2 or more) reveals another trait if there is one. **The passive 20 %** is
-    rolled once per candidate when the pool is drawn, from the candidate's seed, so it shows the
-    moment the pool appears and can't be rerolled. Both report "no notable traits" too, so a
-    missing reveal never hints at none. A trait found this way stays revealed after hiring.
-    **The active check is the game's first action that changes state mid-turn,** so it is
-    pinned down: which trait it reveals comes from the candidate's seed; the answer is saved on
-    the candidate, so asking again returns the same answer and a retried resolution never
-    changes it; it can't be cancelled or refunded (unlike queued operations); it counts against
-    the season's actions even if the level drops at the resolution; and the server's stripping
-    lets that one revealed trait through.
+    **24** (`Intelligence.FAILURES_KEPT`, *unconfirmed*; `RivalFolder.failures`).
+  - **Background check** (level 1; `BackgroundCheckAction`). The **active check answers at once**:
+    the server replies during the season with one of the candidate's traits, or "no notable traits",
+    and the action is used. It's desk work, so instant fits. It never fails and isn't against a
+    rival, so counter-intelligence plays no part. A second check on the same candidate (a second
+    action, level 2 or more) reveals another trait if there is one. **The passive 20 %** is rolled
+    once per candidate when the pool is drawn, from the candidate's seed, so it shows the moment the
+    pool appears and can't be rerolled. Both report "no notable traits" too, so a missing reveal
+    never hints at none. A trait found this way stays revealed after hiring. **The active check is
+    the game's first action that changes state mid-turn,** so it is pinned down: which trait it
+    reveals comes from the candidate's seed; the answer is saved on the candidate, so asking again
+    returns the same answer and a retried resolution never changes it; it can't be cancelled or
+    refunded; it counts against the season's actions even if the level drops at the resolution; and
+    the server's stripping lets that one revealed trait through.
   - **Agency assessment** (level 2): one action looks at **one area** of one rival, settled at
     resolution, the result a **dossier dated to that resolution** that stays in the rival's folder
     until a newer one replaces it:
@@ -2306,90 +2026,62 @@ No BASPM precedent beyond its 1v1 PBEM mode and rival comparison screen.
     - **Programs and plans:** open programs, missions in flight, **R&D focus** (which components
       their engineers work on, with how many), **hardware not flown yet** (owned payloads never
       carried on a successful flight), and the rival's **Intelligence level** (user, 2026-10-07), so
-      one assessment tells a player how hard the rival is to spy on before spending more. The
-      mockup's "launches scheduled for next season" can't exist: a mission scheduled during a
-      season launches at that season's resolution, so a dossier made there would always find none.
-      The user chose both replacements (2026-10-07). A rival's plans can still change after the
-      report: intelligence can be wrong, and that is the rival's counter without having to react.
+      one assessment tells a player how hard the rival is to spy on. (No "launches scheduled for next
+      season": a mission scheduled during a season launches at that resolution, so a dossier would
+      always find none.) A rival's plans can still change after the report: that is the rival's
+      counter without having to react.
     - **Personnel:** roster sizes and average skill per group.
   - **Personnel file** (level 3): one rival employee, in a group the player picks: the most
     skilled person there without a current file, or a person the player names from an earlier
-    file. It shows name and portrait, skills as ranges, a loyalty band (low, middling, high; needs phase 4's loyalty), their ambition and
-    whether they're disappointed, and one of their traits. **Never the same person twice in a turn**
-    (user, 2026-10-23, after three files came back on one astronaut): the files settle one after
-    another, and each skips whoever an earlier one filed that turn, a named person too; with nobody
-    left in the group, the file finds nothing to look at.
+    file. It shows name and portrait, skills as ranges, a loyalty band (low, middling, high), their
+    ambition and whether they're disappointed, one of their traits, and (for poaching) their salary,
+    seasons with the agency and last approach. **Never the same person twice in a turn** (user,
+    2026-10-23): the files settle one after another, and each skips whoever an earlier one filed
+    that turn; with nobody left in the group, the file finds nothing.
   - **Odds against a rival's counter-intelligence** (the target's level, 0 to 3): a targeted
     action succeeds at **85 % minus 15 points per level** of the target's counter-intelligence
     (85 / 70 / 55 / 40). Ranges are tighter the higher the spy's level is over the target's:
     half-width **5 + 5 × (target level − spy level + 2)** points, at least 2 and at most 15.
-    **Follow-ups tighten them** (the user's idea, 2026-10-27; numbers unconfirmed): an assessment of
-    the same area of the same rival at most **2 turns** after the folder's dossier there is a
-    follow-up, and each look in a row takes **3 points** either side off its ranges, down to 2
+    **Follow-ups tighten them** (user, 2026-10-27; *unconfirmed*): an assessment of the same area of
+    the same rival at most **2 turns** after the folder's dossier there is a follow-up, and each look
+    in a row takes **3 points** either side off its ranges, down to 2
     (`Intelligence.followUpHalfWidth`, the row counted in `Dossier.looks`). The range is still drawn
-    fresh around today's value, never intersected with the last one, since the rival's numbers move
-    between looks. A longer gap starts again at one; a failed look doesn't reset the row by itself,
-    but its season counts toward the gap. The dossier's stamp says which look it was. A
-    failed action learns nothing, and is **caught** with **10 % + 10 % per target level**: the
-    target's turn report names the spying agency, the spy loses **20 prestige**, and the spy's
-    report says the operation was blown **and what the target's counter-intelligence level was**
-    that season (user, 2026-10-07: getting caught should still teach something). Catching works
-    the other way too: the catcher learns the spying agency's Intelligence level. A level learned
-    either way goes into the rival's folder, dated like a dossier. **The odds a player sees:**
-    exact ("55 %, their counter-intelligence was level 2 as of Spring 1962") once a dossier or a
-    catch has shown the level, otherwise the full range, 40–85 %. Passive tidbits roll against the same counter-
-    intelligence but are never caught (no one is sent). No secrecy bonus for either archetype
-    (user, 2026-10-07: NASA didn't spill everything either).
-  - **Turn report:** a new "Intelligence" section with reveals, dossiers, tidbits, catches on both
-    sides, and level changes.
-  - **Hidden information stays on the server:** a dossier holds only what the server granted
-    and is kept in the player's own state; a rival's real values never travel to the client, as
-    with traits. Prestige is the one exception: it's public (§2.1(g)).
-  - **As built (2026-10-07):**
-    - **Rules** (`rules.Intelligence`, `rules.IntelligenceBoard`; state in
-      `PlayerSnapshot.intelligence`): a new `INTELLIGENCE` phase of the season pass, before the
-      budget, applies the agency's findings, clears the queue, frees the actions and steps the
-      level (the budget then charges the new level, `BudgetProgress.RunningCosts.intelligence`).
-      The passive candidate roll and every operation, catch and tidbit draw from their own salted
-      seeds, never the season's stream: the bot playouts match the old baseline exactly.
-    - **Settled once a turn** (`TurnScheduler`): from every player's state with the turn's
-      actions applied, before anyone's pass, and kept in `intelligence/turn-N.json`, so a retry
-      after a crash applies the same findings. An operation queued after that file was written
-      comes to nothing and says so in the report ("queued too late").
-    - **Rivals are named by an opaque key** (`GameSeeds.rivalKey`, carried as
-      `RivalSummary.playerId`): operations and folders use it, and account ids never leave the
-      server.
-    - **Tidbits** are one fact from one dossier area; a rival's event history isn't read.
-    - **Folders are capped** (12 tidbits, 8 personnel files, 10 catches per rival, oldest
-      dropped): they travel in the player's state, under Kryo's 64 KB object buffer. Five rivals
-      at every cap add about 10 KB unzipped (`IntelligenceWireTest`). A full agency (every roster
-      at its top cap, 300 rapport pairs, five full folders) measured 34 KB as an object graph, so
-      the state now goes over the wire as gzipped JSON like the turn report: about 17 KB
-      (`StateSizeTest`, 2026-10-07). The bots' states stay under 8 KB over 80 seasons
-      (dev-tools `StateSizes`), and under 22 KB on the standard pack, played to the Moon by
-      the bot that works ahead over 240 seasons (2026-10-09, 200 games, 33 % of the buffer;
-      `-Dexec.args=standard`).
+    fresh around today's value, never intersected with the last one, since the rival's numbers move.
+    A longer gap starts again at one; a failed look doesn't reset the row by itself, but its season
+    counts toward the gap. The dossier's stamp says which look it was. A failed action learns
+    nothing, and is **caught** with **10 % + 10 % per target level**: the target's turn report names
+    the spying agency, the spy loses **20 prestige**, and the spy's report says the operation was
+    blown **and what the target's counter-intelligence level was** that season (user, 2026-10-07:
+    getting caught should still teach something). The catcher learns the spying agency's level too.
+    A level learned either way goes into the rival's folder, dated like a dossier. **The odds a
+    player sees:** exact ("55 %, their counter-intelligence was level 2 as of Spring 1962") once a
+    dossier or a catch has shown the level, otherwise the full range, 40–85 %. Passive tidbits roll
+    against the same counter-intelligence but are never caught (no one is sent). No secrecy bonus
+    for either archetype (user, 2026-10-07: NASA didn't spill everything either).
+  - **Turn report:** an "Intelligence" section with reveals, dossiers, tidbits, failed attempts,
+    foreign hardware, catches on both sides, and level changes.
+  - **Hidden information stays on the server:** a dossier holds only what the server granted and
+    is kept in the player's own state; a rival's real values never travel to the client, as with
+    traits. Prestige is the one exception: it's public (§2.1(g)).
+  - **How it runs:** an `INTELLIGENCE` phase of the season pass, before the budget, applies the
+    agency's findings, clears the queue, frees the actions and steps the level (the budget then
+    charges the new level, `BudgetProgress.RunningCosts.intelligence`). Everything is **settled once
+    a turn** (`TurnScheduler`) from every player's state with the turn's actions applied, before
+    anyone's pass, and kept in `intelligence/turn-N.json`, so a retry after a crash applies the same
+    findings; an operation queued after that file was written comes to nothing ("queued too late").
+    Every roll draws from its own salted seed, never the season's stream. **Rivals are named by an
+    opaque key** (`GameSeeds.rivalKey`, carried as `RivalSummary.playerId`): account ids never leave
+    the server. **Tidbits** are one fact from one dossier area. **Folders are capped** (12 tidbits,
+    8 personnel files, 10 catches, 24 failures per rival, oldest dropped), since they travel in the
+    player's state (gzipped JSON, `StateSizeTest`).
   - **Balance check** (dev-tools `IntelligencePlayouts`, 2026-10-07: four agencies, each spending
     every action every season, 24 seasons, 1,000 games; only the intelligence rules run). Per
-    agency over the 24 seasons:
-    - **Cost:** level 2 about 340 a season (8,200 in all), level 3 about 660 (15,900), against a
-      starting bank of 25,000 and funding of 3,000 a season.
-    - **Against a mix of levels 0 to 3:** level 2 gets 29 dossiers and 3.5 tidbits and is caught 4.6
-      times (92 prestige); level 3 gets 31 dossiers, 15 personnel files and 6 tidbits for the same
-      catches. Level 3 costs twice as much mainly for the files, which only pay off once poaching
-      exists. 65–70 % of operations succeed, 7–10 % are caught.
-    - **An arms race (all at level 3):** 40 % succeed, 24 % are caught, about 15 catches each way
-      and 306 prestige lost per agency: roughly one mid-sized goal (goals pay 120 to 3,000).
-    - **Rival levels become known fast:** 77–85 % of the time each rival's level is known, from
-      plans dossiers and catches; a level 1 service alone, by catching agents, knows 24 %.
-    - **Passive finds** come at the designed rate: 6 of a pool's 30 candidates each season.
+    agency: level 2 costs about 8,200 in all and gets 29 dossiers and 3.5 tidbits, caught 4.6 times
+    (92 prestige); level 3 costs about 15,900 and adds 15 personnel files. 65–70 % of operations
+    succeed, 7–10 % are caught. An arms race (all at level 3): 40 % succeed, 24 % caught, 306
+    prestige lost per agency, roughly one mid-sized goal. Rival levels are known 77–85 % of the time.
   - **Still open:** whether the target ever learns of an operation that failed but wasn't caught
     (default: no); a dossier ages by its date only, no visible decay (default).
-  - **Before the hotspot reaches the client:** `make_hub_art.py` copies the raw hotspot files to
-    `assets/ui/hub/` as they are, and `Hub` turns each polygon name into a `Hub.Place` with
-    `valueOf`, which throws on an unknown name; `HubTest` expects seven places. Add
-    `Hub.Place.INTELLIGENCE_OFFICE` (icon, names, "isn't built yet") and update the test before
-    running the converter with the new polygons.
 - **Win condition** (user, 2026-09-28): the host declares a **list of goal ids** per game
   (`game-meta.json`, visible in the UI). **The first agency to reach all of them wins.** A listed
   goal counts as done when achieved or credited through the cascade. Its time is the game turn
@@ -2403,188 +2095,72 @@ No BASPM precedent beyond its 1v1 PBEM mode and rival comparison screen.
   brought home alive (`crewed-lunar-landing`). The early-era pack can't hold that race, so a game on
   it declares `GameMeta.EARLY_ERA_DECLARED_GOALS` instead (satellite in orbit, human in space, human
   in orbit; the server tests do, since they run on the early-era pack).
-- **How long the Moon race runs** (measured 2026-10-09, `ContentPackPlayouts standard`, 200 bot
-  games of up to 240 seasons, one agency per game, no rivals). The bots fly a fixed plan to the
-  landing, one flight at a time: the early race, one lunar probe (it gates the lunar programs),
-  the lunar craft's tests in Earth orbit, then flyby, lunar orbit, lander test and landing, 17
-  flights for NASA (Mercury, Ranger, Apollo) and 18 for the Soviets (Vostok, Luna, Soyuz 7K-L3).
-  - **The plain bot** (one flight's components at a time, six SET specialists): 36 of 200 games
-    land by season 240, NASA's at a median of 223, the Soviets' 2 at 230 and 239.
-  - **The bot that works ahead** (`standard ahead`: SET Center filled and upgraded, spare
-    specialists on later flights' components, two spare controllers and astronauts, nobody sent
-    to training when the hardware is close): every game lands. **NASA median 135 seasons**
-    (quartiles 122 and 158, fastest 85), **Soviet median 161** (142 and 184, fastest 113). It runs
-    into debt doing it (lowest −150k, 28 conversions).
-  - **What sets the pace:** R&D. The bot spends 2 to 24 seasons on each flight, mostly waiting
-    for its hardware to reach its launch bar of 70 % reliability (about 84 of 152 seasons per
-    game; the rest is funds, staffing and building upgrades). The long waits come with a new craft
-    (Apollo's first suborbital test about 21, Soyuz 7K-L3's 24) or a new rocket: Vostok's
-    uncrewed suborbital test rides the cheaper R-7 of Sputnik, so its first crewed flight waits
-    about 24 seasons for the human-rated R-7, where Mercury's crewed flight rides the Redstone its
-    uncrewed test already used (about 3).
-  - **Against history and the schedule:** a season is a quarter of a game year, so 135 seasons is
-    34 game years against the real 47 seasons from Sputnik to Apollo 11. At a turn a day that is
-    about four and a half months for the friends' game; Monday to Friday, about six for
-    the colleagues'. The early race with the same bot takes a median of 32 (NASA) and 34 (Soviet)
-    seasons, the plain bot's 61 and 49. A human player plays better than either bot, flying
-    several things at once, but these are the only numbers so far.
+- **How long the Moon race runs** (`ContentPackPlayouts standard`; earlier bots and their traces:
+  `git show 5c95135b:design.md`). The bots fly a fixed plan to the landing, one flight at a time:
+  the early race, one lunar probe, the lunar craft's tests in Earth orbit, then flyby, lunar orbit,
+  lander test and landing (17 flights for NASA, 18 for the Soviets).
   - **The length is fine, the lulls are the risk** (user, 2026-10-09): the colleagues played a
-    racing-team manager for about nine months. A shorter race is ruled out: the Moon landing is
-    the point. What matters is how many turns in a row a player has nothing to do.
-  - **Lulls, measured** (dev-tools `RaceLulls`, 2026-10-09: the bot that works ahead, 200 games per
-    cell, components' R&D bands times a factor and their start moved part of the way from
-    baseline to R&D ceiling). A gap is the run of seasons without a launch before a launch.
+    racing-team manager for about nine months. A shorter race is ruled out: the Moon landing is the
+    point. What matters is how many turns in a row a player has nothing to do. About 90 turns to win
+    is fine (user, 2026-10-12).
+  - **What sets the pace:** R&D, then money. Faster R&D shortened the race but hardly the lulls
+    (`RaceLulls`, 2026-10-09): once R&D is quick the bot waits for money instead, and saving for a
+    20,000 program is the same lull. The pack's other flights hardly fill them (`RaceLulls standard
+    side`): a flight pays only for goals the agency doesn't hold yet, most flights in an open program
+    are the plan's own, and a venture costs what the plan needs. So the fix was new things to do: the
+    R&D decisions (§5, Backlog), the commercial contracts (§2.11, flights that pay for a repeat).
+- **A smarter bot, and what it says about the game** (2026-10-12, `ContentPackPlayouts standard smart`,
+  200 games, seeds 42 and 7; `Bot.SMART`, each part behind a system property). Diagnosed from the
+  side-missions bot: it launched at a median chance to complete of 0.41 crewed and 0.48 uncrewed, lost
+  about 4 astronauts a game, and hired about 265 people a game, idle specialists resigning and the
+  oldest best hires retiring. The smart bot keeps nobody idle, sizes SET to the slots, hires for the
+  years left (only who stays to season 100), matches skills to slots, launches early at odds 0.5
+  crewed / 0.3 uncrewed, opens the plan's later rockets with spare money, and runs two teams of
+  engineers per slot, swapping research and training every course (the user's ideas). Medians: NASA
+  87, Soviet 96 (with R&D decisions 82 / 85); every game lands. Tried and dropped (each slower on both
+  seeds): opening later *programs* early (money binds), upgrading the VAB ahead, flying later flights
+  alongside the current one (`bot.parallel`), and side flights (about two seasons faster without; kept, as a player
+  fills lulls). With today's rules (raises, the ceiling, the grounding, §2.2(c)) the smart bot's
+  average game is about 85.9 seasons.
+  - **Lulls with the smart bot:** about 33 launches a game; 18 % of gaps 5+ seasons, 3 % 10+; each
+    game's longest gap a median of 10 seasons. With R&D decisions: about 50 decisions a game, offered
+    in 61 % of quiet seasons, covering 70 % of the median game's longest quiet stretch.
+  - **What makes the slow games slow: a budget snowball** (`-Dbot.slowGames=true`). Slow games stall
+    on funds about 40 seasons a game against 2 to 4 and spend about 100,000 more on retries. Prestige
+    at the review of season 32 is half, so the funding rate is too, and the gap widens: early failures
+    delay the first goals, a lower review follows, then less money for 16 seasons. R&D waits barely
+    differ.
+  - **The user's answers** (2026-10-12): failures should punish a little more, but only in small
+    steps (calculated risk fits the theme, and pushing players into R&D lengthens the lulls): the
+    grounding after a lost crew (§2.5(j)). The idle-staff point became an advisor tip (`ui-spec.md`
+    component 24). For the snowball: the Sputnik shock (§2.1(e)) and raises between reviews
+    (§2.1(f)).
+  - **The Sputnik shock, measured** (dev-tools `RaceShock`: the smart bot as NASA against the smart
+    bot as the Soviets in one game, sharing the goal tally, 200 races). **Racing changes everything
+    the solo playouts showed:** without the rule the Soviets land at a median of 146 (96 alone),
+    because every First NASA takes pays them only second-time prestige and the reviews snowball.
 
-    | R&D, start | Landing median NASA / Soviet | Launches | Gaps of 5+ / 10+ | Longest gap (median game) |
-    |---|---|---|---|---|
-    | ×1, as is | 135 / 161 | 39 | 22 % / 6 % | 18 |
-    | ×1, 50 % | 95 / 115 | 30 | 18 % / 6 % | 15 |
-    | ×2, as is | 104 / 120 | 31 | 19 % / 6 % | 15 |
-    | ×2, 50 % | 80 / 117 | 27 | 16 % / 7 % | 14 |
-    | ×3, 50 % | 80 / 116 | 26 | 14 % / 7 % | 17 |
+    | Share | NASA / Soviet median landing | Lands first, NASA : Soviets | Margin, median (quartiles) |
+    |---|---|---|---|
+    | 0 (off) | 92 / 146 | 150 : 50 | 57 (29-71) |
+    | **0.5 (built)** | 88 / 105 | 129 : 70 | 26 (12-49) |
+    | 0.75 | 86 / 95 | 128 : 70 | 15 (8-33) |
+    | 1.0 | 86 / 90 | 108 : 89 | 14 (7-23) |
 
-    Faster R&D shortens the race but hardly the lulls: about three turns in four have no launch
-    in every cell, and the median game still has a stretch of two to three weeks of daily turns
-    without one. Once R&D is quick the bot waits for money instead (about 50 of its seasons
-    stalled on funds at ×3 and 50 %, against 25 as is): saving for a 20,000 program or a new
-    rocket is the same lull. The Soviet race gains least past ×2, for the same reason. The bot
-    flies only its plan, though; a player can fill a wait with the pack's other flights (probes,
-    satellites, records).
-  - **Do the pack's other flights fill the lulls?** Hardly (measured 2026-10-09, `RaceLulls standard
-    side`, the side-missions bot, two seeds). It flies about four side flights per game besides its
-    plan, half of them fillers (a flight in a program already open, on a rocket already open, with
-    its hardware at the bar: Vostok's and Soyuz's longer flights, Explorer 1's extended mission, the
-    X-15's) and half ventures (a new program, rocket or research first: Mariner 9, Mars 2, Luna 15,
-    Lunar Orbiter). The landing stays where it was (NASA 134 to 135, Soviet 166 to 168), and so do
-    the lulls: gaps of 5+ turns 19 % of all gaps against 22 %, the median game's longest gap 20 to
-    22 turns against 17 to 18. Why:
-    - **Fillers are few.** A flight pays only for goals the agency doesn't hold yet (repeats pay
-      nothing, `MissionProgress`), and most flights in an open program are the plan's own steps or
-      already flown. Where a filler exists, the bot flies it.
-    - **Ventures cost what the plan needs.** The middle of the race is a saving game: Apollo's or
-      Soyuz 7K-L3's 20,000 to 25,000 to open against 20,000 to 60,000 in hand, a funding rate that
-      grows from 3,000 to about 47,000 a season over the race, and money piling up only after about
-      season 140. A venture's opening price, new rocket and upkeep come out of that, and the
-      Headquarters and VAB caps leave little room for a second line of work.
-    - **Earlier versions of this bot made the lulls longer** (up to 36 turns) by buying permanent
-      costs (building levels, hires, reopened rockets) for passing side flights, which sank the
-      agency into debt before its first satellite.
-
-    So under these numbers a waiting player has little worth flying. The fix is new things to do,
-    not more of the same: the interactive events (§5, Backlog), and perhaps flights that pay for a
-    repeat or cheaper ways to keep a program open. Both became the commercial contracts (§2.11,
-    2026-10-11).
-  - **A smarter bot, and what it says about the game** (measured 2026-10-12, `ContentPackPlayouts
-    standard smart`, 200 games, seeds 42 and 7). Diagnosed from the side-missions bot first: it
-    launched at a median chance to complete of 0.41 crewed and 0.48 uncrewed (`MissionAssessment`;
-    70 % per component multiplies down over a flight's steps), lost about 4 astronauts a game, and
-    hired about 265 people a game: 54 specialists a game resigned (the SET Center filled to capacity
-    with only four R&D slots per component, so the rest sat idle at −2 morale a season to the floor
-    of 35) and 79 retired (hiring the best average skill picks the oldest). The smart bot (`Bot.SMART`)
-    adds the fixes one by one, each kept only if it moved the median:
-
-    | Step | Landing median NASA / Soviet | Note |
-    |---|---|---|
-    | Side-missions bot | 135 / 168 | 199 of 200 land |
-    | Strict odds gate alone (0.6 crewed, 0.5 uncrewed) | 209 / 215 | 32 land: waiting idles people, who quit |
-    | Nobody idle, slot-sized SET, hires for years left, skill-matched slots | 114 / 125 | 82 hires a game, 1.5 astronauts lost |
-    | + launch early at odds 0.5 crewed / 0.3 uncrewed | 101 / 115 | the flat bar still applies otherwise |
-    | + open the plan's later rockets with spare money | **92 / 98** (seed 7: 96 / 99) | every game lands, about season 101 on average |
-    | + two teams of engineers per slot, swapping research and training every course (3 seasons); hires only who stays to season 100 (the user's ideas) | **87 / 96** (seed 7: 84 / 97) | average 98.8 and 99.5 against 101.1 and 102.8 |
-    | With R&D decisions (`smart decisions`) | 82 / 85 | the side-missions bot with decisions: 113 / 152 |
-
-    Tried and dropped (each slower on both seeds): opening later *programs* early too (money
-    is the binding constraint: anything bought early for a later flight is taken from the current
-    one), upgrading the VAB ahead for a bigger rocket class (Soviet 98 to 112), flying the plan's
-    later flights alongside the current one (about one a game, mostly the uncrewed lander tests;
-    the extra crews and building levels cost more than the overlap saves), and side flights
-    (without them about two seasons faster; kept on, as a player fills lulls). Each part stays
-    behind a system property for measuring (`ContentPackPlayouts.Bot.SMART`).
-    - **The two last steps, alone** (2026-10-12, both seeds): two rotating teams take NASA's median
-      from 92-96 to 84 (training and research both grow skill, and the team coming back from a course
-      is the stronger one), the Soviets' unchanged with a longer slow tail (the second team's
-      salaries); hires rise from 75 to 88 a game. Hiring only who stays to season 100 leaves the
-      speed where it was (99.0 and 102.1 on average) and cuts retirements by about a fifth (hires 71
-      a game). Together they give the best average on both seeds, so both are the defaults.
-    - **Lulls with the smart bot** (2026-10-12, seed 42, `ContentPackPlayouts` now prints them): about 33
-      launches a game; 18 % of gaps 5+ seasons, 3 % 10+; each game's longest gap a median of 10 seasons
-      (quartiles 8 and 12) against the side-missions bot's 22 (14 and 41). With R&D decisions: about 50
-      decisions a game, offered in 61 % of quiet seasons, covering 70 % of the median game's longest
-      quiet stretch. Spread: NASA's quartiles 79 to 110, the Soviets' 82 to 114, slowest games near 170.
-    - **What makes the slow games slow: a budget snowball** (2026-10-12, `-Dbot.slowGames=true`, the
-      smart bot with decisions, each agency's slowest quarter against its fastest). Slow games stall
-      on funds about 40 seasons a game against 2 to 4, sit in debt 11 seasons against under 1, and spend
-      about 100,000 more on launches (retries after failures). Underneath: prestige at the review of
-      season 32 is half (Soviet 5,900 against 11,900; NASA 9,300 against 14,000), so the funding rate
-      is too (10,800 against 19,500 a season), and the gap widens: at season 64, 13,000 to 16,000 against
-      32,000 to 35,000. Early failures delay the first goals, a lower review follows, then less money
-      for 16 seasons delays the next goals: positive feedback that turns early luck into a lasting
-      lead. R&D waits barely differ (about 45 seasons against 40). Levers, for the user: a dampened
-      or catch-up review, or funding that answers a rival's First (the Sputnik shock raised NASA's
-      budget in 1958), which also keeps a multiplayer race close.
-    - **The user's answers** (2026-10-12): about 90 turns to win is fine. Failures should punish a
-      little more, but only in small steps: calculated risk fits the theme, and pushing players into
-      R&D lengthens the lulls. The first step is the grounding after a lost crew (§2.5(j)). The idle
-      staff point became an advisor tip (`ui-spec.md` component 24). Of the two levers, the user
-      picked the Sputnik shock (§2.1(e)).
-    - **The Sputnik shock, measured** (2026-10-12, dev-tools `RaceShock`: the smart bot as NASA against
-      the smart bot as the Soviets in one game, sharing the goal tally as the server does, each on its
-      own random source; 200 races, seed 42, seed 7 in brackets). **Racing changes everything the solo
-      playouts showed:** without the rule the Soviets, who land at a median of 96 alone, land at 146
-      (145), because every First NASA takes pays them only half (second-time prestige) and the reviews
-      snowball from there: after season 32's review the side behind gets 9,000 a season against
-      18,000. NASA lands first in 150 (151) of 200 races.
-
-      | Share | NASA / Soviet median landing | Lands first, NASA : Soviets | Margin, median (quartiles) | Behind at 32, lands first | Rate after 32, behind / ahead |
-      |---|---|---|---|---|---|
-      | 0 (off) | 92 / 146 (91 / 145) | 150 : 50 (151 : 48) | 57 (29-71) (62) | 29 (15) | 9,000 / 17,800 |
-      | **0.5 (built)** | 88 / 105 (87 / 104) | 129 : 70 (137 : 61) | 26 (12-49) (27) | 34 (32) | 14,100 / 18,900 |
-      | 0.75 | 86 / 95 | 128 : 70 | 15 (8-33) | 50 | 16,500 / 19,700 |
-      | 1.0 | 86 / 90 | 108 : 89 | 14 (7-23) | 61 | 17,100 / 19,500 |
-
-      At 0.5 the margin halves and the Soviets land about 40 seasons sooner. The first landing comes
-      about 5 seasons sooner too: NASA also collects credit for the Soviets' early Firsts (about 6,900
-      prestige a game, the Soviets 15,300), and the earlier of two closer landings is earlier. NASA
-      stays the favourite, as it is alone (median 87 against 96). The bot doesn't play around the
-      rule, and `RaceShock` stops the winner at its landing; in a real game the winner keeps making
-      Firsts, so the loser's credit is if anything larger. The rule does nothing for a slow start
-      without a rival ahead (a solo game, or the leader's own bad luck): raises between reviews
-      (§2.1(f)) are the lever for that.
-    - **Raises between reviews, measured** (2026-10-12, §2.1(f); `-Drules.raiseShare` switches them).
-      Solo, `ContentPackPlayouts standard smart decisions -Dbot.slowGames=true`, 200 games, seed 42
-      (seed 7 in brackets):
-
-      | Raise share | Median landing NASA / Soviet | Average | Slowest quarter, NASA / Soviet | Stalled on funds, slowest quarter | Longest quiet stretch, median |
-      |---|---|---|---|---|---|
-      | 0 (off) | 87 / 88 (84 / 97) | 96.9 (98.0) | 135 / 133 (131 / 142) | 41-44 seasons (39-47) | 10 |
-      | 0.5 | 78 / 81 (79 / 79) | 84.7 (83.4) | 111 / 101 (108 / 99) | 13-22 (12-21) | 9 |
-      | **1 (built)** | 78 / 79 (77 / 79) | 80.5 (80.5) | 97 / 92 (99 / 93) | 6-12 (7-14) | 9 |
-
-      The fastest quarter barely moves (71 to 76 seasons); the slow tail shrinks by about 40 seasons and
-      games stall on money a fifth as often. **The cost: a typical game is about 9 seasons shorter**
-      (median about 78 against 87, two years of game time), because the median game was short of
-      money too. Gaps of 10+ seasons between launches fall from 3 % to 1 %.
-
-      Race (`RaceShock`, the Sputnik shock at 0.5, seed 42):
-
-      | Raise share | NASA / Soviet median | Lands first, NASA : Soviets | Margin, median (quartiles) | First landing, median |
-      |---|---|---|---|---|
-      | 0 | 88 / 105 | 129 : 70 | 26 (12-49) | 83 |
-      | 0.5 | 80 / 85 | 123 : 72 | 10 (4-18) | 78 |
-      | **1** | 80 / 81 | 104 : 88 | 8 (3-13) | 77 |
-
-      With both rules the race is close: the second agency lands a median of 8 seasons after the
-      first, and the side behind on funding at season 32 lands first in 73 of 200 races (34 with the
-      shock alone). If the shorter games matter, a slightly stingier bracket table would lengthen them
-      again without bringing back the snowball; the user's call. 0.5 is the default,
-      a "bit of a boost" as the user asked; 0.75 closes the race further, and 1.0 makes the side
-      behind at season 32 win nearly a third of the time. The share is the user's call.
-    - **Worth knowing for balance, not verdicts:** a failed flight is cheap enough that launching
-      earlier is faster at every bar tried (odds 0.6/0.5, 0.5/0.4, 0.4/0.3: averages 115, 111, 107),
-      with astronaut losses about flat; a careful player is not rewarded for waiting. And an idle
-      employee quits within about ten seasons (from a new hire's 55 morale), so a player who staffs a building to capacity
-      without the work for them churns people the way the old bots did: the morale rules may be
-      harsher than a player expects, or the hire screen should say so.
+    0.5 is "a bit of a boost", as the user asked; the share is the user's call. The rule does nothing
+    for a slow start without a rival ahead: raises between reviews are the lever for that.
+  - **Raises between reviews, measured** (§2.1(f); `-Drules.raiseShare`). Solo, at share 1: median
+    landing 78 / 79 against 87 / 88 without, the slowest quarter 97 / 92 against 135 / 133, games
+    stalled on money a fifth as often; **a typical game is about 9 seasons shorter**. Share 0.5 gives
+    78 / 81. In the race (with the shock at 0.5): the second agency lands a median of 8 seasons after
+    the first (26 without raises), and the side behind on funding at season 32 lands first in 73 of
+    200 races. If the shorter games matter, a slightly stingier bracket table would lengthen them
+    without bringing back the snowball; the user's call.
+  - **Worth knowing for balance, not verdicts:** a failed flight is cheap enough that launching
+    earlier is faster at every bar tried, with astronaut losses about flat; a careful player is not
+    rewarded for waiting. And an idle employee quits within about ten seasons (from a new hire's 55
+    morale), so a player who staffs a building to capacity without the work for them churns people:
+    the morale rules may be harsher than a player expects.
 - **The game goes on after a winner:** goals, flights and prestige still count.
 
 ### 2.10 Difficulty level
@@ -2595,145 +2171,124 @@ balance sheet if needed rather than adding levels.
 
 ### 2.11 Commercial contracts
 
-**The user's idea (2026-10-11), designed with the user the same day, mocked up and built the same day**
-(`rules.Contracts`, `rules.ContractMarket`; `ui-spec.md` §4.17 and component 27). Aimed at the
-mid-race lulls, which are mostly a wait for money (§2.9, `RaceLulls`). Once an agency has shown a
-capability, clients pay it to fly that capability again: contracts pay **money, not prestige**,
-with hardware the agency already has, so they add no R&D wait. Players compete for them on a shared
-marketplace, another interaction beside intelligence and poaching. No BASPM precedent; every number is
-ours, a default and **unconfirmed** unless a line says otherwise.
+**The user's idea (2026-10-11), designed with the user** (`rules.Contracts`, `rules.ContractMarket`;
+`ui-spec.md` §4.17 and component 27). Aimed at the mid-race lulls, which are mostly a wait for money
+(§2.9). Once an agency has shown a capability, clients pay it to fly that capability again: contracts
+pay **money, not prestige**, with hardware the agency already has, so they add no R&D wait. Players
+compete for them on a shared marketplace. No BASPM precedent; every number is ours, a default and
+**unconfirmed** unless a line says otherwise.
 
 - **Unlocking** (user): each program can carry an **unlock set**, the configurations an agency must
   each have flown successfully, chosen per program (rarely all of them; long extended flights are
   usually left out). Completing it unlocks the program's **category as a contract line** for that
   agency, for good. The agency **qualifies** for the line's listings while at least one of its
-  unlocked programs in that line is open, so a program's upkeep now buys a chance at contracts. The
+  unlocked programs in that line is open, so a program's upkeep buys a chance at contracts. The
   unlock set's configuration cards carry a contract icon with a tooltip (`ui-spec.md` component 27).
-  Programs with nothing a client would buy (the late Moon programs, say) have no unlock set.
-  **As authored (2026-10-11, unconfirmed):** 25 programs in six lines. Earth-orbit satellites: every
-  satellite program, its one-season orbital flight (the three-season extended flights left out).
-  Lunar probes: every lunar probe, its one flight. Space planes: the X-15 (its test and both research
-  flights; contracts fly the first research flight) and the OKB-MiG E-154 (the same three since 2026-10-17;
-  contracts fly its first research flight). One-crew capsules: Mercury and Vostok (the uncrewed and the
-  crewed orbital flight; contracts fly the crewed one). Two-crew: Gemini (orbital, rendezvous,
+  Programs with nothing a client would buy have no unlock set. **As authored (unconfirmed):** 25
+  programs in six lines. Earth-orbit satellites: every satellite program, its one-season orbital
+  flight (the three-season extended flights left out). Lunar probes: every lunar probe, its one
+  flight. Space planes: the X-15 and the OKB-MiG E-154 (the test and both research flights;
+  contracts fly the first research flight). One-crew capsules: Mercury and Vostok (the uncrewed and
+  the crewed orbital flight; contracts fly the crewed one). Two-crew: Gemini (orbital, rendezvous,
   docking) and Voskhod (orbital, spacewalk), contracts flying the orbital flight. Three-crew: Apollo
   in Earth orbit and Soyuz 7K-OK (orbital and docking), the orbital flight. The planetary probes, the
   lunar expeditions and the lunar programs' Earth-orbit tests have none.
-- **A contract flies an existing configuration** (decided): each program with an unlock set names
-  the configuration its contracts fly (Explorer 1's orbital flight, say), **always one of its unlock
-  set**, so its goals are already achieved and a contract can never earn a goal or open a program. Steps, staffing, rockets,
+- **A contract flies an existing configuration:** each program with an unlock set names the
+  configuration its contracts fly, **always one of its unlock set**, so its goals are already
+  achieved and a contract can never earn a goal or open a program. Steps, staffing, rockets,
   reliability and the replay are the normal ones. What changes: steps and goals pay **no prestige**;
   the flight raises reliability like any other; it **doesn't count toward the configuration's repeat
-  count**, so a contract never lowers a later flight's prestige; cards and the turn report label it.
-  An agency qualifying through two programs of a line picks one when it applies.
+  count**; cards and the turn report label it. An agency qualifying through two programs of a line
+  picks one when it applies.
 - **Which launch is the contract:** while a contract is active, the **first launch of its
   configuration** is the contract flight (no toggle); Assemble says so before the launch. Flying that
   configuration for prestige waits until the contract has flown.
-- **Closing a program** is refused while an active contract flies on it, as while any of its
-  missions flies (the existing `MISSIONS_IN_FLIGHT` refusal covers it). An application whose program
-  was closed before the turn resolves comes to nothing and the report says so.
-- **Calling a contract flight off** (built default, unconfirmed): a scrub before it flies puts the
-  contract back on the ground while its window lasts; cancelling it in flight ends the contract as a
-  failure in the record, with neither fee nor the insurer's refund (the cancellation's own refund
-  share applies).
+- **Closing a program** is refused while an active contract flies on it (the existing
+  `MISSIONS_IN_FLIGHT` refusal). An application whose program was closed before the turn resolves
+  comes to nothing and the report says so.
+- **Calling a contract flight off** (unconfirmed): a scrub before it flies puts the contract back on
+  the ground while its window lasts; cancelling it in flight ends the contract as a failure in the
+  record, with neither fee nor the insurer's refund (the cancellation's own refund share applies).
 - **Money** (user): the agency pays the launch cost up front as usual. **On success** the client
   pays the **fee**: the launch cost times (1 + the tier's margin), **+60 / +40 / +25 %** for tiers
   1 to 3, plus a **crew premium** for each crew seat of the contract flight, **1,000 / 670 / 420** by
-  tier (the user's decision, 2026-11-05, unconfirmed numbers; `Contracts.CREW_PREMIUMS`). The margin alone
-  made the X-15's air-dropped research flight (launch cost 683) pay a tier-1 profit of 409, the least of
-  any line, while risking a pilot, against 1,053 for Explorer 1; with the premium it pays about 1,400,
-  Mercury 3,560, Gemini 6,690 and Apollo 10,340. A crewed contract is the riskier job (an extra 50
-  prestige for a lost crew, the grounding of §2.5(j), the person), and now pays for it. The fee is fixed at the award, from the contract configuration with the cheapest of the
-  agency's open rockets that can fly it, or the cheapest of its side's when none of its open ones can
-  (built default); a dearer rocket only lowers the profit. **On failure** the
-  insurer pays back the launch cost actually paid (break even), and the agency loses the prestige
-  that flight's failure costs anyway. A crew lost on a contract flight costs an extra 50 prestige on
-  top of the normal rules.
+  tier (user, 2026-11-05, *unconfirmed numbers*; `Contracts.CREW_PREMIUMS`): the margin alone made the
+  X-15's research flight (launch cost 683) pay a tier-1 profit of 409, the least of any line, while
+  risking a pilot; with the premium it pays about 1,400, Mercury 3,560, Gemini 6,690 and Apollo
+  10,340. The fee is fixed at the award, from the contract configuration with the cheapest of the
+  agency's open rockets that can fly it, or the cheapest of its side's when none of its open ones can;
+  a dearer rocket only lowers the profit. **On failure** the insurer pays back the launch cost
+  actually paid (break even), and the agency loses the prestige that flight's failure costs anyway. A
+  crew lost on a contract flight costs an extra 50 prestige on top of the normal rules.
 - **Tiers go by track record** (user, 2026-10-11, over prestige, which would hand the leader the
   money too). An applicant's **score** is the reliability of the weakest component the contract
   flight would use (the agency's hardware at the start of the turn, its most reliable open rocket
-  that can fly it) plus
-  its **record in that line**: +3 per contract flown successfully, −6 per failed or lapsed one,
-  within ±15. The highest score gets tier 1, the next tier 2, the third tier 3; a fourth applicant
-  and later get nothing (user). Ties go to a seeded draw. Scores read start-of-turn snapshots
-  (§3.7's rule for contended resources). Clients choosing the most dependable launcher is what real
-  customers do, and it rewards R&D past the bar. **Crew and controllers don't count**: clients judge
-  the hardware, not who flies it, so the score differs from the assessment tab's odds on purpose.
+  that can fly it) plus its **record in that line**: +3 per contract flown successfully, −6 per
+  failed or lapsed one, within ±15. The highest score gets tier 1, the next tier 2, the third tier 3;
+  a fourth applicant and later get nothing (user). Ties go to a seeded draw. Scores read
+  start-of-turn snapshots (§3.7). **Crew and controllers don't count**: clients judge the hardware,
+  so the score differs from the assessment tab's odds on purpose.
 - **Applying** (user): **one application per turn**, refused while the agency has an **active
   contract** (awarded and not yet flown to its end), so one contract at a time. Applications are
-  **sealed** until the turn resolves. An application restates intent ("my application this turn is
-  X"), so it can be changed or withdrawn until then.
+  **sealed** until the turn resolves, and can be changed or withdrawn until then.
 - **The award**, at the resolution: each applicant learns its tier and fee, or that it missed out,
   in the turn report. A listing leaves the board once awarded. Everyone's report gets a news line
   naming the agencies that won it, in alphabetical order: who ranked where stays sealed.
 - **A launch window:** an awarded contract must **launch within 3 seasons**. One that doesn't
   **lapses**: it counts as a failure in the record and costs 10 prestige. A scrub before the flight
   refunds the launch cost as usual and keeps the contract while its window lasts.
-- **The board** (the user's design, 2026-10-11, refined the same day): settled once a turn, at the
-  resolution, for everyone (game-level, like intelligence), from its own salted seed.
-  - **A listing** is a line, a client with a story (flavour content), the three tiers' margins, the
-    turn it was posted and **its expiry, 3 turns later**. Listings stay until awarded or expired.
-    **Only lines at least one agency qualifies for are listed** (user: no aspirational listings); a
-    listing nobody qualifies for any more is withdrawn. Everyone sees the whole board, with whether
-    they qualify.
+- **The board** (the user's design, 2026-10-11): settled once a turn, at the resolution, for
+  everyone, from its own salted seed.
+  - **A listing** is a line, a client with a story, the three tiers' margins, the turn it was
+    posted and **its expiry, 3 turns later**. **Only lines at least one agency qualifies for are
+    listed** (user); a listing nobody qualifies for any more is withdrawn. Everyone sees the whole
+    board, with whether they qualify.
   - **Seating** (the user's queueing idea): every listing has three seats, one per tier. The
     eligible agencies (claimed, no active contract) are seated in turn, **the most constrained
     first** (fewest qualifying lines; ties by seeded draw): each takes a free seat in the fullest
     listing it qualifies for. Only when none has a free seat is a new listing posted, in the line
-    **most of the still-unseated agencies qualify for** (ties by seeded draw). Seats are only how the
-    board is sized; nobody sees them, and players apply wherever they qualify. Packing the narrowest
-    agencies first gives the most overlap, so the most competition.
-  - **Extras** to ease the competition: one listing, plus one per four eligible agencies, from the
-    lines they qualify for (seeded), added only while the board holds fewer listings than the
-    seating needed plus the extras, so expiring listings don't pile up.
-- **The Soviet side** has no commercial market, so it is reskinned, not shortened: its clients are
-  ministries and institutes ordering a service (the Ministry of Communications' relays, the Academy
-  of Sciences' instruments). Same rules, own texts.
+    **most of the still-unseated agencies qualify for**. Seats only size the board; nobody sees
+    them. Packing the narrowest agencies first gives the most overlap, so the most competition.
+  - **Extras:** one listing, plus one per four eligible agencies, from the lines they qualify for
+    (seeded), added only while the board holds fewer listings than the seating needed plus the
+    extras, so expiring listings don't pile up.
+- **The Soviet side** has no commercial market, so it is reskinned: its clients are ministries and
+  institutes ordering a service (the Ministry of Communications' relays, the Academy of Sciences'
+  instruments). Same rules, own texts.
 - **Intelligence:** an agency assessment's Programs and plans area also shows the rival's active
   contract and its record per line.
-- **Content:** in the pack (hashed), a file of its own, `commercial.json` (in `ContentPackLoader.FILES`;
-  its own file so the BASPM converter, which writes `programs.json`, never touches it): per program,
-  the unlock set and the contract configuration. The margins and record weights are rules constants
-  (read by help's tokens, never written into text). Clients and their stories by line and side go in
-  each pack's `commercial-clients.json` (90 since 2026-11-05, the user's request after a play test, where the
-  early satellite contracts came round again too soon: 15 a side for the satellites, 6 a side for every other
-  line; 31 before), one of
-  `ContentPackLoader.FILES` since 2026-10-25 (the market draws from them; review.md 2.2), no repeats until
-  a line's have all run. A listing
-  names one client per side, so each side reads its own.
-- **Storage** (as built): `market/turn-N.json`, written once at the resolution before the season
-  passes, like intelligence, and re-read on a retry: the awards from the turn's applications, the
-  board for the coming turn, the clients used. **The board is settled before the passes too**, since
-  each agency's copy is saved in its own state (`PlayerSnapshot.contractBoard`) and a snapshot is
-  written once; so no new message is needed and the client reads the board with the state. The cost
-  is a one-turn lag: a line unlocked by a flight this turn, or an agency freed by a contract ending
-  this turn, is seated at the next resolution. Scores read each agency's state at the start of the
-  turn (an R&D decision taken during the turn can move a reliability); applications and open
-  programs read the state with the turn's actions applied. One edge: a rocket program reopened this
-  turn has no open rocket yet at the turn's start, so the applicant scores on its record alone;
-  reopen the rocket a turn before applying. Per player: the record per line, the
-  active contract with its fee and window, the application, the board; unlocked lines are worked
-  out from the flights flown, not stored. `TurnRollback` deletes the turns' market files.
-- **Measured (2026-10-11):** `RaceLulls standard ahead+contracts 1.0 0.0` against `ahead`, 200 Moon
-  races. A playout has one agency, so the market is simulated: every listing the bot applies for draws
-  three rivals as strong as it, its rank among them random (a fourth of applications miss out). The
-  bot applies whenever it has no contract and flies the contract as soon as its hardware is ready.
-  Per game: 15.6 applications, 11.5 awards, 7.3 paid, 1.4 refunded, **2.8 lapsed** (a quarter of
-  awards: short of money or staff with its own flight going), about **6,000 profit** over the race.
-  Launches per game rise from 39.1 to 44.6; gaps of 5 seasons or more fall from 22 % to 14 % of
-  launches, the 90th percentile gap from 8 to 6 seasons; seasons without a launch from 74 % to 70 %.
-  The race itself barely moves: NASA's median **slower** (135 to 142 seasons), the Soviet one faster
-  (161 to 153), 197 of 200 finished against 200, and debt conversions up from 28 to 49. So contracts
-  fill the lulls, as meant, but at these margins they don't pay for the race: a fee on an early
-  flight is small beside a season's funding, and the lapses and failures cost prestige that the
-  budget reviews then miss. For the play test: higher margins, a fee that scales with the era, or
-  a bot that only applies when it can fly the contract soon (§4).
+- **Content:** in the pack (hashed), `commercial.json` (in `ContentPackLoader.FILES`; its own file so
+  the BASPM converter, which writes `programs.json`, never touches it): per program, the unlock set and
+  the contract configuration. The margins and record weights are rules constants (read by help's
+  tokens). Clients and their stories by line and side are in each pack's `commercial-clients.json`
+  (a pack file too): 90 (user, 2026-11-05, after the early satellite clients came round too soon:
+  15 a side for the satellites, 6 a side for every other line), no repeats until a line's have all
+  run. A listing names one client per side, so each side reads its own. History: §1.1.
+- **Storage:** `market/turn-N.json`, written once at the resolution before the season passes, like
+  intelligence, and re-read on a retry: the awards from the turn's applications, the board for the
+  coming turn, the clients used. The board is settled before the passes too, since each agency's copy
+  is saved in its own state (`PlayerSnapshot.contractBoard`); the client reads it with the state. The
+  cost is a one-turn lag: a line unlocked by a flight this turn, or an agency freed by a contract
+  ending this turn, is seated at the next resolution. Scores read each agency's state at the start of
+  the turn; applications and open programs read it with the turn's actions applied. One edge: a
+  rocket program reopened this turn has no open rocket yet at the turn's start, so the applicant
+  scores on its record alone; reopen the rocket a turn before applying. Per player: the record per
+  line, the active contract with its fee and window, the application, the board; unlocked lines are
+  worked out from the flights flown. `TurnRollback` deletes the turns' market files.
+- **Measured (2026-10-11, before the crew premium):** `RaceLulls standard ahead+contracts 1.0 0.0`,
+  200 Moon races, the market simulated with three rivals as strong as the bot. Per game: 11.5 awards,
+  7.3 paid, **2.8 lapsed**, about **6,000 profit** over the race. Gaps of 5 seasons or more fell from
+  22 % to 14 % of launches, but the race itself barely moved (NASA slower, the Soviets faster) and
+  debt conversions rose. So contracts fill the lulls, as meant, but at these margins don't pay for
+  the race. For the play test: higher margins, a fee that scales with the era, or a bot that only
+  applies when it can fly the contract soon (§4).
 
 ### 2.12 The archive
 
-**The user's idea (2026-10-15), specified the same day** (`ui-spec.md` §4.19; the pages, their images and
-the rights in `assets-raw/archive/PAGES.md`). NASA's imagery is public domain and barely used yet. An
-archive of pages, one per real mission that sent back something memorable, written like a short
+**The user's idea (2026-10-15)** (`ui-spec.md` §4.19, canvas `Launch Window — Archive`; the pages in `assets/content/archive.json`, their
+sources and every figure's check in `assets-raw/archive/CHECKS.md`, images and rights in
+`assets-raw/archive/PAGES.md`, assets made by `assets-raw/archive/make_archive_assets.py`). NASA's imagery is public domain.
+An archive of pages, one per real mission that sent back something memorable, written like a short
 encyclopedia article: the mission's story, a fact box, its pictures and, where there is one, its sound. A
 page stays locked until its goal is reached in the game, so flying the mission feels like getting its
 pictures back. No BASPM precedent.
@@ -2741,22 +2296,22 @@ pictures back. No BASPM precedent.
   agency in the game holds it, achieved or credited through a cascade. A page tells the real mission that
   first did it, whatever program earned the goal in the game (the standard pack's Pioneer 4 can earn
   `lunar-photos`; the page is still Luna 3's). Goals pay only for success, so a failed flight never
-  delivers the pictures.
+  delivers the pictures. A finding's page follows its own rule (§2.13).
 - **For everyone in the game:** a page unlocked by a rival opens for every player too (user,
   2026-10-15). That tells nothing intelligence keeps secret (§2.9): it needs a success on a goal, and a
   First the player could reach is already in the turn report (§2.1(e)). It does tell a player about a
-  First on a goal their agency can't reach (a Soviet player learns of `saturn-flyby`), which the game
-  doesn't report today. That's how it was: both sides announced their successes and hid their failures.
+  First on a goal their agency can't reach (a Soviet player learns of `saturn-flyby`). That's how it was:
+  both sides announced their successes and hid their failures.
 - **Settled from the goal records:** a page's unlock turn is the earliest turn any player's goal records
   hold its goal. Nothing new is saved, and a late joiner finds the pages unlocked before they joined
   (*proposed*). The server answers when asked (`ArchiveRequest`, with the client's pages' goals, through
-  `WinCondition.goalTimes`, cascade credits included), so no event and no saved field: a turn report
-  shows the pages whose unlock turn is its own turn (built 2026-10-15).
-- **When the race is decided** (the user's idea, 2026-10-15): every page nobody has reached by then opens for
-  every agency, on the deciding turn (`game-result.json`), so everyone gets to see the whole archive. Such a
-  page says "opened when the race was decided" instead of who flew it, and that turn's report opens with a
-  notice across the top, "The race is decided, and the whole archive is open", with the way to the Archive
-  tab (the flown pages keep their own card). A goal reached later than that keeps nothing of its own.
+  `WinCondition.goalTimes`, cascade credits included): a turn report shows the pages whose unlock turn is
+  its own turn. `"devArchiveOpen": true` in `game-meta.json` opens every page, saving nothing.
+- **When the race is decided** (user, 2026-10-15): every page nobody has reached by then opens for every
+  agency, on the deciding turn (`game-result.json`). Such a page says "opened when the race was decided"
+  instead of who flew it, and that turn's report opens with a notice across the top, "The race is decided,
+  and the whole archive is open", with the way to the Archive tab. A goal reached later keeps nothing of its
+  own.
 - **Shown:**
   - **Turn report:** a "New in the archive" card on every player's report of the turn it opens, linking
     to each new page. It says whether the player or a rival flew it, without naming the rival (*proposed*).
@@ -2764,193 +2319,144 @@ pictures back. No BASPM precedent.
     Moon", the goal's name (user, 2026-10-15).
 - **The text is our own,** written from the facts (Wikipedia, NASA and others as sources, listed on the
   page), not Wikipedia's text: that keeps one voice and avoids CC BY-SA's share-alike on adapted text. A
-  sentence quoted with attribution stays possible. Every figure is checked as for the history notes.
+  sentence quoted with attribution stays possible. Every figure is checked as for the history notes;
+  where the sources disagreed the pages say less.
 - **Images:**
   - **Only originals:** NASA's, JPL's, Ames's, Langley's or NSSDC's, credited as their captions say, and
     never a third party's reprocessing. The NASA insignia stays out of the game's own art.
   - **Soviet images:** not public domain by default. Under German law (§72(3) UrhG, 50 years for a photo
-    without creative input) the 1959 to 1975 ones are free here; Russia's longer term matters only if
-    the repo goes public. The checks per image are in `PAGES.md`.
+    without creative input) the 1959 to 1975 ones are free here; Russia's longer term was to matter only
+    once the repo went public, which it did on 2026-10-28. The checks per image are in `PAGES.md`.
   - **Leonov's spacewalk film** is still protected in Russia, so his part is told in words.
   - **Venera 9's** known pictures are Don P. Mitchell's processing; use them only with his permission.
-    He says he generally grants it for free, and asking him is the user's call.
+    He says he generally grants it for free, and asking him is the user's call. They aren't in.
 - **Sound:** NASA's air-to-ground recordings are public domain (the Genesis reading, "The Eagle has
-  landed"). The Pale Blue Dot page carries Carl Sagan's recording (§1.1, the 2026-10-13 decision).
-- **The first pages** (user, 2026-10-15), each with the goal that unlocks it:
+  landed"). The Pale Blue Dot page carries Carl Sagan's recording of his whole passage, 4:36 (the
+  2026-10-13 decision, §5, Backlog).
+- **The pages** (user, 2026-10-15, plus the findings' pages of §2.13; 34 in all), with the goal that
+  unlocks each mission page:
 
   | Page | Unlocked by |
   |---|---|
   | Luna 3 | `lunar-photos` |
   | Ranger 7 | `lunar-close-up-photos` |
   | the first spacewalks (Leonov, White) | `spacewalk` |
-  | Lunar Orbiter 1 | `lunar-mapping` |
+  | Lunar Orbiter 1 | `lunar-mapping` (a finding) |
   | Apollo 8 | `crewed-lunar-orbit` |
   | Apollo 11 | `crewed-lunar-landing` |
   | Mariner 4 | `mars-photos` |
-  | Mariner 9 | `mars-mapping` |
+  | Mariner 9 | `mars-mapping` (a finding) |
   | Viking 1 | `mars-orbiter-and-lander` |
   | Pioneer 10 | `jupiter-photos` |
-  | Venera 9 and 13 | `venus-surface-study` |
+  | Venera 9 and 13 | `venus-surface-study` (a finding) |
   | Voyager 1's Pale Blue Dot | `saturn-flyby`, the furthest flight in the game; Voyager isn't in either pack |
-- **Eight more pages** (user, 2026-10-15): Surveyor 1 (`lunar-soft-landing`), Apollo 15 (`apollo-landing-with-rover-flown`,
-  "driving on the Moon": Lunokhod 1 was first), Mariner 10 (`mercury-mapping`), Pioneer 11 (`saturn-structure-study`),
-  and four Soviet ones with usable pictures: Luna 9 (`lunar-surface-photos`), Lunokhod 1 (`lunar-rover`, an LRO frame
-  from NASA's PDS archive and a Soviet photo), Luna 16 (`lunar-sample-return`) and Venera 15 and 16
-  (`venus-radar-mapping`; their 1983 radar images a medium risk, like Venera 13's). Twenty pages in all; the
-  Apollo 15 page carries Scott's hammer and feather.
-- **Size:** images at about 1600 px on the long edge as JPEG, 150 to 300 KB each. The 58 pictures and 20
-  thumbnails add 15 MB to the client, the four sounds 4.1 MB.
-- **Built (2026-10-15)** from the canvas `Launch Window — Archive`: the twelve pages
-  (`assets/content/archive.json`; their sources and every figure's check in `assets-raw/archive/CHECKS.md`,
-  where the sources disagreed the pages say less), the pictures and sounds
-  (`assets-raw/archive/make_archive_assets.py`), and the screens (`ui-spec.md` §4.19). Venera 9's pictures
-  aren't in (Mitchell's permission, the user's call); Leonov's part is told in words. The Sagan recording is
-  the whole reading of his passage, 4:36.
+  | Surveyor 1 | `lunar-soft-landing` |
+  | Apollo 15, "driving on the Moon" (Lunokhod 1 was first), with Scott's hammer and feather | `apollo-landing-with-rover-flown` |
+  | Mariner 10 | `mercury-mapping` |
+  | Pioneer 11 | `saturn-structure-study` (a finding) |
+  | Luna 9 | `lunar-surface-photos` |
+  | Lunokhod 1 (an LRO frame from NASA's PDS archive and a Soviet photo) | `lunar-rover` |
+  | Luna 16 | `lunar-sample-return` |
+  | Venera 15 and 16 (their 1983 radar images a medium risk, like Venera 13's) | `venus-radar-mapping` (a finding) |
+  | Surveyor 3 | `lunar-soil-analysis` (user, 2026-11-01) |
+
+- **Size:** images at about 1600 px on the long edge as JPEG, 150 to 300 KB each.
 
 ### 2.13 Publishing findings (cooperation)
 
-**The user's idea (2026-10-19), designed the same day; built 2026-10-21** (what was decided and built is
-at the end of this section). The race and the Intelligence Office
-(§2.9) are competition. This is the first cooperation: an agency that has learned something about an
-environment can publish it, which makes rivals' flights there safer and pays the publisher prestige. No
-BASPM precedent. History backs it: NASA published its results openly, the Soviets announced Sputnik's
-frequencies so anyone could track it, and both first satellites were contributions to the International
-Geophysical Year. No secrecy bonus for either archetype (as in §2.9).
-- **A finding is a science goal the pack already has** (`magnetic-field-study`, `micrometeoroid-study`,
-  `organisms-in-microgravity`, `lunar-bioscience`, `lunar-soil-study`, `lunar-mapping`,
-  `venus-atmosphere-study`, `mars-surface-and-atmosphere-study` and others), each mapped to the step kinds
-  it makes safer (step ids such as `reentry`, `landing`, `venus-entry`, `mars-descent`, with the body). The
-  exact mapping is worked out closer to implementation (user). Examples of what a finding answers:
+**The user's idea (2026-10-19)** (`rules.Findings`, `FindingPublications`, `PublishFindingAction`;
+`ui-spec.md` §4.20, G16). The race and the Intelligence Office (§2.9) are competition. This is the
+first cooperation: an agency that has learned something about an environment can publish it, which
+makes rivals' flights there safer and pays the publisher prestige. No BASPM precedent. History backs
+it: NASA published its results openly, the Soviets announced Sputnik's frequencies so anyone could
+track it, and both first satellites were contributions to the International Geophysical Year. No
+secrecy bonus for either archetype (as in §2.9). Every point is unconfirmed unless it names the user.
+- **A finding is a science goal the pack already has,** mapped to the step kinds it makes safer, in
+  each pack's `findings.json`, **a rules file inside the pack hash** (user): 18 findings in the
+  standard pack, 2 in the early one (*the mapping awaits the user's review*). A step matches by its
+  kind (its id without the numbering and the a/b of a two-craft flight: `rules.Findings.kind`), the
+  body its program's category is browsed under (a flight to the Moon is MOON for every step, its Earth
+  reentry too), and whether it carries crew. A kind ending in `*` matches every kind it starts
+  (`duration*`). `FindingsTest` prints how many steps each kind matches and fails on one that matches
+  none.
 
-  | Finding | Makes safer | What was learned |
+  | Finding | Makes safer | Steps (standard) |
   |---|---|---|
-  | `magnetic-field-study` | crewed Earth-orbit steps | Explorer 1 found the Van Allen belts (1958) |
-  | `micrometeoroid-study` | long orbital stays, spacewalks | Explorer 16 and the Pegasus satellites measured the hazard for Apollo |
-  | `organisms-in-microgravity` | the first crewed orbit and reentry | Korabl-Sputnik 2's dogs came home alive (1960) |
-  | `lunar-bioscience` | crewed circumlunar flight | Zond 5 took tortoises around the Moon and back (1968) |
-  | `lunar-soil-study`, `lunar-mapping` | the crewed lunar landing | Luna 9 and Surveyor 1 (1966) showed the surface holds a lander, against Gold's deep dust; Lunar Orbiter mapped the Apollo sites |
-  | `venus-atmosphere-study` | `venus-entry`, `venus-descent` | Venera 4 fell silent some 25 km up (1967; heat and pressure or its battery, NSSDC); Venera 7 was built for 150 to 180 atm |
-  | `mars-surface-and-atmosphere-study` | `mars-entry`, `mars-descent`, `mars-landing` | Mariner 4 measured 4–7 mbar (1965), far thinner than assumed |
+  | `magnetic-field-study` | crewed Earth orbit, high orbits, trans-lunar injection (the belts) | 125 |
+  | `organisms-in-microgravity` | crewed suborbital flight, orbit insertion, reentry, around Earth | 136 |
+  | `amphibians-in-microgravity` | crewed long stays (every duration level; the OFO's inner ears) | 89 |
+  | `micrometeoroid-study` | crewed spacewalks around Earth | 35 |
+  | `lunar-micrometeoroid-study` | crewed lunar orbit, surface activities, spacewalks, Moon flights | 35 |
+  | `lunar-bioscience` | crewed lunar flyby, Earth approach and reentry, Moon flights | 41 |
+  | `lunar-structure-survey` | lunar orbit insertion and lunar orbit (mascons, found from Lunar Orbiter's tracking, 1968) | 42 |
+  | `lunar-soil-study`, `lunar-mapping` | powered descent and landing on the Moon | 17 each |
+  | `venus-structure-study` | entry at Venus (Mariner 5's occultation, 1967) | 5 |
+  | `venus-atmosphere-study` | lander and probe descent at Venus | 5 |
+  | `venus-surface-study` | landing at Venus | 3 |
+  | `venus-radar-mapping` | landing at Venus | 2 |
+  | `mars-surface-and-atmosphere-study` | entry, lander descent and de-orbit at Mars | 5 |
+  | `mars-mapping` | landing at Mars | 2 |
+  | `mars-soil-study` | surface work at Mars | 4 |
+  | `solar-wind-measurements` | interplanetary cruise | 46 |
+  | `saturn-structure-study` | approach and flyby at Saturn (Pioneer 11's ring-plane crossing) | 2 |
 
-  Every figure here is to be checked before it goes on a page.
+  Left out: photo goals, and the goals whose step makes nothing later safer (Mercury's, Jupiter's;
+  Pioneer 10's radiation finding has no goal of its own). `organisms-in-microgravity` and
+  `magnetic-field-study` reach most crewed Earth flights, and Korabl-Sputnik 2 earns both: the smart bot
+  never flies it, so their reach is still to measure with flights that earn them. Every figure the table
+  names is to be checked before it goes on a page. What the findings answered, for the pages: Explorer
+  1 found the Van Allen belts (1958); Explorer 16 and the Pegasus satellites measured the micrometeoroid
+  hazard for Apollo; Korabl-Sputnik 2's dogs came home alive (1960); Zond 5 took tortoises around the
+  Moon and back (1968); Luna 9 and Surveyor 1 (1966) showed the surface holds a lander, against Gold's
+  deep dust, and Lunar Orbiter mapped the Apollo sites; Venera 4 fell silent some 25 km up (1967; heat
+  and pressure or its battery, NSSDC), and Venera 7 was built for 150 to 180 atm; Mariner 4 measured
+  4–7 mbar at Mars (1965), far thinner than assumed.
 - **A known environment helps; an unknown one never hurts** (user): BASPM's odds stay the baseline. A
-  matching step gets **+4 base-chance points** (user, 2026-10-21) for an agency that knows the finding, by
-  earning the science goal itself (user: own science counts, so science flights are worth flying in the
-  lulls, §2.9) or because someone published it. **Bonuses from different findings stack** on a step (user;
-  rarely more than one applies).
-- **Publishing is an event the player takes part in, not a standing policy** (user). The finding shows up
-  in the turn report of the season its goal was earned, with a link to its archive page and a **Publish**
-  button. A confirmation dialog shows the prestige it would pay before anything is sent. Doing nothing
-  keeps the finding classified; no answer is ever required.
-- **Publishing later** (user): the finding's archive page keeps the Publish button until it is published,
-  so a player can hold a finding back, at the risk that rivals earn the goal themselves first and the
-  publication pays less.
-- **The payment, capped** (user): at most **33 % of the goal's first-time prestige** (user, 2026-10-21; first
-  designed at 50 %), scaled by the share of rivals it helps, `cap × helped / (players − 1)`, a rival being
-  helped if it doesn't know the finding yet. With 10 players, helping all 9 pays the full 33 %, helping 6
-  pays 6/9 of it, and old news pays nothing.
-  *Proposed:* the dialog's amount is a preview as of now (a rival can still earn the goal at the same
-  resolution), and the turn report states the final amount; publications of one finding in the same
-  resolution split the payment; publishing is settled once a turn for every player, like the intelligence
-  board and the contract market (§2.9, §2.11). The dialog shows the amount and "helps 6 of 9" both (user,
-  2026-10-21: the amount gives the count away to anyone who does the sum, so there's no point hiding it).
-- **Archive pages** (§2.12): **every finding gets one** (user: "knowledge is cool"), written for those
-  that have none yet, and **no history notes for findings** (user): what a note would say goes on the page,
-  which stays locked until the finding is discovered, where a history note is always visible. **A
-  finding's page opens only for the agencies that know it** (user), unlike the other pages, which open for
-  the whole game: for its discoverers, and for everyone once it's published, so opening the page is part
-  of what publishing gives. *Proposed:* it still opens for everyone once the race is decided, like the other
-  closed pages. `lunar-mapping` already has a page (Lunar Orbiter 1); it would follow the finding's rule.
-  The archive is derived from goal records today; publications would be the one new record it reads.
-- **Likely touch points:** a content file mapping goals to step kinds (inside the pack hash or not, to
-  decide); `MissionStepResolution` for the bonus, which the client's odds read through the same rule
-  (`ui-spec.md` G7); known and held findings in the player's state and a new publish action, with the
-  server's preview for the dialog (saved fields and a new action: reset the dev data root, rebuild client
-  and server together); the turn report's finding entry, the archive page's button, the dialog, a help
-  topic (numbers as `HelpValues` tokens); the new pages in `archive.json` and their assets.
-- **To measure when built:** `ContentPackPlayouts standard smart` with the bonus on and off (landing,
-  lulls, side flights), and `RaceShock` with publishing always against never, beside the Sputnik shock
-  and the raises between reviews (§2.9), which already pull the side behind back into the race.
-- **Built (2026-10-21)**, straight in libGDX (user: no mockup; `ui-spec.md` §4.20, G16). What was decided
-  on the way, every point unconfirmed unless it names the user:
-  - **The mapping** (user: worked out at implementation, for review): 18 findings in the standard pack, 2
-    in the early one, in each pack's `findings.json`, **a rules file inside the pack hash** (user). A step
-    matches by its kind (its id without the numbering and the a/b of a two-craft flight:
-    `rules.Findings.kind`), the body its program's category is browsed under (a flight to the Moon is
-    MOON for every step, its Earth reentry too), and whether it carries crew. A kind ending in `*` matches
-    every kind it starts (`duration*`). `FindingsTest` prints how many steps each kind matches and fails on
-    one that matches none.
-
-    | Finding | Makes safer | Steps (standard) |
-    |---|---|---|
-    | `magnetic-field-study` | crewed Earth orbit, high orbits, trans-lunar injection (the belts) | 125 |
-    | `organisms-in-microgravity` | crewed suborbital flight, orbit insertion, reentry, around Earth | 136 |
-    | `amphibians-in-microgravity` | crewed long stays (every duration level; the OFO's inner ears) | 89 |
-    | `micrometeoroid-study` | crewed spacewalks around Earth | 35 |
-    | `lunar-micrometeoroid-study` | crewed lunar orbit, surface activities, spacewalks, Moon flights | 35 |
-    | `lunar-bioscience` | crewed lunar flyby, Earth approach and reentry, Moon flights | 41 |
-    | `lunar-structure-survey` | lunar orbit insertion and lunar orbit (mascons, found from Lunar Orbiter's tracking, 1968) | 42 |
-    | `lunar-soil-study`, `lunar-mapping` | powered descent and landing on the Moon | 17 each |
-    | `venus-structure-study` | entry at Venus (Mariner 5's occultation, 1967) | 5 |
-    | `venus-atmosphere-study` | lander and probe descent at Venus | 5 |
-    | `venus-surface-study` | landing at Venus | 3 |
-    | `venus-radar-mapping` | landing at Venus | 2 |
-    | `mars-surface-and-atmosphere-study` | entry, lander descent and de-orbit at Mars | 5 |
-    | `mars-mapping` | landing at Mars | 2 |
-    | `mars-soil-study` | surface work at Mars | 4 |
-    | `solar-wind-measurements` | interplanetary cruise | 46 |
-    | `saturn-structure-study` | approach and flyby at Saturn (Pioneer 11's ring-plane crossing) | 2 |
-
-    Left out: photo goals, and the goals whose step makes nothing later safer (Mercury's, Jupiter's; Pioneer
-    10's radiation finding has no goal of its own). `organisms-in-microgravity` and `magnetic-field-study`
-    reach most crewed Earth flights, and Korabl-Sputnik 2 earns both: the smart bot never flies it (below), so
-    their reach is still to measure with flights that earn them. Every figure the table names is to be checked before it goes on a page.
-  - **The bonus:** `Findings.BONUS_POINTS` (4, user) per known matching finding on the step's base chance, after
-    the crew blend, in the season pass (`MissionProgress.resolveStep`) and in the odds the client shows
-    (`MissionAssessment`, which lists them on `StepOdds.findings`). A goal the flight earns counts for its
-    later steps, as goal modifiers do. `-Drules.findingBonus=0` turns it off in `ContentPackPlayouts` and
-    `RaceShock`.
-  - **Known** is held (achieved or credited through a cascade) or public. `PlayerSnapshot.publicFindings`
-    keeps every published finding with its turn, the same in every agency, so it also hides the Publish
-    button once anyone has published (the page keeps it "until it is published": by anyone, since a second
-    publication would pay nothing). A late joiner starts with the findings already public.
-  - **Settled before the turn's flights**, like the market (`FindingPublications.settle`, kept in
-    `publications/turn-N.json`): a rival counts as helped when it doesn't know the finding at the start of
-    the resolution, so one that earns the goal itself at the same resolution still counts. This is where
-    the build parts from the design's proposed "final amount": the dialog's preview is then exact unless
-    another agency publishes the same finding at the same resolution, when they split it. Rivals learn it
-    in the same pass (a `FINDINGS` phase before the budget, so a review that season counts the prestige),
-    so it helps their flights from the next turn on.
-  - **Asking to publish** is `PublishFindingAction`, withdrawn by the same action (the journal's inverse
-    action); an ask is settled or dropped at the resolution.
-  - **Pages:** a finding's page opens only for the agencies that know it, for everyone at the end (as
-    proposed). Five findings already have one (Lunar Orbiter 1, Mariner 9, Venera's surface, Venera 15 and
-    16, Pioneer 11), so those pages no longer open for everyone. **The other 13 were written the same day**
-    (after the mechanics, user): Explorer 1 and the belts, Belka and Strelka, Pegasus, Pioneers 6 to 9, Lunar
-    Orbiter's meteoroid cells, the mascons, Surveyor 3's scoop, Venera 4 and Mariner 5, Zond 5's tortoises,
-    Mariners 6 and 7, the Orbiting Frog Otolith, Viking's soil and the Pioneer Venus Multiprobe: 33 pages in
-    all, Explorer 1 (1958) now the first. Their figures are traced in `assets-raw/archive/CHECKS.md`, their
-    pictures' rights in `PAGES.md`. Riskier pictures: Zond 5's two halves of NASA History's composites
-    (credited RKK Energiya, first publication unverified, medium), Venera 4's capsule, Korabl-Sputnik 2's one
-    TV frame (the page's only picture), a Pioneer Venus painting credited to Paul Hudson. Three are figures
-    from NASA reports' PDFs (`make_archive_assets.py`'s `PDF_PAGES`, `BLANKS`). On the way, `viking-1` lost
-    its year for the Mutch Memorial Station (NASA Science says January 1982, other sources 7 January 1981).
-    Surveyor 3's page moved to `lunar-soil-analysis` on 2026-11-01 (user): `lunar-soil-study` comes from the
-    lunar impacts, so a Ranger or Luna 2 flight opened a page about a lander's scoop. It now opens with
-    Surveyor's landing, for everyone in the game. The finding got its own page the same day (user), `ranger-surface`,
-    on what Rangers 7 to 9 let scientists infer about the soil: 34 pages in all.
-  - **Measured (2026-10-21):** `ContentPackPlayouts standard smart`, 200 games, with the bonus on and off
-    (`-Drules.findingBonus=0`): average completion season 84.6 against 84.8, medians 82 and 81 (NASA), 81
-    and 82 (Soviet), crewed completion chance at launch 0.62 against 0.63 (median): no effect beyond noise.
-    The smart bot's route earns only two findings, `magnetic-field-study` (Explorer 1, NASA only) and
-    `lunar-soil-study` (the lunar impacts), so few of its steps get the bonus; a player who flies the
-    science flights in the lulls gets more. Side flights and the lulls (`RaceLulls`) are still to measure.
-  - **Publishing measured (2026-10-21):** `RaceShock standard -Drace.publish=never,always`, 200 races of
-    NASA against the Soviets (both smart bots; "always" asks to publish every classified finding at once,
-    settled before the next season's flights as on the server). About 2 publications a game, paying 255
-    prestige in all. First landing 78.3 against 77.9 seasons on average; the side behind on funding after
-    season 32 still lands first 76 times against 64; the slowest quarter's second landing 108.3 against
-    113.7. A mild pull toward a closer race, part of it perhaps noise; the bots earn few findings.
+  matching step gets **+4 base-chance points** (`Findings.BONUS_POINTS`, user, 2026-10-21) for an
+  agency that knows the finding, after the crew blend, in the season pass
+  (`MissionProgress.resolveStep`) and the client's odds alike (`MissionAssessment`,
+  `StepOdds.findings`). **Bonuses from different findings stack** (user; rarely more than one applies).
+  A goal the flight earns counts for its later steps, as goal modifiers do. `-Drules.findingBonus=0`
+  turns it off in `ContentPackPlayouts` and `RaceShock`.
+- **Known** means held (achieved or credited, user: own science counts, so science flights are worth
+  flying in the lulls) or public. `PlayerSnapshot.publicFindings` keeps every published finding with
+  its turn, the same in every agency. A late joiner starts with the findings already public.
+- **Publishing is an event the player takes part in, not a standing policy** (user). The finding shows
+  up in the turn report of the season its goal was earned, with a link to its archive page and a
+  **Publish** button; a confirmation dialog shows the prestige it would pay. Doing nothing keeps the
+  finding classified; no answer is ever required. **Publishing later** (user): the archive page keeps
+  the button until anyone has published it (a second publication would pay nothing), so a player can
+  hold a finding back, at the risk that rivals earn it first. Asking is `PublishFindingAction`,
+  withdrawn by the same action; an ask is settled or dropped at the resolution.
+- **The payment, capped** (user): at most **33 % of the goal's first-time prestige** (user,
+  2026-10-21), scaled by the share of rivals it helps, `cap × helped / (players − 1)`, a rival being
+  helped if it doesn't know the finding at the start of the resolution (one that earns it at the same
+  resolution still counts). The dialog shows the amount and "helps 6 of 9" both (user: the amount gives
+  the count away anyway). The preview is exact unless another agency publishes the same finding at the
+  same resolution, when they split it.
+- **Settled before the turn's flights**, like the market (`FindingPublications.settle`, kept in
+  `publications/turn-N.json`); rivals learn it in the same pass (a `FINDINGS` phase before the budget,
+  so a review that season counts the prestige), so it helps their flights from the next turn on.
+- **Archive pages** (§2.12): **every finding has one** (user: "knowledge is cool"), and **no history
+  notes for findings** (user): what a note would say goes on the page. **A finding's page opens only for
+  the agencies that know it** (user): its discoverers, everyone once it's published, and everyone once
+  the race is decided. Pages written for findings: Explorer 1 and the belts, Belka and Strelka, Pegasus,
+  Pioneers 6 to 9, Lunar Orbiter's meteoroid cells, the mascons, `ranger-surface` (what Rangers 7 to 9
+  let scientists infer about the soil, for `lunar-soil-study`; user, 2026-11-01), Venera 4 and Mariner
+  5, Zond 5's tortoises, Mariners 6 and 7, the Orbiting Frog Otolith, Viking's soil and the Pioneer
+  Venus Multiprobe; five mission pages are findings' too (Lunar Orbiter 1, Mariner 9, Venera's surface,
+  Venera 15 and 16, Pioneer 11). Riskier pictures: Zond 5's two halves of NASA History's composites
+  (credited RKK Energiya, first publication unverified, medium), Venera 4's capsule, Korabl-Sputnik 2's
+  one TV frame, a Pioneer Venus painting credited to Paul Hudson. Three are figures from NASA reports'
+  PDFs (`make_archive_assets.py`'s `PDF_PAGES`, `BLANKS`). `viking-1` gives no year for the Mutch
+  Memorial Station (NASA Science says January 1982, other sources 7 January 1981).
+- **Measured (2026-10-21):** `ContentPackPlayouts standard smart`, 200 games, bonus on and off: no
+  effect beyond noise (average completion 84.6 against 84.8). The smart bot's route earns only two
+  findings, `magnetic-field-study` (Explorer 1, NASA only) and `lunar-soil-study` (the lunar impacts); a
+  player who flies the science flights in the lulls gets more. `RaceShock standard
+  -Drace.publish=never,always`: about 2 publications a game, 255 prestige in all; the side behind on
+  funding after season 32 lands first 76 times against 64, a mild pull toward a closer race, part of it
+  perhaps noise. Side flights and the lulls (`RaceLulls`) are still to measure.
 
 ## 3. Architecture
 
@@ -2989,8 +2495,8 @@ from the siblings on 2026-10-06 (§5, M6; commands in `CLAUDE.md`).
   each call and reconnects and logs in again by itself if it dropped. A connection that died
   silently looks alive until KryoNet's 12 s timeout, so a call in that window waits out the 8 s
   response timeout and shows one error. **A call that breaks mid-exchange is never repeated**
-  (the server may have acted); read-only calls may retry once, action submits never. Server push
-  ("turn resolved") is possible but not built.
+  (the server may have acted); read-only calls may retry once, action submits never. The one
+  server push is `TurnResolvedNotice` (§3.6).
 - **Server tick:** requests are handled in `GameServer.render()`, which runs 50 times a second
   (a 1 s tick made every round trip take up to a second); the turn scheduler still checks once a
   second.
@@ -3085,7 +2591,7 @@ Per game (one per server, §3.9), in the host-edited `game-meta.json`:
   giving about 11 turns before the real Sputnik.
 - **Dev mode:** `"devMode": true` adds "Resolve turn now" for play testing (the scheduled
   resolution still comes) and allows `DevClient`'s funds cheat.
-- **Players online while a turn resolves** (the user's question, built 2026-10-09). Some players
+- **Players online while a turn resolves** (the user's question, 2026-10-09). Some players
   wait online to see the turn first. The server handles requests and resolves the turn on one
   thread, so a request never interleaves with a resolution; it waits in the network queue and
   is handled after the resolution is saved. Two guards on top:
@@ -3099,8 +2605,7 @@ Per game (one per server, §3.9), in the host-edited `game-meta.json`:
     every logged-in connection gets a `TurnResolvedNotice`, and the client fetches the new state
     at once and shows "The turn resolved", instead of polling 5 s after the deadline and then
     every 15 s (still the fallback). The notice never goes through the reply queue, so it can't
-    be taken for the answer to a request. It is also the hook for the Firsts' front pages (§5,
-    Backlog).
+    be taken for the answer to a request. It also brings the Firsts' front pages (§5, Backlog).
 
 ### 3.7 Persistence & turn-resolution data model
 
@@ -3136,8 +2641,13 @@ projects and BASPM's own XML save, which maps almost 1:1 onto its object graph.
     journal-rolled-back/<turn>/ actions set aside by a rollback of that turn (below)
   content/<packId>/            the game's frozen content pack (§5, M5)
   intelligence/turn-<N>.json   the turn's intelligence, settled once (§2.9)
+  market/turn-<N>.json         the contract market (§2.11)
+  publications/turn-<N>.json   published findings (§2.13)
   backups/                     zips of the data root (below)
   ```
+  Beside them, `frontpages.json`, `reactions/turn-<N>.json` and `losses/turn-<N>.json` (the front
+  pages, statements and lost crews, `ui-spec.md` §4.18). A filler bot's folder also holds
+  `bot.json`, the last turn it played (§5, Backlog).
   **Invariants:** journal names stay fixed-width and sequence-first (crash recovery compares
   them as strings), and the sequence never resets. Writes are atomic (temp file, then rename).
   A retried resolution sees the turn's snapshot already exists and archives exactly the journal
@@ -3151,9 +2661,11 @@ projects and BASPM's own XML save, which maps almost 1:1 onto its object graph.
   connection.
 - **Saved formats are append-only:** `ResolutionEvent`'s `@JsonSubTypes` ids are never renamed
   or reused; event, report and snapshot fields are only added, with values old saves can do
-  without (bump `TurnReport.VERSION` when a field's meaning changes). Jackson is strict about
-  unknown fields, so a removed or renamed field means resetting the dev data root.
-- **Museum records** (2026-10-04, additive): `PlayerSnapshot.memorial` (`MemorialEntry`) and
+  without (bump `TurnReport.VERSION` when a field's meaning changes). Saved state is read
+  strictly, and `SavedFormatTest` pins every saved format with a fixture game; a breaking change
+  after the first live game needs a step in `SnapshotMigrations` (`CLAUDE.md`, "Network and saved
+  formats").
+- **Museum records** (additive): `PlayerSnapshot.memorial` (`MemorialEntry`) and
   `goalRecords` (`GoalRecord`), both append-only.
 - **Rolling back a bad turn** (the user's idea, 2026-10-11): when a bug makes a turn come out
   wrong, the game goes back to the start of the turn, the server gets the fix, and the turn
@@ -3240,14 +2752,11 @@ purpose-built report).
 - **`ContentPackPlayouts`:** bots play a real pack through the real season pass and report
   whether and when they reach the declared goals: the early race on `early-era`, the Moon race on
   `standard` (a pack with the `crewed-lunar-landing` goal), with a plan per agency. `ahead` as the
-  second argument plays the bot that works ahead (§2.6), `side` the one that also flies side
-  missions, `smart` the one that plays like a careful player (§2.9, "A smarter bot"); it also opens Headquarters and the VAB as
-  the plan needs, and closes programs and rockets it no longer flies. Both bots now wait only for
-  the components a configuration's steps fly (before 2026-10-09, every component of its program;
-  the early-era numbers came out the same). With the pool of 10 (2026-10-06):
-  198 of 200 games reach all goals (NASA 98, Soviet 100), average season 57.4; before, with 6
-  candidates, 177 at 62.2. The bot hires the best of the batch, so a bigger pool means better
-  hires.
+  second argument plays the bot that works ahead (§2.9), `side` the one that also flies side
+  missions, `smart` the one that plays like a careful player (§2.9, "A smarter bot"); it also opens
+  Headquarters and the VAB as the plan needs, and closes programs and rockets it no longer flies.
+  The bots wait only for the components a configuration's steps fly. Also `RaceShock` (two smart
+  bots in one game), `RaceLulls`, `IntelligencePlayouts`, `StateSizes` (§2.9).
 - **`PersonnelLifecyclePlayouts`:** the personnel, R&D and mission resolvers on a small fixture
   catalog, with a bot that hires, trains, pulls out, opens programs, researches and launches
   through the validated actions.
@@ -3390,34 +2899,76 @@ patches (`ui-spec.md` component 8).
 
 ## 4. Open questions
 
-- **Lulls in the Moon race** (§2.6, measured 2026-10-09). The length is accepted and the race stays
-  (user, 2026-10-09); the open question is how to keep players busy between flights. Faster R&D
-  and more reliable starts shorten the race but leave the lulls, which turn into waiting for
-  money, and the pack's other flights barely fill them. Next: the interactive events (§5, Backlog),
-  then the R&D tuning with the side-missions bot. The Soviets take about a fifth longer.
-- **Commercial contracts** (§2.11, 2026-10-11): every number is unconfirmed (margins, the record's
-  weights, the launch window, the expiry, the extras), and so are the unlock sets, authored per
-  program. The first measurement (§2.11) says they fill the lulls but don't speed the race, and a
-  quarter of awards lapse: the margins, or a fee scaled to the era, are the first thing to look at.
-- **Declared goals for the colleagues' game:** an early-era race (user, 2026-10-08), with goals
-  drawn from the early-era pack. Since then the standard pack became the default with its own race to
-  a crewed Moon landing (user, 2026-10-09, §2.6); whether the colleagues' game plays that or a
-  shorter early-era race is open.
+- **Lulls in the Moon race** (§2.9). The length is accepted and the race stays (user, 2026-10-09);
+  the question is how to keep players busy between flights. Built for it: the R&D decisions (§5,
+  Backlog), commercial contracts (§2.11), science findings worth flying (§2.13). The play test decides
+  whether more is needed.
+- **Commercial contracts** (§2.11): the first measurement says they fill the lulls but don't speed
+  the race, and a quarter of awards lapse: the margins, or a fee scaled to the era, are the first
+  thing to look at.
+- **Declared goals for the colleagues' game:** the standard pack's race to a crewed Moon landing is the
+  default (user, 2026-10-09, §2.9); whether the colleagues' game plays that or a shorter early-era race
+  (user, 2026-10-08) is open.
 - **NASA/Soviet prestige balance:** BASPM's Soviet programs pay a little more each (about 4 %)
   but NASA has nine more programs, about 34 % more prestige in total. Decided (user,
   2026-10-01) not to close the gap up front; revisit with play-test and harness data.
-- **A game-host role and UI** (announcing games, blackouts, allowlists): direct file edits for
-  now.
-- **Interaction beyond passive competition** (mail, cooperation): after the daily loop is
-  proven (§2.9). Intelligence is designed (§2.9, 2026-10-07); sabotage is ruled out.
+- **A game-host role and UI** (announcing games, blackouts, allowlists, content fixes in a running
+  game): direct file edits for now.
+- **Interaction:** intelligence, poaching, statements and condolences, published findings and the
+  contract market exist (§2.9); sabotage is ruled out. Mail between players and cooperative modes are
+  later ideas.
 - **Can SET staff reach retirement in a realistic game?** At 65 and today's game lengths, few
   will; it matters only if games run decades.
+- **Rights, since the repo went public (2026-10-28):** the Sagan recording was to be revisited before
+  that (§5, Backlog), and the Soviet images' Russian term mattered only once public (§2.12). Both are
+  the user's call.
+- **Balance points the bots raised** (§2.9): cheap failures reward launching early; idle staff quit
+  fast; the shorter games after raises between reviews (a stingier bracket table is the lever); the
+  filler bots' money piling up (§5, Backlog).
 
 **Settled, for the record:** a player who doesn't log in before a resolution keeps their
 default: a scheduled mission launches and training continues. Scrubbing and pulling out are
 ordinary actions available until the resolution (user; BASPM's second "launch now?" prompt is
 skipped). R&D assignments are standing orders (`baspm.md` §2.1). Tiger Teams became the Expert
 trait (§2.2(c)).
+
+**Unconfirmed numbers awaiting the user's review** (each also flagged in its section):
+- Answer to a rival's First: the 50 % share and counting once (`RivalFirsts.SHARE`, §2.1(e)).
+- Raises between reviews: share 1 (`BudgetProgress.RAISE_SHARE`, §2.1(f)).
+- Standing charts: 40 dots, a window of 120 (`server.StandingCache`, §2.1(g)).
+- Skill growth cut by 30 % for training, flying and R&D (§2.2(c)); a flight's unused skills at a third
+  (`SkillGrowth.FLIGHT_UNUSED_SKILL_SHARE`, §2.5(g)).
+- Personal skill ceilings, `100 − 0.5 × points above 75` (`SkillGrowth.ceiling`, §2.2(c)).
+- Rocket-plane wings: +4 on capsule steps (`rules.RocketPlaneWings`, §2.2(c)).
+- People, phases 1 to 3: trait split 20 / 50 / 30 %, reveal points 2 to 4, affinity weights, team-trait
+  and personal-trait effects, bland hints 1 in 4 (`Personality`, `Chemistry`, `TraitEffects`, §2.2(d)).
+- Relationships: one friendship and one clash a person, the 35 % roll, ±4 % output each
+  (`Personality.RELATIONSHIPS_OF_A_KIND`, `Chemistry.RELATIONSHIP_OUTPUT`, §2.2(d)).
+- An engineer's cap ambition: `Careers.CAP_SLACK` 2, `CAP_WINDOW_MAX` 20 (§2.2(d)).
+- Poaching: tenure and cooldown 4 seasons, raises +25 / +50 / +100 %, acceptance odds, the default match
+  +25 %, the match ceiling ×3 (`rules.Poaching`, `Poaching.MATCH_CEILING_FACTOR`, §2.2(d)).
+- Nova: 68 t to the Moon, 15,000 to create, 1,500 upkeep, 91 % R&D ceiling, its heritage (§2.3(e)).
+- The E-154's ids and the X-15's numbers for the Soviet side (§1.2).
+- Intelligence: level costs 0 / 150 / 350 / 700, passives 20 % / 25 % / 40 %, odds 85 % − 15 a level,
+  catch 10 % + 10 a level and its 20 prestige, range half-widths (`rules.Intelligence`, §2.9).
+- Intelligence follow-ups: 2 turns, 3 points a look (`Intelligence.followUpHalfWidth`, §2.9).
+- Foreign hardware: 25 / 50 / 80 % a season, and the roles and counterparts
+  (`Intelligence.HARDWARE_PERCENT`, `foreign-hardware.json`, §2.9).
+- Failed attempts kept per rival: 24 (`Intelligence.FAILURES_KEPT`, §2.9).
+- Commercial contracts: margins +60 / +40 / +25 %, the record's weights (+3, −6, ±15), the 3-season launch
+  window, the 3-turn expiry, the extras, the lapse's 10 prestige and a lost crew's 50, the unlock sets,
+  calling a flight off (`rules.Contracts`, §2.11).
+- Contract crew premiums: 1,000 / 670 / 420 a seat (`Contracts.CREW_PREMIUMS`, §2.11).
+- Publishing findings: the mapping of 18 findings to steps (`findings.json`, §2.13); +4 a finding
+  (`Findings.BONUS_POINTS`) and the 33 % cap are the user's.
+- The archive: a late joiner finds earlier pages open; the report's card names no rival (*proposed*,
+  §2.12).
+- The hands-on decision: every number, and the bonus too easy at these numbers (§5, Backlog).
+- Filler bots: every number (`bot.FillerBot`, §5, Backlog).
+- Front pages and the world reacts: every choice; late joiners can't answer, no page when nobody
+  spoke, follow-ups first (§5, Backlog).
+- Explainers' triggers and the early-era concept audit (§1.1).
+- Backups: each zip holds the whole history (§3.7).
 
 ## 5. Implementation roadmap: milestones & slices
 
@@ -3435,8 +2986,7 @@ first (login → action → scheduled resolution → result, end to end) before 
   (adapted from StarWars' code), the KryoNet protocol (`MessageRegistry`, Robot-Rampage's
   pattern), `RequestDispatcher` (one `handle(connectionId, message)` entry point, no
   KryoNet dependency), `NetworkServer`/`NetworkClient`, the scheduler (`server.schedule`) and
-  `DevClient`. Exit proof: a real server resolved a submitted action on schedule over real
-  sockets.
+  `DevClient`.
   - **The handshake** (`HandshakeRequest(clientVersion, login, password)` /
     `HandshakeResponse`) does the version check and the login in one step. Its two classes are
     **registered first in `MessageRegistry` and their fields never change** (a mismatched pair
@@ -3451,8 +3001,7 @@ first (login → action → scheduled resolution → result, end to end) before 
   - **Versioning:** jgitver only changes the version at a new tag, so the handshake check only
     tells builds apart across tags. `useGitCommitId` would fix that (not enabled; user's call).
 - **M2 — Rules engine, headless (2026-09-30 to 2026-10-03).** Every §2 system as headless
-  resolvers in `rules`, unit-tested and driven by the bot harness (§3.10). Exit criterion met:
-  multi-season missions resolve correctly across turns in hundreds of simulated games.
+  resolvers in `rules`, unit-tested and driven by the bot harness (§3.10).
 - **M3 — Content pack (2026-10-03).** Decisions (user):
   1. **Values follow BASPM** (§1.2); ids, names and text are our own.
   2. **Early-era scope:** Earth-orbit satellites and the one-crew capsules (Sputnik, Explorer,
@@ -3473,179 +3022,111 @@ first (login → action → scheduled resolution → result, end to end) before 
      open programs (`HEADQUARTERS_FULL`); the VAB caps open rocket programs and the rocket class
      (Light, Medium, Heavy). Upkeep is a running cost (925 per season at level 1).
 
-  Also built: programs can be **closed** as in BASPM (refused while a mission of it flies; its
-  components go inactive, keep their reliability, pay no upkeep and release their researchers;
-  reopening doesn't charge creation cost again).
+  Programs can be **closed** as in BASPM (refused while a mission of it flies; its components go
+  inactive, keep their reliability, pay no upkeep and release their researchers; reopening
+  doesn't charge creation cost again).
 
-  **The pack** (`assets/content/early-era/`): 2 categories, 6 programs (Soviet: Sputnik 1,
+  **The early-era pack** (`assets/content/early-era/`): 2 categories, 6 programs (Soviet: Sputnik 1,
   Sputnik 2, Korabl-Sputnik 2, Vostok; NASA: Explorer 1, Mercury), 10 components (five payloads;
-  rockets R-7 Sputnik, R-7 Vostok, Jupiter-C, Redstone, Atlas), 19 configurations, 21 goals.
-  Generated by `baspm_pack.py` (outside the repo, `CLAUDE.md`). **Mapping rules a regenerated
-  pack must follow:**
+  rockets R-7 Sputnik, R-7 Vostok, Jupiter-C, Redstone, Atlas), 19 configurations, 21 goals; for the
+  tests and short scenarios. `EarlyEraPackTest` checks it loads, every configuration has a liftable
+  rocket of its agency at VAB level 1, staffing fits a reachable building level, and both agencies
+  can reach the race goals.
+
+  **The standard pack** (`assets/content/standard`, converter scope `full`, 2026-10-08): all of
+  BASPM's tree, 13 categories (with their `body`), 55 programs, 85 components as converted (61
+  payloads, 24 rockets; Nova added since, §2.3(e)), 186 configurations (189 less the E-154's two and Apollo's Agena
+  docking) and all 207 goals, including umbrella goals that only cascades credit. Our ids are in
+  `full_maps.py` (confirmed, user, 2026-10-08). **The server's default since 2026-10-09** (user;
+  `GameMeta.DEFAULT_CONTENT_PACK`; tests still pin `early-era`). Its text is our own (names,
+  descriptions, long descriptions); **history notes** cover every program and component and the
+  configurations that match a real flight (Gemini 1 to 12, Voskhod, Soyuz 1 to 9, Zond 7, Apollo 4
+  to 15, Apollo-Soyuz, Skylab, the X-15, Venera 13), every figure checked; configurations with no
+  real counterpart (the lunar Gemini plans, the LK-700, the E-154, the extended missions) have none.
+  The two Gemini EOR programs share one note. A joint flight's craft-specific steps take their shared
+  step's text, named for the craft (`ContentStrings.craftStep`: `gemini-a-`, `atv-` for the target,
+  `transtage-`, `-a`/`-b`). Its art is converted (`make_content_art.py`) and its 207 goal patches
+  generated (`assets-raw/patches/patches_full.py`; the model can't spell "CIRCUMLUNAR", so those
+  patches say "GEMINI"). **No animal passengers on the new flights:** Zond 5's tortoises, the
+  Biosatellite and the OFO frogs get no memorial and no honours (user, 2026-10-08). In this scope
+  anything that would be dropped fails the run, and the run checks every launch has a rocket of its
+  agency that lifts it. BASPM's `HistoricalRocketUsedID` only picks the clip. `StandardPackTest`
+  checks the tree: every launch flies on a rocket of its agency at some VAB level, staffing fits,
+  every goal can be earned, and the race goals are open to both agencies. Engine additions that came
+  with it (`FullTreeLaunchTest`):
+  - **`ownLift` on a payload** (`MissionLaunch.requiredLift`): the Agena, the Gemini Transtage, the
+    S-IVB tug and Apollo's CSM carry part of their own lift, which BASPM subtracts from what the
+    rocket must lift (`ComputeExtraBoostProvidedByPayload`).
+  - **`AIR_DROP` launches:** the X-15's and the MiG E-154's configurations fly with no rocket
+    (BASPM's `LaunchType` `NA`). The launch keeps its place in the rocket list with `""`, costs no
+    rocket, and no step may name its rocket slot; the planning screens say a carrier aircraft drops
+    the craft.
+  - **`requiredGoalIds` on a configuration:** a hard gate until the goal is achieved or cancelled
+    (BASPM's `StrictGoalDependency`; the X-15's and E-154's research flights, the progression gates
+    of §2.3(d)). A launch refuses with `GOAL_NOT_REACHED`; the card shows "Locked" and its steps
+    screen names the goal and disables "Plan this mission".
+  - **`transferPercent` as a double:** many reliability transfers are .5 values
+    (`client.view.Rockets` prints it, so format it there).
+
+  **Mapping rules a regenerated pack must follow** (`baspm_pack.py`, outside the repo, `CLAUDE.md`;
+  the early scope must keep reproducing the committed pack):
   - Ids are our own, hand-mapped kebab-case; values are BASPM's.
   - A step's `PrestigeGrantedOnSuccess` is a percentage share → `prestigeSharePercent`; its
     failure value is a percentage of the first-time total →
     `failurePrestigeDeduction = round(pct × firstTime / 100)`.
   - Staffing layouts are emitted one to one: crew slot titles, control slots (title, kind,
     skill), slot-indexed controller involvements, per-slot crew weights. `ROCKET_N` → `@rocket-N`.
-  - A configuration's `cost` is its payloads' unit cost.
+    Controller slots map to skills by BASPM's speciality index, not the slot name.
+  - A configuration's `cost` is its payloads' unit cost times the average step `DifficultyFactor`
+    over all its seasons, rounded half to even, as in BASPM (`MissionsConfigurationsManager`; a
+    missing factor is 1; only Sputnik 1's extended mission has factors).
   - Goal modifiers and achieved goals that reference goals outside the pack are dropped;
     reliability transfers keep only sources in the pack; **discounts whose source program
     belongs to the other agency are dropped** (BASPM's one such case only works for GSA).
-  - A category's required goals are copied onto each of its programs. Controller slots map to
-    skills by BASPM's speciality index, not the slot name. Animal passengers, and the animals
-    honoured for coming home (`cameHome`), come from the converter's `ANIMAL_PASSENGERS` map, not
-    from BASPM's data (backups `.bak-prepassengers`, `.bak-predogs`).
-  - A configuration's `cost` is its payloads' unit cost times the average step `DifficultyFactor`
-    over all its seasons, rounded half to even, as in BASPM (`MissionsConfigurationsManager`; a
-    missing factor is 1). Only Sputnik 1's extended mission has factors (1.75 on its two later
-    steps), so its cost went from 488 to 580 (2026-10-08).
-  - A step only risks the crew when the configuration has crew slots: BASPM flags some steps of
-    two uncrewed Soyuz flights anyway.
-  - A goal modifier BASPM repeats within one list (the X-15's research flights boost on the same
-    goal twice) is merged into one with the summed amount; the engine sums them either way.
-  - **The retrofire comes before the retro pack's jettison (user, 2026-10-16).** BASPM drops the pack
-    first on 20 standard configurations (every Soyuz 7K-L3 and LK-700 flight, Soyuz 7K-OK's orbital
-    flight, Gemini EOR's two lander tests), so the replay burned with a pack it had just dropped. The
-    converter swaps the pair back, each step keeping its own data and its number in the order
-    (`20-retrofire-jettison, 21-retrofire` becomes `20-retrofire, 21-retrofire-jettison`; backup
-    `.bak-preswap`). The order is BASPM's only here.
-  - **Circumlunar Gemini's Earth-orbit tests (user, 2026-10-18):** BASPM names the Transtage's burn a trans-lunar
-    injection (`tli`), but nothing leaves Earth orbit: it stretches the orbit into a long ellipse, so the capsule
-    comes back at nearly lunar-return speed (the heat-shield test; NASA did the same for Apollo on Apollo 4 and 6).
-    The converter renames the step `high-orbit-injection` for that program (both its configurations), with its own
-    text in `strings.json`. The pack hash changed.
-  - **Moon steps by BASPM's own names (user, 2026-10-20).** In the Moon programs BASPM's step TypeIDs and its
-    names for the steps disagree, and the names are right: Gemini EOR's four Moon flights type every step from
-    the parking orbit to the trans-Earth coast `EARTH_ORBIT` (the flybys and lunar orbits never seemed to leave
-    Earth), and their lander's descent, landing, liftoff and ascent `LANGLEY_TEST`; the 7K-L3's and LK-700's
-    reentry preparations and modules separation are both `EARTH-APPROACH`; their Moon approach is `LOI`, the
-    7K-L3's Blok D separation `LUNAR_ORBIT`, their slingshot `TEI`; lunar-orbit Gemini's flyby is `LOI` and its
-    slingshot `LUNAR_ORBIT`; the 7K-L1's slingshot a second `LUNAR_FLYBY`, its parking orbit a second
-    `DEPLOYMENT`, its uncrewed recovery a second `DESCENT`. The converter reads BASPM's English step names
-    (`step_names`, only to compare, nothing copied) and retypes the steps its `RETYPED` table lists, per program,
-    to our kinds; one new kind, `blok-d-separation`. The step names are BASPM's own view of each step, so they
-    decide.
-  - **A flyby passes the Moon in one step (user, 2026-10-20).** BASPM's flybys pass the Moon as two steps, the
-    flyby and the slingshot (Apollo's and Gemini EOR's by name, the others under other TypeIDs): one event, one
-    more chance to fail, and the flyby nearly as hard as the orbit flight (Apollo's 16 steps to 16). The converter
-    drops the slingshot, its prestige share to the flyby. Flyby against orbit flight, in steps: Apollo 15 to 16,
-    Gemini EOR 25 to 26, lunar-orbit Gemini 14 to 16 (no approach), direct-ascent Gemini 15 to 16 (unchanged),
-    LK-700 16 to 17, 7K-L3 17 to 18 (its flyby keeps the Blok D separation), 7K-L1 16 (no orbit flight). The
-    first version of this fix (earlier the same day, by TypeID) took the 7K-L3's and LK-700's two
-    `EARTH-APPROACH` steps for one step repeated and merged them; the names showed they were two steps, and both
-    are back. The free-return concept chip, which named the slingshot, names these flybys instead. The pack hash
-    changed.
-  - **Every step with the crew in it risks the crew (user, 2026-10-20).** BASPM's flag for it (`CrewCanPerish`) is
-    patchy: it left out 282 crewed steps in 105 standard configurations (and 16 in the early era), most of them launch
-    preparations (111), modules separations (46), countdowns (29) and recoveries, but also whole flights' moonwalks
-    and rover drives, dockings and coasts; and it set it on steps of uncrewed flights. The converter now ignores it:
-    a step risks the crew exactly when the crew has a part in it. History backs the odd-looking ones: the Apollo 1
-    fire was a test on the pad, Liberty Bell 7 sank after splashdown, and Soyuz 5's modules failed to separate. This
-    replaces the earlier fix for the five crewed configurations BASPM gave no risk at all. Measured with `ContentPackPlayouts standard smart`
-    (200 games): catastrophes 129 to 173, astronauts lost 289 to 372 (about 1.4 to 1.9 a game), seasons grounded after
-    a loss 429 to 560; the Moon race's median stays at 81 (NASA) and 82 (Soviet). Both packs' hashes changed.
-  - **Left as BASPM has them:** the 7K-L3 orbit's two `lunar-orbit` steps (the second an inclination change,
-    the uncrewed one's a Blok D separation, now retyped), LK-700's landing's three `lunar-surface-activities`, and
-    smaller name mismatches that change no step's meaning (the 7K-L3's `descent-and-landing` named "Descent", the
-    LK-700's `descent-and-splashdown` named "Descent and landing", Apollo's `deployment` named "Orbit insertion" or
-    "CSM deployment"), and the 7K-L3's lunar-orbit lander test (its deployment typed `lk-test`, its engine test
-    `undocking`).
-  - **The landings' surface steps by their names (user, 2026-10-20).** Apollo's landing with the rover had five
-    moonwalks: BASPM types its "Rover surface trip I" and "II" `EVA_I` and its "Moon surface activities III" `EVA_II`.
-    They are `rover-trip-i`, `rover-trip-ii` and `eva-iii` now (new kinds, with text). The 7K-L3's landing typed its
-    touchdown ("Block-D jettison and lunar landing") `LK_TEST`, its two moonwalks `EVA_7K-LOK` (a spacewalk to the
-    lander, playing the crew transfer) and its liftoff ("LPU jettison and lunar liftoff") `UNDOCKING`: they are
-    `lunar-landing`, `eva-i`, `eva-ii` and `lunar-liftoff`. No step count changed; the pack hash did.
-  - **Soyuz 7K-OK's steps by their names (user, 2026-10-20).** `RETYPED` covers `soyuz-7k-ok`: every "Orbit insertion"
-    (the crewed flights', the rendezvous flights' "Spacecraft A/B: Orbit insertion") was typed `ASCENT`, giving each launch
-    two ascents; the orbital flights' "Reentry preparations" and "De-orbit burn" were typed `RETROFIRE_JETTISON` and
-    `RETROFIRE`, which the retrofire swap turned into a burn and a jettison; the suborbital flights' "Reentry preparations"
-    and "KDTU-35 engine test" (the burn) each had the other's type; the long flights' "Duration Level I" to "VI" were all
-    `EARTH_ORBITAL`; the automatic rendezvous's and uncrewed docking's "Target approach" `JOINT_EARTH_ORBITAL` and the
-    latter's "Docking" and "Undocking" `RENDEZVOUS` (the crew transfer's "Undocking" too); the spacewalk's and the crew
-    transfer's "Egress" and "Ingress" the walk's own type. They are `insertion`, `reentry-preparations` and `retrofire`,
-    `reentry-preparations` and `engine-test`, `duration-level-i` to `duration-l6`, `target-approach`, `docking`,
-    `undocking`, `egress` and `ingress` (new, with text). No step count changed; the pack hash did.
-  - **The 7K-L3's crewed orbit flight drops its Blok D (user, 2026-10-20).** Its second lunar orbit (BASPM: "Lunar orbit",
-    after "Inclination change maneuver") is retyped `blok-d-separation`, as its uncrewed twin's "Block-D separation":
-    nothing else drops the Blok D before the LOK's own burn home. The pack hash changed.
-  - **Apollo's Earth-orbit flights by their names too (user, 2026-10-20).** `RETYPED` covers `apollo-earth-orbit`:
-    the suborbital flights' `earth-orbit`, `reentry-preparations` and `earth-orbit` are the suborbital flight, an SPS
-    test (`engine-test`) and the reentry preparations; the orbital flight's and the low-orbit lander test's second
-    `de-orbit-burn` is the modules separation; the long flights' duration levels past the first, all
-    `duration-level-i`, get their own levels; the uncrewed lunar module test's three `earth-orbit` firings are
-    Apollo 5's descent-engine firing, its "fire in the hole" and an ascent-engine firing (two new kinds,
-    `lem-descent-stage-test` and `fire-in-the-hole`, on the lander's engine-test and staging clips); the rendezvous'
-    approach, formation flight and both craft's ways home (`spc-a-`, `spc-b-`), and the docking flight's approach,
-    docking, undocking, reentry preparations and de-orbit burn were all `earth-orbit`. No step count changed. The
-    replay borrows Apollo's own clips where it has none (unconfirmed): `apollo-earth-orbit` for the suborbital
-    flight and the rendezvous' approach and formation flight (a clip with two CSMs would be new), `apollo-retrofire`
-    for the SPS test. The pack hash changed.
-  - **Gemini EOR comes home Gemini's way (user, 2026-10-16).** BASPM gives its six configurations with
-    a way home the Soyuz order (retrofire, jettison, modules separation, or the last two alone). Gemini
-    dropped its adapter's equipment section first, then fired the retros and dropped the retro section,
-    so the converter moves the modules separation in front, each position keeping its number (backup
-    `.bak-pregemini`). Four of them have no retrofire step in BASPM's data; that's left as it is.
-  - **Goal boosts stay (user, 2026-10-08).** BASPM's loader never reads `GoalBoost` elements, so in
-    the shipped game only the penalties apply (`baspm.md` §11.3). We keep applying the boosts the
-    data declares (2 in the early-era pack, 99 in the standard pack, +1 or +2 each): they reward
-    related work, such as Pegasus and Biosatellite for Mercury, or a robot lander for a crewed
-    one. The plan's components card lists every boost, including those not yet reached, as
-    "(+1)"; Mission Control names the active ones; help explains both kinds.
-
-  **The full tree: the `standard` pack (converter scope `full`, 2026-10-08).** The converter writes
-  all of BASPM's tree: 13 categories (with their `body`), 55 programs, 85 components (61 payloads,
-  24 rockets), 189 configurations and all 207 goals. The goals include the umbrella goals no
-  configuration achieves directly, because other goals' cancellations credit them. Our ids are in
-  `full_maps.py` next to the converter; the early-era ids are kept. The ids are confirmed (user,
-  2026-10-08). It is a second pack, `assets/content/standard`, beside `early-era`, and **the server's
-  default since 2026-10-09** (user; `GameMeta.DEFAULT_CONTENT_PACK`), with its own race ending at a
-  crewed Moon landing (§2.6); the early-era pack stays for the tests and short scenarios. **Its text is written** (2026-10-08): names and descriptions for every
-  category, program, component, configuration, goal and step type, in our own words, with the
-  early-era text carried over unchanged. **History notes are complete** (2026-10-09, every figure
-  checked by web search): every program and every component, and the 38 new configurations that
-  match a real flight (Gemini 1 to 12, Voskhod, Soyuz 1 to 9, Zond 7, Apollo 4 to 15, Apollo-Soyuz,
-  Skylab, the X-15, Venera 13). Configurations with no real counterpart (the lunar Gemini plans,
-  the LK-700, the E-154, the extended missions) stay without, as in the early era. The two Gemini
-  EOR programs share one note, the Langley lander, like the other lunar Gemini programs. A joint flight's craft-specific steps take their
-  shared step's text, named for the craft (`ContentStrings.craftStep`: `gemini-a-`, `atv-` for the
-  target, `transtage-`, `-a`/`-b`). **Its art is converted** (`make_content_art.py`: 55 programs,
-  189 configurations, 22 category images), and `ScreenSnapshot` shoots it (`standard-*.png`). **Its
-  goal patches are generated** (2026-10-08): all 207, the new 186 defined in
-  `assets-raw/patches/patches_full.py` (scene templates per kind of mission, each with its program's
-  craft), three variants each, spelling checked by eye, ten goals rerolled or reworded where no
-  variant was spelled right (the model can't spell "CIRCUMLUNAR", so those patches say "GEMINI"). The
-  bots play it (`ContentPackPlayouts standard`) with no invariant broken. The text for the
-  MiG E-154's program and missions should fit the user's art, a rocket plane of its era, not
-  BASPM's PKA (user, 2026-10-08). **No animal passengers on the new flights:** Zond 5's tortoises,
-  the Biosatellite and the OFO frogs get no memorial and no honours (user, 2026-10-08), so
-  `ANIMAL_PASSENGERS` stays as it is. In this scope, anything that would be dropped fails the run, and the run checks
-  every launch has a rocket of its agency that lifts it (106 configurations need at least a
-  Medium rocket, 36 a Heavy). BASPM's `HistoricalRocketUsedID` only picks the clip: 12 launches
-  name one that can't lift them. `StandardPackTest` checks the tree: every launch flies on a rocket
-  of its agency at some VAB level, staffing fits, every goal can be earned, and the race goals
-  (through the crewed lunar landing, Venus and Mars) are open to both agencies. Four engine
-  additions came with it (built 2026-10-08, `FullTreeLaunchTest`):
-  - **`ownLift` on a payload** (`MissionLaunch.requiredLift`): the Agena, the Gemini Transtage, the S-IVB tug and Apollo's CSM
-    carry part of their own lift, which BASPM subtracts from what the rocket must lift
-    (`ComputeExtraBoostProvidedByPayload`). Without it, Apollo's CSM needs a Saturn C-3B in
-    Earth orbit instead of BASPM's Saturn IB.
-  - **`AIR_DROP` launches:** the X-15's three configurations and the MiG E-154's three (its drop test
-    alone until 2026-10-17) fly with no rocket (BASPM's `LaunchType` `NA`, rocket `N/A`). The launch keeps its place in the
-    rocket list with `""`, costs no rocket, and no step may name its rocket slot; the planning
-    screens say a carrier aircraft drops the craft.
-  - **`requiredGoalIds` on a configuration:** a hard gate until the goal is achieved or
-    cancelled (BASPM's `StrictGoalDependency`): the X-15's two research flights and the MiG E-154's
-    (its suborbital test until 2026-10-17). A launch refuses with `GOAL_NOT_REACHED`; the configuration card shows
-    "Locked" and its steps screen names the goal and disables "Plan this mission".
-  - **`transferPercent` as a double:** many of the full tree's reliability transfers are .5
-    values (`client.view.Rockets` prints it, so format it there).
-
-  `EarlyEraPackTest` checks the pack loads, every configuration has a liftable rocket of its
-  agency at VAB level 1, staffing fits a reachable building level, and both agencies can reach
-  the race goals (the human goals through the cascade). Exit criterion met by
-  `ContentPackPlayouts` (§3.10).
+  - A category's required goals are copied onto each of its programs. Animal passengers, and the
+    animals honoured for coming home (`cameHome`), come from the converter's `ANIMAL_PASSENGERS`
+    map, not from BASPM's data.
+  - A goal modifier BASPM repeats within one list is merged into one with the summed amount.
+  - **Goal boosts stay** (user, 2026-10-08). BASPM's loader never reads `GoalBoost` elements, so in
+    the shipped game only the penalties apply (`baspm.md` §11.3). We apply the boosts the data
+    declares (2 in the early-era pack, 99 in the standard pack, +1 or +2 each): they reward related
+    work, such as Pegasus and Biosatellite for Mercury. The plan's components card lists every
+    boost, including those not yet reached, as "(+1)"; Mission Control names the active ones.
+  - **Every step with the crew in it risks the crew** (user, 2026-10-20, both packs): BASPM's
+    `CrewCanPerish` flag is patchy (it left out 282 crewed steps in the standard pack, and set it on
+    uncrewed flights), so the converter ignores it: a step risks the crew exactly when the crew has
+    a part in it. History backs the odd-looking ones: the Apollo 1 fire was a test on the pad,
+    Liberty Bell 7 sank after splashdown, and Soyuz 5's modules failed to separate.
+  - **Steps typed by BASPM's own step names** (user, 2026-10-20): where BASPM's step TypeIDs and its
+    English step names disagree, the names decide. The converter reads the names (`step_names`,
+    only to compare, nothing copied) and retypes the steps its `RETYPED` table lists, per program:
+    Gemini EOR's Moon flights (which otherwise never left Earth orbit), the 7K-L3's and LK-700's,
+    lunar-orbit Gemini's, the 7K-L1's, Soyuz 7K-OK's (insertions, way home, duration levels,
+    docking, egress and ingress), Apollo's Earth-orbit flights (including Apollo 5's
+    `lem-descent-stage-test` and `fire-in-the-hole`), and the landings' surface steps (Apollo's
+    `rover-trip-i`, `rover-trip-ii`, `eva-iii`; the 7K-L3's `lunar-landing`, `eva-i`, `eva-ii`,
+    `lunar-liftoff`). The 7K-L3's crewed orbit flight's second lunar orbit is its
+    `blok-d-separation`. Left as BASPM has them: the 7K-L3 orbit's two `lunar-orbit` steps (the
+    second an inclination change), the LK-700 landing's three `lunar-surface-activities`, smaller
+    name mismatches that change no step's meaning, and the 7K-L3's lunar-orbit lander test (its
+    deployment typed `lk-test`, its engine test `undocking`).
+  - **A flyby passes the Moon in one step** (user, 2026-10-20): BASPM's flybys have a flyby and a
+    slingshot step, one more chance to fail for one event; the converter drops the slingshot, its
+    prestige share to the flyby (Apollo's too). The free-return concept chip names these flybys.
+  - **The retrofire comes before the retro pack's jettison** (user, 2026-10-16): BASPM has them the
+    other way round on 20 standard configurations; the converter swaps the pair, each step keeping
+    its own data and its number in the order.
+  - **Gemini EOR comes home Gemini's way** (user, 2026-10-16): the equipment section first, so the
+    modules separation moves in front of the retrofire. Four of its configurations have no
+    retrofire step in BASPM's data; left as it is.
+  - **Circumlunar Gemini's Earth-orbit tests** (user, 2026-10-18): BASPM names the Transtage's burn
+    a trans-lunar injection, but it only stretches the orbit into a long ellipse (the heat-shield
+    test, as NASA did on Apollo 4 and 6): renamed `high-orbit-injection` for that program.
+  - **The E-154 is rebuilt from the X-15** (`e154_from_x15`, §1.2); **Nova** is added
+    (`nova_rocket`), the lunar-orbit craft's heritage set (`capsule_heritage`), Gemini EOR's discount
+    pointed at its own tests (`discount_fixes`) and Apollo's Agena docking dropped
+    (`dropped_configurations`) (§2.3(e)); the progression gates added (`progression_gates`,
+    §2.3(d)).
 - **M4 — Integration (2026-10-03).** Real player actions and real resolution behind M1's
   skeleton. Decisions (user):
   1. **Undo is inverse actions only;** the journal stays append-only (§3.7).
@@ -3665,18 +3146,20 @@ first (login → action → scheduled resolution → result, end to end) before 
   against the preview, `game-meta.json`'s `contentPack`, `declaredGoalIds`, `gameSeed` and
   `devMode`, the slot claim (`ClaimSlotRequest`; until claimed, fetch and submit answer
   `SLOT_CLAIM_REQUIRED`), and resolution seeded by `GameSeeds.forSeason(gameSeed, turn, account)`
-  with the goal tally built from every player's start-of-turn snapshot. Exit proof: three
-  `DevClient` processes and a scheduled resolution produced exactly the predicted state.
+  with the goal tally built from every player's start-of-turn snapshot.
   - **Open:** the fixture harness still sets some fields directly instead of going through
-    actions; there's no multi-player harness (same-turn goal pricing is unit-tested only).
+    actions; there's no multi-player harness beyond `RaceShock` (same-turn goal pricing is
+    unit-tested only).
   - **Dispatch notes:** call `HiringPool.hire` with `catalog.buildings()`, and launch through
     `MissionLaunch.launch(snapshot, LaunchRequest, catalog)`.
 
 ### M5 — Playable client (libGDX): in play testing
 
-Screens are specified in `ui-spec.md` (server gaps G1–G10 in its §6), mocked up in Claude
-Design and built in libGDX (workflow in `CLAUDE.md`). The first play test runs in dev mode, not
-from a packaged release.
+Screens are specified in `ui-spec.md` (server gaps in its §6), mocked up in Claude Design and built
+in libGDX (workflow in `CLAUDE.md`). Every hub building has its screen, as do the turn report,
+replay, Museum, Settings and game result; each screen's choices are in its `ui-spec.md`
+"Implemented" note. The game is feature complete and in play testing (dev mode; release builds as
+in M6).
 
 **Screen-flow decisions (user, 2026-10-03, `ui-spec.md` §3):** BASPM's buildings regrouped: the
 VAB owns rockets (open, manage, Rocket R&D), Headquarters owns payload programs and all mission
@@ -3687,263 +3170,123 @@ are browsed by celestial body (`ProgramCategory.body`, defaulting to Earth). Con
 viewable before their program opens, read-only. The mission assessment is computed in the
 client from `core` (`MissionAssessment`, exact, not simulated).
 
-**Content packs** (decided 2026-10-03, built 2026-10-04 except the download and the host's
-replace step):
+**Content packs** (decided 2026-10-03):
 - **Frozen per game:** at creation the server copies its pack into
   `<dataRoot>/content/<packId>/` (`FrozenContentPack`, staged and renamed) and only loads it from
   there. `ContentPackHash` (SHA-256 over `ContentPackLoader.FILES`, line endings and BOM
-  ignored) identifies it; the game info sends id and hash. Since 2026-10-25 the R&D decisions, the PR
-  press stories and the commercial clients are pack files too (review.md 2.2): their effects and draws
+  ignored) identifies it; the game info sends id and hash. The R&D decisions, the PR press
+  stories and the commercial clients are pack files too (review.md 2.2): their effects and draws
   change the rules, so a server update must not change them under a running game. They are in both
-  packs, identical (`RulesContentTest`); the rules read them through `ContentCatalog.rules()`, the client's
-  screens through the copies its session installs. Still outside: the building table, the budget schedule
-  and the random-event odds, compiled in (review.md 2.9). Freezing keeps the open turn's
-  actions, in-flight state and every player's numbers consistent.
+  packs, identical (`RulesContentTest`); the rules read them through `ContentCatalog.rules()`, the
+  client's screens through the copies its session installs. Still outside: the building table, the
+  budget schedule and the random-event odds, compiled in (review.md 2.9). Freezing keeps the open
+  turn's actions, in-flight state and every player's numbers consistent.
 - **When the client's pack differs** it warns and uses its own copy. The download (G1) is
   deferred (user, 2026-10-06): content changes ship as a new server version, and the login
   version check makes every client update.
-- **Growth:** one main pack grows in `assets/content/`, renamed `standard` once it covers more
-  than the early era. A scenario is a pack plus a declared goal list.
+- **Growth:** one main pack grows (`standard`). A scenario is a pack plus a declared goal list.
 - **Fixes in a running game:** code fixes ship with a server update between resolutions (past
   turns are stored, not recomputed). Content fixes are an explicit host step between
-  resolutions, refused unless every referenced id still exists, in-flight missions keep their
-  seasons and slots, and the open turn's actions still validate. Numbers may change; structure
-  in use may not.
-- **Display text** (G4, 2026-10-05): `strings.json` names every id, with descriptions and history
-  notes. It is deliberately **not** part of the frozen, hashed pack, so text fixes reach running
-  games; `ContentStringsTest` checks coverage, lengths and characters. Configuration names are
-  relative to their program ("Orbital flight"); `ContentNames.of` gives the full name. Steps
+  resolutions (not built: replace the frozen copy by hand), refused unless every referenced id
+  still exists, in-flight missions keep their seasons and slots, and the open turn's actions still
+  validate. Numbers may change; structure in use may not.
+- **Display text** (G4): `strings.json` names every id, with descriptions, long descriptions and
+  history notes. It is deliberately **not** part of the frozen, hashed pack, so text fixes reach
+  running games; `ContentStringsTest` checks coverage, lengths and characters. Configuration names
+  are relative to their program ("Orbital flight"); `ContentNames.of` gives the full name. Steps
   are keyed by step type; a configuration can override single steps.
 
-**Built** (each screen's choices are in its `ui-spec.md` "Implemented" note):
-- Connect and Join Game; the Space Complex hub; Headquarters (programs, then mission planning
-  up to a real launch); the VAB; the SET Centre; Mission Control (controllers, scheduled and
-  active missions, scrub, cancel, re-staff); the Astronaut Complex; the Public Affairs Office;
-  the turn report and replay viewer (G2); the Museum, Settings and the game result (G3, G10).
-- **Client structure:** `ClientSession` (credentials, state, game info, pack, plan draft),
+**Structure:**
+- **Client:** `ClientSession` (credentials, state, game info, pack, plan draft),
   `ServerGateway`/`NetworkGateway`, `SessionScreen` → `ChromeScreen` (toast, dialogs,
   submit-then-rebuild, chrome), screen logic in `client.view` (tested), widgets in `client.ui`.
 - **Game info** (G1): `GameInfoRequest`/`Response` (pack id and hash, declared goals, open turn
   and date, next resolution and the server's clock, the result with winners' agencies and
-  directors, dev mode).
+  directors, dev mode, the budget schedule).
 - **Dev mode:** `ResolveTurnNowRequest` resolves the open turn at once (refused unless
   `devMode`), without touching the schedule.
 - **Personnel:** portraits and matching names (§2.2(c)); 128 px greyscale portraits in
-  `assets/ui/portraits/`, no atlas (few on screen at once). Laika on the memorial (§2.5(f)).
+  `assets/ui/portraits/`, no atlas (few on screen at once).
 - **First play-test feedback** (2026-10-05): the 50 Hz server tick (§3.3), a waiting chip and
   hover tooltips (`ui-spec.md` components 16 and 17; text in `client.view.Tips`), BASPM's basic
-  training, the rocket screen's explanations and shared-reliability column, navigation after
-  opening, Flight Director sorting, R&D auto-assign with a projected-gain bar
-  (`rules.ResearchPlanning`), building markers on the hub.
-- **Goal mission patches** (2026-10-06): generated per goal (§3.5) and shown in the Museum at 64
-  px (`ui-spec.md` component 8).
+  training, R&D auto-assign with a projected-gain bar (`rules.ResearchPlanning`), building markers
+  on the hub.
 
 ### Backlog
 
-**The decisions checklist's code work is done (2026-10-06):** the conversion rate, the pool of
-10, the once-per-season salary limit, manual replay stepping, credits in Settings, the signing
-bonus, the budget schedule in the game info, the lost-passenger report line, Korabl-Sputnik 2's
-dogs, the animals that came home, and the space-race news (each recorded in its section above).
-**Reset the dev data root** before the next play test: the pack's hash changed with the new
-passengers.
+What began here as ideas after M5's screens and is now built, briefly, with where its rules live, then
+what is still open. The full build history of each is in `git show 5c95135b:design.md`.
 
-**PR duty for astronauts** is built too (2026-10-06, §2.2(c)), with 39 press stories, no repeats
-until all have run, and effects beyond prestige.
+**Help** (the user's idea, 2026-10-08, `ui-spec.md` component 23): a help button in every header and
+the hub strip, and F1, open the rules by topic over the current screen, filtered to that screen's
+topics; typing searches them all. 34 topics, every number a token (`HelpValues`); a changed rule needs
+its topic's text changed in the same session. The public wiki mirrors it (`CLAUDE.md`). Open: put the
+`help` and `search` glyphs on the UI Asset Sheet (their SVGs are in `assets-raw/svg/ui/`).
 
-**Concept chips** (2026-10-07, `ui-spec.md` component 19) are built: `concepts.json` from the
-concept audit (§1.1), the chips on program details, configuration details and the VAB's rocket
-rows, and the "new" dot there and in the Museum. Their look is confirmed (user, 2026-10-07). Otherwise
-next is the next play test.
+**Advisor** (the user's idea, 2026-10-08, `ui-spec.md` component 24): a card on the hub with a new
+agency's first steps, each ticked off from the state, with a link to the building and one to the
+item's help topics, then the stages of the guided progression (§2.3(d)); it can be minimized, not
+hidden. One-off tips: idle staff, the explainers while the first engineers train, closing a program
+that has flown everything. Open: see in the play test whether the order and wording steer a new
+player well, and whether three items at a time is the right number.
 
-**Poaching** (people phase 5, built 2026-10-08, §2.2(d), `ui-spec.md` §4.16): offers to a rival's
-engineers and flight controllers from a personnel file, one a season, and standing orders to match
-them, per department and per person. Mocked up on the canvas `Launch Window — Poaching`. Every number
-is unconfirmed and unmeasured: no bot makes offers yet. **Reset the dev data root** before the next
-play test.
+**Concept chips** (2026-10-07, `ui-spec.md` component 19): `concepts.json` from the concept audit
+(§1.1), the chips on program details, configuration details and the VAB's rocket rows, and the "new"
+dot there and in the Museum. Their look is confirmed (user, 2026-10-07).
 
-**Intelligence** (designed 2026-10-07, §2.9): an eighth building, the Intelligence Office, with a
-level dial (0 to 3, one step a season), actions per season equal to the level, passives, the
-background check on the hire screen, agency assessments and personnel files. Mocked up on the
-canvas `Launch Window — Intelligence Office` and built (2026-10-07), with the user's hotspot
-polygons. The personnel file's loyalty band and ambition wait for phase 4. **Reset the dev data
-root** before the next play test (new fields on the snapshot and on employees).
+**Animated mission steps** (the user's idea, 2026-10-12; `ui-spec.md` §4.7.3; the clips' list in
+`assets-raw/replay/CLIP_CHECKLIST.md`, the pipelines in `assets-raw/replay/` and its README): short
+clips per mission step, each with a success, a glitch and a failure variant, drawn in the explainers'
+style rather than 3D, made in EffectCraft and played with gdx-video as WebM, the way the splash is
+(`ui-spec.md` §4.0, its proof of concept).
+- **Decided (user, 2026-10-12):** Claude animates the steps alone (SVG layers and motion as
+  formulas: smoother than rebuilding a Claude Design storyboard part by part, and much quicker);
+  Claude Design is brought in only for inspiration where a step has no good idea yet.
+- **A whole mission as one film:** the replay plays each step's clip back to back, chosen by the
+  step's outcome, on a monitor; the result shows at the clip's `revealAt`, and steps play on by
+  themselves (Play/Pause). Two alternating players, the next clip preloaded, make the join seamless
+  (17–22 ms, within one screen refresh; one player leaves a 37 ms gap). Each clip ends where the next
+  begins. A step without a clip plays the no-signal loop. A clip rule can name the step before, or
+  with `earlier` any step before it in the season, `programs`, a `later` step and a `"vehicle"`.
+- **As built:** every one of the 249 seasons plays whole and every step has its clips, many
+  borrowed; from Mercury on the spacecraft and probes fly as themselves (a step's `"skin"` and
+  `"alias"` in `build.py`), the rockets stay generic (the report doesn't say which flew). The
+  overhaul pass and every clip's choices stand as built (user, 2026-10-21). Laika's lost signal is
+  shown as a lost signal, never a flatline.
+- **The replay console** (2026-10-13, from a Claude Design mockup, `ui-spec.md` §4.7.3, "The
+  console"): the picture, a mission clock, a status gauge whose needle tells the outcome at the
+  reveal, and telemetry bars, whose motion tells nothing before the reveal. **Open (user,
+  2026-10-13):** a pass over the mission steps' configuration gives each step a mission time to start
+  from (T+ at liftoff, at orbit insertion, ...), so the clock advances from there; until then it's a
+  show clock counting the clips played.
 
-**Help** (the user's idea, built 2026-10-08, `ui-spec.md` component 23): a help button in every
-header and the hub strip, and F1, open the rules by topic over the current screen, filtered to that
-screen's topics; typing searches them all. 28 topics, written 2026-10-08 from this document and
-the rules, every number a token. **Next:** keep the topics in step with the rules (a changed
-constant updates itself, a changed rule needs its text), and put the `help` and `search` glyphs on
-the UI Asset Sheet (prompt given to the user 2026-10-08).
+**Sound for the replay** (the user's idea, 2026-10-13, `ui-spec.md` §4.7.3, "Sound"): no audio baked
+into the videos, so ambience can cross from one step to the next. A pool of named sounds
+(`assets/content/replay-sounds.json`, each one's description its brief), the clips' sidecars cueing
+them like `revealAt` (kept in `assets-raw/replay/cues.json`), the console's own sounds
+(`ReplayConsole`), room tone under everything, radio calls on every step and outcome, the user's
+effects, and a fanfare at the season summary. **Decided (user, 2026-10-13):**
+- **English for both sides.** Soviet recordings are hard to find online without Russian, and none of
+  the players speaks Russian: Russian callouts would cost a lot and make the replay harder to follow.
+  NASA's recordings serve both agencies, unrealistic as that is.
+- **No background music, a fanfare at the end instead** (a few shuffled tracks would be hard to get
+  right without grating). One fanfare when the season summary shows a mission that didn't fail
+  (glitches, solved or not, included), another when it failed; a catastrophe shares the failure's.
+- **Accepted from Claude's proposal:** the pool as data, not an enum; cues with loops, fades and a
+  loop carried into the next clip; the spoiler rule for sound (`ReplayClipsTest`); several takes per
+  sound, no repeats; skips fading everything within 0.1 s; separate music and effects volumes.
+- **Placeholders:** a sound without real takes plays a synthesized `placeholder-*` take
+  (`assets-raw/replay/sounds/make_placeholder_sounds.py`); replace it by putting the real files in
+  its entry's `files`.
+- **The Quindar tones** (§1.1) are generated exactly (pure tones, nothing to license), a cue before
+  and after each CAPCOM line; the telemetry blip stays a separate, softer console sound.
 
-**Animated mission steps** (the user's idea, 2026-10-12, unconfirmed): BASPM animates a mission's
-replay with hundreds of rendered clips, specific to each component. Ours could have short generic
-clips per mission step (launch, staging, orbit, docking, landing, reentry...), each with a success,
-a glitch and a failure variant, drawn in the explainers' style rather than 3D. They'd be made in
-EffectCraft (an open-source After Effects clone with a headless, scriptable CLI) and played with
-gdx-video as WebM, the way the splash is (`ui-spec.md` §4.0, its proof of concept). Open: the list
-of steps and variants, the clip size (the splash is 800 px square and about 650 KB for 4 s), and
-where they play in the replay viewer (`ui-spec.md` §4.7.3).
-
-The list of steps is `assets-raw/replay/CLIP_CHECKLIST.md` (2026-10-13: 153 clips, three variants
-each). A first satellite's six steps were built on 2026-10-13 (`assets-raw/replay/steps/`), so its
-whole replay plays as a film. A capsule's way home followed on 2026-10-14 (reentry preparations,
-retrofire, retropack jettison, reentry, descent and splashdown), so Mercury's orbital flight and
-Korabl-Sputnik 2 play whole too. `orbital-flight` and `earth-orbital` borrow the satellite's
-`earth-orbit` clip (**decided**, user, 2026-10-14: reusing it is fine).
-Every timing in them is unconfirmed. Vostok's two steps followed the same day (`modules-separation`,
-whose glitch is Vostok 1's cable, and `descent-and-landing`), so 16 mission seasons play whole. Time in orbit
-and the suborbital hop followed (`advanced-experiments-earth-orbit`, `biometric-data-transmission`,
-`duration-level-i` and `-ii`, `suborbital-flight`): 31 of 249 seasons now. A gauge panel (a crew's
-oxygen, power and food; a satellite's power) and a heartbeat monitor are the first clips with labels.
-Laika's lost signal is shown as a lost signal, never a flatline. The steps most often one short of a
-whole season are now the planetary transits and orbits (`jupiter-saturn-transit`, `venus-orbit`,
-`earth-jupiter-transit`), `sun-measurements` and `recovery`. `recovery` followed (a helicopter hoists
-the capsule out; its failure is Liberty Bell 7's, flooding and let go), so Gemini's flights play whole;
-the splashdown's sky now clears after touchdown, so the recovery cuts on. Then the way to the planets:
-`tpi` (the burn out of Earth orbit, leaving on a nearly straight line) and the cruises Earth–Mars,
-Earth–Venus, Earth–Jupiter and Jupiter–Saturn, on a map of the planets (not to scale) with the probe
-on its transfer orbit; a cruise clip is the same every season of a long cruise. Then Venus and Mars
-orbits (the orbit scene round another planet, a mapping beam on the surface) and solar measurements
-(the solar wind streaming past a probe in orbit round the Sun): 80 of 249 seasons play whole. The steps
-most often one short are now `earth-departure`, `de-orbit-burn`, `mars-surface` and
-`joint-orbital-flight`. The Moon followed: `lunar-orbit` (mapping, the radio lost on every pass behind
-the Moon), `loi` (the braking burn behind the Moon, out of contact, as on Apollo 8), `tei` and
-`lunar-impact` (its failure is Ranger 3's miss); `parking-orbit` borrows `earth-orbit` and `tli`
-borrows `tpi` (unconfirmed, as the crewed orbit's borrowing was). Then the rest of the way there and
-back: `lunar-approach` (the view closing in on the Moon, ending where the insertion starts),
-`lunar-flyby`, the coasts out and home on an Earth-Moon map (`earth-moon-coast` and `moon-earth-coast`
-borrow them) and `earth-approach`, aiming for the narrow entry corridor; its failure skips off the air
-(`earth-approach-and-reentry` borrows it, unconfirmed). 104 of 249 seasons play whole. Then the way
-down split in two, for the missions that fly it as two steps (Voskhod, Soyuz, Gemini): `descent` (the
-chutes only) and `landing-and-recovery` or `splashdown-and-recovery` (the touchdown under a full main,
-a recovery helicopter flying in; the failure is the main tearing loose), and `insertion` (the last burn
-up onto the planned orbit). `duration` borrows a day in orbit, `de-orbit-burn` the retrofire and
-`earth-departure` the burn out to the planets (unconfirmed). 160 of 249 seasons play whole. Then
-rendezvous and docking: `rendezvous-target-approach` (closing in, two craft on the orbit map: the chaser
-climbs from a lower orbit to just behind the other; the failure's burn cuts out and it runs on ahead),
-and four close-ups over the Earth's limb with the capsule and a docking target with a funnel collar and
-a blinking light: `target-approach` (the failure can't brake and slides under the target),
-`rendezvous` (two capsules holding station; the failure's fuel is spent, as Gemini 4's was),
-`docking` (the glitch bounces off once, the failure twice and never latches) and `undocking` (the
-failure frees itself with a jet stuck open and tumbles away, as Gemini 8 did). `rendezvous-and-docking`,
-`approach-and-docking`, `at-docking` and `lll-docking` borrow the docking, and `joint-earth-orbital` and
-`joint-orbital-flight` (Vostok 3/4's group flight) the closing in (unconfirmed). The close-up always
-shows the Earth, even for an undocking in lunar orbit, and the target is always the docking target,
-even where it's a lander. 173 of 249 seasons play whole. Then the spacewalks, close up on the way
-home's capsule with a hatch on its top and a suited figure on a tether: `eva` (out to an experiment
-package on the hull and back with it; the glitch tumbles and steadies itself with a hand-held gun, as
-on Gemini 4; the failure's visor fogs, as on Gemini 9A, and it's hauled back without the package) and
-`crew-transfer` (two craft docked nose to nose, across on a handrail; the glitch's hand slips and the
-gun brings it back, the failure is hauled back to where it started). `scientific-experiments`,
-`eva-7k-ok`, `eva-in-meo` and `egress` borrow the spacewalk, and `eva-7k-lok` and `eva-gemini-langley`
-(to a lander) the transfer, between two capsules (unconfirmed). 185 of 249 seasons play whole. Then
-the Moon landing's first two steps: `powered-descent` (from low orbit over the limb, engine first,
-pitching upright; the glitch is an alarm lamp, as Apollo 11's computer alarms; the failure an abort,
-the ascent stage climbing off the falling descent stage) and the landing (close over the surface; the
-glitch hovers on a blinking fuel lamp, as Apollo 11 landed with seconds of fuel left; the failure's engine
-dies just up and it tips over on a buckled leg). `landing` flies after four steps that mean four places,
-so a clip rule can now name the step before (`ui-spec.md` §4.7.3, unconfirmed): after `powered-descent`
-and Luna's `lunar-approach` it plays `lunar-landing`; after `lander-descent` (Venera, Viking) and `descent`
-(the X-15's and the MiG's runway) it still plays no signal. The MiG's runway landing will follow a
-parachute descent, since `descent` can't tell a spaceplane from a capsule: the user's call. No new
-season plays whole yet: the Moon's surface, liftoff and ascent come next. They did: `moonwalk` (down the
-ladder with an experiment package, out among the boulders and back; the glitch trips and falls flat, as
-Apollo 16's crew did, and gets up; the failure falls, its visor fogs and it goes back in with the package
-left lying), `lunar-liftoff` (the ascent stage off its descent stage, foil flying; the glitch's engine
-sputters before it lights; the failure's dies low and the stage falls back beside the lander) and
-`lunar-ascent` (on the Moon's map, up from the surface to the orbit where the other craft waits; the glitch
-cuts out and relights, the failure falls back and hits). `eva-i`, `eva-ii` and `lunar-surface-activities`
-play the moonwalk, and `ascent` after `lunar-liftoff` the climb (unconfirmed). The Gemini and LK-700 landings
-play whole (187 of 249 seasons); Apollo's still need its transposition, extraction and lander jettison. The
-step's text for an `ascent` after a lunar liftoff is still the rocket's (the pack's strings). Then Apollo's
-own: `transposition` (the capsule leaves the adapter, its panels fly off, it turns round and docks with the
-lander's hatch; the glitch bounces off twice before it holds, as Apollo 14 needed six tries; the failure
-never holds) and `extraction` (the lander pulled out of the stage; the glitch holds fast at first, the failure
-for good, the capsule backing off alone), the third stage with the lander in its adapter; `lem-jettison`
-borrows the undocking (unconfirmed). Apollo's landings play whole: 190 of 249 seasons. Then borrowings
-for steps an existing clip shows (unconfirmed): Surveyor's `lunar-landing` the Moon landing (its own
-`surveyor-landing` since 2026-10-17),
-`orbit-insertion` the insertion, the third to sixth duration levels the second's, `splashdown` (after the
-chutes) the splashdown and recovery, `lunar-slingshot` the flyby, `heliocentric-orbit-insertion` and
-`ignition-and-separation` the burn out (`tpi`), and `engine-test`, the MiG's `deorbit-burn` and
-`orbital-maneuvering-engine-test` the retrofire (a capsule's: the MiG has no burn of its own yet). And the
-spaceplane's runway landing, `landing` after `descent` (`runway-landing`: a rocket plane glides in over a dry
-lake, flares and puts its skid down; the glitch bounces, the failure's skid gives way, as on an X-15 in
-1962). The `descent` before it still plays the capsule's chutes: the user's call. 211 of 249 seasons play
-whole. Then the planets: the Moon's approach, flyby and orbit insertion take a planet (`PLANET`; no radio
-shadow, no Earth in view), so Venus, Mars, Jupiter and Saturn have approaches, those and Mercury flybys,
-and Mars an orbit insertion, with Jupiter (belts, the spot), Saturn (its ring) and Mercury drawn new.
-Mariner 10 still lacks its cruise from Venus to Mercury (no Mercury on the planets' map). 219 of 249
-seasons play whole. Then the probe landers: `probe-release` (the bus lets its lander go; the glitch holds at
-the first try, the failure at both), `probe-landing` (a sphere lander under its chute onto a rocky plain,
-its mast up and sending; the glitch tips onto its side and sends weakly, as Venera 7; the failure lands hard
-and is silent) and `probe-surface` (its sampler arm scoops the soil; the glitch stalls, as Viking 1's did; the
-failure falls silent, as Mars 3). The landers' entries borrow the reentry, their descents the chutes, and
-Luna's surface work the probe's, its return stage the lunar liftoff (unconfirmed). `landing` after
-`lander-descent` plays the probe's. 229 of 249 seasons play whole. Then the landers' tests in Earth
-orbit, the Moon's lander over the Earth's limb with an alarm lamp: `lander-engine-test` (the descent
-engine burns; the glitch sputters first, the failure goes out) for the LK, lunar module, Langley and
-direct-ascent landing module tests, and `lander-staging` (the ascent stage fires off the descent stage; the
-failure's stages don't part and the stack tumbles) for the ascent stage tests and the LK's landing gear
-jettison. Borrowed (unconfirmed): the LK and Langley lander separations the undocking, the LK's descent the
-powered descent, the Langley lander's ascent and rendezvous the lunar ascent, the Gemini propulsion and
-ascent module burns the retrofire (they aren't landers), the burns to a high orbit the insertion, the coasts
-and the high orbit the Earth orbit, the entry corridor trim the Earth approach. 243 of 249 seasons play
-whole; left are the X-15's and the MiG's air launches and Mariner 10's cruise to Mercury. They're done:
-the carrier plane with the rocket plane under its wing, `air-takeoff` (the glitch's engine smokes and it
-lifts off late, the failure abandons the takeoff), `air-cruise` for the preflight (in flight, as the pack's
-seasons order it after the takeoff, though its text reads as before it; an alarm lamp; the failure turns
-for home), `air-drop` (the glitch lights late, the failure never), then the rocket plane alone,
-`rocket-climb` (the engine runs rough; the failure's stops and it falls through) and `rocket-flight` for
-its peak, its fast run and the MiG's wing test (it rocks; the failure departs into a spin, as the X-15
-lost in 1967). Mercury is on the planets' map for Mariner 10's `venus-mercury-transit` (its own parts, so
-the other cruises are unchanged). Every one of the 249 seasons plays whole, and every step in the
-checklist has its clips (a step behind a vehicle now folds onto a rule's step there too, as the game
-matches it). Most borrowings are unconfirmed.
-
-The launch was tried two ways on 2026-10-12, both judged usable by the user. Claude alone wrote the
-layers as SVG and the motion as formulas: 8 minutes, the smoother motion. The other way was a Claude
-Design storyboard of success, glitch and failure, rebuilt part by part: about 28 minutes, with
-choppier motion from hitting fixed key frames, but its glitch and failure ideas were good: a
-stutter with a lean and a kink left in the trail, and a cut-out with the dashed planned path,
-a break-up and pieces falling along arcs. **Decided (user, 2026-10-12):** Claude animates the steps
-alone, and Claude Design is brought in only for inspiration where a step has no good idea yet.
-Proofs of concept stay at 1920 × 1080 and 1500 kbps (indistinguishable from the default bitrate at
-the sizes they'll play), so they compare; the real size and aspect wait for the replay viewer's
-redesign. Both pipelines are in `assets-raw/replay/` (its README).
-
-**A whole mission as one film** (the user's idea, 2026-10-12, assumed doable): the replay plays each
-step's clip back to back, chosen by the step's outcome, so each mission puts together its own film.
-Measured with the three 1080p launch clips: one player loading the next clip when the current one
-ends leaves a 37 ms gap (just over one 30 fps frame); two alternating players, the next clip
-preloaded during the current one, start it 17–22 ms after the end, within one screen refresh, so
-the join is seamless. A load blocks the render thread for about 12 ms, and the first clip needs
-about 70 ms from load to picture. For it to read as one film, each clip should end where the next
-begins (the launch ends with the rocket gone off the top and the trail left).
-
-**Built (2026-10-12, `ui-spec.md` §4.7.3 and §4.4):** the replay plays each step's clip on a monitor, shows
-the step's result at the clip's `revealAt`, and moves on by itself; steps without a clip play the
-no-signal loop (`assets-raw/replay/no-signal/`). A turn with missions flown first offers to play them
-spoiler-free. The launch is the only step with clips (the storyboard's three, 960 × 540, 650–790 KB each,
-800 kbps). Next: more steps, in the order a typical early mission meets them.
-
-**The replay console (built 2026-10-13, `ui-spec.md` §4.7.3, "The console"):** the monitor became a
-mission-control console, from a Claude Design mockup: the picture on the left, a mission clock, a
-status gauge whose needle tells the outcome at the reveal, and telemetry bars. **Next (user,
-2026-10-13):** a pass over the mission steps' configuration gives each step a mission time to start
-from (T+ at liftoff, at orbit insertion, ...), so the clock advances from there during each step;
-until then it's a show clock counting the clips played.
-
-**A tribute to Carl Sagan and the Pale Blue Dot** (the user's idea, 2026-10-13, for later): after the
-mission behind the photo, show the Pale Blue Dot and honour Sagan's essay, perhaps with his speech.
-- **The mission isn't in the game:** Voyager 1 took the photo on 14 February 1990, from about 6
-  billion km, at Sagan's urging; neither pack has a Voyager program (BASPM's tree doesn't either; the
-  pack mentions Voyager only in two history notes). The choices: a Voyager program of our own (new
-  content beyond BASPM's, the user's call), or the tribute on the furthest outer-planet flight there is
-  (Pioneer 10 or 11, or a goal like `saturn-flyby`).
+**A tribute to Carl Sagan and the Pale Blue Dot** (the user's idea, 2026-10-13): the archive's Pale
+Blue Dot page (§2.12, user, 2026-10-15), unlocked by `saturn-flyby`, the furthest flight in the game
+(neither pack has a Voyager program).
 - **Rights:** the image is NASA/JPL's, public domain. Sagan's text and his reading of it are from
   his book *Pale Blue Dot* (1994) and belong to his estate: not usable without permission, even in a
-  non-commercial project. Without it, the tribute says it in our own words and points to the essay.
+  non-commercial project.
 - **The estate's stance (researched 2026-10-13):** no published policy on fan or non-commercial use.
   Druyan-Sagan Associates (Ann Druyan) licenses Sagan's voice commercially (Apple 2017, Fiat
   Chrysler 2019, Netflix 2025) and sued Luma AI on 25 August 2026 over eight seconds of it in an ad,
@@ -3956,291 +3299,160 @@ mission behind the photo, show the Pale Blue Dot and honour Sagan's essay, perha
   tribute screen.
 - **Decided (user, 2026-10-13): use Sagan's recording without asking.** The user accepts the risk as
   very low for a private, non-commercial game among friends, and doesn't want to draw the estate's
-  attention to the project by asking. The clip comes from the Library of Congress: item
-  `cosmos000110`, https://www.loc.gov/item/cosmos000110/, a short recording of Sagan explaining the
-  Pale Blue Dot, in the Seth MacFarlane Collection of the Carl Sagan and Ann Druyan Archive (Motion
-  Picture, Broadcasting and Recorded Sound Division). When it's built:
-  - `assets/CREDITS.md` credits it as it is: Carl Sagan, the LoC item and its collection, the URL, and
-    "© Druyan-Sagan Associates"; it claims no licence and no public domain.
-  - **If the estate ever objects, take the clip out at once.** Revisit this before the repo goes
-    public (`CLAUDE.md`: ask before making it public).
-- **Where it goes (user, 2026-10-15):** the archive's Pale Blue Dot page (§2.12), unlocked by
-  `saturn-flyby`, the furthest flight in the game.
-- **The whole reading (user, 2026-10-15):** the Library of Congress item turned out to be Sagan reading the
-  entire passage, 4:36, not a short clip; the user keeps all of it ("it could be an hour long and I would
-  keep all of it").
-  - The Voyager 1 image (NASA/JPL, public domain) and the tribute's own text need nothing more.
+  attention to the project by asking. The recording is the Library of Congress's item
+  `cosmos000110`, https://www.loc.gov/item/cosmos000110/, Sagan reading the entire passage, 4:36, in
+  the Seth MacFarlane Collection of the Carl Sagan and Ann Druyan Archive (Motion Picture,
+  Broadcasting and Recorded Sound Division); the user keeps all of it (2026-10-15).
+  `assets/CREDITS.md` credits it as it is (Carl Sagan, the LoC item and its collection, the URL, "©
+  Druyan-Sagan Associates"), claiming no licence and no public domain. **If the estate ever objects,
+  take the clip out at once.** The decision said to revisit it before the repo went public; the repo
+  went public on 2026-10-28, and no revisit is recorded: **open, the user's call.**
 
-**Sound for the replay (the user's idea, 2026-10-13; the groundwork built the same day, `ui-spec.md`
-§4.7.3, "Sound"):** no audio baked into the videos, so ambience can cross from one step to the next.
-A pool of named sounds (`assets/content/replay-sounds.json`), the clips' sidecars cueing them like
-`revealAt`, the console making its own sounds, room tone under everything, and a fanfare at the end.
-**Decided (user, 2026-10-13):**
-- **English for both sides.** Soviet recordings are hard to find online without Russian, and none of
-  the players speaks Russian: Russian callouts would cost a lot and make the replay harder to follow.
-  NASA's recordings serve both agencies, unrealistic as that is.
-- **No background music, a fanfare at the end instead** (user, 2026-10-13, walking back the earlier
-  plan of a few generic tracks shuffled under every replay: hard to get right without it grating).
-  One fanfare when the season summary shows a mission that didn't fail (glitches, solved or not,
-  included), another when it failed; a catastrophe shares the failure's.
-- **Accepted from Claude's proposal:** the pool as data, not an enum; cues with loops, fades and a
-  loop carried into the next clip; the spoiler rule for sound (`ReplayClipsTest`); the console's sounds
-  from `ReplayConsole`; several takes per sound, no repeats; a
-  room-tone layer; skips fading everything within 0.1 s; separate music and effects volumes; the music
-  model's terms recorded in `assets/CREDITS.md`. (Music dipping under radio voices went with the
-  background music.)
-- **First up:** the console's sounds (the pool's descriptions are the brief). Then the radio voices
-  and the clips' cues, as the pass over the mission steps lists the animations.
-- **Placeholders until the real sounds come (user, 2026-10-13):** every sound in the pool has a
-  synthesized take, `placeholder-*` under `assets/audio/replay/`, made by
-  `assets-raw/replay/sounds/make_placeholder_sounds.py` (which leaves a sound with real takes alone).
-  Replace a placeholder by putting the real files in its entry's `files`.
-- **The Quindar tones** (flagged 2026-10-13, history for §1.1): the beep heard every few seconds in
-  Apollo's air-to-ground audio. Mission control's equipment sent a 250 ms tone, 2525 Hz, when CAPCOM
-  keyed the microphone and 2475 Hz when the key was released; inaudible to the crew in theory, they
-  switched the remote tracking stations' transmitters on and off over the phone lines. They belong
-  with the radio voices, a cue before and after each CAPCOM line, and can be generated exactly (pure
-  tones, nothing to license). The telemetry blip stays a separate, softer console sound.
-
-**Advisor** (the user's idea, built 2026-10-08, `ui-spec.md` component 24): a card on the hub with
-a new agency's first steps (help, engineers, a program, a rocket, R&D, controllers, astronauts
-once crewed, reliability to 60 % for a payload and a rocket, then the first mission, the first
-report), each ticked off from the state, with a link to
-the building and one to the item's help topics. It retires for good once everything is done or the
-player hides it. **Next:** see in the play test whether the order and wording steer a new player
-well, and whether three items at a time is the right number.
-
-**A smarter bot** (user, 2026-10-09): worth real effort, for better analysis now and maybe an NPC
-rival later. Built in dev-tools the same day: `ContentPackPlayouts.Bot`, plain, working ahead,
-and flying side missions (§2.6). Lessons for an NPC: buy nothing permanent (building levels,
-hires, rocket programs) for a passing goal, and stay solvent before staying busy; debt stalls the
-plan for longer than any side flight fills. **The smart bot** (2026-10-12, `standard smart`, §2.9
-"A smarter bot"): nobody idle, hires for years left, skill-matched R&D, early launches on the
-flight's odds, the plan's later rockets opened with spare money. It lands every game, at a median of
-87 (NASA) and 96 (Soviet) seasons against the side-missions bot's 135 and 168, with two rotating
-teams of engineers and hires who stay to the game's end (the user's ideas). Several flights of the
-plan at once was tried and made it slower (kept behind `bot.parallel`). Next: the R&D tuning (§2.9,
-"Lulls") and the hands-on and contract measurements rerun with it, a choice of R&D decision options
-by expected value (it still picks at random), and the two balance points it raised: cheap failures
-reward launching early, and idle staff quit fast.
-
-**Interactive events** (the user's idea, 2026-10-09, not designed yet): decisions between
-flights, so a wait for R&D isn't empty. R&D events with choices (a supplier delay, a trade of
-cost against reliability, paying for a ground test or test firing whose result shows), and
-decisions in the turn report. Some should draw on what the explainers teach (§1.1, `ui-spec.md`
-component 18), so a player uses that knowledge to improve a design. To be fleshed out after the
-bot.
-- **R&D decisions, the first step** (talked through with the user, 2026-10-10; not specified yet):
-  - **Shape:** an event arises at a turn's resolution, attached to one component under R&D (rocket or
-    payload), and waits for the player. Choosing is an ordinary action that the server resolves on the
-    spot (outcome drawn from a seed fixed to the event, so no rerolls and the journal replays it), with
-    the result shown at once. Unanswered when the turn resolves, its default applies. One open decision
-    at a time.
-  - **Where:** a gold Decision card at the top of the turn report and a "Decisions" cell in its strip,
-    linking to the R&D board; a gold dot on the VAB's or SET Centre's hub marker (hover "A decision
-    waiting: Atlas"); the decision itself as a banner on the component's R&D card (story, choices with
-    what each shows in advance, the default marked, concept chips), a confirmation, then the outcome in
-    place with the bar and season marks updating; a line in the next report's news.
-  - **When (aimed at the lulls):** near certain (about 85-90 %) when the agency has no mission in flight
-    and the component is more than a season from 60 % (`ResearchPlanning.project`), on the component the
-    soonest mission waits on, else the one furthest from 60 %. Raised by seasons since the last launch,
-    nothing becoming ready next season (no launch, training, upgrade or milestone), waiting for money,
-    and a quiet last turn; lowered by a mission in flight or a launch this turn, and by a decision last
-    season. Paused after an unanswered decision until the player acts again, so absent players don't
-    collect defaults. Measured with the playout bots before tuning.
-  - **Types** (the user's three, then six more; the user wants all of them, story arcs especially):
-    1. *Resource for a chance:* spend X for a stated chance of Y (pay for a ground test).
-    2. *Knowledge:* a right and a wrong answer, a large boost or a penalty, and "I don't know" as the
-       default; drawing on the explainers.
-    3. *Ambiguous:* several choices whose outcomes can't be told in advance, social and personnel themes,
-       traits shaping the result.
-    4. *Who oversees it:* assign an idle engineer, their skill setting the odds; pulling someone out of
-       training makes them available.
-    5. *Trade-offs over time:* an effect over several seasons (freeze the design: faster R&D, lower cap;
-       redesign: a drop now, a higher cap), the season marks previewing each option.
-    6. *Diagnosis:* clues (telemetry, a technician's note), pick the cause; a wrong pick costs a season.
-    7. *Opportunity with strings:* an offer for this turn only (a borrowed test stand for a seconded
-       engineer, an untested cheaper part).
-    8. *Pairing:* pick two engineers to work together; rapport and traits decide, and the pairing builds
-       rapport or starts a clash.
-    9. *Intelligence tip:* adopt a rival's approach, right more often the higher the Intelligence
-       Office's level.
-    10. *Story arcs:* a good outcome opens a follow-up in a later quiet season, with higher stakes.
-  - **The season's gain is fixed when a decision is offered** (the user's play-test find, 2026-11-11): a
-    reliability effect's "seasons of R&D" are the gain of the team that did the season's work, kept on the
-    pending decision (`PendingDecision.seasonGain`, `RdDecisions.seasonGain`). Before, it was read when the
-    player decided, so moving the best engineers onto the component, deciding and moving them back in the
-    same turn grew the effect for free. Staffing a component up over real seasons still pays: the decision
-    after that is sized from the bigger team.
-    11. *Hands-on* (the user's idea, 2026-10-11, from the "Probe Command Minigame" spec doc; specified,
-        not built): instead of options, a short resource puzzle the player can play, or leave to the
-        team. Specified below and in `ui-spec.md` component 26, type 11.
-  - **Specified** as `ui-spec.md` component 26 (2026-10-10), with G11 for the server; **mocked up** the same
-    day on the canvas `Launch Window — R&D decisions` (the choices are in component 26; the look confirmed by
-    the user the same day) and **built** the same day: all ten types, 23 decisions, the rules, the client and
-    the bots ("as built" in component 26). Next: the play test, then the pools grown by type, and the balance
-    (decisions shorten the bots' Moon race by about 13 seasons). **The pools were grown on 2026-10-25:**
-    185 decisions, about 20 first steps a type (pairing 12, hands-on 7), three new story arcs and five new
-    hands-on levels (component 26, "The pools grown").
-  - **Build:** the type a field in a content file (story, options, what shows in advance, effect,
-    default), one resolver per type. Variety isn't a worry: other lull ideas will join it (user).
-- **The hands-on decision** (type 11; the user's idea, 2026-10-11; mocked up the same day, canvas
-  `Launch Window — Hands-on`; every number unconfirmed): a
-  turn-based resource puzzle with a push-your-luck step, adapted from the user's "Probe Command
-  Minigame" spec (the Claude Docs page of that name) from a probe in orbit to a ground test campaign.
-  The mechanics come from another game's minigame; mechanics are free to borrow, but every name,
-  number, text and drawing here is our own (the spirit of §1.2's rule).
-  - **The choice:** the banner offers "Run it yourself" (opens the puzzle) and "Leave it to the team"
-    (the default: nothing happens). Starting commits: from then on the decision settles from the
-    puzzle, and an unfinished puzzle settles as it stands when the turn resolves (its remaining rounds
-    spent empty), so quitting after bad rolls never falls back to the default.
-  - **The puzzle** (the spec's rules, kept): four resources, a fixed command list, a few rounds of up to
-    three commands each. **Plan:** queue commands; their inputs are paid at once, their outputs only
-    at execution, so outputs can't pay for another command the same round; undo and reset refund.
-    **Execute:** commands resolve in slot order, each rolling fail (primary output -1, never below
-    0), normal, or exceptional (+1); on a fail the player may pay 1 of the first resource to turn it
-    normal. Secondary outputs always pay. The recharge command (no input, +1 of the first resource)
-    never rolls and uses a slot. Meeting the objective when the rounds run out is a success, the bonus
-    objective a bonus success (ending the puzzle early), anything less a failure. Held amounts count,
-    not totals produced.
-  - **Ground theme for a rocket's test campaign** (reference level, unconfirmed): *Shifts* (the
-    spec's power: pays the basic commands and for resisting a failure), *Firings* and *Measurements*
-    (the objective), *Spare parts* (the intermediate). Three groups of three commands, each group's
-    first costing only shifts, the others costing the other groups' resources; plus *Overtime* (+1
-    shift). Start 6 shifts; 4 rounds of 3; objective 3 firings and 4 measurements, bonus 6 and 7, as
-    in the spec's reference level. A payload's campaign is the same structure with its own words
-    (*Bench runs*, *Measurements*, *Spare parts*). Command names are our own and live in
-    `decisions.json` with the level.
-  - **The team sets the odds** (unconfirmed): the fail chance is 35 % less a quarter of the best
-    team member's skill in the component's skill, never under 10 %; the exceptional chance is 15 %,
-    20 % with good chemistry on the team; the rest normal. Resisting reads as "call in an expert". A
+**R&D decisions** (the user's idea, 2026-10-10, the first of the "interactive events": decisions
+between flights, so a wait for R&D isn't empty; `ui-spec.md` component 26 and G11; `rules.RdDecisions`,
+`DecideAction`; canvas `Launch Window — R&D decisions`): a choice about a component under R&D, offered mostly in lulls, decided at once (the
+outcome drawn from a seed fixed to the decision, so no rerolls and the journal replays it), its
+default applied if the turn resolves unanswered. Eleven types in each pack's `decisions.json` (a pack
+file): resource for a chance, knowledge (drawing on the explainers), ambiguous, who oversees it,
+trade-offs over time, diagnosis, opportunity with strings, pairing, intelligence tip, story arcs and
+hands-on. 185 decisions since 2026-10-25, about 20 first steps a type (pairing 12, hands-on 7). Only
+one option a decision may take an overseer, and no negative funds effect. **The season's gain is fixed
+when a decision is offered** (the user's play-test find, 2026-11-11): a reliability effect's "seasons
+of R&D" are the gain of the team that did the season's work (`PendingDecision.seasonGain`,
+`RdDecisions.seasonGain`), so moving engineers on and off before deciding grows nothing. Decisions
+shorten the bots' Moon race by about 13 seasons. Variety isn't a worry: other lull ideas may join it
+(user).
+- **The hands-on decision** (type 11; the user's idea, 2026-10-11, from their "Probe Command Minigame"
+  spec, the Claude Docs page of that name; canvas `Launch Window — Hands-on`; `rules.HandsOn`,
+  `HandsOnAction`; *every number unconfirmed*): a turn-based resource puzzle with a push-your-luck step,
+  adapted from a probe in orbit to a ground test campaign. The mechanics come from another game's
+  minigame; mechanics are free to borrow, but every name, number, text and drawing here is our own
+  (the spirit of §1.2's rule).
+  - **The choice:** "Run it yourself" (opens the puzzle) or "Leave it to the team" (the default:
+    nothing happens). Starting commits: an unfinished puzzle settles as it stands when the turn
+    resolves (a waiting fail accepted, an unconfirmed queue refunded, the rounds left run empty), so
+    quitting after bad rolls never falls back to the default.
+  - **The puzzle:** four resources, a fixed command list, a few rounds of up to three commands each.
+    **Plan:** queue commands; their inputs are paid at once, their outputs only at execution, so
+    outputs can't pay for another command the same round; undo and reset refund. **Execute:**
+    commands resolve in slot order, each rolling fail (primary output −1, never below 0), normal, or
+    exceptional (+1); on a fail the player may pay 1 of the first resource to turn it normal. Secondary
+    outputs always pay. The recharge command (no input, +1 of the first resource) never rolls and uses
+    a slot. Meeting the objective when the rounds run out is a success, the bonus objective a bonus
+    success (ending the puzzle early), anything less a failure. Held amounts count, not totals.
+  - **Ground theme for a rocket's test campaign** (reference level): *Shifts* (pays the basic commands
+    and for resisting a failure), *Firings* and *Measurements* (the objective), *Spare parts* (the
+    intermediate). Three groups of three commands, each group's first costing only shifts, the others
+    the other groups' resources; plus *Overtime* (+1 shift). Start 6 shifts; 4 rounds of 3; objective
+    3 firings and 4 measurements, bonus 6 and 7. A payload's campaign has its own words (*Bench runs*,
+    *Measurements*, *Spare parts*). Levels live in `decisions.json` (*A week on the big test stand*,
+    *A week in the vacuum chamber*, and the later ones; help's `handsOn.*` tokens quote the first).
+  - **The team sets the odds:** the fail chance is 35 % less a quarter of the best team member's skill
+    in the component's skill, never under 10 %; the exceptional chance is 15 %, 20 % with good
+    chemistry (as the player sees it); the rest normal. Resisting reads as "call in an expert". A
     component with nobody on it can't offer the type.
-  - **Rewards in seasons of R&D gain** (as the other types): bonus success about three seasons' gain,
-    success about one and a half, failure nothing. Close to a right knowledge answer at best, so the
-    puzzle is a choice, not a duty: a player who never plays it isn't behind.
+  - **Rewards in seasons of R&D gain:** bonus success about three seasons' gain, success about one and
+    a half, failure nothing. A choice, not a duty: a player who never plays it isn't behind.
   - **Server-authoritative:** the puzzle's state lives in the open decision (`PendingDecision`), and
     each step (queue, undo, reset, confirm, resist, accept) is a journaled action the server applies at
-    once and answers with the new state. The rolls come from the decision's own seed and the step's
-    index, never sent to the client (`withoutSeed`), so a player can't preview the rolls offline, and
-    a redone turn replays the same puzzle. A confirm runs its round up to the first fail that waits on
-    a resist choice. The rules are a pure state machine in `core` (`rules.HandsOn`), the client's
-    screen only draws it (G7).
-  - **Levels are authored, not generated:** a handful per component kind, each checked in a test by a
-    search over all-normal play (the objective must be reachable, the bonus too); difficulty may rise
-    with the component's era later.
-  - **How often:** one type among the eleven, drawn like the others, so a few times a game; four rounds
-    of three commands take a few minutes, fine now and then, tiring every turn.
-  - **Built (2026-10-11):** `rules.HandsOn` (the state machine and an all-normal solver, the spec's
-    acceptance tests in `HandsOnTest`), `RdDecisions.handsOn` (rolls from the decision's seed and the
-    roll's index, the expert's answer never changing the next roll), `HandsOnAction`, and two levels in
-    `decisions.json`: *A week on the big test stand* (rockets) and *A week in the vacuum chamber*
-    (payloads), both checked winnable to the bonus by the solver. An unfinished campaign at the
-    resolution accepts a waiting fail, refunds an unconfirmed queue and runs the rounds left empty.
-    The odds use the team's chemistry as the player sees it.
-  - **Measured (2026-10-11):** `ContentPackPlayouts standard side decisions`, 200 Moon races. The bot
-    picks "Run it yourself" at random like any option, then plays the solver's plan each round and
-    calls in an expert on every fail while shifts last: 522 campaigns, **480 bonus, 42 success, no
-    failure**. A perfect planner with four rounds for a three-round bonus almost always gets it, so
-    the bonus is too easy at these numbers, at least for a careful player: a harder bonus, three
-    rounds, or a dearer expert are the levers (unconfirmed, for the user to choose).
+    once. The rolls come from the decision's own seed and the roll's index, never sent to the client
+    (`withoutSeed`), and the expert's answer never changes the next roll. A confirm runs its round up
+    to the first fail that waits on a resist choice. The rules are a pure state machine in `core`, the
+    client only draws it (G7).
+  - **Levels are authored, not generated,** each checked winnable to the bonus by a search over
+    all-normal play (`HandsOnTest`); difficulty may rise with the component's era later.
+  - **Measured (2026-10-11):** the bot playing the solver's plan and resisting every fail got the bonus
+    in 480 of 522 campaigns, no failure: **the bonus is too easy for a careful player.** Levers (for the
+    user to choose): a harder bonus, three rounds, or a dearer expert.
 
-**Front pages for the Firsts** (the user's idea, 2026-10-09; **specified and mocked up 2026-10-11**,
-`ui-spec.md` §4.18 and G14): when an agency makes one of the great Firsts (satellite in orbit, human in
-space, human in orbit, crewed lunar flyby, the Moon landing), every player sees a fictional newspaper's
-front page, *The Daily Zenith*, with the headline and an article on who made it first. It pops up on
-login before the turn report, the first thing they see. The page is the top half of a broadsheet,
-landscape, so its text is readable at 1920 x 1080. Its art (paper, masthead, a press photo per First)
-is generated with ComfyUI (`assets-raw/frontpage/`), and the mockup was laid out in Photocraft, the
-first screen mocked up outside Claude Design. **Built 2026-10-11:** the stories (two per First and a
-tie story, `assets/content/front-pages.json`), the server's printing (G14) and the screen
-(`ui-spec.md` §4.18, "Built in libGDX"). Every choice there is unconfirmed. Next: the play test.
+**Front pages for the Firsts** (the user's idea, 2026-10-09; `ui-spec.md` §4.18 and G14,
+`rules.FrontPagePrinter`): when an agency makes one of the great Firsts (satellite in orbit, human in
+space, human in orbit, crewed lunar flyby, the Moon landing), every player sees a fictional
+newspaper's front page, *The Daily Zenith*, on login before the turn report. The words are in
+`assets/content/front-pages.json`; the art is generated with ComfyUI (`assets-raw/frontpage/`), and
+the mockup was laid out in Photocraft. The orbit photo shows the player's own pilot (12 versions,
+`client.view.PilotPhoto`, user, 2026-10-31). Every choice there is unconfirmed.
 
-**Commercial contracts** (the user's idea, designed, mocked up and **built** 2026-10-11, §2.11,
-`ui-spec.md` §4.17 and component 27): contract lines unlocked per program, a shared marketplace with
-sealed applications, tiers by track record, money instead of prestige. Rules, market, content (25
-unlock sets, 31 clients), screens, help topic, a contract bot (`RaceLulls ... ahead+contracts`) and
-`TurnRollback`'s market files are in. Next: the play test, then tuning from the measurement in
-§2.11.
+**The world reacts** (the user's idea, 2026-10-20; `ui-spec.md` §4.18.1, component 28 and G17, canvas
+`Launch Window — The World Reacts`): when a
+First's front page is printed, every rival may give a press statement during the next turn: one of
+five stances (enthusiastic, polite, "we'll be next", downplay, no comment) plus an optional quote of
+up to 140 characters, printed word for word. At the next resolve a follow-up page, "The World Reacts",
+prints them as one article (`rules.ReactionPrinter`), and rivals who stayed silent appear as not
+responding. Flavour only. The user chose quotes printed as given over an LLM writing the article (an
+LLM rewrite could come later as a layer on top, falling back to the quote). **The article reads as a
+story, not a list** (user, 2026-10-22): the statements' mood picks a story written whole for the First;
+stance lines are joined by linking sentences; clauses on where a rival stands come from public facts
+only. At most 4 statements are told in full; the rest share a line. A page that runs long drops its
+close, then runs on to a continuation sheet, never a scroll area (user). A late statement is refused,
+not lost. Its first plan is in `ideas/world-reacts.md`, superseded where they differ. Unconfirmed:
+late joiners can't answer; no page when nobody spoke; follow-ups print before the turn's own Firsts.
 
-**Publishing findings** (the user's idea, 2026-10-19; **built 2026-10-21**, §2.13, `ui-spec.md` §4.20 and
-G16): science goals as findings that add 4 points to the base chance of the steps they make safer (18 in
-the standard pack, mapped for review), published from the turn report, a finding's archive page or the
-Museum, paying up to 33 % of the goal's first-time prestige by the share of rivals helped (user). Settled
-once a turn (`publications/turn-N.json`). No effect beyond noise on the smart bot's race. Next: the user's
-review of the mapping. All 18 findings have pages (13 written 2026-10-21). Publishing measured with
-`RaceShock -Drace.publish=never,always`. Reset the dev data root and rebuild client and server together.
+**In memory** (the user's idea, 2026-10-22; `ui-spec.md` §4.18.3, component 29 and G19,
+`rules.MemorialPrinter`, canvas `Launch Window — In Memory`): a memorial page in the paper for every crew lost in flight, printed a turn
+late so it never spoils the replay (user), with the agency's statement in the tone its director picks
+(their courage, who they were, we will go on, we will find out why) and the other agencies'
+condolences; a news line when crewed flights resume. It came with **a goal counts only if the crew
+comes home** (§2.6). Left for later: secrecy (a Soviet agency keeping a loss quiet).
 
-**The world reacts** (the user's idea, 2026-10-20; **built 2026-10-22**, `ui-spec.md` §4.18.1, component 28
-and G17, from the canvas `Launch Window — The World Reacts`): when a First's front page is printed, every
-rival may give a press statement during the next turn. A statement is one of five stances (enthusiastic,
-polite, "we'll be next", downplay, no comment) plus an optional quote of up to 140 characters, printed word
-for word. At the next resolve, a follow-up page, "The World Reacts", prints them as one article, and rivals
-who stayed silent appear as not responding. It is flavour only, with no effect on money, prestige or
-anything else. The user chose quotes printed as given over an LLM writing the article: an LLM rewrite could
-come later as a layer on top, falling back to the printed quote. **The article reads as a story, not a list**
-(user, 2026-10-22): the statements' mood picks a story written whole for the First; stance lines are joined
-by linking sentences where the stance changes; clauses on where a rival stands come from public facts only
-(the goals it holds). At most 4 statements are told in full, quotes first and taking turns across the
-stances; the rest share a line. A page that runs long drops its close, then runs on to a continuation sheet
-("Continued on page 2"), never a scroll area (user, 2026-10-22). Its first plan is in
-`ideas/world-reacts.md`, superseded where they differ. Next: the play test. Unconfirmed: late joiners can't
-answer; no page when nobody spoke; follow-ups print before the turn's own Firsts.
+**Theories of the day** (the user's idea, 2026-10-22, flavour only; `ui-spec.md` §4.18.2 and G18,
+`rules.SciencePrinter`, `assets/content/theories.json`): the questions the real space age argued over
+before a flight settled them (the deep lunar dust, eating weightless, the radiation belts,
+micrometeoroids, a warm Venus, canals on Mars, mascons, Moon germs), raised for a player at a
+checkpoint in the turn report and settled for everyone by the first flight that answers them: a
+science page in the paper for the public's questions, a news line for the engineers'. The history is
+in §1.1. Considered and left for later (user): a light rules effect, an open question showing as
+"unknown" on its steps until settled; theories that turn out right (the belts) as a new hazard.
 
-**In memory** (the user's idea, 2026-10-22; **built the same day**, `ui-spec.md` §4.18.3, component 29 and G19, from
-the canvas `Launch Window — In Memory`): a memorial page in the paper for every crew lost in flight, printed a turn late so it never spoils the replay
-(user), with the agency's statement in the tone its director picks (their courage, who they were, we will go on,
-we will find out why) and the other agencies' condolences; a news line when crewed flights resume. It came with
-a rule change built the same day: **a goal counts only if the crew comes home** (§2.6, `GoalsWithheld`; the
-smart bot's 200 games came out identical before and after, it never lost a crew after a step that reached a
-goal). Left for later: secrecy (a Soviet agency keeping a loss quiet).
+**Filler bots** (the user's idea, 2026-10-25): agencies the server plays itself, so a small play test
+has rivals. Listed in `game-meta.json` as `"bots": [{"id": "bot-1", "archetype": "SOVIET"}]`
+(`BotPlayer`; an agency or director name is optional, drawn from `agency-names.json` and the personnel
+names otherwise), each a player folder like any other (`players/bot-1`, made through `PlayerSlots`),
+which no account can log into. A bot plays its turn just before the turn resolves, after the turn's
+backup, so `TurnRollback --redo` plays it again with the fixed build; its `bot.json` keeps the last turn
+it played, so a retry doesn't play it twice (`BotPlayers`). Its actions go through the same validation
+and journal as a player's: `bot.FillerBot` proposes one at a time against the preview, and one the rules
+refuse isn't tried again that turn. It follows the playout bot's plan (`bot.BotPlans`): opens the next
+flight's program and the cheapest rocket that lifts it, upgrades and hires until it can staff it (one
+more for each seat auto-assign can't fill beyond the people away training or sick; without that
+allowance hires snowballed), puts its engineers on the flight's hardware, sends idle people to training
+while the hardware is far off, and launches at about 70 % reliability (65 to 75, a turn's draw). It
+answers R&D decisions with an option at random (never the hands-on puzzle), runs an Analysis section
+above 8,000 and an assessment of a random rival about one turn in three, skips about one turn in ten,
+and gives statements on 70 % of its rivals' Firsts and condolences on 85 % of their lost crews. **Bots
+can win** and are marked "(bot)" in the race, the Intelligence Office and the game result, not in the
+paper (user, 2026-10-25; `RivalSummary.bot`). *Every number is unconfirmed.* On the early-era pack two
+bots reach the whole race in 90 turns (`BotPlayersTest`, since the skill-growth cut); on the standard
+pack, in one 200-turn game, the NASA bot won the Moon race at turn 187: slow, with money piling up past
+2 million (unexplained; it sat 40 turns on Apollo's lunar-module test). Left out: contracts, findings,
+PR duty, poaching, reacting to the news beyond statements.
 
-**Theories of the day** (the user's idea, 2026-10-22; **built the same day, flavour only**, `ui-spec.md` §4.18.2
-and G18, straight in libGDX): the questions the real space age argued over before a flight settled them (the
-deep lunar dust, eating weightless, the radiation belts, micrometeoroids, a warm Venus, canals on Mars, mascons,
-Moon germs), raised for a player at a checkpoint in the turn report and settled for everyone by the first flight
-that answers them: a science page in the paper for the public's questions, a news line for the engineers'. The
-history is in §1.1. Considered and left for later (user): a light rules effect, an open question showing as
-"unknown" on its steps until settled; theories that turn out right (the belts) as a new hazard. Next: the play
-test.
+**Also built, recorded in their sections:** PR duty (§2.2(c)), people (§2.2(d)), intelligence (§2.9),
+commercial contracts (§2.11), the archive (§2.12), publishing findings (§2.13), the guided progression
+and the roads to the Moon (§2.3(d), (e)), the Sputnik shock and raises (§2.1(e), (f)), the grounding
+(§2.5(j)), rocket-plane wings and specialists (§2.2(c)), public prestige and the standing charts
+(§2.1(g)), undoing a bad turn (§3.7).
 
-**Filler bots** (the user's idea, 2026-10-25; **built the same day**): agencies the server plays itself, so a
-small play test has rivals. Listed in `game-meta.json` as `"bots": [{"id": "bot-1", "archetype": "SOVIET"}]`
-(`BotPlayer`; an agency or director name is optional, drawn from `agency-names.json` and the personnel names
-otherwise), each a player folder like any other (`players/bot-1`, made through `PlayerSlots` as a claimed
-slot is), which no account can log into. A bot plays its turn just before the turn resolves, after the turn's
-backup, so `TurnRollback --redo` plays it again with the fixed build; its `bot.json` keeps the last turn it
-played, so a retry doesn't play it twice (`BotPlayers`). Its actions go through the same validation and journal
-as a player's: `bot.FillerBot` proposes one at a time against the preview, and one the rules refuse isn't tried
-again that turn. It follows the playout bot's plan (`bot.BotPlans`, the Moon's on the standard pack, the early
-race's on early-era): opens the next flight's program and the cheapest rocket that lifts it, upgrades and hires
-until it can staff it (one more for each seat "auto-assign" can't fill beyond the people away training or sick,
-who'll be back; without that allowance new hires in basic training snowballed to 34 controllers), puts its engineers on the flight's hardware, sends idle people to training while the
-hardware is far off, and launches at about 70 % reliability (65 to 75, a turn's draw). It answers R&D decisions
-with an option at random (never the hands-on puzzle, which it leaves to the team), runs an Analysis section
-above 8,000 and an assessment of a random rival about one turn in three, skips about one turn in ten, and gives
-statements: on 70 % of its rivals' Firsts, condolences on 85 % of their lost crews, a tone on its own. **Bots can
-win** and are marked "(bot)" in the race, the Intelligence Office and the game result, not in the paper (user,
-2026-10-25; `RivalSummary.bot`). Every number is unconfirmed. On the early-era pack two bots reach the whole race
-in 60 turns (`BotPlayersTest`); on the standard pack, in one 200-turn game, the NASA bot landed and won the Moon
-race at turn 187 and the Soviet one had reached its uncrewed flyby (the smart bot's median is 87): slow, with money
-piling up past 2 million (unexplained; six engineers doing all its R&D is a guess, and it sat 40 turns on Apollo's
-lunar-module test). Left out: contracts, findings, PR duty, poaching, reacting to the news beyond
-statements.
+**Still open:**
+- **A smarter bot, next:** the R&D tuning and the hands-on and contract measurements rerun with the
+  smart bot, a choice of R&D decision options by expected value (it still picks at random), and the two
+  balance points it raised (§2.9): cheap failures reward launching early, and idle staff quit fast.
+  Lessons for an NPC rival, if one is ever built: buy nothing permanent for a passing goal, and stay
+  solvent before staying busy.
+- **More interactive events** beyond the R&D decisions, if the play test asks for them.
+- The console's mission times (above); the hands-on levers (above); the Sagan revisit (above).
 
 ### Later
 
-- **M6 — Deployment: built 2026-10-06, no release cut yet.** The jpackage client zip (built and
-  launched locally, also under a pinned version as CI will), the server Docker image with a
-  bind-mounted data root (`deploy/docker-compose.yml`, unverified until its first CI run), and
-  the two tag-triggered workflows. The packaged exe is DPI-unaware by default (Windows scales
-  it); the user is judging the fonts in both modes. **The repo stays private for now** (user,
-  2026-10-08). The NAS pulls the image with an access token. The repo goes public when a real
-  first game starts. The first version number is still open.
-- **M7+ (order open):** people worth caring about (chemistry, traits, rapport, ambitions, career
-  records, poaching; §2.2(d), in five phases, all built by 2026-10-08); interaction beyond passive competition (§2.9); the rest of the content
-  tree beyond the early era; more Museum encyclopedia entries once there's content for them (§1.1; E-01 to E-19
-  built by 2026-10-07; E-20 to E-30, for the full content pack, built 2026-10-09); a game-host role and UI;
-  validating the `WEEKDAYS` profile with the colleagues' group.
+- **M6 — Deployment: built 2026-10-06; releases `v0.0.1` and `v0.1.0` tagged.** The jpackage client
+  zip, the server Docker image with a bind-mounted data root (`deploy/docker-compose.yml`), and the two
+  tag-triggered workflows (commands and gotchas in `CLAUDE.md`). The packaged exe is DPI-unaware by
+  default (Windows scales it). **The repo is public since 2026-10-28** (user, for the wiki). The GHCR
+  image's visibility is a separate package setting: it was still private on 2026-10-29, so the NAS
+  pulls it with an access token until it is made public (the user means to).
+- **M7+ (order open):** a game-host role and UI (§4); validating the `WEEKDAYS` profile with the
+  colleagues' group; more Museum encyclopedia entries as content calls for them (§1.1). People,
+  interaction, the full content tree and E-01 to E-31 are built (§2.2(d), §2.9, §5 M3, §1.1).
 - **Dropped: launch latitude as a mechanic** (user's idea 2026-10-07, dropped by the user
   2026-10-08). Considered: a site factor on payloads, orbit classes on missions (polar,
   geostationary, the Soviets' Molniya orbit as their answer), and second launch sites as
