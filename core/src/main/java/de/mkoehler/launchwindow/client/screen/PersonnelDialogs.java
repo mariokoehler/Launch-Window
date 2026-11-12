@@ -16,6 +16,8 @@ import de.mkoehler.launchwindow.actions.PullOutOfTrainingAction;
 import de.mkoehler.launchwindow.actions.StartExpertTrainingAction;
 import de.mkoehler.launchwindow.actions.StartTrainingAction;
 import de.mkoehler.launchwindow.persistence.PlayerAction;
+import de.mkoehler.launchwindow.client.ui.HistoryNote;
+import de.mkoehler.launchwindow.client.ui.HistoryNotes;
 import de.mkoehler.launchwindow.client.ui.Refusals;
 import de.mkoehler.launchwindow.client.ui.Theme;
 import de.mkoehler.launchwindow.client.ui.UiKit;
@@ -282,7 +284,11 @@ final class PersonnelDialogs {
                     : "Pick a skill at " + (int) SkillGrowth.EXPERT_TRAINING_SKILL_THRESHOLD + " or more."
                 : String.format(Locale.ROOT, "%.0f %% chance each season", SkillGrowth.expertTrainingSuccessChance(
                     department.skill(specialist, skill)));
-            info.add(ui.label(title, Theme.TextStyle.BODY_STRONG, Theme.INK)).padBottom(2f).row();
+            Table head = new Table();
+            head.add(ui.label(title, Theme.TextStyle.BODY_STRONG, Theme.INK)).left();
+            head.add(new HistoryNote(ui, HistoryNotes.EXPERT)).size(HistoryNote.ICON_SIZE).padLeft(Theme.SPACE_2);
+            head.add().expandX();
+            info.add(head).padBottom(2f).row();
             info.add(ui.paragraph(String.format(Locale.ROOT, "Open-ended: it runs until the trait comes, %.0f %% a "
                 + "season at %d rising to %.0f %% at %d. The skill doesn't grow, and pulling out gives nothing.",
                 SkillGrowth.EXPERT_TRAINING_BASE_SUCCESS_CHANCE, (int) SkillGrowth.EXPERT_TRAINING_SKILL_THRESHOLD,

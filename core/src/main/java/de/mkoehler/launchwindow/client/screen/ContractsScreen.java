@@ -11,6 +11,8 @@ import com.badlogic.gdx.utils.Scaling;
 import de.mkoehler.launchwindow.actions.ApplyContractAction;
 import de.mkoehler.launchwindow.client.LaunchWindowGame;
 import de.mkoehler.launchwindow.client.ui.FullWidthPicture;
+import de.mkoehler.launchwindow.client.ui.HistoryNote;
+import de.mkoehler.launchwindow.client.ui.HistoryNotes;
 import de.mkoehler.launchwindow.client.ui.Theme;
 import de.mkoehler.launchwindow.client.view.ContentNames;
 import de.mkoehler.launchwindow.client.view.ContractsView;
@@ -122,7 +124,11 @@ public final class ContractsScreen extends ChromeScreen {
         card.top().left();
         if (contract == null) {
             card.defaults().left().growX();
-            card.add(ui.label("Your contract", Theme.TextStyle.HEADING_SM, Theme.INK)).padBottom(Theme.SPACE_2).row();
+            Table head = new Table();
+            head.add(ui.label("Your contract", Theme.TextStyle.HEADING_SM, Theme.INK));
+            head.add(new HistoryNote(ui, HistoryNotes.TELSTAR)).size(HistoryNote.ICON_SIZE).padLeft(Theme.SPACE_2);
+            head.add().expandX();
+            card.add(head).padBottom(Theme.SPACE_2).row();
             card.add(ui.paragraph("No active contract. Apply for one below; it's awarded when the turn resolves.",
                 Theme.TextStyle.BODY, Theme.INK)).padBottom(Theme.SPACE_2).row();
             for (String rule : List.of(
@@ -147,7 +153,9 @@ public final class ContractsScreen extends ChromeScreen {
         middle.top().left();
         middle.defaults().left();
         Table titleRow = new Table();
-        titleRow.add(ui.label("Your contract", Theme.TextStyle.HEADING_SM, Theme.INK)).padRight(Theme.SPACE_3);
+        titleRow.add(ui.label("Your contract", Theme.TextStyle.HEADING_SM, Theme.INK));
+        titleRow.add(new HistoryNote(ui, HistoryNotes.TELSTAR)).size(HistoryNote.ICON_SIZE).padLeft(Theme.SPACE_2)
+            .padRight(Theme.SPACE_3);
         titleRow.add(ui.badge(Theme.BadgeKind.ACTIVE, "Tier " + contract.tier() + " of " + Contracts.TIERS));
         middle.add(titleRow).padBottom(Theme.SPACE_3).row();
         middle.add(ui.label((ContractsView.client(contract.clientId()) + " · "

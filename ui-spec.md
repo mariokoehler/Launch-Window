@@ -254,6 +254,8 @@ On the right: a prestige chip, a game-date chip ("1958 · S2") and a next-resolu
     - **The text is our own,** written from real-world facts, never from BASPM's
       historical-facts text (`design.md` §1.2).
     - **The join screen has the first one** (§4.2), where players meet the icon.
+    - **No new ones** (user, 2026-11-12, `design.md` §1.1): the last three added were the Expert
+      panel's (Apollo 13), the Contracts screen's (Telstar) and Luna 17's (Lunokhod 2).
 16. **Waiting indicator** (the user's play-test request, 2026-10-05). When a
     server call takes longer than 0.3 s, a small navy chip, "WAITING FOR THE SERVER" with three
     dots lighting up in turn, shows in the middle of the header row (empty there on every

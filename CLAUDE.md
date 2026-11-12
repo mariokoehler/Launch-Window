@@ -75,9 +75,10 @@ first live game starts in January 2027. Many numbers are still unconfirmed: the 
 - **Advisor before and after** any multi-file feature.
 - **Unspecified sub-details:** propose a concrete default in the doc, flagged unconfirmed (and
   listed in `design.md` §4), rather than stalling. Ask only for foundational or hard-to-reverse choices.
-- **Flag unprompted:** security concerns (briefly), and educational or history material. Any
-  real mission, engineering problem or tidbit that turns up goes into `design.md` §1.1 the same
-  session; history notes are shown in-game (`ui-spec.md` component 15).
+- **Flag unprompted:** security concerns (briefly).
+- **No new history notes** (user, 2026-11-12, `design.md` §1.1): the game has enough. Don't add,
+  collect or propose them; fixing a wrong fact in an existing note is still welcome. Facts a new
+  feature needs (an explainer's, a clip's) are still checked and recorded in §1.1.
 - **Content values follow BASPM** (user decisions 2026-10-03, confirmed 2026-10-06): costs,
   reliability, prestige, goals, budget numbers and training lengths come from BASPM's data;
   ids, names and all text are our own. Write text from the facts, never from BASPM's

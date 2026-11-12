@@ -60,6 +60,25 @@ public final class HistoryNotes {
         + "helped build the R-1, a copy of the V-2.";
 
     /**
+     * On the training dialog's Expert panel, beside its title ({@code design.md} &sect;1.1, checked 2026-11-12:
+     * Wikipedia's "Apollo 13", "John Aaron" and "Ken Mattingly").
+     */
+    public static final String EXPERT = "On Apollo 13 the command module had to be brought back to life on its "
+        + "batteries for the return, something never meant to be done in flight. Flight controller John Aaron, in "
+        + "charge of the power budget, worked out a new power-up sequence with Ken Mattingly, who had been dropped "
+        + "from the crew two days before launch after an exposure to German measles. He never caught it. The crew "
+        + "ran the sequence without trouble and came home.";
+
+    /**
+     * On the Contracts screen, beside "Your contract" ({@code design.md} &sect;1.1, checked 2026-11-12: Wikipedia's
+     * "Telstar 1", IEEE Spectrum and EBSCO; sources give $2.7 to $3.5 million for the launch).
+     */
+    public static final String TELSTAR = "The first commercial satellite flew on a government rocket. AT&T's Bell "
+        + "Labs built Telstar 1, and AT&T paid NASA close to three million dollars to launch it on a Thor-Delta on 10 "
+        + "July 1962. Within weeks it carried the first live television across the Atlantic. Radiation from an "
+        + "American high-altitude nuclear test, Starfish Prime, damaged it, and it fell silent in February 1963.";
+
+    /**
      * Not instantiable; this class only holds texts.
      */
     private HistoryNotes() {

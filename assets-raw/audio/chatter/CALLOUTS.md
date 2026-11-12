@@ -24,7 +24,7 @@ longer fit: `radio-roger` (its new lines are the retrofire's) from the probes' g
 "okay") from three failures, the attitude and tumbling calls from Vostok's and Voskhod's stuck valve, which has its own.
 
 Below: the lines, mostly for glitches and failures. They follow how the real flight loop
-sounded (`design.md` §1.1, "The flight loop in trouble").
+sounded (`git show 9b7107af:design.md`, §1.1, "The flight loop in trouble").
 
 ## How the real loop sounds when things go wrong
 

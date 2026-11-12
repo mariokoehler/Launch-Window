@@ -361,212 +361,29 @@ held-back 1956 flight, Mercury-Redstone 1's "four-inch flight", Ivan Ivanovich, 
 belts, Ham, Liberty Bell 7, Enos, Aurora 7, Faith 7, Belka and Strelka, and Sputnik 1's beeps
 leading to satellite navigation.
 
-**Candidates** (verify the figures before using any):
-- **Veterans or rookies:** NASA's Mercury Seven (1959) were test pilots aged 32–37 with 1,500+
-  flying hours; the first twenty cosmonauts (1960) were young fighter pilots, mostly mid-twenties,
-  picked partly to fit Vostok's cabin (under about 1.70 m and 72 kg, younger than about 30).
-  Apollo 11's controllers averaged about 27. Fits the hire screen next to a candidate's age.
-- **Mary Golda Ross:** Cherokee engineer at Lockheed from 1942, a founding member of its
-  Missiles Systems Division (Agena, early Mars and Venus studies). Fits a SET portrait.
-- **Nisei first names:** many Japanese Americans born in the 1920s–30s had an English first
-  name, which is why the name list mixes "George" and "Kazuo"; many were interned in WWII.
-- **Vostok's natural-decay backup:** one retrorocket, no backup, so the orbit was planned low
-  enough for drag to bring the capsule down within about ten days, with supplies for that long.
-  Vostok 1's stage burned long and put it higher. Fits Vostok Orbital's retrofire step.
-- **Vostok 1's modules didn't part** (12 April 1961): after the retrofire the instrument module
-  should have let go of Gagarin's descent sphere, but a bundle of cables held them together, and
-  the pair tumbled until the cables burned through as they hit the air, about ten minutes later.
-  It's the glitch of the modules-separation clip. Fits that step, or Vostok's history note.
-- **Mercury fired its retros on a ballistic hop** (2026-10-16, from memory; verify before a note uses it):
-  Freedom 7 (5 May 1961) and Liberty Bell 7 (21 July 1961) would have come down without them, but near
-  the top of the arc both fired the three retrorockets anyway and then dropped the pack: a test of the
-  rockets and of the pilot holding attitude through a burn, before orbit depended on it. The burn barely
-  changed the path. It's why BASPM's suborbital flights have a retrofire. Fits Mercury's suborbital
-  history note, or the `retrofire` step's.
-- **Vostok never flew a hop** (2026-10-16, from memory; verify before a note uses it): the Soviet crewed
-  program went straight to orbit; its suborbital flights were the dogs' on R-2A and R-5 rockets, whose
-  capsules came down on parachutes without a burn. BASPM's Vostok suborbital is a what-if. Vostok had no
-  pack to drop either (its one retro engine, the TDU-1, was in the instrument module), so the replay plays
-  its "retrofire jettison" as `retro-shutdown`, the burn's end.
-- **Soyuz comes home in one piece of three** (2026-10-16, from memory; verify before a note uses it):
-  after the deorbit burn the orbital module at the front and the instrument module at the back let go
-  of the descent module, which alone has a heat shield. Soyuz 5's failure to separate is under
-  "Soyuz 7K-OK" below (checked). The replay's `orbital-module-separation` drops the front module (the
-  pack, standing for the back one, went in the jettison before). Fits the 7K-OK's history note, or
-  that clip's failure.
-- **Gemini's adapter came off in two pieces:** checked under "How a Gemini came home" below. The
-  replay's `equipment-section-separation` plays the first of these for Gemini EOR.
-- **Lunokhod's lid and how Lunokhod 2 died** (2026-10-16, from memory; verify before a note uses it): the
-  rovers' lids opened in the lunar day to charge the solar cells on their underside, and closed at night over
-  the radiator to keep the heat in (a polonium-210 heater kept the instruments warm). In May 1973 Lunokhod 2
-  drove into a crater and, climbing out, its open lid touched the wall and picked up soil; when the lid closed,
-  the soil fell on the radiator, and it overheated and fell silent. Lunokhod 1's laser reflector was lost for
-  decades until a Lunar Reconnaissance Orbiter picture placed it in 2010, and lasers on Earth hit it again.
-  The replay's `lunokhod-drive` plays both. Fits Luna 17's history note, or a later Lunokhod 2 program.
-- **One stage, three missions** (2026-10-16, from memory; verify before a note uses it): the Ye-8 descent stage
-  (KT) landed Luna 16's and Luna 20's sample returns and Luna 17's and Luna 21's rovers; Luna 15 was the first
-  sample-return try, and crashed into Mare Crisium on 21 July 1969 while Armstrong and Aldrin were on the
-  surface. Luna 16 (September 1970) drilled about 35 cm with an arm, swung the core up into the return capsule
-  on top and flew 101 g of soil home. The replay draws the one stage for all of them.
-- **Surveyor's last few metres** (2026-10-17, from memory; verify before a note uses it): a big solid retro
-  rocket braked Surveyor from about 2.6 km/s and was dropped kilometres up; three small throttleable vernier
-  engines flew the rest, steered by radar, and cut at about 4 m (14 ft), so it fell the last stretch onto its
-  crushable footpads. Surveyor 1 landed so on 2 June 1966, four months after Luna 9, and sent over 11,000
-  pictures. On Surveyor 3 (April 1967) bright rocks confused the radar, the verniers didn't cut, and it bounced
-  twice before they were shut off by command. Surveyor 2 tumbled when a vernier failed to light, and Surveyor 4
-  fell silent seconds before its retro burned out. The replay's `surveyor-landing` plays the drop and the bounces.
-- **The X-15's high points** (2026-10-17, from memory; verify before a note uses it): above the air its fins had nothing to
-  bite on, so it steered with small hydrogen-peroxide jets in its nose and wings; Joe Walker took it to 107.8 km on
-  22 August 1963. William Knight flew the X-15A-2 to Mach 6.7 on 3 October 1967, and the heat burned through the dummy
-  ramjet under its tail. On 15 November 1967 Mike Adams's X-15 drifted off heading at its peak, spun, and broke up in
-  the pull-out on the way down. Before landing the pilot dropped the lower half of the ventral fin, which came down on
-  its own parachute, so the skids could reach the lakebed. The replay's `x15-peak`, `x15-fast` and `x15-descent`.
-- **The X-15's mother ships** (2026-11-04, from memory; verify before a note uses it): two B-52s, NASA's NB-52A
-  "The High and Mighty One" and NB-52B "Balls 8", carried it on a pylon under the right wing, between the body and the
-  inboard engine pod; a notch was cut in the wing's flap to clear the X-15's fin. The NB-52B went on dropping research
-  craft until 2004. The replay's carrier (`a-carrier`) follows that arrangement.
-- **Astronaut wings from a rocket plane** (2026-10-26, from Wikipedia's X-15 flight list, NASA and Space.com): of the
-  X-15's 199 flights, 13 by eight pilots went above 50 miles, the US Air Force's line for an astronaut; the five Air
-  Force pilots got their wings at the time, and the three NASA civilians only in August 2005: Bill Dana in person, Joe
-  Walker (killed in the XB-70 collision of June 1966) and John McKay posthumously. Two of Walker's flights also passed
-  the 100 km line used internationally, the higher at 354,200 ft (107.96 km, usually rounded to 107.8 km as in the entry
-  above) on 22 August 1963. Neil Armstrong flew the X-15 before Gemini, and Joe Engle
-  earned his wings in it before flying the Space Shuttle. What its pilots learnt (reaction-control jets, pressure
-  suits, flying a reentry) went into the capsules: the game's rocket-plane wings (§2.2(c)).
-- **Nova, the rocket direct ascent needed** (2026-10-26, from Wikipedia's Nova and Saturn C-8 articles and NASA's
-  SP-4009): landing the whole spacecraft and flying it home took a rocket far bigger than the Saturn V. The Nova
-  studies drew one with eight F-1 engines in its first stage, about 12 million pounds of thrust; the 8L design could
-  send about 68 t toward the Moon. NASA picked the Saturn C-5 (the Saturn V) in December 1961 and lunar-orbit
-  rendezvous in July 1962, and the eight-engine stage was dropped; the Michoud plant's roof was also too low for a
-  stage that wide. The game's Nova (§2.3(e)), its history note in `strings.json`.
-- **The roads to the Moon's history notes** (2026-10-26, `assets/content/moon-roads.json`, `ui-spec.md` §4.21):
-  - Apollo: John Houbolt at Langley argued for lunar-orbit rendezvous, the lightest plan, against most of NASA, and
-    wrote over his managers' heads; NASA chose it in July 1962 (as the explainer E-20).
-  - Gemini EOR: in 1961 James Chamberlin's Gemini team sketched Lunar Gemini with a light lander after a Langley
-    design, little more than a platform on a rocket engine on which the astronaut stood, at a fraction of Apollo's
-    launch mass; it stayed on paper once LOR won (Air & Space's "Lunar Landers That Never Were", Spaceflight Histories'
-    "Lunar Gemini"). No source found confirms an Earth-orbit-rendezvous variant: the note doesn't claim one.
-  - Gemini direct ascent: Nova, above.
-  - Soyuz 7K-L3: the LK flew three uncrewed tests in Earth orbit, 1970 and 1971 (Kosmos 379, 398, 434), and worked;
-    the N1 failed all four launches, 1969 to 1972.
-  - LK-700: Chelomei's direct-ascent proposal on the UR-700; the government chose Korolev's N1-L3, and neither the
-    UR-700 nor the LK-700 was built.
-- **The first rover sent to Mars** (2026-10-17, from Wikipedia and IEEE Spectrum; verify before a note uses it): Mars 2
-  and Mars 3 each carried PrOP-M, a 4.5 kg box on two wide skis, tethered to its lander by a 15 m cable. The lander's
-  arm was to set it down in view of the cameras; it would walk on its skis at up to a metre an hour, stopping every
-  1.5 m to measure the soil, and two bars on its front would tell it of a rock, so it could back off and walk round.
-  Neither ran: Mars 2 crashed on 27 November 1971, and Mars 3, down on 2 December, fell silent seconds after landing
-  (sources give 14 to 20). The rovers stayed secret for about 20 years. The replay's `mars-rover`.
-- **Viking's lander leaves its orbiter** (2026-10-17, NSSDCA's pages for Viking 1's orbiter and lander): the orbiter was
-  an octagon about 2.5 m across with four wings of solar panels (two opposite ones 9.75 m tip to tip), a 1.5 m dish on
-  one edge of its base and its main engine above; the lander's attachment points were on its bottom. Viking 1's lander
-  separated on 20 July 1976 at 08:51 UT and slowed itself out of orbit with its own hydrazine thrusters (12 nozzles in
-  four clusters of three, about 180 m/s), coasted a few hours and turned for entry. The replay's `viking-separation`.
-- **Pioneer Venus Multiprobe** (2026-10-17, checked against NSSDCA's catalogue pages for the bus, the large probe and
-  the Day probe, and a NASA technical report for the anomaly): the bus was a drum 2.5 m across with solar cells round
-  its side, no heat shield and no parachute; the large probe sat in the middle of its forward end and the three small
-  ones 120 degrees apart round it. The large probe left on 16 November 1978 on pyrotechnic springs; on 20 November the
-  small probes' clamps were released by explosive nuts and they flew off at a tangent, the bus spinning at 48 rpm.
-  Every probe was a sphere inside a blunt cone (the small ones' a 45-degree one). The large one (1.5 m, about 315 kg) put out its chute just
-  after entry on 9 December, dropped its heat shield at 67 km, cut the chute loose at about 45 km and fell free to the
-  ground (spacecraft time 19:39:55 UT). The small ones (0.8 m, about 90 kg) kept their heat shields and had no chute.
-  The Day probe hit at 19:47:59 after a 56-minute fall and sent for 67 minutes 37 seconds more. Every probe's
-  temperature sensors failed at about 12.5 km (near 640 K); a 1993 workshop traced it to the external harness's
-  insulation. The bus followed the probes in and sent for about a minute before it burned up near 110 km. The
-  replay's `multiprobe-*` clips play them.
-- **Injection, then departure** (2026-10-16, from memory; verify before a note uses it): BASPM splits a planetary
-  probe's start into a trans-planetary injection (the rocket's, with the booster seat) and an Earth departure
-  (the probe's alone: spacecraft systems, navigation, experiments). Pioneer Venus Orbiter (May 1978) went
-  straight from its Atlas-Centaur onto the path to Venus; once separated it was spun up, unfolded its
-  magnetometer boom, turned its despun antenna to the Earth, and the first tracking set up the course
-  corrections. The replay's `earth-departure` plays that coming alive.
-- **Saving throws are real:** Apollo 11's 1202/1201 alarms (a controller's call not to abort)
-  and Apollo 13's improvised survival plan. Fits a step rescued by its saving throw.
-- **The flight loop in trouble** (2026-10-14, as usually quoted; verify before a note uses them):
-  calls stayed flat and clipped. Apollo 12 (14 November 1969): lightning struck the Saturn V twice
-  after liftoff, the telemetry turned to nonsense, and EECOM John Aaron, who had seen the pattern once
-  in a test, called "try SCE to Aux", a switch few knew; the data came back and the mission flew on.
-  Apollo 13: "Houston, we've had a problem", said almost casually. Gemini 8: "We have serious
-  problems here. We're tumbling end over end." Apollo 11's landing ran on fuel calls, "sixty
-  seconds", "thirty seconds", to "contact light". Ideas for the replay's radio lines are in
-  `assets-raw/audio/chatter/CALLOUTS.md`.
-- **The carrier that burns up** (2026-10-15, checked): the early Venera carriers were never meant to
-  survive Venus. Venera 4's station (1967) was built to release its capsule and disintegrate at entry,
-  its own instruments working until then (Wikipedia, "Venera 4"). Venera 7's lander stayed attached
-  into the upper atmosphere, so the carrier could keep it chilled as long as possible; when buffeting
-  broke the carrier's lock on the Earth, it let the lander go (04:58:44 GMT, 15 December 1970), and
-  "while the carrier burned up, the lander experienced peak braking loads of 350 g" (Wikipedia,
-  "Venera 7"; A. LePage, Drew Ex Machina, 2020). It's the carrier-entry step's clip (`bus-entry`).
-- **The landers' way down** (2026-10-15, checked): Venera 7's parachute opened reefed; the reefing line
-  melted as designed about 13 minutes later, and some six minutes after that the chute began to fail. The
-  lander fell faster than planned, hit at about 17 m/s, toppled over and still sent a faint signal for 23
-  minutes, the first data from another planet's surface (Wikipedia, "Venera 7"). Viking's lander came
-  down in stages: its 16 m chute opened at about 6 km and 250 m/s, the aeroshell's heat shield dropped
-  7 seconds later and the legs came out 8 seconds after that; at about 1.5 km the lander left the
-  backshell and chute, lit its three descent engines and touched down about 40 seconds later at
-  2.4 m/s (Wikipedia, "Viking 1"). Mars 3 used a heat shield, a parachute and retrorockets the same
-  way. Mars 2's lander, five days earlier, hit the atmosphere too steeply and its chute never opened
-  (Wikipedia, "Mars 2"). They're the lander-descent step's clips (`venus-descent`: the glitch is Venera
-  7's torn chute; `mars-descent`). Viking 2's lander came down with one footpad on a rock and stood tilted
-  about 8 degrees, which tilted the horizon in its pictures (Malin Space Science Systems, "Views from the
-  Viking Landers"; NSSDC's caption of its first colour picture); Mars 3, down safely in a dust storm, sent
-  for a few seconds and then nothing more (Wikipedia, "Mars 3"). They're the Mars landing's glitch and
-  failure (`mars-landing`); Viking 1's stuck sampler arm and Mars 3's silence are its surface work's
-  (`mars-surface`).
-- **Expert rescue:** Apollo 13's command-module power-up procedure, devised by EECOM John Aaron
-  and the ground team and tested in the simulator by Ken Mattingly, grounded by measles
-  exposure. A controller and a non-flying astronaut rescuing a mission together is exactly the
-  Expert mechanic (§2.5(i)).
-- **Flight Director as a generalist:** Mission Control's five skills echo real consoles (FDO,
-  GUIDO, EECOM). A great Flight Director is broad, not deep.
-- **"Tiger Team"** is real NASA jargon for an urgent specialist task force.
-- **The R&D decisions' real problems** (2026-10-25, from memory; verify before a history note uses them): the
-  diagnoses grown that day are real failure modes, told without names. Pogo, the lengthwise shaking where
-  thrust and the fuel lines feed each other, troubled the Titan II under Gemini and the Saturn V on Apollo 6
-  (April 1968), cured with gas-filled dampers in the oxidiser lines. Combustion instability nearly stopped the
-  F-1 engine; baffles across the injector face, proven by setting off small bombs in the chamber, broke up
-  the waves. Others: a stage's thrust tailing off after cutoff and bumping the one above, a pump racing on a
-  gulp of gas from a vortex over a low tank's outlet, plastics giving off vapour that fogs optics in a
-  vacuum, cold grease jamming a mechanism, metals sticking in a vacuum (cold welding), steel against
-  aluminium corroding in salt air, and the bonus of testing a whole rocket at once ("all-up" testing, which
-  NASA adopted for the Saturn V in 1963 and first flew on Apollo 4 in November 1967).
-- **Rocket families:** reliability transfer encodes the real Redstone → Jupiter-C → Juno II
-  and Atlas/Titan/Saturn lineages; real families inherited engines, guidance and experience.
-  (A rival-driven "second mover" discount would be a genuine cross-player idea, not decided.)
-- **Prestige became budget:** NASA's funding rose sharply after Sputnik and Gagarin, before
-  Apollo had flown. Fits the first funding review.
-- **Trouble concentrates where things are already strained:** BASPM's bad events strike
-  components in R&D, morale after failures. Fits event text that explains why it fired.
-- **International cooperation came later:** no unified agency existed in the Cold War; the ISS
-  came decades later. A Museum aside.
-- **Prime vs extended objectives:** real missions are graded against must-achieve and bonus
-  objectives. For wherever a mission's extended phase is explained.
-- **Astronauts as PR:** the Mercury Seven's *Life* magazine deal and tours were a deliberate
-  strategy to build support. Behind PR duty (§2.2(c)).
-- **Commercial launches began with Telstar** (for the contracts, §2.11): AT&T built Telstar 1 and
-  paid NASA about $3 million a launch, the first commercial payload, launched on a Thor-Delta on
-  10 July 1962; with Telstar 2 in 1963 that was about $6 million for both. Sources: EBSCO's
-  research starter "First Commercial Communications Satellite Is Launched", IEEE Spectrum
-  ("Happy Birthday, Telstar"), Space.com ("Telstar: Satellites Beamed 1st TV Signals Across the
-  Sea", the $6 million): ebsco.com/research-starters/communication-and-mass-media/first-commercial-communications-satellite-launched,
-  spectrum.ieee.org/happy-birthday-telstar, www.space.com/19756-telstar.html. Fits the first contract line's history note.
-- **Real precedents behind some contract clients** (2026-11-05, §2.11; **sources not yet checked**, from
-  memory, so none of it goes into in-game history notes until it is): the Paton Electric Welding Institute's
-  Vulkan unit welded in vacuum on Soyuz 6 (October 1969), run from the descent module; Byurakan's Orion-2
-  ultraviolet telescope flew on Soyuz 13 (December 1973); the X-15 carried ultraviolet star cameras and
-  horizon-sensor tests; Thomas Gold argued the lunar plains might be deep dust, which Surveyor and Luna 9
-  disproved; John Glenn ate applesauce from a tube on Friendship 7; Telstar was used to compare American
-  and British clocks in 1962. The client stories state none of these as facts, only the needs behind them.
-- **Space insurance is as old as commercial satellites:** Lloyd's of London wrote the first
-  satellite policy in 1965, pre-launch cover for Intelsat I "Early Bird", the first commercial
-  satellite in geostationary orbit; COMSAT never claimed on it. Cover for the launch itself came
-  later, so the contracts' insurer is a small liberty. Sources: Wikipedia ("Satellite
-  insurance", en.wikipedia.org/wiki/Satellite_insurance), H. Yoshida, IISL 1993 ("first insurance
-  policy for satellite was written in 1965 to provide prelaunch coverage").
-- **Flying other people's experiments:** the X-15 carried micrometeorite collection pods and
-  ablative heat-shield samples for Apollo (NASA, www.nasa.gov/specials/60th/x-15). The supersonic
-  airliner's flight data came from the XB-70, not the X-15 (NASA's image archive, "Fleet aircraft"), so the X-15's contract clients are
-  research labs and Apollo's contractors, not airliner makers.
+**Moratorium on new history notes (user, 2026-11-12):** the game has enough of them. Don't add
+new history notes, don't collect candidates for them, and don't propose them; the notes in the game
+and the facts below are the record. Fixing a wrong fact in an existing note is still welcome. The
+candidate list kept until then (Mary Golda Ross, the Nisei names, Vostok and Soyuz coming home, the
+X-15, the R&D decisions' real problems, and more) is in `git show 9b7107af:design.md`.
+
+The last three added (checked 2026-11-12):
+- **Expert rescue** (`HistoryNotes.EXPERT`, on the training dialog's Expert panel): on Apollo 13 John
+  Aaron, in charge of the power budget, worked out the command module's power-up on its batteries with
+  Ken Mattingly, dropped from the crew two days before launch after Charlie Duke brought German measles
+  (rubella) to the crews; Mattingly never caught it, and Jack Swigert flew. Sources: Wikipedia's
+  "Apollo 13", "John Aaron", "Ken Mattingly". That Mattingly ran it in the simulator rests on one
+  secondary account (Cooper's *Thirteen*), so the note leaves it out.
+- **Telstar** (`HistoryNotes.TELSTAR`, beside "Your contract" on the Contracts screen): Bell Labs built
+  Telstar 1, AT&T paid NASA for the launch (Thor-Delta, 10 July 1962): sources differ on the fee, $2.68
+  million paid in advance (Wikipedia), $2.7 million (UPI at the time), $3 million (IEEE Spectrum, EBSCO),
+  $3.5 million (John Pierce), so the note says "close to three million dollars". Radiation from Starfish
+  Prime damaged it; its transmitter failed on 21 February 1963.
+- **Lunokhod 2** (Luna 17's note in `strings.json`): landed in January 1973, drove about 39 km (the agreed
+  figure; 37 km by its wheels, about 42 km from LRO pictures); on 9 May its open lid touched a crater wall
+  and gathered dust, which fell onto the radiators when the lid was closed; it overheated, and its signal
+  was lost on 11 May (Wikipedia, "Lunokhod 2").
+
 - **Press stories that really happened** (easter eggs in `pr-press.json`, §2.2(c), the player's
   astronaut in the real person's place; no history-note icon):
   - `do-good-work`: Gus Grissom, asked for a pep talk at Convair's Atlas plant in 1959, said
@@ -922,9 +739,6 @@ leading to satellite navigation.
   compact, 3.05 m across and 4.57 m long, with two Aerojet AJ10-138 engines of about 36 kN each, burning fuels that
   light on contact. Sources disagree on its length (one gives 7.6 m, which may count the interstage); the replay
   draws 4.57. Sources: Wikipedia ("Transtage", "Titan IIIC").
-- **The R-16 disaster** (Baikonur, 24 October 1960) for a later memorial or news context,
-  handled with care; **Apollo-Soyuz's crew breathing nitrogen tetroxide fumes** on the way
-  down (1975). Both turned up while writing E-05.
 - **The Sputnik shock** (checked 2026-10-12, for the answer to a rival's First, §2.1(e)): Sputnik 1
   (4 October 1957) set off a year of American answers: ARPA was founded in February 1958, the National
   Aeronautics and Space Act was signed on 29 July 1958, the National Defense Education Act on
@@ -952,15 +766,6 @@ leading to satellite navigation.
   docking in October 1967, Soyuz 2). After Soyuz 11 (30 June 1971) the next crew flew on Soyuz 12
   (27 September 1973), about 27 months, with the crew now in pressure suits. The game's 4 turns are a
   year: shorter than history, on purpose.
-- **Rocket pioneers in the suggested agency names** (2026-10-12, `assets/content/agency-names.json`,
-  `ui-spec.md` §4.2): three names honour pioneers. Konstantin Tsiolkovsky published the rocket equation
-  in 1903, in "Exploration of Outer Space by Means of Reaction Devices". Nikolai Kibalchich, sentenced
-  to death in 1881 for making the bombs that killed Tsar Alexander II, spent his last days in a cell
-  drawing a rocket-propelled flying machine; the police filed the paper away, and it was published only
-  in 1918. Robert Goddard flew the first liquid-fuelled rocket on 16 March 1926 at Auburn,
-  Massachusetts. A fourth, the "Baikal Jet Propulsion Group", echoes GIRD, Moscow's Group for the Study
-  of Reactive Motion (1931), where Sergei Korolev worked and whose GIRD-09 flew on 17 August 1933.
-  Candidates for history notes if the names ever get one.
 - **CAPCOM, the capsule communicator** (the user's question, checked 2026-10-08; shown on mission
   assembly's Mission control card, `HistoryNotes.CAPCOM`): the name comes from Project Mercury,
   when spacecraft were called capsules. Mercury flights were followed by tracking stations around

@@ -165,7 +165,7 @@
     "luna-17": {
       "name": "Luna 17",
       "description": "A lander that lowers ramps and sends a remote-controlled rover out to drive across the Moon.",
-      "historyNote": "Lunokhod 1 rolled down Luna 17's ramps on 17 November 1970. Built to last three lunar days, it worked through eleven and drove about 10.5 km, steered by drivers on Earth through a delay of several seconds. Its operations ended on 4 October 1971, the anniversary of Sputnik 1.",
+      "historyNote": "Lunokhod 1 rolled down Luna 17's ramps on 17 November 1970. Built to last three lunar days, it worked through eleven and drove about 10.5 km, steered from Earth. Lunokhod 2 followed in 1973 and drove about 39 km, until in May its open lid brushed a crater wall and picked up dust. When the lid was closed, the dust fell onto the radiator, and the rover overheated and fell silent.",
       "longDescription": "Luna 17 carried the first rover to the Moon, Lunokhod 1, launched on 10 November 1970 to land in Mare Imbrium, the Sea of Rains. The hard part was driving at all: a crew on Earth steered from television pictures that arrived seconds late, so every move was planned from the last frames, with one operator driving and another keeping the rover's main antenna pointed at the Earth. The rover had to survive each two-week lunar night on its own heat and wake up again. Its months of driving and soil tests showed what a machine driven from Earth could do on another world."
     },
     "pioneer-sun-orbiter": {
