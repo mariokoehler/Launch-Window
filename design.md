@@ -2853,8 +2853,8 @@ the chrome and hub decisions. Mockup canvases are private Claude Design artifact
 for links): Personnel Recruitment, Connect & Join Game, Space Complex Hub, SET Centre, VAB,
 Headquarters, Mission Control & Turn Report, Astronaut Complex & Public Affairs Office, Museum
 & Settings & Game Result, and the UI Asset Sheet. The per-canvas writeups (what each mockup showed
-and proposed, which `ui-spec.md` cites as "the writeup") are in `git show 6fc7af5:design.md`;
-the outcomes are in each screen's "Implemented" note.
+and proposed) are in `git show 6fc7af5:design.md`; the outcomes are in each screen's `ui-spec.md`
+section.
 
 **Chrome (every screen except the hub; `ChromeScreen`):**
 - 30 px page padding, 20 px between header, content and footer.
@@ -3158,7 +3158,7 @@ first (login → action → scheduled resolution → result, end to end) before 
 Screens are specified in `ui-spec.md` (server gaps in its §6), mocked up in Claude Design and built
 in libGDX (workflow in `CLAUDE.md`). Every hub building has its screen, as do the turn report,
 replay, Museum, Settings and game result; each screen's choices are in its `ui-spec.md`
-"Implemented" note. The game is feature complete and in play testing (dev mode; release builds as
+section. The game is feature complete and in play testing (dev mode; release builds as
 in M6).
 
 **Screen-flow decisions (user, 2026-10-03, `ui-spec.md` §3):** BASPM's buildings regrouped: the
