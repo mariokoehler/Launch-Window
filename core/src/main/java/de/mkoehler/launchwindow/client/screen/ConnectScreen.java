@@ -1,6 +1,7 @@
 package de.mkoehler.launchwindow.client.screen;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -12,6 +13,7 @@ import de.mkoehler.launchwindow.client.LaunchWindowGame;
 import de.mkoehler.launchwindow.client.connect.Credentials;
 import de.mkoehler.launchwindow.client.connect.LoginResult;
 import de.mkoehler.launchwindow.client.connect.ServerAddress;
+import de.mkoehler.launchwindow.client.settings.ClientSettings;
 import de.mkoehler.launchwindow.client.ui.FormField;
 import de.mkoehler.launchwindow.client.ui.Theme;
 import de.mkoehler.launchwindow.net.LoginNames;
@@ -36,6 +38,7 @@ public final class ConnectScreen extends StageScreen {
     private final FormField password;
     private final TextButton connect;
     private final Cell<Actor> bannerCell;
+    private int nextPreset;
 
     /**
      * Builds the screen, prefilled with the server, login and password of the last successful login
@@ -45,7 +48,7 @@ public final class ConnectScreen extends StageScreen {
      */
     public ConnectScreen(LaunchWindowGame game) {
         super(game);
-        server = new FormField(ui, "Server", game.lastServer(), "host:port");
+        server = new FormField(ui, "Server", game.lastServer(), "host:port").withAction(serverPresetButton());
         login = new FormField(ui, "Login", game.lastLogin(), "your-login");
         password = new FormField(ui, "Password", game.lastPassword(), "");
         password.input().setPasswordMode(true);
@@ -211,6 +214,36 @@ public final class ConnectScreen extends StageScreen {
     public void setBusy(boolean busy) {
         connect.setDisabled(busy);
         connect.setText(busy ? "Connecting…" : "Connect");
+    }
+
+    /**
+     * Builds the icon button beside the server field: each press puts the next of
+     * {@link ClientSettings#SERVER_PRESETS} into the field, this machine first (user, 2026-11-12).
+     *
+     * @return the button
+     */
+    private Table serverPresetButton() {
+        Table button = new Table();
+        button.setBackground(ui.rect(Theme.SURFACE_CARD, Theme.NAVY, Theme.BORDER_THIN));
+        Image glyph = new Image(ui.icon("restart"), Scaling.fit);
+        glyph.setColor(Theme.NAVY);
+        button.add(glyph).size(16f).padLeft(Theme.SPACE_3).padRight(Theme.SPACE_3);
+        button.setTouchable(Touchable.enabled);
+        button.addListener(SessionScreen.clicked(this::nextServerPreset));
+        ui.tooltip(button, "Known servers", "Fills in a known server: this machine first, then the public "
+            + "server. Press again for the next.");
+        return button;
+    }
+
+    /**
+     * Puts the next known server into the server field.
+     */
+    public void nextServerPreset() {
+        String preset = ClientSettings.SERVER_PRESETS.get(nextPreset);
+        nextPreset = (nextPreset + 1) % ClientSettings.SERVER_PRESETS.size();
+        server.input().setText(preset);
+        server.input().setCursorPosition(preset.length());
+        server.setError(null);
     }
 
     private void submitOnEnter(TextField field, char key) {

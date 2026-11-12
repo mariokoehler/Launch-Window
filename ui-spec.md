@@ -1697,6 +1697,11 @@ password of the last successful login are kept in
 sibling projects), so the form comes up filled in, focus starts on the password
 field, and Enter logs in. A failed login is never saved. Log out and Switch server
 in Settings keep the login and password and save the server chosen there.
+**Known servers (user, 2026-11-12; built straight in libGDX):** an icon-only button (the
+`restart` arrow) beside the server field, which it shortens, puts the next known server into the
+field on each press, this machine (`localhost:45825`) first, then the public server
+(`nas5714.myqnapcloud.com:45825`), round and round (`ClientSettings.SERVER_PRESETS`). With nothing
+saved yet, the field starts on the public server (`ClientSettings.defaults()`).
 
 ### 4.2 Join game (first visit to a game only)
 **Purpose:** join the game. **Shows:** an archetype choice between NASA-style and
