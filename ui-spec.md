@@ -3392,7 +3392,9 @@ this spec. All are done except G6 and G1's pack download; each done item names w
     and `JoinScreen`) logs out and opens Connect with the banner; a client that missed the notice does the same
     when a refresh says it has no slot. `GameInfoResponse.gameId` (`GameSeeds.gameKey`, a hash of the seed, never
     the seed) keys the client's per-game marks (read reports, the result seen, front pages and their fillers,
-    archive pages), so a new game on the same server starts unread; explainers read and the preferences stay.
+    archive pages) and the advisor's (retired, its idle and close-program tips; missed at first, user's play test,
+    2026-11-13), so a new game on the same server starts unread and with the advisor; help and explainers read and
+    the preferences stay.
   - **Applies at once:** the schedule and breaks are read from the file anyway; `RequestDispatcher`'s meta is
     replaced (dev mode, the archive toggle, the goals, the seed); new bots get their agencies
     (`BotPlayers.ensureSlots`). A changed pack makes `GameServer` rebuild its game in place after answering

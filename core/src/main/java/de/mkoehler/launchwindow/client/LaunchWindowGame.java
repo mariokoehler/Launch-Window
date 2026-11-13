@@ -822,11 +822,22 @@ public class LaunchWindowGame extends Game {
         flagsInMemory = flags;
     }
 
+    /**
+     * The advisor's marks that belong to one game: a new game on the same server starts with the advisor again
+     * ({@code ui-spec.md} &sect;4.22). Whether help and the explainers were opened stays with the player.
+     */
+    private static final java.util.Set<String> GAME_FLAGS = java.util.Set.of("advisorRetired", "idleTipDone",
+        "idleTipShown", "closeTipDone", "closeTipShown");
+
+    private String flagKey(String name) {
+        return GAME_FLAGS.contains(name) ? gameKey(name) : key(name);
+    }
+
     private boolean flag(String name) {
         if (flagsInMemory != null) {
             return flagsInMemory.contains(name);
         }
-        return session != null && preferences().getBoolean(key(name), false);
+        return session != null && preferences().getBoolean(flagKey(name), false);
     }
 
     private void setFlag(String name) {
@@ -838,7 +849,7 @@ public class LaunchWindowGame extends Game {
             return;
         }
         com.badlogic.gdx.Preferences preferences = preferences();
-        preferences.putBoolean(key(name), true);
+        preferences.putBoolean(flagKey(name), true);
         preferences.flush();
     }
 
