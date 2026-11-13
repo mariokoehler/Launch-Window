@@ -3159,7 +3159,7 @@ row's note lists its choices. All **unconfirmed**:
   line and a check on the current option); the date field and calendar popover; the section list with its marks; the password
   field with a show toggle and the "shown once" box; a 16 px checkbox and the checklist row with a 28 px patch; a field's
   focus, error, read-only and disabled states. No new colour tokens. **New icons for the UI Asset Sheet:** eye, eye-off, copy,
-  calendar, trash, plus, dice (Random), spark (Make a new one); the lock is the existing `lock.png`.
+  calendar, trash, plus, dice (Random), spark (Make a new one); the lock is the existing `lock.png`. They are on the UI Asset Sheet and in `assets/ui/icons/` (2026-11-13), drawn by `assets-raw/svg/ui/make_ui_icons.py`.
 ## 5. Refusal reasons (for toasts and inline messages)
 
 The server replies with these codes. The wording below is the spec's; the client's own is in

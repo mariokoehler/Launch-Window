@@ -88,6 +88,19 @@ CHROME = {
     "contract_unlock":'<path d="M12.2 21H5V2.5h8l4.5 4.5v5"/><path d="M13 2.5V7h4.5"/><path d="M8 8h3.5M8 11.5h5.5"/>'
                        '<path d="M7.8 16.4c.8-1.7 1.6-1.7 2 0s1.2 1.2 2-.4"/><circle cx="16.5" cy="16" r="3.4"/>'
                        '<path d="M15 19.3l-1 3.2M18 19.3l1 3.2"/>',
+    # Server settings (ui-spec.md §4.22, the Server settings canvas, 2026-11-13): show and hide a
+    # password, copy, a date field's calendar button, remove a row, add a row, a random seed, make a
+    # new password.
+    "eye": '<path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>',
+    "eye_off": '<path d="M3 3l18 18"/><path d="M10.6 5.1A10.8 10.8 0 0 1 12 5c6.4 0 10 7 10 7a17.8 17.8 0 0 1-3.2 4.2'
+               'M6.6 6.6C3.8 8.4 2 12 2 12s3.6 7 10 7a9.6 9.6 0 0 0 5.4-1.6"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/>',
+    "copy": '<rect x="9" y="9" width="12" height="12"/><path d="M5 15V3h12"/>',
+    "calendar": '<rect x="3" y="5" width="18" height="16"/><path d="M3 10h18M8 3v4M16 3v4"/>',
+    "trash": '<path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/>',
+    "plus": '<path d="M12 5v14M5 12h14"/>',
+    "dice": '<rect x="3" y="3" width="18" height="18"/><circle cx="8" cy="8" r="1.2" fill="currentColor"/>'
+            '<circle cx="16" cy="16" r="1.2" fill="currentColor"/><circle cx="12" cy="12" r="1.2" fill="currentColor"/>',
+    "spark": '<path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5 18 18M6 18l2.5-2.5M15.5 8.5 18 6"/>',
 }
 
 # Icons drawn as filled shapes rather than strokes; the contract flight's page knocks its lines out
