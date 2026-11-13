@@ -30,6 +30,9 @@ import de.mkoehler.launchwindow.net.messages.PublishPreviewResponse;
 import de.mkoehler.launchwindow.net.messages.ResolveTurnNowRequest;
 import de.mkoehler.launchwindow.net.messages.ResolveTurnNowResponse;
 import de.mkoehler.launchwindow.net.messages.RivalSummary;
+import de.mkoehler.launchwindow.net.messages.SaveServerSettingsRequest;
+import de.mkoehler.launchwindow.net.messages.ServerSettingsRequest;
+import de.mkoehler.launchwindow.net.messages.ServerSettingsResponse;
 import de.mkoehler.launchwindow.net.messages.RivalsRequest;
 import de.mkoehler.launchwindow.net.messages.RivalsResponse;
 import de.mkoehler.launchwindow.net.messages.StandingRequest;
@@ -108,11 +111,15 @@ public class RequestDispatcher {
     private final Path dataRoot;
     private final ObjectMapper mapper;
     private final ActionContext context;
-    private final GameMeta meta;
+    private GameMeta meta;
     private final GameInfoService gameInfo;
     private final SecureRandom actionSeeds = new SecureRandom();
     private final Map<Integer, String> connectionAccountIds = new HashMap<>();
     private TurnForcer turnForcer;
+    private ServerSettingsService settings;
+    private java.util.function.IntFunction<String> remoteHosts = id -> "unknown";
+    private boolean settingsChanged;
+    private boolean packChanged;
 
     /**
      * Creates a new dispatcher.
@@ -203,6 +210,12 @@ public class RequestDispatcher {
         }
         if (message instanceof SubmitStatementRequest request) {
             return new DispatchResult(handleSubmitStatement(connectionId, request), false);
+        }
+        if (message instanceof ServerSettingsRequest request) {
+            return new DispatchResult(handleServerSettings(connectionId, request), false);
+        }
+        if (message instanceof SaveServerSettingsRequest request) {
+            return new DispatchResult(handleSaveServerSettings(connectionId, request), false);
         }
         throw new IllegalArgumentException("Unexpected message type: " + message.getClass().getName());
     }
@@ -749,6 +762,133 @@ public class RequestDispatcher {
         } catch (IOException | RuntimeException e) {
             return GameInfoResponse.failure("Failed to read the game info: " + e.getMessage());
         }
+    }
+
+    /**
+     * Sets the admin's settings service and where a connection's address comes from (ui-spec.md section 4.22).
+     * Without a service, every settings request fails.
+     *
+     * @param settings    the service, shared across rebuilds so its lockouts last
+     * @param remoteHosts a connection's remote host
+     */
+    public void setServerSettings(ServerSettingsService settings, java.util.function.IntFunction<String> remoteHosts) {
+        this.settings = settings;
+        this.remoteHosts = Objects.requireNonNull(remoteHosts, "remoteHosts must not be null");
+    }
+
+    /**
+     * Takes over the logged-in connections of the dispatcher this one replaces, when the server rebuilds its game.
+     *
+     * @param previous the dispatcher replaced
+     */
+    public void adoptConnections(RequestDispatcher previous) {
+        connectionAccountIds.putAll(previous.connectionAccountIds);
+    }
+
+    /**
+     * Returns the settings as the dispatcher reads them now.
+     *
+     * @return the game meta
+     */
+    public GameMeta meta() {
+        return meta;
+    }
+
+    /**
+     * Returns whether the settings were saved since the last call, and clears it.
+     *
+     * @return whether everyone online should hear of it
+     */
+    public boolean takeSettingsChanged() {
+        boolean changed = settingsChanged;
+        settingsChanged = false;
+        return changed;
+    }
+
+    /**
+     * Returns whether a save changed the content pack since the last call, and clears it: the server then rebuilds
+     * its game from the new pack.
+     *
+     * @return whether it did
+     */
+    public boolean takePackChanged() {
+        boolean changed = packChanged;
+        packChanged = false;
+        return changed;
+    }
+
+    /**
+     * Handles a {@link ServerSettingsRequest}: the settings, for the admin password.
+     *
+     * @param connectionId the connection the request arrived on
+     * @param request      the request
+     * @return the response
+     */
+    public ServerSettingsResponse handleServerSettings(int connectionId, ServerSettingsRequest request) {
+        if (connectionAccountIds.get(connectionId) == null) {
+            return ServerSettingsResponse.failure(ServerSettingsResponse.Status.NOT_AUTHENTICATED,
+                "Not authenticated - send a HandshakeRequest first.");
+        }
+        if (settings == null) {
+            return ServerSettingsResponse.failure(ServerSettingsResponse.Status.SERVER_ERROR,
+                "This server can't edit its settings.");
+        }
+        try {
+            return settings.read(request.password(), remoteHosts.apply(connectionId), gameInfo.info());
+        } catch (IOException e) {
+            return ServerSettingsResponse.failure(ServerSettingsResponse.Status.SERVER_ERROR, e.getMessage());
+        }
+    }
+
+    /**
+     * Handles a {@link SaveServerSettingsRequest}: saves the admin's changes and applies them at once (dev mode, the
+     * bots; the schedule is read from the file anyway). A changed pack is applied by the server rebuilding its game
+     * after this returns ({@link #takePackChanged()}).
+     *
+     * @param connectionId the connection the request arrived on
+     * @param request      the request
+     * @return the response
+     */
+    public ServerSettingsResponse handleSaveServerSettings(int connectionId, SaveServerSettingsRequest request) {
+        if (connectionAccountIds.get(connectionId) == null) {
+            return ServerSettingsResponse.failure(ServerSettingsResponse.Status.NOT_AUTHENTICATED,
+                "Not authenticated - send a HandshakeRequest first.");
+        }
+        if (settings == null) {
+            return ServerSettingsResponse.failure(ServerSettingsResponse.Status.SERVER_ERROR,
+                "This server can't edit its settings.");
+        }
+        GameInfoResponse before;
+        try {
+            before = gameInfo.info();
+        } catch (IOException e) {
+            return ServerSettingsResponse.failure(ServerSettingsResponse.Status.SERVER_ERROR, e.getMessage());
+        }
+        ServerSettingsService.SaveOutcome outcome = settings.save(request, remoteHosts.apply(connectionId), before,
+            () -> {
+                try {
+                    return gameInfo.info();
+                } catch (IOException e) {
+                    return before;
+                }
+            });
+        if (outcome.saved() == null) {
+            return outcome.response();
+        }
+        settingsChanged = true;
+        if (outcome.packChanged()) {
+            packChanged = true;
+            return outcome.response();
+        }
+        meta = outcome.saved();
+        try {
+            de.mkoehler.launchwindow.server.schedule.BotPlayers.ensureSlots(dataRoot, mapper, context, meta);
+        } catch (IOException | RuntimeException e) {
+            // Checked before the save, so this is a failed write: the next startup tries again.
+            System.getLogger(RequestDispatcher.class.getName()).log(System.Logger.Level.ERROR,
+                "Couldn't found the new bots' agencies", e);
+        }
+        return outcome.response();
     }
 
     private static boolean isBlank(String value) {

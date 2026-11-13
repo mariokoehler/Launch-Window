@@ -60,6 +60,8 @@ first live game starts in January 2027. Many numbers are still unconfirmed: the 
 - Explainers E-01 to E-31 and concept chips (`ui-spec.md` components 18 and 19, `design.md` §1.1),
   help and its public wiki (component 23), the advisor (component 24), looking ahead (component 25).
 - Deployment: client zip and server image built by tag-triggered CI (`design.md` §5, M6).
+- Server settings: the admin edits `game-meta.json` in the client behind an admin password the server prints at
+  startup (`ui-spec.md` §4.22, G21).
 
 ## How we work
 
@@ -237,7 +239,8 @@ mvn -pl dev-tools compile exec:exec@handson         # any hands-on level's puzzl
   (without `--yes` it only says what it would do; on the NAS, run the class from the fixed image,
   as in `deploy/docker-compose.yml`). The server zips the data root into `data/backups/` before
   every turn.
-- **Dev mode:** `"devMode": true` in the server's `game-meta.json` (restart the server) shows
+- **Dev mode:** `"devMode": true` in the server's `game-meta.json` (restart the server, or set it in the client's
+  Server settings, which applies at once; the admin password is in the server's log and the file) shows
   "Dev · Resolve turn now" on the hub and allows `DevClient`'s `funds` cheat. `"devArchiveOpen": true`
   beside it opens every archive page, saving nothing (for reviewing them). `"bots"` there adds filler bots.
 - **Bot playouts:** `mvn -pl dev-tools compile exec:java -DmainClass=de.mkoehler.launchwindow.devtools.analysis.ContentPackPlayouts`

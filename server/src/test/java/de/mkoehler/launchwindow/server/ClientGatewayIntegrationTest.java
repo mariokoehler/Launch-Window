@@ -257,6 +257,59 @@ class ClientGatewayIntegrationTest {
     }
 
     /**
+     * The admin's server settings through the client's gateway (ui-spec.md section 4.22): the settings for the
+     * password, the unasked notice that they changed kept out of the reply queue, and a save.
+     */
+    @Test
+    void theGatewayFetchesAndSavesTheServerSettings(@TempDir Path dataRoot) throws Exception {
+        int port = startServer(dataRoot);
+        ObjectMapper mapper = GameServer.createMapper();
+        GameMeta meta = ServerTestGames.meta(false);
+        meta.setAdminPassword("admin-pass-1234");
+        de.mkoehler.launchwindow.server.schedule.GameMetaStore.save(dataRoot.resolve("game-meta.json"), meta, mapper);
+        dispatcher.setServerSettings(new ServerSettingsService(dataRoot, mapper, getClass().getClassLoader(),
+            java.time.Clock.systemUTC()), id -> "test");
+        application = new HeadlessApplication(new ApplicationAdapter() {
+        });
+        gateway = new NetworkGateway();
+        Credentials mario = new Credentials(new ServerAddress("localhost", port), "mario", "hunter2");
+        createAccount(mario);
+
+        de.mkoehler.launchwindow.net.messages.ServerSettingsResponse wrong =
+            await(done -> gateway.fetchServerSettings(mario, "nope", done));
+        assertEquals(de.mkoehler.launchwindow.net.messages.ServerSettingsResponse.Status.WRONG_ADMIN_PASSWORD,
+            wrong.status());
+        de.mkoehler.launchwindow.net.messages.ServerSettingsResponse read =
+            await(done -> gateway.fetchServerSettings(mario, "admin-pass-1234", done));
+        assertEquals(de.mkoehler.launchwindow.net.messages.ServerSettingsResponse.Status.OK, read.status(),
+            read.message());
+
+        for (int connectionId : dispatcher.loggedInConnections()) {
+            server.send(connectionId, new de.mkoehler.launchwindow.net.messages.ServerSettingsChangedNotice());
+        }
+        long deadline = System.currentTimeMillis() + 5_000;
+        boolean heard = false;
+        while (!heard && System.currentTimeMillis() < deadline) {
+            heard = gateway.takeSettingsChangedNotice();
+            Thread.sleep(20);
+        }
+        assertTrue(heard, "the notice arrived");
+
+        de.mkoehler.launchwindow.net.messages.ServerSettings s = read.settings();
+        de.mkoehler.launchwindow.net.messages.ServerSettings edit = new de.mkoehler.launchwindow.net.messages
+            .ServerSettings(s.version(), s.openTurn(), s.agencies(), s.nextResolution(), s.activeDays(),
+            s.resolutionTime(), s.timezone(), s.breaks(), s.contentPack(), s.declaredGoalIds(), s.gameSeed(), true,
+            false, s.bots(), s.packLock(), s.goalsLock(), List.of());
+        de.mkoehler.launchwindow.net.messages.ServerSettingsResponse saved =
+            await(done -> gateway.saveServerSettings(mario, "admin-pass-1234", edit, "", done));
+        assertEquals(de.mkoehler.launchwindow.net.messages.ServerSettingsResponse.Status.OK, saved.status(),
+            "the notice wasn't taken for the save's reply: " + saved.message());
+        assertTrue(saved.settings().devMode());
+        assertTrue(mapper.readValue(dataRoot.resolve("game-meta.json").toFile(), GameMeta.class).isDevMode());
+        assertEquals(1, handshakes.get(), "and the connection stayed up");
+    }
+
+    /**
      * Turn reports over real sockets: none before the first turn resolves, then the resolved
      * turn's report, read back from the JSON it's saved as, with its budget breakdown adding up.
      */

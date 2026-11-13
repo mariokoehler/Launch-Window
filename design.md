@@ -2382,13 +2382,14 @@ Per game (one per server, §3.9), in the host-edited `game-meta.json`:
 - **Blackout periods:** inclusive date ranges with no resolution, addable at any time
   (holidays, vacations), checked at trigger time so a blackout added today still stops today's
   turn. Only future turns can be blacked out.
-- **Editing it** (the user's idea, 2026-11-13; to be built): the admin edits every field from the
-  client, in Settings › Server settings (`ui-spec.md` §4.22, G20), after unlocking with an admin
-  password kept in the file as `adminPassword`. The server makes one at startup when it's missing
-  and prints it to stdout at every start. Hand edits still work. The schedule, breaks, dev mode and
-  new bots apply at once; the pack and seed lock once the first agency exists, the declared goals
-  once the first turn resolves, a bot once its agency exists. (The lock points, the 5-tries
-  throttle, the hidden seed and the password's shape are unconfirmed, §4.)
+- **Editing it** (the user's idea, 2026-11-13): the admin edits every field from the client, in
+  Settings › Server settings or from Join game (`ui-spec.md` §4.22, G21), with an admin password kept in the
+  file as `adminPassword`. The server makes one at startup when it's missing and prints it at every start;
+  every admin request carries it. Hand edits still work (a save over one is refused as stale). The schedule,
+  breaks, dev mode and new bots apply at once; a changed pack rebuilds the game in place. The pack and seed
+  lock once the first agency exists or a turn has resolved, the goals once a turn has resolved, a bot once
+  its agency exists. (The lock points, the lockout, the hidden seed and the password's shape are
+  unconfirmed, §4.)
 - **The announced start date** is an automatic blackout from "server live" to the day before
   the start: the signup window.
 - **A non-resolving day** is simply a day the job doesn't fire; queued actions carry over. The
@@ -2401,7 +2402,7 @@ Per game (one per server, §3.9), in the host-edited `game-meta.json`:
   countdown. **Game date:** turn 1 is Winter 1955, one season per turn (confirmed 2026-10-06),
   giving about 11 turns before the real Sputnik.
 - **Dev mode:** `"devMode": true` adds "Resolve turn now" for play testing (the scheduled
-  resolution still comes) and allows `DevClient`'s funds cheat.
+  resolution still comes) and allows `DevClient`'s funds cheat. Set in Server settings, it applies at once.
 - **Players online while a turn resolves** (the user's question, 2026-10-09). Some players
   wait online to see the turn first. The server handles requests and resolves the turn on one
   thread, so a request never interleaves with a resolution; it waits in the network queue and
@@ -2538,7 +2539,7 @@ projects and BASPM's own XML save, which maps almost 1:1 onto its object graph.
   (case-insensitive), fixed for the game. A late joiner's own season count starts at 1; they
   resolve on the shared clock.
 - **Host actions:** the game's settings, blackouts included, are edited in the client's Server
-  settings behind the admin password (§3.6, to be built); announcing and the start date stay
+  settings behind the admin password (§3.6); announcing and the start date stay
   outside the game. An allowlist mode is a possible later host option.
 - **Client settings** are a local file only (`~/.launch-window/client-settings.json`). It keeps
   the last server, login and password so Enter logs straight in (user, 2026-10-05). The
@@ -2726,9 +2727,10 @@ patches (`ui-spec.md` component 8).
   2026-10-01) not to close the gap up front; revisit with play-test and harness data.
 - **A game-host role and UI:** Server settings (§3.6, `ui-spec.md` §4.22) covers `game-meta.json`;
   announcing games, allowlists and content fixes in a running game are still outside the game.
-  Unconfirmed in it: the lock points (pack and seed at the first agency, goals at the first
-  resolution), hiding the seed once locked, 5 wrong tries in 10 minutes locking an address out for
-  10, a 16-character generated password printed at every start, and the client never saving it.
+  Unconfirmed in it: the lock points (pack and seed at the first agency or the first resolution, goals at the
+  first resolution), hiding the seed once locked, 5 wrong tries in 10 minutes locking an address out for
+  10 (behind NAT, possibly everyone), a 16-character generated password printed at every start, the client
+  never saving it, and the early-era pack's one-line description.
 - **Interaction:** intelligence, poaching, statements and condolences, published findings and the
   contract market exist (§2.9); sabotage is ruled out. Mail between players and cooperative modes are
   later ideas.

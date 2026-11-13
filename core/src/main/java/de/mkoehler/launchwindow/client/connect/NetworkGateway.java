@@ -34,6 +34,10 @@ import de.mkoehler.launchwindow.net.messages.StandingResponse;
 import de.mkoehler.launchwindow.net.messages.TurnReportRequest;
 import de.mkoehler.launchwindow.net.messages.TurnReportResponse;
 import de.mkoehler.launchwindow.net.messages.TurnResolvedNotice;
+import de.mkoehler.launchwindow.net.messages.SaveServerSettingsRequest;
+import de.mkoehler.launchwindow.net.messages.ServerSettings;
+import de.mkoehler.launchwindow.net.messages.ServerSettingsRequest;
+import de.mkoehler.launchwindow.net.messages.ServerSettingsResponse;
 import de.mkoehler.launchwindow.persistence.PlayerAction;
 import de.mkoehler.launchwindow.rules.TurnReport;
 
@@ -98,6 +102,8 @@ public final class NetworkGateway implements ServerGateway {
     private NetworkClient client;
     /** The turn the server last said had resolved, set on KryoNet's thread, taken on the render thread. */
     private final AtomicLong resolvedNotice = new AtomicLong();
+    private final java.util.concurrent.atomic.AtomicBoolean settingsNotice =
+        new java.util.concurrent.atomic.AtomicBoolean();
     /** Who the connection is logged in as; only the worker thread touches it. */
     private Credentials session;
 
@@ -242,6 +248,41 @@ public final class NetworkGateway implements ServerGateway {
             ServerResult fetched = readWithRetry(credentials);
             return fetched.kind() == ServerResult.Kind.OK ? fetched : ServerResult.of(ServerResult.Kind.OK, "");
         }, message -> ServerResult.of(ServerResult.Kind.FAILED, message), done);
+    }
+
+    @Override
+    public boolean takeSettingsChangedNotice() {
+        return settingsNotice.getAndSet(false);
+    }
+
+    @Override
+    public void fetchServerSettings(Credentials credentials, String password,
+            Consumer<ServerSettingsResponse> done) {
+        run(() -> {
+            ServerSettingsResponse first = serverSettingsOnce(credentials, new ServerSettingsRequest(password));
+            return first.status() == ServerSettingsResponse.Status.SERVER_ERROR && client == null
+                ? serverSettingsOnce(credentials, new ServerSettingsRequest(password)) : first;
+        }, message -> ServerSettingsResponse.failure(ServerSettingsResponse.Status.SERVER_ERROR, message), done);
+    }
+
+    @Override
+    public void saveServerSettings(Credentials credentials, String password, ServerSettings settings,
+            String newPassword, Consumer<ServerSettingsResponse> done) {
+        run(() -> serverSettingsOnce(credentials, SaveServerSettingsRequest.of(password, settings, newPassword)),
+            message -> ServerSettingsResponse.failure(ServerSettingsResponse.Status.SERVER_ERROR, message), done);
+    }
+
+    private ServerSettingsResponse serverSettingsOnce(Credentials credentials, Object request) {
+        Optional<LoginResult> refusal = ensureSession(credentials);
+        if (refusal.isPresent()) {
+            return ServerSettingsResponse.failure(ServerSettingsResponse.Status.SERVER_ERROR, refusal.get().message());
+        }
+        try {
+            return client.sendAndReceive(request, ServerSettingsResponse.class);
+        } catch (IOException | RuntimeException e) {
+            dropConnection();
+            return ServerSettingsResponse.failure(ServerSettingsResponse.Status.SERVER_ERROR, e.getMessage());
+        }
     }
 
     @Override
@@ -441,6 +482,9 @@ public final class NetworkGateway implements ServerGateway {
         fresh.setNoticeListener(notice -> {
             if (notice instanceof TurnResolvedNotice resolved) {
                 resolvedNotice.set(resolved.resolvedTurn());
+            }
+            if (notice instanceof de.mkoehler.launchwindow.net.messages.ServerSettingsChangedNotice) {
+                settingsNotice.set(true);
             }
         });
         try {

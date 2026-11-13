@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import de.mkoehler.launchwindow.net.NetworkServer;
+import de.mkoehler.launchwindow.net.messages.ServerSettingsChangedNotice;
 import de.mkoehler.launchwindow.net.messages.TurnResolvedNotice;
 import de.mkoehler.launchwindow.content.BudgetSchedule;
 import de.mkoehler.launchwindow.content.ContentCatalog;
@@ -48,6 +49,8 @@ public class GameServer extends ApplicationAdapter {
     private AccountStore accountStore;
     private RequestDispatcher dispatcher;
     private TurnScheduler scheduler;
+    private ObjectMapper mapper;
+    private ServerSettingsService settings;
     private String lastSchedulerFailure;
     private long nextSchedulerCheckNanos = System.nanoTime();
 
@@ -87,14 +90,40 @@ public class GameServer extends ApplicationAdapter {
 
     @Override
     public void create() {
-        ObjectMapper mapper = createMapper();
+        mapper = createMapper();
         accountStore = new AccountStore(dataRoot.resolve("accounts.json"));
+        Path metaFile = dataRoot.resolve("game-meta.json");
         GameMeta meta;
         try {
-            meta = GameMetaStore.loadOrCreateDefault(dataRoot.resolve("game-meta.json"), mapper).meta();
+            meta = GameMetaStore.loadOrCreateDefault(metaFile, mapper).meta();
+            // At startup only: the scheduler's every-tick read must never write the file (ui-spec.md section 4.22).
+            String password = ServerSettingsService.ensureAdminPassword(metaFile, mapper);
+            meta.setAdminPassword(password);
+            System.out.println("Admin password (game-meta.json, adminPassword): " + password);
         } catch (IOException e) {
             throw new IllegalStateException("Could not read game-meta.json", e);
         }
+        settings = new ServerSettingsService(dataRoot, mapper, GameServer.class.getClassLoader(),
+            Clock.systemDefaultZone());
+        networkServer = new NetworkServer();
+        startGame(meta);
+        try {
+            networkServer.start(tcpPort);
+        } catch (IOException e) {
+            throw new IllegalStateException("Could not listen on TCP port " + tcpPort, e);
+        }
+        Gdx.app.log(TAG, "Launch Window server listening on TCP " + tcpPort + ", data root " + dataRoot.toAbsolutePath());
+    }
+
+    /**
+     * Builds the game from its settings: the frozen pack, the rules' context, the bots' slots, the game info, the
+     * dispatcher and the scheduler. Run at startup, and again when the admin switches the content pack (possible
+     * only while no agency exists and no turn has resolved, ui-spec.md section 4.22), so nobody can found an agency
+     * against the old pack. The logged-in connections carry over.
+     *
+     * @param meta the settings
+     */
+    private void startGame(GameMeta meta) {
         // The game loads only its own frozen copy of the pack, made on the first start, and pins it for the
         // server's life (design.md section 5, M5 "Content packs").
         FrozenContentPack pack;
@@ -115,12 +144,16 @@ public class GameServer extends ApplicationAdapter {
         }
         GameInfoService gameInfo = new GameInfoService(dataRoot, mapper, pack.packId(), pack.hash(), meta,
             Clock.systemDefaultZone(), context.schedule());
+        RequestDispatcher previous = dispatcher;
         dispatcher = new RequestDispatcher(accountStore, dataRoot, mapper, context, meta, gameInfo);
+        if (previous != null) {
+            dispatcher.adoptConnections(previous);
+        }
+        dispatcher.setServerSettings(settings, networkServer::remoteHost);
         scheduler = new TurnScheduler(dataRoot, mapper, Clock.systemDefaultZone(), context,
             RandomEventRoster.baspmClose());
         dispatcher.setTurnForcer(scheduler::resolveNow);
         refreshStanding();
-        networkServer = new NetworkServer();
         // Everyone online hears at once that the turn resolved (on this thread, after it's saved).
         scheduler.setOnResolved(turn -> {
             refreshStanding();
@@ -128,12 +161,6 @@ public class GameServer extends ApplicationAdapter {
                 networkServer.send(connectionId, new TurnResolvedNotice(turn));
             }
         });
-        try {
-            networkServer.start(tcpPort);
-        } catch (IOException e) {
-            throw new IllegalStateException("Could not listen on TCP port " + tcpPort, e);
-        }
-        Gdx.app.log(TAG, "Launch Window server listening on TCP " + tcpPort + ", data root " + dataRoot.toAbsolutePath());
     }
 
     @Override
@@ -200,6 +227,30 @@ public class GameServer extends ApplicationAdapter {
             networkServer.sendThenClose(connectionId, result.response());
         } else {
             networkServer.send(connectionId, result.response());
+        }
+        // Taken before a rebuild, which replaces the dispatcher that holds it.
+        boolean settingsChanged = dispatcher.takeSettingsChanged();
+        if (dispatcher.takePackChanged()) {
+            rebuildGame();
+        }
+        if (settingsChanged) {
+            // Everyone online fetches the game info again: the countdown, the Dev button (ui-spec.md section 4.22).
+            for (int id : dispatcher.loggedInConnections()) {
+                networkServer.send(id, new ServerSettingsChangedNotice());
+            }
+        }
+    }
+
+    /** Rebuilds the game from the saved settings, after the admin switched the pack. */
+    private void rebuildGame() {
+        RequestDispatcher current = dispatcher;
+        try {
+            GameMeta meta = GameMetaStore.loadOrCreateDefault(dataRoot.resolve("game-meta.json"), mapper).meta();
+            startGame(meta);
+            Gdx.app.log(TAG, "Rebuilt the game on content pack " + meta.getContentPack());
+        } catch (IOException | RuntimeException e) {
+            dispatcher = current;
+            Gdx.app.error(TAG, "Couldn't rebuild the game on the new pack; restart the server", e);
         }
     }
 

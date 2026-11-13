@@ -138,6 +138,17 @@ final class SettingsDialog {
             .right();
         card.add(credits).padBottom(Theme.SPACE_4).row();
 
+        card.add(section("Server settings")).padBottom(Theme.SPACE_2).row();
+        Table admin = new Table();
+        admin.add(ui.paragraph("For the server's admin, with the admin password: the schedule, breaks, bots and "
+            + "the game's setup.", Theme.TextStyle.CAPTION, Theme.INK_MUTED)).expandX().fillX().left()
+            .padRight(Theme.SPACE_3);
+        admin.add(ChromeScreen.onClick(ui.button("Server settings…", Theme.ButtonKind.SECONDARY), () -> {
+            host.closeDialog();
+            new ServerSettingsDialog(game, host.stage(), credentials).open();
+        })).right();
+        card.add(admin).padBottom(Theme.SPACE_4).row();
+
         card.add(ChromeScreen.onClick(ui.button("Done", Theme.ButtonKind.PRIMARY), host::closeDialog)).right()
             .fill(false, false).row();
         return card;

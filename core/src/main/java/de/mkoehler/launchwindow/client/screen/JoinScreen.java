@@ -4,6 +4,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.Value;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
@@ -132,8 +133,28 @@ public final class JoinScreen extends StageScreen {
         column.row();
         column.add(card).row();
         column.add(ui.paragraph("Agency name and director's name must be unique among current players "
-            + "(not case-sensitive).", Theme.TextStyle.CAPTION, Theme.ON_PAGE_MUTED)).padTop(Theme.SPACE_5);
+            + "(not case-sensitive).", Theme.TextStyle.CAPTION, Theme.ON_PAGE_MUTED)).padTop(Theme.SPACE_5).row();
+        // The admin can set the game up before the first agency fixes its pack and seed (ui-spec.md section 4.22).
+        TextButton serverSettings = ui.pageGhostButton("Server settings");
+        serverSettings.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                openServerSettings();
+            }
+        });
+        column.add(serverSettings).width(Value.prefWidth).right().padTop(Theme.SPACE_3);
         root.add(column);
+    }
+
+    /**
+     * Opens the admin's server settings over this screen ({@code ui-spec.md} &sect;4.22).
+     *
+     * @return the dialog
+     */
+    public ServerSettingsDialog openServerSettings() {
+        ServerSettingsDialog dialog = new ServerSettingsDialog(game, stage, credentials);
+        dialog.open();
+        return dialog;
     }
 
     @Override

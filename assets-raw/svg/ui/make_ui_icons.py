@@ -88,19 +88,20 @@ CHROME = {
     "contract_unlock":'<path d="M12.2 21H5V2.5h8l4.5 4.5v5"/><path d="M13 2.5V7h4.5"/><path d="M8 8h3.5M8 11.5h5.5"/>'
                        '<path d="M7.8 16.4c.8-1.7 1.6-1.7 2 0s1.2 1.2 2-.4"/><circle cx="16.5" cy="16" r="3.4"/>'
                        '<path d="M15 19.3l-1 3.2M18 19.3l1 3.2"/>',
-    # Server settings (ui-spec.md §4.22, the Server settings canvas, 2026-11-13): show and hide a
-    # password, copy, a date field's calendar button, remove a row, add a row, a random seed, make a
-    # new password.
+    # Server settings (ui-spec.md section 4.22, its canvas's sheet of new pieces), 2026-11-13.
     "eye": '<path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>',
-    "eye_off": '<path d="M3 3l18 18"/><path d="M10.6 5.1A10.8 10.8 0 0 1 12 5c6.4 0 10 7 10 7a17.8 17.8 0 0 1-3.2 4.2'
-               'M6.6 6.6C3.8 8.4 2 12 2 12s3.6 7 10 7a9.6 9.6 0 0 0 5.4-1.6"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/>',
-    "copy": '<rect x="9" y="9" width="12" height="12"/><path d="M5 15V3h12"/>',
-    "calendar": '<rect x="3" y="5" width="18" height="16"/><path d="M3 10h18M8 3v4M16 3v4"/>',
-    "trash": '<path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/>',
+    "eye_off": '<path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>'
+               '<line x1="3" y1="21" x2="21" y2="3"/>',
+    "copy": '<rect x="8" y="8" width="13" height="13"/><path d="M16 8V3H3v13h5"/>',
+    "calendar": '<rect x="3" y="5" width="18" height="16"/><line x1="8" y1="3" x2="8" y2="7"/>'
+                '<line x1="16" y1="3" x2="16" y2="7"/><line x1="3" y1="10" x2="21" y2="10"/>'
+                '<path d="M7 14h2M11 14h2M15 14h2M7 17.5h2M11 17.5h2"/>',
+    "trash": '<path d="M3 6h18"/><path d="M8 6V3h8v3"/><path d="M5 6l1 15h12l1-15"/><path d="M10 10v7M14 10v7"/>',
     "plus": '<path d="M12 5v14M5 12h14"/>',
-    "dice": '<rect x="3" y="3" width="18" height="18"/><circle cx="8" cy="8" r="1.2" fill="currentColor"/>'
-            '<circle cx="16" cy="16" r="1.2" fill="currentColor"/><circle cx="12" cy="12" r="1.2" fill="currentColor"/>',
-    "spark": '<path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5 18 18M6 18l2.5-2.5M15.5 8.5 18 6"/>',
+    "dice": '<rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8" cy="8" r="1.2"/>'
+            '<circle cx="16" cy="8" r="1.2"/><circle cx="12" cy="12" r="1.2"/><circle cx="8" cy="16" r="1.2"/>'
+            '<circle cx="16" cy="16" r="1.2"/>',
+    "spark": '<path d="M12 2v5M12 17v5M2 12h5M17 12h5"/><path d="M12 8l1.5 2.5L16 12l-2.5 1.5L12 16l-1.5-2.5L8 12l2.5-1.5z"/>',
 }
 
 # Icons drawn as filled shapes rather than strokes; the contract flight's page knocks its lines out

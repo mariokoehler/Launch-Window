@@ -77,7 +77,7 @@ public final class GameMetaStore {
      * @param mapper the Jackson mapper to write it with
      * @throws IOException if the write fails
      */
-    private static void save(Path file, GameMeta meta, ObjectMapper mapper) throws IOException {
+    public static void save(Path file, GameMeta meta, ObjectMapper mapper) throws IOException {
         Files.createDirectories(file.getParent());
         Path tempFile = Files.createTempFile(file.getParent(), "game-meta-", ".json.tmp");
         try {

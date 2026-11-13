@@ -728,6 +728,10 @@ abstract class SessionScreen extends StageScreen {
         if (!refreshing && game.gateway().takeTurnResolvedNotice() > 0) {
             refresh();
         }
+        // The admin saved the server's settings: the countdown and the Dev button may have changed (G21).
+        if (!refreshing && game.gateway().takeSettingsChangedNotice()) {
+            refresh();
+        }
         // Once the turn is due, fetch the resolved state shortly after: new date, new candidates, new countdown.
         if (left.isPresent() && left.getAsLong() == 0 && now - lastRefreshMillis > REFRESH_SPACING_MILLIS
             && now - session.gameInfo().receivedAtMillis() > RESOLUTION_GRACE_MILLIS) {
