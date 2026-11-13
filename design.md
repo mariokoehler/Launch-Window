@@ -2381,8 +2381,14 @@ Per game (one per server, §3.9), in the host-edited `game-meta.json`:
   zone.
 - **Blackout periods:** inclusive date ranges with no resolution, addable at any time
   (holidays, vacations), checked at trigger time so a blackout added today still stops today's
-  turn. Only future turns can be blacked out. The host edits the JSON file; no in-game host UI
-  in v1.
+  turn. Only future turns can be blacked out.
+- **Editing it** (the user's idea, 2026-11-13; to be built): the admin edits every field from the
+  client, in Settings › Server settings (`ui-spec.md` §4.22, G20), after unlocking with an admin
+  password kept in the file as `adminPassword`. The server makes one at startup when it's missing
+  and prints it to stdout at every start. Hand edits still work. The schedule, breaks, dev mode and
+  new bots apply at once; the pack and seed lock once the first agency exists, the declared goals
+  once the first turn resolves, a bot once its agency exists. (The lock points, the 5-tries
+  throttle, the hidden seed and the password's shape are unconfirmed, §4.)
 - **The announced start date** is an automatic blackout from "server live" to the day before
   the start: the signup window.
 - **A non-resolving day** is simply a day the job doesn't fire; queued actions carry over. The
@@ -2531,8 +2537,9 @@ projects and BASPM's own XML save, which maps almost 1:1 onto its object graph.
   archetype (non-exclusive), an agency name and a **Director** name, both unique in the game
   (case-insensitive), fixed for the game. A late joiner's own season count starts at 1; they
   resolve on the shared clock.
-- **Host actions** (announcing, the start date, blackouts) are direct file edits in v1. An
-  allowlist mode is a possible later host option.
+- **Host actions:** the game's settings, blackouts included, are edited in the client's Server
+  settings behind the admin password (§3.6, to be built); announcing and the start date stay
+  outside the game. An allowlist mode is a possible later host option.
 - **Client settings** are a local file only (`~/.launch-window/client-settings.json`). It keeps
   the last server, login and password so Enter logs straight in (user, 2026-10-05). The
   password is in clear text on purpose: an accepted risk for a hobby game on the player's own
@@ -2717,8 +2724,11 @@ patches (`ui-spec.md` component 8).
 - **NASA/Soviet prestige balance:** BASPM's Soviet programs pay a little more each (about 4 %)
   but NASA has nine more programs, about 34 % more prestige in total. Decided (user,
   2026-10-01) not to close the gap up front; revisit with play-test and harness data.
-- **A game-host role and UI** (announcing games, blackouts, allowlists, content fixes in a running
-  game): direct file edits for now.
+- **A game-host role and UI:** Server settings (§3.6, `ui-spec.md` §4.22) covers `game-meta.json`;
+  announcing games, allowlists and content fixes in a running game are still outside the game.
+  Unconfirmed in it: the lock points (pack and seed at the first agency, goals at the first
+  resolution), hiding the seed once locked, 5 wrong tries in 10 minutes locking an address out for
+  10, a 16-character generated password printed at every start, and the client never saving it.
 - **Interaction:** intelligence, poaching, statements and condolences, published findings and the
   contract market exist (§2.9); sabotage is ruled out. Mail between players and cooperative modes are
   later ideas.

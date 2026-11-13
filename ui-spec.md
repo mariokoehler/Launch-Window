@@ -1341,7 +1341,9 @@ the blue page uses the on-page colours. *Sound (the user's idea, 2026-10-12):* K
 to the Moon" (`assets/audio/moon-speech.mp3`, NASA, 8.6 s) plays once when the screen opens, when
 sound is on; leaving the screen stops it. **Actions:** Join. **States:** agency name
 taken; director name taken (both checked ignoring case); empty fields; no archetype picked
-("Pick an agency style." under the cards when Join is pressed).
+("Pick an agency style." under the cards when Join is pressed). A small "Server settings" text link at
+the foot opens the admin's settings (§4.22), so the game can be set up before the first agency is founded
+(to be built).
 
 **History note on the Director field** (component 15, the first one a player
 sees): *"Both agencies here have a Director, but in reality the
@@ -2253,6 +2255,8 @@ white gear at the end of the hub strip (icon-only, 32 px, like `IconButton`; dec
   (user, 2026-10-06) shows `assets/CREDITS.md` in the dialog (headings, paragraphs and bullets,
   scrolling past 520 px), with Back and Done. A parenthesis in a script the fonts lack (the
   archive's Russian name) is left out, since its English name stands next to it.
+- **Server settings…** (the user's idea, 2026-11-13; to be built): a row under About that opens the admin's
+  unlock step and the server settings (§4.22).
 
 ### 4.13 Game result
 **Purpose:** announce the winner (`client.screen.GameResultDialog`). **Shows:** a `Dialog` over the
@@ -3057,6 +3061,73 @@ screen from existing tokens.
 Lunar Gemini and the Langley light lander; no source confirms an Earth-orbit-rendezvous variant, so the note
 doesn't claim one), Gemini direct ascent (Nova), the 7K-L3 (the LK's three uncrewed tests, the N1's four failures),
 the LK-700 (Chelomei's UR-700, never built).
+
+### 4.22 Server settings *(the user's idea, 2026-11-13; canvas `Launch Window — Server settings`, to be mocked up)*
+**Purpose:** let the server's admin edit everything in `game-meta.json` from the client, so nobody hand-edits
+JSON (`client.screen.ServerSettingsDialog`; server side G20, `design.md` §3.6). Every field the file holds is
+here; the server checks every value and saves the file itself.
+
+**Where:** a quiet "Server settings…" row at the end of Settings (§4.12), under About, and a small text link
+"Server settings" at the foot of Join game (§4.2), so an admin can set the game up before founding an agency
+(claiming a slot uses the seed, so the seed and pack lock at the first slot). Both need a connection; Connect
+has no entry (not logged in).
+
+**Step 1: Unlock** (a small `Dialog`, about 480 px): heading "Server settings", the line "Enter the admin
+password. The server prints it to its log at every start; it's stored in `game-meta.json` as
+`adminPassword`.", a password field (masked, with a show toggle), Unlock (primary, Enter) and Cancel. Errors
+under the field: "That's not the admin password." and "Too many wrong tries. Try again in N minutes." The
+password is never saved on the client (unconfirmed); the unlock lasts for the connection, so reopening the
+dialog in the same session skips this step.
+
+**Step 2: Settings** (a `Dialog` about 1100 × 760 px, scrolling inside): a left list of sections, the form on
+the right, and a footer.
+- **Header:** "Server settings", and a status line: "Turn N open · next resolution Tue 17 Nov, 09:00 Europe/Berlin
+  (09:00 your time)", from the server, recomputed after a save.
+- **Schedule:** the seven weekdays as toggle chips (Mon to Sun, at least one on) with two preset buttons, Every
+  day and Weekdays; the resolution time (HH:MM, 24 h, a field with steppers or a time picker: the mockup's
+  choice); the timezone, a searchable list of zone ids (type "berl" to find Europe/Berlin), showing each
+  zone's current offset. Applies at once.
+- **Breaks** (blackouts): a list of date ranges, each From, To (inclusive), the day count and a remove button;
+  Add break adds a row starting tomorrow. A break that has ended shows dimmed with "past" (harmless, removable).
+  Dates are typed as YYYY-MM-DD, with a small calendar popover if the mockup wants one (a new component; flag
+  it). Applies at once: a break covering today stops today's turn if it hasn't resolved.
+- **Game:** the content pack (a dropdown of the packs the server bundles, `standard` and `early-era`, each with
+  a one-line description), the declared goals (a checklist of the chosen pack's goals with their patches
+  (component 8), in pack order, at least one; switching the pack re-picks that pack's default race, and a goal
+  the pack lacks can't stay ticked), and the game seed (a number field with a Random button). **Locks:** the
+  pack and the seed lock once any agency exists (a player's or a bot's, the first slot claim), the goals once the
+  first turn resolves. A locked field shows its value read-only with a lock icon and the reason ("Fixed once
+  the first agency is founded." / "Fixed once the first turn resolves."); the seed then shows as "Hidden once
+  the game has begun" (unconfirmed: an admin who also plays shouldn't see it).
+- **Bots** (filler bots, `design.md` §5): a table, one row a bot: its id (`bot-1`, made by the client, the
+  next free number, read-only), side (NASA or Soviet, a segmented choice), agency name and director name
+  (optional, 32 characters, placeholder "Drawn at random"), and a remove button. Add bot adds a row. A bot
+  whose agency exists is fixed: its row is read-only, with "In the race since turn N" and no remove button (its
+  agency stays in the race; removing it would leave an agency nobody plays). A new bot founds its agency when
+  the settings are saved and plays from the next resolution.
+- **Development:** Dev mode (a toggle, with the warning "Every player gets Resolve turn now and the funds cheat.
+  Use it for play tests only.") and Open every archive page (a toggle, only enabled with dev mode on: "For
+  reviewing the archive; saves nothing."). Both apply at once.
+- **Admin:** change the admin password: New password and Repeat (masked, at least 8 characters, left empty to
+  keep the current one), and Make a new one, which fills both with a generated password shown once in clear
+  with a copy button. The current password is never shown (the server never sends it).
+- **Footer:** Cancel (asks "Discard your changes?" when there are any) and Save (primary, disabled until
+  something changed). Each section's name in the list carries a dot while it has unsaved changes and a red mark
+  while it has an error. On save the server checks everything; a refusal comes back per field and shows under
+  that field (the section jumps there), and nothing is saved. On success a toast "Server settings saved."
+  and the dialog stays open on the saved values.
+- **Someone edited the file meanwhile** (a hand edit, another admin): the save is refused with STALE_SETTINGS,
+  "The settings changed on the server since you opened them." with Reload (drops your changes).
+
+**States:** unlocking (the waiting chip), wrong password, locked out, loading, editing, saving, a field
+refused, stale, saved. **Shots:** `server-settings-*.png`, `-Dshots=serversettings` (unlock, each section
+before the game starts, the Game and Bots sections once it has, a refused field, stale).
+
+**New components and tokens** (flag for `Theme.java` and the UI Asset Sheet): weekday toggle chips, a
+searchable select, a date field (and calendar popover if used), the lock icon, a section list with change
+and error marks. Reuse the existing toggle, field, dropdown, segmented choice and `Dialog`.
+
+**Text** (unconfirmed, the mockup may reword): as quoted above.
 ## 5. Refusal reasons (for toasts and inline messages)
 
 The server replies with these codes. The wording below is the spec's; the client's own is in
@@ -3102,13 +3173,14 @@ The server replies with these codes. The wording below is the spec's; the client
 | Contracts (§4.17; `ContractOutcome`): CONTRACT_ACTIVE / NOT_QUALIFIED / PROGRAM_NOT_OPEN / UNKNOWN_LISTING; closing a program while its contract flies is the existing MISSIONS_IN_FLIGHT | You have an active contract: one at a time. / You can't fly this one: unlock its line first. / Open the program first. / That listing isn't on the board any more. / Can't close while a mission uses it. |
 | The world reacts (§4.18.1, component 28; `SubmitStatementResponse`): TURN_RESOLVED / UNKNOWN_PAGE / REACTION_WINDOW_CLOSED / NOT_A_RIVAL / INVALID_STANCE / QUOTE_TOO_LONG / QUOTE_BAD_CHARACTERS | The turn resolved before that reached the server, so nothing was done. / That front page isn't there any more. / Statements on that First closed when the turn after it resolved. / Only a rival that was in the race when the First was printed can answer it. / Pick one of the five stances. / At most 140 characters. / Only letters, numbers and common punctuation. |
 | Join game (`ClaimSlotResponse.Reason`): AGENCY_NAME_TAKEN / DIRECTOR_NAME_TAKEN / MISSING_FIELDS / ALREADY_CLAIMED / NOT_AUTHENTICATED / SERVER_ERROR | Already taken by another agency. (under the field) / the same / Required. / (client logs in again and opens the agency) / (danger notice with the server's words) |
+| Server settings (§4.22, G20; to be built): WRONG_ADMIN_PASSWORD / ADMIN_LOCKED_OUT / NOT_UNLOCKED / STALE_SETTINGS / FIELD_LOCKED / INVALID_FIELD | That's not the admin password. / Too many wrong tries. Try again in N minutes. / (client shows the unlock step again) / The settings changed on the server since you opened them. / That's fixed now the game has begun. / (under the field, the server's words for it: "Pick at least one day.", "Not a time zone.", "A break ends before it starts.", "At least one goal.", "That goal isn't in this pack.", "Already taken by another agency.", "At most 32 characters.", "At least 8 characters.", "The passwords don't match.") |
 
 ---
 
 ## 6. Gaps the server, rules, or content must fill for M5
 
 What the client needed from the server, rules or content beyond the state, found while writing
-this spec. All are done except G6 and G1's pack download; each done item names what was built.
+this spec. All are done except G6, G1's pack download and G20; each done item names what was built.
 
 - **G1. Game info.** Done: `GameInfoRequest`/`GameInfoResponse` (`design.md` §3.6 and §5 M5): the
   content pack id and hash, the declared goals, the game turn and date (turn 1 is Winter 1955, one
@@ -3212,6 +3284,44 @@ this spec. All are done except G6 and G1's pack download; each done item names w
   `reactions/turn-N.json` by `GameSeeds.rivalKey`, sealed as the resolution reads them
   (`ReactionStore.seal`; a later one is refused with `TURN_RESOLVED`); `rules.ReactionPrinter`;
   `ServerGateway.submitStatement`, `ClientSession.statements`; `DevClient`'s `pages` and `react`.
+- **G20. Server settings (§4.22, `design.md` §3.6).** To be built:
+  - **The admin password:** `GameMeta.adminPassword`. `GameServer.create` (startup only, never
+    `GameMetaStore.loadOrCreateDefault`, which also runs every tick, in `TurnRollback` and in `SavedFormatTest`
+    on the fixture) generates one when it's missing, a new file's or an existing one's: 16 characters from
+    `SecureRandom` over an alphabet without look-alikes (no 0/O, 1/l/I), in groups of four, and saves it. Every
+    start prints `Admin password (game-meta.json, adminPassword): xxxx-xxxx-xxxx-xxxx` to stdout. `data/` is
+    ignored by git (checked), so it never reaches the public repo.
+  - **Messages** (appended last in `MessageRegistry`; client and server rebuilt together):
+    `AdminUnlockRequest`/`Response`, `ServerSettingsRequest`/`Response` and `SaveServerSettingsRequest`/`Response`.
+    `GameMeta` lives in `server`, so the wire form is a `core` DTO, `ServerSettings`: every field but the
+    password, plus a version token (the file's hash as read), the open turn, the next resolution, which fields
+    are locked and why, which bots' agencies exist and since when, and the bundled packs with their goal ids and
+    default races. The seed is left out once locked. A save carries the DTO, the version token and an optional
+    new password; it answers per-field refusals (§5) or the saved settings. Also a `ServerSettingsChangedNotice`
+    to every logged-in connection (like `TurnResolvedNotice`), so clients fetch the game info again (the
+    countdown, the Dev button).
+  - **The unlock** is kept per connection on the server (dropped on disconnect) and every settings request
+    checks it (`NOT_UNLOCKED`). Compared in constant time. Throttled per remote address: 5 wrong tries in 10
+    minutes lock it out for 10 minutes (`ADMIN_LOCKED_OUT`, the minutes left in the response), and every
+    wrong try is logged with the address (the port is on the public internet).
+  - **The save** re-reads `game-meta.json`, refuses STALE_SETTINGS if its hash isn't the token, applies the
+    fields, checks them the way startup does (`GameMeta.validate`, `BotPlayer`'s constructor, the pack id
+    pattern and the pack being bundled, the declared goals against that pack's catalog, unique agency and
+    director names against the game's), and writes it atomically (`GameMetaStore.save`). A hand edit of the file
+    keeps working as before.
+  - **Applies at once:** the schedule and breaks already are re-read every tick. Dev mode and the archive
+    toggle: `RequestDispatcher` holds the startup `GameMeta` and must read the live one instead (a shared
+    holder the save replaces), or the Dev button would show and the request be refused. New bots:
+    `BotPlayers.ensureSlots` runs after the save (a listed bot without a slot is skipped by `BotPlayers.play`
+    until then). A changed pack or seed (only possible while no agency exists): the server rebuilds its game
+    in place from the new meta (`GameServer`'s start-up split into a method it can run again: freeze the pack,
+    the catalog and context, the dispatcher's and scheduler's game, the game info), so nobody can found an
+    agency against the old pack in between.
+  - **Locks** (FIELD_LOCKED): pack and seed once `players/` holds a folder; declared goals once the first turn
+    resolved (`scheduler-state.json`'s next turn > 1); a bot's side and names once its folder exists, and such a
+    bot can't be removed.
+  - **Rollback:** `TurnRollback` doesn't restore `game-meta.json`, so undoing a turn keeps the settings and
+    password as they are.
 
 ## 7. Suggested mockup order
 
