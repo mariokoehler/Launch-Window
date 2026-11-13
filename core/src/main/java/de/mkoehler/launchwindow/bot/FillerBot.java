@@ -174,6 +174,8 @@ public final class FillerBot {
                 }
             }
             decide(snapshot, out);
+            // Every turn, sitting out or done with the race: people who aren't paid leave (design.md 2.2(c)).
+            pay(snapshot, out);
             if (idle) {
                 return out;
             }
@@ -186,7 +188,6 @@ public final class FillerBot {
                     rocket(snapshot, rocket, out);
                 }
                 staff(snapshot, target, out);
-                pay(snapshot, out);
                 research(snapshot, target, rocket, out);
                 boolean ready = hardwareReady(snapshot, target, rocket, launchAt);
                 if (ready && snapshot.getInProgressMissions().values().stream()

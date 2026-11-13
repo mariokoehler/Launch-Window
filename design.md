@@ -1130,7 +1130,8 @@ season unchanged. Tiger Teams' live per-step choice doesn't fit, so it was redes
     `ResearchProgress`, `ResearchPlanning`), but a slot's value in the staffing pickers stays the person's skill.
   - **Bots** (`PayExpectations.botPolicy`/`nextBotStep`, shared by the playout bots and `FillerBot`): anyone 5 %
     or more under, the department is brought up to expectations when the funds above a season's funding cover two
-    seasons of it, else its best people first.
+    seasons of it, else its best people first. Every turn, also one a filler bot sits out and after its race
+    (`BotPlayersTest` checks nobody is left two reviews behind).
   - **Meeting an expectation has no cap** (one person or a department); a percentage raise of one person is capped
     at +50 %, as the department's slider.
 - **CAPCOM:** the astronaut on CAPCOM grows the skills they used that season, as a controller
@@ -2846,9 +2847,12 @@ patches (`ui-spec.md` component 8).
   fast; the shorter games after raises between reviews (a stingier bracket table is the lever); the
   filler bots' money piling up (§5, Backlog).
 - **Money stops mattering from the second review** (§3.10's findings, 2026-11-13): answered for now by
-  diminishing returns at the top of each review (§2.1(d)); a play test decides whether it's enough. Next lever
-  (user): salaries that need raising from time to time, or morale slips, so the department screen gets used.
-  Measure a change with `EconomyCeiling` and the playouts' money ledger.
+  diminishing returns at the top of each review (§2.1(d)) and pay expectations (§2.2(c), about 65 % more in
+  salaries by the fourth review); a play test decides whether it's enough. Measure a change with
+  `EconomyCeiling` and the playouts' money and people ledgers.
+- **Firsts and pay** (§2.2(c), 2026-11-13): a First raises the expectation of everyone on the mission, crew and
+  ground, so a team that flies many Firsts may end up expecting far more than the rest. Damp it for ground staff
+  if a play test shows it.
 
 **Settled, for the record:** a player who doesn't log in before a resolution keeps their
 default: a scheduled mission launches and training continues. Scrubbing and pulling out are
@@ -2861,6 +2865,9 @@ trait (§2.2(c)).
 - Raises between reviews: share 1 (`BudgetProgress.RAISE_SHARE`, §2.1(f)).
 - Diminishing returns at the top: the knee halfway, 30 % of the slope above it, from review 2
   (`BudgetProgress.KNEE_SHARE`, `TOP_SLOPE`, §2.1(d)).
+- Pay expectations: +10 % a review; +2 % a clean flight or shift, +10 % a First, +10 % the Expert trait, +5 % an
+  ambition, +1 % per 5 R&D points, at most +15 % a turn; the ceiling 3 points a percent under; underpaid from 5 %;
+  morale at work ±5 % from 80 and below 50; drift 2 a season (`PayExpectations`, §2.2(c)).
 - Standing charts: 40 dots, a window of 120 (`server.StandingCache`, §2.1(g)).
 - Skill growth cut by 30 % for training, flying and R&D (§2.2(c)); a flight's unused skills at a third
   (`SkillGrowth.FLIGHT_UNUSED_SKILL_SHARE`, §2.5(g)).

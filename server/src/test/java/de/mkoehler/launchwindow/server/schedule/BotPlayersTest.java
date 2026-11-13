@@ -68,6 +68,12 @@ class BotPlayersTest {
         for (PlayerSnapshot agency : List.of(nasa, soviet)) {
             assertEquals(TURNS + 1, agency.getSeason(), agency.getAgencyName() + " resolved every turn");
             assertFalse(agency.getOpenedProgramIds().isEmpty(), agency.getAgencyName() + " opened a program");
+            // They pay what people expect (design.md 2.2(c)): nobody left two reviews behind.
+            java.util.stream.Stream.of(agency.getAstronauts(), agency.getMissionControlOfficers(),
+                    agency.getSetSpecialists()).flatMap(List::stream).forEach(person -> assertTrue(
+                de.mkoehler.launchwindow.rules.PayExpectations.underpaidPercent(person) < 17,
+                agency.getAgencyName() + " pays " + person.getName() + " "
+                    + de.mkoehler.launchwindow.rules.PayExpectations.underpaidPercent(person) + " % under"));
             // Crewed flights among the goals show it hired astronauts: a bot that's done stops hiring, and they leave.
             for (String goal : GameMeta.EARLY_ERA_DECLARED_GOALS) {
                 assertTrue(agency.hasAchievedOrCancelledGoal(goal), agency.getAgencyName() + " reached " + goal);

@@ -905,6 +905,11 @@ public final class ContentPackPlayouts {
                 tally.debtConversions++;
             }
         }
+        // Pay what people expect every season, as far as a season's funding in reserve allows (design.md 2.2(c));
+        // -Dbot.pay=false plays a director who never raises anyone, to measure what neglect costs.
+        if (!"false".equals(System.getProperty("bot.pay"))) {
+            de.mkoehler.launchwindow.rules.PayExpectations.botPolicy(snapshot, snapshot.getFundingRatePerSeason());
+        }
         MissionConfiguration target = target(snapshot);
         if (target == null) {
             return;
@@ -921,11 +926,6 @@ public final class ContentPackPlayouts {
             openRocket(snapshot, rocket, tally);
         }
         ensureStaff(snapshot, target, random, tally);
-        // Pay what people expect, as far as a season's funding in reserve allows (design.md 2.2(c)).
-        // -Dbot.pay=false plays a director who never raises anyone, to measure what neglect costs.
-        if (!"false".equals(System.getProperty("bot.pay"))) {
-            de.mkoehler.launchwindow.rules.PayExpectations.botPolicy(snapshot, snapshot.getFundingRatePerSeason());
-        }
         if (smart && SMART_OPEN_AHEAD) {
             openAhead(snapshot, target, rocket, tally);
         }
