@@ -3062,7 +3062,7 @@ Lunar Gemini and the Langley light lander; no source confirms an Earth-orbit-ren
 doesn't claim one), Gemini direct ascent (Nova), the 7K-L3 (the LK's three uncrewed tests, the N1's four failures),
 the LK-700 (Chelomei's UR-700, never built).
 
-### 4.22 Server settings *(the user's idea, 2026-11-13; canvas `Launch Window — Server settings`, to be mocked up)*
+### 4.22 Server settings *(the user's idea, 2026-11-13; mocked up the same day on the canvas `Launch Window — Server settings`)*
 **Purpose:** let the server's admin edit everything in `game-meta.json` from the client, so nobody hand-edits
 JSON (`client.screen.ServerSettingsDialog`; server side G20, `design.md` §3.6). Every field the file holds is
 here; the server checks every value and saves the file itself.
@@ -3128,6 +3128,38 @@ searchable select, a date field (and calendar popover if used), the lock icon, a
 and error marks. Reuse the existing toggle, field, dropdown, segmented choice and `Dialog`.
 
 **Text** (unconfirmed, the mockup may reword): as quoted above.
+
+**Mocked up (2026-11-13)** on `Launch Window — Server settings`: the unlock step in four states, every section before the game
+begins, Game and Bots once it has, a refused field, stale, saved, the discard question, and a sheet of the new pieces; each
+row's note lists its choices. All **unconfirmed**:
+- **Unlock:** the game's `Dialog`, 480 px, eyebrow "ADMIN"; an eye button at the field's end shows the password (crossed out
+  when shown); waiting is the game's own chip at the top centre, with Unlock disabled; a wrong password keeps the text, frames
+  the field red and says so under it; locked out disables the field and Unlock.
+- **Settings:** 1100 × about 730; the status line under the title with the clock icon; a 210 px section list (the active one
+  with a navy bar and a light navy fill, a navy dot for unsaved changes, a red "!" for an error, which wins); the form scrolls
+  inside; Cancel and Save at the foot, Save enabled once anything changed.
+- **Schedule:** seven 50 × 36 chips with Every day and Weekdays beside them; the time a plain HH:MM field (no stepper or
+  picker); the zone a searchable select showing each zone's offset today, the typed part marked gold, "1 of 597 zones".
+- **Breaks:** rows of From, To, Days, a "Past" tag and a trash button, a past row at 55 %; each date field has a calendar button
+  opening a month (Monday first, the range shaded, its ends navy, today ringed gold).
+- **Game:** the pack a dropdown with its one-line description; the declared goals as chips with their patches (× unticks)
+  above a search field and the pack's whole checklist (207 goals in `standard`); the seed with Random. Locked fields turn grey
+  with the lock icon inside and the reason under them; the goals become plain chips; the seed reads "Hidden once the game has
+  begun".
+- **Bots:** a table (id, side as the segmented control, agency, director, trash); a bot in the race turns grey, side disabled,
+  with the lock and "In the race since turn 3. Its agency stays: nobody else would play it.", and no trash.
+- **Development:** both toggles are the existing `SegmentedControl` (Off / On, as Settings' Sound), the client having no switch;
+  the warning a gold `Notice`; the archive toggle disabled while dev mode is off.
+- **Admin:** New and Repeat side by side; Make a new one fills both and shows the password once in a gold box with Copy.
+- **Refused:** the section's entry gets the red "!", the field a red frame with the server's words, and the foot "Nothing was
+  saved. Fix the marked field and save again." **Stale:** a gold banner over the form with Reload; Save stays off until a
+  reload. **Saved:** the success toast, the dots gone, Save disabled. **Cancel with changes:** "Discard your changes?" naming the
+  sections, Discard in red (component 5), Keep editing.
+- **New for `Theme.java`:** weekday chips; the searchable select and its popover; a dropdown (the same popover, a description
+  line and a check on the current option); the date field and calendar popover; the section list with its marks; the password
+  field with a show toggle and the "shown once" box; a 16 px checkbox and the checklist row with a 28 px patch; a field's
+  focus, error, read-only and disabled states. No new colour tokens. **New icons for the UI Asset Sheet:** eye, eye-off, copy,
+  calendar, trash, plus, dice (Random), spark (Make a new one); the lock is the existing `lock.png`.
 ## 5. Refusal reasons (for toasts and inline messages)
 
 The server replies with these codes. The wording below is the spec's; the client's own is in
