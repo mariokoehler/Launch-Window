@@ -2158,14 +2158,16 @@ next review and the review table; active effects and news.
 - the net per season, and the funds runway under it (component 25);
 - prestige ("PR duty: +N / season" under it), and the next funding review: "in n seasons", counted
   on the player's own seasons, every 16, as a scale of its prestige range with two markers (you,
-  and what keeps today's funding; the legend names both), plus a forecast `Notice` (warning when
-  funding would fall);
+  and what keeps today's funding; the legend names both, and from review 2 on where the line flattens:
+  "Straight up to 7,250, then 30 % as steep.", `design.md` §2.1(d)), plus a forecast `Notice` (warning
+  when funding would fall);
 - captions above the last-review line: how much a credit for rivals' Firsts adds (the bracket's
   ends, its pay and the gold mark already include it, `ReviewForecast`; `design.md` §2.1(e)); what
   1,000 more prestige would add now (or that the bracket's top is reached, or, before the first
   review, that raises start then), and the raise due next season when prestige has already grown
   (`design.md` §2.1(f)). Shots `rival-firsts-pao.png`, `rival-firsts-help.png`, `raise-pao.png`;
-- the bracket table, and what the current prestige would earn;
+- the bracket table (each review's top is what it pays after flattening, `BudgetProgress.topFunding`), and
+  what the current prestige would earn;
 - the news log (random events only, the story in a tooltip).
 
 **Negative values** (decided, 2026-10-04): funds in debt, here and in the footer, are a small solid

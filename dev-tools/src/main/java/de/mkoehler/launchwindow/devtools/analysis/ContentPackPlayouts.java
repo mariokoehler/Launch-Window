@@ -175,7 +175,7 @@ public final class ContentPackPlayouts {
     private final Set<String> sideGivenUp = new HashSet<>();
 
     private final ContentCatalog catalog;
-    private final BudgetSchedule schedule = BudgetSchedule.baspmClose();
+    private final BudgetSchedule schedule = BudgetTrial.schedule();
     private final RandomEventRoster roster = RandomEventRoster.baspmClose();
     private final BuildingSchedule buildings;
     private final List<String> declaredGoals;
@@ -411,6 +411,30 @@ public final class ContentPackPlayouts {
     }
 
     private boolean keepPlaying;
+    /** The money ledger, when one is kept (EconomyLedger): every season of every game. */
+    EconomyLedger ledger;
+
+    /**
+     * Plays games for a fixed number of seasons, past the race's end, keeping the money ledger.
+     *
+     * @param games   how many games
+     * @param seasons seasons per game
+     * @param seed    the random seed
+     * @return the ledger
+     */
+    public EconomyLedger economy(int games, int seasons, long seed) {
+        ledger = new EconomyLedger();
+        keepPlaying = true;
+        try {
+            economyReport = run(games, seasons, seed);
+        } finally {
+            keepPlaying = false;
+        }
+        return ledger;
+    }
+
+    /** The last {@link #economy} run's report: when the race was won, the debt it took. */
+    Report economyReport;
     private final int[] peopleTally = new int[5];
     /** Ambitions said and settled, by "GROUP OUTCOME", in people mode (phase 4). */
     private final Map<String, Integer> ambitionTally = new java.util.TreeMap<>();
@@ -553,6 +577,8 @@ public final class ContentPackPlayouts {
         private final Set<String> reached = new HashSet<>();
         private final List<Integer> gaps = new ArrayList<>();
         private int sinceLaunch;
+        // Whether the agency had won the race before the season (the money ledger's split).
+        private boolean wonRace;
         // Random events seen this game, good then bad (2026-10-10, sizing the news stories).
         private final int[] randomEvents = new int[2];
         // R&D decisions this game (2026-10-10): per season, whether one was offered and whether it flew.
@@ -613,6 +639,7 @@ public final class ContentPackPlayouts {
             // Journaled player actions first.
             tally.launchedThisSeason = 0;
             seasonNow = season;
+            long fundsStart = snapshot.getFunds();
             decideWaiting(snapshot, random);
             act(snapshot, random, tally);
             if (contractRivals >= 0) {
@@ -637,6 +664,14 @@ public final class ContentPackPlayouts {
             BudgetWatch watch = new BudgetWatch();
             List<ResolutionEvent> seasonEvents = SeasonResolver.advanceSeason(snapshot, context, random, watch);
             checkState(snapshot);
+            if (ledger != null) {
+                for (ResolutionEvent event : seasonEvents) {
+                    if (event instanceof de.mkoehler.launchwindow.rules.SeasonFundsSettled settled) {
+                        ledger.record(season + 1, wonRace, fundsStart, settled.income(), settled.expenses(),
+                            snapshot.getFunds());
+                    }
+                }
+            }
             if (sizeLargest != null) {
                 measure(snapshot, season);
             }
@@ -706,6 +741,13 @@ public final class ContentPackPlayouts {
             // The harness's own completion check must agree with the win logic M4 will call.
             WinCondition.Outcome win = WinCondition.evaluate(Map.of("bot", snapshot), declaredGoals, catalog);
             boolean complete = reached.size() == declaredGoals.size();
+            if (complete && !wonRace && keepPlaying) {
+                // Played on past the race (the money ledger): only when it was won is counted.
+                tally.completedByArchetype.merge(archetype, 1, Integer::sum);
+                tally.completionSeasons.add(season + 1);
+                tally.completionSeasonsByArchetype.computeIfAbsent(archetype, key -> new ArrayList<>()).add(season + 1);
+            }
+            wonRace |= complete;
             if (complete != (win.status() == WinCondition.Status.WON && win.winners().equals(List.of("bot")))) {
                 throw new IllegalStateException("Completion " + complete + " disagrees with WinCondition " + win);
             }
@@ -2517,6 +2559,23 @@ public final class ContentPackPlayouts {
         // it there are none, so the earlier numbers stay comparable.
         boolean withDecisions = args.length > 2 && args[2].equals("decisions");
         ContentPackPlayouts harness = new ContentPackPlayouts(catalog, bot, withDecisions);
+        // -Dplayout.economy=true keeps the money ledger instead (EconomyLedger): every game played on past the
+        // race's end, -Dplayout.seasons long (160 by default, ten reviews).
+        if (Boolean.getBoolean("playout.economy")) {
+            harness.economy(Integer.getInteger("playout.games", 200), Integer.getInteger("playout.seasons", 160),
+                Long.getLong("bot.seed", 42L)).print(bot + " bot, alone, " + args[0] + ", " + BudgetTrial.label());
+            Report played = harness.economyReport;
+            System.out.println("Won the race: " + played.completedByArchetype() + " of " + played.gamesByArchetype());
+            played.completionSeasons().forEach((archetype, list) -> {
+                List<Integer> sorted = list.stream().sorted().toList();
+                System.out.printf("  %s won in season: min %d, quartiles %d / %d / %d, max %d%n", archetype,
+                    sorted.getFirst(), sorted.get(sorted.size() / 4), sorted.get(sorted.size() / 2),
+                    sorted.get(sorted.size() * 3 / 4), sorted.getLast());
+            });
+            System.out.println("Debt conversions " + played.debtConversions() + ", lowest funds "
+                + played.lowestFunds());
+            return;
+        }
         int seasons = harness.declaredGoals().equals(MOON_DECLARED_GOALS) ? 240 : 80;
         Report report = harness.run(200, seasons, Long.getLong("bot.seed", 42L));
         System.out.println(report.games() + " games, " + report.seasons() + " seasons max, declared goals "

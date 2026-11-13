@@ -42,6 +42,21 @@ public final class BudgetProgress {
 
     private static double raiseShare = RAISE_SHARE;
 
+    /** The first review whose line flattens ({@link #reviewFunding}); the start and review 1 never do. */
+    public static final int FLATTEN_FROM_REVIEW = 2;
+
+    /**
+     * Where along a review's prestige range its line flattens, 0 to 1 ({@code design.md} &sect;2.1(d)):
+     * diminishing returns at the top, so a dominant agency isn't drowning in money (user, 2026-11-13);
+     * unconfirmed.
+     */
+    public static final double KNEE_SHARE = 0.5;
+    /** The line's slope above the knee, as a share of its slope below; unconfirmed. */
+    public static final double TOP_SLOPE = 0.3;
+
+    private static double kneeShare = KNEE_SHARE;
+    private static double topSlope = TOP_SLOPE;
+
     /**
      * Not instantiable; this class only exposes static methods.
      */
@@ -179,7 +194,7 @@ public final class BudgetProgress {
         // Rivals' Firsts count as prestige here, the bracket shifted down like the catch-up shift
         // (RivalFirsts); the baseline the next review's catch-up reads stays the player's own.
         long credit = snapshot.getRivalFirstsCredit();
-        long rate = reviewRate(schedule.reviewFor(reviewNumber), catchUpShift + credit, prestige);
+        long rate = reviewRate(reviewNumber, schedule.reviewFor(reviewNumber), catchUpShift + credit, prestige);
         snapshot.setFundingRatePerSeason(rate);
         snapshot.setPrestigeAtLastReview(prestige);
         snapshot.setRivalFirstsCredit(0);
@@ -213,6 +228,51 @@ public final class BudgetProgress {
     }
 
     /**
+     * Sets where every review's line flattens from {@link #FLATTEN_FROM_REVIEW} on, for playouts that measure
+     * the diminishing returns at the top of the funding ({@code design.md} &sect;2.1(d)): below the knee a review
+     * pays along BASPM's straight line, above it the line rises at {@code topSlope} of its slope.
+     * {@code setFlattening(1, 1)} is BASPM's straight line; put {@link #KNEE_SHARE} and {@link #TOP_SLOPE} back
+     * after.
+     *
+     * @param kneeShare where along the prestige range the knee sits, 0 to 1
+     * @param topSlope  the slope above it, as a share, 0 to 1
+     * @throws IllegalArgumentException if either is outside 0 to 1
+     */
+    public static void setFlattening(double kneeShare, double topSlope) {
+        if (kneeShare < 0 || kneeShare > 1 || topSlope < 0 || topSlope > 1) {
+            throw new IllegalArgumentException("knee and slope must be 0 to 1: " + kneeShare + ", " + topSlope);
+        }
+        BudgetProgress.kneeShare = kneeShare;
+        BudgetProgress.topSlope = topSlope;
+    }
+
+    /**
+     * A review's funding for a prestige: {@link #interpolate}'s straight line, flattened above the knee from
+     * {@link #FLATTEN_FROM_REVIEW} on when {@link #setFlattening} asks for it.
+     *
+     * @param reviewNumber the review, from 1
+     * @param minPrestige  the bracket's bottom prestige, after any shift
+     * @param minFunding   the funding at the bottom
+     * @param maxPrestige  the bracket's top prestige, after any shift
+     * @param maxFunding   the funding at the top
+     * @param prestige     the player's prestige
+     * @return the funding per season
+     */
+    public static long reviewFunding(int reviewNumber, long minPrestige, long minFunding, long maxPrestige,
+            long maxFunding, long prestige) {
+        long straight = interpolate(minPrestige, minFunding, maxPrestige, maxFunding, prestige);
+        if (reviewNumber < FLATTEN_FROM_REVIEW || kneeShare >= 1 || topSlope >= 1) {
+            return straight;
+        }
+        long kneePrestige = minPrestige + Math.round((maxPrestige - minPrestige) * kneeShare);
+        if (prestige <= kneePrestige) {
+            return straight;
+        }
+        long kneeFunding = interpolate(minPrestige, minFunding, maxPrestige, maxFunding, kneePrestige);
+        return kneeFunding + (long) Math.ceil((straight - kneeFunding) * topSlope);
+    }
+
+    /**
      * Raises the funding between reviews when prestige has grown ({@code design.md} &sect;2.1(f)): the
      * review in force, with its own shift, prices today's prestige and the highest prestige the rate
      * already pays for, and the rate gains the difference. It never falls between reviews, and a
@@ -233,7 +293,8 @@ public final class BudgetProgress {
         }
         BudgetSchedule.Review bracket = schedule.reviewFor(reviewNumber);
         long shift = snapshot.getLastReviewShift();
-        long gain = reviewRate(bracket, shift, prestige) - reviewRate(bracket, shift, funded);
+        long gain = reviewRate(reviewNumber, bracket, shift, prestige)
+            - reviewRate(reviewNumber, bracket, shift, funded);
         snapshot.setFundedPrestige(prestige);
         long raise = (long) Math.ceil(gain * raiseShare);
         if (raise <= 0) {
@@ -264,8 +325,8 @@ public final class BudgetProgress {
         int reviewNumber = next / SEASONS_PER_REVIEW;
         BudgetSchedule.Review bracket = schedule.reviewFor(reviewNumber);
         long shift = snapshot.getLastReviewShift();
-        return (long) Math.ceil((reviewRate(bracket, shift, prestige)
-            - reviewRate(bracket, shift, snapshot.getFundedPrestige())) * raiseShare);
+        return (long) Math.ceil((reviewRate(reviewNumber, bracket, shift, prestige)
+            - reviewRate(reviewNumber, bracket, shift, snapshot.getFundedPrestige())) * raiseShare);
     }
 
     /**
@@ -283,8 +344,9 @@ public final class BudgetProgress {
     }
 
     /** The funding a review's bracket pays for a prestige, after the catch-up shift. */
-    private static long reviewRate(BudgetSchedule.Review bracket, long catchUpShift, long prestige) {
-        return interpolate(bracket.minPrestige() - catchUpShift, bracket.minFunding(),
+    private static long reviewRate(int reviewNumber, BudgetSchedule.Review bracket, long catchUpShift,
+            long prestige) {
+        return reviewFunding(reviewNumber, bracket.minPrestige() - catchUpShift, bracket.minFunding(),
             bracket.maxPrestige() - catchUpShift, bracket.maxFunding(), prestige);
     }
 
@@ -315,8 +377,29 @@ public final class BudgetProgress {
          * @return the funding per season
          */
         public long payAt(long prestige) {
-            return interpolate(minPrestige, minFunding, maxPrestige, maxFunding, prestige);
+            return reviewFunding(reviewNumber, minPrestige, minFunding, maxPrestige, maxFunding, prestige);
         }
+
+        /**
+         * Returns what the review pays at the top of its range: {@link #maxFunding} once its line has flattened.
+         *
+         * @return the funding per season
+         */
+        public long topFunding() {
+            return payAt(maxPrestige);
+        }
+    }
+
+    /**
+     * Returns what a review pays at the top of its range, after its line flattens.
+     *
+     * @param reviewNumber the review, from 1
+     * @param bracket      its bracket
+     * @return the funding per season
+     */
+    public static long topFunding(int reviewNumber, BudgetSchedule.Review bracket) {
+        return reviewFunding(reviewNumber, bracket.minPrestige(), bracket.minFunding(), bracket.maxPrestige(),
+            bracket.maxFunding(), bracket.maxPrestige());
     }
 
     /**
@@ -411,8 +494,8 @@ public final class BudgetProgress {
         long max = bracket.maxPrestige() - shift;
         long current = snapshot.getFundingRatePerSeason();
         long keep = -1;
-        if (reviewRate(bracket, shift, max) >= current) {
-            if (reviewRate(bracket, shift, min) >= current) {
+        if (reviewRate(reviewNumber, bracket, shift, max) >= current) {
+            if (reviewRate(reviewNumber, bracket, shift, min) >= current) {
                 keep = Math.max(0, min);
             } else {
                 // The rate rises with prestige: find the least prestige that pays today's rate.
@@ -420,7 +503,7 @@ public final class BudgetProgress {
                 long high = max;
                 while (high - low > 1) {
                     long mid = low + (high - low) / 2;
-                    if (reviewRate(bracket, shift, mid) >= current) {
+                    if (reviewRate(reviewNumber, bracket, shift, mid) >= current) {
                         high = mid;
                     } else {
                         low = mid;
@@ -430,7 +513,8 @@ public final class BudgetProgress {
             }
         }
         return new ReviewForecast(reviewNumber, seasonsUntil, catchUp, min, bracket.minFunding(), max,
-            bracket.maxFunding(), reviewRate(bracket, shift, prestige), current, keep, credit);
+            bracket.maxFunding(), reviewRate(reviewNumber, bracket, shift, prestige), current,
+            keep, credit);
     }
 
     /**
@@ -570,7 +654,7 @@ public final class BudgetProgress {
      * @param prestige    the player's prestige
      * @return the funding per season for that prestige
      */
-    static long interpolate(long minPrestige, long minFunding, long maxPrestige, long maxFunding, long prestige) {
+    public static long interpolate(long minPrestige, long minFunding, long maxPrestige, long maxFunding, long prestige) {
         if (prestige <= minPrestige) {
             return minFunding;
         }

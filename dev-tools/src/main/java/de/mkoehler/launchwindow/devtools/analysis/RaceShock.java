@@ -44,6 +44,7 @@ public final class RaceShock {
     private static final int SEASONS = 240;
     /** Whether the races play with the R&D decisions ({@code decisions} as an argument). */
     private static boolean withDecisions;
+    private static boolean economy;
 
     private RaceShock() {
     }
@@ -91,6 +92,12 @@ public final class RaceShock {
             }
             return;
         }
+        // -Drace.economy=true keeps the money ledger of each side while it races (EconomyLedger).
+        if (Boolean.getBoolean("race.economy")) {
+            economy = true;
+            report(BudgetTrial.label(), play(catalog, seed, false));
+            return;
+        }
         String shares = System.getProperty("race.shares", "0," + RivalFirsts.SHARE);
         for (String share : shares.split(",")) {
             RivalFirsts.setShare(Double.parseDouble(share));
@@ -103,6 +110,10 @@ public final class RaceShock {
     private static List<Race> play(ContentCatalog catalog, long seed, boolean publish) {
         ContentPackPlayouts nasaHarness = new ContentPackPlayouts(catalog, ContentPackPlayouts.Bot.SMART, withDecisions);
         ContentPackPlayouts sovietHarness = new ContentPackPlayouts(catalog, ContentPackPlayouts.Bot.SMART, withDecisions);
+        if (economy) {
+            nasaHarness.ledger = new EconomyLedger();
+            sovietHarness.ledger = new EconomyLedger();
+        }
         List<Race> races = new ArrayList<>();
         for (int game = 0; game < GAMES; game++) {
             Random nasaRandom = new Random(seed * 1_000_003L + 2L * game);
@@ -172,6 +183,10 @@ public final class RaceShock {
             int nasaLands = nasa.completedSeason > 0 ? nasa.completedSeason : SEASONS + 1;
             int sovietLands = soviet.completedSeason > 0 ? soviet.completedSeason : SEASONS + 1;
             boolean nasaBehind = nasaRate32 < sovietRate32;
+            if (economy && game == GAMES - 1) {
+                nasaHarness.ledger.print("NASA, smart bot, racing the Soviets");
+                sovietHarness.ledger.print("the Soviets, smart bot, racing NASA");
+            }
             races.add(new Race(nasaLands, sovietLands, nasaRate32, sovietRate32,
                 nasaBehind ? nasaRates : sovietRates, nasaBehind ? sovietRates : nasaRates, credits[0], credits[1],
                 published, publishedPrestige));

@@ -425,4 +425,22 @@ class BudgetProgressTest {
             BudgetProgress.setRaiseShare(BudgetProgress.RAISE_SHARE);
         }
     }
+
+    @Test
+    void aFlattenedReviewPaysLessOnlyAboveTheKneeAndNeverBeforeReviewTwo() {
+        // Review 4's range: 7,500..70,000 prestige pays 8,000..49,000; the knee halfway, at 38,750 (28,500), and
+        // 30 % of the slope above it.
+        assertEquals(BudgetProgress.interpolate(7_500, 8_000, 70_000, 49_000, 20_000),
+            BudgetProgress.reviewFunding(4, 7_500, 8_000, 70_000, 49_000, 20_000));
+        assertEquals(28_500, BudgetProgress.reviewFunding(4, 7_500, 8_000, 70_000, 49_000, 38_750));
+        assertEquals(28_500 + 6_150, BudgetProgress.reviewFunding(4, 7_500, 8_000, 70_000, 49_000, 70_000));
+        assertEquals(8_000, BudgetProgress.reviewFunding(1, 250, 3_800, 2_500, 8_000, 2_500));
+        assertThrows(IllegalArgumentException.class, () -> BudgetProgress.setFlattening(1.5, 0.3));
+        try {
+            BudgetProgress.setFlattening(1, 1);
+            assertEquals(49_000, BudgetProgress.reviewFunding(4, 7_500, 8_000, 70_000, 49_000, 70_000));
+        } finally {
+            BudgetProgress.setFlattening(BudgetProgress.KNEE_SHARE, BudgetProgress.TOP_SLOPE);
+        }
+    }
 }

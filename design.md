@@ -905,6 +905,14 @@ reaches its first review later in real time, which is fine.
   repeats** (confirmed 2026-10-06). **Catch-up** (`baspm.md` §11.7): if prestige at the previous
   review fell short of that review's raw minimum, this review's bracket shifts down by the
   shortfall, so shortfalls don't compound.
+- **Diminishing returns at the top** (our own change, user, 2026-11-13; §3.10, "Money stops mattering from
+  the second review"): from review 2 on (`BudgetProgress.FLATTEN_FROM_REVIEW`), a review's line flattens
+  halfway along its prestige range (`KNEE_SHARE` 0.5) and rises above that at 30 % of its slope (`TOP_SLOPE`;
+  both *unconfirmed*), so review 4 tops out at 34,650 instead of 49,000 and review 10 at 56,250 instead of
+  65,000. Below the knee nothing changes. `BudgetProgress.reviewFunding` is the line everything prices
+  with (reviews, raises, the forecast); the Public Affairs Office shows the flattened top
+  (`ReviewForecast.topFunding`). The start and review 1 were money's tight stretch in the play tests and
+  stay as BASPM has them.
 - **Running costs each season:** every employee's own salary (drawn from BASPM's 25–60 when the
   person is created), program maintenance, mission-component maintenance, and building upkeep
   (§5, M3).
@@ -2574,6 +2582,11 @@ purpose-built report).
   catalog, with a bot that hires, trains, pulls out, opens programs, researches and launches
   through the validated actions.
 - **`CareerCurves`:** rookie-vs-veteran skill curves for tuning the age trade-off (§2.2(c)).
+- **The economy** (the user's question, 2026-11-13, after a play test drowning in money): `EconomyCeiling`
+  prices, from the rules alone, the most an agency can spend each season to keep running against what each
+  review pays; `-Dplayout.economy=true` on `ContentPackPlayouts` and `-Drace.economy=true` on `RaceShock` keep a
+  per-season ledger (`EconomyLedger`: funding, running costs, everything else spent, cash banked), by review,
+  before and after the race is won.
 
 **Invariants** are checked every season and recomputed independently of the resolver under
 test (never by calling its own predicate), so a clean run is a genuine cross-check: skill and
@@ -2594,6 +2607,33 @@ runs with that in mind; per-run history is in the pre-2026-10-06 design doc (see
   a random event or an R&D decision's secondment can't be given work, so their season's own morale holds
   (`PersonnelLifecycle`); other morale changes (events, salary, ambitions) still apply.
 
+- **Money stops mattering from the second review** (2026-11-13, 100 smart-bot games alone and 200 races of two):
+  while racing, a strong agency leaves 17–32 % of a review's funding unspent and ends 76–96 % of its seasons with
+  two or more seasons' funding banked (3–6 seasons, median); a rival barely changes it. After the race, two
+  thirds goes unspent. The rules' ceiling agrees: buildings and staff maxed with 16 median programs cost about
+  21,000 (NASA) to 23,000 (Soviets) a season, 4 programs (a finished race, like the play test) about 15,000,
+  against a fourth review paying up to 49,000 and later ones 52,500–65,000; only every dearest program and
+  rocket open at top salaries (44,000–49,000) reaches it. A reasonable player (staff for the biggest mission
+  plus spares: 7 astronauts, 15 controllers, 16 engineers; buildings only as big as that needs; intelligence
+  level 2; 4 to 7 programs, 3 to 4 rockets) runs at about 8,000–10,700, covered from the third review at
+  modest prestige. Lowering the ranges' tops alone (`-Drules.budget`, `BudgetTrial`) starves the middle as
+  well, since a review pays along a straight line from its bottom to its top: tops of 17,000 / 27,000 /
+  36,000 / 38,000+ from review 2 already left a quarter of two-bot races without a landing by season 240,
+  and lower ones spiral (debts paid in prestige lower the next review). The smart bot sits mid-range
+  (about 26,000 at review 3, 31,000 at review 4, against tops of 35,000 and 49,000), so the surplus is
+  worst for a dominant player at the top. Flattening each line from review 2 on above a knee instead
+  (`-Drules.flatten=<knee>,<slope>`, `BudgetProgress.setFlattening`) keeps the middle and trims the top. Two
+  smart bots racing, 200 games each:
+
+  | Funding | Top, reviews 2 / 3 / 4 | Left at reviews 2–4 | Flush seasons | First landing, quartiles (mean) | Second landing, mean |
+  |---|---|---|---|---|---|
+  | BASPM's straight line | 21,000 / 35,000 / 49,000 | 7–32 % | 76–96 % | 74 / 78 / 83 (78.8) | 91.1 |
+  | Knee 0.6, slope 0.25 | 16,080 / 26,150 / 36,700 | −3–19 % | 36–71 % | 75 / 79 / 85 (80.5) | 96.3 |
+  | Knee 0.5, slope 0.3 (adopted) | 15,260 / 24,675 / 34,650 | −4–14 % | 19–61 % | 77 / 80 / 85 (82.1) | 99.9 |
+  | Knee 0.4, slope 0.1 | 12,144 / 19,070 / 26,860 | −3–6 % | 3–40 % | 84 / 89 / 96 (92.9) | 116.9 |
+
+  Adopted: knee 0.5, slope 0.3 (user, 2026-11-13; §2.1(d)). `-Drules.flatten=1,1` plays BASPM's line
+  again for comparison.
 ### 3.11 Offscreen screenshot tooling for UI checking
 
 **Decided (user, 2026-09-27), built 2026-10-04:** Robot-Rampage's `ScreenSnapshot`
@@ -2746,6 +2786,10 @@ patches (`ui-spec.md` component 8).
 **Settled, for the record:** a player who doesn't log in before a resolution keeps their
 default: a scheduled mission launches and training continues. Scrubbing and pulling out are
 ordinary actions available until the resolution (user; BASPM's second "launch now?" prompt is
+- **Money stops mattering from the second review** (§3.10's findings, 2026-11-13): answered for now by
+  diminishing returns at the top of each review (§2.1(d)); a play test decides whether it's enough. Next lever
+  (user): salaries that need raising from time to time, or morale slips, so the department screen gets used.
+  Measure a change with `EconomyCeiling` and the playouts' money ledger.
 skipped). R&D assignments are standing orders (`baspm.md` §2.1). Tiger Teams became the Expert
 trait (§2.2(c)).
 
@@ -2756,6 +2800,8 @@ trait (§2.2(c)).
 - Skill growth cut by 30 % for training, flying and R&D (§2.2(c)); a flight's unused skills at a third
   (`SkillGrowth.FLIGHT_UNUSED_SKILL_SHARE`, §2.5(g)).
 - Personal skill ceilings, `100 − 0.5 × points above 75` (`SkillGrowth.ceiling`, §2.2(c)).
+- Diminishing returns at the top: the knee halfway, 30 % of the slope above it, from review 2
+  (`BudgetProgress.KNEE_SHARE`, `TOP_SLOPE`, §2.1(d)).
 - Rocket-plane wings: +4 on capsule steps (`rules.RocketPlaneWings`, §2.2(c)).
 - People, phases 1 to 3: trait split 20 / 50 / 30 %, reveal points 2 to 4, affinity weights, team-trait
   and personal-trait effects, bland hints 1 in 4 (`Personality`, `Chemistry`, `TraitEffects`, §2.2(d)).

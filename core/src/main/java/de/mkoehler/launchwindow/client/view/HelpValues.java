@@ -71,6 +71,9 @@ public final class HelpValues {
         v.put("budget.startFunding", whole(budget.initialFundingRate()));
         v.put("budget.seasonsPerReview", whole(BudgetProgress.SEASONS_PER_REVIEW));
         v.put("budget.fundsPerPrestige", whole(budget.fundsPerPrestige()));
+        v.put("budget.flattenFrom", whole(BudgetProgress.FLATTEN_FROM_REVIEW));
+        v.put("budget.kneeShare", whole(Math.round(BudgetProgress.KNEE_SHARE * 100)));
+        v.put("budget.topSlope", whole(Math.round(BudgetProgress.TOP_SLOPE * 100)));
         v.put("budget.coveredSeasons", whole(PrestigeConversion.COVERED_SEASONS));
         v.put("budget.rivalShare", whole(Math.round(de.mkoehler.launchwindow.rules.RivalFirsts.SHARE * 100)));
         v.put("findings.bonus", whole(Math.round(de.mkoehler.launchwindow.rules.Findings.BONUS_POINTS)));

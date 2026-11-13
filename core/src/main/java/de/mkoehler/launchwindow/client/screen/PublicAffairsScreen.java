@@ -502,7 +502,7 @@ public final class PublicAffairsScreen extends ChromeScreen {
         ends.add(ui.label(String.format(Locale.ROOT, "%,d prestige or less: %s", Math.max(0, forecast.minPrestige()),
             money(forecast.minFunding())), Theme.TextStyle.CAPTION, Theme.INK_MUTED)).expandX().left();
         ends.add(ui.label(String.format(Locale.ROOT, "%,d or more: %s", forecast.maxPrestige(),
-            money(forecast.maxFunding())), Theme.TextStyle.CAPTION, Theme.INK_MUTED)).right();
+            money(forecast.topFunding())), Theme.TextStyle.CAPTION, Theme.INK_MUTED)).right();
         card.add(ends).padBottom(Theme.SPACE_2).row();
         Table legend = new Table();
         legend.add(legendItem(Theme.NAVY, String.format(Locale.ROOT, "You, %,d", state.getPrestige())))
@@ -511,8 +511,13 @@ public final class PublicAffairsScreen extends ChromeScreen {
             legend.add(legendItem(Theme.GOLD, String.format(Locale.ROOT, "Keeps today's %s: %,d",
                 money(forecast.currentRate()), forecast.keepPrestige()))).padRight(Theme.SPACE_4);
         }
-        legend.add(ui.label("A straight line in between, rounded up.", Theme.TextStyle.CAPTION, Theme.INK_MUTED))
-            .expandX().left();
+        // From review 2 on the line flattens past its knee (design.md section 2.1(d)).
+        String line = forecast.reviewNumber() < BudgetProgress.FLATTEN_FROM_REVIEW
+            ? "A straight line in between, rounded up."
+            : String.format(Locale.ROOT, "Straight up to %,d, then %d %% as steep.", forecast.minPrestige()
+                + Math.round((forecast.maxPrestige() - forecast.minPrestige()) * BudgetProgress.KNEE_SHARE),
+                Math.round(BudgetProgress.TOP_SLOPE * 100));
+        legend.add(ui.label(line, Theme.TextStyle.CAPTION, Theme.INK_MUTED)).expandX().left();
         card.add(legend).padBottom(Theme.SPACE_3).row();
 
         long diff = forecast.payToday() - forecast.currentRate();
@@ -581,7 +586,7 @@ public final class PublicAffairsScreen extends ChromeScreen {
             Theme.TextStyle style = upcoming ? Theme.TextStyle.BODY_STRONG : Theme.TextStyle.BODY_SM;
             String[] cells = {"#" + (i + 1) + (i + 1 == reviews.size() ? " and later" : ""),
                 String.format(Locale.ROOT, "%,d – %,d", review.minPrestige(), review.maxPrestige()),
-                money(review.minFunding()) + " – " + money(review.maxFunding())};
+                money(review.minFunding()) + " – " + money(BudgetProgress.topFunding(i + 1, review))};
             for (String text : cells) {
                 Table cell = new Table();
                 cell.setBackground(ui.solid(fill));
