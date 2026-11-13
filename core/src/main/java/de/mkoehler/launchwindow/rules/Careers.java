@@ -196,8 +196,18 @@ public final class Careers {
      * @param roster  the department
      * @param percent the salary change, in percent
      */
+    /**
+     * Returns how much loyalty a salary change moves: half the percentage, rounded.
+     *
+     * @param percent the change
+     * @return the loyalty change
+     */
+    public static int loyaltyChange(int percent) {
+        return Math.round(percent / 2f);
+    }
+
     static void salaryChanged(List<? extends Personnel> roster, int percent) {
-        int change = Math.round(percent / 2f);
+        int change = loyaltyChange(percent);
         for (Personnel person : roster) {
             person.setLoyalty(Math.clamp(person.getLoyalty() + change, 0, 100));
         }

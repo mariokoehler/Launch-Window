@@ -434,6 +434,10 @@
       "body": [
         "Morale runs from 0 to 100. Busy people (on R&D, on a mission, in training or on PR duty) gain {people.busyMorale} a season; idle ones lose {people.idleMorale}, unless they're sidelined and can't be given work. Salary changes, ambitions, press stories, R&D decisions, random events and some traits move it too.",
         "A department's average morale also sets how good its candidates are.",
+        "## Pay and morale",
+        "Pay sets how far work can fill morale: for every percent someone is paid below what they expect, their morale can rise {pay.ceilingPerPercent} points less than 100, and above that it drifts down {pay.drift} a season. The person page marks the line on the morale bar.",
+        "## Morale at work",
+        "From {pay.highMorale}, people's skills count {pay.moraleSkill} % more on missions and in R&D; below {pay.lowMorale}, {pay.moraleSkill} % less. Mission plans and R&D forecasts already include it.",
         "## Leaving",
         "- At {people.resignAt} or below, a person resigns.",
         "- People retire at {people.retireAstronaut} (astronauts), {people.retireController} (flight controllers) and {people.retireEngineer} (engineers).",
@@ -449,6 +453,11 @@
       "body": [
         "Everyone has a salary, between {people.salaryMin} and {people.salaryMax} when they're hired, paid every season with the running costs.",
         "Manage department changes a whole department's salaries by up to {people.salaryAdjust} % either way, once per department per season. A raise lifts morale by as many points as the percentage; a cut lowers it three times as much. Loyalty moves by half the change.",
+        "## What people expect",
+        "Everyone expects a salary: what they were hired at, then {pay.reviewStep} % more at every funding review, and more for good work, in the turn it happens: {pay.flight} % for a flight or console shift without a failed step, {pay.first} % for a First, {pay.expert} % for the Expert trait, {pay.ambition} % for an ambition come true, and for an engineer {pay.rd} % per {pay.rdPoints} points of reliability their R&D added. At most {pay.maxStep} % a turn from good work. The turn report says who expects more, and why.",
+        "Paid {pay.underpaidAt} % or more below that, someone is underpaid: a gold chip on the roster, and a ceiling on their morale (see Morale). One review left unanswered keeps them below their best, two make them work worse, three and they resign.",
+        "## Raising pay",
+        "On a person's page, raise them to what they expect, or by {pay.raiseSteps} %, once per person per season. Manage department can instead bring everyone up to what they expect at once, which uses the department's one change. A raise lifts morale a point per percent and loyalty half as much. A cut leaves what they expect where it was, so it opens a gap too.",
         "A matched poaching offer raises one person's salary for good."
       ],
       "related": ["morale", "poaching", "budget"]

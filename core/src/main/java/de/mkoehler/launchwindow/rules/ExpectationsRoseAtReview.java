@@ -6,10 +6,21 @@ package de.mkoehler.launchwindow.rules;
  *
  * @param reviewNumber the review
  * @param percent      the rise, in percent
+ * @param underpaid    how many are underpaid after it ({@link PayExpectations#isUnderpaid})
+ * @param byGroup      the underpaid by department ({@link PersonnelGroup} name), departments with none left out
  * @author Mario Koehler
  */
 public record ExpectationsRoseAtReview(
     int reviewNumber,
-    long percent
+    long percent,
+    int underpaid,
+    java.util.Map<String, Integer> byGroup
 ) implements ResolutionEvent {
+
+    /**
+     * Normalizes a missing map.
+     */
+    public ExpectationsRoseAtReview {
+        byGroup = byGroup == null ? java.util.Map.of() : java.util.Map.copyOf(byGroup);
+    }
 }

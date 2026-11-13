@@ -22,8 +22,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class PayExpectationsTest {
 
     @AfterEach
-    void allOff() {
-        PayExpectations.setParts(false, false, false, false);
+    void asTheGameRuns() {
+        PayExpectations.setParts(true, true, true, true);
     }
 
     private static SetSpecialist engineer(String id, int morale, double salary) {
@@ -38,9 +38,11 @@ class PayExpectationsTest {
         return state;
     }
 
-    /** Off, as the game runs until the screens are built: no ceiling, no effect on skill, no rises. */
+    /** On as the game runs; off (for a playout measuring it): no ceiling, no effect on skill, no rises. */
     @Test
-    void everyPartIsOffByDefault() {
+    void everyPartIsOnAndCanBeTurnedOff() {
+        assertTrue(PayExpectations.anyOn());
+        PayExpectations.setParts(false, false, false, false);
         SetSpecialist underpaid = engineer("a", 95, 30);
         underpaid.setExpectedSalary(60.0);
         assertFalse(PayExpectations.anyOn());
@@ -113,7 +115,7 @@ class PayExpectationsTest {
         PlayerSnapshot state = agency(person);
         int loyalty = person.getLoyalty();
 
-        assertEquals(PayExpectations.RaiseOutcome.INVALID_RAISE, PayExpectations.raise(state, "a", 60));
+        assertEquals(PayExpectations.RaiseOutcome.NOT_A_RAISE, PayExpectations.raise(state, "a", 60));
         assertEquals(PayExpectations.RaiseOutcome.RAISED, PayExpectations.raise(state, "a", 0));
         assertEquals(100.0, person.getSalary(), 1e-9, "meeting it has no cap");
         assertEquals(100, person.getMorale(), "+150, clamped");
@@ -123,7 +125,7 @@ class PayExpectationsTest {
         assertEquals(PayExpectations.RaiseOutcome.RAISED, PayExpectations.raise(state, "a", 5));
         assertEquals(105.0, person.getSalary(), 1e-9);
         assertEquals(100.0, person.expectedSalary(), 1e-9, "a raise leaves the expectation where it was");
-        assertEquals(PayExpectations.RaiseOutcome.UNKNOWN_PERSON, PayExpectations.raise(state, "nobody", 5));
+        assertEquals(PayExpectations.RaiseOutcome.UNKNOWN_PERSONNEL, PayExpectations.raise(state, "nobody", 5));
     }
 
     /** The department: each underpaid person to their own expectation, once a season, and refused when none is. */

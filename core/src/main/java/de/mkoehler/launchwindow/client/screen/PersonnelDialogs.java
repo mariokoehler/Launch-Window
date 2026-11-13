@@ -5,12 +5,17 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Scaling;
 import de.mkoehler.launchwindow.actions.AdjustSalariesAction;
+import de.mkoehler.launchwindow.actions.MeetExpectationsAction;
+import de.mkoehler.launchwindow.actions.RaiseSalaryAction;
+import de.mkoehler.launchwindow.client.view.PayTexts;
+import de.mkoehler.launchwindow.rules.PayExpectations;
 import de.mkoehler.launchwindow.actions.DismissAction;
 import de.mkoehler.launchwindow.actions.PullOutOfTrainingAction;
 import de.mkoehler.launchwindow.actions.StartExpertTrainingAction;
@@ -39,6 +44,7 @@ import de.mkoehler.launchwindow.rules.TrainingPlanning;
 import de.mkoehler.launchwindow.rules.TrainingProgress;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Locale;
 
 /**
@@ -579,6 +585,68 @@ final class PersonnelDialogs {
         return buttons;
     }
 
+    /**
+     * Asks to raise one person ({@code ui-spec.md} &sect;4.23): to what they expect, or by a percentage. The
+     * preview is the rule's own ({@link PayExpectations#preview}).
+     *
+     * @param person  the person
+     * @param percent the raise in percent, or 0 for their expectation
+     */
+    void confirmRaise(Personnel person, int percent) {
+        String surname = person.getName().substring(person.getName().lastIndexOf(' ') + 1);
+        PayExpectations.Preview preview = PayExpectations.preview(person, percent);
+        Table card = host.dialogCard(department.place() + " · raise", percent == 0
+            ? "Meet " + person.getName() + "\u2019s expectation" : "Raise " + person.getName() + " by " + percent + " %");
+        card.add(ui.paragraph(percent == 0
+            ? "The salary rises to the " + PayTexts.money(preview.salary()) + " " + surname + " expects, for good. "
+                + "One raise a person each season."
+            : "The salary rises " + percent + " %, for good. One raise a person each season.",
+            Theme.TextStyle.BODY, Theme.INK_MUTED)).padBottom(Theme.SPACE_4).row();
+        Table box = new Table();
+        box.setBackground(ui.cardAccent(Theme.NAVY));
+        box.pad(Theme.SPACE_4, Theme.SPACE_4 + Theme.BORDER_ACCENT, Theme.SPACE_4, Theme.SPACE_4);
+        box.defaults().left().expandX().top();
+        box.add(previewCell("New salary", PayTexts.money(preview.salary()) + " a season",
+            "from " + PayTexts.money(person.getSalary()), Theme.INK));
+        box.add(previewCell("Extra per season", "+ " + PayTexts.money(preview.extra()),
+            "a raise of " + preview.percent() + " %", Theme.INK)).row();
+        int ceiling = PayExpectations.moraleCeiling(withSalary(person, preview.salary()));
+        box.add(previewCell("Morale", person.getMorale() + " \u2192 " + preview.moraleAfter(),
+            ceiling >= 100 ? "+1 a percent; no ceiling once paid as expected" : "+1 a percent; pay then holds it to "
+                + ceiling, RosterCells.moraleColor(preview.moraleAfter()))).padTop(Theme.SPACE_3);
+        box.add(previewCell("Loyalty", person.getLoyalty() + " \u2192 " + preview.loyaltyAfter(), "half as much",
+            Theme.NAVY)).padTop(Theme.SPACE_3);
+        card.add(box).padBottom(Theme.SPACE_4).row();
+        card.add(confirmButtons("OK", Theme.ButtonKind.PRIMARY, () -> host.submit(
+            new RaiseSalaryAction(person.getId(), percent), result -> {
+                host.closeDialog();
+                host.toast("Raised " + person.getName() + " to " + PayTexts.money(preview.salary()) + ".",
+                    Theme.NoticeKind.SUCCESS);
+            }))).right().fill(false, false);
+        host.showDialog(card, RAISE_DIALOG_WIDTH);
+    }
+
+    /** The confirm's width, from the mockup. */
+    private static final float RAISE_DIALOG_WIDTH = 480f;
+
+    private Table previewCell(String label, String value, String caption, com.badlogic.gdx.graphics.Color color) {
+        Table cell = new Table();
+        cell.left();
+        cell.defaults().left();
+        cell.add(ui.label(label.toUpperCase(Locale.ROOT), Theme.TextStyle.CAPTION, Theme.INK_MUTED)).row();
+        cell.add(ui.label(value, Theme.TextStyle.HEADING_SM, color)).row();
+        cell.add(ui.label(caption, Theme.TextStyle.CAPTION, Theme.INK_MUTED));
+        return cell;
+    }
+
+    /** A stand-in at another salary, for the ceiling a raise would leave. */
+    private static Personnel withSalary(Personnel person, double salary) {
+        de.mkoehler.launchwindow.model.SetSpecialist copy = new de.mkoehler.launchwindow.model.SetSpecialist();
+        copy.setSalary(salary);
+        copy.setExpectedSalary(person.expectedSalary());
+        return copy;
+    }
+
     // ------------------------------------------------------------------ manage department
 
     /**
@@ -588,6 +656,18 @@ final class PersonnelDialogs {
      * @param percent the starting percentage
      */
     void openManageDepartment(int percent) {
+        // Opens on "Bring everyone up" when anyone is paid below what they expect (ui-spec.md section 4.23).
+        openManageDepartment(percent, !PayExpectations.belowExpectation(host.session.state(), department.group())
+            .isEmpty());
+    }
+
+    /**
+     * Opens the Manage department dialog in one of its two modes.
+     *
+     * @param percent the starting percentage for the same raise
+     * @param bring   whether it opens on "Bring everyone up to expectations"
+     */
+    void openManageDepartment(int percent, boolean bring) {
         List<? extends Personnel> roster = department.roster(host.session.state());
         if (roster.isEmpty()) {
             host.toast("There's nobody in the department yet.", Theme.NoticeKind.INFO);
@@ -598,6 +678,13 @@ final class PersonnelDialogs {
             return;
         }
         Table card = host.dialogCard(department.place(), "Manage department");
+        card.add(segmented(new String[] {"Same raise for everyone", "Bring everyone up to expectations"},
+            bring ? 1 : 0, pick -> openManageDepartment(percent, pick == 1))).height(32f).padBottom(Theme.SPACE_4)
+            .row();
+        if (bring) {
+            bringEveryoneUp(card, roster);
+            return;
+        }
         card.add(ui.paragraph("A one-off adjustment to every " + switch (department) {
             case SET -> "SET salary";
             case ASTRONAUT -> "astronaut's salary";
@@ -632,7 +719,8 @@ final class PersonnelDialogs {
         right.add(morale);
         preview.add(left).expandX().left();
         preview.add(right).expandX().left();
-        card.add(preview).padBottom(Theme.SPACE_4).row();
+        card.add(preview).padBottom(Theme.SPACE_3).row();
+        card.add(onceLine()).padBottom(Theme.SPACE_4).row();
 
         Table buttons = new Table();
         buttons.add(button("Cancel", Theme.ButtonKind.SECONDARY, host::closeDialog)).padRight(10f);
@@ -665,7 +753,122 @@ final class PersonnelDialogs {
             }
         });
         update.run();
-        host.showDialog(card);
+        host.showDialog(card, MANAGE_DIALOG_WIDTH);
+    }
+
+    /** Manage department's second mode: everyone paid below what they expect, brought up to it. */
+    private void bringEveryoneUp(Table card, List<? extends Personnel> roster) {
+        card.add(ui.paragraph("Raises everyone paid below what they expect to exactly that, for good. Each one's morale "
+            + "rises a point per percent, loyalty half as much.", Theme.TextStyle.BODY, Theme.INK_MUTED))
+            .padBottom(Theme.SPACE_4).row();
+        List<Personnel> under = PayExpectations.belowExpectation(host.session.state(), department.group());
+        if (under.isEmpty()) {
+            Table quiet = new Table();
+            quiet.setBackground(ui.rect(Theme.SURFACE_CARD, Theme.NAVY_BORDER, Theme.BORDER_THIN));
+            quiet.pad(Theme.SPACE_4);
+            quiet.defaults().left().growX();
+            quiet.add(ui.label("Nobody is underpaid.", Theme.TextStyle.BODY_STRONG, Theme.INK)).row();
+            quiet.add(ui.paragraph("Everyone in the " + department.place() + " is paid what they expect. Expectations "
+                + "rise at the next funding review and with good work.", Theme.TextStyle.BODY_SM, Theme.INK_MUTED))
+                .padTop(2f);
+            card.add(quiet).padBottom(Theme.SPACE_3).row();
+        } else {
+            double extra = 0;
+            int moraleAfter = 0;
+            java.util.Map<Personnel, PayExpectations.Preview> previews = new java.util.LinkedHashMap<>();
+            for (Personnel person : under) {
+                PayExpectations.Preview preview = PayExpectations.preview(person, 0);
+                previews.put(person, preview);
+                extra += preview.extra();
+            }
+            for (Personnel person : roster) {
+                PayExpectations.Preview preview = previews.get(person);
+                moraleAfter += preview == null ? person.getMorale() : preview.moraleAfter();
+            }
+            int moraleNow = (int) Math.round(roster.stream().mapToInt(Personnel::getMorale).average().orElse(0));
+            Table summary = new Table();
+            summary.setBackground(ui.cardAccent(Theme.NAVY));
+            summary.pad(Theme.SPACE_3, Theme.SPACE_4 + Theme.BORDER_ACCENT, Theme.SPACE_3, Theme.SPACE_4);
+            summary.add(ui.label(under.size() + " of " + roster.size() + " underpaid  ·  + " + PayTexts.money(extra)
+                + " a season  ·  average morale " + moraleNow + " \u2192 " + Math.round((double) moraleAfter
+                / roster.size()), Theme.TextStyle.BODY_STRONG, Theme.INK)).left().expandX();
+            card.add(summary).padBottom(Theme.SPACE_3).row();
+            Table list = new Table();
+            list.top().left();
+            list.defaults().left().padBottom(6f);
+            list.add(ui.label("UNDERPAID", Theme.TextStyle.LABEL, Theme.INK_MUTED)).expandX();
+            list.add(ui.label("PAID \u2192 EXPECTS", Theme.TextStyle.LABEL, Theme.INK_MUTED)).width(150f);
+            list.add(ui.label("MORALE \u2192 AFTER", Theme.TextStyle.LABEL, Theme.INK_MUTED)).width(130f).row();
+            for (Map.Entry<Personnel, PayExpectations.Preview> entry : previews.entrySet()) {
+                Personnel person = entry.getKey();
+                PayExpectations.Preview preview = entry.getValue();
+                Table who = new Table();
+                who.left();
+                who.add(RosterCells.avatar(ui, person)).size(40f).padRight(Theme.SPACE_2);
+                Table name = new Table();
+                name.left();
+                name.defaults().left();
+                name.add(ui.label(person.getName(), Theme.TextStyle.BODY_STRONG, Theme.INK)).row();
+                name.add(ui.label(PayTexts.under(person) + " % under", Theme.TextStyle.CAPTION, Theme.GOLD_TEXT));
+                who.add(name);
+                list.add(who).expandX();
+                list.add(ui.label(PayTexts.money(person.getSalary()) + " \u2192 " + PayTexts.money(preview.salary()),
+                    Theme.TextStyle.BODY_SM, Theme.INK)).width(150f);
+                Table morale = new Table();
+                morale.left();
+                morale.add(ui.label(person.getMorale() + " \u2192 ", Theme.TextStyle.BODY_SM, Theme.INK));
+                morale.add(ui.label(String.valueOf(preview.moraleAfter()), Theme.TextStyle.BODY_STRONG,
+                    RosterCells.moraleColor(preview.moraleAfter())));
+                list.add(morale).width(130f).row();
+            }
+            ScrollPane scroll = new ScrollPane(list, new ScrollPane.ScrollPaneStyle());
+            scroll.setFadeScrollBars(false);
+            scroll.setScrollingDisabled(true, false);
+            card.add(scroll).height(Math.min(7, under.size()) * 46f + 24f).padBottom(Theme.SPACE_3).row();
+        }
+        card.add(onceLine()).padBottom(Theme.SPACE_4).row();
+        Table buttons = new Table();
+        buttons.add(button("Cancel", Theme.ButtonKind.SECONDARY, host::closeDialog)).padRight(10f);
+        TextButton ok = button("OK", Theme.ButtonKind.PRIMARY, () -> host.submit(
+            new MeetExpectationsAction(department.group()), result -> {
+                host.closeDialog();
+                host.toast("Brought " + under.size() + (under.size() == 1 ? " person" : " people")
+                    + " up to what they expect.", Theme.NoticeKind.SUCCESS);
+            }));
+        ok.setDisabled(under.isEmpty());
+        buttons.add(ok);
+        card.add(buttons).right().fill(false, false);
+        host.showDialog(card, MANAGE_DIALOG_WIDTH);
+    }
+
+    /** Manage department's width with its list of the underpaid. */
+    private static final float MANAGE_DIALOG_WIDTH = 640f;
+
+    private Label onceLine() {
+        return ui.label("Either way, once per season: the department's one change.", Theme.TextStyle.CAPTION,
+            Theme.INK_MUTED);
+    }
+
+    /** A segmented choice, as Settings' Sound. */
+    private Table segmented(String[] names, int selected, java.util.function.IntConsumer pick) {
+        Table segments = new Table();
+        segments.setBackground(ui.rect(new com.badlogic.gdx.graphics.Color(0f, 0f, 0f, 0f), Theme.NAVY_BORDER,
+            Theme.BORDER_THIN));
+        segments.pad(Theme.BORDER_THIN);
+        for (int i = 0; i < names.length; i++) {
+            int index = i;
+            boolean on = i == selected;
+            Table segment = new Table();
+            segment.setBackground(ui.solid(on ? Theme.NAVY : Theme.SURFACE_CARD));
+            segment.add(ui.label(names[i].toUpperCase(Locale.ROOT), Theme.TextStyle.LABEL,
+                on ? Theme.ON_FILL : Theme.NAVY));
+            if (!on) {
+                segment.setTouchable(com.badlogic.gdx.scenes.scene2d.Touchable.enabled);
+                segment.addListener(SessionScreen.clicked(() -> pick.accept(index)));
+            }
+            segments.add(segment).expand().fill().uniformX();
+        }
+        return segments;
     }
 
     private static String percentLabel(int percent) {

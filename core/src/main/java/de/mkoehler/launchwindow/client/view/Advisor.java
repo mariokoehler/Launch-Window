@@ -192,6 +192,54 @@ public final class Advisor {
             + ". Training is free and raises skills: send whoever waits for work to training, or put engineers on R&D.",
         "Their building", Destination.SET_CENTRE, List.of("morale", "training"));
 
+    /** Morale below this, held there by pay, makes the pay tip show ({@code ui-spec.md} &sect;4.23). */
+    public static final int PAY_TIP_MORALE = 60;
+
+    /**
+     * A tip apart from the first steps ({@code ui-spec.md} &sect;4.23): while anyone's morale sits at what their pay
+     * allows, below {@link #PAY_TIP_MORALE}, the card says how many. It shows whenever that's so, on a retired
+     * advisor too, and never counts toward {@link #finished}.
+     */
+    public static final Item PAY_TIP = new Item("underpaid", "{underpaid} underpaid enough to hurt their work",
+        "Their pay holds their morale down, and below " + de.mkoehler.launchwindow.rules.PayExpectations.LOW_MORALE
+            + " people work worse. Raise them on their page, or bring the department up in Manage department.",
+        "Their building", Destination.SET_CENTRE, List.of("salaries", "morale"));
+
+    /**
+     * Returns whether the pay tip shows: someone's morale is at their pay's ceiling, below
+     * {@link #PAY_TIP_MORALE}.
+     *
+     * @param state the player's state
+     * @return whether it's due
+     */
+    public static boolean payTipDue(PlayerSnapshot state) {
+        return payTipCount(state) > 0;
+    }
+
+    private static long payTipCount(PlayerSnapshot state) {
+        return java.util.stream.Stream.of(state.getAstronauts(), state.getSetSpecialists(),
+                state.getMissionControlOfficers()).flatMap(List::stream).filter(Advisor::heldByPay).count();
+    }
+
+    private static boolean heldByPay(de.mkoehler.launchwindow.model.Personnel person) {
+        int ceiling = de.mkoehler.launchwindow.rules.PayExpectations.moraleCeiling(person);
+        return ceiling < PAY_TIP_MORALE && person.getMorale() <= ceiling;
+    }
+
+    /** The building with the most people held by pay, or {@code null} if nobody is. */
+    private static Destination payDestination(PlayerSnapshot state) {
+        long set = state.getSetSpecialists().stream().filter(Advisor::heldByPay).count();
+        long astronauts = state.getAstronauts().stream().filter(Advisor::heldByPay).count();
+        long controllers = state.getMissionControlOfficers().stream().filter(Advisor::heldByPay).count();
+        if (set + astronauts + controllers == 0) {
+            return null;
+        }
+        if (set >= astronauts && set >= controllers) {
+            return Destination.SET_CENTRE;
+        }
+        return astronauts >= controllers ? Destination.ASTRONAUT_COMPLEX : Destination.MISSION_CONTROL;
+    }
+
     /** The explainer the explainer tip opens (E-01): every agency starts by putting a satellite in orbit. */
     public static final String TIP_EXPLAINER = "suborbital-vs-orbital";
 
@@ -474,6 +522,10 @@ public final class Advisor {
     }
 
     private static String named(String text, PlayerSnapshot state, ContentCatalog catalog) {
+        if (text.contains("{underpaid}")) {
+            long count = payTipCount(state);
+            text = text.replace("{underpaid}", count == 1 ? "1 person" : count + " people");
+        }
         if (text.contains("{program}")) {
             Program program = closeTipProgram(state, catalog);
             text = text.replace("{program}", program == null ? "the program" : ContentNames.of(program.id()));
@@ -550,6 +602,10 @@ public final class Advisor {
         if (item == IDLE_TIP) {
             Destination idle = idleDestination(state);
             return idle == null ? item.destination() : idle;
+        }
+        if (item == PAY_TIP) {
+            Destination pay = payDestination(state);
+            return pay == null ? item.destination() : pay;
         }
         if (item.id().equals("raise-reliability")) {
             double payload = bestPayload(state, catalog);

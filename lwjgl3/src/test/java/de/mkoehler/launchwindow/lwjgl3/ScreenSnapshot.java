@@ -366,6 +366,10 @@ public final class ScreenSnapshot {
             raiseShots(folder, game);
             return;
         }
+        if ("pay".equals(System.getProperty("shots"))) {
+            payShots(folder, game);
+            return;
+        }
         if ("join".equals(System.getProperty("shots"))) {
             joinNameShots(folder, game);
             return;
@@ -1040,6 +1044,60 @@ public final class ScreenSnapshot {
         report = fundsMoved(report);
         game.session().keepReport(report);
         write(folder, "raise-report.png", new TurnReportScreen(game, report), null);
+    }
+
+    /**
+     * Pay expectations (ui-spec.md section 4.23, 2026-11-13), alone with {@code -Dshots=pay}: the person page
+     * underpaid (the morale tooltip open), paid as expected and raised this season; the raise confirm; Manage
+     * department in both modes and with nobody underpaid; the SET roster with the chip's tooltip open; a review's
+     * turn report. Last in the run: it changes the session.
+     */
+    private static void payShots(File folder, LaunchWindowGame game) {
+        String hash = ContentPackHash.ofClasspath("content/early-era", ScreenSnapshot.class.getClassLoader());
+        GameInfoResponse info = GameInfoResponse.success("early-era", hash, List.of(), 9, true,
+            6 * 3_600_000L + 12 * 60_000L, 0L, null, List.of(), List.of(), 0);
+        PlayerSnapshot state = setCentreState();
+        List<SetSpecialist> set = state.getSetSpecialists();
+        // Underpaid by 18 %, 9 % and 14 %; the rest as expected.
+        set.get(2).setSalary(42.0);
+        set.get(2).setExpectedSalary(51.0);
+        set.get(2).setMorale(54);
+        set.get(5).setSalary(48.0);
+        set.get(5).setExpectedSalary(53.0);
+        set.get(0).setSalary(33.0);
+        set.get(0).setExpectedSalary(38.5);
+        game.setSession(ClientSession.start(CREDENTIALS, state, new GameInfo(info, System.currentTimeMillis()),
+            ScreenSnapshot.class.getClassLoader()));
+        SetSpecialist wanda = set.get(2);
+        write(folder, "pay-person-underpaid.png", new de.mkoehler.launchwindow.client.screen.PersonScreen(game, wanda,
+            () -> new SetCentreScreen(game)), screen -> showTooltip(screen.stage().getRoot(), "Morale"));
+        write(folder, "pay-person-paid.png", new de.mkoehler.launchwindow.client.screen.PersonScreen(game, set.get(3),
+            () -> new SetCentreScreen(game)), null);
+        write(folder, "pay-raise-confirm.png", new de.mkoehler.launchwindow.client.screen.PersonScreen(game, wanda,
+            () -> new SetCentreScreen(game)), screen -> screen.openRaise(0));
+        write(folder, "pay-raise-five.png", new de.mkoehler.launchwindow.client.screen.PersonScreen(game, wanda,
+            () -> new SetCentreScreen(game)), screen -> screen.openRaise(5));
+        write(folder, "pay-manage-bring.png", new SetCentreScreen(game), screen -> screen.openManageDepartment(0));
+        write(folder, "pay-manage-same.png", new SetCentreScreen(game),
+            screen -> screen.openManageDepartment(10, false));
+        write(folder, "pay-roster.png", new SetCentreScreen(game),
+            screen -> showTooltip(screen.stage().getRoot(), "18 % under"));
+        TurnReport report = TurnReport.build(state, state, List.of(
+            new de.mkoehler.launchwindow.rules.ExpectationsRoseAtReview(1, 10, 23,
+                java.util.Map.of("SET", 7, "ASTRONAUT", 9, "MISSION_CONTROL", 7)),
+            new de.mkoehler.launchwindow.rules.ExpectationRose(de.mkoehler.launchwindow.rules.PersonnelGroup.SET,
+                wanda.getId(), wanda.getName(), 49.5, 51.0, 3, List.of("RD_STINT:vostok-capsule")),
+            new de.mkoehler.launchwindow.rules.ExpectationRose(de.mkoehler.launchwindow.rules.PersonnelGroup.SET,
+                set.get(5).getId(), set.get(5).getName(), 49.0, 53.0, 7, List.of("FLIGHT:CONTROLLER", "AMBITION"))),
+            9, game.session().catalog());
+        write(folder, "pay-report.png", new TurnReportScreen(game, report), null);
+        state.getRaisedThisSeason().add(wanda.getId());
+        write(folder, "pay-person-raised.png", new de.mkoehler.launchwindow.client.screen.PersonScreen(game, wanda,
+            () -> new SetCentreScreen(game)), null);
+        for (SetSpecialist person : set) {
+            person.setExpectedSalary(person.getSalary());
+        }
+        write(folder, "pay-manage-nobody.png", new SetCentreScreen(game), screen -> screen.openManageDepartment(0, true));
     }
 
     /**

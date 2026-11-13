@@ -700,6 +700,23 @@ public final class TurnReportView {
                     "Lost", -1));
             }
         }
+        // Pay (ui-spec.md section 4.23): the review's rise first, with each department's underpaid, then each
+        // person's rise with its causes.
+        for (de.mkoehler.launchwindow.rules.ExpectationsRoseAtReview review
+                : events(report, de.mkoehler.launchwindow.rules.ExpectationsRoseAtReview.class)) {
+            List<String> departments = new ArrayList<>();
+            for (PersonnelGroup group : PersonnelGroup.values()) {
+                Integer count = review.byGroup().get(group.name());
+                if (count != null) {
+                    departments.add(PayTexts.place(group) + " · " + count);
+                }
+            }
+            lines.add(new Line(PayTexts.reviewLine(review), String.join("   ", departments), "Pay", 0));
+        }
+        for (de.mkoehler.launchwindow.rules.ExpectationRose rose
+                : events(report, de.mkoehler.launchwindow.rules.ExpectationRose.class)) {
+            lines.add(new Line(rose.name() + " " + PayTexts.riseLine(rose), "", "Pay", 0, rose.personnelId()));
+        }
         Map<String, List<MissionSkillGrowthApplied>> growth = new LinkedHashMap<>();
         for (MissionSkillGrowthApplied applied : events(report, MissionSkillGrowthApplied.class)) {
             growth.computeIfAbsent(applied.missionInstanceId(), key -> new ArrayList<>()).add(applied);

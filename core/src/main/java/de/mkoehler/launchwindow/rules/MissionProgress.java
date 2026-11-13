@@ -865,8 +865,11 @@ public final class MissionProgress {
         for (MissionStep.ControllerInvolvement involvement : step.controllerInvolvements()) {
             String holderId = slotHolder(mission.getControlSlotIds(), involvement.slot());
             StaffingSlot slot = slots.get(involvement.slot());
+            // Morale counts on the consoles too (design.md 2.2(c), pay expectations); the slot's value stays the skill.
+            Personnel holder = holderId == null ? null : slot.kind() == StaffingSlot.Kind.ASTRONAUT
+                ? findById(snapshot.getAstronauts(), holderId) : findById(snapshot.getMissionControlOfficers(), holderId);
             sum += involvement.percent() / 100.0 * slotValue(snapshot, slot, holderId)
-                * chemistry.multiplier(slot.kind() == StaffingSlot.Kind.ASTRONAUT);
+                * chemistry.multiplier(slot.kind() == StaffingSlot.Kind.ASTRONAUT) * PayExpectations.skillFactor(holder);
         }
         return sum;
     }
@@ -887,17 +890,15 @@ public final class MissionProgress {
         }
         if (slot.kind() == StaffingSlot.Kind.ASTRONAUT) {
             Astronaut astronaut = findById(snapshot.getAstronauts(), holderId);
-            return astronaut == null ? 0 : astronaut.getSkill(AstronautSkill.valueOf(slot.skill()))
-                * PayExpectations.skillFactor(astronaut);
+            return astronaut == null ? 0 : astronaut.getSkill(AstronautSkill.valueOf(slot.skill()));
         }
         MissionControlOfficer officer = findById(snapshot.getMissionControlOfficers(), holderId);
         if (officer == null) {
             return 0;
         }
-        // Morale counts on the consoles too (design.md 2.2(c), pay expectations).
-        return (slot.flightDirectorSlot()
+        return slot.flightDirectorSlot()
             ? officer.flightDirectorSkill()
-            : officer.getSkill(MissionControlSkill.valueOf(slot.skill()))) * PayExpectations.skillFactor(officer);
+            : officer.getSkill(MissionControlSkill.valueOf(slot.skill()));
     }
 
     private static String slotHolder(List<String> slotIds, int slot) {

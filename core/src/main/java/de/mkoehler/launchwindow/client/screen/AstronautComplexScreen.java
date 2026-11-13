@@ -118,7 +118,8 @@ public final class AstronautComplexScreen extends ChromeScreen {
                 head.add(new HistoryNote(ui, HEADCOUNT_NOTE)).size(HistoryNote.ICON_SIZE).padLeft(4f);
             }
             stat.add(head).padBottom(2f).row();
-            stat.add(ui.label(stats[i][1], Theme.TextStyle.HEADING_SM, Theme.INK)).row();
+            stat.add(i == stats.length - 1 ? RosterCells.salaryValue(ui, stats[i][1], session.state(),
+                PersonnelGroup.ASTRONAUT) : ui.label(stats[i][1], Theme.TextStyle.HEADING_SM, Theme.INK)).row();
             if (stats[i][2] != null) {
                 stat.add(ui.label(stats[i][2], Theme.TextStyle.CAPTION, Theme.INK_MUTED));
             }
@@ -230,6 +231,7 @@ public final class AstronautComplexScreen extends ChromeScreen {
         stateHolder.left();
         stateHolder.defaults().left();
         stateHolder.add(active ? ui.badge(Theme.BadgeKind.ACTIVE, text) : RosterCells.pill(ui, text)).row();
+        RosterCells.underpaidChip(ui, stateHolder, astronaut);
         if (astronaut.isRocketPlaneWings()) {
             Label wings = ui.label("Rocket-plane wings", Theme.TextStyle.CAPTION, Theme.SUCCESS);
             Tips.Tip tip = Tips.wings();

@@ -201,6 +201,52 @@ final class RosterCells {
     }
 
     /**
+     * Adds the Underpaid chip under a roster row's state ({@code ui-spec.md} &sect;4.23): 20 px, a gold frame and
+     * text on a light gold fill (outlined, unlike the solid Expert badge), for anyone
+     * {@link de.mkoehler.launchwindow.rules.PayExpectations#UNDERPAID_AT} % or more under; its tooltip says how far,
+     * the pay and the ceiling. Nothing for anyone else.
+     *
+     * @param ui     the UI kit
+     * @param holder the state column
+     * @param person the person
+     */
+    static void underpaidChip(UiKit ui, Table holder, Personnel person) {
+        if (!de.mkoehler.launchwindow.rules.PayExpectations.isUnderpaid(person)) {
+            return;
+        }
+        Table chip = new Table();
+        chip.setBackground(ui.rect(new Color(Theme.GOLD).lerp(Color.WHITE, 0.82f), Theme.GOLD, Theme.BORDER_THIN));
+        chip.pad(0f, Theme.SPACE_2, 0f, Theme.SPACE_2);
+        chip.add(ui.label("UNDERPAID", Theme.TextStyle.LABEL, Theme.GOLD_TEXT));
+        ui.tooltip(chip, de.mkoehler.launchwindow.client.view.PayTexts.under(person) + " % under",
+            de.mkoehler.launchwindow.client.view.PayTexts.chipText(person));
+        holder.add(chip).height(20f).left().padTop(4f).row();
+    }
+
+    /**
+     * Builds a department strip's salary value with "· N underpaid" beside it in gold when anyone is
+     * ({@code ui-spec.md} &sect;4.23).
+     *
+     * @param ui    the UI kit
+     * @param value the salary text
+     * @param state the player
+     * @param group the department
+     * @return the value
+     */
+    static Table salaryValue(UiKit ui, String value, de.mkoehler.launchwindow.model.PlayerSnapshot state,
+            PersonnelGroup group) {
+        Table cell = new Table();
+        cell.left();
+        cell.add(ui.label(value, Theme.TextStyle.HEADING_SM, Theme.INK));
+        int underpaid = de.mkoehler.launchwindow.rules.PayExpectations.underpaidCount(state, group);
+        if (underpaid > 0) {
+            cell.add(ui.label("· " + underpaid + " underpaid", Theme.TextStyle.BODY_STRONG, Theme.GOLD_TEXT))
+                .padLeft(Theme.SPACE_2).bottom().padBottom(1f);
+        }
+        return cell;
+    }
+
+    /**
      * Returns morale's color: green when high, gold in the middle, red when low.
      *
      * @param morale the morale

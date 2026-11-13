@@ -10,8 +10,9 @@ package de.mkoehler.launchwindow.rules;
  * @param before      the expectation before
  * @param after       the expectation after (before any review's rise the same turn)
  * @param percent     the rise, rounded
- * @param reasons     what earned it, by career line kind ({@code FLIGHT}, {@code FIRST}, {@code EXPERT},
- *                    {@code AMBITION}, {@code RD_STINT}), one each
+ * @param reasons     what earned it, in the rule's order: {@code FLIGHT:<role>} ({@code CREW}, {@code CAPCOM},
+ *                    {@code CONTROLLER}), {@code FIRST}, {@code EXPERT}, {@code AMBITION},
+ *                    {@code RD_STINT:<component id>}
  * @author Mario Koehler
  */
 public record ExpectationRose(

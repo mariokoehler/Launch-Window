@@ -50,7 +50,7 @@ final class PeopleLedger {
         }
         for (de.mkoehler.launchwindow.rules.ResolutionEvent event : events) {
             if (event instanceof de.mkoehler.launchwindow.rules.ExpectationRose rose) {
-                rose.reasons().forEach(reason -> reasons.merge(reason, 1, Integer::sum));
+                rose.reasons().forEach(reason -> reasons.merge(reason.split(":")[0], 1, Integer::sum));
             } else if (event instanceof de.mkoehler.launchwindow.rules.ExpectationsRoseAtReview) {
                 reasons.merge("REVIEW", 1, Integer::sum);
             }
@@ -77,7 +77,7 @@ final class PeopleLedger {
             salaries += person.getSalary();
             double expects = person.expectedSalary();
             expected += expects;
-            underpaid += person.getSalary() < expects * 0.95 ? 1 : 0;
+            underpaid += de.mkoehler.launchwindow.rules.PayExpectations.isUnderpaid(person) ? 1 : 0;
         }
         rows.add(new Row(season, people.size(), high, low, sum, resigned, salaries, expected, underpaid, raised,
             departments.size()));

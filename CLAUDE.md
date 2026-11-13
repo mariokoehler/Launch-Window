@@ -62,6 +62,8 @@ first live game starts in January 2027. Many numbers are still unconfirmed: the 
 - Deployment: client zip and server image built by tag-triggered CI (`design.md` §5, M6).
 - Server settings: the admin edits `game-meta.json` in the client behind an admin password the server prints at
   startup, and can start a new game from there (`ui-spec.md` §4.22, G21).
+- Pay expectations: people expect raises (reviews, good work); being underpaid caps morale, and morale changes
+  how well people work; raise one person or a whole department (`design.md` §2.2(c), `ui-spec.md` §4.23).
 
 ## How we work
 
@@ -249,7 +251,7 @@ mvn -pl dev-tools compile exec:exec@handson         # any hands-on level's puzzl
   works ahead, `side` for the one that also flies side missions, or `smart` for the best player, whose parts switch with `-Dbot.*` properties (`Bot.SMART`'s Javadoc; `-Dbot.roads=<nasa>,<soviet>` plays each road to the Moon, `-Dbot.slowGames=true` compares the slowest games with the fastest), `-Dexec.args="standard side"`)
   (`-Dexec.args="standard side decisions"` plays with the R&D decisions and reports how often they come)
   (`RaceShock` plays NASA against the Soviets in one game, the answer to rivals' Firsts off and on, `-Drace.shares=0,0.5`, or publishing findings never and always, `-Drace.publish=never,always`; both it and `ContentPackPlayouts` take `-Drules.raiseShare=0` to turn off raises between reviews and `-Drules.findingBonus=0` to turn off the findings' bonus)
-  (money: `-Dplayout.economy=true` keeps a per-season ledger, played past the race (`-Dplayout.seasons`, `-Dplayout.games`); `RaceShock` takes `-Drace.economy=true`; `EconomyCeiling` prices the most an agency can spend against each review, from the rules alone; all three take `-Drules.budget=<bottom>-<top>,...` for other review ranges and `-Drules.flatten=<knee>,<slope>` for another flattening, `1,1` being BASPM's straight line; `-Drules.pay=all` (or `market,performance,ceiling,upside`) turns on pay expectations, off in the game until their screens exist, with a people ledger beside the money one, and `-Dbot.pay=false` plays a bot that never raises anyone)
+  (money: `-Dplayout.economy=true` keeps a per-season ledger, played past the race (`-Dplayout.seasons`, `-Dplayout.games`); `RaceShock` takes `-Drace.economy=true`; `EconomyCeiling` prices the most an agency can spend against each review, from the rules alone; all three take `-Drules.budget=<bottom>-<top>,...` for other review ranges and `-Drules.flatten=<knee>,<slope>` for another flattening, `1,1` being BASPM's straight line; `-Drules.pay=none` (or some of `market,performance,ceiling,upside`) turns pay expectations off, with a people ledger beside the money one, and `-Dbot.pay=false` plays a bot that never raises anyone)
   (also `PersonnelLifecyclePlayouts`, `CareerCurves`, `StateSizes` (it takes the pack too), `IntelligencePlayouts`, `RaceLulls` (the Moon race's lulls with R&D tuned; `-Dexec.args="standard ahead+contracts 1.0 0.0"` plays with contracts against three simulated rivals); `design.md` §3.10).
 - **Releasing** (ported from Robot-Rampage; its and StarWars' CLAUDE.md hold the gotchas):
   - **Client zip, locally:** `mvn -pl lwjgl3 -am -Prelease-client -DskipTests verify` gives

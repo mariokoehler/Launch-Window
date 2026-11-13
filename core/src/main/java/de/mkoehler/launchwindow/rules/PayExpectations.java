@@ -16,8 +16,7 @@ import java.util.Objects;
  * morale, and morale changes how well they work. A person can be raised on their own, and a department brought up to
  * its expectations at once.</p>
  *
- * <p>Each part is off until its screens are built ({@link #setParts}); the playouts turn them on with
- * {@code -Drules.pay}. Off, a person's expectation still follows their salary at hiring, so nothing else changes.</p>
+ * <p>Every part is on; playouts can turn parts off ({@link #setParts}, {@code -Drules.pay}) to measure them.</p>
  *
  * @author Mario Koehler
  */
@@ -44,8 +43,11 @@ public final class PayExpectations {
      * below {@link #HIGH_MORALE}; two (17 %), below {@link #LOW_MORALE}; three (25 %), at the resignation line.
      */
     public static final int CEILING_PER_PERCENT = 3;
-    /** Underpaid by this much or more, in percent, and the bots raise (the ledger's line too). */
-    public static final double BOT_RAISE_AT = 5;
+    /**
+     * Underpaid by this much or more, in percent, counts as underpaid: the roster chip, the gold "expects", the
+     * department's count, the report's and the bots' line.
+     */
+    public static final double UNDERPAID_AT = 5;
     /** How far morale above the ceiling falls a season (halved for Steady). */
     public static final int DRIFT = 2;
     /** Morale from which a person works better. */
@@ -59,16 +61,16 @@ public final class PayExpectations {
     /** The largest raise of one person, in percent. */
     public static final int MAX_RAISE_PERCENT = DepartmentSalaries.MAX_PERCENT;
 
-    private static boolean market;
-    private static boolean performance;
-    private static boolean ceiling;
-    private static boolean upside;
+    private static boolean market = true;
+    private static boolean performance = true;
+    private static boolean ceiling = true;
+    private static boolean upside = true;
 
     private PayExpectations() {
     }
 
     /**
-     * Turns the parts on or off: off for the game until the screens are built, on in playouts that measure them.
+     * Turns the parts on or off, for playouts that measure them; the game runs with all of them on.
      *
      * @param marketOn      the review step
      * @param performanceOn the performance steps
@@ -100,6 +102,68 @@ public final class PayExpectations {
     public static double underpaidPercent(Personnel person) {
         double expected = person.expectedSalary();
         return expected <= 0 || person.getSalary() >= expected ? 0 : 100.0 * (1 - person.getSalary() / expected);
+    }
+
+    /**
+     * Returns whether someone is paid {@link #UNDERPAID_AT} % or more below their expectation.
+     *
+     * @param person the person
+     * @return whether they're underpaid
+     */
+    public static boolean isUnderpaid(Personnel person) {
+        return underpaidPercent(person) >= UNDERPAID_AT;
+    }
+
+    /**
+     * Returns how many in a department are underpaid ({@link #isUnderpaid}).
+     *
+     * @param snapshot the player
+     * @param group    the department
+     * @return the count
+     */
+    public static int underpaidCount(PlayerSnapshot snapshot, PersonnelGroup group) {
+        return (int) roster(snapshot, group).stream().filter(PayExpectations::isUnderpaid).count();
+    }
+
+    /**
+     * What a raise would do to one person, the same numbers {@link #raise} and {@link #meetExpectations} apply.
+     *
+     * @param salary      the new salary
+     * @param percent     the raise in percent, rounded
+     * @param extra       the extra per season
+     * @param moraleAfter morale after it
+     * @param loyaltyAfter loyalty after it
+     */
+    public record Preview(double salary, int percent, double extra, int moraleAfter, int loyaltyAfter) {
+    }
+
+    /**
+     * Previews a raise of one person.
+     *
+     * @param person  the person
+     * @param percent the raise, or 0 for their expectation
+     * @return what it would do
+     */
+    public static Preview preview(Personnel person, int percent) {
+        double salary = raisedSalary(person, percent);
+        int actual = (int) Math.round(100 * (salary / person.getSalary() - 1));
+        int gain = Math.max(0, actual);
+        return new Preview(salary, actual, salary - person.getSalary(),
+            DepartmentSalaries.adjustedMorale(person.getMorale(), gain),
+            Math.clamp(person.getLoyalty() + Careers.loyaltyChange(gain), 0, 100));
+    }
+
+    /**
+     * Returns everyone a department's "bring everyone up" would raise, most underpaid first.
+     *
+     * @param snapshot the player
+     * @param group    the department
+     * @return the people paid below their expectation
+     */
+    public static List<Personnel> belowExpectation(PlayerSnapshot snapshot, PersonnelGroup group) {
+        return roster(snapshot, group).stream().filter(p -> p.getSalary() < p.expectedSalary())
+            .map(Personnel.class::cast)
+            .sorted(Comparator.comparingDouble(PayExpectations::underpaidPercent).reversed()).toList();
     }
 
     /**
@@ -178,8 +242,15 @@ public final class PayExpectations {
             }
         }
         if (review) {
-            events.add(new ExpectationsRoseAtReview(
-                (int) (seasonsElapsed / BudgetProgress.SEASONS_PER_REVIEW), Math.round(REVIEW_STEP * 100)));
+            java.util.Map<String, Integer> byGroup = new java.util.LinkedHashMap<>();
+            for (PersonnelGroup group : PersonnelGroup.values()) {
+                int count = underpaidCount(snapshot, group);
+                if (count > 0) {
+                    byGroup.put(group.name(), count);
+                }
+            }
+            events.add(new ExpectationsRoseAtReview((int) (seasonsElapsed / BudgetProgress.SEASONS_PER_REVIEW),
+                Math.round(REVIEW_STEP * 100), byGroup.values().stream().mapToInt(Integer::intValue).sum(), byGroup));
         }
         return events;
     }
@@ -201,20 +272,28 @@ public final class PayExpectations {
             };
             if (add > 0) {
                 step += add;
-                reasons.add(line.kind().name());
+                reasons.add(switch (line.kind()) {
+                    case FLIGHT -> "FLIGHT:" + line.note();
+                    case RD_STINT -> "RD_STINT:" + line.ref();
+                    default -> line.kind().name();
+                });
             }
         }
+        reasons.sort(Comparator.comparingInt(reason -> REASON_ORDER.indexOf(reason.split(":")[0])));
         return step;
     }
+
+    /** The order causes are told in: the rule's list. */
+    private static final List<String> REASON_ORDER = List.of("FLIGHT", "FIRST", "EXPERT", "AMBITION", "RD_STINT");
 
     /** The result of a raise. */
     public enum RaiseOutcome {
         /** The salary rose. */
         RAISED,
         /** Nobody by that id. */
-        UNKNOWN_PERSON,
+        UNKNOWN_PERSONNEL,
         /** Not a raise, or more than {@link #MAX_RAISE_PERCENT}. */
-        INVALID_RAISE,
+        NOT_A_RAISE,
         /** Already raised this season. */
         ALREADY_RAISED
     }
@@ -244,19 +323,19 @@ public final class PayExpectations {
         Objects.requireNonNull(snapshot, "snapshot must not be null");
         Personnel person = everyone(snapshot).stream().filter(p -> p.getId().equals(personId)).findFirst().orElse(null);
         if (person == null) {
-            return RaiseOutcome.UNKNOWN_PERSON;
+            return RaiseOutcome.UNKNOWN_PERSONNEL;
         }
         if (snapshot.getRaisedThisSeason().contains(personId)) {
             return RaiseOutcome.ALREADY_RAISED;
         }
         if (percent < 0 || percent > MAX_RAISE_PERCENT) {
-            return RaiseOutcome.INVALID_RAISE;
+            return RaiseOutcome.NOT_A_RAISE;
         }
         double salary = raisedSalary(person, percent);
         int actual = (int) Math.round(100 * (salary / person.getSalary() - 1));
         // Meeting an expectation has no cap, as the department's doesn't; a percentage raise does.
         if (salary <= person.getSalary()) {
-            return RaiseOutcome.INVALID_RAISE;
+            return RaiseOutcome.NOT_A_RAISE;
         }
         apply(person, salary, actual);
         snapshot.getRaisedThisSeason().add(personId);
@@ -313,7 +392,7 @@ public final class PayExpectations {
     }
 
     /**
-     * The bots' pay: each department with anyone underpaid by {@link #BOT_RAISE_AT} % or more is brought up to its
+     * The bots' pay: each department with anyone underpaid by {@link #UNDERPAID_AT} % or more is brought up to its
      * expectations when the funds above the reserve cover two seasons of it; otherwise its best people are raised
      * one by one, as far as that goes.
      *
@@ -358,14 +437,14 @@ public final class PayExpectations {
         double spare = snapshot.getFunds() - reserve;
         for (PersonnelGroup group : PersonnelGroup.values()) {
             List<? extends Personnel> roster = roster(snapshot, group);
-            if (roster.stream().noneMatch(p -> underpaidPercent(p) >= BOT_RAISE_AT)) {
+            if (roster.stream().noneMatch(p -> underpaidPercent(p) >= UNDERPAID_AT)) {
                 continue;
             }
             if (!DepartmentSalaries.adjustedThisSeason(snapshot, group) && spare >= 2 * costToMeet(snapshot, group)) {
                 return new BotStep(group, null);
             }
             Personnel best = roster.stream()
-                .filter(p -> underpaidPercent(p) >= BOT_RAISE_AT && !snapshot.getRaisedThisSeason().contains(p.getId()))
+                .filter(p -> underpaidPercent(p) >= UNDERPAID_AT && !snapshot.getRaisedThisSeason().contains(p.getId()))
                 .filter(p -> spare >= 2 * (p.expectedSalary() - p.getSalary()))
                 .max(Comparator.comparingDouble(Chemistry::bestSkill)).orElse(null);
             if (best != null) {

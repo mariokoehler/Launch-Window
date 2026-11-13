@@ -106,7 +106,8 @@ public final class SetCentreScreen extends ChromeScreen {
             stat.defaults().left();
             stat.add(ui.label(stats[i][0].toUpperCase(Locale.ROOT), Theme.TextStyle.CAPTION, Theme.INK_MUTED))
                 .padBottom(2f).row();
-            stat.add(ui.label(stats[i][1], Theme.TextStyle.HEADING_SM, Theme.INK));
+            stat.add(i == stats.length - 1 ? RosterCells.salaryValue(ui, stats[i][1], session.state(), PersonnelGroup.SET)
+                : ui.label(stats[i][1], Theme.TextStyle.HEADING_SM, Theme.INK));
             strip.add(stat).expandX().fillX().uniformX().top();
             strip.add(new Image(ui.solid(Theme.NAVY_BORDER))).width(Theme.BORDER_THIN).fillY();
         }
@@ -207,6 +208,7 @@ public final class SetCentreScreen extends ChromeScreen {
         Table stateHolder = new Table();
         stateHolder.left();
         stateHolder.add(state).left().row();
+        RosterCells.underpaidChip(ui, stateHolder, specialist);
         RosterCells.outlookNote(ui, stateHolder, specialist, PersonnelGroup.SET, session.openTurn());
         row.add(stateHolder).width(340f).left().padRight(Theme.SPACE_4);
         row.add(RosterCells.traits(ui, specialist)).width(RosterCells.TRAITS_WIDTH).left().padRight(Theme.SPACE_4);
@@ -355,5 +357,15 @@ public final class SetCentreScreen extends ChromeScreen {
      */
     public void openManageDepartment(int percent) {
         dialogs.openManageDepartment(percent);
+    }
+
+    /**
+     * Opens the Manage department dialog in one of its modes ({@code ui-spec.md} &sect;4.23).
+     *
+     * @param percent the starting percentage for the same raise
+     * @param bring   whether on "Bring everyone up to expectations"
+     */
+    public void openManageDepartment(int percent, boolean bring) {
+        dialogs.openManageDepartment(percent, bring);
     }
 }

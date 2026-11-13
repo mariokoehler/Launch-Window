@@ -572,6 +572,34 @@ public final class UiKit implements Disposable {
     }
 
     /**
+     * Gives an actor a hover tooltip with two more parts under the explanation: a sentence in semibold, and a note
+     * under a rule ({@code ui-spec.md} &sect;4.23, the morale tooltip).
+     *
+     * @param target the actor to explain
+     * @param title  the title
+     * @param text   the explanation
+     * @param strong a sentence in semibold, or {@code null}
+     * @param note   a note under a rule, or {@code null}
+     * @return the tooltip, already attached
+     */
+    public Tooltip<Table> tooltip(Actor target, String title, String text, String strong, String note) {
+        Tooltip<Table> tooltip = tooltip(target, title, text);
+        Table card = tooltip.getActor();
+        card.row();
+        if (strong != null) {
+            card.add(paragraph(strong, Theme.TextStyle.BODY_STRONG, Theme.ON_FILL)).width(TOOLTIP_TEXT_WIDTH)
+                .padTop(Theme.SPACE_2).row();
+        }
+        if (note != null) {
+            card.add(new com.badlogic.gdx.scenes.scene2d.ui.Image(solid(new Color(1f, 1f, 1f, 0.3f))))
+                .height(1f).width(TOOLTIP_TEXT_WIDTH).padTop(Theme.SPACE_2).row();
+            card.add(paragraph(note, Theme.TextStyle.BODY_SM, Theme.ON_FILL)).width(TOOLTIP_TEXT_WIDTH)
+                .padTop(Theme.SPACE_2).row();
+        }
+        return tooltip;
+    }
+
+    /**
      * Builds a label that wraps to its cell's width.
      *
      * @param text  the text

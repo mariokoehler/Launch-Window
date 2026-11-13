@@ -129,7 +129,8 @@ public final class MissionControlScreen extends ChromeScreen {
             stat.defaults().left();
             stat.add(ui.label(stats[i][0].toUpperCase(Locale.ROOT), Theme.TextStyle.CAPTION, Theme.INK_MUTED))
                 .padBottom(2f).row();
-            stat.add(ui.label(stats[i][1], Theme.TextStyle.HEADING_SM, Theme.INK)).row();
+            stat.add(i == stats.length - 1 ? RosterCells.salaryValue(ui, stats[i][1], session.state(),
+                PersonnelGroup.MISSION_CONTROL) : ui.label(stats[i][1], Theme.TextStyle.HEADING_SM, Theme.INK)).row();
             if (stats[i][2] != null) {
                 stat.add(ui.label(stats[i][2], Theme.TextStyle.CAPTION, Theme.INK_MUTED));
             }
@@ -346,6 +347,7 @@ public final class MissionControlScreen extends ChromeScreen {
         Table stateHolder = new Table();
         stateHolder.left();
         stateHolder.add(active ? ui.badge(Theme.BadgeKind.ACTIVE, text) : RosterCells.pill(ui, text)).left().row();
+        RosterCells.underpaidChip(ui, stateHolder, officer);
         RosterCells.outlookNote(ui, stateHolder, officer, PersonnelGroup.MISSION_CONTROL, session.openTurn());
         row.add(stateHolder).width(385f).left().padRight(Theme.SPACE_4);
         row.add(RosterCells.traits(ui, officer)).width(RosterCells.TRAITS_WIDTH).left().padRight(Theme.SPACE_4);

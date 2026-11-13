@@ -3165,8 +3165,19 @@ every number unconfirmed, read from its constants, G7). Built on existing screen
   are underpaid enough to hurt their work."
 - **Help:** the Salaries and Morale topics explain expectations, the ceiling and morale at work, numbers as tokens.
 
-The game keeps the rule off (`PayExpectations.setParts`) until these are built; the playouts turn it on with
-`-Drules.pay=all`.
+**As built (2026-11-13; shots group `pay`):** as mocked up, with these differences (all **unconfirmed**):
+- Manage department is 640 px wide in both modes (the list needs it); the modes are a segmented control of the
+  dialog's own (`PersonnelDialogs.segmented`), opening on "Bring everyone up" whenever anyone is paid below what they
+  expect.
+- "Raised this season" sits under the raise buttons, not beside them (the 440 px column).
+- The report's pay lines are ordinary People lines tagged "PAY" in the section's neutral colour; the review's line
+  lists each department's count ("Astronaut Complex · 9   SET Centre · 7") as text, not links. A person's line
+  opens their page.
+- The strip's count sits beside "Total salary / season"'s value on all three department screens.
+- The advisor's tip: "N people underpaid enough to hurt their work", whenever someone's morale sits at what their
+  pay allows below 60 (`Advisor.PAY_TIP`), leading the card and opening the department with the most; no Got it.
+- New widgets: `client.ui.PayBar`, `client.ui.MoraleBar` (the skill ceiling's tick), `UiKit.tooltip` with a semibold
+  sentence and a note under a rule; the chip is `RosterCells.underpaidChip`.
 
 **Mocked up (2026-11-13)** on `Launch Window — Pay`: the person page underpaid (the morale tooltip open), paid as expected
 and raised this season; the raise confirm; Manage department in both modes and with nobody underpaid; the SET roster with
@@ -3230,6 +3241,8 @@ The server replies with these codes. The wording below is the spec's; the client
 | Rocket programs: VAB_FULL / ROCKET_CLASS_TOO_LARGE / UNKNOWN_ROCKET | The VAB can't hold more rocket programs. Upgrade it or close one. / Upgrade the VAB to build this rocket class. / That rocket doesn't exist in this game. |
 | Building upgrade: MAX_LEVEL / ALREADY_UPGRADING; program opening also UNKNOWN_PROGRAM | Already at the top level. / Already upgrading. / That program doesn't exist in this game. |
 | Manage department (`AdjustSalariesAction`): INVALID_PERCENT / EMPTY_DEPARTMENT | Pick a change between −50 % and +50 %. / There's nobody in the department yet. |
+| Bring everyone up (`MeetExpectationsAction`, §4.23): NOBODY_UNDERPAID / ALREADY_ADJUSTED / EMPTY_DEPARTMENT | Nobody in the department is paid below what they expect. / (as Manage department) |
+| Raise one person (`RaiseSalaryAction`, §4.23): ALREADY_RAISED / NOT_A_RAISE / UNKNOWN_PERSONNEL | Already raised this season. Try again after the next turn. / That isn't a raise, or it's more than the largest one. / That person isn't on the roster any more. |
 | Hands-on campaign (component 26, type 11; `HandsOn.Outcome`, `RdDecisions.Outcome.NO_PUZZLE`): WRONG_PHASE / NO_SLOT / CANT_PAY / UNKNOWN_COMMAND / NOTHING_QUEUED / CANT_RESIST / NO_PUZZLE | Not now: the campaign is somewhere else. / The round's slots are full. / You can't pay for that command. / That command isn't in this campaign. / Nothing is queued. / Not enough shifts to call in an expert. / No campaign is in progress. |
 | Findings (§4.20; `Findings.PublishOutcome`): NOT_A_FINDING / NOT_KNOWN / ALREADY_PUBLIC / ALREADY_QUEUED / NOT_QUEUED | That goal isn't a finding. / Reach the goal first. / Someone published it already. / It's published at the next resolution already. / There's nothing to withdraw. |
 | Contracts (§4.17; `ContractOutcome`): CONTRACT_ACTIVE / NOT_QUALIFIED / PROGRAM_NOT_OPEN / UNKNOWN_LISTING; closing a program while its contract flies is the existing MISSIONS_IN_FLIGHT | You have an active contract: one at a time. / You can't fly this one: unlock its line first. / Open the program first. / That listing isn't on the board any more. / Can't close while a mission uses it. |

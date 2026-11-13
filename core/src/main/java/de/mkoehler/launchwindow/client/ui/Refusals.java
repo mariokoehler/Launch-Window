@@ -75,6 +75,9 @@ public final class Refusals {
         Map.entry("EMPTY_DEPARTMENT", "There's nobody in the department yet."),
         Map.entry("ALREADY_ADJUSTED", "This department's salaries were already changed this season. Try again "
             + "after the next turn."),
+        Map.entry("NOBODY_UNDERPAID", "Nobody in the department is paid below what they expect."),
+        Map.entry("ALREADY_RAISED", "Already raised this season. Try again after the next turn."),
+        Map.entry("NOT_A_RAISE", "That isn't a raise, or it's more than the largest one."),
         Map.entry("HEADQUARTERS_FULL", "Headquarters can't run more programs. Upgrade it or close one."),
         Map.entry("WRONG_AGENCY", "That belongs to another agency."),
         Map.entry("GOALS_NOT_MET", "Achieve the required goals first."),

@@ -353,7 +353,7 @@ public final class SpaceComplexScreen extends SessionScreen {
         }
         boolean idleTip = idleTip(state);
         boolean closeTip = closeTip(state);
-        boolean tip = idleTip || closeTip;
+        boolean tip = idleTip || closeTip || Advisor.payTipDue(state);
         if (game.advisorRetired() && !tip) {
             return;
         }
@@ -374,6 +374,10 @@ public final class SpaceComplexScreen extends SessionScreen {
         }
         if (idleTip) {
             open.add(0, Advisor.IDLE_TIP);
+        }
+        // Pay holding morale low comes first while it lasts (ui-spec.md section 4.23).
+        if (Advisor.payTipDue(state)) {
+            open.add(0, Advisor.PAY_TIP);
         }
         // The explainer tip fills the wait for basic training; missed, it comes after the first steps.
         if (!tipOnly && !game.explainerTipDone() && Advisor.explainerTipDue(state)) {

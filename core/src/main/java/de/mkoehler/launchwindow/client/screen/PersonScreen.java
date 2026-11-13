@@ -7,6 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Container;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.Scaling;
 import de.mkoehler.launchwindow.client.LaunchWindowGame;
 import de.mkoehler.launchwindow.client.ui.RelationshipMarker;
@@ -21,6 +22,8 @@ import de.mkoehler.launchwindow.model.Astronaut;
 import de.mkoehler.launchwindow.model.AssignmentState;
 import de.mkoehler.launchwindow.model.MissionControlOfficer;
 import de.mkoehler.launchwindow.model.Personnel;
+import de.mkoehler.launchwindow.client.view.PayTexts;
+import de.mkoehler.launchwindow.rules.PayExpectations;
 import de.mkoehler.launchwindow.model.Trait;
 import de.mkoehler.launchwindow.model.TrainingKind;
 
@@ -177,23 +180,16 @@ public final class PersonScreen extends ChromeScreen {
         boolean active = person.getUnavailableSeasons() == 0 && person.getAssignmentState() != AssignmentState.IDLE;
         facts.add(factLabel("State")).width(90f);
         facts.add(active ? ui.badge(Theme.BadgeKind.ACTIVE, state) : RosterCells.pill(ui, state)).row();
-        facts.add(factLabel("Salary"));
-        facts.add(ui.label(String.format(Locale.ROOT, "$ %.1f a season", person.getSalary()), Theme.TextStyle.BODY_SM,
-            Theme.INK)).row();
         facts.add(factLabel("Morale"));
         Table morale = new Table();
         Color color = RosterCells.moraleColor(person.getMorale());
-        Image bar = new Image(ui.solid(color));
-        Table track = new Table();
-        track.setBackground(ui.solid(Theme.SKILL_TRACK));
-        track.left();
-        track.add(bar).width(180f * Math.max(0, Math.min(100, person.getMorale())) / 100f).height(6f);
-        track.add().expandX();
-        morale.add(track).width(180f).height(6f).padRight(Theme.SPACE_3);
+        // The tick marks where pay holds morale (ui-spec.md section 4.23).
+        morale.add(new de.mkoehler.launchwindow.client.ui.MoraleBar(ui, person.getMorale(), color,
+            PayExpectations.moraleCeiling(person))).width(180f).height(10f).padRight(Theme.SPACE_3);
         morale.add(ui.label(String.valueOf(person.getMorale()), Theme.TextStyle.BODY_STRONG, color));
         Tips.Tip tip = Tips.stat("morale");
         if (tip != null) {
-            ui.tooltip(morale, tip.title(), tip.text());
+            ui.tooltip(morale, tip.title(), tip.text(), PayTexts.atWork(), PayTexts.holds(person));
         }
         facts.add(morale).row();
         facts.add(factLabel("Loyalty"));
@@ -203,6 +199,8 @@ public final class PersonScreen extends ChromeScreen {
             + "raises, and with ambitions that come true; it falls when one is passed over or runs out. It's what "
             + "keeps rivals from hiring engineers and flight controllers away.");
         facts.add(loyalty).row();
+        facts.add(factLabel("Pay")).top();
+        facts.add(payBlock(person)).growX().row();
         card.add(facts).growX().row();
         if (department != Department.ASTRONAUT) {
             card.add(new Image(ui.solid(Theme.NAVY_BORDER))).height(1f).growX().padBottom(Theme.SPACE_3).row();
@@ -226,6 +224,52 @@ public final class PersonScreen extends ChromeScreen {
         actions.add(actionButton("Dismiss", Theme.ButtonKind.DESTRUCTIVE, () -> dialogs.confirmDismiss(person)));
         card.add(actions).padTop(Theme.SPACE_2);
         return card;
+    }
+
+    /**
+     * The Pay block ({@code ui-spec.md} &sect;4.23): salary against what they expect, the pay bar, where it holds
+     * morale, and the raise buttons.
+     */
+    private Table payBlock(Personnel person) {
+        Table pay = new Table();
+        pay.left();
+        pay.defaults().left();
+        boolean underpaid = PayExpectations.isUnderpaid(person);
+        Table line = new Table();
+        line.left();
+        line.add(ui.label(PayTexts.money(person.getSalary()) + " a season", Theme.TextStyle.BODY_SM, Theme.INK));
+        line.add(ui.label("·", Theme.TextStyle.BODY_SM, Theme.INK_MUTED)).padLeft(6f).padRight(6f);
+        line.add(ui.label("expects " + PayTexts.money(person.expectedSalary()),
+            underpaid ? Theme.TextStyle.BODY_STRONG : Theme.TextStyle.BODY_SM,
+            underpaid ? Theme.GOLD_TEXT : Theme.INK_MUTED));
+        pay.add(line).padBottom(4f).row();
+        pay.add(new de.mkoehler.launchwindow.client.ui.PayBar(ui, person.getSalary(), person.expectedSalary()))
+            .width(180f).height(4f).padBottom(4f).row();
+        pay.add(ui.label(PayTexts.standing(person), Theme.TextStyle.CAPTION,
+            underpaid ? Theme.GOLD_TEXT : Theme.INK_MUTED)).padBottom(Theme.SPACE_2).row();
+        boolean raised = session.state().getRaisedThisSeason().contains(person.getId());
+        boolean paid = person.getSalary() >= person.expectedSalary();
+        Table buttons = new Table();
+        buttons.left();
+        TextButton meet = actionButton(paid ? "Meet expectation" : "Meet expectation (+" + PayTexts.money(
+            person.expectedSalary() - person.getSalary()) + ")", Theme.ButtonKind.SECONDARY,
+            () -> dialogs.confirmRaise(person, 0));
+        meet.setDisabled(raised || paid);
+        if (paid && !raised) {
+            ui.tooltip(meet, "Paid as expected", null);
+        }
+        buttons.add(meet).padRight(6f);
+        for (int step : PayExpectations.RAISE_STEPS) {
+            TextButton raise = actionButton("+" + step + " %", Theme.ButtonKind.SECONDARY,
+                () -> dialogs.confirmRaise(person, step));
+            raise.setDisabled(raised);
+            buttons.add(raise).padRight(6f);
+        }
+        pay.add(buttons).row();
+        if (raised) {
+            pay.add(ui.label("Raised this season", Theme.TextStyle.CAPTION_ITALIC, Theme.INK_MUTED)).padTop(4f);
+        }
+        return pay;
     }
 
     private String role() {
@@ -360,5 +404,14 @@ public final class PersonScreen extends ChromeScreen {
     private Container<Label> sectionTitle(String text) {
         return new Container<>(ui.label(text.toUpperCase(Locale.ROOT), Theme.TextStyle.CAPTION, Theme.INK_MUTED))
             .left();
+    }
+
+    /**
+     * Opens the raise confirm, as a raise button does ({@code ui-spec.md} &sect;4.23).
+     *
+     * @param percent the raise, or 0 to meet their expectation
+     */
+    public void openRaise(int percent) {
+        dialogs.confirmRaise(person(), percent);
     }
 }

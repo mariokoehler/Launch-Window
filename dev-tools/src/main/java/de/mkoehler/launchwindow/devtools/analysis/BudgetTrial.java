@@ -39,11 +39,13 @@ final class BudgetTrial {
             de.mkoehler.launchwindow.rules.BudgetProgress.setFlattening(Double.parseDouble(parts[0].trim()),
                 Double.parseDouble(parts[1].trim()));
         }
-        // -Drules.pay=all, or some of market,performance,ceiling,upside: pay expectations' parts (design.md 2.2(c)).
+        // -Drules.pay=none, or some of market,performance,ceiling,upside: pay expectations' parts (design.md 2.2(c));
+        // without it, the game's (all on).
         String pay = System.getProperty("rules.pay", "");
-        boolean all = pay.contains("all");
-        de.mkoehler.launchwindow.rules.PayExpectations.setParts(all || pay.contains("market"),
-            all || pay.contains("performance"), all || pay.contains("ceiling"), all || pay.contains("upside"));
+        if (!pay.isBlank() && !pay.contains("all")) {
+            de.mkoehler.launchwindow.rules.PayExpectations.setParts(pay.contains("market"), pay.contains("performance"),
+                pay.contains("ceiling"), pay.contains("upside"));
+        }
         BudgetSchedule game = BudgetSchedule.baspmClose();
         String spec = System.getProperty("rules.budget");
         if (spec == null || spec.isBlank() || spec.equals("game")) {

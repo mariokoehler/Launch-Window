@@ -1095,8 +1095,8 @@ season unchanged. Tiger Teams' live per-step choice doesn't fit, so it was redes
   **Once per department per season** (user, 2026-10-06): `PlayerSnapshot.salaryAdjustedGroups`
   records the groups changed during the open turn, a second change is refused
   (`ALREADY_ADJUSTED`), and the season pass clears the record.
-- **Pay expectations** (user, 2026-11-13; `rules.PayExpectations`; *every number unconfirmed*, and **off
-  until its screens are built**: `-Drules.pay` turns its parts on in the playouts). Morale was easy because
+- **Pay expectations** (user, 2026-11-13; `rules.PayExpectations`; *every number unconfirmed*; on since its screens
+  were built the same day, `ui-spec.md` §4.23; `-Drules.pay=none`, or some of its parts, measures it in the playouts). Morale was easy because
   work alone fills it to 100 and high morale bought nothing; now pay sets how far work can fill it, and
   morale changes how well people work.
   - **The expectation:** each person's `expectedSalary`, set to their salary when hired (a recruit's new
@@ -1120,9 +1120,14 @@ season unchanged. Tiger Teams' live per-step choice doesn't fit, so it was redes
     department action. **Manage department** keeps its flat percentage and gains "bring everyone up to
     expectations" (each underpaid person to their own expectation, morale by their own percentage), which uses
     the department's once a season.
-  - **Shown:** pay against expectation on the person page, the department's underpaid count and the cost of
-    meeting it in Manage department, and in the turn report when expectations rose (the review) and who is
-    underpaid (`ui-spec.md`, to be specified).
+  - **Shown** (`ui-spec.md` §4.23): pay against expectation on the person page, an Underpaid chip on the rosters
+    and the count on the department strip, Manage department's "bring everyone up", the turn report's review line
+    (with each department's underpaid, stored on `ExpectationsRoseAtReview`) and each rise with its causes
+    (`ExpectationRose.reasons`), the advisor's tip, and help (Salaries, Morale).
+  - **A running game:** each person's expectation is pinned to their salary at its next turn, so the first gap comes
+    with the next review or the next good work.
+  - **The morale effect at work** counts in the odds and R&D (`crewContributionSum`, `controlContributionSum`,
+    `ResearchProgress`, `ResearchPlanning`), but a slot's value in the staffing pickers stays the person's skill.
   - **Bots** (`PayExpectations.botPolicy`/`nextBotStep`, shared by the playout bots and `FillerBot`): anyone 5 %
     or more under, the department is brought up to expectations when the funds above a season's funding cover two
     seasons of it, else its best people first.
@@ -2685,6 +2690,9 @@ runs with that in mind; per-run history is in the pre-2026-10-06 design doc (see
   flights, 265 for R&D stints, 15 for ambitions, plus the reviews; the paying bots raise someone in most seasons,
   each department 4 to 9 times a review (they answer every 5 % gap; a player can leave gaps under 7 %, which still
   allow 80+). Watch: Firsts lift whole mission teams, so a crew flying many may end up expecting far more.
+  Since the rule went on (same day), every playout runs it: `ContentPackPlayouts`, `RaceShock`, `RaceLulls` and
+  `StateSizes` through the playout bot, which pays; `PersonnelLifecyclePlayouts` drives the morale pass without the
+  pay phase, so expectations never rise there (its morale effect at work still counts).
 - **Someone sidelined loses no idle morale** (the user's decision, 2026-10-22): an employee made unavailable by
   a random event or an R&D decision's secondment can't be given work, so their season's own morale holds
   (`PersonnelLifecycle`); other morale changes (events, salary, ambitions) still apply.
