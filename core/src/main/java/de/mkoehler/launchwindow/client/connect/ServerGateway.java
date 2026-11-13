@@ -181,6 +181,47 @@ public interface ServerGateway {
     void resolveTurnNow(Credentials credentials, Consumer<ServerResult> done);
 
     /**
+     * Fetches the server's settings for the admin password ({@code ui-spec.md} &sect;4.22, G21). A read: retried
+     * once if the connection broke. By default it fails at once, like a gateway without a server.
+     *
+     * @param credentials who and where
+     * @param password    the admin password
+     * @param done        called on the render thread with the server's answer
+     */
+    default void fetchServerSettings(Credentials credentials, String password,
+            Consumer<de.mkoehler.launchwindow.net.messages.ServerSettingsResponse> done) {
+        done.accept(de.mkoehler.launchwindow.net.messages.ServerSettingsResponse.failure(
+            de.mkoehler.launchwindow.net.messages.ServerSettingsResponse.Status.SERVER_ERROR, "No server."));
+    }
+
+    /**
+     * Saves the server's settings ({@code ui-spec.md} &sect;4.22, G21). A write: never repeated if the connection
+     * breaks. By default it fails at once.
+     *
+     * @param credentials who and where
+     * @param password    the admin password
+     * @param settings    the edited settings
+     * @param newPassword a new admin password, or empty
+     * @param done        called on the render thread with the server's answer
+     */
+    default void saveServerSettings(Credentials credentials, String password,
+            de.mkoehler.launchwindow.net.messages.ServerSettings settings, String newPassword,
+            Consumer<de.mkoehler.launchwindow.net.messages.ServerSettingsResponse> done) {
+        done.accept(de.mkoehler.launchwindow.net.messages.ServerSettingsResponse.failure(
+            de.mkoehler.launchwindow.net.messages.ServerSettingsResponse.Status.SERVER_ERROR, "No server."));
+    }
+
+    /**
+     * Returns whether the server said, unasked, that its settings changed, and forgets it: a screen then fetches
+     * the game info again. Stubs keep the default.
+     *
+     * @return whether a notice came since the last call
+     */
+    default boolean takeSettingsChangedNotice() {
+        return false;
+    }
+
+    /**
      * Ends the session: closes its connection. The next {@link #logIn} opens a new one.
      */
     void logOut();

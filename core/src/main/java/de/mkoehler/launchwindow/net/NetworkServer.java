@@ -176,6 +176,23 @@ public final class NetworkServer {
     }
 
     /**
+     * Returns the address a connection comes from, for throttling the admin password's tries.
+     *
+     * @param connectionId the connection
+     * @return its remote host, or "unknown" if it's gone or has none
+     */
+    public String remoteHost(int connectionId) {
+        for (Connection connection : server.getConnections()) {
+            if (connection.getID() == connectionId) {
+                java.net.InetSocketAddress address = connection.getRemoteAddressTCP();
+                return address == null || address.getAddress() == null ? "unknown"
+                    : address.getAddress().getHostAddress();
+            }
+        }
+        return "unknown";
+    }
+
+    /**
      * Closes one connection. Its {@link Handler#onDisconnect(int)} event
      * follows like for any other end of a connection.
      *

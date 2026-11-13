@@ -306,6 +306,10 @@ public final class ScreenSnapshot {
             standingShots(folder, game);
             return;
         }
+        if ("serversettings".equals(System.getProperty("shots"))) {
+            serverSettingsShots(folder, game);
+            return;
+        }
         if ("foreign".equals(System.getProperty("shots"))) {
             foreignHardwareShots(folder, game);
             return;
@@ -624,6 +628,113 @@ public final class ScreenSnapshot {
         progressionShots(folder, game);
         roadsShots(folder, game);
         standingShots(folder, game);
+        serverSettingsShots(folder, game);
+    }
+
+    /** The settings before the game begins: two breaks (one past), the standard race, no bots. */
+    private static de.mkoehler.launchwindow.net.messages.ServerSettings serverSettings(long turn, boolean begun,
+            List<de.mkoehler.launchwindow.net.messages.ServerSettings.Bot> bots) {
+        var catalog = de.mkoehler.launchwindow.content.ContentPackLoader.loadFromClasspath("content/standard",
+            ScreenSnapshot.class.getClassLoader());
+        var early = de.mkoehler.launchwindow.content.ContentPackLoader.loadFromClasspath("content/early-era",
+            ScreenSnapshot.class.getClassLoader());
+        java.time.LocalDate today = java.time.LocalDate.now(java.time.ZoneId.of("Europe/Berlin"));
+        long next = today.plusDays(1).atTime(9, 0).atZone(java.time.ZoneId.of("Europe/Berlin")).toInstant()
+            .toEpochMilli();
+        return new de.mkoehler.launchwindow.net.messages.ServerSettings("v1", turn, begun ? 4 : 0, next,
+            List.of("MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"), "09:00", "Europe/Berlin",
+            List.of(new de.mkoehler.launchwindow.net.messages.ServerSettings.Break(today.minusDays(17).toString(),
+                    today.minusDays(15).toString()),
+                new de.mkoehler.launchwindow.net.messages.ServerSettings.Break(today.plusDays(38).toString(),
+                    today.plusDays(41).toString()),
+                new de.mkoehler.launchwindow.net.messages.ServerSettings.Break(today.plusDays(45).toString(),
+                    today.plusDays(46).toString())),
+            "standard", List.of("earth-orbit-satellite", "human-in-orbit", "crewed-lunar-landing"),
+            begun ? null : 7_340_211_983L, false, false, bots,
+            begun ? "Fixed once the first agency is founded." : null,
+            turn > 1 ? "Fixed once the first turn resolves." : null,
+            List.of(new de.mkoehler.launchwindow.net.messages.ServerSettings.Pack("standard",
+                    catalog.goals().stream().map(de.mkoehler.launchwindow.content.Goal::id).toList(),
+                    List.of("earth-orbit-satellite", "human-in-orbit", "crewed-lunar-landing")),
+                new de.mkoehler.launchwindow.net.messages.ServerSettings.Pack("early-era",
+                    early.goals().stream().map(de.mkoehler.launchwindow.content.Goal::id).toList(),
+                    List.of("earth-orbit-satellite", "human-in-space", "human-in-orbit"))));
+    }
+
+    private static void writeServerSettings(File folder, String name, LaunchWindowGame game,
+            Consumer<de.mkoehler.launchwindow.client.screen.ServerSettingsDialog> state) {
+        write(folder, name, new JoinScreen(game, CREDENTIALS), screen -> {
+            var dialog = new de.mkoehler.launchwindow.client.screen.ServerSettingsDialog(game, screen.stage(),
+                CREDENTIALS);
+            state.accept(dialog);
+            screen.render(0f);
+        });
+    }
+
+    /**
+     * Server settings (ui-spec.md section 4.22, G21, 2026-11-13), alone with {@code -Dshots=serversettings}: the
+     * canvas's boards, over Join game (one of the two places it opens from).
+     */
+    private static void serverSettingsShots(File folder, LaunchWindowGame game) {
+        List<de.mkoehler.launchwindow.net.messages.ServerSettings.Bot> none = List.of();
+        var before = serverSettings(1, false, none);
+        writeServerSettings(folder, "server-settings-unlock.png", game,
+            d -> d.showUnlockForShots("READY", "", false, ""));
+        writeServerSettings(folder, "server-settings-unlock-waiting.png", game,
+            d -> d.showUnlockForShots("WAITING", "abcd-efgh-jkmn", false, ""));
+        writeServerSettings(folder, "server-settings-unlock-wrong.png", game,
+            d -> d.showUnlockForShots("WRONG", "correcthorse", true, "That's not the admin password."));
+        writeServerSettings(folder, "server-settings-unlock-locked.png", game,
+            d -> d.showUnlockForShots("LOCKED", "", false, "Too many wrong tries. Try again in 8 minutes."));
+        for (var section : de.mkoehler.launchwindow.client.screen.ServerSettingsDialog.Section.values()) {
+            writeServerSettings(folder, "server-settings-" + section.name().toLowerCase(java.util.Locale.ROOT)
+                + ".png", game, d -> d.showSettingsForShots(before, section));
+        }
+        writeServerSettings(folder, "server-settings-schedule-zones.png", game, d -> {
+            d.showSettingsForShots(before, de.mkoehler.launchwindow.client.screen.ServerSettingsDialog.Section.SCHEDULE);
+            d.openZonesForShots("berl");
+        });
+        writeServerSettings(folder, "server-settings-breaks-calendar.png", game, d -> {
+            d.showSettingsForShots(before, de.mkoehler.launchwindow.client.screen.ServerSettingsDialog.Section.BREAKS);
+            d.openCalendarForShots(1, false);
+        });
+        writeServerSettings(folder, "server-settings-bots-new.png", game, d -> {
+            d.showSettingsForShots(before, de.mkoehler.launchwindow.client.screen.ServerSettingsDialog.Section.BOTS);
+            d.addBotForShots("", "", "SOVIET");
+            d.addBotForShots("Meridian Rocket Society", "Walter Krueger", "NASA");
+        });
+        writeServerSettings(folder, "server-settings-admin-made.png", game, d -> {
+            d.showSettingsForShots(before, de.mkoehler.launchwindow.client.screen.ServerSettingsDialog.Section.ADMIN);
+            d.makePasswordForShots("k7mq-r4tx-9hzc-wp3d");
+        });
+        var begun = serverSettings(12, true, List.of(
+            new de.mkoehler.launchwindow.net.messages.ServerSettings.Bot("bot-1", "SOVIET", "Juniper Aerospace",
+                "Samuel Oduya", 3),
+            new de.mkoehler.launchwindow.net.messages.ServerSettings.Bot("bot-2", "NASA", "", "", 3)));
+        writeServerSettings(folder, "server-settings-game-locked.png", game,
+            d -> d.showSettingsForShots(begun, de.mkoehler.launchwindow.client.screen.ServerSettingsDialog.Section.GAME));
+        writeServerSettings(folder, "server-settings-bots-locked.png", game, d -> {
+            d.showSettingsForShots(begun, de.mkoehler.launchwindow.client.screen.ServerSettingsDialog.Section.BOTS);
+            d.addBotForShots("", "", "NASA");
+        });
+        writeServerSettings(folder, "server-settings-refused.png", game, d -> {
+            d.showSettingsForShots(before, de.mkoehler.launchwindow.client.screen.ServerSettingsDialog.Section.SCHEDULE);
+            d.editForShots();
+            d.showRefusedForShots(java.util.Map.of("breaks.2", "A break ends before it starts."));
+        });
+        writeServerSettings(folder, "server-settings-stale.png", game, d -> {
+            d.showSettingsForShots(begun, de.mkoehler.launchwindow.client.screen.ServerSettingsDialog.Section.SCHEDULE);
+            d.showStaleForShots();
+        });
+        writeServerSettings(folder, "server-settings-saved.png", game, d -> {
+            d.showSettingsForShots(begun, de.mkoehler.launchwindow.client.screen.ServerSettingsDialog.Section.SCHEDULE);
+            d.showSavedForShots();
+        });
+        writeServerSettings(folder, "server-settings-discard.png", game, d -> {
+            d.showSettingsForShots(before, de.mkoehler.launchwindow.client.screen.ServerSettingsDialog.Section.BREAKS);
+            d.editForShots();
+            d.showDiscardForShots();
+        });
     }
 
     /**

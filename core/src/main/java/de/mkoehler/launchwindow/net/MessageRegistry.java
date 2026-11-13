@@ -338,5 +338,12 @@ public final class MessageRegistry {
         kryo.register(de.mkoehler.launchwindow.net.messages.StandingRequest.class);
         kryo.register(de.mkoehler.launchwindow.net.messages.StandingResponse.class);
         kryo.register(de.mkoehler.launchwindow.net.messages.StandingSeries.class);
+
+        // Server settings (ui-spec.md section 4.22, G21, 2026-11-13). Never move these lines.
+        kryo.register(de.mkoehler.launchwindow.net.messages.ServerSettingsRequest.class);
+        kryo.register(de.mkoehler.launchwindow.net.messages.SaveServerSettingsRequest.class);
+        kryo.register(de.mkoehler.launchwindow.net.messages.ServerSettingsResponse.class);
+        kryo.register(de.mkoehler.launchwindow.net.messages.ServerSettingsResponse.Status.class);
+        kryo.register(de.mkoehler.launchwindow.net.messages.ServerSettingsChangedNotice.class);
     }
 }

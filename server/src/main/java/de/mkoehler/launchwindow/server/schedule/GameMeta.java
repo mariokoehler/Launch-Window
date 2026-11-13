@@ -31,6 +31,7 @@ public class GameMeta {
     private boolean devMode;
     private boolean devArchiveOpen;
     private List<BotPlayer> bots = new ArrayList<>();
+    private String adminPassword;
 
     /**
      * The content pack a new game plays, under {@code assets/content/}: BASPM's whole tree (user,
@@ -54,6 +55,19 @@ public class GameMeta {
 
     /** The race a new game declares: the default pack's. */
     public static final List<String> DEFAULT_DECLARED_GOALS = STANDARD_DECLARED_GOALS;
+
+    /** The packs the server bundles, in the order the admin's settings list them (ui-spec.md section 4.22). */
+    public static final List<String> BUNDLED_PACKS = List.of("standard", "early-era");
+
+    /**
+     * Returns the race a game on a pack declares by default.
+     *
+     * @param packId the pack
+     * @return its default race
+     */
+    public static List<String> defaultGoals(String packId) {
+        return "early-era".equals(packId) ? EARLY_ERA_DECLARED_GOALS : STANDARD_DECLARED_GOALS;
+    }
 
     /**
      * Creates an uninitialized instance, for Jackson.
@@ -252,7 +266,25 @@ public class GameMeta {
         return bots.stream().anyMatch(bot -> bot.id().equals(playerId));
     }
 
-    void validate() {
+    /**
+     * Returns the admin password (ui-spec.md section 4.22, G21): the server makes one at startup when there's none.
+     *
+     * @return the password, or {@code null} if none is set
+     */
+    public String getAdminPassword() {
+        return adminPassword;
+    }
+
+    /**
+     * Sets the admin password.
+     *
+     * @param adminPassword the password
+     */
+    public void setAdminPassword(String adminPassword) {
+        this.adminPassword = adminPassword;
+    }
+
+    public void validate() {
         Objects.requireNonNull(schedule, "schedule must not be null").validate();
         for (Blackout blackout : blackouts) {
             Objects.requireNonNull(blackout, "a blackout entry must not be null");
