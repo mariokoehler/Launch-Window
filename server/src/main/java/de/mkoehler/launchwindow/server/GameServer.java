@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import de.mkoehler.launchwindow.net.NetworkServer;
+import de.mkoehler.launchwindow.net.messages.NewGameStartedNotice;
 import de.mkoehler.launchwindow.net.messages.ServerSettingsChangedNotice;
 import de.mkoehler.launchwindow.net.messages.TurnResolvedNotice;
 import de.mkoehler.launchwindow.content.BudgetSchedule;
@@ -228,12 +229,18 @@ public class GameServer extends ApplicationAdapter {
         } else {
             networkServer.send(connectionId, result.response());
         }
-        // Taken before a rebuild, which replaces the dispatcher that holds it.
+        // Taken before a rebuild, which replaces the dispatcher that holds them.
         boolean settingsChanged = dispatcher.takeSettingsChanged();
-        if (dispatcher.takePackChanged()) {
+        boolean newGame = dispatcher.takeNewGameStarted();
+        if (dispatcher.takePackChanged() || newGame) {
             rebuildGame();
         }
-        if (settingsChanged) {
+        if (newGame) {
+            // Every agency is gone: everyone online goes back to Connect and founds a new one (ui-spec.md 4.22).
+            for (int id : dispatcher.loggedInConnections()) {
+                networkServer.send(id, new NewGameStartedNotice());
+            }
+        } else if (settingsChanged) {
             // Everyone online fetches the game info again: the countdown, the Dev button (ui-spec.md section 4.22).
             for (int id : dispatcher.loggedInConnections()) {
                 networkServer.send(id, new ServerSettingsChangedNotice());
@@ -241,7 +248,7 @@ public class GameServer extends ApplicationAdapter {
         }
     }
 
-    /** Rebuilds the game from the saved settings, after the admin switched the pack. */
+    /** Rebuilds the game from the saved settings, after the admin switched the pack or started a new game. */
     private void rebuildGame() {
         RequestDispatcher current = dispatcher;
         try {

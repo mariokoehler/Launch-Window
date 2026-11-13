@@ -37,13 +37,22 @@ import java.util.List;
  *                             testing tools (resolving the turn now)
  * @param budget               the game's budget schedule, or {@code null} on failure; read it through
  *                             {@link #budgetSchedule()}
+ * @param gameId               this game's identity, new with every new game (not its seed, which stays
+ *                             hidden), so a client keeps its read marks per game; empty from an older server
  * @author Mario Koehler
  */
 public record GameInfoResponse(boolean success, String message, String contentPackId, String contentPackHash,
                                List<String> declaredGoalIds, long gameTurn, int year, Season season,
                                boolean started, long nextResolutionMillis, long serverNowMillis,
                                String resultStatus, List<String> winnerAgencies, List<String> winnerDirectors,
-                               long resultTurn, boolean devMode, BudgetScheduleInfo budget) {
+                               long resultTurn, boolean devMode, BudgetScheduleInfo budget, String gameId) {
+
+    /**
+     * Normalizes a missing game identity.
+     */
+    public GameInfoResponse {
+        gameId = gameId == null ? "" : gameId;
+    }
 
     /**
      * Creates a successful response, copying every list into an {@link ArrayList}.
@@ -123,7 +132,19 @@ public record GameInfoResponse(boolean success, String message, String contentPa
         return new GameInfoResponse(true, "", contentPackId, contentPackHash, new ArrayList<>(declaredGoalIds),
             gameTurn, date.year(), date.season(), started, nextResolutionMillis, serverNowMillis, resultStatus,
             new ArrayList<>(winnerAgencies), new ArrayList<>(winnerDirectors), resultTurn, devMode,
-            BudgetScheduleInfo.of(schedule));
+            BudgetScheduleInfo.of(schedule), "");
+    }
+
+    /**
+     * Returns this response with the game's identity.
+     *
+     * @param id the identity
+     * @return the response
+     */
+    public GameInfoResponse withGameId(String id) {
+        return new GameInfoResponse(success, message, contentPackId, contentPackHash, declaredGoalIds, gameTurn, year,
+            season, started, nextResolutionMillis, serverNowMillis, resultStatus, winnerAgencies, winnerDirectors,
+            resultTurn, devMode, budget, id);
     }
 
     /**
@@ -134,7 +155,7 @@ public record GameInfoResponse(boolean success, String message, String contentPa
      */
     public static GameInfoResponse failure(String message) {
         return new GameInfoResponse(false, message, null, null, new ArrayList<>(), 0, 0, null, false, -1, 0, null,
-            new ArrayList<>(), new ArrayList<>(), 0, false, null);
+            new ArrayList<>(), new ArrayList<>(), 0, false, null, "");
     }
 
     /**

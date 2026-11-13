@@ -310,6 +310,63 @@ class ClientGatewayIntegrationTest {
     }
 
     /**
+     * A new game through the gateway ({@code ui-spec.md} &sect;4.22): the admin's request wipes the game, the notice
+     * reaches the gateway, a refresh says the agency is gone, and logging in again asks for a new one with the
+     * notice forgotten.
+     */
+    @Test
+    void theGatewayStartsANewGameAndHearsOfIt(@TempDir Path dataRoot) throws Exception {
+        int port = startServer(dataRoot);
+        ObjectMapper mapper = GameServer.createMapper();
+        GameMeta meta = ServerTestGames.meta(false);
+        meta.setAdminPassword("admin-pass-1234");
+        de.mkoehler.launchwindow.server.schedule.GameMetaStore.save(dataRoot.resolve("game-meta.json"), meta, mapper);
+        dispatcher.setServerSettings(new ServerSettingsService(dataRoot, mapper, getClass().getClassLoader(),
+            java.time.Clock.systemUTC()), id -> "test");
+        application = new HeadlessApplication(new ApplicationAdapter() {
+        });
+        gateway = new NetworkGateway();
+        Credentials mario = new Credentials(new ServerAddress("localhost", port), "mario", "hunter2");
+        createAccount(mario);
+        assertEquals(ClaimResult.Kind.JOINED, claim(mario, "Baltic Star Agency", "A. Reyes").kind());
+        de.mkoehler.launchwindow.net.messages.ServerSettingsResponse read =
+            await(done -> gateway.fetchServerSettings(mario, "admin-pass-1234", done));
+
+        de.mkoehler.launchwindow.net.messages.ServerSettingsResponse started = await(done -> gateway.startNewGame(
+            mario, "admin-pass-1234", read.settings().version(), "NEW GAME", done));
+
+        assertEquals(de.mkoehler.launchwindow.net.messages.ServerSettingsResponse.Status.OK, started.status(),
+            started.message());
+        assertTrue(meta.getGameSeed() != mapper.readValue(dataRoot.resolve("game-meta.json").toFile(), GameMeta.class)
+            .getGameSeed(), "a new seed");
+        // This harness has no GameServer to tell everyone: send the notice as it would.
+        for (int connectionId : dispatcher.loggedInConnections()) {
+            server.send(connectionId, new de.mkoehler.launchwindow.net.messages.NewGameStartedNotice());
+        }
+        long deadline = System.currentTimeMillis() + 5_000;
+        boolean heard = false;
+        while (!heard && System.currentTimeMillis() < deadline) {
+            heard = gateway.takeNewGameNotice();
+            Thread.sleep(20);
+        }
+        assertTrue(heard, "the notice arrived");
+        ServerResult refreshed = await(done -> gateway.refresh(mario, done));
+        assertEquals(ServerResult.Kind.REFUSED, refreshed.kind());
+        assertEquals(de.mkoehler.launchwindow.net.messages.ClaimSlotRequest.SLOT_CLAIM_REQUIRED, refreshed.message(),
+            "a client that missed the notice learns it this way");
+
+        // A notice that came late, after the client left, must not end the next session.
+        for (int connectionId : dispatcher.loggedInConnections()) {
+            server.send(connectionId, new de.mkoehler.launchwindow.net.messages.NewGameStartedNotice());
+        }
+        Thread.sleep(200);
+        gateway.logOut();
+        LoginResult again = await(done -> gateway.logIn(mario, done));
+        assertEquals(LoginResult.Kind.NEEDS_SLOT, again.kind());
+        assertTrue(!gateway.takeNewGameNotice(), "a new session starts without the old one's notice");
+    }
+
+    /**
      * Turn reports over real sockets: none before the first turn resolves, then the resolved
      * turn's report, read back from the JSON it's saved as, with its budget breakdown adding up.
      */

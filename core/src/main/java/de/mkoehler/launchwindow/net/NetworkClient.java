@@ -46,7 +46,8 @@ public final class NetworkClient implements AutoCloseable {
             @Override
             public void received(Connection connection, Object object) {
                 if (object instanceof de.mkoehler.launchwindow.net.messages.TurnResolvedNotice
-                        || object instanceof de.mkoehler.launchwindow.net.messages.ServerSettingsChangedNotice) {
+                        || object instanceof de.mkoehler.launchwindow.net.messages.ServerSettingsChangedNotice
+                        || object instanceof de.mkoehler.launchwindow.net.messages.NewGameStartedNotice) {
                     // Unasked: never a reply, so it must not be taken for one.
                     noticeListener.accept(object);
                 } else if (MessageRegistry.isProtocolMessage(object)) {

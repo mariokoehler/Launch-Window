@@ -127,6 +127,6 @@ public final class GameInfoService {
         }
         return GameInfoResponse.success(contentPackId, contentPackHash, meta.getDeclaredGoalIds(), gameTurn,
             gameTurn > 1, nextMillis, clock.millis(), status, agencies, directors, resultTurn, meta.isDevMode(),
-            schedule);
+            schedule).withGameId(GameSeeds.gameKey(meta.getGameSeed()));
     }
 }

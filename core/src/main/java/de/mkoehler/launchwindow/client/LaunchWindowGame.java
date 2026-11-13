@@ -187,7 +187,7 @@ public class LaunchWindowGame extends Game {
      */
     public boolean resultUnseen() {
         return session != null && session.gameInfo().response().decided()
-            && !preferences().getBoolean(key("resultSeen"), false);
+            && !preferences().getBoolean(gameKey("resultSeen"), false);
     }
 
     /**
@@ -198,7 +198,7 @@ public class LaunchWindowGame extends Game {
             return;
         }
         com.badlogic.gdx.Preferences preferences = preferences();
-        preferences.putBoolean(key("resultSeen"), true);
+        preferences.putBoolean(gameKey("resultSeen"), true);
         preferences.flush();
     }
 
@@ -273,7 +273,7 @@ public class LaunchWindowGame extends Game {
         if (archiveReadInMemory != null) {
             return archiveReadInMemory.contains(pageId);
         }
-        return session != null && preferences().getBoolean(key("archiveRead." + pageId), false);
+        return session != null && preferences().getBoolean(gameKey("archiveRead." + pageId), false);
     }
 
     /**
@@ -290,7 +290,7 @@ public class LaunchWindowGame extends Game {
             return;
         }
         com.badlogic.gdx.Preferences preferences = preferences();
-        preferences.putBoolean(key("archiveRead." + pageId), true);
+        preferences.putBoolean(gameKey("archiveRead." + pageId), true);
         preferences.flush();
     }
 
@@ -314,7 +314,7 @@ public class LaunchWindowGame extends Game {
         if (frontPagesSeenInMemory != null) {
             return frontPagesSeenInMemory.contains(pageId);
         }
-        return session != null && preferences().getBoolean(key("frontPageSeen." + pageId), false);
+        return session != null && preferences().getBoolean(gameKey("frontPageSeen." + pageId), false);
     }
 
     /**
@@ -331,7 +331,7 @@ public class LaunchWindowGame extends Game {
             return;
         }
         com.badlogic.gdx.Preferences preferences = preferences();
-        preferences.putBoolean(key("frontPageSeen." + pageId), true);
+        preferences.putBoolean(gameKey("frontPageSeen." + pageId), true);
         preferences.flush();
     }
 
@@ -384,7 +384,7 @@ public class LaunchWindowGame extends Game {
             return;
         }
         com.badlogic.gdx.Preferences preferences = preferences();
-        preferences.putString(key("fillers." + pageId), String.join(",", shown));
+        preferences.putString(gameKey("fillers." + pageId), String.join(",", shown));
         preferences.putString(key("fillersSeen"), String.join(",", seen));
         preferences.flush();
     }
@@ -397,7 +397,9 @@ public class LaunchWindowGame extends Game {
             return null;
         }
         com.badlogic.gdx.Preferences preferences = preferences();
-        return preferences.contains(key(name)) ? preferences.getString(key(name)) : null;
+        // A page's fillers belong to its game; which fillers this device has seen, to the device.
+        String stored = name.startsWith("fillers.") ? gameKey(name) : key(name);
+        return preferences.contains(stored) ? preferences.getString(stored) : null;
     }
 
     /**
@@ -841,7 +843,31 @@ public class LaunchWindowGame extends Game {
     }
 
     private String readKey() {
-        return key("reportRead");
+        return gameKey("reportRead");
+    }
+
+    /**
+     * A mark that belongs to one game, not to the player (read reports, a seen result, front pages, archive pages):
+     * keyed by the game too, so a new game on the same server starts unread ({@code ui-spec.md} &sect;4.22).
+     */
+    private String gameKey(String name) {
+        String gameId = session.gameInfo().response().gameId();
+        return gameId.isEmpty() ? key(name) : key(name) + "." + gameId;
+    }
+
+    /**
+     * Leaves a game the admin has ended ({@code ui-spec.md} &sect;4.22): ends the session and goes back to Connect,
+     * saying so, with this login filled in. Logging in again leads to founding an agency in the new game.
+     *
+     * @param credentials who was playing
+     */
+    public void leaveForNewGame(Credentials credentials) {
+        gateway().takeNewGameNotice();
+        rememberConnect(credentials.address().toString(), credentials.login(),
+            credentials.password());
+        gateway().logOut();
+        setScreen(new de.mkoehler.launchwindow.client.screen.ConnectScreen(this).sayingNewGame());
+        setSession(null);
     }
 
     private String key(String name) {

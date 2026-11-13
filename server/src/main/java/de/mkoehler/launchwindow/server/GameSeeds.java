@@ -56,6 +56,17 @@ public final class GameSeeds {
             .nextLong());
     }
 
+    /**
+     * Returns the game's identity for clients ({@code GameInfoResponse.gameId}): new with every new game's seed,
+     * and not the seed itself, which the settings hide once the game has begun.
+     *
+     * @param gameSeed the game's seed
+     * @return the identity
+     */
+    public static String gameKey(long gameSeed) {
+        return "g" + Long.toHexString(new SplittableRandom(gameSeed ^ 0x6A3E_C0DE_1969_0720L).nextLong());
+    }
+
     private static long mixString(String value) {
         long hash = 1125899906842597L;
         for (int i = 0; i < value.length(); i++) {

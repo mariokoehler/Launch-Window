@@ -36,8 +36,8 @@ public final class TurnBackups {
 
     private static final Pattern TURN_ZIP = Pattern.compile("before-turn-(\\d+)\\.zip");
 
-    /** Left out of every zip: the zips themselves, the logins' password hashes, the frozen pack. */
-    private static final List<String> LEFT_OUT = List.of(DIR, "accounts.json", "content");
+    /** Left out of every zip: the zips themselves, the logins' password hashes, the frozen pack, the ended games. */
+    private static final List<String> LEFT_OUT = List.of(DIR, "accounts.json", "content", "old-games");
 
     /**
      * Not instantiable; this class only exposes static methods.

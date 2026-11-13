@@ -284,6 +284,18 @@ public final class ConnectScreen extends StageScreen {
         root.invalidateHierarchy();
     }
 
+    /**
+     * Opens Connect saying the admin started a new game ({@code ui-spec.md} &sect;4.22): the agency is gone, and
+     * logging in leads to founding a new one.
+     *
+     * @return this screen
+     */
+    public ConnectScreen sayingNewGame() {
+        showBanner(Theme.NoticeKind.INFO, "A new game has started.",
+            "The admin ended the last one. Connect to found your agency in the new game.");
+        return this;
+    }
+
     private void showBanner(Theme.NoticeKind kind, String lead, String text) {
         bannerCell.setActor(ui.notice(kind, lead, text));
         bannerCell.padBottom(Theme.SPACE_4);

@@ -26,6 +26,7 @@ import de.mkoehler.launchwindow.client.ui.Theme;
 import de.mkoehler.launchwindow.client.ui.UiKit;
 import de.mkoehler.launchwindow.content.ContentStrings;
 import de.mkoehler.launchwindow.net.AdminPasswords;
+import de.mkoehler.launchwindow.net.messages.StartNewGameRequest;
 import de.mkoehler.launchwindow.net.messages.ServerSettings;
 import de.mkoehler.launchwindow.net.messages.ServerSettingsResponse;
 
@@ -179,6 +180,9 @@ public final class ServerSettingsDialog {
     private boolean stale;
     private boolean busy;
     private boolean discarding;
+    private boolean confirmingNewGame;
+    private String newGameTyped = "";
+    private TextButton newGameButton;
 
     private Popup popup = Popup.NONE;
     private String zoneQuery = "";
@@ -428,6 +432,11 @@ public final class ServerSettingsDialog {
         scrim.clearChildren();
         if (discarding) {
             scrim.add(discardCard()).width(SettingsDialog.WIDTH);
+            return;
+        }
+        if (confirmingNewGame) {
+            scrim.add(newGameCard()).width(SettingsDialog.WIDTH);
+            addWaitingChip(busy);
             return;
         }
         Table card = card("Admin", "Server settings");
@@ -1097,6 +1106,146 @@ public final class ServerSettingsDialog {
             }));
             form.add(box).width(576f).row();
         }
+        newGameBlock(form);
+    }
+
+    // ---------------------------------------------------------------------------------------------- new game
+
+    /** The Admin section's last block: ending the game for everyone and starting a fresh one. */
+    private void newGameBlock(Table form) {
+        form.add(rule()).height(Theme.BORDER_THIN).padTop(Theme.SPACE_4).padBottom(18f).row();
+        form.add(fieldLabel("Start a new game")).padBottom(Theme.SPACE_1).row();
+        form.add(ui.paragraph("Ends this game for everyone and starts a fresh one with a new seed. Accounts and these "
+            + "settings stay.", Theme.TextStyle.BODY_SM, Theme.INK_MUTED)).padBottom(Theme.SPACE_2).row();
+        Table row = new Table();
+        row.left();
+        boolean blocked = busy || stale || anyDirty();
+        TextButton start = ChromeScreen.onClick(ui.button("Start a new game…", Theme.ButtonKind.DESTRUCTIVE), () -> {
+            if (!busy && !stale && !anyDirty()) {
+                confirmingNewGame = true;
+                newGameTyped = "";
+                errors.remove("confirm");
+                footMessage = "";
+                popup = Popup.NONE;
+                showSettings();
+            }
+        });
+        start.setDisabled(blocked);
+        row.add(start).padRight(Theme.SPACE_3);
+        if (blocked && !busy) {
+            row.add(ui.paragraph(stale ? "Reload first." : "Save or discard your changes first.",
+                Theme.TextStyle.CAPTION, Theme.INK_MUTED)).growX();
+        }
+        form.add(row).row();
+    }
+
+    private Table newGameCard() {
+        Table card = card("Danger", "End this game and start a new one?");
+        card.add(ui.paragraph("Everyone's game ends now, and it can't be undone from here.",
+            Theme.TextStyle.BODY_STRONG, Theme.DANGER)).padBottom(Theme.SPACE_3).row();
+        String agencies = saved.agencies() == 1 ? "its 1 agency" : "all " + saved.agencies() + " of its agencies";
+        String[][] lines = {
+            {"Deleted", "the game at turn " + saved.openTurn() + ": " + agencies + ", bots included, with every "
+                + "turn report, front page, standing chart and the game's result, and its turn backups."},
+            {"Kept", "every account and its password, these settings and the admin password."},
+            {"Then", "everyone online goes back to Connect and founds a new agency. The new game has a new random seed "
+                + "and its first turn resolves on the schedule."},
+            {"Saved", "a zip of the old game, in the server's old-games folder, to put back by hand if this was a "
+                + "mistake."},
+        };
+        for (String[] line : lines) {
+            Table entry = new Table();
+            entry.add(ui.label(line[0].toUpperCase(Locale.ROOT), Theme.TextStyle.LABEL, Theme.INK_MUTED)).width(70f)
+                .top().left().padTop(2f);
+            entry.add(ui.paragraph(line[1], Theme.TextStyle.BODY_SM, Theme.INK)).growX().left();
+            card.add(entry).padBottom(Theme.SPACE_2).row();
+        }
+        card.add(fieldLabel("Type " + StartNewGameRequest.CONFIRMATION + " to confirm")).padTop(Theme.SPACE_2)
+            .padBottom(Theme.SPACE_1).row();
+        TextField typed = field(newGameTyped, StartNewGameRequest.CONFIRMATION, errors.containsKey("confirm"),
+            text -> {
+                newGameTyped = text;
+                errors.remove("confirm");
+                if (newGameButton != null) {
+                    newGameButton.setDisabled(busy || !confirmed());
+                }
+            });
+        typed.setDisabled(busy);
+        card.add(typed).width(260f).height(FIELD).padBottom(Theme.SPACE_1).row();
+        card.add(errorOrHint("confirm", footDanger ? footMessage : "Capitals, as shown."))
+            .padBottom(Theme.SPACE_4).row();
+        Table buttons = new Table();
+        buttons.add(ChromeScreen.onClick(ui.button("Keep this game", Theme.ButtonKind.SECONDARY), () -> {
+            if (!busy) {
+                confirmingNewGame = false;
+                footMessage = "";
+                showSettings();
+            }
+        })).padRight(10f);
+        newGameButton = ChromeScreen.onClick(ui.button("End it and start a new game", Theme.ButtonKind.DESTRUCTIVE),
+            this::startNewGame);
+        newGameButton.setDisabled(busy || !confirmed());
+        buttons.add(newGameButton);
+        card.add(buttons).right().fill(false, false).row();
+        Gdx.app.postRunnable(() -> stage.setKeyboardFocus(typed));
+        return card;
+    }
+
+    private boolean confirmed() {
+        return StartNewGameRequest.CONFIRMATION.equals(newGameTyped.strip());
+    }
+
+    private void startNewGame() {
+        if (busy || !confirmed()) {
+            return;
+        }
+        busy = true;
+        footMessage = "";
+        footDanger = false;
+        showSettings();
+        game.gateway().startNewGame(credentials, password, saved.version(), newGameTyped.strip(), this::newGameAnswer);
+    }
+
+    private void newGameAnswer(ServerSettingsResponse response) {
+        busy = false;
+        switch (response.status()) {
+            case OK -> {
+                // The game is gone for this client too: back to Connect, saying so (also on the server's notice).
+                close();
+                game.leaveForNewGame(credentials);
+            }
+            case INVALID_FIELD -> {
+                errors.putAll(response.fieldErrors());
+                showSettings();
+            }
+            case STALE_SETTINGS -> {
+                confirmingNewGame = false;
+                showStale();
+            }
+            case WRONG_ADMIN_PASSWORD, ADMIN_LOCKED_OUT -> {
+                confirmingNewGame = false;
+                saved = null;
+                showUnlockState(response.status() == ServerSettingsResponse.Status.ADMIN_LOCKED_OUT
+                    ? UnlockState.LOCKED : UnlockState.WRONG, response.message());
+            }
+            default -> {
+                footMessage = "The new game didn't start: " + (response.message().isEmpty()
+                    ? "the server couldn't answer." : response.message());
+                footDanger = true;
+                showSettings();
+            }
+        }
+    }
+
+    /**
+     * Opens the new game's confirmation, with some text typed, for the shots.
+     *
+     * @param typedText what the admin has typed
+     */
+    public void confirmNewGameForShots(String typedText) {
+        confirmingNewGame = true;
+        newGameTyped = typedText;
+        showSettings();
     }
 
     // ---------------------------------------------------------------------------------------------- saving

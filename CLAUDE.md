@@ -61,7 +61,7 @@ first live game starts in January 2027. Many numbers are still unconfirmed: the 
   help and its public wiki (component 23), the advisor (component 24), looking ahead (component 25).
 - Deployment: client zip and server image built by tag-triggered CI (`design.md` §5, M6).
 - Server settings: the admin edits `game-meta.json` in the client behind an admin password the server prints at
-  startup (`ui-spec.md` §4.22, G21).
+  startup, and can start a new game from there (`ui-spec.md` §4.22, G21).
 
 ## How we work
 
@@ -230,7 +230,8 @@ mvn -pl dev-tools compile exec:exec@handson         # any hands-on level's puzzl
   `cmd //c ".\reset_dev_data.cmd /y < nul"` (`/y` skips the question, `< nul` the pause; the
   `.\` is needed because this sandbox sets `NoDefaultCurrentDirectoryInExePath`). The reset deletes
   `data/` except `game-meta.json` and `accounts.json` (`/all` deletes the accounts too) and
-  clears the client's report read marks. Run it with the server stopped.
+  clears the client's report read marks. Run it with the server stopped. With the server running, Server settings ›
+  Admin › Start a new game does the same from the client (old game zipped to `data/old-games/`).
 - **Reset the dev data root** whenever saved state stops loading: after a field change on a
   saved class (Jackson is strict on unknown fields) or a content-pack change (the pack hash
   changes). Adding a saved field alone needs no reset.
@@ -248,8 +249,8 @@ mvn -pl dev-tools compile exec:exec@handson         # any hands-on level's puzzl
   works ahead, `side` for the one that also flies side missions, or `smart` for the best player, whose parts switch with `-Dbot.*` properties (`Bot.SMART`'s Javadoc; `-Dbot.roads=<nasa>,<soviet>` plays each road to the Moon, `-Dbot.slowGames=true` compares the slowest games with the fastest), `-Dexec.args="standard side"`)
   (`-Dexec.args="standard side decisions"` plays with the R&D decisions and reports how often they come)
   (`RaceShock` plays NASA against the Soviets in one game, the answer to rivals' Firsts off and on, `-Drace.shares=0,0.5`, or publishing findings never and always, `-Drace.publish=never,always`; both it and `ContentPackPlayouts` take `-Drules.raiseShare=0` to turn off raises between reviews and `-Drules.findingBonus=0` to turn off the findings' bonus)
-  (also `PersonnelLifecyclePlayouts`, `CareerCurves`, `StateSizes` (it takes the pack too), `IntelligencePlayouts`, `RaceLulls` (the Moon race's lulls with R&D tuned; `-Dexec.args="standard ahead+contracts 1.0 0.0"` plays with contracts against three simulated rivals); `design.md` §3.10).
   (money: `-Dplayout.economy=true` keeps a per-season ledger, played past the race (`-Dplayout.seasons`, `-Dplayout.games`); `RaceShock` takes `-Drace.economy=true`; `EconomyCeiling` prices the most an agency can spend against each review, from the rules alone; all three take `-Drules.budget=<bottom>-<top>,...` for other review ranges and `-Drules.flatten=<knee>,<slope>` for another flattening, `1,1` being BASPM's straight line)
+  (also `PersonnelLifecyclePlayouts`, `CareerCurves`, `StateSizes` (it takes the pack too), `IntelligencePlayouts`, `RaceLulls` (the Moon race's lulls with R&D tuned; `-Dexec.args="standard ahead+contracts 1.0 0.0"` plays with contracts against three simulated rivals); `design.md` §3.10).
 - **Releasing** (ported from Robot-Rampage; its and StarWars' CLAUDE.md hold the gotchas):
   - **Client zip, locally:** `mvn -pl lwjgl3 -am -Prelease-client -DskipTests verify` gives
     `lwjgl3/target/LaunchWindow-Client.zip` (jpackage app-image: `LaunchWindow.exe`, `app/`,

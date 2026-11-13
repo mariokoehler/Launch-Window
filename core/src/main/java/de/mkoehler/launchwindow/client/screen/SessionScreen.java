@@ -179,6 +179,13 @@ abstract class SessionScreen extends StageScreen {
         long resolvedBefore = session.latestResolvedTurn();
         game.gateway().refresh(session.credentials(), result -> {
             refreshing = false;
+            // No agency any more: a new game started while this client missed the notice (ui-spec.md 4.22).
+            if (isShowing() && result.kind() == ServerResult.Kind.REFUSED
+                    && de.mkoehler.launchwindow.net.messages.ClaimSlotRequest.SLOT_CLAIM_REQUIRED
+                        .equals(result.message())) {
+                game.leaveForNewGame(session.credentials());
+                return;
+            }
             if (isShowing() && result.kind() == ServerResult.Kind.OK && result.state() != null) {
                 session.update(result);
                 stateChanged();
@@ -731,6 +738,11 @@ abstract class SessionScreen extends StageScreen {
         // The admin saved the server's settings: the countdown and the Dev button may have changed (G21).
         if (!refreshing && game.gateway().takeSettingsChangedNotice()) {
             refresh();
+        }
+        // The admin started a new game: this agency is gone (ui-spec.md section 4.22).
+        if (game.gateway().takeNewGameNotice()) {
+            game.leaveForNewGame(session.credentials());
+            return;
         }
         // Once the turn is due, fetch the resolved state shortly after: new date, new candidates, new countdown.
         if (left.isPresent() && left.getAsLong() == 0 && now - lastRefreshMillis > REFRESH_SPACING_MILLIS

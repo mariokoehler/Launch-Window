@@ -76,6 +76,9 @@ public final class ServerSettingsService {
     /** The reason a field is fixed, once a turn resolved. */
     static final String LOCK_TURN = "Fixed once the first turn resolves.";
 
+    /** The data root's folder of ended games, one zip each, kept through every new game. */
+    public static final String OLD_GAMES = "old-games";
+
     private final Path dataRoot;
     private final Path metaFile;
     private final ObjectMapper mapper;
@@ -193,6 +196,119 @@ public final class ServerSettingsService {
             return new SaveOutcome(ServerSettingsResponse.failure(ServerSettingsResponse.Status.SERVER_ERROR,
                 String.valueOf(e.getMessage())), null, false);
         }
+    }
+
+    /** What survives a new game in the data root: the logins, the settings, and the old games' archives. */
+    static final Set<String> KEPT_FOR_A_NEW_GAME = Set.of("accounts.json", "game-meta.json", OLD_GAMES);
+
+    /**
+     * What starting a new game came to.
+     *
+     * @param response the answer for the client
+     * @param started  whether the old game was wiped (the server rebuilds its game and tells everyone)
+     */
+    public record NewGameOutcome(ServerSettingsResponse response, boolean started) {
+    }
+
+    /**
+     * Ends the game and starts a fresh one ({@code ui-spec.md} &sect;4.22): the old game zipped into
+     * {@value #OLD_GAMES}, everything in the data root deleted but the accounts and the settings, and a new random seed
+     * saved. The caller rebuilds the game (the frozen pack, the bots' slots, the scheduler) and tells everyone online.
+     *
+     * @param request the request
+     * @param host    the address it came from
+     * @param after   the game info after it, for the answer
+     * @return what happened
+     */
+    public NewGameOutcome startNewGame(de.mkoehler.launchwindow.net.messages.StartNewGameRequest request, String host,
+            java.util.function.Supplier<GameInfoResponse> after) {
+        try {
+            GameMeta current = load();
+            Optional<ServerSettingsResponse> refusal = checkPassword(current, request.password(), host);
+            if (refusal.isPresent()) {
+                return new NewGameOutcome(refusal.get(), false);
+            }
+            if (!version().equals(request.version())) {
+                return new NewGameOutcome(ServerSettingsResponse.failure(ServerSettingsResponse.Status.STALE_SETTINGS,
+                    "The settings changed on the server since you opened them."), false);
+            }
+            if (!de.mkoehler.launchwindow.net.messages.StartNewGameRequest.CONFIRMATION
+                    .equals(request.confirmation().strip())) {
+                return new NewGameOutcome(ServerSettingsResponse.invalid(Map.of("confirm", "Type "
+                    + de.mkoehler.launchwindow.net.messages.StartNewGameRequest.CONFIRMATION + " to confirm.")), false);
+            }
+            Path archive = archiveOldGame();
+            for (Path entry : listing(dataRoot)) {
+                if (!KEPT_FOR_A_NEW_GAME.contains(entry.getFileName().toString())) {
+                    deleteTree(entry);
+                }
+            }
+            current.setGameSeed(new java.security.SecureRandom().nextLong());
+            GameMetaStore.save(metaFile, current, mapper);
+            LOG.log(System.Logger.Level.WARNING, "The admin started a new game from " + host + "; the old one is in "
+                + dataRoot.relativize(archive));
+            return new NewGameOutcome(ServerSettingsResponse.ok(view(current, version(), after.get())), true);
+        } catch (IOException | RuntimeException e) {
+            LOG.log(System.Logger.Level.ERROR, "Couldn't start a new game", e);
+            // The archive comes first, so a wipe that stopped halfway loses nothing: trying again finishes it.
+            return new NewGameOutcome(ServerSettingsResponse.failure(ServerSettingsResponse.Status.SERVER_ERROR,
+                e.getMessage() + ". Try again; if it fails again, restart the server and try once more."), false);
+        }
+    }
+
+    /**
+     * Zips the game about to end into {@value #OLD_GAMES}, its frozen pack included and its turn backups left out,
+     * so a new game started by mistake can be put back by hand (unzip it into a stopped server's data root).
+     */
+    private Path archiveOldGame() throws IOException {
+        Path dir = dataRoot.resolve(OLD_GAMES);
+        Files.createDirectories(dir);
+        String stamp = java.time.LocalDateTime.now(clock).format(java.time.format.DateTimeFormatter
+            .ofPattern("yyyyMMdd-HHmmss", Locale.ROOT));
+        Path zip = dir.resolve("game-" + stamp + ".zip");
+        Path temp = Files.createTempFile(dir, "game-", ".zip.tmp");
+        try {
+            List<Path> files;
+            try (Stream<Path> walk = Files.walk(dataRoot)) {
+                files = walk.filter(Files::isRegularFile).filter(file -> {
+                    String top = dataRoot.relativize(file).getName(0).toString();
+                    return !top.equals(OLD_GAMES) && !top.equals("accounts.json")
+                        && !top.equals(de.mkoehler.launchwindow.server.schedule.TurnBackups.DIR);
+                }).sorted().toList();
+            }
+            try (java.io.OutputStream out = Files.newOutputStream(temp);
+                    java.util.zip.ZipOutputStream zipOut = new java.util.zip.ZipOutputStream(out)) {
+                for (Path file : files) {
+                    StringBuilder name = new StringBuilder();
+                    for (Path part : dataRoot.relativize(file)) {
+                        name.append(name.isEmpty() ? "" : "/").append(part);
+                    }
+                    zipOut.putNextEntry(new java.util.zip.ZipEntry(name.toString()));
+                    Files.copy(file, zipOut);
+                    zipOut.closeEntry();
+                }
+            }
+            Files.move(temp, zip, java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+            return zip;
+        } catch (IOException e) {
+            Files.deleteIfExists(temp);
+            throw e;
+        }
+    }
+
+    private static List<Path> listing(Path dir) throws IOException {
+        try (Stream<Path> entries = Files.list(dir)) {
+            return entries.toList();
+        }
+    }
+
+    private static void deleteTree(Path path) throws IOException {
+        if (Files.isDirectory(path, java.nio.file.LinkOption.NOFOLLOW_LINKS)) {
+            for (Path child : listing(path)) {
+                deleteTree(child);
+            }
+        }
+        Files.delete(path);
     }
 
     private GameMeta load() throws IOException {

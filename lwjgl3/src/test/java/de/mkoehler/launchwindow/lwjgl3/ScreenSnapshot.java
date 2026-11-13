@@ -419,6 +419,8 @@ public final class ScreenSnapshot {
         if ("connect".equals(System.getProperty("shots"))) {
             write(folder, "connect-no-account.png", filledConnect(game), screen -> screen.applyLoginResult(
                 CREDENTIALS, LoginResult.failure(LoginResult.Kind.NO_ACCOUNT, "")));
+            // After a new game (ui-spec.md section 4.22): the banner set before the screen shows.
+            write(folder, "connect-new-game.png", filledConnect(game).sayingNewGame(), null);
             return;
         }
         write(folder, "connect-default.png", new ConnectScreen(game), null);
@@ -435,6 +437,7 @@ public final class ScreenSnapshot {
             CREDENTIALS, LoginResult.failure(LoginResult.Kind.UNREACHABLE, "Connection refused")));
         write(folder, "connect-no-account.png", filledConnect(game), screen -> screen.applyLoginResult(
             CREDENTIALS, LoginResult.failure(LoginResult.Kind.NO_ACCOUNT, "")));
+        write(folder, "connect-new-game.png", filledConnect(game).sayingNewGame(), null);
 
         write(folder, "join-default.png", new JoinScreen(game, CREDENTIALS), null);
         write(folder, "join-selected.png", new JoinScreen(game, CREDENTIALS), screen -> {
@@ -734,6 +737,15 @@ public final class ScreenSnapshot {
             d.showSettingsForShots(before, de.mkoehler.launchwindow.client.screen.ServerSettingsDialog.Section.BREAKS);
             d.editForShots();
             d.showDiscardForShots();
+        });
+        // Starting a new game (ui-spec.md section 4.22): the strongly worded confirmation, empty and typed.
+        writeServerSettings(folder, "server-settings-new-game.png", game, d -> {
+            d.showSettingsForShots(begun, de.mkoehler.launchwindow.client.screen.ServerSettingsDialog.Section.ADMIN);
+            d.confirmNewGameForShots("");
+        });
+        writeServerSettings(folder, "server-settings-new-game-typed.png", game, d -> {
+            d.showSettingsForShots(begun, de.mkoehler.launchwindow.client.screen.ServerSettingsDialog.Section.ADMIN);
+            d.confirmNewGameForShots("NEW GAME");
         });
     }
 

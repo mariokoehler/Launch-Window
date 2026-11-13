@@ -120,6 +120,7 @@ public class RequestDispatcher {
     private java.util.function.IntFunction<String> remoteHosts = id -> "unknown";
     private boolean settingsChanged;
     private boolean packChanged;
+    private boolean newGameStarted;
 
     /**
      * Creates a new dispatcher.
@@ -216,6 +217,9 @@ public class RequestDispatcher {
         }
         if (message instanceof SaveServerSettingsRequest request) {
             return new DispatchResult(handleSaveServerSettings(connectionId, request), false);
+        }
+        if (message instanceof de.mkoehler.launchwindow.net.messages.StartNewGameRequest request) {
+            return new DispatchResult(handleStartNewGame(connectionId, request), false);
         }
         throw new IllegalArgumentException("Unexpected message type: " + message.getClass().getName());
     }
@@ -815,6 +819,57 @@ public class RequestDispatcher {
         boolean changed = packChanged;
         packChanged = false;
         return changed;
+    }
+
+    /**
+     * Returns whether the admin started a new game since the last call, and clears it: the server then rebuilds its
+     * game and tells everyone online.
+     *
+     * @return whether they did
+     */
+    public boolean takeNewGameStarted() {
+        boolean started = newGameStarted;
+        newGameStarted = false;
+        return started;
+    }
+
+    /**
+     * Handles a {@link de.mkoehler.launchwindow.net.messages.StartNewGameRequest}: ends the game and starts a fresh
+     * one ({@code ui-spec.md} &sect;4.22). The server rebuilds its game after this returns
+     * ({@link #takeNewGameStarted()}).
+     *
+     * @param connectionId the connection the request arrived on
+     * @param request      the request
+     * @return the response
+     */
+    public ServerSettingsResponse handleStartNewGame(int connectionId,
+            de.mkoehler.launchwindow.net.messages.StartNewGameRequest request) {
+        if (connectionAccountIds.get(connectionId) == null) {
+            return ServerSettingsResponse.failure(ServerSettingsResponse.Status.NOT_AUTHENTICATED,
+                "Not authenticated - send a HandshakeRequest first.");
+        }
+        if (settings == null) {
+            return ServerSettingsResponse.failure(ServerSettingsResponse.Status.SERVER_ERROR,
+                "This server can't edit its settings.");
+        }
+        GameInfoResponse before;
+        try {
+            before = gameInfo.info();
+        } catch (IOException e) {
+            return ServerSettingsResponse.failure(ServerSettingsResponse.Status.SERVER_ERROR, e.getMessage());
+        }
+        ServerSettingsService.NewGameOutcome outcome = settings.startNewGame(request, remoteHosts.apply(connectionId),
+            () -> {
+                try {
+                    return gameInfo.info();
+                } catch (IOException e) {
+                    return before;
+                }
+            });
+        if (outcome.started()) {
+            newGameStarted = true;
+        }
+        return outcome.response();
     }
 
     /**

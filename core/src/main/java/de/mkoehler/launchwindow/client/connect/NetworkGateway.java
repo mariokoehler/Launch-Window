@@ -98,11 +98,16 @@ public final class NetworkGateway implements ServerGateway {
         return thread;
     });
 
-    /** The session's connection; only the worker thread touches it. {@code null} when logged out. */
-    private NetworkClient client;
+    /**
+     * The session's connection; only the worker thread changes it (KryoNet's thread reads it, to drop a closing
+     * connection's notices). {@code null} when logged out.
+     */
+    private volatile NetworkClient client;
     /** The turn the server last said had resolved, set on KryoNet's thread, taken on the render thread. */
     private final AtomicLong resolvedNotice = new AtomicLong();
     private final java.util.concurrent.atomic.AtomicBoolean settingsNotice =
+        new java.util.concurrent.atomic.AtomicBoolean();
+    private final java.util.concurrent.atomic.AtomicBoolean newGameNotice =
         new java.util.concurrent.atomic.AtomicBoolean();
     /** Who the connection is logged in as; only the worker thread touches it. */
     private Credentials session;
@@ -253,6 +258,19 @@ public final class NetworkGateway implements ServerGateway {
     @Override
     public boolean takeSettingsChangedNotice() {
         return settingsNotice.getAndSet(false);
+    }
+
+    @Override
+    public boolean takeNewGameNotice() {
+        return newGameNotice.getAndSet(false);
+    }
+
+    @Override
+    public void startNewGame(Credentials credentials, String password, String version, String confirmation,
+            Consumer<ServerSettingsResponse> done) {
+        run(() -> serverSettingsOnce(credentials,
+                new de.mkoehler.launchwindow.net.messages.StartNewGameRequest(password, version, confirmation)),
+            message -> ServerSettingsResponse.failure(ServerSettingsResponse.Status.SERVER_ERROR, message), done);
     }
 
     @Override
@@ -486,6 +504,10 @@ public final class NetworkGateway implements ServerGateway {
             if (notice instanceof de.mkoehler.launchwindow.net.messages.ServerSettingsChangedNotice) {
                 settingsNotice.set(true);
             }
+            // Only the session's own connection: a closing one's late notice must not end the next session.
+            if (notice instanceof de.mkoehler.launchwindow.net.messages.NewGameStartedNotice && client == fresh) {
+                newGameNotice.set(true);
+            }
         });
         try {
             fresh.connect(credentials.address().host(), credentials.address().port());
@@ -507,6 +529,8 @@ public final class NetworkGateway implements ServerGateway {
             closeLater(fresh);
             return Optional.of(LoginResult.failure(LoginResult.Kind.FAILED, e.getMessage()));
         }
+        // A new session starts clean: a new game's notice belonged to the session before it.
+        newGameNotice.set(false);
         client = fresh;
         session = credentials;
         return Optional.empty();

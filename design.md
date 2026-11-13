@@ -2398,6 +2398,10 @@ Per game (one per server, §3.9), in the host-edited `game-meta.json`:
   lock once the first agency exists or a turn has resolved, the goals once a turn has resolved, a bot once
   its agency exists. (The lock points, the lockout, the hidden seed and the password's shape are
   unconfirmed, §4.)
+- **Starting a new game** (the user's idea, 2026-11-13; `ui-spec.md` §4.22, G21): from the same dialog, behind a
+  typed "NEW GAME". What `reset_dev_data.cmd` does, from the client and with the server running: the old game is
+  zipped to `data/old-games/`, everything else but the accounts and the settings is deleted, a new random seed is
+  saved, the game is rebuilt in place, and everyone online goes back to Connect to found a new agency.
 - **The announced start date** is an automatic blackout from "server live" to the day before
   the start: the signup window.
 - **A non-resolving day** is simply a day the job doesn't fire; queued actions carry over. The
@@ -2578,15 +2582,15 @@ purpose-built report).
   Headquarters and the VAB as the plan needs, and closes programs and rockets it no longer flies.
   The bots wait only for the components a configuration's steps fly. Also `RaceShock` (two smart
   bots in one game), `RaceLulls`, `IntelligencePlayouts`, `StateSizes` (§2.9).
-- **`PersonnelLifecyclePlayouts`:** the personnel, R&D and mission resolvers on a small fixture
-  catalog, with a bot that hires, trains, pulls out, opens programs, researches and launches
-  through the validated actions.
-- **`CareerCurves`:** rookie-vs-veteran skill curves for tuning the age trade-off (§2.2(c)).
 - **The economy** (the user's question, 2026-11-13, after a play test drowning in money): `EconomyCeiling`
   prices, from the rules alone, the most an agency can spend each season to keep running against what each
   review pays; `-Dplayout.economy=true` on `ContentPackPlayouts` and `-Drace.economy=true` on `RaceShock` keep a
   per-season ledger (`EconomyLedger`: funding, running costs, everything else spent, cash banked), by review,
   before and after the race is won.
+- **`PersonnelLifecyclePlayouts`:** the personnel, R&D and mission resolvers on a small fixture
+  catalog, with a bot that hires, trains, pulls out, opens programs, researches and launches
+  through the validated actions.
+- **`CareerCurves`:** rookie-vs-veteran skill curves for tuning the age trade-off (§2.2(c)).
 
 **Invariants** are checked every season and recomputed independently of the resolver under
 test (never by calling its own predicate), so a clean run is a genuine cross-check: skill and
@@ -2603,10 +2607,6 @@ runs with that in mind; per-run history is in the pre-2026-10-06 design doc (see
   Widen the gap between the floor and the Poor ceiling if unhappy rosters should hire worse.
 - **Idle morale loss is a "sustained neglect" penalty** at typical activity levels, not a
   routine one.
-- **Someone sidelined loses no idle morale** (the user's decision, 2026-10-22): an employee made unavailable by
-  a random event or an R&D decision's secondment can't be given work, so their season's own morale holds
-  (`PersonnelLifecycle`); other morale changes (events, salary, ambitions) still apply.
-
 - **Money stops mattering from the second review** (2026-11-13, 100 smart-bot games alone and 200 races of two):
   while racing, a strong agency leaves 17–32 % of a review's funding unspent and ends 76–96 % of its seasons with
   two or more seasons' funding banked (3–6 seasons, median); a rival barely changes it. After the race, two
@@ -2634,6 +2634,10 @@ runs with that in mind; per-run history is in the pre-2026-10-06 design doc (see
 
   Adopted: knee 0.5, slope 0.3 (user, 2026-11-13; §2.1(d)). `-Drules.flatten=1,1` plays BASPM's line
   again for comparison.
+- **Someone sidelined loses no idle morale** (the user's decision, 2026-10-22): an employee made unavailable by
+  a random event or an R&D decision's secondment can't be given work, so their season's own morale holds
+  (`PersonnelLifecycle`); other morale changes (events, salary, ambitions) still apply.
+
 ### 3.11 Offscreen screenshot tooling for UI checking
 
 **Decided (user, 2026-09-27), built 2026-10-04:** Robot-Rampage's `ScreenSnapshot`
@@ -2782,26 +2786,26 @@ patches (`ui-spec.md` component 8).
 - **Balance points the bots raised** (§2.9): cheap failures reward launching early; idle staff quit
   fast; the shorter games after raises between reviews (a stingier bracket table is the lever); the
   filler bots' money piling up (§5, Backlog).
-
-**Settled, for the record:** a player who doesn't log in before a resolution keeps their
-default: a scheduled mission launches and training continues. Scrubbing and pulling out are
-ordinary actions available until the resolution (user; BASPM's second "launch now?" prompt is
 - **Money stops mattering from the second review** (§3.10's findings, 2026-11-13): answered for now by
   diminishing returns at the top of each review (§2.1(d)); a play test decides whether it's enough. Next lever
   (user): salaries that need raising from time to time, or morale slips, so the department screen gets used.
   Measure a change with `EconomyCeiling` and the playouts' money ledger.
+
+**Settled, for the record:** a player who doesn't log in before a resolution keeps their
+default: a scheduled mission launches and training continues. Scrubbing and pulling out are
+ordinary actions available until the resolution (user; BASPM's second "launch now?" prompt is
 skipped). R&D assignments are standing orders (`baspm.md` §2.1). Tiger Teams became the Expert
 trait (§2.2(c)).
 
 **Unconfirmed numbers awaiting the user's review** (each also flagged in its section):
 - Answer to a rival's First: the 50 % share and counting once (`RivalFirsts.SHARE`, §2.1(e)).
 - Raises between reviews: share 1 (`BudgetProgress.RAISE_SHARE`, §2.1(f)).
+- Diminishing returns at the top: the knee halfway, 30 % of the slope above it, from review 2
+  (`BudgetProgress.KNEE_SHARE`, `TOP_SLOPE`, §2.1(d)).
 - Standing charts: 40 dots, a window of 120 (`server.StandingCache`, §2.1(g)).
 - Skill growth cut by 30 % for training, flying and R&D (§2.2(c)); a flight's unused skills at a third
   (`SkillGrowth.FLIGHT_UNUSED_SKILL_SHARE`, §2.5(g)).
 - Personal skill ceilings, `100 − 0.5 × points above 75` (`SkillGrowth.ceiling`, §2.2(c)).
-- Diminishing returns at the top: the knee halfway, 30 % of the slope above it, from review 2
-  (`BudgetProgress.KNEE_SHARE`, `TOP_SLOPE`, §2.1(d)).
 - Rocket-plane wings: +4 on capsule steps (`rules.RocketPlaneWings`, §2.2(c)).
 - People, phases 1 to 3: trait split 20 / 50 / 30 %, reveal points 2 to 4, affinity weights, team-trait
   and personal-trait effects, bland hints 1 in 4 (`Personality`, `Chemistry`, `TraitEffects`, §2.2(d)).

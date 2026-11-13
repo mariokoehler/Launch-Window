@@ -3109,6 +3109,19 @@ opens with its name and a line:
   mode ("Needs dev mode. For reviewing the archive; saves nothing.").
 - **Admin**: New password (with the eye, which shows both) and Repeat side by side, "At least 8 characters.";
   Make a new one fills both with an `AdminPasswords.generate()` password shown once in a gold box with Copy.
+  Below a rule, **Start a new game** (the user's idea, 2026-11-13; built without a mockup, from the dialog's own
+  pieces): "Ends this game for everyone and starts a fresh one with a new seed. Accounts and these settings
+  stay." and a red-outlined "Start a new game…", off with unsaved changes ("Save or discard your changes first.")
+  or a stale view ("Reload first."). It replaces the dialog with a card like Discard's: eyebrow DANGER, "End this
+  game and start a new one?", in red "Everyone's game ends now, and it can't be undone from here.", then four
+  labelled lines (DELETED the game at turn N with all its agencies, bots included, reports, front pages,
+  standing, result and turn backups; KEPT every account and password, these settings and the admin password;
+  THEN everyone online goes back to Connect and founds a new agency, a new random seed, the first turn on the
+  schedule; SAVED a zip of the old game in the server's old-games folder), "Type NEW GAME to confirm" with a
+  field ("Capitals, as shown."), Keep this game, and "End it and start a new game" (red, off until the field
+  reads NEW GAME). On success the admin, and everyone else online on the server's notice, lands on Connect with
+  the login filled in and an info banner: "A new game has started. The admin ended the last one. Connect to
+  found your agency in the new game." Shots `server-settings-new-game.png`, `server-settings-new-game-typed.png`.
 - **Saving**: the client checks Repeat ("The passwords don't match.") and the seed ("A whole number."), the
   server the rest (§5). Refused: the field framed red with the words under it, the section's "!", the dialog
   jumps to the first one, and the foot says "Nothing was saved. Fix the marked field and save again." Stale: a
@@ -3166,7 +3179,7 @@ The server replies with these codes. The wording below is the spec's; the client
 | Contracts (§4.17; `ContractOutcome`): CONTRACT_ACTIVE / NOT_QUALIFIED / PROGRAM_NOT_OPEN / UNKNOWN_LISTING; closing a program while its contract flies is the existing MISSIONS_IN_FLIGHT | You have an active contract: one at a time. / You can't fly this one: unlock its line first. / Open the program first. / That listing isn't on the board any more. / Can't close while a mission uses it. |
 | The world reacts (§4.18.1, component 28; `SubmitStatementResponse`): TURN_RESOLVED / UNKNOWN_PAGE / REACTION_WINDOW_CLOSED / NOT_A_RIVAL / INVALID_STANCE / QUOTE_TOO_LONG / QUOTE_BAD_CHARACTERS | The turn resolved before that reached the server, so nothing was done. / That front page isn't there any more. / Statements on that First closed when the turn after it resolved. / Only a rival that was in the race when the First was printed can answer it. / Pick one of the five stances. / At most 140 characters. / Only letters, numbers and common punctuation. |
 | Join game (`ClaimSlotResponse.Reason`): AGENCY_NAME_TAKEN / DIRECTOR_NAME_TAKEN / MISSING_FIELDS / ALREADY_CLAIMED / NOT_AUTHENTICATED / SERVER_ERROR | Already taken by another agency. (under the field) / the same / Required. / (client logs in again and opens the agency) / (danger notice with the server's words) |
-| Server settings (§4.22, G21; `ServerSettingsResponse.Status`): WRONG_ADMIN_PASSWORD / ADMIN_LOCKED_OUT / STALE_SETTINGS / INVALID_FIELD / NOT_AUTHENTICATED / SERVER_ERROR | That's not the admin password. / Too many wrong tries. Try again in N minutes. / The settings changed on the server since you opened them. / (under each field, the server's words: "Pick at least one day.", "Not a time: use HH:MM, 00:00 to 23:59.", "Not a time zone.", "A break ends before it starts.", "Not a date: use YYYY-MM-DD.", "That pack isn't on this server.", "At least one goal.", "That goal isn't in this pack: …", "At most 32 characters.", "Already taken by another agency.", "Already taken by another director.", "At least 8 characters.") / (the foot, with the server's words) |
+| Server settings (§4.22, G21; `ServerSettingsResponse.Status`): WRONG_ADMIN_PASSWORD / ADMIN_LOCKED_OUT / STALE_SETTINGS / INVALID_FIELD / NOT_AUTHENTICATED / SERVER_ERROR | That's not the admin password. / Too many wrong tries. Try again in N minutes. / The settings changed on the server since you opened them. / (under each field, the server's words: "Pick at least one day.", "Not a time: use HH:MM, 00:00 to 23:59.", "Not a time zone.", "A break ends before it starts.", "Not a date: use YYYY-MM-DD.", "That pack isn't on this server.", "At least one goal.", "That goal isn't in this pack: …", "At most 32 characters.", "Already taken by another agency.", "Already taken by another director.", "At least 8 characters.", "Type NEW GAME to confirm.") / (the foot, with the server's words) |
 
 ---
 
@@ -3299,6 +3312,18 @@ this spec. All are done except G6 and G1's pack download; each done item names w
     It checks what startup would: the schedule, the breaks, the pack being bundled and loading, the goals in its
     catalog, bot ids, sides and names (32 characters, not taken by an agency or another bot), then writes
     atomically.
+  - **A new game** (`StartNewGameRequest(password, version, confirmation)`, answered by `ServerSettingsResponse`;
+    `ServerSettingsService.startNewGame`): the password, the version (STALE_SETTINGS) and the typed "NEW GAME"
+    (INVALID_FIELD on `confirm`) are checked first. Then the old game is zipped to `data/old-games/game-<time>.zip`
+    (frozen pack included, turn backups and accounts left out; `TurnBackups` leaves `old-games` out of its own
+    zips), everything in the data root but `accounts.json`, `game-meta.json` and `old-games/` is deleted, and a new
+    `SecureRandom` seed is saved. `GameServer` rebuilds the game (frozen pack, bots' slots, scheduler, which starts
+    at turn 1 and never resolves straight away) and sends `NewGameStartedNotice` to every logged-in connection
+    instead of the settings notice. The client (`LaunchWindowGame.leaveForNewGame`, from the dialog, `SessionScreen`
+    and `JoinScreen`) logs out and opens Connect with the banner; a client that missed the notice does the same
+    when a refresh says it has no slot. `GameInfoResponse.gameId` (`GameSeeds.gameKey`, a hash of the seed, never
+    the seed) keys the client's per-game marks (read reports, the result seen, front pages and their fillers,
+    archive pages), so a new game on the same server starts unread; explainers read and the preferences stay.
   - **Applies at once:** the schedule and breaks are read from the file anyway; `RequestDispatcher`'s meta is
     replaced (dev mode, the archive toggle, the goals, the seed); new bots get their agencies
     (`BotPlayers.ensureSlots`). A changed pack makes `GameServer` rebuild its game in place after answering

@@ -345,5 +345,9 @@ public final class MessageRegistry {
         kryo.register(de.mkoehler.launchwindow.net.messages.ServerSettingsResponse.class);
         kryo.register(de.mkoehler.launchwindow.net.messages.ServerSettingsResponse.Status.class);
         kryo.register(de.mkoehler.launchwindow.net.messages.ServerSettingsChangedNotice.class);
+
+        // Starting a new game from the server settings (ui-spec.md section 4.22, 2026-11-13). Never move these lines.
+        kryo.register(de.mkoehler.launchwindow.net.messages.StartNewGameRequest.class);
+        kryo.register(de.mkoehler.launchwindow.net.messages.NewGameStartedNotice.class);
     }
 }

@@ -168,6 +168,16 @@ public final class JoinScreen extends StageScreen {
     }
 
     @Override
+    public void render(float delta) {
+        // The admin started a new game meanwhile: begin again from Connect, in the new game (ui-spec.md 4.22).
+        if (game.gateway().takeNewGameNotice()) {
+            game.leaveForNewGame(credentials);
+            return;
+        }
+        super.render(delta);
+    }
+
+    @Override
     public void dispose() {
         if (speech != null) {
             speech.dispose();

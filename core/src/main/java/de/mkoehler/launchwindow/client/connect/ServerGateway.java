@@ -222,6 +222,32 @@ public interface ServerGateway {
     }
 
     /**
+     * Ends the game for everyone and starts a fresh one ({@code ui-spec.md} &sect;4.22). A write: never repeated if
+     * the connection breaks. By default it fails at once.
+     *
+     * @param credentials  who and where
+     * @param password     the admin password
+     * @param version      the settings' version the admin was looking at
+     * @param confirmation the words the admin typed
+     * @param done         called on the render thread with the server's answer
+     */
+    default void startNewGame(Credentials credentials, String password, String version, String confirmation,
+            Consumer<de.mkoehler.launchwindow.net.messages.ServerSettingsResponse> done) {
+        done.accept(de.mkoehler.launchwindow.net.messages.ServerSettingsResponse.failure(
+            de.mkoehler.launchwindow.net.messages.ServerSettingsResponse.Status.SERVER_ERROR, "No server."));
+    }
+
+    /**
+     * Returns whether the server said, unasked, that the admin started a new game, and forgets it: the session's
+     * agency is gone, so the client goes back to Connect. Stubs keep the default.
+     *
+     * @return whether a notice came since the last call
+     */
+    default boolean takeNewGameNotice() {
+        return false;
+    }
+
+    /**
      * Ends the session: closes its connection. The next {@link #logIn} opens a new one.
      */
     void logOut();
