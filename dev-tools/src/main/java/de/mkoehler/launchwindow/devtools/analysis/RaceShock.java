@@ -113,6 +113,8 @@ public final class RaceShock {
         if (economy) {
             nasaHarness.ledger = new EconomyLedger();
             sovietHarness.ledger = new EconomyLedger();
+            nasaHarness.people = new PeopleLedger();
+            sovietHarness.people = new PeopleLedger();
         }
         List<Race> races = new ArrayList<>();
         for (int game = 0; game < GAMES; game++) {
@@ -186,6 +188,8 @@ public final class RaceShock {
             if (economy && game == GAMES - 1) {
                 nasaHarness.ledger.print("NASA, smart bot, racing the Soviets");
                 sovietHarness.ledger.print("the Soviets, smart bot, racing NASA");
+                nasaHarness.people.print("NASA, smart bot, racing the Soviets");
+                sovietHarness.people.print("the Soviets, smart bot, racing NASA");
             }
             races.add(new Race(nasaLands, sovietLands, nasaRate32, sovietRate32,
                 nasaBehind ? nasaRates : sovietRates, nasaBehind ? sovietRates : nasaRates, credits[0], credits[1],

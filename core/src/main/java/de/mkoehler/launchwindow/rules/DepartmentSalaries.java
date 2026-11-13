@@ -37,7 +37,9 @@ public final class DepartmentSalaries {
         /** The group has nobody in it. */
         EMPTY_DEPARTMENT,
         /** The group's salaries were already adjusted this season. */
-        ALREADY_ADJUSTED
+        ALREADY_ADJUSTED,
+        /** Nobody in the group is paid below their expectation ({@link PayExpectations#meetExpectations}). */
+        NOBODY_UNDERPAID
     }
 
     /**
@@ -130,6 +132,8 @@ public final class DepartmentSalaries {
             return AdjustOutcome.ALREADY_ADJUSTED;
         }
         for (Personnel person : roster) {
+            // A raise or cut leaves the expectation where it was (design.md 2.2(c), pay expectations).
+            PayExpectations.pin(person);
             person.setSalary(adjustedSalary(person.getSalary(), percent));
             person.setMorale(adjustedMorale(person.getMorale(), percent));
         }
@@ -157,5 +161,6 @@ public final class DepartmentSalaries {
      */
     public static void startNewSeason(PlayerSnapshot snapshot) {
         snapshot.getSalaryAdjustedGroups().clear();
+        snapshot.getRaisedThisSeason().clear();
     }
 }

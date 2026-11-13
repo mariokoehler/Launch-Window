@@ -349,5 +349,9 @@ public final class MessageRegistry {
         // Starting a new game from the server settings (ui-spec.md section 4.22, 2026-11-13). Never move these lines.
         kryo.register(de.mkoehler.launchwindow.net.messages.StartNewGameRequest.class);
         kryo.register(de.mkoehler.launchwindow.net.messages.NewGameStartedNotice.class);
+
+        // Pay expectations (design.md section 2.2(c), 2026-11-13). Never move these lines.
+        kryo.register(de.mkoehler.launchwindow.actions.RaiseSalaryAction.class);
+        kryo.register(de.mkoehler.launchwindow.actions.MeetExpectationsAction.class);
     }
 }

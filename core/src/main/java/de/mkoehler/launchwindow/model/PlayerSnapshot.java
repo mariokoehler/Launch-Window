@@ -78,6 +78,7 @@ public class PlayerSnapshot {
     private int launchesThisWindow;
     private Map<String, Integer> unavailableComponents = new LinkedHashMap<>();
     private List<String> salaryAdjustedGroups = new ArrayList<>();
+    private List<String> raisedThisSeason = new ArrayList<>();
     private List<String> usedPressStoryIds = new ArrayList<>();
     private List<String> usedEventStoryIds = new ArrayList<>();
     private PendingDecision pendingDecision;
@@ -695,6 +696,27 @@ public class PlayerSnapshot {
     public void setSalaryAdjustedGroups(List<String> salaryAdjustedGroups) {
         Objects.requireNonNull(salaryAdjustedGroups, "salaryAdjustedGroups must not be null");
         this.salaryAdjustedGroups = new ArrayList<>(salaryAdjustedGroups);
+    }
+
+    /**
+     * Returns the people raised on their own this season, by id: once a season each ({@code design.md}
+     * &sect;2.2(c), pay expectations). Cleared by every season pass. The live list is returned.
+     *
+     * @return the ids, never {@code null}
+     */
+    public List<String> getRaisedThisSeason() {
+        return raisedThisSeason;
+    }
+
+    /**
+     * Sets the people raised on their own this season.
+     *
+     * @param raisedThisSeason the ids
+     * @throws NullPointerException if {@code raisedThisSeason} is {@code null}
+     */
+    public void setRaisedThisSeason(List<String> raisedThisSeason) {
+        Objects.requireNonNull(raisedThisSeason, "raisedThisSeason must not be null");
+        this.raisedThisSeason = new ArrayList<>(raisedThisSeason);
     }
 
     /**

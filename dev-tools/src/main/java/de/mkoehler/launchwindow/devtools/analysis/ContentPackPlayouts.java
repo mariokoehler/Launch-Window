@@ -413,6 +413,8 @@ public final class ContentPackPlayouts {
     private boolean keepPlaying;
     /** The money ledger, when one is kept (EconomyLedger): every season of every game. */
     EconomyLedger ledger;
+    /** The people ledger, kept beside the money one while racing ({@link PeopleLedger}). */
+    PeopleLedger people;
 
     /**
      * Plays games for a fixed number of seasons, past the race's end, keeping the money ledger.
@@ -424,6 +426,7 @@ public final class ContentPackPlayouts {
      */
     public EconomyLedger economy(int games, int seasons, long seed) {
         ledger = new EconomyLedger();
+        people = new PeopleLedger();
         keepPlaying = true;
         try {
             economyReport = run(games, seasons, seed);
@@ -672,6 +675,13 @@ public final class ContentPackPlayouts {
                     }
                 }
             }
+            if (people != null && !wonRace) {
+                int resigned = (int) seasonEvents.stream()
+                    .filter(de.mkoehler.launchwindow.rules.PersonnelDeparture.class::isInstance)
+                    .map(de.mkoehler.launchwindow.rules.PersonnelDeparture.class::cast)
+                    .filter(left -> left.reason() == de.mkoehler.launchwindow.rules.DepartureReason.RESIGNED).count();
+                people.record(season + 1, snapshot, resigned, seasonEvents);
+            }
             if (sizeLargest != null) {
                 measure(snapshot, season);
             }
@@ -911,6 +921,11 @@ public final class ContentPackPlayouts {
             openRocket(snapshot, rocket, tally);
         }
         ensureStaff(snapshot, target, random, tally);
+        // Pay what people expect, as far as a season's funding in reserve allows (design.md 2.2(c)).
+        // -Dbot.pay=false plays a director who never raises anyone, to measure what neglect costs.
+        if (!"false".equals(System.getProperty("bot.pay"))) {
+            de.mkoehler.launchwindow.rules.PayExpectations.botPolicy(snapshot, snapshot.getFundingRatePerSeason());
+        }
         if (smart && SMART_OPEN_AHEAD) {
             openAhead(snapshot, target, rocket, tally);
         }
@@ -2564,6 +2579,7 @@ public final class ContentPackPlayouts {
         if (Boolean.getBoolean("playout.economy")) {
             harness.economy(Integer.getInteger("playout.games", 200), Integer.getInteger("playout.seasons", 160),
                 Long.getLong("bot.seed", 42L)).print(bot + " bot, alone, " + args[0] + ", " + BudgetTrial.label());
+            harness.people.print(bot + " bot, alone, " + args[0] + ", " + BudgetTrial.label());
             Report played = harness.economyReport;
             System.out.println("Won the race: " + played.completedByArchetype() + " of " + played.gamesByArchetype());
             played.completionSeasons().forEach((archetype, list) -> {

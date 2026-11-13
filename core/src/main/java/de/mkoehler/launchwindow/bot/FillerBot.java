@@ -186,6 +186,7 @@ public final class FillerBot {
                     rocket(snapshot, rocket, out);
                 }
                 staff(snapshot, target, out);
+                pay(snapshot, out);
                 research(snapshot, target, rocket, out);
                 boolean ready = hardwareReady(snapshot, target, rocket, launchAt);
                 if (ready && snapshot.getInProgressMissions().values().stream()
@@ -198,6 +199,18 @@ public final class FillerBot {
             }
             intelligenceOperation(snapshot, out);
             return out;
+        }
+
+        /** Pay what people expect, a season's funding kept in reserve (design.md 2.2(c), pay expectations). */
+        private void pay(PlayerSnapshot snapshot, Map<String, PlayerAction> out) {
+            de.mkoehler.launchwindow.rules.PayExpectations.BotStep step = de.mkoehler.launchwindow.rules.PayExpectations
+                .nextBotStep(snapshot, snapshot.getFundingRatePerSeason());
+            if (step == null) {
+                return;
+            }
+            out.put("pay-" + step.group() + "-" + step.personnelId(), step.personnelId() == null
+                ? new de.mkoehler.launchwindow.actions.MeetExpectationsAction(step.group())
+                : new de.mkoehler.launchwindow.actions.RaiseSalaryAction(step.personnelId(), 0));
         }
 
         /** An R&amp;D decision waiting: an option at random, never the hands-on puzzle; the default if that's refused. */

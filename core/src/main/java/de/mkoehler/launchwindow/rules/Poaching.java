@@ -536,6 +536,8 @@ public final class Poaching {
         recruit.setRetention(Retention.DEFAULT);
         recruit.setIntelFind(null);
         recruit.setSalary(offer.newSalary());
+        // A recruit expects what they were hired for (design.md 2.2(c), pay expectations).
+        recruit.setExpectedSalary(offer.newSalary());
         if (recruit instanceof SetSpecialist engineer) {
             engineer.setRdTargetComponentId(null);
             engineer.setRdSlot(null);
@@ -567,7 +569,10 @@ public final class Poaching {
                         person.setSalaryBeforeMatches(person.getSalary());
                     }
                     person.getApproachedBy().add(finding.rivalId());
+                    PayExpectations.pin(person);
                     person.setSalary(offer.newSalary());
+                    // A matched offer is what they're worth now.
+                    person.setExpectedSalary(Math.max(person.expectedSalary(), offer.newSalary()));
                     person.setLoyalty(Math.clamp(person.getLoyalty() + MATCH_LOYALTY, 0, 100));
                     person.setLastApproachedTurn(gameTurn);
                     person.getCareer().add(new CareerEntry(gameTurn, CareerEntry.Kind.OFFER, finding.rivalAgency(),

@@ -39,6 +39,11 @@ final class BudgetTrial {
             de.mkoehler.launchwindow.rules.BudgetProgress.setFlattening(Double.parseDouble(parts[0].trim()),
                 Double.parseDouble(parts[1].trim()));
         }
+        // -Drules.pay=all, or some of market,performance,ceiling,upside: pay expectations' parts (design.md 2.2(c)).
+        String pay = System.getProperty("rules.pay", "");
+        boolean all = pay.contains("all");
+        de.mkoehler.launchwindow.rules.PayExpectations.setParts(all || pay.contains("market"),
+            all || pay.contains("performance"), all || pay.contains("ceiling"), all || pay.contains("upside"));
         BudgetSchedule game = BudgetSchedule.baspmClose();
         String spec = System.getProperty("rules.budget");
         if (spec == null || spec.isBlank() || spec.equals("game")) {
@@ -71,7 +76,9 @@ final class BudgetTrial {
         String flatten = System.getProperty("rules.flatten");
         String ranges = spec == null || spec.isBlank() || spec.equals("game") ? "the game's funding"
             : "trial funding " + (spec.equals("trial") ? TRIAL : spec);
-        return flatten == null || flatten.isBlank() ? ranges
+        String pay = System.getProperty("rules.pay", "");
+        String flat = flatten == null || flatten.isBlank() ? ranges
             : ranges + ", flattened above " + flatten.replace(",", " of the range to a slope of ");
+        return pay.isBlank() ? flat : flat + ", pay expectations: " + pay;
     }
 }

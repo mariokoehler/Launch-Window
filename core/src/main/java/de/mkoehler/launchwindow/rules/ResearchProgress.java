@@ -289,7 +289,7 @@ public final class ResearchProgress {
             double skillBefore = skillBeforeGain.get(specialist);
             double nominalGain = SkillGrowth.rdReliabilityGain(rawAmount, startReliability,
                 cap, skillBefore) * snapshot.getRdResultsMultiplier() * owned.getRdFactor() * chemistry
-                * TraitEffects.rdGain(specialist, componentId, false);
+                * TraitEffects.rdGain(specialist, componentId, false) * PayExpectations.skillFactor(specialist);
             nominalGains[slot] = nominalGain;
             nominalTotal += nominalGain;
         }

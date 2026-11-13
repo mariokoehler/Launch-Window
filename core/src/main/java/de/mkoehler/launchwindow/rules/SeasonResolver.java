@@ -68,6 +68,8 @@ public final class SeasonResolver {
         TEAMS,
         /** Careers: tenure, loyalty, the career record and ambitions (design.md 2.2(d), phase 4). */
         CAREERS,
+        /** Pay expectations: the review's rise and the turn's performance (design.md 2.2(c)). */
+        PAY,
         /** R&D decisions: last turn's settled, a new one perhaps offered (ui-spec.md component 26). */
         DECISIONS,
         /** Fresh candidate pools. */
@@ -286,6 +288,7 @@ public final class SeasonResolver {
             case RANDOM_EVENTS -> RandomEvents.advanceSeason(snapshot, context.roster(), random, context.gameTurn(),
                 context.seasonsElapsed());
             case TRAINING -> TrainingProgress.advanceSeason(snapshot, random);
+            case PAY -> PayExpectations.advanceSeason(snapshot, (int) context.gameTurn(), context.seasonsElapsed());
             case RESEARCH -> ResearchProgress.advanceSeason(snapshot, context.catalog(), random);
             case DECISIONS -> RdDecisions.advanceSeason(snapshot, context.catalog(),
                 context.catalog().rules().decisions(), context.gameTurn());

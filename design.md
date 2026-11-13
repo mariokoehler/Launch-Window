@@ -1095,6 +1095,39 @@ season unchanged. Tiger Teams' live per-step choice doesn't fit, so it was redes
   **Once per department per season** (user, 2026-10-06): `PlayerSnapshot.salaryAdjustedGroups`
   records the groups changed during the open turn, a second change is refused
   (`ALREADY_ADJUSTED`), and the season pass clears the record.
+- **Pay expectations** (user, 2026-11-13; `rules.PayExpectations`; *every number unconfirmed*, and **off
+  until its screens are built**: `-Drules.pay` turns its parts on in the playouts). Morale was easy because
+  work alone fills it to 100 and high morale bought nothing; now pay sets how far work can fill it, and
+  morale changes how well people work.
+  - **The expectation:** each person's `expectedSalary`, set to their salary when hired (a recruit's new
+    salary when poached; a save without it reads as their salary). It rises at **every funding review** by
+    10 % for everyone (the market), and with **performance**, the turn it happens (from the season's career
+    lines, never recounted): a flight, console shift or CAPCOM shift without a failed step +2 %; a First
+    (crew or ground) +10 %; the Expert trait +10 %; a fulfilled ambition +5 %; an engineer's finished R&D
+    stint +1 % per 5 reliability points added, pro rata (engineers never fly or become Experts). In one turn at most
+    +15 % from performance. A matched poaching offer raises the expectation to the new salary; any other raise
+    leaves it alone, and a cut doesn't lower it (so a cut now hurts twice).
+  - **The ceiling:** morale can't rise above 100 − 3 × the percentage someone is underpaid. A review unanswered
+    leaves people 9 % under (ceiling 73, no longer working at their best), two 17 % (48, working worse), three
+    25 % (25, resigning). Work fills morale only up to the ceiling;
+    above it, morale drifts down 2 a season. Drift follows the season's morale rules: halved for Steady, none
+    while sidelined. Paid at or above expectation: no ceiling.
+  - **What morale does:** from 80 up, a person's skill counts 5 % more on missions (crew, consoles, CAPCOM)
+    and in R&D; below 50, 5 % less. Applied where the skill is read, so mission plans, looking ahead and the
+    advisor show it too.
+  - **Raising one person** (new): from their page, to their expectation or by +5 / +10 %, once per person per
+    season; morale +1 per percent and loyalty by half, as a department raise. Raises only: cuts stay a
+    department action. **Manage department** keeps its flat percentage and gains "bring everyone up to
+    expectations" (each underpaid person to their own expectation, morale by their own percentage), which uses
+    the department's once a season.
+  - **Shown:** pay against expectation on the person page, the department's underpaid count and the cost of
+    meeting it in Manage department, and in the turn report when expectations rose (the review) and who is
+    underpaid (`ui-spec.md`, to be specified).
+  - **Bots** (`PayExpectations.botPolicy`/`nextBotStep`, shared by the playout bots and `FillerBot`): anyone 5 %
+    or more under, the department is brought up to expectations when the funds above a season's funding cover two
+    seasons of it, else its best people first.
+  - **Meeting an expectation has no cap** (one person or a department); a percentage raise of one person is capped
+    at +50 %, as the department's slider.
 - **CAPCOM:** the astronaut on CAPCOM grows the skills they used that season, as a controller
   does (confirmed 2026-10-06).
 - **PR duty for astronauts** (user, 2026-10-06; `rules.PrDuty`): a **standing order** for an idle
@@ -2634,6 +2667,24 @@ runs with that in mind; per-run history is in the pre-2026-10-06 design doc (see
 
   Adopted: knee 0.5, slope 0.3 (user, 2026-11-13; §2.1(d)). `-Drules.flatten=1,1` plays BASPM's line
   again for comparison.
+- **Pay expectations, measured** (2026-11-13; §2.2(c); `RaceShock -Drace.economy=true -Drules.pay=…`, the
+  people ledger `PeopleLedger`; `-Dbot.pay=false` plays a director who never raises anyone; the ceiling at 3 points
+  a percent, bots raising anyone 5 % under). NASA's side, while racing, reviews 2 to 4:
+
+  | | Morale (mean) | 80+ / below 50 | Resignations a season | Salary bill at review 4 | First landing, quartiles (mean) |
+  |---|---|---|---|---|---|
+  | Today's rules | 94 | 86–87 % / 0 % | 0.01–0.02 | 2,290 | 77 / 80 / 85 (82.1) |
+  | All on, bots pay | 87–94 | 73–89 % / 0–2 % | 0.01–0.05 | 3,780 | 76 / 81 / 84 (83.4) |
+  | No morale upside, bots pay | 87–93 | 73–86 % / 1–3 % | 0.03–0.09 | 3,590 | 78 / 82 / 89 (86.6) |
+  | All on, nobody ever raised | 62–69 | 14–22 % / 14–26 % | 0.8–1.0 | 2,205 | 93 / 101 / 113 (105.7) |
+
+  Paying costs about 65 % more in salaries by review 4 and money runs tighter (flush seasons 7–31 %, from
+  19–61 %); the morale upside about pays it back in the race (one season slower on average with it, four
+  without). Neglect loses about a person a season from the second review and costs the race over 20 seasons.
+  Expectation rises per agency over a race: about 225 for Firsts (crew and ground, ~15 people each), 190 for
+  flights, 265 for R&D stints, 15 for ambitions, plus the reviews; the paying bots raise someone in most seasons,
+  each department 4 to 9 times a review (they answer every 5 % gap; a player can leave gaps under 7 %, which still
+  allow 80+). Watch: Firsts lift whole mission teams, so a crew flying many may end up expecting far more.
 - **Someone sidelined loses no idle morale** (the user's decision, 2026-10-22): an employee made unavailable by
   a random event or an R&D decision's secondment can't be given work, so their season's own morale holds
   (`PersonnelLifecycle`); other morale changes (events, salary, ambitions) still apply.

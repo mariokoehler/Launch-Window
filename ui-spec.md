@@ -3134,6 +3134,40 @@ the date field and calendar, the section list with its marks, the password field
 box, a 16 px checkbox with a patch row. **New icons** (`assets-raw/svg/ui/make_ui_icons.py`): eye, eye_off, copy,
 calendar, trash, plus, dice, spark; on the UI Asset Sheet since 2026-11-13.
 
+### 4.23 Pay expectations *(the user's idea, 2026-11-13; to be mocked up, canvas `Launch Window — Pay`)*
+**Purpose:** show what each person expects to be paid against what they get, and let the player raise one person or
+bring a department up to expectations. Rules in `design.md` §2.2(c), "Pay expectations" (`rules.PayExpectations`;
+every number unconfirmed, read from its constants, G7). Built on existing screens; nothing here is a new screen.
+
+- **Person page (§4.14), the Pay block,** replacing the plain salary line in "Who they are", under morale and
+  loyalty:
+  - "PAY" label; "$ 42 a season · expects $ 51" (expects in gold when underpaid by 5 % or more, muted otherwise).
+  - A thin bar from 0 to the expectation, filled to the salary (navy, the gap gold); paid as expected or more, the
+    bar is full and the line says "Paid as expected".
+  - When underpaid: "Underpaid by 18 %: morale can't rise above 46." (the ceiling, `moraleCeiling`: 3 points a
+    percent, so one review unanswered keeps someone below 80, two below 50, three at the resignation line).
+  - The morale bar gains a 2 px tick at the ceiling, like the skill ceiling's (component 31), and its tooltip says
+    what morale does at work: "From 80, skills count 5 % more on missions and in R&D; below 50, 5 % less."
+  - **Raise** actions (the row actions' style): "Meet expectation (+$ 9)", "+5 %", "+10 %". Each opens a small
+    confirm: the new salary, the extra per season, morale now → after (+1 a percent), loyalty → after. Off with a
+    reason when already raised this season ("Raised this season"), and Meet expectation off when paid as expected.
+- **Manage department (component 13)** gains a second mode above the slider, as two segments: "Same raise for
+  everyone" (today's slider) and **"Bring everyone up to expectations"**: "7 of 15 underpaid · + $ 312 a season ·
+  average morale 71 → 83", a list of the underpaid (portrait, name, paid → expects, morale → after) and OK. Off
+  with "Nobody is underpaid." when nobody is. Both modes use the department's once a season.
+- **Rosters (component 11):** an "Underpaid" chip (gold, the percentage in its tooltip) in the state column, and
+  the department header's line gains "N underpaid".
+- **Turn report, People:** at a review, "Pay expectations rose 10 % with the funding review: 23 people now
+  underpaid." with a link to each department; each performance rise as a line in the person's name with its causes
+  (`ExpectationRose.reasons`: "A. Reyes expects 10 % more: a First, the Expert trait."), grouped like the ambition
+  lines. The person page shows only where pay stands now; the report is where the causes are told.
+- **Advisor (component 24):** a hint when anyone's morale has fallen to their pay's ceiling below 60: "N people
+  are underpaid enough to hurt their work."
+- **Help:** the Salaries and Morale topics explain expectations, the ceiling and morale at work, numbers as tokens.
+
+The game keeps the rule off (`PayExpectations.setParts`) until these are built; the playouts turn it on with
+`-Drules.pay=all`.
+
 ## 5. Refusal reasons (for toasts and inline messages)
 
 The server replies with these codes. The wording below is the spec's; the client's own is in

@@ -838,7 +838,8 @@ public final class MissionProgress {
             Astronaut astronaut = findById(snapshot.getAstronauts(), slotHolder(mission.getCrewSlotIds(),
                 involvement.slot()));
             if (astronaut != null) {
-                sum += involvement.percent() / 100.0 * astronaut.getSkill(involvement.skill());
+                sum += involvement.percent() / 100.0 * astronaut.getSkill(involvement.skill())
+                    * PayExpectations.skillFactor(astronaut);
             }
         }
         return sum;
@@ -886,15 +887,17 @@ public final class MissionProgress {
         }
         if (slot.kind() == StaffingSlot.Kind.ASTRONAUT) {
             Astronaut astronaut = findById(snapshot.getAstronauts(), holderId);
-            return astronaut == null ? 0 : astronaut.getSkill(AstronautSkill.valueOf(slot.skill()));
+            return astronaut == null ? 0 : astronaut.getSkill(AstronautSkill.valueOf(slot.skill()))
+                * PayExpectations.skillFactor(astronaut);
         }
         MissionControlOfficer officer = findById(snapshot.getMissionControlOfficers(), holderId);
         if (officer == null) {
             return 0;
         }
-        return slot.flightDirectorSlot()
+        // Morale counts on the consoles too (design.md 2.2(c), pay expectations).
+        return (slot.flightDirectorSlot()
             ? officer.flightDirectorSkill()
-            : officer.getSkill(MissionControlSkill.valueOf(slot.skill()));
+            : officer.getSkill(MissionControlSkill.valueOf(slot.skill()))) * PayExpectations.skillFactor(officer);
     }
 
     private static String slotHolder(List<String> slotIds, int slot) {

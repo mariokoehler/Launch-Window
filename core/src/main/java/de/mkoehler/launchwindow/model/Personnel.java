@@ -54,6 +54,7 @@ public abstract class Personnel {
     private Integer lastApproachedTurn;
     private List<String> approachedBy = new ArrayList<>();
     private Double salaryBeforeMatches;
+    private Double expectedSalary;
     private Retention retention = Retention.DEFAULT;
 
     /**
@@ -622,6 +623,34 @@ public abstract class Personnel {
      */
     public void setSalaryBeforeMatches(Double salaryBeforeMatches) {
         this.salaryBeforeMatches = salaryBeforeMatches;
+    }
+
+    /**
+     * Returns the salary this person expects (design.md section 2.2(c), pay expectations), or {@code null} when it
+     * was never set: a save from before it, read as their salary ({@link #expectedSalary()}).
+     *
+     * @return the expectation, or {@code null}
+     */
+    public Double getExpectedSalary() {
+        return expectedSalary;
+    }
+
+    /**
+     * Sets the salary this person expects.
+     *
+     * @param expectedSalary the expectation, or {@code null} for their salary
+     */
+    public void setExpectedSalary(Double expectedSalary) {
+        this.expectedSalary = expectedSalary;
+    }
+
+    /**
+     * Returns the salary this person expects, their salary when none was set.
+     *
+     * @return the expectation
+     */
+    public double expectedSalary() {
+        return expectedSalary == null ? salary : expectedSalary;
     }
 
     /**

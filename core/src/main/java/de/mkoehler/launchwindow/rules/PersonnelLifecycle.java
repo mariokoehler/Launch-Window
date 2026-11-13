@@ -291,7 +291,9 @@ public final class PersonnelLifecycle {
         boolean sidelined = idle && person.getUnavailableSeasons() > 0;
         int moraleDelta = sidelined ? 0 : TraitEffects.seasonMorale(person,
             idle ? -IDLE_MORALE_LOSS_PER_SEASON : BUSY_MORALE_GAIN_PER_SEASON);
-        person.setMorale(clamp(person.getMorale() + moraleDelta, MORALE_MIN, MORALE_MAX));
+        // Pay sets how far work can fill morale (design.md 2.2(c), pay expectations); sidelined, nothing moves.
+        int morale = sidelined ? person.getMorale() : PayExpectations.withCeiling(person, moraleDelta);
+        person.setMorale(clamp(morale, MORALE_MIN, MORALE_MAX));
         person.setSeasonsSinceTraining(TraitEffects.inTraining(person) ? 0 : person.getSeasonsSinceTraining() + 1);
         advanceAge(person);
 

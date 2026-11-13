@@ -98,7 +98,8 @@ public final class ResearchPlanning {
                 ? (SkillGrowth.rdSlotBandLower(bands, slot) + SkillGrowth.rdSlotBandUpper(bands, slot)) / 2.0
                 : SkillGrowth.drawRdSlotRawAmount(bands, slot, random);
             nominal += SkillGrowth.rdReliabilityGain(raw, current, cap, skills[slot]) * multiplier
-                * TraitEffects.rdGain(team[slot], component.id(), true, seasonsAhead);
+                * TraitEffects.rdGain(team[slot], component.id(), true, seasonsAhead)
+                * PayExpectations.skillFactor(team[slot]);
         }
         if (nominal <= 0) {
             return 0;
