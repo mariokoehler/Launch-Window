@@ -3117,7 +3117,7 @@ opens with its name and a line:
 **New pieces** (in the dialog, from existing tokens; no new colours): weekday chips, the select and its popover,
 the date field and calendar, the section list with its marks, the password field with an eye, the "shown once"
 box, a 16 px checkbox with a patch row. **New icons** (`assets-raw/svg/ui/make_ui_icons.py`): eye, eye_off, copy,
-calendar, trash, plus, dice, spark.
+calendar, trash, plus, dice, spark; on the UI Asset Sheet since 2026-11-13.
 
 ## 5. Refusal reasons (for toasts and inline messages)
 
