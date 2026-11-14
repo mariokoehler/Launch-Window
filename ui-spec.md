@@ -177,7 +177,10 @@ On the right: a prestige chip, a game-date chip ("1958 · S2") and a next-resolu
     total salary per season); and buttons to the sub-screens: **Hire** and
     **Manage department**. A 230 px Traits column after the state (`RosterCells.traits`, the
     revealed traits, component 20), with "Still getting to know each other" under any chips while
-    someone is inside the reveal window; the name opens the person page (`RosterCells.who`, §4.14).
+    someone is inside the reveal window; the name and the portrait both open the person page
+    (`RosterCells.person`, §4.14), and hovering either shows it's a link (the user's request, 2026-11-14; straight in
+    libGDX): the name turns navy and underlined, the portrait gets a 2 px navy frame and lightens to 80 %, both at
+    once. `-Dshots=rosterhover`.
 
     **Row actions:**
     - **Train:** opens the training dialog (component 12);

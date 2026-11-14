@@ -219,10 +219,11 @@ public final class AstronautComplexScreen extends ChromeScreen {
     private Table row(Astronaut astronaut) {
         Table row = new Table();
         row.pad(Theme.SPACE_3, Theme.SPACE_4, Theme.SPACE_3, Theme.SPACE_4);
-        row.add(RosterCells.avatar(ui, astronaut)).size(48f).padRight(Theme.SPACE_4);
-        row.add(RosterCells.who(ui, astronaut, "AGE " + astronaut.getAge(), () -> game.setScreen(
-            new PersonScreen(game, astronaut, () -> new AstronautComplexScreen(game))))).width(RosterCells.NAME_WIDTH).left()
-            .padRight(Theme.SPACE_4);
+        // The portrait and the name both open the person page, and show it on hover (ui-spec.md 4.14).
+        RosterCells.PersonCells cells = RosterCells.person(ui, astronaut, "AGE " + astronaut.getAge(), () -> game.setScreen(
+            new PersonScreen(game, astronaut, () -> new AstronautComplexScreen(game))));
+        row.add(cells.avatar()).size(48f).padRight(Theme.SPACE_4);
+        row.add(cells.who()).width(RosterCells.NAME_WIDTH).left().padRight(Theme.SPACE_4);
 
         String text = AstronautCorps.stateText(astronaut, session.state(), session.catalog());
         boolean active = astronaut.getUnavailableSeasons() == 0

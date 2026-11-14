@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.ui.Container;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
@@ -78,6 +79,96 @@ final class RosterCells {
     static final float TRAITS_WIDTH = 230f;
 
     /**
+     * A roster row's portrait and name cell, both opening the person page.
+     *
+     * @param avatar the portrait, framed in navy while hovered
+     * @param who    the name and age line, the name navy and underlined while hovered
+     */
+    record PersonCells(Stack avatar, Table who) {
+    }
+
+    /**
+     * Builds a roster row's portrait and name cell ({@code ui-spec.md} &sect;4.14, "Rosters"): clicking either
+     * opens the person page, and hovering either marks both as a link (the user's request, 2026-11-14): the name
+     * turns navy and underlined, the portrait gets a navy frame and lightens.
+     *
+     * @param ui      the UI kit
+     * @param person  the person
+     * @param ageLine the caption under the name
+     * @param open    opens the person page
+     * @return the two cells
+     */
+    static PersonCells person(UiKit ui, Personnel person, String ageLine, Runnable open) {
+        Table who = who(ui, person, ageLine, open);
+        Label name = who.findActor(NAME);
+        Stack nameStack = (Stack) name.getParent();
+        Image underline = new Image(ui.solid(Theme.NAVY));
+        Table under = new Table();
+        under.bottom().left();
+        under.add(underline).height(1f).width(name.getPrefWidth());
+        under.setTouchable(Touchable.disabled);
+        underline.setVisible(false);
+        nameStack.add(under);
+
+        Stack avatar = new Stack();
+        Table portrait = avatar(ui, person);
+        portrait.setTouchable(Touchable.disabled);
+        Image frame = new Image(ui.rect(new Color(0f, 0f, 0f, 0f), Theme.NAVY, 2f));
+        frame.setTouchable(Touchable.disabled);
+        frame.setVisible(false);
+        avatar.add(portrait);
+        avatar.add(frame);
+        avatar.setTouchable(Touchable.enabled);
+        avatar.addListener(ChromeScreen.clicked(open));
+        ui.tooltip(avatar, person.getName(), "Opens the person page: skills, traits and relationships.");
+
+        Label.LabelStyle plain = name.getStyle();
+        Label.LabelStyle linked = new Label.LabelStyle(plain.font, Theme.NAVY);
+        Runnable on = () -> {
+            name.setStyle(linked);
+            underline.setVisible(true);
+            frame.setVisible(true);
+            portrait.getColor().a = HOVER_FADE;
+        };
+        Runnable off = () -> {
+            name.setStyle(plain);
+            underline.setVisible(false);
+            frame.setVisible(false);
+            portrait.getColor().a = 1f;
+        };
+        name.addListener(hover(on, off));
+        avatar.addListener(hover(on, off));
+        return new PersonCells(avatar, who);
+    }
+
+    /** A hovered portrait's opacity: lighter on the white card, so the initials' navy square shows it too. */
+    private static final float HOVER_FADE = 0.8f;
+
+    /** The name label's actor name in {@link #who}, so {@link #person} can find it. */
+    static final String NAME = "roster-name";
+
+    /** Calls {@code on} when the pointer enters an actor and {@code off} when it leaves, ignoring its children. */
+    private static com.badlogic.gdx.scenes.scene2d.InputListener hover(Runnable on, Runnable off) {
+        return new com.badlogic.gdx.scenes.scene2d.InputListener() {
+            @Override
+            public void enter(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y, int pointer,
+                              com.badlogic.gdx.scenes.scene2d.Actor fromActor) {
+                if (pointer == -1 && (fromActor == null || !fromActor.isDescendantOf(event.getListenerActor()))) {
+                    on.run();
+                }
+            }
+
+            @Override
+            public void exit(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y, int pointer,
+                             com.badlogic.gdx.scenes.scene2d.Actor toActor) {
+                if (pointer == -1 && (toActor == null || !toActor.isDescendantOf(event.getListenerActor()))) {
+                    off.run();
+                }
+            }
+        };
+    }
+
+    /**
      * Builds a person's name and age line; clicking the name opens their person page
      * ({@code ui-spec.md} &sect;4.14).
      *
@@ -92,15 +183,18 @@ final class RosterCells {
         who.left();
         who.defaults().left();
         Label name = ui.label(person.getName(), Theme.TextStyle.HEADING_SM, Theme.INK);
+        name.setName(NAME);
         name.setTouchable(Touchable.enabled);
         name.addListener(ChromeScreen.clicked(open));
         ui.tooltip(name, person.getName(), "Opens the person page: skills, traits and relationships.");
+        // In a stack, so a hover underline can sit under it (person).
+        Stack named = new Stack(name);
         com.badlogic.gdx.scenes.scene2d.ui.Image mark = RetentionCards.mark(ui, person);
         if (mark == null) {
-            who.add(name).padBottom(2f).row();
+            who.add(named).padBottom(2f).row();
         } else {
             Table line = new Table();
-            line.add(name).padRight(6f);
+            line.add(named).padRight(6f);
             line.add(mark).size(13f);
             who.add(line).padBottom(2f).row();
         }

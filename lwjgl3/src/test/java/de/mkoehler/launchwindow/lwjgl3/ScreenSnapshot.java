@@ -386,6 +386,10 @@ public final class ScreenSnapshot {
             archiveShots(folder, game);
             return;
         }
+        if ("rosterhover".equals(System.getProperty("shots"))) {
+            rosterHoverShots(folder, game);
+            return;
+        }
         if ("investigations".equals(System.getProperty("shots"))) {
             investigationShots(folder, game);
             return;
@@ -641,6 +645,7 @@ public final class ScreenSnapshot {
         standingShots(folder, game);
         serverSettingsShots(folder, game);
         investigationShots(folder, game);
+        rosterHoverShots(folder, game);
     }
 
     /** The settings before the game begins: two breaks (one past), the standard race, no bots. */
@@ -1169,6 +1174,77 @@ public final class ScreenSnapshot {
         game.session().keepFrontPages(List.of(page, other));
         write(folder, "investigations-page.png", new FrontPageScreen(game, List.of(page), () -> { }, false), null);
         write(folder, "investigations-page-2.png", new FrontPageScreen(game, List.of(other), () -> { }, false), null);
+    }
+
+    /**
+     * The rosters' links (ui-spec.md 4.14, the user's request 2026-11-14): each department's roster with its first
+     * person's name hovered, the name navy and underlined and the portrait framed; and a portrait hovered.
+     */
+    private static void rosterHoverShots(File folder, LaunchWindowGame game) {
+        String hash = ContentPackHash.ofClasspath("content/standard", ScreenSnapshot.class.getClassLoader());
+        GameInfoResponse info = GameInfoResponse.success("standard", hash, List.of(), 23, true,
+            6 * 3_600_000L, 0L, null, List.of(), List.of(), 0);
+        PlayerSnapshot me = new PlayerSnapshot("Orion Spaceworks", Archetype.NASA, 18_400, 2_140, 3_000, 23);
+        me.setDirectorName("Clara Voss");
+        String[][] people = {{"1", "Ruth Hale", "nasa_001"}, {"2", "Mikhail Brandt", "nasa_002"},
+            {"3", "Ana Ruiz", null}};
+        for (String[] person : people) {
+            SetSpecialist engineer = new SetSpecialist("e" + person[0], person[1], 36, 70, 50);
+            Astronaut astronaut = new Astronaut("a" + person[0], person[1], 34, 70, 50);
+            de.mkoehler.launchwindow.model.MissionControlOfficer officer =
+                new de.mkoehler.launchwindow.model.MissionControlOfficer("c" + person[0], person[1], 40, 70, 50);
+            engineer.setPortraitId(person[2]);
+            astronaut.setPortraitId(person[2]);
+            officer.setPortraitId(person[2]);
+            me.getSetSpecialists().add(engineer);
+            me.getAstronauts().add(astronaut);
+            me.getMissionControlOfficers().add(officer);
+        }
+        startSession(game, me, info);
+        write(folder, "roster-hover-set.png", new SetCentreScreen(game),
+            screen -> hover(screen.stage().getRoot(), "Ruth Hale", false));
+        write(folder, "roster-hover-astronauts.png", new AstronautComplexScreen(game),
+            screen -> hover(screen.stage().getRoot(), "Ruth Hale", false));
+        write(folder, "roster-hover-controllers.png", new MissionControlScreen(game),
+            screen -> hover(screen.stage().getRoot(), "Ruth Hale", false));
+        write(folder, "roster-hover-portrait.png", new SetCentreScreen(game),
+            screen -> hover(screen.stage().getRoot(), "Mikhail Brandt", true));
+    }
+
+    /**
+     * Moves the pointer onto a roster row's name, or its portrait: fires an enter event at the actor, as the stage
+     * would.
+     */
+    private static void hover(com.badlogic.gdx.scenes.scene2d.Group root, String name, boolean portrait) {
+        java.util.ArrayDeque<com.badlogic.gdx.scenes.scene2d.Actor> todo = new java.util.ArrayDeque<>();
+        todo.add(root);
+        while (!todo.isEmpty()) {
+            com.badlogic.gdx.scenes.scene2d.Actor actor = todo.removeFirst();
+            if (actor instanceof com.badlogic.gdx.scenes.scene2d.ui.Label label && "roster-name".equals(label.getName())
+                    && label.getText().toString().equals(name)) {
+                com.badlogic.gdx.scenes.scene2d.Actor target = label;
+                if (portrait) {
+                    // The row's first cell is the portrait's stack.
+                    com.badlogic.gdx.scenes.scene2d.Actor row = label;
+                    while (!(row.getParent() instanceof com.badlogic.gdx.scenes.scene2d.ui.Table table
+                            && table.getChildren().first() != row
+                            && table.getChildren().first() instanceof com.badlogic.gdx.scenes.scene2d.ui.Stack)) {
+                        row = row.getParent();
+                    }
+                    target = ((com.badlogic.gdx.scenes.scene2d.ui.Table) row.getParent()).getChildren().first();
+                }
+                com.badlogic.gdx.scenes.scene2d.InputEvent event = new com.badlogic.gdx.scenes.scene2d.InputEvent();
+                event.setType(com.badlogic.gdx.scenes.scene2d.InputEvent.Type.enter);
+                event.setStage(target.getStage());
+                event.setPointer(-1);
+                target.fire(event);
+                return;
+            }
+            if (actor instanceof com.badlogic.gdx.scenes.scene2d.Group group) {
+                group.getChildren().forEach(todo::add);
+            }
+        }
+        throw new IllegalStateException("no roster name " + name);
     }
 
     /**
