@@ -107,6 +107,9 @@ first live game starts in January 2027. Many numbers are still unconfirmed: the 
   and takes no contributions (user).
 - **Commits** are GPG-signed. If signing fails, start Kleopatra
   (`C:\Program Files (x86)\Gpg4win\bin\kleopatra.exe`) and retry; never `--no-gpg-sign`.
+- **Commit and push finished work to `master` without asking** (user, 2026-11-14): once a task is complete,
+  tested and documented, commit it and push it, then say so. Release tags (`vX.Y.Z`) still need the user's
+  go-ahead, since they build and publish the client and server.
 - **The GitHub repo** (`mariokoehler/Launch-Window`) is public since 2026-10-28 (the user, for the wiki):
   everything pushed is published, so the hard rule below matters doubly.
 - **After a change, say what it needs:** client only; rebuild client and server together (a changed
