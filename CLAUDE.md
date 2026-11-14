@@ -64,6 +64,8 @@ first live game starts in January 2027. Many numbers are still unconfirmed: the 
   startup, and can start a new game from there (`ui-spec.md` §4.22, G21).
 - Pay expectations: people expect raises (reviews, good work); being underpaid caps morale, and morale changes
   how well people work; raise one person or a whole department (`design.md` §2.2(c), `ui-spec.md` §4.23).
+- Incident investigations: a failure's own investigation, led by an engineer, may win back part of the lost
+  reliability; a lost crew's independent board reports on the paper (`design.md` §2.14, `ui-spec.md` §4.24).
 
 ## How we work
 
@@ -250,7 +252,7 @@ mvn -pl dev-tools compile exec:exec@handson         # any hands-on level's puzzl
   (`-Dexec.args=standard` for the full pack, which plays the Moon race; add `ahead` for the bot that
   works ahead, `side` for the one that also flies side missions, or `smart` for the best player, whose parts switch with `-Dbot.*` properties (`Bot.SMART`'s Javadoc; `-Dbot.roads=<nasa>,<soviet>` plays each road to the Moon, `-Dbot.slowGames=true` compares the slowest games with the fastest), `-Dexec.args="standard side"`)
   (`-Dexec.args="standard side decisions"` plays with the R&D decisions and reports how often they come)
-  (`RaceShock` plays NASA against the Soviets in one game, the answer to rivals' Firsts off and on, `-Drace.shares=0,0.5`, or publishing findings never and always, `-Drace.publish=never,always`; both it and `ContentPackPlayouts` take `-Drules.raiseShare=0` to turn off raises between reviews and `-Drules.findingBonus=0` to turn off the findings' bonus)
+  (`RaceShock` plays NASA against the Soviets in one game, the answer to rivals' Firsts off and on, `-Drace.shares=0,0.5`, or publishing findings never and always, `-Drace.publish=never,always`; both it and `ContentPackPlayouts` take `-Drules.raiseShare=0` to turn off raises between reviews and `-Drules.findingBonus=0` to turn off the findings' bonus; `ContentPackPlayouts` takes `-Drules.investigations=off` and prints the investigations it led)
   (money: `-Dplayout.economy=true` keeps a per-season ledger, played past the race (`-Dplayout.seasons`, `-Dplayout.games`); `RaceShock` takes `-Drace.economy=true`; `EconomyCeiling` prices the most an agency can spend against each review, from the rules alone; all three take `-Drules.budget=<bottom>-<top>,...` for other review ranges and `-Drules.flatten=<knee>,<slope>` for another flattening, `1,1` being BASPM's straight line; `-Drules.pay=none` (or some of `market,performance,ceiling,upside`) turns pay expectations off, with a people ledger beside the money one, and `-Dbot.pay=false` plays a bot that never raises anyone)
   (also `PersonnelLifecyclePlayouts`, `CareerCurves`, `StateSizes` (it takes the pack too), `IntelligencePlayouts`, `RaceLulls` (the Moon race's lulls with R&D tuned; `-Dexec.args="standard ahead+contracts 1.0 0.0"` plays with contracts against three simulated rivals); `design.md` §3.10).
 - **Releasing** (ported from Robot-Rampage; its and StarWars' CLAUDE.md hold the gotchas):
@@ -370,11 +372,13 @@ cd assets && java --enable-native-access=ALL-UNNAMED -cp "../lwjgl3/target/class
   `theories.json` (`TheoriesTest`), `memorial-pages.json` (`MemorialPagesTest`), `foreign-hardware.json`
   (`ForeignHardwareTest`: every program and rocket an entry, a role up to 46 characters), `moon-roads.json`
   (`RoadsToMoonTest`), `archive.json` (`ArchiveTest`), `concepts.json` (`ConceptsTest`), `explainers.json`
-  (`ExplainersTest`), `help.json` (`HelpTest`), `replay-sounds.json` (`ReplaySoundsTest`: every take listed
+  (`ExplainersTest`), `help.json` (`HelpTest`), `investigation-causes.json` (`InvestigationCausesTest`: every group and
+  phase a failing step can land on has causes, none blames a crew), `replay-sounds.json` (`ReplaySoundsTest`: every take listed
   and credited; loops OGG or WAV, never MP3) and `replay-clips.json` (`ReplayClipsTest`: every rule to its
   three clips and sidecars).
 - **Ids in saved state are never renamed or reused:** turn reports store story ids, printed pages their
-  story, reaction, theory and memorial line ids, saved state decision, press-story and client ids.
+  story, reaction, theory and memorial line ids, saved state decision, press-story and client ids, and
+  investigation cause, factor and board-story ids.
 - Help's `handsOn.*` tokens quote the first hands-on level in `decisions.json` (rounds, slots, the
   expert's cost): a later level with a different shape needs the help text reworded.
 - A finding's kinds are step ids without numbering or a/b (`Findings.kind`); `FindingsTest` fails on a

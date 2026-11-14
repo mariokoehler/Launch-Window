@@ -114,7 +114,14 @@ public final class Refusals {
         Map.entry("ROCKET_CLASS_TOO_LARGE", "Upgrade the VAB to build this rocket class."),
         Map.entry("UNKNOWN_ROCKET", "That rocket doesn't exist in this game."),
         Map.entry("MAX_LEVEL", "Already at the top level."),
-        Map.entry("ALREADY_UPGRADING", "Already upgrading."));
+        Map.entry("ALREADY_UPGRADING", "Already upgrading."),
+        // Incident investigations (design.md 2.14).
+        Map.entry("NO_INCIDENT", "That failure can't be investigated any more."),
+        Map.entry("ALREADY_STARTED", "Its investigation has started already."),
+        Map.entry("NOT_STARTED", "Its investigation hasn't started."),
+        Map.entry("UNKNOWN_LEAD", "No such engineer."),
+        Map.entry("LEAD_NOT_FREE",
+            "That engineer isn't free to lead it: only someone idle, on R&D or in training past basic can."));
 
     /**
      * Not instantiable; this class only holds the wording.

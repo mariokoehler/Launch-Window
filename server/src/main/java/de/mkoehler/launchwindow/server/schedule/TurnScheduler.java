@@ -16,6 +16,8 @@ import de.mkoehler.launchwindow.persistence.PlayerStateService;
 import de.mkoehler.launchwindow.rules.ContractMarket;
 import de.mkoehler.launchwindow.rules.FindingPublications;
 import de.mkoehler.launchwindow.rules.MemorialPrinter;
+import de.mkoehler.launchwindow.rules.ReportPrinter;
+import de.mkoehler.launchwindow.content.InvestigationCauses;
 import de.mkoehler.launchwindow.rules.SciencePrinter;
 import de.mkoehler.launchwindow.content.MemorialPages;
 import de.mkoehler.launchwindow.content.Theories;
@@ -278,7 +280,8 @@ public class TurnScheduler {
      * rivals' statements on the turn before's Firsts (&sect;4.18.1, G17) and the science pages of the theories
      * settled this turn (&sect;4.18.2, G18), and keeps them all in {@code frontpages.json} at once. The crews lost
      * this turn are recorded in {@code losses/turn-N.json} for the next turn to answer, and the memorial pages of
-     * those lost in the turn before are printed, first of all (&sect;4.18.3, G19).
+     * those lost in the turn before are printed, first of all (&sect;4.18.3, G19), then the independent boards'
+     * reports issued this turn ({@code design.md} &sect;2.14(b)).
      *
      * @param gameTurn the turn just resolved
      * @param meta     the game's configuration, for its seed
@@ -313,6 +316,9 @@ public class TurnScheduler {
         }
         List<FrontPage> pages = new ArrayList<>(MemorialPrinter.print(Math.toIntExact(gameTurn), meta.getGameSeed(),
             LossStore.load(dataRoot, mapper, gameTurn - 1), statements, named, MemorialPages.standard(), words));
+        // The boards' reports issued this turn (design.md 2.14(b)), after the memorials.
+        pages.addAll(ReportPrinter.print(Math.toIntExact(gameTurn), meta.getGameSeed(), turns,
+            InvestigationCauses.standard(), words));
         pages.addAll(followUps(gameTurn, meta, services, words, statements));
         pages.addAll(FrontPagePrinter.print(Math.toIntExact(gameTurn), meta.getGameSeed(), agencies, words,
             goal -> context.catalog().goal(goal).isPresent()));

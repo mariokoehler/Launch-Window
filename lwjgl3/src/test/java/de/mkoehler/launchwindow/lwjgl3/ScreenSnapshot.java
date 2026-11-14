@@ -386,6 +386,10 @@ public final class ScreenSnapshot {
             archiveShots(folder, game);
             return;
         }
+        if ("investigations".equals(System.getProperty("shots"))) {
+            investigationShots(folder, game);
+            return;
+        }
         if ("findings".equals(System.getProperty("shots"))) {
             findingShots(folder, game);
             return;
@@ -636,6 +640,7 @@ public final class ScreenSnapshot {
         roadsShots(folder, game);
         standingShots(folder, game);
         serverSettingsShots(folder, game);
+        investigationShots(folder, game);
     }
 
     /** The settings before the game begins: two breaks (one past), the standard race, no bots. */
@@ -1044,6 +1049,126 @@ public final class ScreenSnapshot {
         report = fundsMoved(report);
         game.session().keepReport(report);
         write(folder, "raise-report.png", new TurnReportScreen(game, report), null);
+    }
+
+    /**
+     * Incident investigations (design.md 2.14, ui-spec.md 4.24): the report's card with an offer, a found cause,
+     * an undetermined one and a board opened; the choose-a-lead dialog; an investigation under way; a board's
+     * report on the owner's report; and the board's front page.
+     */
+    private static void investigationShots(File folder, LaunchWindowGame game) {
+        game.useFrontPageMarksInMemory(new java.util.HashSet<>());
+        String hash = ContentPackHash.ofClasspath("content/standard", ScreenSnapshot.class.getClassLoader());
+        GameInfoResponse info = GameInfoResponse.success("standard", hash, List.of(), 23, true,
+            6 * 3_600_000L, 0L, null, List.of(), List.of(), 0);
+        PlayerSnapshot me = new PlayerSnapshot("Orion Spaceworks", Archetype.NASA, 18_400, 2_140, 3_000, 23);
+        me.setDirectorName("Clara Voss");
+        me.getOpenedProgramIds().add("explorer-1");
+        me.getMissionComponents().put("explorer-1-satellite", new OwnedMissionComponent(61.2, 3));
+        me.getMissionComponents().put("jupiter-c", new OwnedMissionComponent(72.4, 3));
+        String[][] people = {{"e1", "Ruth Hale", "90"}, {"e2", "Mikhail Brandt", "68"},
+            {"e3", "Konstantin Alexandropoulos", "45"}, {"e4", "Ana Ruiz", "30"}};
+        for (String[] person : people) {
+            SetSpecialist engineer = new SetSpecialist(person[0], person[1], 36, 70, 50);
+            for (SetSkill skill : SetSkill.values()) {
+                engineer.setSkill(skill, 25);
+            }
+            engineer.setSkill(SetSkill.ROCKETS, Double.parseDouble(person[2]));
+            engineer.setSkill(SetSkill.SPACE_PROBES, Double.parseDouble(person[2]) - 10);
+            me.getSetSpecialists().add(engineer);
+        }
+        SetSpecialist researching = me.getSetSpecialists().get(0);
+        researching.setAssignmentState(de.mkoehler.launchwindow.model.AssignmentState.ASSIGNED);
+        researching.setRdTargetComponentId("jupiter-c");
+        researching.setRdSlot(0);
+        SetSpecialist trainee = me.getSetSpecialists().get(3);
+        trainee.setAssignmentState(de.mkoehler.launchwindow.model.AssignmentState.IN_TRAINING);
+        trainee.setTrainingKind(de.mkoehler.launchwindow.model.TrainingKind.ADVANCED);
+        trainee.setTrainingTargetSkill(SetSkill.ROCKETS);
+        trainee.setTrainingSeasonsTotal(3);
+        trainee.setTrainingSeasonsCompleted(1);
+        de.mkoehler.launchwindow.model.Incident offered = new de.mkoehler.launchwindow.model.Incident("m5",
+            de.mkoehler.launchwindow.model.Incident.Kind.AGENCY, 22, "explorer-1-orbit", "04-ascent", List.of(
+                new de.mkoehler.launchwindow.model.Incident.Part("jupiter-c", 70, 7.3),
+                new de.mkoehler.launchwindow.model.Incident.Part("explorer-1-satellite", 30, 2.6)), "jupiter-c",
+            List.of(), List.of(), null, null, null, 0, 0, 0, 0);
+        me.getIncidents().add(offered);
+        startSession(game, me, info);
+        TurnReport report = TurnReport.build(me, me, List.of(
+            new de.mkoehler.launchwindow.rules.InvestigationOffered("m5", "explorer-1-orbit", "04-ascent", 9.9, 24),
+            new de.mkoehler.launchwindow.rules.InvestigationConcluded("m2", "explorer-1-orbit", "03-launch", "e2",
+                "Mikhail Brandt", true, "rocket-turbopump-bearing", "jupiter-c", List.of(
+                    new de.mkoehler.launchwindow.rules.InvestigationConcluded.Recovery("jupiter-c", 4.1),
+                    new de.mkoehler.launchwindow.rules.InvestigationConcluded.Recovery("explorer-1-satellite", 0.8)),
+                5),
+            new de.mkoehler.launchwindow.rules.InvestigationConcluded("m3", "explorer-1-orbit", "05-deployment",
+                "e3", "Konstantin Alexandropoulos", false, null, "explorer-1-satellite", List.of(), 0),
+            new de.mkoehler.launchwindow.rules.OfficialInvestigationOpened("m4", "gemini-spacewalk", "04-ascent", 26)),
+            22, game.session().catalog());
+        game.session().keepReport(report);
+        write(folder, "investigations-report.png", new TurnReportScreen(game, report), null);
+        write(folder, "investigations-dialog.png", new TurnReportScreen(game, report),
+            screen -> screen.chooseLead("m5"));
+
+        de.mkoehler.launchwindow.rules.Investigations.start(me, game.session().catalog(), "m5", "e1", 7);
+        startSession(game, me, info);
+        game.session().keepReport(report);
+        write(folder, "investigations-started.png", new TurnReportScreen(game, report), null);
+        write(folder, "investigations-set-centre.png", new SetCentreScreen(game), null);
+        // The next turn: the offer is still open, and the latest report lists it (its own report is a turn back).
+        me.getIncidents().set(0, offered);
+        researching.setAssignmentState(de.mkoehler.launchwindow.model.AssignmentState.ASSIGNED);
+        researching.setRdTargetComponentId("jupiter-c");
+        researching.setRdSlot(0);
+        startSession(game, me, GameInfoResponse.success("standard", hash, List.of(), 24, true,
+            6 * 3_600_000L, 0L, null, List.of(), List.of(), 0));
+        TurnReport next = TurnReport.build(me, me, List.of(), 23, game.session().catalog());
+        game.session().keepReport(next);
+        write(folder, "investigations-still-open.png", new TurnReportScreen(game, next), null);
+        write(folder, "investigations-help.png", new TurnReportScreen(game, next),
+            screen -> screen.openHelp().select("investigations"));
+        SetSpecialist veteran = me.getSetSpecialists().get(1);
+        veteran.getCareer().add(new de.mkoehler.launchwindow.model.CareerEntry(22,
+            de.mkoehler.launchwindow.model.CareerEntry.Kind.INVESTIGATION, "explorer-1-orbit", "03-launch", "FOUND",
+            4.9, 0));
+        veteran.getCareer().add(new de.mkoehler.launchwindow.model.CareerEntry(18,
+            de.mkoehler.launchwindow.model.CareerEntry.Kind.INVESTIGATION, "explorer-1-orbit", "05-deployment",
+            "UNDETERMINED", 0, 0));
+        write(folder, "investigations-person.png", new de.mkoehler.launchwindow.client.screen.PersonScreen(game, veteran, () -> new SetCentreScreen(game)),
+            null);
+
+        PlayerSnapshot own = new PlayerSnapshot("Orion Spaceworks", Archetype.NASA, 16_940, 7_210, 3_000, 27);
+        own.setDirectorName("Clara Voss");
+        List<FrontPage.Lost> crew = List.of(
+            new FrontPage.Lost("Ana Reyes", 38, "nasa_001", "a1", 2, 0, 28, List.of()),
+            new FrontPage.Lost("Lev Marek", 32, "nasa_003", "a3", 1, 0, 6, List.of()));
+        for (FrontPage.Lost lost : crew) {
+            own.getMemorial().add(new de.mkoehler.launchwindow.model.MemorialEntry(lost.name(), lost.age(), 22,
+                de.mkoehler.launchwindow.model.MemorialEntry.Cause.MISSION, "gemini-spacewalk", "04-ascent",
+                lost.portraitId(), lost.personnelId(), java.util.Map.of(), List.of(), 15, List.of()));
+        }
+        GameInfoResponse later = GameInfoResponse.success("standard", hash, List.of(), 27, true,
+            6 * 3_600_000L, 0L, null, List.of(), List.of(), 0);
+        startSession(game, own, later);
+        TurnReport issued = TurnReport.build(own, own, List.of(
+            new de.mkoehler.launchwindow.rules.OfficialReportIssued("m4", "gemini-spacewalk", "04-ascent", 22,
+                "craft-stuck-vent", "factor-earlier-signs", "gemini-capsule", List.of("a1", "a3"),
+                List.of("Ana Reyes", "Lev Marek"))), 26, game.session().catalog());
+        game.session().keepReport(issued);
+        write(folder, "investigations-board-report.png", new TurnReportScreen(game, issued), null);
+        FrontPage.Loss loss = new FrontPage.Loss("m4", 22, "k-orion", "Orion Spaceworks", "Clara Voss",
+            "gemini-spacewalk", "04-ascent", crew, List.of(), List.of());
+        FrontPage.Achiever orion = new FrontPage.Achiever("Orion Spaceworks", "Clara Voss",
+            List.of("Ana Reyes", "Lev Marek"));
+        FrontPage page = new FrontPage("26-report-1", "", 26, "board-names-cause", "Grey skies, a cold wind",
+            List.of(), List.of(orion), List.of(), FrontPage.Kind.REPORT, null, List.of(), null,
+            new FrontPage.Report(loss, "craft-stuck-vent", "factor-earlier-signs", "gemini-capsule"));
+        FrontPage other = new FrontPage("26-report-2", "", 26, "board-what-went-wrong", "Grey skies, a cold wind",
+            List.of(), List.of(orion), List.of(), FrontPage.Kind.REPORT, null, List.of(), null,
+            new FrontPage.Report(loss, "rocket-pogo", "factor-concerns", "jupiter-c"));
+        game.session().keepFrontPages(List.of(page, other));
+        write(folder, "investigations-page.png", new FrontPageScreen(game, List.of(page), () -> { }, false), null);
+        write(folder, "investigations-page-2.png", new FrontPageScreen(game, List.of(other), () -> { }, false), null);
     }
 
     /**

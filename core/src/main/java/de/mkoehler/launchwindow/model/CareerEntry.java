@@ -65,7 +65,12 @@ public record CareerEntry(int turn, Kind kind, String ref, String note, String o
         /** Stayed when a rival made an offer (poaching). */
         OFFER,
         /** Earned rocket-plane wings: {@code ref} is the configuration flown. */
-        WINGS
+        WINGS,
+        /**
+         * Led an incident investigation ({@code design.md} &sect;2.14): {@code ref} is the configuration that
+         * failed, {@code note} the step, {@code outcome} {@code FOUND} or {@code UNDETERMINED}.
+         */
+        INVESTIGATION
     }
 
     /**

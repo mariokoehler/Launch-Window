@@ -81,7 +81,9 @@ import de.mkoehler.launchwindow.model.PlayerSnapshot;
     @JsonSubTypes.Type(value = de.mkoehler.launchwindow.actions.HandsOnAction.class, name = "handsOn"),
     @JsonSubTypes.Type(value = de.mkoehler.launchwindow.actions.PublishFindingAction.class, name = "publishFinding"),
     @JsonSubTypes.Type(value = de.mkoehler.launchwindow.actions.RaiseSalaryAction.class, name = "raiseSalary"),
-    @JsonSubTypes.Type(value = de.mkoehler.launchwindow.actions.MeetExpectationsAction.class, name = "meetExpectations")
+    @JsonSubTypes.Type(value = de.mkoehler.launchwindow.actions.MeetExpectationsAction.class, name = "meetExpectations"),
+    @JsonSubTypes.Type(value = de.mkoehler.launchwindow.actions.StartInvestigationAction.class, name = "startInvestigation"),
+    @JsonSubTypes.Type(value = de.mkoehler.launchwindow.actions.CancelInvestigationAction.class, name = "cancelInvestigation")
 })
 public abstract class PlayerAction {
 

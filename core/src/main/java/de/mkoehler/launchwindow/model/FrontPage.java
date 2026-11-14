@@ -8,7 +8,8 @@ import java.util.List;
  * First, the turn it was reached in, the story drawn for it, and who made it), or the follow-up page
  * that prints the rivals' statements about one ({@link Kind#REACTIONS}, &sect;4.18 "The world reacts",
  * G17), a theory of the day settled ({@link Kind#SCIENCE}, &sect;4.18.2), or a crew lost in flight
- * ({@link Kind#MEMORIAL}, &sect;4.18.3). Printed once by the server at a resolution, kept in the game's
+ * ({@link Kind#MEMORIAL}, &sect;4.18.3), or an independent board's report on one ({@link Kind#REPORT},
+ * {@code design.md} &sect;2.14(b)). Printed once by the server at a resolution, kept in the game's
  * {@code frontpages.json}, and sent to every player. Agency names only, never account ids.
  *
  * @param id             the page's id, {@code <turn>-<goal-id>}, or {@code <turn>-<goal-id>-reactions}
@@ -27,11 +28,12 @@ import java.util.List;
  * @param reactions      a follow-up's statements, in the order the article tells them; a memorial page's
  *                       condolences
  * @param memorial       a memorial page's lost crew and the agency's statement, or {@code null}
+ * @param report         a board's report: the crew, the cause and the factor, or {@code null}
  * @author Mario Koehler
  */
 public record FrontPage(String id, String goalId, int gameTurn, String storyId, String weather,
                         List<String> foldedGoalIds, List<Achiever> achievers, List<String> rivals,
-                        Kind kind, String reactsTo, List<Reaction> reactions, Memorial memorial) {
+                        Kind kind, String reactsTo, List<Reaction> reactions, Memorial memorial, Report report) {
 
     /** A follow-up page's id ends in this, after the First page's own id. */
     public static final String REACTIONS_SUFFIX = "-reactions";
@@ -45,6 +47,25 @@ public record FrontPage(String id, String goalId, int gameTurn, String storyId, 
         rivals = rivals == null ? new ArrayList<>() : new ArrayList<>(rivals);
         kind = kind == null ? Kind.FIRST : kind;
         reactions = reactions == null ? new ArrayList<>() : new ArrayList<>(reactions);
+    }
+
+    /**
+     * A First's page.
+     *
+     * @param id            the page's id
+     * @param goalId        the First's goal
+     * @param gameTurn      the turn it was reached in
+     * @param storyId       the story's id
+     * @param weather       the ear's weather line
+     * @param foldedGoalIds other Firsts told on this page
+     * @param achievers     the agencies that made it
+     * @param rivals        up to two other agencies the article names
+     */
+    public FrontPage(String id, String goalId, int gameTurn, String storyId, String weather,
+                     List<String> foldedGoalIds, List<Achiever> achievers, List<String> rivals, Kind kind,
+                     String reactsTo, List<Reaction> reactions, Memorial memorial) {
+        this(id, goalId, gameTurn, storyId, weather, foldedGoalIds, achievers, rivals, kind, reactsTo, reactions,
+            memorial, null);
     }
 
     /**
@@ -135,6 +156,15 @@ public record FrontPage(String id, String goalId, int gameTurn, String storyId, 
     }
 
     /**
+     * Returns whether this is an independent board's report on a lost crew ({@code design.md} &sect;2.14(b)).
+     *
+     * @return whether it is
+     */
+    public boolean reportPage() {
+        return kind == Kind.REPORT;
+    }
+
+    /**
      * Returns whether the page tells a First, its own or folded in. Only a First's page does: a follow-up is
      * about the First, not the news of it, and a science page about a theory.
      *
@@ -164,7 +194,9 @@ public record FrontPage(String id, String goalId, int gameTurn, String storyId, 
         /** A theory of the day settled by a flight (ui-spec.md section 4.18.2); its story id is the theory's. */
         SCIENCE,
         /** A crew lost in flight, printed the turn after the loss (ui-spec.md section 4.18.3). */
-        MEMORIAL
+        MEMORIAL,
+        /** An independent board's report on a lost crew, printed when it's issued (design.md section 2.14(b)). */
+        REPORT
     }
 
     /**
@@ -283,6 +315,18 @@ public record FrontPage(String id, String goalId, int gameTurn, String storyId, 
             withheldGoalIds = withheldGoalIds == null ? new ArrayList<>() : new ArrayList<>(withheldGoalIds);
             firstGoalIds = firstGoalIds == null ? new ArrayList<>() : new ArrayList<>(firstGoalIds);
         }
+    }
+
+    /**
+     * What a board's report page tells ({@code design.md} &sect;2.14(b)): the loss, as a memorial page's, and what
+     * the board found, by ids in {@code investigation-causes.json}.
+     *
+     * @param loss        the loss it reports on; its turn is the accident's
+     * @param causeId     the cause
+     * @param factorId    the contributing factor
+     * @param componentId the component the cause names
+     */
+    public record Report(Loss loss, String causeId, String factorId, String componentId) {
     }
 
     /**

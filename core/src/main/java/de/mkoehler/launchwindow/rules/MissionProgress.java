@@ -214,6 +214,8 @@ public final class MissionProgress {
         // prestige (design.md §2.11).
         long tierTotal = mission.isContract() ? 0 : MissionPrestige.tierTotal(configuration, tier);
         boolean crewLost = false;
+        List<String> lostCrewIds = List.of();
+        List<String> lostCrewNames = List.of();
         long seasonPrestige = 0;
         // Where this season's goals start, so a lost crew's can be taken back (withholdGoals).
         int seasonEvents = events.size();
@@ -240,6 +242,10 @@ public final class MissionProgress {
                 missionEndedThisSeason = true;
                 if (outcome == MissionStepOutcome.CATASTROPHIC) {
                     crewLost = !mission.crewIds().isEmpty();
+                    if (crewLost) {
+                        lostCrewIds = List.copyOf(mission.crewIds());
+                        lostCrewNames = Investigations.crewNames(snapshot, mission);
+                    }
                     loseCrew(snapshot, mission, step, gameTurn, events);
                     if (crewLost) {
                         CrewedGrounding.ground(snapshot, mission, events);
@@ -256,9 +262,14 @@ public final class MissionProgress {
         // final season (completion, or a retirement triggered by this same release) still counts;
         // a CATASTROPHIC season's lost crew already can't grow, since loseCrew above already
         // removed them from the roster.
-        applyPostSeasonReliabilityChange(snapshot, catalog, mission, executedSteps, executedOutcomes, random,
-            events);
+        Map<String, Double> losses = applyPostSeasonReliabilityChange(snapshot, catalog, mission, executedSteps,
+            executedOutcomes, random, events);
         applyPostSeasonSkillGrowth(snapshot, configuration, mission, executedSteps, random, events);
+        if (missionEndedThisSeason) {
+            // Recorded now, while the flight still exists (design.md 2.14).
+            Investigations.record(snapshot, catalog, configuration, mission, executedSteps.getLast(), losses,
+                lostCrewIds, lostCrewNames, gameTurn, events);
+        }
 
         // Recent-history turns feed the random-event gates (design.md §2.7). A failure is FAILURE or
         // CATASTROPHIC; a season that didn't end in one counts as a failure-free flight season.
@@ -947,10 +958,12 @@ public final class MissionProgress {
      * @param events          the list to append any
      *                        {@link MissionReliabilityChanged}/{@link ResearchComponentMaxed}
      *                        event to
+     * @return the reliability each component of a failing step lost, for its investigation ({@link Investigations});
+     *     empty when no step failed
      */
-    private static void applyPostSeasonReliabilityChange(PlayerSnapshot snapshot, ContentCatalog catalog,
-            InProgressMission mission, List<MissionStep> executedSteps, List<MissionStepOutcome> executedOutcomes,
-            RandomGenerator random, List<ResolutionEvent> events) {
+    private static Map<String, Double> applyPostSeasonReliabilityChange(PlayerSnapshot snapshot,
+            ContentCatalog catalog, InProgressMission mission, List<MissionStep> executedSteps,
+            List<MissionStepOutcome> executedOutcomes, RandomGenerator random, List<ResolutionEvent> events) {
         Map<String, Integer> categoryByComponentId = new LinkedHashMap<>();
         Map<String, Integer> failureInvolvementPercentByComponentId = new LinkedHashMap<>();
 
@@ -970,10 +983,15 @@ public final class MissionProgress {
             }
         }
 
+        Map<String, Double> losses = new LinkedHashMap<>();
         for (Map.Entry<String, Integer> entry : categoryByComponentId.entrySet()) {
-            applyComponentReliabilityChange(snapshot, catalog, mission.getId(), entry.getKey(), entry.getValue(),
-                failureInvolvementPercentByComponentId.get(entry.getKey()), random, events);
+            double change = applyComponentReliabilityChange(snapshot, catalog, mission.getId(), entry.getKey(),
+                entry.getValue(), failureInvolvementPercentByComponentId.get(entry.getKey()), random, events);
+            if (entry.getValue() == CATEGORY_FAILURE) {
+                losses.put(entry.getKey(), Math.max(0, -change));
+            }
         }
+        return losses;
     }
 
     /**
@@ -1018,8 +1036,9 @@ public final class MissionProgress {
      *                                    factor is drawn from
      * @param events                     the list to append this
      *                                    component's events to
+     * @return the change applied, negative for a loss; 0 for a component not owned
      */
-    private static void applyComponentReliabilityChange(PlayerSnapshot snapshot, ContentCatalog catalog,
+    private static double applyComponentReliabilityChange(PlayerSnapshot snapshot, ContentCatalog catalog,
             String missionInstanceId, String componentId, int category, Integer failureInvolvementPercent,
             RandomGenerator random, List<ResolutionEvent> events) {
         OwnedMissionComponent owned = snapshot.getMissionComponents().get(componentId);
@@ -1028,7 +1047,7 @@ public final class MissionProgress {
             // Defensive skip, not expected: MissionLaunch only ever launches a configuration whose
             // every step component is validated (ContentCatalog) to be owned once its program is
             // open.
-            return;
+            return 0;
         }
 
         double before = owned.getCurrentReliability();
@@ -1054,6 +1073,7 @@ public final class MissionProgress {
         if (maxedEvent != null) {
             events.add(maxedEvent);
         }
+        return after - before;
     }
 
     /**

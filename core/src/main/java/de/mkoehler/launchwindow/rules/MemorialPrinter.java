@@ -128,7 +128,7 @@ public final class MemorialPrinter {
         return losses;
     }
 
-    private static FrontPage.Lost lost(MemorialEntry entry, int gameTurn) {
+    static FrontPage.Lost lost(MemorialEntry entry, int gameTurn) {
         List<CareerEntry> career = entry.career() == null ? List.of() : entry.career();
         int flights = (int) career.stream().filter(c -> c.kind() == CareerEntry.Kind.FLIGHT && "CREW".equals(c.note()))
             .count();

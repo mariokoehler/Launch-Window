@@ -42,5 +42,11 @@ public enum AssignmentState {
      * standing order until recalled. Busy for morale, never protected from departure, and off crews
      * and CAPCOM. Only astronauts take it. Appended last: Kryo sends enums by ordinal.
      */
-    PR_DUTY
+    PR_DUTY,
+
+    /**
+     * A SET specialist leading an incident investigation for the season ({@code design.md} &sect;2.14,
+     * {@code rules.Investigations}): no R&amp;D, not idle. Appended last: Kryo sends enums by ordinal.
+     */
+    INVESTIGATING
 }

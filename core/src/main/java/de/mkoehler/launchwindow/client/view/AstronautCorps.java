@@ -112,6 +112,7 @@ public final class AstronautCorps {
             case IN_TRAINING -> trainingText(astronaut);
             case PR_DUTY -> "On PR tour · +" + PrDuty.effectiveYields(PrDuty.onDuty(state)).getOrDefault(astronaut.getId(),
                 0L) + " prestige / season";
+            case INVESTIGATING -> "Leading an investigation";
         };
     }
 

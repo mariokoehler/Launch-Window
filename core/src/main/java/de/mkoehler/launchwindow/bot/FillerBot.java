@@ -174,6 +174,7 @@ public final class FillerBot {
                 }
             }
             decide(snapshot, out);
+            investigate(snapshot, out);
             // Every turn, sitting out or done with the race: people who aren't paid leave (design.md 2.2(c)).
             pay(snapshot, out);
             if (idle) {
@@ -244,6 +245,19 @@ public final class FillerBot {
             String key = "decide:" + pending.decisionId() + ":";
             out.put(key + option.id(), new DecideAction(option.id(), person, second));
             out.put(key + decision.defaultOption(), new DecideAction(decision.defaultOption(), null, null));
+        }
+
+        /** A failure waiting for an investigation: led by whoever is expected to give back the most (design.md 2.14). */
+        private void investigate(PlayerSnapshot snapshot, Map<String, PlayerAction> out) {
+            for (de.mkoehler.launchwindow.model.Incident incident
+                    : de.mkoehler.launchwindow.rules.Investigations.agencyIncidents(snapshot)) {
+                if (incident.started()) {
+                    continue;
+                }
+                de.mkoehler.launchwindow.rules.Investigations.bestLead(snapshot, catalog, incident).ifPresent(lead ->
+                    out.put("investigate:" + incident.id() + ":" + lead.getId(),
+                        new de.mkoehler.launchwindow.actions.StartInvestigationAction(incident.id(), lead.getId())));
+            }
         }
 
         /** An Analysis section while the money lasts. */

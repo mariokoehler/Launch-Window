@@ -27,6 +27,8 @@ import de.mkoehler.launchwindow.content.Theories;
 import de.mkoehler.launchwindow.content.MemorialPages;
 import de.mkoehler.launchwindow.client.view.Help;
 import de.mkoehler.launchwindow.client.view.MemorialView;
+import de.mkoehler.launchwindow.client.view.InvestigationsView;
+import de.mkoehler.launchwindow.content.InvestigationCauses;
 import de.mkoehler.launchwindow.model.FrontPage;
 import de.mkoehler.launchwindow.rules.ReactionPrinter;
 
@@ -199,6 +201,7 @@ public class FrontPageScreen extends SessionScreen {
         return page.science() ? Theories.standard().theory(page.storyId())
             .map(t -> t.reach() == Theories.Reach.PUBLIC).orElse(false)
             : page.memorialPage() ? page.memorial() != null
+            : page.reportPage() ? page.report() != null
             : FrontPages.standard().first(page.goalId()).isPresent();
     }
 
@@ -259,8 +262,9 @@ public class FrontPageScreen extends SessionScreen {
         carried = List.of();
         java.util.function.Predicate<String> inPack = goal -> session.catalog().goal(goal).isPresent();
         Optional<MemorialView.Page> memorial = page.memorialPage() ? MemorialView.of(page, MemorialPages.standard())
+            : page.reportPage() ? InvestigationsView.reportPage(page, InvestigationCauses.standard(), session.catalog())
             : Optional.empty();
-        Optional<FrontPageView.Page> words = page.memorialPage() ? memorial.map(m -> new FrontPageView.Page(
+        Optional<FrontPageView.Page> words = sombre(page) ? memorial.map(m -> new FrontPageView.Page(
                 m.headline(), m.shortHeadline(), m.deck(), "", List.of(), List.of(), 0, m.folio(), m.date(), m.weather(),
                 List.of(), null))
             : page.followUp()
@@ -283,6 +287,9 @@ public class FrontPageScreen extends SessionScreen {
         band.add(masthead).size(761f, BAND_HEIGHT).expandX();
         if (page.memorialPage()) {
             band.add(ear(ui.label("IN MEMORY", Theme.TextStyle.NEWS_EAR_TWO, Theme.INK), null)).size(230f, 84f);
+        } else if (page.reportPage()) {
+            band.add(ear(ui.label("BOARD OF", Theme.TextStyle.NEWS_EAR_TWO, Theme.INK),
+                ui.label("INQUIRY", Theme.TextStyle.NEWS_EAR_TWO, Theme.INK))).size(230f, 84f);
         } else if (page.followUp() || page.science()) {
             band.add(ear(ui.label(page.science() ? "SCIENCE" : "THE WORLD", Theme.TextStyle.NEWS_EAR_TWO, Theme.INK),
                 ui.label(page.science() ? "REPORT" : "REACTS", Theme.TextStyle.NEWS_EAR_TWO, Theme.INK)))
@@ -317,9 +324,17 @@ public class FrontPageScreen extends SessionScreen {
         sheet.add(rule()).width(INNER).height(1f).padTop(10f).row();
 
         float lower = PAGE_HEIGHT - MARGIN - TOP_FIXED - headlineHeight - deckHeight;
-        sheet.add(page.firstPage() ? lower(view, lower) : page.memorialPage() ? lowerMemorial(memorial.get(), lower)
+        sheet.add(page.firstPage() ? lower(view, lower) : sombre(page) ? lowerMemorial(memorial.get(), lower)
             : lowerReactions(page, view, lower)).width(INNER).height(lower).padTop(LOWER_TOP).row();
         return page.memorialPage() ? mourning(sheet) : sheet;
+    }
+
+    /**
+     * Whether a page is laid out as a memorial page: the crew's portraits and an article in columns. A board's
+     * report on a lost crew ({@code design.md} &sect;2.14(b)) is, without the mourning frame.
+     */
+    private static boolean sombre(FrontPage page) {
+        return page.memorialPage() || page.reportPage();
     }
 
     /** The memorial page's mourning frame: a 3 px ink rule 12 px inside the sheet. */
@@ -555,7 +570,8 @@ public class FrontPageScreen extends SessionScreen {
         sheet.top().pad(MARGIN);
         sheet.add(rule()).width(INNER).height(4f).row();
         Table head = new Table();
-        head.add(ui.label(page.science() ? "SCIENCE REPORT" : page.memorialPage() ? "IN MEMORY" : "THE WORLD REACTS",
+        head.add(ui.label(page.science() ? "SCIENCE REPORT" : page.memorialPage() ? "IN MEMORY"
+            : page.reportPage() ? "BOARD OF INQUIRY" : "THE WORLD REACTS",
             Theme.TextStyle.NEWS_LABEL,
             Theme.INK)).left().width(300f);
         head.add(ui.label("CONTINUED FROM PAGE 1", Theme.TextStyle.NEWS_FOLIO, Theme.INK)).expandX();
@@ -979,6 +995,7 @@ public class FrontPageScreen extends SessionScreen {
     private Table strip(FrontPage page) {
         Table strip = new Table();
         String line = page.memorialPage() ? "In memory."
+            : page.reportPage() ? "The board's report: no effect on the race."
             : page.followUp() ? "Statements only: no effect on the race."
             : page.science() ? "Science news: no effect on the race."
             : FrontPageView.gameLine(page, session.state().getAgencyName(), session.catalog(), ContentNames::of);
@@ -1061,13 +1078,14 @@ public class FrontPageScreen extends SessionScreen {
      * pages on its memorial, coming back to this page.
      */
     private Optional<TextButton> memorialButton(FrontPage page) {
-        if (!page.memorialPage() || page.memorial() == null || sheet > 0
-                || !page.madeBy(session.state().getAgencyName())) {
+        FrontPage.Loss loss = page.memorialPage() && page.memorial() != null ? page.memorial().loss()
+            : page.reportPage() && page.report() != null ? page.report().loss() : null;
+        if (loss == null || sheet > 0 || !page.madeBy(session.state().getAgencyName())) {
             return Optional.empty();
         }
         List<de.mkoehler.launchwindow.model.MemorialEntry> memorial = session.state().getMemorial();
         java.util.Set<String> crew = new java.util.HashSet<>();
-        page.memorial().loss().crew().forEach(lost -> crew.add(lost.personnelId()));
+        loss.crew().forEach(lost -> crew.add(lost.personnelId()));
         for (int i = 0; i < memorial.size(); i++) {
             if (crew.contains(memorial.get(i).personnelId())) {
                 int index = i;

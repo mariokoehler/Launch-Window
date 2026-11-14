@@ -534,6 +534,106 @@ abstract class ChromeScreen extends SessionScreen {
     }
 
     /**
+     * An offered investigation's controls ({@code design.md} &sect;2.14): Choose a lead while it waits, the lead
+     * and Withdraw while it's under way, nothing once it's closed. They read today's state, on any report.
+     *
+     * @param incidentId the incident
+     * @return the controls
+     */
+    protected Table investigationControls(String incidentId) {
+        Table controls = new Table();
+        de.mkoehler.launchwindow.model.Incident incident = de.mkoehler.launchwindow.client.view.InvestigationsView
+            .open(session.state(), incidentId).orElse(null);
+        if (incident == null) {
+            return controls;
+        }
+        if (incident.started()) {
+            controls.add(ui.badge(Theme.BadgeKind.ACTIVE, "Led by " + incident.leadName())).padRight(Theme.SPACE_2);
+            controls.add(actionButton("Withdraw", Theme.ButtonKind.SECONDARY, () -> submit(
+                new de.mkoehler.launchwindow.actions.CancelInvestigationAction(incidentId), result -> toast(
+                    "Withdrawn: the fee is back, and " + incident.leadName() + (incident.returnComponentId() != null
+                        ? " is back on R&D." : " is free again."),
+                    Theme.NoticeKind.INFO))));
+        } else {
+            controls.add(actionButton("Choose a lead", Theme.ButtonKind.PRIMARY, () -> chooseLead(incidentId)));
+        }
+        return controls;
+    }
+
+    /**
+     * Asks who leads an investigation ({@code design.md} &sect;2.14): the free SET specialists, best match first,
+     * each with the chance, what a found cause would give back and the R&amp;D they'd leave, all from the rules.
+     *
+     * @param incidentId the incident
+     */
+    public void chooseLead(String incidentId) {
+        de.mkoehler.launchwindow.model.Incident incident = de.mkoehler.launchwindow.client.view.InvestigationsView
+            .open(session.state(), incidentId).orElse(null);
+        if (incident == null || incident.started()) {
+            return;
+        }
+        String mission = session.catalog().missionConfiguration(incident.missionConfigurationId())
+            .map(de.mkoehler.launchwindow.client.view.MissionControl::missionName)
+            .orElse(ContentNames.of(incident.missionConfigurationId()));
+        Table card = dialogCard("Investigate a failure", "Who leads the investigation into " + mission + "?");
+        card.add(ui.paragraph(de.mkoehler.launchwindow.client.view.InvestigationsView.lossSummary(incident,
+            session.catalog()), Theme.TextStyle.BODY, Theme.INK)).padBottom(Theme.SPACE_2).row();
+        card.add(ui.paragraph("The lead spends this season on it, away from their R&D or training, and it costs "
+            + money(de.mkoehler.launchwindow.rules.Investigations.FEE) + ". If they find the cause, a share of each "
+            + "loss comes back: the better they know the hardware that failed, the likelier and the larger. If not, "
+            + "nothing does.", Theme.TextStyle.BODY_SM, Theme.INK_MUTED)).padBottom(Theme.SPACE_4).row();
+        List<de.mkoehler.launchwindow.model.SetSpecialist> candidates = de.mkoehler.launchwindow.rules.Investigations
+            .candidates(session.state(), session.catalog(), incident);
+        if (candidates.isEmpty()) {
+            card.add(ui.notice(Theme.NoticeKind.INFO, "Nobody is free.",
+                "Only an SET specialist who is idle, on R&D or in training past basic, and available, can lead."))
+                .growX()
+                .padBottom(Theme.SPACE_4).row();
+        }
+        boolean fundsShort = session.state().getFunds() < de.mkoehler.launchwindow.rules.Investigations.FEE;
+        for (de.mkoehler.launchwindow.model.SetSpecialist lead : candidates.stream().limit(LEAD_ROWS).toList()) {
+            de.mkoehler.launchwindow.rules.Investigations.Prospect prospect = de.mkoehler.launchwindow.rules
+                .Investigations.prospect(session.state(), session.catalog(), incident, lead);
+            Table row = new Table();
+            row.setBackground(ui.rect(Theme.SURFACE_CARD, Theme.NAVY_BORDER, Theme.BORDER_THIN));
+            row.pad(Theme.SPACE_2, Theme.SPACE_3, Theme.SPACE_2, Theme.SPACE_3);
+            Table words = new Table();
+            words.left();
+            words.defaults().left().growX();
+            Table name = new Table();
+            name.add(ui.label(lead.getName(), Theme.TextStyle.BODY_STRONG, Theme.INK)).left().padRight(Theme.SPACE_2);
+            name.add(ui.label(String.format(java.util.Locale.ROOT, "Match %d", Math.round(prospect.match())),
+                Theme.TextStyle.CAPTION, Theme.NAVY)).left().expandX();
+            words.add(name).row();
+            words.add(ui.label(de.mkoehler.launchwindow.client.view.SetDepartment.stateText(lead),
+                Theme.TextStyle.CAPTION, Theme.INK_MUTED)).row();
+            words.add(ui.label(de.mkoehler.launchwindow.client.view.InvestigationsView.prospectLine(prospect),
+                Theme.TextStyle.CAPTION, Theme.INK)).row();
+            row.add(words).expandX().fillX().left().padRight(Theme.SPACE_3);
+            var pick = actionButton("Lead", Theme.ButtonKind.SECONDARY, () -> submit(
+                new de.mkoehler.launchwindow.actions.StartInvestigationAction(incidentId, lead.getId()), result -> {
+                    closeDialog();
+                    toast(lead.getName() + " leads the investigation. The report comes when the turn resolves.",
+                        Theme.NoticeKind.SUCCESS);
+                }));
+            pick.setDisabled(fundsShort);
+            row.add(pick).right();
+            card.add(row).growX().padBottom(Theme.SPACE_2).row();
+        }
+        if (fundsShort) {
+            card.add(ui.notice(Theme.NoticeKind.WARNING, "Not enough funds.", "The investigation costs "
+                + money(de.mkoehler.launchwindow.rules.Investigations.FEE) + ".")).growX().padBottom(Theme.SPACE_2)
+                .row();
+        }
+        card.add(actionButton("Not now", Theme.ButtonKind.SECONDARY, this::closeDialog)).right().fill(false, false)
+            .padTop(Theme.SPACE_2);
+        showDialog(card, 640f);
+    }
+
+    /** The choose-a-lead dialog's rows, best match first. */
+    private static final int LEAD_ROWS = 5;
+
+    /**
      * Asks the server what publishing a finding now would pay, then asks the player to confirm
      * ({@code design.md} &sect;2.13). Nothing is sent before the player confirms.
      *

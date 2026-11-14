@@ -2310,6 +2310,94 @@ secrecy bonus for either archetype (as in §2.9). Every point is unconfirmed unl
   funding after season 32 lands first 76 times against 64, a mild pull toward a closer race, part of it
   perhaps noise. Side flights and the lulls (`RaceLulls`) are still to measure.
 
+### 2.14 Incident investigations
+
+**The user's idea (2026-11-14)** (`rules.Investigations`, `StartInvestigationAction`, `ui-spec.md` §4.24). A
+failure took reliability from the hardware, showed the replay, and that was that; a lost crew grounded
+crewed flights for 4 turns, which then simply ended. Real programs investigated: a board, a report, a cause
+and a fix. Two kinds, by what was lost. No BASPM precedent. Every number is **unconfirmed** unless it names
+the user.
+
+- **What counts as an incident:** a step that ends a flight, FAILURE or CATASTROPHIC (`MissionProgress`).
+  The record is made at once, because the flight is gone by the end of the pass (`model.Incident`, on
+  `PlayerSnapshot.incidents`): the turn, the configuration and the failing step, each component of that step
+  (rocket slots resolved) with its involvement and the reliability it actually lost, the culprit (below) and
+  whether a crew was lost. A minor glitch isn't one: it costs no reliability.
+- **The culprit:** one component of the failing step, drawn by involvement × (100 − its reliability as
+  flown), the risk measure the outlook uses (§2.5): the weak link is blamed most often. The report names it,
+  and its research group picks the cause (below). Drawn from the agency's salted seed, never the season's
+  stream.
+
+**(a) The agency's own investigation** (no crew lost):
+- **Offered** in the report of the turn it failed, and open for that turn and the next
+  (`Investigations.OFFER_TURNS` 2: a failure in turn T can be investigated in T+1 or T+2; unanswered, it
+  lapses at T+2's resolution). Not offered when nothing was lost (every component at its floor). Doing
+  nothing has no cost (user, 2026-11-14: the numbers make it worth doing, so no morale penalty).
+- **The lead** (user): any SET specialist, idle, on R&D or in training past basic (user, 2026-11-14: every
+  candidate in the one dialog, rather than pulling someone out of training first), not unavailable. A researcher
+  leaves their slot for the season and goes back to it after, if it's still free (otherwise idle). A trainee is
+  pulled out as `PullOutOfTrainingAction` would, keeping the same share of the round (the dialog says how much);
+  basic training can't be cut short, so new hires can't lead. Investigating is its own
+  assignment (`AssignmentState.INVESTIGATING`): no R&D, not idle, one investigation at a time. Withdrawn by
+  `CancelInvestigationAction` before the resolution, refunding the fee and putting the lead back (a trainee stays
+  out of training: a pull-out ends the round).
+- **The cost:** the lead's season, which is the real price (user), and a flat fee of **100**
+  (`Investigations.FEE`; user, 2026-11-14: flat and small, so the choice is about the person). For scale:
+  salaries are 25 to 60, the cheapest intelligence level 150 a season.
+- **The match:** the lead's skill in each of the failing step's components' research groups (the skill R&D
+  reads, `MissionComponent.associatedSkill`, times `PayExpectations.skillFactor`), weighted by the
+  components' involvement in that step: 0 to 100.
+- **The odds and the share** (user, 2026-11-14: "the cap but not the guarantee"): success
+  `min(90 %, 40 % + 0.5 × match)`; on success each component that lost reliability gets back
+  `⅔ × match / 100` of its own loss, so ⅔ only at a perfect match (a match of 90 gives back 60 %, 60 gives 40 %).
+  Both are stamped when the investigation starts, so the dialog's prediction is exactly what's rolled.
+  **Failure is always an option** (user): an undetermined cause gives back nothing, and the fee isn't refunded.
+- **Settled** at the end of the season it ran (phase `INVESTIGATIONS`, right after `RESEARCH`), rolled from the start action's server seed (stripped for the client, as an R&D decision's
+  is). The recovery lands on top of whatever the season's R&D did, clamped at the component's
+  `maxReliability` (user: no cap at the value before the failure; adding back a share of the loss can't
+  overshoot it except through R&D in between). Reaching the R&D ceiling releases its researchers, as any gain
+  does. A component no longer owned gets nothing. A lead who leaves during the resolution still delivers
+  the report (the work was done).
+- **The lead** (user): a career line (`CareerEntry.Kind.INVESTIGATION`, the flight and the outcome), and on
+  success **+5 morale** (`Investigations.SUCCESS_MORALE`).
+- **Measured** (2026-11-14, the rules' formulas over the standard pack's 86 components, before building):
+  what a season of R&D in the best slot adds against ⅔ of an average failure loss. R&D earns a share of the
+  headroom to the R&D ceiling, so it slows near the top; a failure takes a share of everything above the
+  floor. Median ratio, recovery over R&D, at a failure's reliability of 40 / 60 / 80: 1.7 / 4.3 / 18 for a
+  skill of 50, 0.9 / 2.4 / 10 for 90. Investigating is nearly always worth the season; the choice is who leads.
+  Floors raised by transfers shrink the losses and narrow it. **Played** (`ContentPackPlayouts standard
+  smart`, 200 games, 2026-11-14, the bot leading every one with the lead expected to give back most, less the R&D
+  they leave): 12.3 investigations a game, 85 % found (its engineers match well, about 80 to 90), 45.7 of the
+  99.3 points those failures cost given back; the average landing moved from season 87.3 (off,
+  `-Drules.investigations=off`) to 87.0, within noise; 0.65 board reports a game. A player's weaker engineers
+  find less. **85 % is right** (user, 2026-11-14: "finding the cause is more fun than not finding it").
+
+**(b) The official investigation** (a crew lost, user):
+- **Mandatory and independent:** no cost, no lead, no recovery. Flavour, to give the loss some closure.
+- **Due 4 turns after the accident** (`CrewedGrounding.GROUNDING_SEASONS`): a loss in turn T issues the report
+  at T+4's resolution, so it's read the turn crewed flights may fly again. On its own clock: a second loss
+  restarts the grounding but not the first report.
+- **Always finds a cause** (user) and the steps taken. **Never the crew's fault** (user, both kinds): the
+  causes are hardware, procedures, testing and schedules.
+- **Public:** printed as a front page for every agency (`FrontPage.Kind.REPORT`, `rules.ReportPrinter`, from
+  the owner's turn report as the science pages are); the owner's report also gets a card, with a link to the
+  crew's memorial (memorials are per agency, so only the owner's card links).
+
+**(c) The causes** (`assets/content/investigation-causes.json`, outside the pack, `InvestigationCausesTest`):
+keyed by the culprit's **group** (rockets, both kinds; probes; spacecraft; suits), filtered by the failing step's
+**phase**: ground and countdown, launch and ascent, in space, separation and docking, spacewalk, return and landing
+on Earth, landing on an airless world, liftoff from one, entry and landing on a planet with air, and a rocket plane's
+flight (`winged`). The step kinds map to phases by patterns in the file, "in space" when none matches; where a kind
+alone can't tell (a "landing" on the Moon, on Venus or on a runway), a rule also names the flight's body (its
+program category's, as findings use it, §2.13) or its program. A cause lists the phases it fits, or none for any,
+and is marked when it can't explain a lost crew (a stuck nose shroud, a failed restart), so a board never reports
+one. `InvestigationCausesTest` checks every group and phase a failing step of the standard pack can land on has
+causes, lethal ones for crewed steps. Its words name the real hardware and step (`{component}`, `{step}`,
+`{mission}`), and come as a pair, the finding and the fix, so they always match. A board's report adds a
+contributing factor (schedule, testing, inspection, paperwork) from its own list. **No repeats** until a group's
+eligible causes are used up, per agency (`PlayerSnapshot.usedInvestigationCauseIds`); ids are stored, never
+renamed or reused. Text from the facts, our own words, no history notes.
+
 ## 3. Architecture
 
 ### 3.1 High-level shape
@@ -2892,6 +2980,8 @@ trait (§2.2(c)).
   window, the 3-turn expiry, the extras, the lapse's 10 prestige and a lost crew's 50, the unlock sets,
   calling a flight off (`rules.Contracts`, §2.11).
 - Contract crew premiums: 1,000 / 670 / 420 a seat (`Contracts.CREW_PREMIUMS`, §2.11).
+- Incident investigations: open 2 turns, the fee of 100, success `min(90 %, 40 % + 0.5 × match)`, the share
+  `⅔ × match / 100`, +5 morale, the culprit's draw, the phases (`rules.Investigations`, §2.14).
 - Publishing findings: the mapping of 18 findings to steps (`findings.json`, §2.13); +4 a finding
   (`Findings.BONUS_POINTS`) and the 33 % cap are the user's.
 - The archive: a late joiner finds earlier pages open; the report's card names no rival (*proposed*,

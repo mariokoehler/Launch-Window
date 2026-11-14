@@ -203,6 +203,18 @@ public final class HelpValues {
         v.put("missions.crewWeight", whole(Math.round(MissionStepResolution.CREW_BLEND_WEIGHT * 100)));
         v.put("missions.catastrophic", whole(Math.round(MissionStepResolution.CATASTROPHIC_BAND_FRACTION * 100)));
         v.put("missions.grounding", whole(de.mkoehler.launchwindow.rules.CrewedGrounding.GROUNDING_SEASONS));
+        v.put("investigations.offerTurns", whole(de.mkoehler.launchwindow.rules.Investigations.OFFER_TURNS));
+        v.put("investigations.fee", whole(de.mkoehler.launchwindow.rules.Investigations.FEE));
+        v.put("investigations.baseChance", whole(Math.round(de.mkoehler.launchwindow.rules.Investigations.BASE_CHANCE
+            * 100)));
+        v.put("investigations.chancePerPoint", String.format(java.util.Locale.ROOT, "%.1f",
+            de.mkoehler.launchwindow.rules.Investigations.CHANCE_PER_POINT * 100));
+        v.put("investigations.maxChance", whole(Math.round(de.mkoehler.launchwindow.rules.Investigations.MAX_CHANCE
+            * 100)));
+        v.put("investigations.maxShare", whole(Math.round(de.mkoehler.launchwindow.rules.Investigations.MAX_SHARE
+            * 100)));
+        v.put("investigations.morale", whole(de.mkoehler.launchwindow.rules.Investigations.SUCCESS_MORALE));
+        v.put("investigations.boardTurns", whole(de.mkoehler.launchwindow.rules.CrewedGrounding.GROUNDING_SEASONS));
         v.put("missions.wingsBonus", whole(Math.round(de.mkoehler.launchwindow.rules.RocketPlaneWings.BONUS_POINTS)));
         v.put("missions.failure", whole(Math.round(MissionStepResolution.FAILURE_BAND_FRACTION * 100)));
         v.put("missions.minor", whole(Math.round((1 - MissionStepResolution.CATASTROPHIC_BAND_FRACTION

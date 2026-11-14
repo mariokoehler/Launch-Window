@@ -358,13 +358,29 @@
         "If the first roll fails, the flight controllers get a saving throw: the step's chance, scaled by the skills of the consoles it involves. If it works, the glitch is solved and the step counts as a success. If not, it's one of:",
         "- a minor glitch ({missions.minor} % of the time): half the step's prestige, and the mission goes on;",
         "- a failure ({missions.failure} %): the mission ends, and the season's prestige turns into a deduction;",
-        "- a catastrophe ({missions.catastrophic} %): on a step that puts the crew at risk, the mission ends, the whole crew is lost, and the flight's goals don't count. On other steps it counts as a failure. Losing a crew grounds your crewed flights for the next {missions.grounding} turns while the accident is investigated; uncrewed flights go on, as Apollo 4, 5 and 6 did after the Apollo 1 fire.",
+        "- a catastrophe ({missions.catastrophic} %): on a step that puts the crew at risk, the mission ends, the whole crew is lost, and the flight's goals don't count. On other steps it counts as a failure. Losing a crew grounds your crewed flights for the next {missions.grounding} turns while an independent board investigates the accident (see Investigations); uncrewed flights go on, as Apollo 4, 5 and 6 did after the Apollo 1 fire.",
         "Experts can improve the saving throw, and so can the trait Cool under pressure. Each team's chemistry scales what it brings: the crew's skill in the first roll, the controllers' and CAPCOM's in the saving throw.",
         "## After each season",
-        "Each component's reliability moves with how it did: success and minor glitches raise it toward its maximum, a failure lowers it, never below where it started. Every astronaut aboard grows the skills their seat used, and the others by {training.flightUnused} % of that; each controller grows the skills their console used."
+        "Each component's reliability moves with how it did: success and minor glitches raise it toward its maximum, a failure lowers it, never below where it started, and an investigation may win part of that back (see Investigations). Every astronaut aboard grows the skills their seat used, and the others by {training.flightUnused} % of that; each controller grows the skills their console used."
       ],
-      "related": ["experts", "mission-control", "chemistry", "prestige", "findings", "traits"],
+      "related": ["experts", "mission-control", "chemistry", "prestige", "findings", "traits", "investigations"],
       "explainers": ["reliability", "launch-escape"]
+    },
+    {
+      "id": "investigations",
+      "group": "Missions",
+      "title": "Investigations",
+      "body": [
+        "A failed flight can be investigated, to learn what went wrong and fix it. What it cost decides who investigates: a failure that lost no crew is the agency's own to look into, if it wants to; a lost crew is always investigated by an independent board.",
+        "## Your own investigation",
+        "A failure takes reliability from the components of the step that failed. The turn report that shows the failure offers an investigation, and the offer stays open for {investigations.offerTurns} turns. Doing nothing costs nothing; the offer simply closes.",
+        "Choose a lead: any SET specialist who is idle, on R&D or in training (not basic training, which every new hire finishes). The lead spends a season on it, and goes back to the component they were researching afterwards if there's still a place on it. Someone in training is pulled out, keeping the share of the round a pull-out keeps; the dialog says how much. It costs {investigations.fee}, and you can withdraw until the turn resolves, with the fee back.",
+        "How well the lead knows the hardware that failed is their match: their skill in each component's field, weighted by how much the component mattered to the step. The chance of finding the cause is {investigations.baseChance} %, plus {investigations.chancePerPoint} percentage points for each point of match, at most {investigations.maxChance} %. A found cause gives back a share of each component's loss: {investigations.maxShare} % of it at a perfect match, less for a weaker one. The dialog shows each candidate's chance, what a found cause would give back, and the R&D they'd leave behind.",
+        "When the turn resolves, the report says what was found and what was changed, and the reliability comes back on top of that season's R&D, never above the component's maximum. If the cause isn't found, nothing comes back and the fee is spent. Either way it goes in the lead's career record, and a found cause lifts their morale by {investigations.morale}.",
+        "## A lost crew",
+        "When a crew is lost, an independent board investigates. It costs nothing, needs nobody from the agency, and gives nothing back. Its report comes {investigations.boardTurns} turns after the accident, the turn your crewed flights may fly again, and the paper prints it for every agency. A board never blames the crew."
+      ],
+      "related": ["mission-steps", "rnd", "careers", "the-paper"]
     },
     {
       "id": "experts",

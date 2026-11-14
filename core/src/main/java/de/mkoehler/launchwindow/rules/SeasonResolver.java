@@ -64,6 +64,8 @@ public final class SeasonResolver {
         TRAINING,
         /** R&D on mission components. */
         RESEARCH,
+        /** Incident investigations: the season's settled, offers lapse, boards report (design.md 2.14). */
+        INVESTIGATIONS,
         /** Teamwork: work seasons, pairs' rapport and traits shown (design.md 2.2(d)). */
         TEAMS,
         /** Careers: tenure, loyalty, the career record and ambitions (design.md 2.2(d), phase 4). */
@@ -290,6 +292,7 @@ public final class SeasonResolver {
             case TRAINING -> TrainingProgress.advanceSeason(snapshot, random);
             case PAY -> PayExpectations.advanceSeason(snapshot, (int) context.gameTurn(), context.seasonsElapsed());
             case RESEARCH -> ResearchProgress.advanceSeason(snapshot, context.catalog(), random);
+            case INVESTIGATIONS -> Investigations.advanceSeason(snapshot, context.catalog(), context.gameTurn());
             case DECISIONS -> RdDecisions.advanceSeason(snapshot, context.catalog(),
                 context.catalog().rules().decisions(), context.gameTurn());
             case TEAMS -> throw new IllegalStateException("teams run with their captured teams");

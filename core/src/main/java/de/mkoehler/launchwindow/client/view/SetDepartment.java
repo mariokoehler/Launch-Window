@@ -116,6 +116,7 @@ public final class SetDepartment {
                 + " · slot " + (specialist.getRdSlot() == null ? "?" : specialist.getRdSlot() + 1);
             case IN_TRAINING -> trainingText(specialist);
             case PR_DUTY -> "On PR tour";
+            case INVESTIGATING -> "Leading an investigation";
         };
     }
 

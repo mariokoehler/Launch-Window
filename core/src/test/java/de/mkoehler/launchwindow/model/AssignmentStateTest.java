@@ -13,12 +13,12 @@ class AssignmentStateTest {
 
     /**
      * Pins the constants' order: Kryo sends enums by ordinal, so new ones are only ever appended
-     * (PR_DUTY came last, 2026-10-06).
+     * (PR_DUTY came last, 2026-10-06; INVESTIGATING after it, 2026-11-14).
      */
     @Test
     void constantsKeepTheirOrdinals() {
         assertEquals(java.util.List.of(AssignmentState.IDLE, AssignmentState.ASSIGNED, AssignmentState.IN_TRAINING,
-            AssignmentState.PR_DUTY), java.util.List.of(AssignmentState.values()));
+            AssignmentState.PR_DUTY, AssignmentState.INVESTIGATING), java.util.List.of(AssignmentState.values()));
     }
 
     /**

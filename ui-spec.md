@@ -1466,6 +1466,8 @@ any report.
   left under its disabled launch button, and every crewed mission card waits on the grounding in
   its Astronauts check and earliest launch (component 25). Shots `grounding-*.png`
   (`-Dshots=grounding`);
+- investigations (`design.md` §2.14, §4.24): an Investigations card under Findings with a failure that can be
+  investigated (and its controls), an investigation's result, and a board opened or reporting;
 - the Budget card, which accounts for **what the turn's resolution did to the money** (user,
   2026-11-04), so its lines add up to the change in funds (its Net is the Funds cell of the
   strip): funding and running costs (broken down by kind), then commercial contracts (fees and
@@ -2883,6 +2885,8 @@ choices **unconfirmed**.
   sentences, close), the withheld-goal sentences per goal kind, the condolence lines, the spokesman's
   statement. Ids are stored on printed pages: never rename or reuse one. Tokens as the reactions' (`{agency}`,
   `{director}`, `{season}`, `{quote}`), plus `{mission}`, `{step}`, `{crew}`, `{name}`, `{age}`, `{flights}`.
+- **The board's report** follows a lost crew a few turns later, the turn crewed flights may fly again: its own
+  page kind, laid out like this one without the mourning frame (§4.24, `design.md` §2.14(b)).
 - **Later** (the user's call, not specified): secrecy, a Soviet agency keeping a loss quiet at the risk of
   rivals' intelligence uncovering it later (Bondarenko's death in 1961 was not revealed until 1986).
 
@@ -3201,6 +3205,41 @@ the chip's tooltip open; a review's turn report. Each row's note lists its choic
   relationship news.
 - **New for `Theme.java`:** the pay bar, the morale bar's ceiling tick, the Underpaid chip. No new tokens or icons.
 
+### 4.24 Incident investigations *(the user's idea, 2026-11-14, `design.md` §2.14; built straight in libGDX, no mockup, user)*
+**Purpose:** a failure ends with a report: what went wrong and what was changed. The agency investigates its own
+failures, for a chance at part of the lost reliability; an independent board investigates a lost crew, for closure.
+Made of existing components; every look is unconfirmed. `-Dshots=investigations`.
+- **Turn report, an Investigations card** (left column, under Findings; only on a turn with something to say),
+  eyebrow "INVESTIGATIONS", note "What went wrong, and what was done" (`InvestigationsView.reportLines`). One row a
+  line, title in body-strong, sentences in body-small, a muted last line:
+  - *an offer:* "Investigate the failure of Explorer 1 · Orbital flight?", the step it failed at and the points it
+    cost, "Can be started until the end of Fall 1960." On the right the controls, reading today's state as the
+    findings' do: a primary **Choose a lead**; once started, a gold "Led by Ruth Hale" badge and **Withdraw**;
+    nothing once settled or lapsed;
+  - *a found cause:* "Cause found: a seized turbopump bearing", the finding and the fix, "+4.9" in green on the right,
+    and "Led by …, on the … failure. Given back: Jupiter-C +4.1, Explorer 1 satellite +0.8.";
+  - *no cause found:* "No cause found for the failure of …", nothing back; *a lapsed offer:* "The failure of … wasn't
+    investigated";
+  - *a board opened:* "An independent board investigates the loss of …", when its report is due;
+  - *a board's report* (the owner's only): "The board's report on …: <the cause>", the finding, the contributing
+    factor and the fix, "In memory of …", and **Open the memorial** (a link to the first of the crew's pages; the
+    memorial is the agency's own, so only its card links).
+- **Choose a lead** (component 6's shape, 640 px): eyebrow "INVESTIGATE A FAILURE", "Who leads the investigation
+  into …?", the loss ("Failed at ascent. Lost: Jupiter-C −7.3, Explorer 1 satellite −2.6."), what leading costs and
+  gives. Up to 5 rows, best match first (`Investigations.candidates`: idle, on R&D, or in training past basic): the
+  name and "Match 87", the state ("Researching · Jupiter-C · slot 1", "Idle" or the training), and "84 % chance · +5.7
+  back if found · leaves 2.7 of R&D" (a trainee: "· leaves training, keeping 20 % of the round"), every figure from
+  the rules on the preview state (`Investigations.prospect`); a secondary **Lead** on each, disabled when the fee
+  isn't covered (a warning says so). "Nobody is free" when no one is; **Not now** closes it.
+- **The board's page** (`FrontPage.Kind.REPORT`, §4.18): laid out as a memorial page (§4.18.3), the crew's portraits
+  and the article in two centred columns, without the mourning frame; the right ear "BOARD OF / INQUIRY". Headline
+  and deck from `investigation-causes.json`'s board stories ("BOARD NAMES CAUSE OF GEMINI LOSS", "Investigators point
+  to a cabin vent that stuck open in the Gemini capsule"), then the lead, the finding, the contributing factor, "The
+  changes made since: …", and the close. The strip says "The board's report: no effect on the race."; the owner's
+  copy has **Open the memorial**. Printed for every agency, at the resolution that issues it.
+- **SET Centre:** a lead's state reads "Leading an investigation".
+- **Help:** an "Investigations" topic (Missions), on the turn report, the paper and the memorial.
+
 ## 5. Refusal reasons (for toasts and inline messages)
 
 The server replies with these codes. The wording below is the spec's; the client's own is in
@@ -3245,6 +3284,7 @@ The server replies with these codes. The wording below is the spec's; the client
 | Raise one person (`RaiseSalaryAction`, §4.23): ALREADY_RAISED / NOT_A_RAISE / UNKNOWN_PERSONNEL | Already raised this season. Try again after the next turn. / That isn't a raise, or it's more than the largest one. / That person isn't on the roster any more. |
 | Hands-on campaign (component 26, type 11; `HandsOn.Outcome`, `RdDecisions.Outcome.NO_PUZZLE`): WRONG_PHASE / NO_SLOT / CANT_PAY / UNKNOWN_COMMAND / NOTHING_QUEUED / CANT_RESIST / NO_PUZZLE | Not now: the campaign is somewhere else. / The round's slots are full. / You can't pay for that command. / That command isn't in this campaign. / Nothing is queued. / Not enough shifts to call in an expert. / No campaign is in progress. |
 | Findings (§4.20; `Findings.PublishOutcome`): NOT_A_FINDING / NOT_KNOWN / ALREADY_PUBLIC / ALREADY_QUEUED / NOT_QUEUED | That goal isn't a finding. / Reach the goal first. / Someone published it already. / It's published at the next resolution already. / There's nothing to withdraw. |
+| Investigations (§4.24; `Investigations.Outcome`): NO_INCIDENT / ALREADY_STARTED / NOT_STARTED / UNKNOWN_LEAD / LEAD_NOT_FREE / INSUFFICIENT_FUNDS | That failure can't be investigated any more. / Its investigation has started already. / Its investigation hasn't started. / No such engineer. / That engineer isn't free to lead it: only someone idle or on R&D can. / Not enough funds. |
 | Contracts (§4.17; `ContractOutcome`): CONTRACT_ACTIVE / NOT_QUALIFIED / PROGRAM_NOT_OPEN / UNKNOWN_LISTING; closing a program while its contract flies is the existing MISSIONS_IN_FLIGHT | You have an active contract: one at a time. / You can't fly this one: unlock its line first. / Open the program first. / That listing isn't on the board any more. / Can't close while a mission uses it. |
 | The world reacts (§4.18.1, component 28; `SubmitStatementResponse`): TURN_RESOLVED / UNKNOWN_PAGE / REACTION_WINDOW_CLOSED / NOT_A_RIVAL / INVALID_STANCE / QUOTE_TOO_LONG / QUOTE_BAD_CHARACTERS | The turn resolved before that reached the server, so nothing was done. / That front page isn't there any more. / Statements on that First closed when the turn after it resolved. / Only a rival that was in the race when the First was printed can answer it. / Pick one of the five stances. / At most 140 characters. / Only letters, numbers and common punctuation. |
 | Join game (`ClaimSlotResponse.Reason`): AGENCY_NAME_TAKEN / DIRECTOR_NAME_TAKEN / MISSING_FIELDS / ALREADY_CLAIMED / NOT_AUTHENTICATED / SERVER_ERROR | Already taken by another agency. (under the field) / the same / Required. / (client logs in again and opens the agency) / (danger notice with the server's words) |
@@ -3406,6 +3446,19 @@ this spec. All are done except G6 and G1's pack download; each done item names w
   - **Tests:** `ServerSettingsServiceTest` (the password, the lockout, the locks, a no-change save keeps the file,
     stale, refused fields, a pack switch saving a file startup accepts), `ServerSettingsIntegrationTest` (a real
     server: switch the pack, then found an agency on it). `TurnRollback` doesn't touch `game-meta.json`.
+- **G22. Incident investigations (§4.24, `design.md` §2.14).** Done:
+  - **Rules:** `rules.Investigations` (recorded by `MissionProgress` when a step ends a flight; settled in the
+    `INVESTIGATIONS` phase after `RESEARCH`), `model.Incident` on `PlayerSnapshot.incidents` (the start action's seed
+    stripped by `Personality.forClient`), the used causes on `usedInvestigationCauseIds`, `AssignmentState.INVESTIGATING`,
+    `CareerEntry.Kind.INVESTIGATION`.
+  - **Actions** (appended last in `PlayerAction` and `MessageRegistry`): `StartInvestigationAction(incidentId, leadId)`
+    and its inverse `CancelInvestigationAction(incidentId)`.
+  - **Events** (appended to `ResolutionEvent`): `InvestigationOffered`, `OfficialInvestigationOpened`,
+    `InvestigationLapsed`, `InvestigationConcluded`, `OfficialReportIssued`.
+  - **The paper:** `FrontPage.Kind.REPORT` with a new `FrontPage.report` (`FrontPage.Report`, registered last), printed
+    by `rules.ReportPrinter` from the owners' turn reports in `TurnScheduler.printFrontPages`, after the memorials.
+  - **Words:** `assets/content/investigation-causes.json`, outside the pack (`InvestigationCausesTest`).
+  - **Tests:** `InvestigationsTest`, `ReportPrinterTest`, `InvestigationsViewTest`, `InvestigationCausesTest`.
 
 ## 7. Suggested mockup order
 

@@ -103,6 +103,10 @@ public class PlayerSnapshot {
     private List<String> pendingPublications = new ArrayList<>();
     /** Findings this agency published. */
     private List<String> publishedFindings = new ArrayList<>();
+    /** Failures still under investigation or offered for one ({@code design.md} &sect;2.14). */
+    private List<Incident> incidents = new ArrayList<>();
+    /** The investigation causes this agency has been told, so none repeats until its group is used up. */
+    private List<String> usedInvestigationCauseIds = new ArrayList<>();
 
     /**
      * No-argument constructor required for Jackson deserialization.
@@ -1112,6 +1116,46 @@ public class PlayerSnapshot {
             throw new IllegalArgumentException("crewedGroundingSeasons must not be negative: " + crewedGroundingSeasons);
         }
         this.crewedGroundingSeasons = crewedGroundingSeasons;
+    }
+
+    /**
+     * Returns the failures still under investigation or offered for one ({@code design.md} &sect;2.14).
+     *
+     * @return the live, mutable list
+     */
+    public List<Incident> getIncidents() {
+        return incidents;
+    }
+
+    /**
+     * Sets the failures under investigation.
+     *
+     * @param incidents the incidents
+     * @throws NullPointerException if {@code incidents} is {@code null}
+     */
+    public void setIncidents(List<Incident> incidents) {
+        Objects.requireNonNull(incidents, "incidents must not be null");
+        this.incidents = new ArrayList<>(incidents);
+    }
+
+    /**
+     * Returns the investigation causes this agency has been told.
+     *
+     * @return the live, mutable list of cause ids
+     */
+    public List<String> getUsedInvestigationCauseIds() {
+        return usedInvestigationCauseIds;
+    }
+
+    /**
+     * Sets the investigation causes this agency has been told.
+     *
+     * @param usedInvestigationCauseIds the cause ids
+     * @throws NullPointerException if {@code usedInvestigationCauseIds} is {@code null}
+     */
+    public void setUsedInvestigationCauseIds(List<String> usedInvestigationCauseIds) {
+        Objects.requireNonNull(usedInvestigationCauseIds, "usedInvestigationCauseIds must not be null");
+        this.usedInvestigationCauseIds = new ArrayList<>(usedInvestigationCauseIds);
     }
 
     /**

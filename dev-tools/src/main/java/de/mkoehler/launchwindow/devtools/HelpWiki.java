@@ -181,6 +181,11 @@ public final class HelpWiki {
         screens("findings",
             new Screen("findings-report", "A finding in the turn report, with its Publish button.", null),
             new Screen("findings-dialog", "Publishing a finding: what it would pay as things stand.", "Publishing"));
+        screens("investigations",
+            new Screen("investigations-report", "Investigations in the turn report: an offer and two results.", null),
+            new Screen("investigations-dialog", "Choosing a lead: each one's chance, what they'd win back and the R&D "
+                + "they'd leave.", "Your own investigation"),
+            new Screen("investigations-page", "A board's report in the paper.", "A lost crew"));
         screens("intelligence",
             new Screen("intel-overview", "The Intelligence Office: its level, actions and what each level brings.",
                 "What each level brings"),

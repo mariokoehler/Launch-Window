@@ -195,6 +195,7 @@ public final class MissionControl {
             }
             case IN_TRAINING -> trainingText(officer);
             case PR_DUTY -> "On PR tour";
+            case INVESTIGATING -> "Leading an investigation";
         };
     }
 

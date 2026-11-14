@@ -188,14 +188,14 @@ public record Help(List<Topic> topics) {
         /** A person's page, living or on the memorial. */
         PERSON("this person", "traits", "chemistry", "ambitions", "careers", "morale", "poaching"),
         /** Someone's page on the memorial. */
-        MEMORIAL("the memorial", "careers", "museum", "traits", "the-paper"),
+        MEMORIAL("the memorial", "careers", "museum", "traits", "the-paper", "investigations"),
         /** The turn report and a mission's replay. */
-        TURN_REPORT("the turn report", "turn-report", "mission-steps", "random-events", "budget", "contracts",
-            "findings", "the-paper"),
+        TURN_REPORT("the turn report", "turn-report", "mission-steps", "investigations", "random-events", "budget",
+            "contracts", "findings", "the-paper"),
         /** The Museum, its archive pages and its explainers. */
         MUSEUM("the Museum", "museum", "winning", "the-race", "prestige", "careers", "findings", "the-paper"),
         /** The newspaper's pages: the Firsts, the world's reactions, science and memorial pages (ui-spec.md 4.18). */
-        NEWSPAPER("the paper", "the-paper", "the-race", "turn-report", "careers"),
+        NEWSPAPER("the paper", "the-paper", "the-race", "turn-report", "careers", "investigations"),
         /** The Intelligence Office. */
         INTELLIGENCE("the Intelligence Office", "intelligence", "poaching", "the-race"),
         /** The roads to the Moon compared (ui-spec.md 4.21). */

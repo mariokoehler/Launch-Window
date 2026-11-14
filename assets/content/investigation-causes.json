@@ -1,0 +1,1025 @@
+{
+  "phases": [
+    {
+      "id": "ground",
+      "pattern": "launch-preparations|countdown|pre-launch"
+    },
+    {
+      "id": "landing",
+      "pattern": "^descent-and-landing$",
+      "programs": [
+        "zond-5"
+      ]
+    },
+    {
+      "id": "surface-landing",
+      "pattern": "lunar-landing|powered-descent|lk-descent|lunar-impact|lem-descent"
+    },
+    {
+      "id": "surface-landing",
+      "pattern": "^landing$|^descent-and-landing$",
+      "bodies": [
+        "MOON"
+      ]
+    },
+    {
+      "id": "surface-liftoff",
+      "pattern": "lunar-liftoff|lunar-ascent|ascent-from-lunar-surface|lem-ascent|fire-in-the-hole"
+    },
+    {
+      "id": "planet-entry",
+      "pattern": "lander-entry|lander-descent|lander-deployment-and-de-orbit|landing-and-deployment|big-probe|small-probes|interplanetary-bus-entry"
+    },
+    {
+      "id": "planet-entry",
+      "pattern": "^landing$",
+      "bodies": [
+        "VENUS",
+        "MARS"
+      ]
+    },
+    {
+      "id": "winged",
+      "pattern": "takeoff|high-speed-leg|powered-ascent|launch-from-drop-plane|peak-altitude"
+    },
+    {
+      "id": "winged",
+      "pattern": "^landing$",
+      "bodies": [
+        "EARTH"
+      ]
+    },
+    {
+      "id": "landing",
+      "pattern": "reentry|retrofire|descent|landing|splashdown|recovery|de-orbit|entry|impact"
+    },
+    {
+      "id": "eva",
+      "pattern": "(^|-)eva($|-)|egress|ingress|surface-activities|rover-trip"
+    },
+    {
+      "id": "launch",
+      "pattern": "(^|-)launch($|-)|ascent|liftoff"
+    },
+    {
+      "id": "separation",
+      "pattern": "separation|docking|rendezvous|transposition|jettison|deployment|release|detachment|extraction|target-approach|tpi|transfer"
+    }
+  ],
+  "defaultPhase": "space",
+  "causes": [
+    {
+      "id": "rocket-weld-void",
+      "group": "ROCKET",
+      "phases": [],
+      "short": "a hidden flaw in a weld",
+      "finding": "A weld in one of the {component}'s propellant lines had a void inside it that no surface check could see. Under load it cracked, and the leak starved the engine.",
+      "fix": "Every weld on the propellant lines is now X-rayed, not only a sample from each batch."
+    },
+    {
+      "id": "rocket-chafed-wiring",
+      "group": "ROCKET",
+      "phases": [],
+      "short": "chafed wiring",
+      "finding": "A cable bundle in the {component} had rubbed against the edge of a bracket under vibration until its insulation wore through, and the bare wire shorted a control circuit.",
+      "fix": "The bundles are now sleeved and clamped clear of sharp edges, and the bracket was redrawn with a rounded lip."
+    },
+    {
+      "id": "rocket-valve-debris",
+      "group": "ROCKET",
+      "phases": [],
+      "short": "debris in a propellant valve",
+      "finding": "A shred of cleaning cloth left inside a propellant valve during assembly kept the valve from seating.",
+      "fix": "Assembly now ends with the whole system flushed and filtered, and every open port is capped and logged until it is closed for good."
+    },
+    {
+      "id": "rocket-soft-fasteners",
+      "group": "ROCKET",
+      "phases": [],
+      "short": "fasteners softer than specified",
+      "finding": "A batch of fasteners from one supplier was softer than its specification, and one of them sheared under the load of flight.",
+      "fix": "Fasteners from every batch are now tested on arrival, and the supplier's own batch records are audited."
+    },
+    {
+      "id": "rocket-frozen-fill-valve",
+      "group": "ROCKET",
+      "phases": [
+        "ground"
+      ],
+      "short": "a fill valve that froze",
+      "finding": "A liquid oxygen fill valve on the {component} iced up partly open, and the tank pressure it let fall could not be brought back in time.",
+      "fix": "The valve now has a heater and a second position sensor, and the count can hold and recover instead of scrubbing.",
+      "fatal": false
+    },
+    {
+      "id": "rocket-early-umbilical",
+      "group": "ROCKET",
+      "phases": [
+        "ground"
+      ],
+      "short": "an umbilical released too early",
+      "finding": "An umbilical plug came out of its socket a moment early, and the {component} lost ground power before its own batteries had taken over.",
+      "fix": "The switch to internal power now comes first and must be confirmed before any plug is released.",
+      "fatal": false
+    },
+    {
+      "id": "rocket-drifting-sensor",
+      "group": "ROCKET",
+      "phases": [
+        "ground"
+      ],
+      "fatal": false,
+      "short": "a pressure sensor out of calibration",
+      "finding": "A tank pressure sensor on the {component} had drifted out of calibration and reported a fault that wasn't there. The safety logic did exactly what it was told and stopped the count.",
+      "fix": "Critical readings now come from two sensors each, and a disagreement between them holds the count instead of ending it."
+    },
+    {
+      "id": "rocket-wet-connector",
+      "group": "ROCKET",
+      "phases": [
+        "ground"
+      ],
+      "short": "moisture in a connector",
+      "finding": "Rain in the days before the launch had worked its way into a connector at the base of the {component}, and the moisture caused a short that came and went.",
+      "fix": "Connectors on the pad are now sealed against the weather, and a dry-nitrogen purge runs through them for the whole countdown.",
+      "fatal": false
+    },
+    {
+      "id": "rocket-turbopump-bearing",
+      "group": "ROCKET",
+      "phases": [
+        "launch"
+      ],
+      "short": "a seized turbopump bearing",
+      "finding": "A bearing in the {component}'s turbopump overheated and seized seconds into the flight. Without the pump the engine lost its thrust.",
+      "fix": "The bearing has a new cage design and more coolant flowing through it, and every pump now runs a longer acceptance test."
+    },
+    {
+      "id": "rocket-combustion-instability",
+      "group": "ROCKET",
+      "phases": [
+        "launch"
+      ],
+      "short": "unstable combustion",
+      "finding": "The pressure in one of the {component}'s combustion chambers began to swing back and forth hundreds of times a second, and the shaking tore the injector apart.",
+      "fix": "Baffles across the injector face now break up the oscillation; the change was proven on the test stand by setting off small charges inside a running chamber."
+    },
+    {
+      "id": "rocket-pogo",
+      "group": "ROCKET",
+      "phases": [
+        "launch"
+      ],
+      "short": "pogo oscillation",
+      "finding": "The {component} began to bounce along its length as its thrust and the flow of its propellant fed each other, until the shaking broke a line.",
+      "fix": "Gas-filled accumulators in the feed lines now soak up the pressure waves before they can build."
+    },
+    {
+      "id": "rocket-gyro-drift",
+      "group": "ROCKET",
+      "phases": [
+        "launch",
+        "space"
+      ],
+      "short": "a drifting gyroscope",
+      "finding": "A gyroscope in the {component}'s guidance platform drifted, and the vehicle steered steadily away from its planned path.",
+      "fix": "The gyroscopes now run in for longer before they are installed, and a second platform checks the first."
+    },
+    {
+      "id": "rocket-thin-panel",
+      "group": "ROCKET",
+      "phases": [
+        "launch"
+      ],
+      "short": "a skin panel thinner than its drawings",
+      "finding": "The {component} broke up as it passed through the moment of greatest air pressure. One of its skin panels had been milled thinner than its drawings called for.",
+      "fix": "Panels are now measured after milling, and the flight path was reshaped to ease the peak load."
+    },
+    {
+      "id": "rocket-hydraulic-leak",
+      "group": "ROCKET",
+      "phases": [
+        "launch"
+      ],
+      "short": "a hydraulic leak",
+      "finding": "A leaking hydraulic line drained the actuators that swivel the {component}'s engines, and without steering the vehicle tumbled.",
+      "fix": "The line has a new fitting with a locking collar, and the system now carries a reserve."
+    },
+    {
+      "id": "rocket-fire-in-the-hole",
+      "group": "ROCKET",
+      "phases": [
+        "separation"
+      ],
+      "short": "an upper stage that lit too soon",
+      "finding": "The {component}'s upper stage lit while the spent stage was still attached below it, and its exhaust had nowhere to go.",
+      "fix": "Staging now waits for a confirmed separation signal, not a timer alone."
+    },
+    {
+      "id": "rocket-dud-bolt",
+      "group": "ROCKET",
+      "phases": [
+        "separation"
+      ],
+      "short": "an explosive bolt that did not fire",
+      "finding": "One of the explosive bolts holding the {component}'s stages together did not fire, and the stack was dragged off course by what it could not let go of.",
+      "fix": "Every bolt now has two igniters on separate circuits."
+    },
+    {
+      "id": "rocket-stuck-shroud",
+      "group": "ROCKET",
+      "phases": [
+        "separation"
+      ],
+      "short": "a nose shroud that stayed latched",
+      "finding": "One half of the {component}'s nose shroud stayed latched, and the payload could not get clear of it.",
+      "fix": "The latches were redesigned with springs that push each half away, and the release is now tested on every shroud.",
+      "fatal": false
+    },
+    {
+      "id": "rocket-uneven-springs",
+      "group": "ROCKET",
+      "phases": [
+        "separation"
+      ],
+      "short": "separation springs that released unevenly",
+      "finding": "The separation springs released unevenly and set the payload tumbling faster than its own controls could stop.",
+      "fix": "The springs are now matched in sets, and each release is filmed on the test rig.",
+      "fatal": false
+    },
+    {
+      "id": "rocket-propellant-floated",
+      "group": "ROCKET",
+      "phases": [
+        "space"
+      ],
+      "short": "propellant that floated away from the outlets",
+      "finding": "The {component}'s upper stage did not relight after its coast: in weightlessness its propellant had drifted away from the tank outlets.",
+      "fix": "Small settling rockets now push the propellant back over the outlets before every restart.",
+      "fatal": false
+    },
+    {
+      "id": "rocket-boil-off",
+      "group": "ROCKET",
+      "phases": [
+        "space"
+      ],
+      "short": "propellant lost to boil-off",
+      "finding": "Sunlight warmed the {component}'s upper-stage tanks more than predicted during the coast, and the propellant that boiled off left too little for the burn.",
+      "fix": "Better insulation and a new attitude for the coast now keep the tanks in shade.",
+      "fatal": false
+    },
+    {
+      "id": "rocket-level-sensor",
+      "group": "ROCKET",
+      "phases": [
+        "space",
+        "launch",
+        "surface-landing"
+      ],
+      "short": "a faulty level sensor",
+      "finding": "A faulty level sensor told the {component}'s engine that its tank was empty while propellant remained, and the engine shut down short of the planned speed.",
+      "fix": "Shutdown now needs two sensors to agree.",
+      "fatal": false
+    },
+    {
+      "id": "rocket-helium-leak",
+      "group": "ROCKET",
+      "phases": [
+        "space"
+      ],
+      "short": "a slow helium leak",
+      "finding": "A helium bottle that keeps the {component}'s tanks pressurized leaked slowly through a fitting, and by the time of the burn the pressure had fallen too far.",
+      "fix": "The fittings are now brazed rather than threaded, and the pressure is checked again before each burn.",
+      "fatal": false
+    },
+    {
+      "id": "probe-cracked-solder",
+      "group": "PROBE",
+      "phases": [],
+      "short": "a cracked solder joint",
+      "finding": "A solder joint on one of the {component}'s circuit boards cracked as it heated and cooled, and the system it fed went silent.",
+      "fix": "Boards are now cycled through heat and cold many more times before they fly."
+    },
+    {
+      "id": "probe-sequence-error",
+      "group": "PROBE",
+      "phases": [],
+      "short": "an error in the stored command sequence",
+      "finding": "One command in the {component}'s stored sequence carried the wrong value, and the craft followed it faithfully.",
+      "fix": "Every command list is now checked by a second team against a simulation of the whole flight.",
+      "fatal": false
+    },
+    {
+      "id": "probe-bit-flip",
+      "group": "PROBE",
+      "phases": [],
+      "short": "a radiation upset",
+      "finding": "A charged particle flipped a bit in the {component}'s memory, and the craft took the corrupted value for an order.",
+      "fix": "Critical values are now kept in three copies, and the craft goes by the majority."
+    },
+    {
+      "id": "probe-battery-overheat",
+      "group": "PROBE",
+      "phases": [
+        "ground"
+      ],
+      "short": "a battery damaged on the pad",
+      "finding": "The {component}'s battery overheated while it charged on the pad, and the cells it damaged could no longer carry the load.",
+      "fix": "Charging now runs at a lower rate, with a temperature cutoff."
+    },
+    {
+      "id": "probe-miswired-connector",
+      "group": "PROBE",
+      "phases": [
+        "ground"
+      ],
+      "short": "a connector mated one pin out of line",
+      "finding": "A connector on the {component} had been mated one pin out of line. The checkout had tested the circuit at the box, not through the cable.",
+      "fix": "Checkout now tests every circuit end to end, through the flight cables."
+    },
+    {
+      "id": "probe-resonant-bracket",
+      "group": "PROBE",
+      "phases": [
+        "launch"
+      ],
+      "short": "a bracket that resonated with the rocket",
+      "finding": "A bracket inside the {component} resonated with the rocket's vibration and broke, and the unit it held came loose.",
+      "fix": "The bracket was stiffened, and the craft is now shaken to the full launch levels before it ships."
+    },
+    {
+      "id": "probe-trapped-air",
+      "group": "PROBE",
+      "phases": [
+        "launch"
+      ],
+      "short": "air trapped in a sealed compartment",
+      "finding": "Air trapped in a sealed compartment of the {component} could not escape fast enough as the rocket climbed, and the pressure burst a panel.",
+      "fix": "Every compartment now has a vent sized for the climb."
+    },
+    {
+      "id": "probe-acoustic-crack",
+      "group": "PROBE",
+      "phases": [
+        "launch"
+      ],
+      "short": "the noise of liftoff",
+      "finding": "The roar of liftoff shook the {component}'s thin antenna dish until it cracked.",
+      "fix": "The dish now has stiffening ribs, and the craft is tested in an acoustic chamber.",
+      "fatal": false
+    },
+    {
+      "id": "probe-jammed-boom",
+      "group": "PROBE",
+      "phases": [
+        "separation"
+      ],
+      "short": "a boom that jammed on its hinge",
+      "finding": "A folded boom on the {component} jammed on its hinge, and with it folded the craft could not point.",
+      "fix": "The hinge has more clearance and a stronger spring, and deployment is tested hot and cold.",
+      "fatal": false
+    },
+    {
+      "id": "probe-panel-restraint",
+      "group": "PROBE",
+      "phases": [
+        "separation"
+      ],
+      "short": "a solar panel that did not unfold",
+      "finding": "A solar panel's restraint cable on the {component} did not cut, and without the panel the craft ran down its batteries.",
+      "fix": "Each restraint cable now has two cutters.",
+      "fatal": false
+    },
+    {
+      "id": "probe-over-spin",
+      "group": "PROBE",
+      "phases": [
+        "separation"
+      ],
+      "short": "a spin-up faster than designed",
+      "finding": "The {component} came away spinning faster than it was built for, and the force tore at its booms and antennas.",
+      "fix": "The spin rockets were resized and their timing checked again on the ground.",
+      "fatal": false
+    },
+    {
+      "id": "probe-overheating",
+      "group": "PROBE",
+      "phases": [
+        "space"
+      ],
+      "short": "overheating in sunlight",
+      "finding": "The {component} ran hotter in sunlight than its designers predicted, and its electronics went past their limits.",
+      "fix": "More of its surface is now covered with reflective tape, and its electronics are rated for higher temperatures."
+    },
+    {
+      "id": "probe-lost-sun",
+      "group": "PROBE",
+      "phases": [
+        "space"
+      ],
+      "short": "a lost attitude reference",
+      "finding": "The sensor that finds the Sun lost its lock, and the {component} spent its control gas hunting for it.",
+      "fix": "A second sensor, and a limit on the gas a search may use, now keep a lost craft from emptying its tanks.",
+      "fatal": false
+    },
+    {
+      "id": "probe-transmitter-tube",
+      "group": "PROBE",
+      "phases": [
+        "space"
+      ],
+      "short": "a transmitter that wore out",
+      "finding": "The {component}'s transmitter tube failed under the strain of a long flight, and nothing more was heard.",
+      "fix": "A spare transmitter now flies on every craft, switched in automatically.",
+      "fatal": false
+    },
+    {
+      "id": "probe-slow-valve",
+      "group": "PROBE",
+      "phases": [
+        "space",
+        "surface-landing",
+        "surface-liftoff"
+      ],
+      "short": "an engine valve slow to close",
+      "finding": "The {component}'s engine burned longer than ordered: a valve was slow to close.",
+      "fix": "The valve now closes on two signals, and a separate timer cuts every burn off as well."
+    },
+    {
+      "id": "probe-power-bus",
+      "group": "PROBE",
+      "phases": [
+        "space"
+      ],
+      "short": "a short that took down the power",
+      "finding": "A short in one instrument pulled the {component}'s whole power supply down, because nothing isolated it.",
+      "fix": "Each instrument now sits behind its own fuse."
+    },
+    {
+      "id": "probe-shield-erosion",
+      "group": "PROBE",
+      "phases": [
+        "landing",
+        "planet-entry"
+      ],
+      "short": "a heat shield that wore away too fast",
+      "finding": "The {component}'s heat shield wore away faster than tests had shown, and the instruments inside overheated before the parachute opened.",
+      "fix": "The shield is now thicker, and its material was tested again at the speeds of a real entry."
+    },
+    {
+      "id": "probe-torn-parachute",
+      "group": "PROBE",
+      "phases": [
+        "landing",
+        "planet-entry"
+      ],
+      "short": "a parachute that tore",
+      "finding": "The {component}'s parachute opened at a speed it was not built for, and tore.",
+      "fix": "Deployment now waits for a lower speed, and the canopy was reinforced."
+    },
+    {
+      "id": "probe-crushed-hull",
+      "group": "PROBE",
+      "phases": [
+        "planet-entry"
+      ],
+      "short": "a hull that gave way to the pressure",
+      "finding": "The {component}'s hull gave way to an atmosphere denser than its design assumed.",
+      "fix": "The design now assumes the harshest measurement on record, not the average, and is tested in a pressure chamber beyond it."
+    },
+    {
+      "id": "probe-radar-echo",
+      "group": "PROBE",
+      "phases": [
+        "surface-landing",
+        "planet-entry"
+      ],
+      "short": "a false radar echo",
+      "finding": "The {component}'s radar altimeter mistook a stray echo for the surface, and the braking came too late.",
+      "fix": "The altimeter now checks two beams against each other before it trusts a reading."
+    },
+    {
+      "id": "craft-nicked-wire",
+      "group": "SPACECRAFT",
+      "phases": [],
+      "short": "a wire nicked during assembly",
+      "finding": "The insulation of a wire bundle behind a panel in the {component} had been nicked during assembly, and in flight the bare wire shorted.",
+      "fix": "Wiring is now inspected after every panel is closed, and the bundles run behind guards."
+    },
+    {
+      "id": "craft-tank-heater",
+      "group": "SPACECRAFT",
+      "phases": [],
+      "short": "a damaged switch in an oxygen tank",
+      "finding": "A heater switch inside an oxygen tank of the {component} had been damaged in a ground test long before the flight. In flight it overheated, and the tank failed.",
+      "fix": "The switches are now rated for the voltage they really see, and tank tests record the temperature inside the tank."
+    },
+    {
+      "id": "craft-coolant-leak",
+      "group": "SPACECRAFT",
+      "phases": [],
+      "short": "a coolant leak",
+      "finding": "Coolant leaked from a fitting in the {component}'s cooling loop, and without it the electronics overheated.",
+      "fix": "The loop's fittings are now brazed, and the loop is leak-tested under pressure before every launch."
+    },
+    {
+      "id": "craft-hatch-seal",
+      "group": "SPACECRAFT",
+      "phases": [
+        "ground"
+      ],
+      "fatal": false,
+      "short": "a hatch seal that failed its check",
+      "finding": "The {component}'s hatch seal failed its pressure check in the countdown, and the flight could not go on with a cabin that might leak.",
+      "fix": "The seal is made of a new material, and its check now comes earlier, while there is time to fix it."
+    },
+    {
+      "id": "craft-cabin-materials",
+      "group": "SPACECRAFT",
+      "phases": [
+        "ground"
+      ],
+      "short": "flammable materials in the cabin",
+      "finding": "A spark from a wire found materials in the {component}'s cabin that burned far more fiercely than anyone had expected.",
+      "fix": "Every cabin material is now tested for how it burns, and the cabin is no longer filled with pure oxygen on the pad."
+    },
+    {
+      "id": "craft-stuck-vent",
+      "group": "SPACECRAFT",
+      "phases": [
+        "launch"
+      ],
+      "short": "a cabin vent that stuck open",
+      "finding": "A cabin vent in the {component} failed to close as it climbed, and the cabin pressure fell.",
+      "fix": "The vent now closes on a spring, and its closing is checked on the pad."
+    },
+    {
+      "id": "craft-launch-debris",
+      "group": "SPACECRAFT",
+      "phases": [
+        "launch"
+      ],
+      "short": "debris shed by the rocket",
+      "finding": "Insulation shed by the rocket struck the {component} during the climb and damaged its skin.",
+      "fix": "The insulation that could shed was bonded again, and cameras now watch every climb."
+    },
+    {
+      "id": "craft-adapter-joint",
+      "group": "SPACECRAFT",
+      "phases": [
+        "launch"
+      ],
+      "short": "a cracked adapter joint",
+      "finding": "The joint between the {component} and its adapter flexed beyond its design load under the climb's acceleration, and cracked.",
+      "fix": "The joint was strengthened and load-tested to half again beyond what a flight puts on it."
+    },
+    {
+      "id": "craft-docking-guide",
+      "group": "SPACECRAFT",
+      "phases": [
+        "separation"
+      ],
+      "short": "a bent docking guide",
+      "finding": "The {component}'s docking latches did not engage: a guide had bent on first contact and held them out of line.",
+      "fix": "The guides are stiffer, and the latches were tested again across the whole range of approach angles.",
+      "fatal": false
+    },
+    {
+      "id": "craft-stuck-thruster",
+      "group": "SPACECRAFT",
+      "phases": [
+        "separation",
+        "space"
+      ],
+      "short": "a thruster that stuck open",
+      "finding": "One of the {component}'s attitude thrusters stuck open and set the craft spinning.",
+      "fix": "Each ring of thrusters can now be shut off on its own, and the valves were redesigned.",
+      "fatal": false
+    },
+    {
+      "id": "craft-charge-order",
+      "group": "SPACECRAFT",
+      "phases": [
+        "separation"
+      ],
+      "short": "separation charges that fired out of order",
+      "finding": "A separation charge on the {component} fired out of order and damaged the module beside it.",
+      "fix": "The firing circuits are now interlocked, so the charges can only fire in sequence."
+    },
+    {
+      "id": "craft-rendezvous-radar",
+      "group": "SPACECRAFT",
+      "phases": [
+        "separation"
+      ],
+      "short": "a rendezvous radar that lost its target",
+      "finding": "The {component}'s rendezvous radar lost its target at close range, and the approach went on without the numbers it needed.",
+      "fix": "The radar's antenna mount was changed to keep the target in view, and the approach now has a fallback using optical tracking.",
+      "fatal": false
+    },
+    {
+      "id": "craft-scrubber-moisture",
+      "group": "SPACECRAFT",
+      "phases": [
+        "space"
+      ],
+      "short": "carbon dioxide absorbent spoiled by damp",
+      "finding": "The {component}'s carbon dioxide cartridges saturated far faster than rated: their absorbent had taken up moisture in storage.",
+      "fix": "Cartridges are now sealed for storage, and some from every batch are tested."
+    },
+    {
+      "id": "craft-fuel-cell",
+      "group": "SPACECRAFT",
+      "phases": [
+        "space"
+      ],
+      "short": "a flooded fuel cell",
+      "finding": "A fuel cell in the {component} flooded with its own water, and its output collapsed.",
+      "fix": "The water separator was redesigned, and the cells now have a backup battery."
+    },
+    {
+      "id": "craft-computer-overload",
+      "group": "SPACECRAFT",
+      "phases": [
+        "space",
+        "surface-landing"
+      ],
+      "short": "an overloaded guidance computer",
+      "finding": "The {component}'s guidance computer was flooded with data it did not need, and dropped tasks it did.",
+      "fix": "The program now sheds its least important work first, and the switch that fed the extra data was rewired.",
+      "fatal": false
+    },
+    {
+      "id": "craft-radiators",
+      "group": "SPACECRAFT",
+      "phases": [
+        "space"
+      ],
+      "short": "radiators too small for the attitude",
+      "finding": "The {component}'s radiators could not shed enough heat in the attitude it held, and the cabin warmed beyond its limits.",
+      "fix": "Flight plans now turn the craft to spread the sunlight evenly, and the radiators were enlarged."
+    },
+    {
+      "id": "craft-pressure-valve",
+      "group": "SPACECRAFT",
+      "phases": [
+        "space",
+        "landing"
+      ],
+      "short": "a pressure valve that opened early",
+      "finding": "A pressure-equalizing valve in the {component} opened before its time, and the cabin lost its air.",
+      "fix": "The valve was redesigned so that it cannot open while the cabin is sealed, and it has a cover that can be closed by hand."
+    },
+    {
+      "id": "craft-shield-seam",
+      "group": "SPACECRAFT",
+      "phases": [
+        "landing"
+      ],
+      "short": "a seam in the heat shield",
+      "finding": "A seam in the {component}'s heat shield opened under the heat of reentry.",
+      "fix": "The shield's seams are now bonded in a single cure and inspected with ultrasound."
+    },
+    {
+      "id": "craft-tangled-chute",
+      "group": "SPACECRAFT",
+      "phases": [
+        "landing"
+      ],
+      "short": "a parachute tangled in its lines",
+      "finding": "The {component}'s main parachute tangled in its own lines as it came out.",
+      "fix": "The packing method was changed, and the chute now opens in stages."
+    },
+    {
+      "id": "craft-short-retro",
+      "group": "SPACECRAFT",
+      "phases": [
+        "landing"
+      ],
+      "short": "a retrorocket burn cut short",
+      "finding": "The {component}'s retrorocket burned for less than its planned time, and the craft met the atmosphere at the wrong angle.",
+      "fix": "The burn now has a second, independent timer, and the engine controller a backup."
+    },
+    {
+      "id": "craft-module-straps",
+      "group": "SPACECRAFT",
+      "phases": [
+        "landing"
+      ],
+      "short": "modules that failed to separate",
+      "finding": "The {component}'s equipment module did not fully separate before reentry, and the two entered the atmosphere still joined.",
+      "fix": "The separation bolts now have twin charges, and the straps that held were redesigned to cut cleanly."
+    },
+    {
+      "id": "craft-landing-trigger",
+      "group": "SPACECRAFT",
+      "phases": [
+        "landing"
+      ],
+      "short": "landing rockets that fired too late",
+      "finding": "The {component}'s landing rockets fired too late to soften the impact: their trigger had been confused by the swaying of the parachute.",
+      "fix": "The trigger now ignores readings it cannot confirm, and the rockets have a backup timer."
+    },
+    {
+      "id": "craft-bent-hinge",
+      "group": "SPACECRAFT",
+      "phases": [
+        "eva"
+      ],
+      "short": "a hatch hinge bent in vacuum",
+      "finding": "The {component}'s hatch would not seal again after the spacewalk: its hinge had bent as it opened in vacuum.",
+      "fix": "The hinge is stronger, and the hatch is now tested opening and closing in a vacuum chamber."
+    },
+    {
+      "id": "craft-airlock-valve",
+      "group": "SPACECRAFT",
+      "phases": [
+        "eva"
+      ],
+      "short": "a leaking airlock valve",
+      "finding": "The {component}'s airlock valve leaked as it filled again, and the craft could not hold its air.",
+      "fix": "The valve now seats against two seals, and checking both is part of the airlock procedure."
+    },
+    {
+      "id": "suit-glove-seam",
+      "group": "SUIT",
+      "phases": [],
+      "short": "a split glove seam",
+      "finding": "A seam in a glove of the {component} split at the knuckle, where it flexes with every grip.",
+      "fix": "The glove is now stitched in a different pattern and flexed thousands of times on a test rig before it flies."
+    },
+    {
+      "id": "suit-cooling-pump",
+      "group": "SUIT",
+      "phases": [],
+      "short": "a cooling pump that stalled",
+      "finding": "The pump of the {component}'s cooling garment stalled, and the suit overheated within minutes.",
+      "fix": "The pump has a backup, and the suit now warns early of a rise in temperature."
+    },
+    {
+      "id": "suit-frozen-regulator",
+      "group": "SUIT",
+      "phases": [],
+      "short": "an oxygen regulator that froze",
+      "finding": "The {component}'s oxygen regulator froze in the cold of shadow and gave too little flow.",
+      "fix": "The regulator now has a heater and was tested again at the coldest temperatures of a spacewalk."
+    },
+    {
+      "id": "suit-too-stiff",
+      "group": "SUIT",
+      "phases": [],
+      "fatal": false,
+      "short": "a suit too stiff to work in",
+      "finding": "Pressurized in vacuum, the {component} was far stiffer than in tests on the ground, and the work planned for it could not be done.",
+      "fix": "Joints with bearings now let the suit bend under pressure, and the work plan adds handholds and rests."
+    },
+    {
+      "id": "suit-tether-clip",
+      "group": "SUIT",
+      "phases": [
+        "eva"
+      ],
+      "short": "a tether clip that opened",
+      "finding": "A tether clip on the {component} opened under a load it should have held.",
+      "fix": "The clip was redesigned to lock, and every tether is now load-tested before flight."
+    },
+    {
+      "id": "suit-fogged-visor",
+      "group": "SUIT",
+      "phases": [
+        "eva"
+      ],
+      "fatal": false,
+      "short": "a fogged visor",
+      "finding": "The {component}'s visor fogged over, and the work outside had to stop.",
+      "fix": "The visor has an anti-fog coating, and more air now flows across it."
+    },
+    {
+      "id": "suit-kinked-umbilical",
+      "group": "SUIT",
+      "phases": [
+        "eva"
+      ],
+      "short": "a kinked umbilical",
+      "finding": "The {component}'s umbilical kinked and cut off the flow of oxygen to the suit.",
+      "fix": "The umbilical now has a stiffer sleeve that cannot bend tightly enough to close."
+    },
+    {
+      "id": "suit-sharp-edge",
+      "group": "SUIT",
+      "phases": [
+        "eva"
+      ],
+      "short": "a sharp edge on the craft",
+      "finding": "A sharp edge on the outside of the craft cut through the {component}'s outer layers.",
+      "fix": "Edges along every route outside are now padded, and the suit's outer layer is thicker at the knees and hands."
+    },
+    {
+      "id": "rocket-pad-fire",
+      "group": "ROCKET",
+      "phases": [
+        "ground"
+      ],
+      "short": "a fuel leak that caught fire",
+      "finding": "Kerosene leaking from a loose fitting on the {component} pooled at the foot of the pad, and a spark from the pad's electrics set it alight.",
+      "fix": "Every fitting is now leak-checked under pressure before fuelling, and the pad's electrics are sealed so they cannot spark."
+    },
+    {
+      "id": "rocket-premature-start",
+      "group": "ROCKET",
+      "phases": [
+        "ground"
+      ],
+      "short": "an engine that lit on the pad",
+      "finding": "A check of the {component}'s circuits during the countdown sent a start command that should have been blocked, and an engine lit on the pad.",
+      "fix": "An engine can now start only through a hardware interlock that the launch sequence alone releases, and circuit checks are finished before any propellant is loaded."
+    },
+    {
+      "id": "probe-camera-power",
+      "group": "PROBE",
+      "phases": [
+        "surface-landing"
+      ],
+      "fatal": false,
+      "short": "cameras that lost their power",
+      "finding": "The {component}'s cameras lost their power minutes before the end, and the pictures it was sent for never came.",
+      "fix": "The cameras now have their own battery and switch on early, with a timer as a backup."
+    },
+    {
+      "id": "craft-descent-throttle",
+      "group": "SPACECRAFT",
+      "phases": [
+        "surface-landing"
+      ],
+      "short": "a descent engine that wouldn't throttle",
+      "finding": "A valve in the {component}'s descent engine stuck, so the engine would not throttle down smoothly, and the craft came down faster than it could correct.",
+      "fix": "The valve was redesigned, and the engine's throttling is now tested across its whole range in a vacuum chamber."
+    },
+    {
+      "id": "craft-landing-radar",
+      "group": "SPACECRAFT",
+      "phases": [
+        "surface-landing"
+      ],
+      "short": "a landing radar that lost the ground",
+      "finding": "The {component}'s landing radar lost its lock on the surface in the last minute of the descent, and the guidance flew on old numbers.",
+      "fix": "The radar's antenna was moved where the craft's own legs and exhaust cannot block it, and the guidance now holds a safe hover while the radar is out."
+    },
+    {
+      "id": "craft-propellant-slosh",
+      "group": "SPACECRAFT",
+      "phases": [
+        "surface-landing"
+      ],
+      "short": "propellant sloshing in the tanks",
+      "finding": "Propellant sloshing in the {component}'s tanks during the descent fooled its gauges into reading them nearly empty, and the abort that followed came too late.",
+      "fix": "Baffles now calm the propellant, and the gauges average their readings before they warn."
+    },
+    {
+      "id": "craft-buckled-leg",
+      "group": "SPACECRAFT",
+      "phases": [
+        "surface-landing"
+      ],
+      "short": "a landing leg that buckled",
+      "finding": "One of the {component}'s landing legs buckled on a boulder it came down on, and the craft tipped over.",
+      "fix": "The legs were strengthened and their crushable struts lengthened, and landing sites must now be flatter."
+    },
+    {
+      "id": "craft-ascent-valve",
+      "group": "SPACECRAFT",
+      "phases": [
+        "surface-liftoff"
+      ],
+      "short": "an ascent engine valve that stuck",
+      "finding": "One of the propellant valves of the {component}'s ascent engine opened only part of the way, and the engine never reached full thrust.",
+      "fix": "Each valve now has a second, parallel path, and each is fired many times on the ground before it flies."
+    },
+    {
+      "id": "craft-stage-bolt",
+      "group": "SPACECRAFT",
+      "phases": [
+        "surface-liftoff"
+      ],
+      "short": "a stage that wouldn't let go",
+      "finding": "A bolt joining the {component}'s ascent stage to the stage below did not fire cleanly, and the liftoff began with the craft still held at one corner.",
+      "fix": "Every bolt now has two charges, and the circuits that fire them were rewired apart from each other."
+    },
+    {
+      "id": "craft-surface-dust",
+      "group": "SPACECRAFT",
+      "phases": [
+        "surface-liftoff",
+        "surface-landing"
+      ],
+      "short": "dust in a connector",
+      "finding": "Dust kicked up on the surface worked into a connector on the {component} and broke a circuit the liftoff needed.",
+      "fix": "Exposed connectors now wear dust caps that stay on until the moment they are used."
+    },
+    {
+      "id": "craft-control-actuator",
+      "group": "SPACECRAFT",
+      "phases": [
+        "winged"
+      ],
+      "short": "a jammed control actuator",
+      "finding": "An actuator that moves one of the {component}'s control surfaces jammed at speed, and the craft rolled further than the other surfaces could hold.",
+      "fix": "The actuator now has a second motor, and its linkage was rebuilt with more room for the heat."
+    },
+    {
+      "id": "craft-skin-heating",
+      "group": "SPACECRAFT",
+      "phases": [
+        "winged"
+      ],
+      "short": "a skin panel buckled by heat",
+      "finding": "Air friction at top speed heated a skin panel on the {component} beyond its rating, and it buckled and tore away.",
+      "fix": "The panel is now made of a heat-resistant alloy, and its joints let it expand."
+    },
+    {
+      "id": "craft-rough-start",
+      "group": "SPACECRAFT",
+      "phases": [
+        "winged"
+      ],
+      "short": "a rough engine start",
+      "finding": "The {component}'s rocket engine lit roughly, with a pressure spike that damaged its chamber.",
+      "fix": "The igniter was redesigned to light the propellants more evenly, and the start now pauses to check the pressures."
+    },
+    {
+      "id": "craft-gear-lock",
+      "group": "SPACECRAFT",
+      "phases": [
+        "winged"
+      ],
+      "short": "a landing gear that didn't lock",
+      "finding": "The {component}'s landing gear collapsed as it touched down: a lock had not engaged.",
+      "fix": "Each gear leg now signals when it is locked, and the lock was redesigned to engage under load."
+    }
+  ],
+  "factors": [
+    {
+      "id": "factor-schedule",
+      "text": "The board found that the pressure of the schedule had pushed testing into the weeks before the flight, leaving no time to follow up on what the tests showed."
+    },
+    {
+      "id": "factor-test-conditions",
+      "text": "Ground tests had never put the part under the conditions it met in flight."
+    },
+    {
+      "id": "factor-sampling",
+      "text": "Inspection had checked a sample from each batch of parts, not every one."
+    },
+    {
+      "id": "factor-paperwork",
+      "text": "A change to the design had reached the drawings but not everyone who built and tested the part."
+    },
+    {
+      "id": "factor-earlier-signs",
+      "text": "Earlier flights had shown signs of the problem, and they had been filed as within limits rather than understood."
+    },
+    {
+      "id": "factor-supplier-tests",
+      "text": "The agency had relied on its supplier's tests without checking them."
+    },
+    {
+      "id": "factor-concerns",
+      "text": "Concerns raised by engineers had not reached the people who decided whether to fly."
+    },
+    {
+      "id": "factor-margins",
+      "text": "The design's safety margins had been worn away by weight savings made late in its development."
+    }
+  ],
+  "boardStories": [
+    {
+      "id": "board-names-cause",
+      "headline": "Board names cause of {program} loss",
+      "deck": "Investigators point to {cause} in the {component}",
+      "lead": "The independent board that investigated the loss of {mission} in {season} has published its report.",
+      "close": "{agency} has accepted every one of the board's recommendations. Its crewed flights may fly again."
+    },
+    {
+      "id": "board-what-went-wrong",
+      "headline": "{program}: what went wrong",
+      "deck": "Report traces the accident to {cause}",
+      "lead": "The board of inquiry into the loss of {mission} in {season} has given its findings.",
+      "close": "The report closes with the names of the crew: {crew}."
+    },
+    {
+      "id": "board-inquiry-ends",
+      "headline": "Inquiry ends: the {program} accident explained",
+      "deck": "The board finds {cause} and calls for changes across the program",
+      "lead": "The inquiry into the loss of {mission} in {season} is over.",
+      "close": "{agency} says the changes are made, and that it will fly again."
+    },
+    {
+      "id": "board-to-fly-again",
+      "headline": "{agency} to fly again after {program} findings",
+      "deck": "Independent report blames {cause}",
+      "lead": "The board investigating {mission}, lost in {season}, has delivered its report.",
+      "close": "With the report published, {agency}'s crewed flights may resume."
+    }
+  ]
+}

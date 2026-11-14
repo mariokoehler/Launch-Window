@@ -325,6 +325,12 @@ class MessageRegistryTest {
         FrontPagesResponse withLoss = FrontPagesResponse.of(List.of(memorial), List.of(new FrontPage.Statement(
             loss.id(), FrontPage.Stance.CONDOLENCES, "")), List.of(loss));
         assertEquals(withLoss, roundTrip(withLoss, FrontPagesResponse.class));
+        // A board's report on the loss (design.md 2.14(b)).
+        FrontPage report = new FrontPage("48-report-1", "", 48, "board-names-cause", "Cold", List.of(),
+            List.of(orion), List.of(), FrontPage.Kind.REPORT, null, List.of(), null,
+            new FrontPage.Report(loss, "craft-shield-seam", "factor-schedule", "apollo-csm"));
+        FrontPagesResponse withReport = FrontPagesResponse.of(List.of(memorial, report), List.of());
+        assertEquals(withReport, roundTrip(withReport, FrontPagesResponse.class));
         SubmitStatementRequest give = new SubmitStatementRequest(27, first.id(), FrontPage.Stance.DOWNPLAY, "A stunt.");
         assertEquals(give, roundTrip(give, SubmitStatementRequest.class));
         SubmitStatementRequest withdraw = new SubmitStatementRequest(27, first.id(), null, "");

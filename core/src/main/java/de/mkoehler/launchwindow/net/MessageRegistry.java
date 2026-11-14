@@ -353,5 +353,10 @@ public final class MessageRegistry {
         // Pay expectations (design.md section 2.2(c), 2026-11-13). Never move these lines.
         kryo.register(de.mkoehler.launchwindow.actions.RaiseSalaryAction.class);
         kryo.register(de.mkoehler.launchwindow.actions.MeetExpectationsAction.class);
+
+        // Incident investigations (design.md section 2.14, 2026-11-14). Never move these lines.
+        kryo.register(de.mkoehler.launchwindow.actions.StartInvestigationAction.class);
+        kryo.register(de.mkoehler.launchwindow.actions.CancelInvestigationAction.class);
+        kryo.register(de.mkoehler.launchwindow.model.FrontPage.Report.class);
     }
 }

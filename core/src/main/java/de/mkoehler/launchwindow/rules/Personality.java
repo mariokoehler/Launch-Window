@@ -298,6 +298,7 @@ public final class Personality {
         if (copy.getPendingDecision() != null) {
             copy.setPendingDecision(copy.getPendingDecision().withoutSeed());
         }
+        copy.setIncidents(copy.getIncidents().stream().map(de.mkoehler.launchwindow.model.Incident::withoutSeed).toList());
         return copy;
     }
 

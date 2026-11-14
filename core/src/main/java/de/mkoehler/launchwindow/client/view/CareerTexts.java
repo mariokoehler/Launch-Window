@@ -186,6 +186,11 @@ public final class CareerTexts {
                 + seasons(entry.count()) + " together";
             case EXPERT -> "Expert trait earned: " + TurnReportView.skillLabel(entry.ref());
             case WINGS -> "Rocket-plane wings earned, on " + mission(entry.ref(), catalog);
+            case INVESTIGATION -> "Led the investigation into the failure of " + mission(entry.ref(), catalog) + " at "
+                + TurnReportView.stepInSentence(entry.ref(), entry.note()) + ": "
+                + ("FOUND".equals(entry.outcome())
+                    ? String.format(Locale.ROOT, "cause found, reliability +%.1f", entry.value())
+                    : "cause undetermined");
             case AMBITION -> ambitionLine(entry);
             case JOINED -> String.format(Locale.ROOT, "Joined from %s, for +%d %%: salary %s → %d, a signing bonus of %d",
                 entry.ref(), entry.count(), entry.note(), Math.round(entry.value()), Math.round(entry.value()));
@@ -219,6 +224,7 @@ public final class CareerTexts {
     public static boolean highlight(CareerEntry entry) {
         return switch (entry.kind()) {
             case TRAIT, RELATIONSHIP, FLIGHT, FIRST, EXPERT -> true;
+            case INVESTIGATION -> "FOUND".equals(entry.outcome());
             case AMBITION -> AmbitionSettled.Outcome.FULFILLED.name().equals(entry.outcome());
             default -> false;
         };

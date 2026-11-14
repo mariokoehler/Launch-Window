@@ -41,6 +41,10 @@ import de.mkoehler.launchwindow.model.Personnel;
 import de.mkoehler.launchwindow.rules.MissionStepOutcome;
 import de.mkoehler.launchwindow.rules.ResearchPlanning;
 import de.mkoehler.launchwindow.rules.TurnReport;
+import de.mkoehler.launchwindow.rules.OfficialReportIssued;
+import de.mkoehler.launchwindow.rules.ResolutionEvent;
+import de.mkoehler.launchwindow.client.view.InvestigationsView;
+import de.mkoehler.launchwindow.content.InvestigationCauses;
 
 import java.util.List;
 import java.util.Locale;
@@ -147,6 +151,10 @@ public final class TurnReportScreen extends ChromeScreen {
         Table findings = findings(catalog);
         if (findings != null) {
             first.add(findings).row();
+        }
+        Table investigations = investigations(catalog);
+        if (investigations != null) {
+            first.add(investigations).row();
         }
         Table archive = archive(catalog);
         if (archive != null) {
@@ -545,6 +553,72 @@ public final class TurnReportScreen extends ChromeScreen {
             card.add(row).padBottom(i < lines.size() - 1 ? Theme.SPACE_3 : 0f).row();
         }
         return card;
+    }
+
+    /**
+     * The Investigations card ({@code design.md} &sect;2.14, {@code ui-spec.md} &sect;4.24), or {@code null} on a
+     * turn with none: a failure that can be investigated, with its controls; an investigation's result, with
+     * what came back; a board opened or reporting on a lost crew, with the way to its memorial.
+     */
+    private Table investigations(ContentCatalog catalog) {
+        List<InvestigationsView.ReportLine> lines = new java.util.ArrayList<>(InvestigationsView.reportLines(report,
+            catalog, InvestigationCauses.standard()));
+        // An offer stays open for more than one turn: the latest report lists the ones still open.
+        if (report.gameTurn() >= session.latestResolvedTurn()) {
+            lines.addAll(InvestigationsView.stillOpen(session.state(), lines, catalog));
+        }
+        if (lines.isEmpty()) {
+            return null;
+        }
+        Table card = section("Investigations", "What went wrong, and what was done");
+        for (int i = 0; i < lines.size(); i++) {
+            InvestigationsView.ReportLine line = lines.get(i);
+            Table row = new Table();
+            Table text = new Table();
+            text.left();
+            text.defaults().left().growX();
+            text.add(ui.paragraph(line.title(), Theme.TextStyle.BODY_STRONG, Theme.INK)).padBottom(2f).row();
+            if (!line.text().isEmpty()) {
+                text.add(ui.paragraph(line.text(), Theme.TextStyle.BODY_SM, Theme.INK)).padBottom(2f).row();
+            }
+            if (!line.detail().isEmpty()) {
+                text.add(ui.paragraph(line.detail(), Theme.TextStyle.CAPTION, Theme.INK_MUTED)).row();
+            }
+            if (line.kind() == InvestigationsView.Kind.BOARD_REPORTED) {
+                int memorial = memorialIndex(line.incidentId());
+                if (memorial >= 0) {
+                    Label open = ui.label("Open the memorial", Theme.TextStyle.CAPTION, Theme.NAVY);
+                    open.setTouchable(com.badlogic.gdx.scenes.scene2d.Touchable.enabled);
+                    open.addListener(clicked(() -> game.setScreen(new MemorialPersonScreen(game, memorial,
+                        () -> new TurnReportScreen(game, report)))));
+                    text.add(open).padTop(2f).row();
+                }
+            }
+            row.add(text).expandX().fillX().left().padRight(Theme.SPACE_3);
+            if (line.kind() == InvestigationsView.Kind.OFFERED) {
+                row.add(investigationControls(line.incidentId())).right().top();
+            } else if (!line.value().isEmpty()) {
+                row.add(ui.label(line.value(), Theme.TextStyle.BODY_STRONG, Theme.SUCCESS)).right().top();
+            }
+            card.add(row).padBottom(i < lines.size() - 1 ? Theme.SPACE_3 : 0f).row();
+        }
+        return card;
+    }
+
+    /** The memorial entry of the first of a board report's crew, or -1. */
+    private int memorialIndex(String incidentId) {
+        for (ResolutionEvent event : report.events()) {
+            if (event instanceof OfficialReportIssued issued && issued.incidentId().equals(incidentId)
+                    && !issued.crewIds().isEmpty()) {
+                var memorial = session.state().getMemorial();
+                for (int i = 0; i < memorial.size(); i++) {
+                    if (issued.crewIds().getFirst().equals(memorial.get(i).personnelId())) {
+                        return i;
+                    }
+                }
+            }
+        }
+        return -1;
     }
 
     private Table chip(String text, Color color, Color fill) {

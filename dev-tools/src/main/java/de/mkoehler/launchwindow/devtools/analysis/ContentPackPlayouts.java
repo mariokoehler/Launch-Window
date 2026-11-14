@@ -644,6 +644,7 @@ public final class ContentPackPlayouts {
             seasonNow = season;
             long fundsStart = snapshot.getFunds();
             decideWaiting(snapshot, random);
+            investigateWaiting(snapshot, season);
             act(snapshot, random, tally);
             if (contractRivals >= 0) {
                 actContracts(snapshot, tally);
@@ -689,6 +690,7 @@ public final class ContentPackPlayouts {
             decisionSeasons.add(new boolean[] {seasonEvents.stream()
                 .anyMatch(de.mkoehler.launchwindow.rules.DecisionOffered.class::isInstance), tally.launchedThisSeason > 0});
             for (ResolutionEvent event : seasonEvents) {
+                countInvestigation(event);
                 if (event instanceof de.mkoehler.launchwindow.rules.RandomEventOccurred occurred) {
                     randomEvents[occurred.kind().isPositive() ? 0 : 1]++;
                     tally.randomEventKinds.merge(occurred.kind().name(), 1, Integer::sum);
@@ -784,6 +786,57 @@ public final class ContentPackPlayouts {
             tally.randomEventsPerGame.add(new int[] {randomEvents[0], randomEvents[1], seasons});
             tally.decisionSeasons.add(decisionSeasons);
         }
+    }
+
+    /**
+     * Starts every failure's investigation the way a careful player might: led by whoever is expected to give
+     * back the most, less the R&amp;D they leave ({@code design.md} &sect;2.14). Seeded by the incident, so the
+     * season's draws stay. {@code -Drules.investigations=off} turns them off.
+     */
+    private void investigateWaiting(PlayerSnapshot snapshot, int season) {
+        for (var incident : de.mkoehler.launchwindow.rules.Investigations.agencyIncidents(snapshot)) {
+            if (incident.started()) {
+                continue;
+            }
+            de.mkoehler.launchwindow.rules.Investigations.bestLead(snapshot, catalog, incident).ifPresent(lead ->
+                de.mkoehler.launchwindow.rules.Investigations.start(snapshot, catalog, incident.id(), lead.getId(),
+                    incident.id().hashCode() * 31L + season));
+        }
+    }
+
+    /** Investigations over every game: offered, started, found, board reports, and points given back. */
+    private static final java.util.concurrent.ConcurrentHashMap<String, Double> INVESTIGATIONS =
+        new java.util.concurrent.ConcurrentHashMap<>();
+
+    private static void countInvestigation(ResolutionEvent event) {
+        if (event instanceof de.mkoehler.launchwindow.rules.InvestigationOffered offered) {
+            INVESTIGATIONS.merge("offered", 1.0, Double::sum);
+            INVESTIGATIONS.merge("lost", offered.totalLoss(), Double::sum);
+        } else if (event instanceof de.mkoehler.launchwindow.rules.InvestigationConcluded concluded) {
+            INVESTIGATIONS.merge("concluded", 1.0, Double::sum);
+            INVESTIGATIONS.merge(concluded.found() ? "found" : "undetermined", 1.0, Double::sum);
+            INVESTIGATIONS.merge("recovered", concluded.totalRecovered(), Double::sum);
+        } else if (event instanceof de.mkoehler.launchwindow.rules.InvestigationLapsed) {
+            INVESTIGATIONS.merge("lapsed", 1.0, Double::sum);
+        } else if (event instanceof de.mkoehler.launchwindow.rules.OfficialReportIssued) {
+            INVESTIGATIONS.merge("boards", 1.0, Double::sum);
+        }
+    }
+
+    /**
+     * Prints the investigations counted, per game.
+     *
+     * @param games the games played
+     */
+    static void printInvestigations(int games) {
+        double offered = INVESTIGATIONS.getOrDefault("offered", 0.0);
+        double concluded = INVESTIGATIONS.getOrDefault("concluded", 0.0);
+        System.out.printf(java.util.Locale.ROOT, "Investigations (%s): %.1f offered a game, %.1f led, %.0f %% found;"
+                + " %.1f points lost to those failures a game, %.1f given back; %.0f lapsed, %.2f board reports a game%n",
+            de.mkoehler.launchwindow.rules.Investigations.enabled() ? "on" : "off", offered / games,
+            concluded / games, concluded == 0 ? 0 : 100 * INVESTIGATIONS.getOrDefault("found", 0.0) / concluded,
+            INVESTIGATIONS.getOrDefault("lost", 0.0) / games, INVESTIGATIONS.getOrDefault("recovered", 0.0) / games,
+            INVESTIGATIONS.getOrDefault("lapsed", 0.0), INVESTIGATIONS.getOrDefault("boards", 0.0) / games);
     }
 
     /**
@@ -2594,6 +2647,7 @@ public final class ContentPackPlayouts {
         }
         int seasons = harness.declaredGoals().equals(MOON_DECLARED_GOALS) ? 240 : 80;
         Report report = harness.run(200, seasons, Long.getLong("bot.seed", 42L));
+        printInvestigations(200);
         System.out.println(report.games() + " games, " + report.seasons() + " seasons max, declared goals "
             + harness.declaredGoals());
         System.out.println("Completed (all declared goals): " + report.completedByArchetype() + " of "
