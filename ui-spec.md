@@ -1762,6 +1762,18 @@ does (`baspm.md` §10.11), plus the chosen rocket per launch:
   astronauts. A confirmation (component 5) names who leaves training for which slot and the
   share of the round each keeps (nothing for Expert training); then the pull-outs go one by
   one and the slots are filled after the last. `-Dshots=pulltraining`.
+- **Ambitions before skill?** *(user, 2026-11-14; straight in libGDX)*: after Auto-assign, and before Pull from
+  training's confirmation, a dialog (component 6's shape, 600 px) for each person the best fits pass over whose
+  ambition this flight would serve (`rules.AmbitionSwaps`, the stakes as `Careers.ambitionsAtStake` counts them):
+  eyebrow "AN AMBITION", "Give Viktor Dorofeev the COSMONAUT slot?", what they want, both fits ("Pavel Orlov (fit
+  69); Viktor Dorofeev's is 68"), the flight's chance to complete with each, what a fulfilled ambition gives and a
+  passed-over one costs, a trainee's share of the round kept, and a warning when the best fit wants the flight too.
+  **Keep <best fit>** / **Take <ambitious>**. The slot offered is the one where they cost least, a holder without an
+  ambition at stake first: a seat for the flying ambitions, a seat or CAPCOM for being part of a First, a console
+  for the controllers'. One question at a time, each on the plan as the last answer left it; nobody is asked about
+  twice, nor is the one displaced offered the slot back, nor someone already in another slot. Auto-assign offers
+  only the free; Pull from training also those it could pull, and only the slots it fills. Closing the dialog keeps
+  the plan as it stands. `-Dshots=ambitionswap`.
 - A slot that can't be filled says why ("only 5 flight controllers; this mission
   needs 9. Upgrade Mission Control and hire").
 - A warning names anyone free whose ambition this team would pass over (component 25).

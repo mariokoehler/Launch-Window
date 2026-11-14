@@ -386,6 +386,10 @@ public final class ScreenSnapshot {
             archiveShots(folder, game);
             return;
         }
+        if ("ambitionswap".equals(System.getProperty("shots"))) {
+            ambitionSwapShots(folder, game);
+            return;
+        }
         if ("rosterhover".equals(System.getProperty("shots"))) {
             rosterHoverShots(folder, game);
             return;
@@ -646,6 +650,7 @@ public final class ScreenSnapshot {
         serverSettingsShots(folder, game);
         investigationShots(folder, game);
         rosterHoverShots(folder, game);
+        ambitionSwapShots(folder, game);
     }
 
     /** The settings before the game begins: two breaks (one past), the standard race, no bots. */
@@ -1245,6 +1250,32 @@ public final class ScreenSnapshot {
             }
         }
         throw new IllegalStateException("no roster name " + name);
+    }
+
+    /**
+     * Auto-assign's ambition question (the user's request, 2026-11-14): the best fit takes the seat, and someone
+     * free who wants to fly in space is offered it instead; then the same with the best fit wanting it too.
+     */
+    private static void ambitionSwapShots(File folder, LaunchWindowGame game) {
+        String hash = ContentPackHash.ofClasspath("content/early-era", ScreenSnapshot.class.getClassLoader());
+        GameInfoResponse info = GameInfoResponse.success("early-era", hash, List.of(), 1, true,
+            6 * 3_600_000L, 0L, null, List.of(), List.of(), 0);
+        PlayerSnapshot state = planningState(11, 25_000);
+        Astronaut wanting = state.getAstronauts().getLast();
+        wanting.setAmbition(new de.mkoehler.launchwindow.model.Ambition(
+            de.mkoehler.launchwindow.model.Ambition.Kind.FLY_IN_SPACE, "", 6, 10, 9));
+        startSession(game, state, info);
+        write(folder, "ambition-swap.png", new AssembleMissionScreen(game, "vostok-orbital"),
+            AssembleMissionScreen::autoAssign);
+        for (Astronaut astronaut : state.getAstronauts()) {
+            if (astronaut != wanting && astronaut.getAmbition() == null) {
+                astronaut.setAmbition(new de.mkoehler.launchwindow.model.Ambition(
+                    de.mkoehler.launchwindow.model.Ambition.Kind.FLY_IN_SPACE, "", 6, 10, 9));
+            }
+        }
+        startSession(game, state, info);
+        write(folder, "ambition-swap-contested.png", new AssembleMissionScreen(game, "vostok-orbital"),
+            AssembleMissionScreen::autoAssign);
     }
 
     /**

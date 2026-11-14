@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.Scaling;
 import de.mkoehler.launchwindow.client.view.CareerTexts;
+import de.mkoehler.launchwindow.rules.AmbitionSwaps;
 import de.mkoehler.launchwindow.rules.Careers;
 import de.mkoehler.launchwindow.actions.LaunchMissionAction;
 import de.mkoehler.launchwindow.client.LaunchWindowGame;
@@ -132,10 +133,7 @@ public final class AssembleMissionScreen extends ChromeScreen {
             draft.clear();
             rebuild();
         });
-        TextButton auto = onClick(ui.pageButton("Auto-assign"), () -> {
-            draft.autoAssign(session.state());
-            rebuild();
-        });
+        TextButton auto = onClick(ui.pageButton("Auto-assign"), this::autoAssign);
         clear.setDisabled(!editable());
         auto.setDisabled(!editable());
         // Only when the free staff fall short and people in training make up the rest (the user's request, 2026-11-11).
@@ -746,12 +744,53 @@ public final class AssembleMissionScreen extends ChromeScreen {
      * @param draft the plan
      */
     public void confirmPullFromTraining(MissionDraft draft) {
-        List<MissionStaffing.Fill> fills = fillsFromTraining(draft);
-        if (fills.isEmpty()) {
+        List<MissionStaffing.Fill> proposed = fillsFromTraining(draft);
+        if (proposed.isEmpty()) {
             toast("Nothing to fill from training any more.", Theme.NoticeKind.INFO);
             return;
         }
+        // The fills as a plan, so anyone ambitious they pass over can be asked about first (the user's request,
+        // 2026-11-14): only the slots being filled may change hands, never one filled by hand.
+        MissionDraft plan = draft.copy();
+        for (MissionStaffing.Fill fill : proposed) {
+            if (fill.crew()) {
+                plan.setCrew(fill.slot(), fill.personId());
+            } else {
+                plan.setControl(fill.slot(), fill.personId());
+            }
+        }
+        askAmbitions(plan, true, new java.util.HashSet<>(), (crew, slot) -> proposed.stream()
+            .anyMatch(fill -> fill.crew() == crew && fill.slot() == slot), () -> confirmPulls(draft, plan));
+    }
+
+    /** The fills a plan makes in a draft's empty slots, each pulled out of training if it must be. */
+    private List<MissionStaffing.Fill> fillsOf(MissionDraft draft, MissionDraft plan) {
+        List<MissionStaffing.Fill> fills = new ArrayList<>();
+        for (int slot = 0; slot < plan.crewSlotIds().size(); slot++) {
+            String id = plan.crewSlotIds().get(slot);
+            String was = slot < draft.crewSlotIds().size() ? draft.crewSlotIds().get(slot) : null;
+            if (id != null && !id.isEmpty() && (was == null || was.isEmpty())) {
+                fills.add(new MissionStaffing.Fill(true, slot, id, MissionStaffing.pullableForMission(person(id))));
+            }
+        }
+        for (int slot = 0; slot < plan.controlSlotIds().size(); slot++) {
+            String id = plan.controlSlotIds().get(slot);
+            String was = slot < draft.controlSlotIds().size() ? draft.controlSlotIds().get(slot) : null;
+            if (id != null && !id.isEmpty() && (was == null || was.isEmpty())) {
+                fills.add(new MissionStaffing.Fill(false, slot, id, MissionStaffing.pullableForMission(person(id))));
+            }
+        }
+        return fills;
+    }
+
+    private void confirmPulls(MissionDraft draft, MissionDraft plan) {
+        List<MissionStaffing.Fill> fills = fillsOf(draft, plan);
         List<MissionStaffing.Fill> pulls = fills.stream().filter(MissionStaffing.Fill::fromTraining).toList();
+        if (pulls.isEmpty()) {
+            // The answers put free people where the trainees would have gone: nobody leaves training.
+            pullNext(fills, pulls, 0);
+            return;
+        }
         Table card = dialogCard("Confirm", "Pull " + pulls.size() + (pulls.size() == 1 ? " person" : " people")
             + " out of training?");
         card.add(ui.paragraph("Not enough staff are free for this mission. These leave training for it:",
@@ -781,6 +820,99 @@ public final class AssembleMissionScreen extends ChromeScreen {
     }
 
     /**
+     * Fills every slot with its best fit, then asks, one at a time, about anyone ambitious the best fits pass over
+     * (the user's request, 2026-11-14).
+     */
+    public void autoAssign() {
+        draft().autoAssign(session.state());
+        rebuild();
+        askAmbitions(draft(), false, new java.util.HashSet<>(), (crew, slot) -> true, this::rebuild);
+    }
+
+    /**
+     * Asks, one person at a time, whether to give someone ambitious a slot the plan gave its best fit
+     * ({@link AmbitionSwaps}, the user's request, 2026-11-14): the slot, both fits, the flight's chance either
+     * way, and whether the best fit wants it too. Each answer changes the plan the next question reads; closing
+     * the dialog keeps the plan as it stands.
+     *
+     * @param plan     the plan, changed in place by each answer
+     * @param training whether people in training may be offered
+     * @param asked    the people asked about so far
+     * @param offered  which slots may change hands
+     * @param done     runs once nobody is left to ask about
+     */
+    private void askAmbitions(MissionDraft plan, boolean training, java.util.Set<String> asked,
+                              java.util.function.BiPredicate<Boolean, Integer> offered, Runnable done) {
+        java.util.Optional<AmbitionSwaps.Swap> next = AmbitionSwaps.next(session.state(), configuration,
+            plan.crewSlotIds(), plan.controlSlotIds(), training, asked, offered);
+        if (next.isEmpty()) {
+            done.run();
+            return;
+        }
+        AmbitionSwaps.Swap swap = next.get();
+        asked.add(swap.personId());
+        Personnel person = person(swap.personId());
+        Personnel holder = person(swap.holderId());
+        String seat = swap.crew() ? configuration.crewSlots().get(swap.slot())
+            : configuration.controlSlots().get(swap.slot()).title();
+        MissionDraft taken = plan.copy();
+        if (swap.crew()) {
+            taken.setCrew(swap.slot(), swap.personId());
+        } else {
+            taken.setControl(swap.slot(), swap.personId());
+        }
+        double before = plan.assess(session.state(), session.catalog()).completion();
+        double after = taken.assess(session.state(), session.catalog()).completion();
+
+        String wants = CareerTexts.ambition(swap.kind(), "");
+        Table card = dialogCard("An ambition", "Give " + person.getName() + " the " + seat + " slot?");
+        card.add(ui.paragraph(person.getName() + " wants to " + Character.toLowerCase(wants.charAt(0))
+            + wants.substring(1) + (swap.ifFirst() ? ", if this flight reaches a goal first" : "") + ". The best fit "
+            + "for the slot is " + holder.getName() + String.format(java.util.Locale.ROOT, " (fit %d); %s's is %d.",
+                Math.round(swap.holderValue()), person.getName(), Math.round(swap.personValue())),
+            Theme.TextStyle.BODY, Theme.INK)).growX().padBottom(Theme.SPACE_2).row();
+        if (swap.fromTraining()) {
+            card.add(ui.paragraph(person.getName() + " would leave training for it, keeping "
+                + PersonnelDialogs.keptPercent(person) + " % of the round in progress.", Theme.TextStyle.BODY_SM,
+                Theme.INK)).growX().padBottom(Theme.SPACE_2).row();
+        }
+        card.add(ui.paragraph(String.format(java.util.Locale.ROOT, "The flight's chance to complete: %d %% with %s, "
+                + "%d %% with %s.", Math.round(before * 100), holder.getName(), Math.round(after * 100),
+            person.getName()), Theme.TextStyle.BODY_SM, Theme.INK)).growX().padBottom(Theme.SPACE_2).row();
+        card.add(ui.paragraph(String.format(java.util.Locale.ROOT, "If the flight goes well, an ambition that comes "
+                + "true lifts morale by %d and loyalty by %d; one passed over costs %d morale and %d loyalty.",
+            Careers.FULFILLED_MORALE, Careers.FULFILLED_LOYALTY, Math.abs(Careers.PASSED_OVER_MORALE),
+            Math.abs(Careers.PASSED_OVER_LOYALTY)), Theme.TextStyle.CAPTION, Theme.INK_MUTED)).growX()
+            .padBottom(Theme.SPACE_2).row();
+        if (swap.holderWants()) {
+            card.add(ui.notice(Theme.NoticeKind.WARNING, holder.getName() + " wants this flight too.",
+                "Taking " + person.getName() + " passes " + holder.getName() + " over.")).growX()
+                .padBottom(Theme.SPACE_2).row();
+        }
+        Table buttons = new Table();
+        buttons.add(actionButton("Keep " + holder.getName(), Theme.ButtonKind.SECONDARY, () -> {
+            closeDialog();
+            askAmbitions(plan, training, asked, offered, done);
+        })).padRight(10f);
+        buttons.add(actionButton("Take " + person.getName(), Theme.ButtonKind.PRIMARY, () -> {
+            closeDialog();
+            if (swap.crew()) {
+                plan.setCrew(swap.slot(), swap.personId());
+            } else {
+                plan.setControl(swap.slot(), swap.personId());
+            }
+            // The one displaced isn't offered the slot straight back.
+            asked.add(swap.holderId());
+            if (!training) {
+                rebuild();
+            }
+            askAmbitions(plan, training, asked, offered, done);
+        }));
+        card.add(buttons).right().fill(false, false).padTop(Theme.SPACE_2);
+        showDialog(card, 600f);
+    }
+
+    /**
      * One pull-out at a time, each sent when the last is through; a refusal stops the rest. The slots
      * are filled only after the last, since every rebuild drops from the draft whoever isn't free yet.
      */
@@ -795,8 +927,9 @@ public final class AssembleMissionScreen extends ChromeScreen {
                 }
             }
             rebuild();
-            toast("Pulled " + pulls.size() + (pulls.size() == 1 ? " person" : " people")
-                + " out of training and filled every slot.", Theme.NoticeKind.SUCCESS);
+            toast(pulls.isEmpty() ? "Filled every slot; nobody had to leave training." : "Pulled " + pulls.size()
+                + (pulls.size() == 1 ? " person" : " people") + " out of training and filled every slot.",
+                Theme.NoticeKind.SUCCESS);
             return;
         }
         Personnel person = person(pulls.get(index).personId());
