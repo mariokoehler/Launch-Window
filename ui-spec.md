@@ -863,7 +863,10 @@ choices **unconfirmed** in its yellow note.
       white line after the idle line, behind a small gold dot (gold text read poorly on the bright
       art): "A decision waiting: Atlas". The same dot shows while a component of its board is below
       its R&D cap with no engineers (the user's idea, 2026-10-31), hover "Atlas has no engineers" or
-      "3 rockets have no engineers" (`PayloadRnd.unstaffed`).
+      "3 rockets have no engineers" (`PayloadRnd.unstaffed`). The same dot shows on the Astronaut Complex, Mission Control and the SET Centre while anyone there
+      is underpaid (5 % or more under their expectation, as the rosters' Underpaid chip counts it; the user's idea,
+      2026-11-14, built straight in libGDX), hover "2 engineers underpaid" after the other lines (`Hub.underpaidLine`;
+      `-Dshots=underpaidhub`).
     - **R&D board (component 10), where the player decides:** a banner inside the component's card
       (`DecisionBanner` in `RndCards`), between the reliability bar's caption and the team chemistry
       row; the board puts that card first. The mission plan's read-only R&D tab shows the banner

@@ -386,6 +386,10 @@ public final class ScreenSnapshot {
             archiveShots(folder, game);
             return;
         }
+        if ("underpaidhub".equals(System.getProperty("shots"))) {
+            underpaidHubShots(folder, game);
+            return;
+        }
         if ("ambitionswap".equals(System.getProperty("shots"))) {
             ambitionSwapShots(folder, game);
             return;
@@ -651,6 +655,7 @@ public final class ScreenSnapshot {
         investigationShots(folder, game);
         rosterHoverShots(folder, game);
         ambitionSwapShots(folder, game);
+        underpaidHubShots(folder, game);
     }
 
     /** The settings before the game begins: two breaks (one past), the standard race, no bots. */
@@ -1276,6 +1281,37 @@ public final class ScreenSnapshot {
         startSession(game, state, info);
         write(folder, "ambition-swap-contested.png", new AssembleMissionScreen(game, "vostok-orbital"),
             AssembleMissionScreen::autoAssign);
+    }
+
+    /**
+     * Underpaid people on the hub (the user's idea, 2026-11-14): the gold dot on the staff buildings' markers, and
+     * the count under the hovered name, after the idle line.
+     */
+    private static void underpaidHubShots(File folder, LaunchWindowGame game) {
+        String hash = ContentPackHash.ofClasspath("content/standard", ScreenSnapshot.class.getClassLoader());
+        GameInfoResponse info = GameInfoResponse.success("standard", hash, List.of(), 23, true,
+            6 * 3_600_000L, 0L, null, List.of(), List.of(), 0);
+        PlayerSnapshot me = new PlayerSnapshot("Orion Spaceworks", Archetype.NASA, 18_400, 2_140, 3_000, 23);
+        me.setDirectorName("Clara Voss");
+        for (int i = 1; i <= 3; i++) {
+            SetSpecialist engineer = new SetSpecialist("e" + i, "Engineer " + i, 36, 70, 50);
+            engineer.setSalary(40);
+            engineer.setExpectedSalary(i == 3 ? 40.0 : 50.0);
+            engineer.setAssignmentState(de.mkoehler.launchwindow.model.AssignmentState.IN_TRAINING);
+            engineer.setTrainingKind(de.mkoehler.launchwindow.model.TrainingKind.ADVANCED);
+            engineer.setTrainingSeasonsTotal(3);
+            me.getSetSpecialists().add(engineer);
+            de.mkoehler.launchwindow.model.MissionControlOfficer officer =
+                new de.mkoehler.launchwindow.model.MissionControlOfficer("c" + i, "Controller " + i, 40, 70, 50);
+            officer.setSalary(40);
+            officer.setExpectedSalary(i == 1 ? 50.0 : 40.0);
+            me.getMissionControlOfficers().add(officer);
+        }
+        startSession(game, me, info);
+        write(folder, "hub-underpaid.png", new SpaceComplexScreen(game),
+            screen -> screen.hover(Hub.Place.SET_CENTRE));
+        write(folder, "hub-underpaid-idle.png", new SpaceComplexScreen(game),
+            screen -> screen.hover(Hub.Place.MISSION_CONTROL));
     }
 
     /**

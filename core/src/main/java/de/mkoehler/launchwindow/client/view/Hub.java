@@ -79,6 +79,37 @@ public final class Hub {
     }
 
     /**
+     * Words a building's underpaid people for its hover, such as "2 engineers underpaid", or {@code null} when
+     * nobody is (the user's idea, 2026-11-14): underpaid as the rosters' chip counts it
+     * ({@link de.mkoehler.launchwindow.rules.PayExpectations#isUnderpaid}), whose morale is capped by it.
+     *
+     * @param place the building
+     * @param state the player's state
+     * @return the line
+     */
+    public static String underpaidLine(Place place, PlayerSnapshot state) {
+        de.mkoehler.launchwindow.rules.PersonnelGroup group = switch (place) {
+            case ASTRONAUT_COMPLEX -> de.mkoehler.launchwindow.rules.PersonnelGroup.ASTRONAUT;
+            case MISSION_CONTROL -> de.mkoehler.launchwindow.rules.PersonnelGroup.MISSION_CONTROL;
+            case SET_CENTRE -> de.mkoehler.launchwindow.rules.PersonnelGroup.SET;
+            default -> null;
+        };
+        if (group == null) {
+            return null;
+        }
+        int underpaid = de.mkoehler.launchwindow.rules.PayExpectations.underpaidCount(state, group);
+        if (underpaid == 0) {
+            return null;
+        }
+        String noun = switch (place) {
+            case ASTRONAUT_COMPLEX -> state.getArchetype() == Archetype.SOVIET ? "cosmonaut" : "astronaut";
+            case MISSION_CONTROL -> "flight controller";
+            default -> "engineer";
+        };
+        return underpaid + " " + noun + (underpaid == 1 ? "" : "s") + " underpaid";
+    }
+
+    /**
      * The hub's buildings, named as in the hotspot files.
      */
     public enum Place {

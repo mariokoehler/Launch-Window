@@ -857,12 +857,14 @@ public final class SpaceComplexScreen extends SessionScreen {
             }
             // A decision waiting (ui-spec.md component 26): the same dot in gold, upper left. Headquarters
             // gets it for new contracts on offer and for a contract still to launch (ui-spec.md section 4.17);
-            // the VAB and the SET Centre for a component below its cap with nobody on it.
+            // the VAB and the SET Centre for a component below its cap with nobody on it; the three staff
+            // buildings for anyone underpaid (the user's idea, 2026-11-14).
             Hub.Place deciding = decisionPlace();
             boolean offers = newContracts() || contractToLaunch() != null;
             for (Hub.Hotspot spot : hotspots) {
                 if (spot.place() != deciding && !(offers && spot.place() == Hub.Place.HEADQUARTERS)
-                    && unstaffedLine(spot.place()) == null) {
+                    && unstaffedLine(spot.place()) == null
+                    && Hub.underpaidLine(spot.place(), session.state()) == null) {
                     continue;
                 }
                 float radius = isUpgrading(spot.place()) ? MARKER_RADIUS : IDLE_MARKER_RADIUS;
@@ -919,6 +921,13 @@ public final class SpaceComplexScreen extends SessionScreen {
                     drawCentered(batch, idleShadow, unstaffed, hover.labelX() * scaleX + 1.5f, below - 1.5f,
                         parentAlpha);
                     drawCentered(batch, idleName, unstaffed, hover.labelX() * scaleX, below, parentAlpha);
+                    below -= idleName.getHeight() + 2f;
+                }
+                String underpaid = Hub.underpaidLine(hover.place(), session.state());
+                if (underpaid != null) {
+                    drawCentered(batch, idleShadow, underpaid, hover.labelX() * scaleX + 1.5f, below - 1.5f,
+                        parentAlpha);
+                    drawCentered(batch, idleName, underpaid, hover.labelX() * scaleX, below, parentAlpha);
                     below -= idleName.getHeight() + 2f;
                 }
                 String contracts = hover.place() != Hub.Place.HEADQUARTERS ? null
