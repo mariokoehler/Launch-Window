@@ -9,7 +9,6 @@ import java.io.UncheckedIOException;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Locale;
 import java.util.Optional;
 import java.util.Set;
 
@@ -275,17 +274,44 @@ public record Help(List<Topic> topics) {
      * @return the topics, in the list's order
      */
     public List<Topic> shown(String query, Scope context, HelpValues values) {
-        String needle = query == null ? "" : query.trim().toLowerCase(Locale.ROOT);
+        String needle = query == null ? "" : query.trim();
         List<Topic> shown = new ArrayList<>();
         for (Topic topic : topics) {
             boolean keep = needle.isEmpty()
                 ? context == null || context.topicIds().contains(topic.id())
-                : topic.searchText(values).toLowerCase(Locale.ROOT).contains(needle);
+                : !matches(topic.searchText(values), needle).isEmpty();
             if (keep) {
                 shown.add(topic);
             }
         }
         return shown;
+    }
+
+    /**
+     * Returns where a search finds its text in a line: what the help marks as found. Case is ignored
+     * and a non-breaking space counts as a space, so "25 %" is found as the player types it.
+     *
+     * @param text  the line, tokens filled
+     * @param query the search text; blank finds nothing
+     * @return the found stretches, in order and never overlapping, each {@code {start, end}} (end
+     *     exclusive)
+     */
+    public static List<int[]> matches(String text, String query) {
+        String needle = query == null ? "" : query.trim().replace(' ', ' ');
+        List<int[]> found = new ArrayList<>();
+        if (needle.isEmpty() || text == null) {
+            return found;
+        }
+        String hay = text.replace(' ', ' ');
+        for (int at = 0; at + needle.length() <= hay.length(); ) {
+            if (hay.regionMatches(true, at, needle, 0, needle.length())) {
+                found.add(new int[] {at, at + needle.length()});
+                at += needle.length();
+            } else {
+                at++;
+            }
+        }
+        return found;
     }
 
     /**

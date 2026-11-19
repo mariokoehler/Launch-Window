@@ -418,6 +418,15 @@ public final class ScreenSnapshot {
             intelligenceShots(folder, game);
             return;
         }
+        if ("help".equals(System.getProperty("shots"))) {
+            String hash = ContentPackHash.ofClasspath("content/early-era", ScreenSnapshot.class.getClassLoader());
+            PlayerSnapshot agency = new PlayerSnapshot("Baltic Star Agency", Archetype.SOVIET, 25_000, 250, 3_000, 1);
+            agency.setDirectorName("A. Reyes");
+            startSession(game, agency, GameInfoResponse.success("early-era", hash, List.of(), 1, true,
+                6 * 3_600_000L, 0L, null, List.of(), List.of(), 0));
+            helpShots(folder, game);
+            return;
+        }
         if ("poaching".equals(System.getProperty("shots"))) {
             poachingShots(folder, game);
             return;
@@ -2578,6 +2587,12 @@ public final class ScreenSnapshot {
         write(folder, "help-traits.png", new SetCentreScreen(game), screen -> screen.openHelp().select("traits"));
         write(folder, "help-buildings.png", new SpaceComplexScreen(game), screen -> screen.openHelp().select("buildings"));
         write(folder, "help-mission-steps.png", new SpaceComplexScreen(game), screen -> screen.openHelp().select("mission-steps"));
+        // What a search found is marked, and a topic opens on its first find: here near the end of a long topic.
+        write(folder, "help-search-deep.png", new SpaceComplexScreen(game), screen -> {
+            var help = screen.openHelp();
+            help.search("refund");
+            help.select("programs");
+        });
         write(folder, "help-search-none.png", new SetCentreScreen(game),
             screen -> screen.openHelp().search("sabotage of the moon"));
         write(folder, "help-button-tooltip.png", new SetCentreScreen(game),

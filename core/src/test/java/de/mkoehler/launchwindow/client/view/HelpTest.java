@@ -108,6 +108,32 @@ class HelpTest {
     }
 
     @Test
+    void theFindsToMarkIgnoreCaseAndNonBreakingSpaces() {
+        List<int[]> found = Help.matches("Loyalty falls; loyal people stay. LOYAL.", " loyal ");
+        assertEquals(3, found.size());
+        assertEquals(List.of(0, 5, 15, 20, 34, 39),
+            found.stream().flatMap(f -> java.util.stream.Stream.of(f[0], f[1])).toList());
+        int[] percent = Help.matches("up to 25 % a season", "25 %").get(0);
+        assertEquals(6, percent[0]);
+        assertEquals(10, percent[1]);
+        assertTrue(Help.matches("aaaa", "aa").size() == 2, "finds never overlap");
+        assertTrue(Help.matches("anything", "  ").isEmpty());
+    }
+
+    @Test
+    void everyTopicTheSearchShowsHasAFindToMark() throws IOException {
+        Help help = bundled();
+        HelpValues values = HelpValues.of(BudgetSchedule.baspmClose(), BuildingSchedule.baspmClose());
+        for (String query : List.of("loyalty", "season", "25 %", "Crew")) {
+            for (Help.Topic topic : help.shown(query, null, values)) {
+                boolean marked = !Help.matches(topic.title(), query).isEmpty() || topic.body().stream()
+                    .anyMatch(line -> !Help.matches(values.fill(Help.Line.of(line).text()), query).isEmpty());
+                assertTrue(marked, topic.id() + " shown for \"" + query + "\" with nothing to mark");
+            }
+        }
+    }
+
+    @Test
     void linesKeepTheirKind() {
         assertEquals(new Help.Line(Help.Line.Kind.HEADING, "Odds"), Help.Line.of("## Odds"));
         assertEquals(new Help.Line(Help.Line.Kind.BULLET, "one"), Help.Line.of("- one"));

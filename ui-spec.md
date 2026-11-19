@@ -617,7 +617,11 @@ choices **unconfirmed** in its yellow note.
       hub's).
     - **Filter:** typing searches **every** topic's title and text (numbers filled in, ignoring
       case) and drops the screen's filter; the status line says how many topics mention the text,
-      or that none does. **Show all topics** clears both the text and the screen's filter.
+      or that none does. **Show all topics** clears both the text and the screen's filter. In the
+      shown topic, every find (title, subheadings, text) is marked with a highlighter stroke behind
+      the glyphs, `GOLD` at 50 % (`MarkedLabel`, `Help.matches`; a non-breaking space matches a typed
+      space), and the topic opens scrolled to its first find, once per topic and search (user,
+      2026-11-19). Shot `help-search-deep.png`.
     - **A topic:** its group as an eyebrow, its title, then paragraphs, subheadings and bullets.
       Below a rule: **See also**, other topics as secondary buttons (a topic the filter hides
       clears the filter so the list can mark it), and **How the real thing works**, explainers as

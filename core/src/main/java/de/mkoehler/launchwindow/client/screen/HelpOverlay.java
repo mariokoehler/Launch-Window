@@ -6,6 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Stack;
@@ -13,9 +14,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Scaling;
 import de.mkoehler.launchwindow.client.LaunchWindowGame;
 import de.mkoehler.launchwindow.client.ui.ConceptChip;
+import de.mkoehler.launchwindow.client.ui.MarkedLabel;
 import de.mkoehler.launchwindow.client.ui.Theme;
 import de.mkoehler.launchwindow.client.ui.UiKit;
 import de.mkoehler.launchwindow.client.view.Explainers;
@@ -60,6 +63,10 @@ public final class HelpOverlay {
     private String selected;
     /** Set while the reset empties the field, so that doesn't count as the player typing. */
     private boolean resetting;
+    /** What a search's finds are marked with in the text: a highlighter's gold. */
+    private final Drawable marker;
+    /** The topic and search the text last scrolled to the first find for, so other rebuilds keep the scroll. */
+    private String scrolledFor = "";
 
     /**
      * Builds the help over a screen.
@@ -74,6 +81,7 @@ public final class HelpOverlay {
         this.values = HelpValues.of(host.session.gameInfo().response().budgetSchedule(),
             host.session.catalog().buildings());
         this.context = context;
+        marker = ui.solid(new Color(Theme.GOLD.r, Theme.GOLD.g, Theme.GOLD.b, 0.5f));
         search = ui.searchField("Search the rules");
         search.addListener(new ChangeListener() {
             @Override
@@ -134,13 +142,14 @@ public final class HelpOverlay {
      */
     public void select(String id) {
         selected = id;
+        // Its top, or its first find when searching (refresh scrolls there).
+        textScroll.setScrollY(0f);
         if (help.shown(search.getText(), context, values).stream().noneMatch(topic -> topic.id().equals(id))) {
             // A link to a topic the filter hides: show every topic, so the list can mark it.
             reset();
         } else {
             refresh();
         }
-        textScroll.setScrollY(0f);
     }
 
     /**
@@ -248,7 +257,7 @@ public final class HelpOverlay {
         }
         buildStatus(query, shown.size());
         buildList(shown, query);
-        buildText();
+        buildText(query);
     }
 
     private void buildStatus(String query, int count) {
@@ -307,7 +316,7 @@ public final class HelpOverlay {
         return row;
     }
 
-    private void buildText() {
+    private void buildText(String query) {
         text.clearChildren();
         text.defaults().left();
         Help.Topic topic = selected == null ? null : help.byId(selected).orElse(null);
@@ -317,8 +326,10 @@ public final class HelpOverlay {
         float width = TEXT_WIDTH;
         text.add(ui.label(topic.group().toUpperCase(Locale.ROOT), Theme.TextStyle.EYEBROW, Theme.NAVY))
             .padBottom(2f).row();
-        text.add(ui.paragraph(topic.title(), Theme.TextStyle.HEADING_LG, Theme.INK)).width(width)
-            .padBottom(Theme.SPACE_4).row();
+        Label firstFind = null;
+        Label title = paragraph(topic.title(), Theme.TextStyle.HEADING_LG, query);
+        firstFind = firstFind(firstFind, title);
+        text.add(title).width(width).padBottom(Theme.SPACE_4).row();
         Help.Line.Kind previous = null;
         for (String raw : topic.body()) {
             Help.Line line = Help.Line.of(raw);
@@ -328,18 +339,19 @@ public final class HelpOverlay {
                 text.add().height(Theme.SPACE_2).row();
             }
             previous = line.kind();
+            Label label = paragraph(filled, line.kind() == Help.Line.Kind.HEADING ? Theme.TextStyle.HEADING_SM
+                : Theme.TextStyle.BODY, query);
+            firstFind = firstFind(firstFind, label);
             switch (line.kind()) {
-                case HEADING -> text.add(ui.paragraph(filled, Theme.TextStyle.HEADING_SM, Theme.INK)).width(width)
-                    .padTop(Theme.SPACE_3).padBottom(Theme.SPACE_2).row();
+                case HEADING -> text.add(label).width(width).padTop(Theme.SPACE_3).padBottom(Theme.SPACE_2).row();
                 case BULLET -> {
                     Table bullet = new Table();
                     bullet.top().left();
                     bullet.add(ui.label("•", Theme.TextStyle.BODY, Theme.NAVY)).top().width(18f).left();
-                    bullet.add(ui.paragraph(filled, Theme.TextStyle.BODY, Theme.INK)).width(width - 18f).left();
+                    bullet.add(label).width(width - 18f).left();
                     text.add(bullet).width(width).padBottom(Theme.SPACE_1).row();
                 }
-                case PARAGRAPH -> text.add(ui.paragraph(filled, Theme.TextStyle.BODY, Theme.INK)).width(width)
-                    .padBottom(Theme.SPACE_3).row();
+                case PARAGRAPH -> text.add(label).width(width).padBottom(Theme.SPACE_3).row();
             }
         }
         // A locked explainer would answer a theory of the day early: no chip.
@@ -372,5 +384,37 @@ public final class HelpOverlay {
             }
             text.add(chips).width(width).row();
         }
+        scrollToFind(topic.id() + "\n" + query.trim(), firstFind);
+    }
+
+    /**
+     * Builds a line of the topic's text, what the search found marked.
+     */
+    private Label paragraph(String line, Theme.TextStyle style, String query) {
+        return new MarkedLabel(line, new Label.LabelStyle(ui.fonts().get(style), Theme.INK), Help.matches(line, query),
+            marker);
+    }
+
+    private static Label firstFind(Label sofar, Label line) {
+        return sofar == null && line instanceof MarkedLabel marked && marked.marked() ? line : sofar;
+    }
+
+    /**
+     * Scrolls the text so its first find shows, once for each topic and search: a rebuild for anything else (back
+     * from an explainer) keeps where the player scrolled to.
+     */
+    private void scrollToFind(String key, Label find) {
+        if (find == null || key.equals(scrolledFor)) {
+            if (find == null) {
+                scrolledFor = "";
+            }
+            return;
+        }
+        scrolledFor = key;
+        textScroll.layout();
+        com.badlogic.gdx.math.Vector2 at = find.localToAscendantCoordinates(text, new com.badlogic.gdx.math.Vector2());
+        // A little of what comes before shows too.
+        textScroll.scrollTo(at.x, at.y - Theme.SPACE_6, find.getWidth(), find.getHeight() + 2 * Theme.SPACE_6);
+        textScroll.updateVisualScroll();
     }
 }
