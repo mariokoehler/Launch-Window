@@ -3473,6 +3473,9 @@ and the roads to the Moon (§2.3(d), (e)), the Sputnik shock and raises (§2.1(e
   default (Windows scales it). **The repo is public since 2026-10-28** (user, for the wiki). The GHCR
   image's visibility is a separate package setting: it was still private on 2026-10-29, so the NAS
   pulls it with an access token until it is made public (the user means to).
+  **For the live game** (plan, not built; user, 2026-11-20): a release branch takes the fixes that need no
+  data reset and merges into `master`; reset-needing work stays on `master` for a later game
+  (`ideas/live-release-branch.md`).
 - **M7+ (order open):** a game-host role and UI (§4); validating the `WEEKDAYS` profile with the
   colleagues' group; more Museum encyclopedia entries as content calls for them (§1.1). People,
   interaction, the full content tree and E-01 to E-31 are built (§2.2(d), §2.9, §5 M3, §1.1).
