@@ -107,9 +107,9 @@ final class GameResultDialog {
         boolean announced = !(host instanceof MuseumScreen);
         reveal = announced ? Reveal.play() : Reveal.none();
         card.addActor(reveal.starter());
-        // The fanfare under it, for the winner: a sound, so it plays with Animations off too. It fades out
-        // when the dialog closes or the screen changes (UiSounds). Unconfirmed: the winner only.
-        if (announced && (youWon || tied && winners.contains(mine))) {
+        // The fanfare under it, for everyone (user, 2026-11-20): a sound, so it plays with Animations off too.
+        // It fades out when the dialog closes or the screen changes (UiSounds).
+        if (announced) {
             UiSounds.playMusic(UiSounds.RACE_WON, card);
         }
 

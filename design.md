@@ -2996,7 +2996,7 @@ trait (§2.2(c)).
   fade in 0.15 s (`client.ui.Juice`, `ScreenFade`, §5, Backlog).
 - Juice J2: the report's entrance beats, about 1.3 s in all (`TurnReportScreen`, `ui-spec.md` §4.4).
 - Juice J3: the season crossfade 1.2 s; a First's page 120 px in 0.8 s; the result's beats and the chart's 2.5 s;
-  the fanfare's 1.5 s fade and the winner only; the hover fade 0.15 s (`ui-spec.md` §4.3, §4.13, §4.18).
+  the fanfare's 1.5 s fade; the hover fade 0.15 s (`ui-spec.md` §4.3, §4.13, §4.18).
 
 ## 5. Implementation roadmap: milestones & slices
 

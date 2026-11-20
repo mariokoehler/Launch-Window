@@ -2332,10 +2332,10 @@ race tab (the mockup's choices, unconfirmed).
   the report's read mark, and set by Keep playing or Open the Museum.
 - **The announcement builds up** (J3, 2026-11-20; unconfirmed): the trophy stamps down (0.3 s), the race
   table fades in (0.6 s), and the chart draws its lines in from left to right over 2.5 s (from 0.9 s),
-  the grid and names there from the start. Under it, for the winner (a shared win too), the `race-won`
+  the grid and names there from the start. Under it, for every player (user, 2026-11-20), the `race-won`
   fanfare plays like background music at the replay music's volume, with Animations off too; it fades
   out over 1.5 s when the dialog closes or the screen changes (`client.ui.UiSounds`). Reopened from the
-  Museum, the dialog shows at once, silently. *Unconfirmed:* the fanfare for the winner only.
+  Museum, the dialog shows at once, silently.
 
 ### 4.14 Person page *(for `design.md` §2.2(d), 2026-10-07)*
 **Purpose:** everything about one employee, so the player gets to know them
