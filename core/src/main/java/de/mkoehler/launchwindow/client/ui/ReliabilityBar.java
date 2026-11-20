@@ -42,6 +42,8 @@ public final class ReliabilityBar extends Widget {
     private Drawable band;
     private final Drawable milestoneTick;
     private float[] milestones = new float[0];
+    private float slideFrom = Float.NaN;
+    private java.util.function.DoubleSupplier slideProgress;
 
     /**
      * Builds the bar.
@@ -128,6 +130,30 @@ public final class ReliabilityBar extends Widget {
         return this;
     }
 
+    /**
+     * Slides the fill from an earlier reliability to the current one as a progress runs from 0 to 1, as
+     * the turn report's entrance does ({@link Reveal}).
+     *
+     * @param from     the reliability it starts from
+     * @param progress the slide's progress, 0 to 1
+     * @return this bar
+     */
+    public ReliabilityBar slideFrom(double from, java.util.function.DoubleSupplier progress) {
+        this.slideFrom = (float) from;
+        this.slideProgress = progress;
+        return this;
+    }
+
+    /** The reliability the fill shows now: the current one, or on its way there. */
+    private float shown() {
+        if (Float.isNaN(slideFrom)) {
+            return current;
+        }
+        float progress = (float) slideProgress.getAsDouble();
+        return progress >= 1f ? current
+            : slideFrom + (current - slideFrom) * com.badlogic.gdx.math.Interpolation.pow2Out.apply(progress);
+    }
+
     @Override
     public float getPrefHeight() {
         return CAP_MARKER_HEIGHT;
@@ -156,11 +182,12 @@ public final class ReliabilityBar extends Widget {
             return;
         }
         boolean raised = raisedCap > rdCap;
-        boolean capped = current >= (raised ? raisedCap : rdCap);
+        float shown = shown();
+        boolean capped = shown >= (raised ? raisedCap : rdCap);
         if (projected > current) {
             projectedFill.draw(batch, getX(), trackY, width * Math.min(1f, projected / max), TRACK_HEIGHT);
         }
-        (capped ? cappedFill : fill).draw(batch, getX(), trackY, width * Math.min(1f, current / max), TRACK_HEIGHT);
+        (capped ? cappedFill : fill).draw(batch, getX(), trackY, width * Math.min(1f, shown / max), TRACK_HEIGHT);
         for (float milestone : milestones) {
             float x = getX() + width * Math.min(1f, milestone / max);
             milestoneTick.draw(batch, x - 0.5f, getY() + (getHeight() - FLOOR_MARKER_HEIGHT) / 2f, 1f,

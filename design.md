@@ -2994,6 +2994,7 @@ trait (§2.2(c)).
 - Backups: each zip holds the whole history (§3.7).
 - Juice J1: a number ticks 0.6 s and flashes 1 s; a dot pulses 3 times, 0.6 s each, growing by half; screens
   fade in 0.15 s (`client.ui.Juice`, `ScreenFade`, §5, Backlog).
+- Juice J2: the report's entrance beats, about 1.3 s in all (`TurnReportScreen`, `ui-spec.md` §4.4).
 
 ## 5. Implementation roadmap: milestones & slices
 
@@ -3486,7 +3487,8 @@ release-branch plan (§5, M6) it can ship during a live game. Durations and coun
   Attention markers (the gold dots: someone underpaid, an unread report) pulse a few times when they first
   appear, then stay still. A 100 to 150 ms fade between screens at `LaunchWindowGame.setScreen` (kept only
   if it doesn't feel sluggish).
-- **J2, the turn report:** once per report (the read marks), the six headline tiles count up, the cards
+- **J2, the turn report (built 2026-11-20; `ui-spec.md` §4.4, The entrance):** once per report (its own
+  first-sight mark), the six headline tiles count up, the cards
   fade in one after another, the R&D reliability bars slide from the old value to the new one, and the
   mission step squares fill step by step. A goal won stamps its patch onto the card with a small settle.
 - **J3, the big moments:** a turn that resolves while the player is online shows a toast with the new season,

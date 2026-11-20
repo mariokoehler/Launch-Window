@@ -591,7 +591,10 @@ public final class StandingChart extends WidgetGroup {
     }
 
     private void marks(Batch batch, Standing.Line line, float ox, float oy) {
-        for (Standing.Event goal : line.goals()) {
+        // A First draws over a plain goal taken the same turn (the goals come in no fixed order).
+        List<Standing.Event> goals = line.goals().stream()
+            .sorted(java.util.Comparator.comparing(goal -> goal.kind() == Standing.EventKind.FIRST)).toList();
+        for (Standing.Event goal : goals) {
             if (goal.turn() < model.from() || !line.has(goal.turn())) {
                 continue;
             }

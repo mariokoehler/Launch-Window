@@ -3487,6 +3487,20 @@ public final class ScreenSnapshot {
      * one turn with Vostok Orbital and Sputnik 1 Extended flying.
      */
     private static void reportShots(File folder, LaunchWindowGame game, GameInfoResponse info) {
+        PassedTurn passed = passedTurn();
+        TurnReport report = passed.report();
+        PlayerSnapshot after = passed.after();
+        GameInfoResponse next = GameInfoResponse.success("early-era", info.contentPackHash(), List.of(), 24, true,
+            6 * 3_600_000L + 12 * 60_000L + 30_000L, 0L, null, List.of(), List.of(), 0);
+        reportShotsAfterPass(folder, game, report, after, next);
+    }
+
+    /** A season passed for real: its report and the state after it. */
+    private record PassedTurn(TurnReport report, PlayerSnapshot after) {
+    }
+
+    /** The Mission Control agency resolves one turn with Vostok Orbital and Sputnik 1 Extended flying. */
+    private static PassedTurn passedTurn() {
         TurnReport report;
         PlayerSnapshot after;
         try {
@@ -3508,8 +3522,11 @@ public final class ScreenSnapshot {
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }
-        GameInfoResponse next = GameInfoResponse.success("early-era", info.contentPackHash(), List.of(), 24, true,
-            6 * 3_600_000L + 12 * 60_000L + 30_000L, 0L, null, List.of(), List.of(), 0);
+        return new PassedTurn(report, after);
+    }
+
+    private static void reportShotsAfterPass(File folder, LaunchWindowGame game, TurnReport report,
+                                             PlayerSnapshot after, GameInfoResponse next) {
         startSession(game, after, next);
         game.session().keepReport(report);
         write(folder, "report.png", new TurnReportScreen(game, report), null);
@@ -3568,7 +3585,7 @@ public final class ScreenSnapshot {
         write(folder, "replay-queue-summary.png", new ReplayScreen(game, report, queue.get(0), queue),
             screen -> screen.show(99));
         // The same report a turn later: an earlier report, with Next offered and no morale warnings.
-        GameInfoResponse later = GameInfoResponse.success("early-era", info.contentPackHash(), List.of(), 25, true,
+        GameInfoResponse later = GameInfoResponse.success("early-era", next.contentPackHash(), List.of(), 25, true,
             6 * 3_600_000L + 12 * 60_000L + 30_000L, 0L, null, List.of(), List.of(), 0);
         startSession(game, after, later);
         game.session().keepReport(report);
@@ -4266,10 +4283,39 @@ public final class ScreenSnapshot {
                     now[0] += step.equals("half") ? de.mkoehler.launchwindow.client.screen.ScreenFade.SECONDS / 2 : 5;
                 });
             }
+            juiceReportShots(folder, game, now);
         } finally {
             de.mkoehler.launchwindow.client.ui.Juice.useClock(null);
             de.mkoehler.launchwindow.client.ui.Juice.freeze(true);
         }
+    }
+
+    /**
+     * The turn report's entrance (J2): a real season pass with two goals reached added, shot at moments of
+     * the entrance, and once played to its end, which must match the report shown without one.
+     */
+    private static void juiceReportShots(File folder, LaunchWindowGame game, double[] now) {
+        PassedTurn passed = passedTurn();
+        TurnReport plain = passed.report();
+        List<de.mkoehler.launchwindow.rules.ResolutionEvent> events = new ArrayList<>(plain.events());
+        events.add(new de.mkoehler.launchwindow.rules.GoalSettled("m-vostok", "human-in-orbit", false, 200, true));
+        events.add(new de.mkoehler.launchwindow.rules.GoalSettled("m-vostok", "human-in-space", true, 100, false));
+        TurnReport report = new TurnReport(plain.version(), plain.gameTurn(), plain.prestigeBefore(),
+            plain.prestigeAfter(), plain.fundsBefore(), plain.fundsAfter(), plain.components(), plain.missions(), events);
+        String hash = ContentPackHash.ofClasspath("content/early-era", ScreenSnapshot.class.getClassLoader());
+        GameInfoResponse next = GameInfoResponse.success("early-era", hash, List.of(), 24, true,
+            6 * 3_600_000L + 12 * 60_000L + 30_000L, 0L, null, List.of(), List.of(), 0);
+        startSession(game, passed.after(), next);
+        game.session().keepReport(report);
+        // Without an entrance: as the report shows on a second look.
+        game.useReportRevealedInMemory(Long.MAX_VALUE);
+        write(folder, "juice-report-plain.png", new TurnReportScreen(game, report), null);
+        for (double at : new double[] {0.2, 0.5, 0.9, 5.0}) {
+            game.useReportRevealedInMemory(0L);
+            write(folder, String.format(java.util.Locale.ROOT, "juice-report-%.1f.png", at), new TurnReportScreen(game, report),
+                screen -> now[0] += at);
+        }
+        game.useReportRevealedInMemory(null);
     }
 
     private static <S extends Screen> void write(File folder, String name, S screen, Consumer<S> state) {

@@ -1454,6 +1454,17 @@ turn that resolves while the player is in the game shows a toast and lights the 
 dot, rather than taking over the screen. "Read" is remembered per device, in the client's
 preferences, per server and login.
 
+**The entrance** (J2, 2026-11-20; `client.ui.Reveal`, `design.md` §5, Backlog): the first time a report
+shows on the device (its own mark, `LaunchWindowGame.firstSightOfReport`, never for a report older than
+one already shown), it plays in about 1.3 s; afterwards, and with Settings' Animations Off, it shows
+at once. The headline numbers count up from zero (0.6 s); the cards fade in (0.25 s each) as a wave
+from the top left, a column 0.08 s after the one to its left and a card 0.12 s after the one above;
+from 0.35 s each mission's step squares fill in one after another (0.07 s apart) and each reliability
+bar slides from last season's value to this one (0.6 s); from 0.8 s each reached goal's patch stamps
+onto the Goals card (0.25 s apart: it drops from half again its size as it fades in, lands with the
+`stamp` sound, the first three only, and gives a little). A click anywhere finishes it, silently. A
+rebuild partway (the archive's answer) picks it up where it was. Every duration is unconfirmed.
+
 **Earlier turns (user, 2026-10-04):** "Previous turn" and "Next turn" step through the saved
 reports. Previous turns off once the server says a turn resolved before the player joined. An
 earlier report leaves out the morale warnings, which describe the roster now. Replays work from
@@ -1462,7 +1473,7 @@ any report.
 **Shows, grouped:**
 - missions flown this season, with step outcomes (success, glitch solved, minor
   glitch, failure, catastrophic), prestige gained or lost, and goals achieved
-  ("first in the game!"). A mission's step squares wrap into even rows of at most 20, so a
+  ("first in the game!"), each led by its patch (40 px, J2). A mission's step squares wrap into even rows of at most 20, so a
   33-step Moon flight doesn't push the other columns off the screen (the user's play test,
   2026-11-11; shot `report-long-flight.png`);
 - R&D gains per component, and components that hit their R&D cap (researchers

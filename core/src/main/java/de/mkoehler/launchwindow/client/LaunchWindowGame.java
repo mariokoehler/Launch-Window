@@ -34,6 +34,7 @@ public class LaunchWindowGame extends Game {
     /** The sound setting when kept in memory (screenshots), else {@code null}. */
     private static Boolean soundInMemory;
     private static Boolean animationsInMemory;
+    private Long reportRevealedInMemory;
     /** The volumes when the sound setting is kept in memory. */
     private static final java.util.Map<String, Float> volumesInMemory = new java.util.HashMap<>();
     /** The replay's music and effects volume until the player sets them (unconfirmed). */
@@ -892,6 +893,45 @@ public class LaunchWindowGame extends Game {
 
     private String readKey() {
         return gameKey("reportRead");
+    }
+
+    /**
+     * Returns whether this is the first time a report shows on this device, marking it seen: its
+     * entrance plays once ({@code ui-spec.md} &sect;4.4, J2), and never for a report older than one
+     * already shown. Separate from the read mark, which is set before the report opens.
+     *
+     * @param turn the report's turn
+     * @return whether to play the entrance
+     */
+    public boolean firstSightOfReport(long turn) {
+        if (session == null) {
+            return false;
+        }
+        if (reportRevealedInMemory != null) {
+            if (turn <= reportRevealedInMemory) {
+                return false;
+            }
+            reportRevealedInMemory = turn;
+            return true;
+        }
+        com.badlogic.gdx.Preferences preferences = preferences();
+        String key = gameKey("reportRevealed");
+        if (turn <= preferences.getLong(key, 0L)) {
+            return false;
+        }
+        preferences.putLong(key, turn);
+        preferences.flush();
+        return true;
+    }
+
+    /**
+     * Keeps the report's first-sight mark in memory from now on (screenshots), never this machine's;
+     * {@code null} goes back to the device's.
+     *
+     * @param lastRevealed the last turn whose report has shown, or {@code null}
+     */
+    public void useReportRevealedInMemory(Long lastRevealed) {
+        reportRevealedInMemory = lastRevealed;
     }
 
     /**

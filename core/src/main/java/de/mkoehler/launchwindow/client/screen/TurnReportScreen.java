@@ -27,6 +27,7 @@ import de.mkoehler.launchwindow.client.ui.MilestoneLabels;
 import de.mkoehler.launchwindow.client.ui.OutcomeBar;
 import de.mkoehler.launchwindow.client.ui.RelationshipMarker;
 import de.mkoehler.launchwindow.client.ui.ReliabilityBar;
+import de.mkoehler.launchwindow.client.ui.Reveal;
 import de.mkoehler.launchwindow.client.ui.Theme;
 import de.mkoehler.launchwindow.client.ui.TraitChip;
 import de.mkoehler.launchwindow.client.view.Archive;
@@ -65,6 +66,9 @@ public final class TurnReportScreen extends ChromeScreen {
     private final java.util.Map<TurnReportView.Line, String> sciencePages = new java.util.IdentityHashMap<>();
     private final TextButton previous;
     private final TextButton next;
+    /** The report's entrance (J2), played on its first sight only. */
+    private final Reveal reveal;
+    private com.badlogic.gdx.audio.Sound stamp;
 
     /**
      * Builds the screen for a report.
@@ -82,9 +86,37 @@ public final class TurnReportScreen extends ChromeScreen {
         titleActions.add(previous).padRight(Theme.SPACE_2);
         titleActions.add(next).padRight(Theme.SPACE_4);
         titleActions.add(actionButton("Continue to Space Complex", Theme.ButtonKind.PRIMARY, this::goHome));
+        reveal = de.mkoehler.launchwindow.client.ui.Juice.motion() && game.firstSightOfReport(report.gameTurn())
+            ? Reveal.play() : Reveal.none();
+        stage.addCaptureListener(reveal.skipOnClick());
         rebuild();
         fetchArchive();
     }
+
+    // The entrance's beats, in seconds from the start (J2, ui-spec.md section 4.4). Unconfirmed.
+    /** The headline numbers count up over this. */
+    private static final float COUNT_SECONDS = 0.6f;
+    /** The first column's top card starts fading in. */
+    private static final float CARDS_START = 0.1f;
+    /** Each column further right starts this much later. */
+    private static final float COLUMN_STEP = 0.08f;
+    /** Each card further down starts this much later. */
+    private static final float ROW_STEP = 0.12f;
+    /** The mission squares start filling in, one after another. */
+    private static final float SQUARES_START = 0.35f;
+    private static final float SQUARE_STEP = 0.07f;
+    private static final float SQUARE_SECONDS = 0.1f;
+    /** The reliability bars slide from their old value. */
+    private static final float BARS_START = 0.35f;
+    private static final float BARS_SECONDS = 0.6f;
+    /** The goals' patches stamp down, one after another. */
+    private static final float STAMPS_START = 0.8f;
+    private static final float STAMP_STEP = 0.25f;
+    private static final float STAMP_SECONDS = 0.3f;
+    /** The stamp's sound plays as the patch lands, this far into its motion. */
+    private static final float STAMP_LANDS = 0.6f;
+    /** At most this many stamps sound; a cascade of goals stamps the rest silently. */
+    private static final int STAMPS_HEARD = 3;
 
     /** Asks which archive pages this game has opened, for the "New in the archive" card (ui-spec.md 4.19). */
     private void fetchArchive() {
@@ -114,21 +146,25 @@ public final class TurnReportScreen extends ChromeScreen {
         content.clearChildren();
         content.top();
         content.defaults().growX();
-        content.add(glance(catalog)).padBottom(Theme.SPACE_4).row();
+        content.add(reveal.fadeIn(glance(catalog), 0f)).padBottom(Theme.SPACE_4).row();
+        float topDelay = CARDS_START;
         // The press waits for a statement on a crew this turn lost (ui-spec.md 4.18.3, component 29).
         PressCards.waiting(this).filter(loss -> loss.gameTurn() == report.gameTurn())
             .ifPresent(loss -> content.add(PressCards.own(this, loss, false, this::rebuild)).padBottom(Theme.SPACE_4)
                 .row());
         Table decision = decisionCard();
         if (decision != null) {
-            content.add(decision).padBottom(Theme.SPACE_4).row();
+            content.add(reveal.fadeIn(decision, topDelay)).padBottom(Theme.SPACE_4).row();
+            topDelay += ROW_STEP;
         }
         Table archiveComplete = archiveComplete(catalog);
         if (archiveComplete != null) {
-            content.add(archiveComplete).padBottom(Theme.SPACE_4).row();
+            content.add(reveal.fadeIn(archiveComplete, topDelay)).padBottom(Theme.SPACE_4).row();
+            topDelay += ROW_STEP;
         }
         for (ContractsView.ReportCard contract : ContractsView.reportCards(report)) {
-            content.add(contractCard(contract)).padBottom(Theme.SPACE_4).row();
+            content.add(reveal.fadeIn(contractCard(contract), topDelay)).padBottom(Theme.SPACE_4).row();
+            topDelay += ROW_STEP;
         }
 
         Table columns = new Table();
@@ -164,6 +200,14 @@ public final class TurnReportScreen extends ChromeScreen {
         Table third = column();
         third.add(people(catalog)).row();
         third.add(budget()).row();
+        // The cards fade in as a wave from the top left (J2); the press's own card stays still.
+        Table[] all = {first, second, third};
+        for (int column = 0; column < all.length; column++) {
+            int row = 0;
+            for (com.badlogic.gdx.scenes.scene2d.Actor card : all[column].getChildren()) {
+                reveal.fadeIn(card, topDelay + column * COLUMN_STEP + row++ * ROW_STEP);
+            }
+        }
         columns.add(first).expandX().fillX().uniformX().top().padRight(Theme.SPACE_4);
         columns.add(second).expandX().fillX().uniformX().top().padRight(Theme.SPACE_4);
         columns.add(third).expandX().fillX().uniformX().top();
@@ -192,7 +236,8 @@ public final class TurnReportScreen extends ChromeScreen {
             cell.defaults().left();
             cell.add(ui.label(stat.label().toUpperCase(Locale.ROOT), Theme.TextStyle.CAPTION, Theme.INK_MUTED))
                 .padBottom(2f).row();
-            cell.add(ui.label(stat.value(), Theme.TextStyle.HEADING_SM, tone(stat.tone()))).row();
+            cell.add(reveal.countUp(ui.label(stat.value(), Theme.TextStyle.HEADING_SM, tone(stat.tone())), 0f,
+                COUNT_SECONDS)).row();
             cell.add(ui.label(stat.note(), Theme.TextStyle.CAPTION, Theme.INK_MUTED));
             strip.add(cell).expandX().fillX().uniformX().top();
             if (i < stats.size() - 1) {
@@ -472,8 +517,18 @@ public final class TurnReportScreen extends ChromeScreen {
                 if (i > 0 && i % perRow == 0) {
                     dots.row();
                 }
-                dots.add(new Image(ui.solid(OutcomeBar.COLORS[outcomes.get(i).ordinal()]))).size(10f).padRight(3f)
-                    .padBottom(i < (rows - 1) * perRow ? 3f : 0f).left();
+                // The squares fill in step by step, every mission at once (J2).
+                float delay = SQUARES_START + i * SQUARE_STEP;
+                Image square = new Image(ui.solid(OutcomeBar.COLORS[outcomes.get(i).ordinal()]));
+                square.getColor().a = reveal.progress(delay, SQUARE_SECONDS);
+                square.addAction(new com.badlogic.gdx.scenes.scene2d.Action() {
+                    @Override
+                    public boolean act(float delta) {
+                        getActor().getColor().a = reveal.progress(delay, SQUARE_SECONDS);
+                        return false;
+                    }
+                });
+                dots.add(square).size(10f).padRight(3f).padBottom(i < (rows - 1) * perRow ? 3f : 0f).left();
             }
             text.add(dots).padBottom(Theme.SPACE_2).row();
             text.add(actionButton("Watch replay", Theme.ButtonKind.SECONDARY,
@@ -493,8 +548,11 @@ public final class TurnReportScreen extends ChromeScreen {
         if (lines.isEmpty()) {
             card.add(ui.paragraph("No new goals this season.", Theme.TextStyle.BODY_SM, Theme.INK_MUTED)).row();
         }
-        for (TurnReportView.GoalLine line : lines) {
+        for (int index = 0; index < lines.size(); index++) {
+            TurnReportView.GoalLine line = lines.get(index);
             Table row = new Table();
+            // The goal's patch, stamped onto the card (J2).
+            row.add(stamped(line.goalId(), index)).size(GOAL_PATCH).padRight(Theme.SPACE_3);
             Table left = new Table();
             left.left();
             left.defaults().left();
@@ -513,6 +571,73 @@ public final class TurnReportScreen extends ChromeScreen {
             card.add(row).padBottom(Theme.SPACE_2).row();
         }
         return card;
+    }
+
+    /** A reached goal's patch on the report's Goals card. */
+    private static final float GOAL_PATCH = 40f;
+
+    /**
+     * Builds a reached goal's patch that stamps down onto the card in the report's entrance: it drops
+     * from half again its size as it fades in, lands with the stamp's sound, and settles with a small
+     * give.
+     */
+    private Table stamped(String goalId, int index) {
+        Table patch = RaceTable.patch(ui, goalId, true, GOAL_PATCH);
+        patch.setTransform(true);
+        float delay = STAMPS_START + index * STAMP_STEP;
+        boolean heard = index < STAMPS_HEARD;
+        com.badlogic.gdx.scenes.scene2d.Action stamping = new com.badlogic.gdx.scenes.scene2d.Action() {
+            @Override
+            public boolean act(float delta) {
+                float progress = reveal.progress(delay, STAMP_SECONDS);
+                float scale;
+                float alpha;
+                if (progress < STAMP_LANDS) {
+                    float fall = progress / STAMP_LANDS;
+                    scale = 1.5f - 0.5f * fall * fall;
+                    alpha = fall;
+                } else {
+                    float give = (progress - STAMP_LANDS) / (1f - STAMP_LANDS);
+                    scale = 1f - 0.06f * (float) Math.sin(Math.PI * give);
+                    alpha = 1f;
+                }
+                Table target = (Table) getActor();
+                target.setOrigin(Align.center);
+                target.setScale(scale);
+                target.getColor().a = alpha;
+                if (heard && reveal.beat("stamp:" + goalId, delay + STAMP_LANDS * STAMP_SECONDS)) {
+                    playStamp();
+                }
+                return false;
+            }
+        };
+        stamping.setActor(patch);
+        stamping.act(0f);
+        patch.addAction(stamping);
+        return patch;
+    }
+
+    private void playStamp() {
+        if (!LaunchWindowGame.soundOn()) {
+            return;
+        }
+        if (stamp == null) {
+            try {
+                stamp = com.badlogic.gdx.Gdx.audio.newSound(com.badlogic.gdx.Gdx.files.internal("audio/ui/stamp.ogg"));
+            } catch (RuntimeException e) {
+                com.badlogic.gdx.Gdx.app.error("Audio", "can't play the stamp", e);
+                return;
+            }
+        }
+        stamp.play(LaunchWindowGame.effectsVolume());
+    }
+
+    @Override
+    public void dispose() {
+        if (stamp != null) {
+            stamp.dispose();
+        }
+        super.dispose();
     }
 
     /**
@@ -670,7 +795,8 @@ public final class TurnReportScreen extends ChromeScreen {
             card.add(head).padBottom(4f).row();
             if (component.isPresent()) {
                 ReliabilityBar bar = new ReliabilityBar(ui, line.after(), component.get().maxRdReliability(),
-                    component.get().maxReliability(), 0);
+                    component.get().maxReliability(), 0)
+                    .slideFrom(line.before(), () -> reveal.progress(BARS_START, BARS_SECONDS));
                 // The seasons to each mark from here (component 25), on the latest report only: an older
                 // one's bar shows a reliability the component has since moved on from.
                 boolean latest = report.gameTurn() >= session.latestResolvedTurn();
