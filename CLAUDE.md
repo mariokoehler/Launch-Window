@@ -66,6 +66,7 @@ first live game starts in January 2027. Many numbers are still unconfirmed: the 
   how well people work; raise one person or a whole department (`design.md` §2.2(c), `ui-spec.md` §4.23).
 - Incident investigations: a failure's own investigation, led by an engineer, may win back part of the lost
   reliability; a lost crew's independent board reports on the paper (`design.md` §2.14, `ui-spec.md` §4.24).
+- Juice: small effects behind one switch (`client.ui.Juice`); J1 built, J2 and J3 planned (`design.md` §5, Backlog).
 
 ## How we work
 
@@ -308,7 +309,9 @@ cd assets && java --enable-native-access=ALL-UNNAMED -cp "../lwjgl3/target/class
   changing anything under `assets/content/` or a drawing's labels, run `mvn -q -pl lwjgl3
   test-compile` again, or the shots show the old text while the PNGs are new.
 - **Shots render with no time passing:** a tooltip needs `ScreenSnapshot.showTooltip`, and the
-  waiting chip a `render(0.6f)` first. `ScreenSnapshot` runs silent.
+  waiting chip a `render(0.6f)` first. `ScreenSnapshot` runs silent, with every effect frozen at its end
+  (`Juice.freeze`). Only `-Dshots=juice` lets time pass, on a clock it steps by hand: an effect's
+  mid-states go there, and a finished one must match its plain shot pixel for pixel.
 
 ## Pitfalls
 

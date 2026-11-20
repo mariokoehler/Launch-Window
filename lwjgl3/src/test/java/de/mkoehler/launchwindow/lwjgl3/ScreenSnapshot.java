@@ -238,6 +238,9 @@ public final class ScreenSnapshot {
         // Silent, and the sound setting never this machine's: the Join screen would speak otherwise.
         configuration.disableAudio(true);
         LaunchWindowGame.useSoundInMemory(true);
+        // No time passes in a shot: every effect shows its end, and none remembers the shot before (Juice).
+        LaunchWindowGame.useAnimationsInMemory(true);
+        de.mkoehler.launchwindow.client.ui.Juice.freeze(true);
         // The shots render at the game's default text size, Large, unless -Dui.textScale says otherwise;
         // the Settings shot shows Large chosen when the shots are taken at its size.
         float textScale = Float.parseFloat(System.getProperty("ui.textScale", String.valueOf(LaunchWindowGame.TextSize.LARGE.scale())));
@@ -282,6 +285,10 @@ public final class ScreenSnapshot {
         // The idle tip done: only its own shots show it (groundingShots).
         game.useAdvisorMarksInMemory(new java.util.HashSet<>(java.util.Set.of("idleTipDone", "explainerTipDone", "closeTipDone")));
         // -Dshots=contracts renders only one group, for a quick look at the screens being worked on.
+        if ("juice".equals(System.getProperty("shots"))) {
+            juiceShots(folder, game);
+            return;
+        }
         if ("advisor".equals(System.getProperty("shots"))) {
             advisorShots(folder, game);
             return;
@@ -4207,6 +4214,62 @@ public final class ScreenSnapshot {
             }
         }
         throw new IllegalStateException("no tooltip titled " + title);
+    }
+
+    /**
+     * The small effects in motion (design.md section 5, Backlog, J1), alone with {@code -Dshots=juice}: the only
+     * shots that let time pass, on a clock stepped by hand. The hub's funds and prestige as an order changes them
+     * (the flash at the start, half-ticked with the attention dots at a pulse's peak, at rest), the footer's funds
+     * ticking up on the page, and the screen fade halfway and done; done must match the plain shot pixel for pixel.
+     * Run it at another window size too, e.g. {@code 1600x1200}, to see the fade keep the letterbox.
+     */
+    private static void juiceShots(File folder, LaunchWindowGame game) {
+        double[] now = {100.0};
+        de.mkoehler.launchwindow.client.ui.Juice.freeze(false);
+        de.mkoehler.launchwindow.client.ui.Juice.useClock(() -> now[0]);
+        try {
+            String hash = ContentPackHash.ofClasspath("content/standard", ScreenSnapshot.class.getClassLoader());
+            GameInfoResponse info = GameInfoResponse.success("standard", hash, List.of(), 23, true,
+                6 * 3_600_000L, 0L, null, List.of(), List.of(), 0);
+            PlayerSnapshot me = new PlayerSnapshot("Orion Spaceworks", Archetype.NASA, 18_400, 2_140, 3_000, 23);
+            me.setDirectorName("Clara Voss");
+            SetSpecialist engineer = new SetSpecialist("e1", "Engineer 1", 36, 70, 50);
+            engineer.setSalary(40);
+            engineer.setExpectedSalary(50.0);
+            me.getSetSpecialists().add(engineer);
+            startSession(game, me, info);
+            write(folder, "juice-hub-before.png", new SpaceComplexScreen(game), null);
+            me.setFunds(17_150);
+            me.setPrestige(2_390);
+            startSession(game, me, info);
+            write(folder, "juice-hub-flash.png", new SpaceComplexScreen(game), null);
+            write(folder, "juice-hub-mid.png", new SpaceComplexScreen(game),
+                screen -> now[0] += de.mkoehler.launchwindow.client.ui.Juice.PULSE_SECONDS / 2);
+            now[0] += 5;
+            write(folder, "juice-hub-rest.png", new SpaceComplexScreen(game), screen -> now[0] += 5);
+
+            me.setFunds(19_000);
+            startSession(game, me, info);
+            write(folder, "juice-footer-up.png", new PublicAffairsScreen(game), screen -> now[0] += 0.15);
+            now[0] += 5;
+            write(folder, "juice-fade-plain.png", new PublicAffairsScreen(game), null);
+            for (String step : List.of("half", "done")) {
+                write(folder, "juice-fade-" + step + ".png", new PublicAffairsScreen(game), screen -> {
+                    SpaceComplexScreen hub = new SpaceComplexScreen(game);
+                    hub.show();
+                    hub.resize(width, height);
+                    hub.render(0f);
+                    de.mkoehler.launchwindow.client.screen.ScreenFade.capture(hub);
+                    hub.hide();
+                    hub.dispose();
+                    screen.resize(width, height);
+                    now[0] += step.equals("half") ? de.mkoehler.launchwindow.client.screen.ScreenFade.SECONDS / 2 : 5;
+                });
+            }
+        } finally {
+            de.mkoehler.launchwindow.client.ui.Juice.useClock(null);
+            de.mkoehler.launchwindow.client.ui.Juice.freeze(true);
+        }
     }
 
     private static <S extends Screen> void write(File folder, String name, S screen, Consumer<S> state) {

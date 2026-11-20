@@ -20,7 +20,9 @@ import com.badlogic.gdx.utils.Timer;
 import de.mkoehler.launchwindow.client.ClientSession;
 import de.mkoehler.launchwindow.client.connect.ServerResult;
 import de.mkoehler.launchwindow.client.LaunchWindowGame;
+import de.mkoehler.launchwindow.client.ui.Juice;
 import de.mkoehler.launchwindow.client.ui.Theme;
+import de.mkoehler.launchwindow.client.ui.TickingLabel;
 import de.mkoehler.launchwindow.client.view.ContentNames;
 import de.mkoehler.launchwindow.client.view.ContractsView;
 import de.mkoehler.launchwindow.client.view.DecisionView;
@@ -71,6 +73,9 @@ public final class SpaceComplexScreen extends SessionScreen {
     private static final float IDLE_MARKER_RADIUS = 18f;
     /** The idle-people dot on a marker's upper right, in art pixels. */
     private static final float IDLE_DOT_RADIUS = 6f;
+    /** The key prefixes of the hub's attention dots ({@link Juice#pulse}). */
+    private static final String HUB_PULSE = "hub:";
+    private static final String REPORT_PULSE = "report:";
     /** The plain marker's icon size, in art pixels. */
     private static final float IDLE_MARKER_ICON = 20f;
     /** The most height a tall, narrow marker icon (the VAB's rocket) may use inside the disc. */
@@ -636,16 +641,18 @@ public final class SpaceComplexScreen extends SessionScreen {
             ui.label("TURN REPORT", Theme.TextStyle.LABEL, Theme.NAVY));
         if (game.reportUnread()) {
             // The unread mark: a gold dot, as in the mockup.
-            report.add(new Image(ui.unreadDot())).size(10f).padLeft(6f);
+            report.add(pulsing(new Image(ui.unreadDot()), REPORT_PULSE + session.gameInfo().response().gameTurn()))
+                .size(10f).padLeft(6f);
         }
         report.setTouchable(Touchable.enabled);
         report.addListener(clicked(this::openReportFromHub));
         chips.add(report).height(CHIP_HEIGHT).padRight(gap);
         chips.add(chip(ui.solid(Theme.SURFACE_CARD), "funds", Theme.NAVY,
-            ui.label(money(state.getFunds()), Theme.TextStyle.LABEL, Theme.NAVY))).height(CHIP_HEIGHT).padRight(gap);
+            new TickingLabel(ui, Theme.TextStyle.LABEL, Theme.NAVY, false, "funds", SpaceComplexScreen::money)
+                .show(state.getFunds(), juiceContext()))).height(CHIP_HEIGHT).padRight(gap);
         chips.add(chip(ui.solid(Theme.SURFACE_CARD), "prestige", Theme.NAVY,
-            ui.label(String.format(Locale.ROOT, "%,d", state.getPrestige()), Theme.TextStyle.LABEL, Theme.NAVY)))
-            .height(CHIP_HEIGHT).padRight(gap);
+            new TickingLabel(ui, Theme.TextStyle.LABEL, Theme.NAVY, false, "prestige", SpaceComplexScreen::money)
+                .show(state.getPrestige(), juiceContext()))).height(CHIP_HEIGHT).padRight(gap);
         // Settings, the hub having no header (decided 2026-10-04): a white icon-only button, like IconButton.
         Table gear = new Table();
         gear.setBackground(ui.rect(Theme.SURFACE_CARD, Theme.ON_PAGE, Theme.BORDER_THIN));
@@ -681,6 +688,28 @@ public final class SpaceComplexScreen extends SessionScreen {
 
     private static String money(long amount) {
         return String.format(Locale.ROOT, "%,d", amount);
+    }
+
+    /** Pulses an attention dot the first time it shows (J1, {@link Juice#pulse}). */
+    private static Image pulsing(Image dot, String key) {
+        dot.addAction(new com.badlogic.gdx.scenes.scene2d.Action() {
+            @Override
+            public boolean act(float delta) {
+                Actor actor = getActor();
+                actor.setOrigin(Align.center);
+                actor.setScale(Juice.pulse(key));
+                return false;
+            }
+        });
+        return dot;
+    }
+
+    @Override
+    public void hide() {
+        super.hide();
+        // A pulse cut short by leaving plays again next time.
+        Juice.abandonPulses(HUB_PULSE);
+        Juice.abandonPulses(REPORT_PULSE);
     }
 
     @Override
@@ -731,6 +760,8 @@ public final class SpaceComplexScreen extends SessionScreen {
         private final Drawable gear = ui.icon("settings");
         private final java.util.Map<Hub.Place, Drawable> markerIcons = new java.util.EnumMap<>(Hub.Place.class);
         private Hub.Place hovered;
+        /** The attention dots drawn this frame, so the ones gone pulse again when they come back. */
+        private final java.util.Set<String> pulsing = new java.util.HashSet<>();
 
         HotspotLayer() {
             setTouchable(Touchable.enabled);
@@ -842,6 +873,8 @@ public final class SpaceComplexScreen extends SessionScreen {
                 shapes.end();
             }
             // Idle people (the user's idea, 2026-10-10): a red dot on the marker's upper right.
+            // Both dots pulse the first time they show (J1).
+            pulsing.clear();
             shapes.begin(ShapeRenderer.ShapeType.Filled);
             for (Hub.Hotspot spot : hotspots) {
                 if (Hub.idle(spot.place(), session.state()) == 0) {
@@ -850,10 +883,13 @@ public final class SpaceComplexScreen extends SessionScreen {
                 float radius = isUpgrading(spot.place()) ? MARKER_RADIUS : IDLE_MARKER_RADIUS;
                 float dotX = spot.labelX() + radius * 0.72f;
                 float dotY = spot.labelY() + MARKER_RISE + radius * 0.72f;
+                String key = HUB_PULSE + "idle:" + spot.place();
+                pulsing.add(key);
+                float pulse = Juice.pulse(key);
                 shapes.setColor(Color.WHITE);
-                shapes.circle(dotX, dotY, IDLE_DOT_RADIUS + 1.5f, 24);
+                shapes.circle(dotX, dotY, (IDLE_DOT_RADIUS + 1.5f) * pulse, 24);
                 shapes.setColor(Theme.DANGER);
-                shapes.circle(dotX, dotY, IDLE_DOT_RADIUS, 24);
+                shapes.circle(dotX, dotY, IDLE_DOT_RADIUS * pulse, 24);
             }
             // A decision waiting (ui-spec.md component 26): the same dot in gold, upper left. Headquarters
             // gets it for new contracts on offer and for a contract still to launch (ui-spec.md section 4.17);
@@ -870,12 +906,16 @@ public final class SpaceComplexScreen extends SessionScreen {
                 float radius = isUpgrading(spot.place()) ? MARKER_RADIUS : IDLE_MARKER_RADIUS;
                 float dotX = spot.labelX() - radius * 0.72f;
                 float dotY = spot.labelY() + MARKER_RISE + radius * 0.72f;
+                String key = HUB_PULSE + "decide:" + spot.place();
+                pulsing.add(key);
+                float pulse = Juice.pulse(key);
                 shapes.setColor(Color.WHITE);
-                shapes.circle(dotX, dotY, IDLE_DOT_RADIUS + 1.5f, 24);
+                shapes.circle(dotX, dotY, (IDLE_DOT_RADIUS + 1.5f) * pulse, 24);
                 shapes.setColor(Theme.GOLD);
-                shapes.circle(dotX, dotY, IDLE_DOT_RADIUS, 24);
+                shapes.circle(dotX, dotY, IDLE_DOT_RADIUS * pulse, 24);
             }
             shapes.end();
+            Juice.retainPulses(HUB_PULSE, pulsing);
             shapes.identity();
             batch.begin();
             for (Hub.Hotspot spot : plain) {

@@ -25,6 +25,7 @@ abstract class StageScreen extends ScreenAdapter {
     protected final Stage stage;
     protected final Table root = new Table();
     private boolean shown;
+    private boolean drawn;
     private int fontGeneration;
 
     /**
@@ -62,6 +63,15 @@ abstract class StageScreen extends ScreenAdapter {
         return shown;
     }
 
+    /**
+     * Returns whether the screen has drawn a frame yet, so {@link ScreenFade} has something to fade out.
+     *
+     * @return whether drawn
+     */
+    boolean hasDrawn() {
+        return drawn;
+    }
+
     @Override
     public void show() {
         shown = true;
@@ -87,6 +97,8 @@ abstract class StageScreen extends ScreenAdapter {
         }
         stage.act(delta);
         stage.draw();
+        drawn = true;
+        ScreenFade.drawOver(stage.getViewport());
     }
 
     @Override

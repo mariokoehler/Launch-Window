@@ -3478,7 +3478,8 @@ release-branch plan (§5, M6) it can ship during a live game. Durations and coun
   Effects stay under about a second.
 - **Left alone:** the memorial pages and lost crews; a failure gets no flourish beyond the red it has now;
   no screen shake.
-- **J1, groundwork and the everyday:** the shared helper and its switch (the Settings toggle included).
+- **J1, groundwork and the everyday (built 2026-11-20; `ui-spec.md` §2, Motion, §4.3, §4.12):** the shared
+  helper and its switch (`client.ui.Juice`, the Settings toggle included).
   The header's funds and prestige tick to a new value and flash green or red when an order changes them.
   Attention markers (the gold dots: someone underpaid, an unread report) pulse a few times when they first
   appear, then stay still. A 100 to 150 ms fade between screens at `LaunchWindowGame.setScreen` (kept only

@@ -114,6 +114,14 @@ final class SettingsDialog {
         card.add(volume("Replay sounds", LaunchWindowGame.effectsVolume(), LaunchWindowGame::setEffectsVolume))
             .padBottom(Theme.SPACE_4).row();
 
+        card.add(section("Animations")).padBottom(Theme.SPACE_2).row();
+        Table animations = new Table();
+        animations.add(onOffControl(LaunchWindowGame.animationsOn(), LaunchWindowGame::setAnimationsOn)).width(220f)
+            .height(32f).padRight(Theme.SPACE_3);
+        animations.add(ui.paragraph("Numbers that tick, dots that pulse, screens that fade. For everyone on this "
+            + "device.", Theme.TextStyle.CAPTION, Theme.INK_MUTED)).expandX().fillX().left();
+        card.add(animations).padBottom(Theme.SPACE_4).row();
+
         card.add(section("Replays")).padBottom(Theme.SPACE_2).row();
         Table replays = new Table();
         replays.add(replaysControl()).width(360f).height(32f).padRight(Theme.SPACE_3);
@@ -222,17 +230,22 @@ final class SettingsDialog {
 
     /** Sound on or off, for this device (the splash reads it before anyone logs in). */
     private Table soundControl() {
+        return onOffControl(LaunchWindowGame.soundOn(), LaunchWindowGame::setSoundOn);
+    }
+
+    /** A setting on or off, for this device, saved as it's picked. */
+    private Table onOffControl(boolean current, java.util.function.Consumer<Boolean> save) {
         Table segments = new Table();
         segments.setBackground(ui.rect(new Color(0f, 0f, 0f, 0f), Theme.NAVY_BORDER, Theme.BORDER_THIN));
         segments.pad(Theme.BORDER_THIN);
         for (boolean on : new boolean[] {true, false}) {
-            boolean selected = LaunchWindowGame.soundOn() == on;
+            boolean selected = current == on;
             Table segment = new Table();
             segment.setBackground(ui.solid(selected ? Theme.NAVY : Theme.SURFACE_CARD));
             segment.add(ui.label(on ? "On" : "Off", Theme.TextStyle.LABEL, selected ? Theme.ON_FILL : Theme.NAVY));
             segment.setTouchable(Touchable.enabled);
             segment.addListener(ChromeScreen.clicked(() -> {
-                LaunchWindowGame.setSoundOn(on);
+                save.accept(on);
                 host.closeDialog();
                 open();
             }));

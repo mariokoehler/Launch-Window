@@ -33,6 +33,7 @@ public class LaunchWindowGame extends Game {
 
     /** The sound setting when kept in memory (screenshots), else {@code null}. */
     private static Boolean soundInMemory;
+    private static Boolean animationsInMemory;
     /** The volumes when the sound setting is kept in memory. */
     private static final java.util.Map<String, Float> volumesInMemory = new java.util.HashMap<>();
     /** The replay's music and effects volume until the player sets them (unconfirmed). */
@@ -139,6 +140,8 @@ public class LaunchWindowGame extends Game {
         } catch (IllegalStateException e) {
             return e.getMessage();
         }
+        // Another agency, or the same one later: no number ticks from what the last session showed.
+        de.mkoehler.launchwindow.client.ui.Juice.forget();
         setScreen(new SpaceComplexScreen(this, true));
         return null;
     }
@@ -453,6 +456,40 @@ public class LaunchWindowGame extends Game {
      */
     public static boolean soundOn() {
         return soundInMemory != null ? soundInMemory : preferences().getBoolean("sound", true);
+    }
+
+    /**
+     * Returns whether the game animates its small effects (Settings, {@code ui-spec.md} &sect;4.12;
+     * {@link de.mkoehler.launchwindow.client.ui.Juice}), on this device for everyone.
+     *
+     * @return whether animations are on (the default)
+     */
+    public static boolean animationsOn() {
+        return animationsInMemory != null ? animationsInMemory : preferences().getBoolean("animations", true);
+    }
+
+    /**
+     * Keeps the animations setting in memory from now on (screenshots), so it doesn't depend on this machine.
+     *
+     * @param on whether animations are on
+     */
+    public static void useAnimationsInMemory(boolean on) {
+        animationsInMemory = on;
+    }
+
+    /**
+     * Turns the game's animations on or off on this device.
+     *
+     * @param on whether to animate
+     */
+    public static void setAnimationsOn(boolean on) {
+        if (animationsInMemory != null) {
+            animationsInMemory = on;
+            return;
+        }
+        com.badlogic.gdx.Preferences preferences = preferences();
+        preferences.putBoolean("animations", on);
+        preferences.flush();
     }
 
     /**
@@ -968,6 +1005,7 @@ public class LaunchWindowGame extends Game {
      * @param screen the screen to visit
      */
     public void visit(Screen screen) {
+        de.mkoehler.launchwindow.client.screen.ScreenFade.capture(getScreen());
         super.setScreen(screen);
     }
 
@@ -979,6 +1017,9 @@ public class LaunchWindowGame extends Game {
     @Override
     public void setScreen(Screen screen) {
         Screen previous = getScreen();
+        if (previous != screen) {
+            de.mkoehler.launchwindow.client.screen.ScreenFade.capture(previous);
+        }
         super.setScreen(screen);
         if (previous != null && previous != screen) {
             Gdx.app.postRunnable(previous::dispose);
@@ -1029,6 +1070,7 @@ public class LaunchWindowGame extends Game {
             ui.dispose();
         }
         ClickSound.dispose();
+        de.mkoehler.launchwindow.client.screen.ScreenFade.dispose();
     }
 
     /**

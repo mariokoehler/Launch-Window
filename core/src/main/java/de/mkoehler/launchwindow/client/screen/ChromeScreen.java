@@ -18,6 +18,7 @@ import com.badlogic.gdx.utils.Scaling;
 import de.mkoehler.launchwindow.client.LaunchWindowGame;
 import de.mkoehler.launchwindow.client.ui.ConceptChip;
 import de.mkoehler.launchwindow.client.ui.Theme;
+import de.mkoehler.launchwindow.client.ui.TickingLabel;
 import de.mkoehler.launchwindow.client.view.Concepts;
 import de.mkoehler.launchwindow.client.view.ContentNames;
 import de.mkoehler.launchwindow.client.view.Explainers;
@@ -85,7 +86,7 @@ abstract class ChromeScreen extends SessionScreen {
     /** Room for the screen's buttons, right of its title. */
     protected final Table titleActions = new Table();
 
-    private final Label prestige;
+    private final TickingLabel prestige;
     private final Label gameDate;
     private final Label countdown;
     private final Table footer = new Table();
@@ -104,7 +105,8 @@ abstract class ChromeScreen extends SessionScreen {
      */
     protected ChromeScreen(LaunchWindowGame game, List<Crumb> crumbs, String eyebrow, String title) {
         super(game);
-        prestige = ui.label("", Theme.TextStyle.LABEL, Theme.NAVY);
+        prestige = new TickingLabel(ui, Theme.TextStyle.LABEL, Theme.NAVY, false, "prestige",
+            value -> String.format(Locale.ROOT, "%,d PRESTIGE", value));
         gameDate = ui.label("", Theme.TextStyle.LABEL, Theme.ON_FILL);
         countdown = ui.label("", Theme.TextStyle.LABEL, Theme.NAVY);
 
@@ -697,7 +699,7 @@ abstract class ChromeScreen extends SessionScreen {
      */
     protected void refreshChrome() {
         PlayerSnapshot state = session.state();
-        prestige.setText(String.format(Locale.ROOT, "%,d PRESTIGE", state.getPrestige()));
+        prestige.show(state.getPrestige(), juiceContext());
         gameDate.setText(session.gameInfo().response().date().label().toUpperCase(Locale.ROOT));
         rebuildFooter(state, session.catalog());
     }
@@ -757,8 +759,11 @@ abstract class ChromeScreen extends SessionScreen {
     private void rebuildFooter(PlayerSnapshot state, ContentCatalog catalog) {
         footer.clearChildren();
         // No funds delta: last season's net change isn't in the state yet (gap G2), so none is invented.
-        footer.add(tip(footerStat("funds", String.format(Locale.ROOT, state.getFunds() < 0 ? "− %,d" : "%,d",
-            Math.abs(state.getFunds())), state.getFunds() < 0, this::goPublicAffairs), Tips.funds())).expandX().left();
+        TickingLabel funds = new TickingLabel(ui, Theme.TextStyle.CAPTION, Theme.ON_PAGE_STRONG, true, "funds",
+            value -> String.format(Locale.ROOT, value < 0 ? "− %,d" : "%,d", Math.abs(value)))
+            .show(state.getFunds(), juiceContext());
+        footer.add(tip(footerStat("funds", funds, state.getFunds() < 0, this::goPublicAffairs), Tips.funds()))
+            .expandX().left();
         footer.add(tip(footerStat("set_employees", counts(state.getSetSpecialists(), catalog, state,
             Building.SET_CENTER), this::goSetCentre), Tips.staffCounts("Engineers", "SET Centre"))).expandX();
         footer.add(tip(footerStat("astronauts", counts(state.getAstronauts(), catalog, state,
@@ -782,10 +787,10 @@ abstract class ChromeScreen extends SessionScreen {
     }
 
     private Table footerStat(String icon, String text, Runnable action) {
-        return footerStat(icon, text, false, action);
+        return footerStat(icon, ui.label(text, Theme.TextStyle.CAPTION, Theme.ON_PAGE_STRONG), false, action);
     }
 
-    private Table footerStat(String icon, String text, boolean negative, Runnable action) {
+    private Table footerStat(String icon, Label text, boolean negative, Runnable action) {
         Table stat = new Table();
         stat.setBackground(ui.solid(new Color(1f, 1f, 1f, 0.08f)));
         stat.pad(Theme.SPACE_1, Theme.SPACE_2, Theme.SPACE_1, Theme.SPACE_2);
@@ -797,10 +802,10 @@ abstract class ChromeScreen extends SessionScreen {
             Table tag = new Table();
             tag.setBackground(ui.solid(Theme.DANGER));
             tag.pad(1f, 5f, 1f, 5f);
-            tag.add(ui.label(text, Theme.TextStyle.CAPTION, Theme.ON_PAGE_STRONG));
+            tag.add(text);
             stat.add(tag).padRight(Theme.SPACE_2);
         } else {
-            stat.add(ui.label(text, Theme.TextStyle.CAPTION, Theme.ON_PAGE_STRONG)).padRight(Theme.SPACE_2);
+            stat.add(text).padRight(Theme.SPACE_2);
         }
         Image chevron = new Image(ui.icon("chevron"), Scaling.fit);
         chevron.setColor(new Color(1f, 1f, 1f, 0.6f));

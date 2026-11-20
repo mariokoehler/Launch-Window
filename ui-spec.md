@@ -92,6 +92,15 @@ Detailed in `design.md` §3.13; summarized here with the data each element shows
 On the right: a prestige chip, a game-date chip ("1958 · S2") and a next-resolution chip
 ("Next turn in 6 h 12 m"), in an async game the most useful single fact.
 
+**Motion** (`design.md` §5, Backlog, J1, 2026-11-20; `client.ui.Juice`): when an order changes the
+funds or prestige, the number ticks to its new value over 0.6 s and flashes, green up and red down,
+fading over 1 s (`client.ui.TickingLabel`). On a card (the header's chip, the hub's chips) the text
+takes the colour; on the page (the footer) a solid green or red tag shows behind the white text and
+fades. The value is remembered across screens, so leaving a screen and coming back doesn't tick again;
+another agency or a new turn shows the new value at once, so a turn's results never flash ahead of
+the report. Screens crossfade: the old one fades out over the new one in 0.15 s (`ScreenFade`), the new
+one taking clicks at once. Settings' Animations Off (§4.12) stops all of it. Every duration is unconfirmed.
+
 **Footer (every screen except the hub):** five clickable stat chips:
 
 | Chip | Shows | Opens |
@@ -1421,7 +1430,10 @@ clicked: a white disc with a navy ring and the place's own icon, the same one th
 Headquarters folder, Public Affairs Office dollar, Museum trophy). It turns navy with a white
 icon while its building is hovered. The marker counts as part of its building for hover and
 click. The icon is one field per place (`Hub.Place.icon()`), easy to swap. Idle-staff and
-decision dots sit on the markers (components 25, 26).
+decision dots sit on the markers (components 25, 26). A dot, and the Turn Report's unread dot, pulses
+three times (0.6 s each, growing by half) the first time it shows on the hub, then stays still; a dot that
+goes away pulses again when it comes back, and one whose pulse the player left before it finished plays it
+again next time (J1, 2026-11-20). The funds and prestige chips tick (§2, Motion).
 
 ### 4.4 Turn report (automatic after a resolution, reopenable from the hub)
 **Purpose:** "what happened overnight", the async equivalent of BASPM's end-of-season news
@@ -2274,6 +2286,9 @@ white gear at the end of the hub strip (icon-only, 32 px, like `IconButton`; dec
   needs nothing): on release
   over the widget, not when disabled, dragged off or scrolling; the sounds slider sets its volume
   too, and sound Off silences it.
+- **Animations** (J1, 2026-11-20): On (the default) or Off, for everyone on the device
+  (`LaunchWindowGame.animationsOn`): the numbers that tick, the dots that pulse and the screens that fade
+  (§2, Motion; §4.3). Off shows every effect's end at once.
 - **Replays:** Ask, Always or Never, per account (§4.4).
 - **About:** the version, the game's content pack and hash (8 characters), the fan-project note
   (not affiliated with the original game's makers) and the font licenses. A "Credits" button

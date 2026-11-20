@@ -718,6 +718,17 @@ abstract class SessionScreen extends StageScreen {
     }
 
     /**
+     * Returns who and when the header's numbers are shown for: another agency or another turn shows
+     * them at once instead of ticking ({@link de.mkoehler.launchwindow.client.ui.Juice#tick}).
+     *
+     * @return the context
+     */
+    protected String juiceContext() {
+        return session.credentials().address() + "|" + session.credentials().login() + "|"
+            + session.gameInfo().response().gameTurn();
+    }
+
+    /**
      * Returns the next-turn countdown's text, upper case, as the chips show it.
      *
      * @return the text
