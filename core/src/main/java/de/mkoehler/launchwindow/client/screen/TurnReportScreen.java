@@ -69,6 +69,8 @@ public final class TurnReportScreen extends ChromeScreen {
     /** The report's entrance (J2), played on its first sight only. */
     private final Reveal reveal;
     private com.badlogic.gdx.audio.Sound stamp;
+    /** How much later the columns start for the cards above them, so their own beats wait too. */
+    private float topShift;
 
     /**
      * Builds the screen for a report.
@@ -166,6 +168,7 @@ public final class TurnReportScreen extends ChromeScreen {
             content.add(reveal.fadeIn(contractCard(contract), topDelay)).padBottom(Theme.SPACE_4).row();
             topDelay += ROW_STEP;
         }
+        topShift = topDelay - CARDS_START;
 
         Table columns = new Table();
         columns.top();
@@ -518,7 +521,7 @@ public final class TurnReportScreen extends ChromeScreen {
                     dots.row();
                 }
                 // The squares fill in step by step, every mission at once (J2).
-                float delay = SQUARES_START + i * SQUARE_STEP;
+                float delay = topShift + SQUARES_START + i * SQUARE_STEP;
                 Image square = new Image(ui.solid(OutcomeBar.COLORS[outcomes.get(i).ordinal()]));
                 square.getColor().a = reveal.progress(delay, SQUARE_SECONDS);
                 square.addAction(new com.badlogic.gdx.scenes.scene2d.Action() {
@@ -584,7 +587,7 @@ public final class TurnReportScreen extends ChromeScreen {
     private Table stamped(String goalId, int index) {
         Table patch = RaceTable.patch(ui, goalId, true, GOAL_PATCH);
         patch.setTransform(true);
-        float delay = STAMPS_START + index * STAMP_STEP;
+        float delay = topShift + STAMPS_START + index * STAMP_STEP;
         boolean heard = index < STAMPS_HEARD;
         com.badlogic.gdx.scenes.scene2d.Action stamping = new com.badlogic.gdx.scenes.scene2d.Action() {
             @Override
@@ -796,7 +799,7 @@ public final class TurnReportScreen extends ChromeScreen {
             if (component.isPresent()) {
                 ReliabilityBar bar = new ReliabilityBar(ui, line.after(), component.get().maxRdReliability(),
                     component.get().maxReliability(), 0)
-                    .slideFrom(line.before(), () -> reveal.progress(BARS_START, BARS_SECONDS));
+                    .slideFrom(line.before(), () -> reveal.progress(topShift + BARS_START, BARS_SECONDS));
                 // The seasons to each mark from here (component 25), on the latest report only: an older
                 // one's bar shows a reliability the component has since moved on from.
                 boolean latest = report.gameTurn() >= session.latestResolvedTurn();
