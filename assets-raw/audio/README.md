@@ -79,3 +79,16 @@ Four more, the user's own, made with Stable Audio 3 (no `.txt`):
 
 `assets-raw/replay/sounds/make_effect_sounds.py` publishes them (level raised, as OGG) into the replay's
 catalog, and `assets-raw/replay/effects.py` times their cues off the clips' built projects.
+
+## The juice's sounds (2026-11-20)
+
+The user's Pixabay finds, each with a `.txt` beside it naming its page and uploader (credited in
+`assets/CREDITS.md`), for the small effects in `design.md` §5, Backlog (Juice); nothing else gets a sound:
+
+- `new_turn_chime.ogg`: a turn resolves while the player is online (J3).
+- `newspaper_thump.ogg`: a First's front page slides up and lands (J3). A paper riser peaking at about 0.8 s;
+  published cut to 2.5 s.
+- `stamp.ogg`: a goal's patch stamps onto its card in the turn report (J2).
+- `game_won_fanfare.ogg`: the race won (J3). 19 s; the dialog is to fade it out when it closes.
+
+`make_juice_sounds.py` publishes them (levels evened, as OGG at 44.1 kHz) into `assets/audio/ui/`.

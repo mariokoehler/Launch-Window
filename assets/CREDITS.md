@@ -35,6 +35,17 @@ cut from the variable fonts), for the Firsts' front pages, under the SIL Open Fo
 - `audio/handson/exceptional.ogg`: "Success Notification" by Universfield, Pixabay,
   https://pixabay.com/sound-effects/film-special-effects-success-notification-132473/. Pixabay Content License, https://pixabay.com/service/license-summary/.
   Level lowered 1 dB.
+- `audio/ui/new-turn.ogg`, `paper-lands.ogg`, `stamp.ogg`, `race-won.ogg`: the small effects' sounds
+  (`design.md` §5, Backlog, Juice), published by `assets-raw/audio/make_juice_sounds.py`.
+- `audio/ui/new-turn.ogg`: "Chime Sound" by freesound_community, Pixabay,
+  https://pixabay.com/sound-effects/film-special-effects-chime-sound-7143/. Pixabay Content License, https://pixabay.com/service/license-summary/. Level raised 2.5 dB.
+- `audio/ui/paper-lands.ogg`: "Riser Paper" by ALEXIS_GAMING_CAM, Pixabay,
+  https://pixabay.com/sound-effects/film-special-effects-riser-paper-415195/. Pixabay Content License, https://pixabay.com/service/license-summary/.
+  Cut to 2.5 s, fading out over the last second.
+- `audio/ui/stamp.ogg`: "Stamp" by freesound_community, Pixabay,
+  https://pixabay.com/sound-effects/film-special-effects-stamp-81635/. Pixabay Content License, https://pixabay.com/service/license-summary/.
+- `audio/ui/race-won.ogg`: "Fanfare" by MUFP2, Pixabay, https://pixabay.com/sound-effects/musical-fanfare-368589/.
+  Pixabay Content License, https://pixabay.com/service/license-summary/. Level raised 6 dB.
 - `audio/replay/`: the replay's sounds (`content/replay-sounds.json`). Sounds made for Launch Window
   need no credit here; any that weren't are credited below, one bullet per file, and marked
   `"credit": true` in the catalog. Generated music names its model and the model's terms here.

@@ -3491,9 +3491,8 @@ release-branch plan (§5, M6) it can ship during a live game. Durations and coun
   pulses the Turn Report button's dot and crossfades the hub's art to the new season's. A First's front page
   slides up onto the screen with a shadow. Winning the race stamps the medal in (the icon only), draws the
   prestige chart's lines from left to right and plays a short fanfare.
-- **Sounds,** four at most, picked and credited by the user: a new-turn chime and the fanfare (J3), the
-  paper landing (J3) and the patch's stamp (J2). Until then each plays a synthesized `placeholder-*` take,
-  as the replay's sounds do. Nothing else gets a sound.
+- **Sounds,** four, the user's Pixabay picks (2026-11-20, in `assets/audio/ui/`, `assets-raw/audio/README.md`):
+  `new-turn` and `race-won` (J3), `paper-lands` (J3) and `stamp` (J2). Nothing else gets a sound.
 
 ### Later
 
