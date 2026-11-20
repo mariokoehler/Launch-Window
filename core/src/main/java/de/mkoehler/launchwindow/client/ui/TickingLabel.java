@@ -32,6 +32,7 @@ public final class TickingLabel extends Label {
     private final GlyphLayout measure = new GlyphLayout();
     private final Color shown = new Color();
     private Juice.Tick tick;
+    private boolean wasTicking;
 
     /**
      * Builds the label.
@@ -82,9 +83,12 @@ public final class TickingLabel extends Label {
             return;
         }
         String text = format.apply(tick.value());
-        if (!textEquals(text)) {
+        boolean ticking = tick.ticking();
+        if (!textEquals(text) || ticking != wasTicking) {
+            // Also once as the tick ends: the label lets go of the widest value's width it held.
             setText(text);
             invalidateHierarchy();
+            wasTicking = ticking;
         }
         float flash = upTag == null ? tick.flash() : 0f;
         Color signal = tick.direction() > 0 ? Theme.SUCCESS : Theme.DANGER;

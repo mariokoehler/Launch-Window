@@ -2992,6 +2992,8 @@ trait (§2.2(c)).
   spoke, follow-ups first (§5, Backlog).
 - Explainers' triggers and the early-era concept audit (§1.1).
 - Backups: each zip holds the whole history (§3.7).
+- Juice J1: a number ticks 0.6 s and flashes 1 s; a dot pulses 3 times, 0.6 s each, growing by half; screens
+  fade in 0.15 s (`client.ui.Juice`, `ScreenFade`, §5, Backlog).
 
 ## 5. Implementation roadmap: milestones & slices
 
@@ -3489,8 +3491,10 @@ release-branch plan (§5, M6) it can ship during a live game. Durations and coun
   mission step squares fill step by step. A goal won stamps its patch onto the card with a small settle.
 - **J3, the big moments:** a turn that resolves while the player is online shows a toast with the new season,
   pulses the Turn Report button's dot and crossfades the hub's art to the new season's. A First's front page
-  slides up onto the screen with a shadow. Winning the race stamps the medal in (the icon only), draws the
-  prestige chart's lines from left to right and plays a short fanfare.
+  slides up onto the screen with a shadow and lands on `paper-lands`' thump, about 0.75 s into the clip (its
+  reverb tail plays on). Winning the race stamps the medal in (the icon only), draws the prestige chart's
+  lines from left to right, with the 19 s fanfare as background music while the screen builds up; leaving
+  before it ends fades it out (user, 2026-11-20).
 - **Sounds,** four, the user's Pixabay picks (2026-11-20, in `assets/audio/ui/`, `assets-raw/audio/README.md`):
   `new-turn` and `race-won` (J3), `paper-lands` (J3) and `stamp` (J2). Nothing else gets a sound.
 
