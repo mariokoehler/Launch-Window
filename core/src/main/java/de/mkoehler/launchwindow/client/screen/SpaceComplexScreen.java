@@ -86,6 +86,14 @@ public final class SpaceComplexScreen extends SessionScreen {
     private final List<Hub.Hotspot> hotspots;
     private final Hub.TimeOfDay timeOfDay;
     private final Image art = new Image();
+    /** The season before, fading out over the new one when a turn resolves here (J3). */
+    private final Image oldArt = new Image();
+    private String shownArtPath;
+    private double crossfadeStart;
+    /** How long the season's crossfade takes, in seconds. Unconfirmed. */
+    private static final float SEASON_FADE_SECONDS = 1.2f;
+    /** How long a building's hover highlight takes to fade in or out, in seconds. Unconfirmed. */
+    private static final float HOVER_FADE_SECONDS = 0.15f;
     private final HotspotLayer layer = new HotspotLayer();
     private final Table strip = new Table();
     /** The advisor's corner: bottom left, clear of every building's marker on both agencies' art. */
@@ -131,6 +139,24 @@ public final class SpaceComplexScreen extends SessionScreen {
         countdown = ui.label("", Theme.TextStyle.LABEL, Theme.NAVY);
         root.setBackground(ui.solid(Theme.NAVY));
         art.setScaling(Scaling.fill);
+        oldArt.setScaling(Scaling.fill);
+        oldArt.setTouchable(Touchable.disabled);
+        oldArt.addAction(new com.badlogic.gdx.scenes.scene2d.Action() {
+            @Override
+            public boolean act(float delta) {
+                if (oldArt.getDrawable() == null) {
+                    return false;
+                }
+                float progress = (float) ((Juice.now() - crossfadeStart) / SEASON_FADE_SECONDS);
+                if (progress >= 1f || !Juice.motion()) {
+                    // Gone before another backdrop loads and releases its texture.
+                    oldArt.setDrawable(null);
+                } else {
+                    oldArt.getColor().a = 1f - com.badlogic.gdx.math.Interpolation.fade.apply(Math.max(0f, progress));
+                }
+                return false;
+            }
+        });
 
         Table overlay = new Table();
         overlay.top();
@@ -138,6 +164,7 @@ public final class SpaceComplexScreen extends SessionScreen {
         overlay.add(pressCorner).left().pad(Theme.SPACE_6, Theme.SPACE_6, 0f, 0f).row();
         Stack stack = new Stack();
         stack.add(art);
+        stack.add(oldArt);
         stack.add(layer);
         stack.add(overlay);
         advisorCorner.bottom().left().pad(0f, Theme.SPACE_6, Theme.SPACE_6, 0f);
@@ -335,8 +362,18 @@ public final class SpaceComplexScreen extends SessionScreen {
     protected void rebuild() {
         PlayerSnapshot state = session.state();
         // The season can change while the player sits here (a turn resolved); the time of day can't.
-        Drawable picture = ui.backdrop(Hub.artPath(state.getArchetype(), session.gameInfo().response().date().season(),
-            timeOfDay));
+        String path = Hub.artPath(state.getArchetype(), session.gameInfo().response().date().season(), timeOfDay);
+        Drawable picture = ui.backdrop(path);
+        // A new season while the player is here: the old art fades out over the new (J3).
+        if (shownArtPath != null && !shownArtPath.equals(path) && Juice.motion()) {
+            Drawable before = ui.previousBackdrop(shownArtPath);
+            if (before != null) {
+                oldArt.setDrawable(before);
+                oldArt.getColor().a = 1f;
+                crossfadeStart = Juice.now();
+            }
+        }
+        shownArtPath = path;
         art.setDrawable(picture);
         rebuildStrip(state);
         rebuildAdvisor(state);
@@ -760,6 +797,9 @@ public final class SpaceComplexScreen extends SessionScreen {
         private final Drawable gear = ui.icon("settings");
         private final java.util.Map<Hub.Place, Drawable> markerIcons = new java.util.EnumMap<>(Hub.Place.class);
         private Hub.Place hovered;
+        /** Each building's hover highlight, 0 to 1: it fades in and out (J3). */
+        private final java.util.Map<Hub.Place, Float> glow = new java.util.EnumMap<>(Hub.Place.class);
+        private final Color lerped = new Color();
         /** The attention dots drawn this frame, so the ones gone pulse again when they come back. */
         private final java.util.Set<String> pulsing = new java.util.HashSet<>();
 
@@ -784,6 +824,31 @@ public final class SpaceComplexScreen extends SessionScreen {
                     open(hovered);
                 }
             }));
+        }
+
+        @Override
+        public void act(float delta) {
+            super.act(delta);
+            float step = Juice.motion() ? delta / HOVER_FADE_SECONDS : 1f;
+            for (Hub.Hotspot spot : hotspots) {
+                float target = spot.place() == hovered ? 1f : 0f;
+                float now = glow.getOrDefault(spot.place(), 0f);
+                glow.put(spot.place(), now < target ? Math.min(target, now + step) : Math.max(target, now - step));
+            }
+        }
+
+        /** A colour between two, exactly either one at the ends, so a still hub draws as it did. */
+        private Color blend(Color from, Color to, float amount) {
+            return amount <= 0f ? from : amount >= 1f ? to : lerped.set(from).lerp(to, amount);
+        }
+
+        /** How strongly a building shows hovered now, eased. */
+        private float glowOf(Hub.Place place) {
+            // The snapshot sets a hover and draws without acting: show it at once.
+            if (!Juice.motion()) {
+                return place == hovered ? 1f : 0f;
+            }
+            return com.badlogic.gdx.math.Interpolation.fade.apply(glow.getOrDefault(place, 0f));
         }
 
         /** Converts a local point to art pixels; the layer covers the whole art. */
@@ -828,7 +893,6 @@ public final class SpaceComplexScreen extends SessionScreen {
             float scaleY = getHeight() / Hub.ART_HEIGHT;
             List<Hub.Hotspot> upgrading = hotspots.stream().filter(spot -> isUpgrading(spot.place())).toList();
             List<Hub.Hotspot> plain = hotspots.stream().filter(spot -> !isUpgrading(spot.place())).toList();
-            Hub.Hotspot hover = hotspots.stream().filter(spot -> spot.place() == hovered).findFirst().orElse(null);
             batch.end();
             Gdx.gl.glEnable(GL20.GL_BLEND);
             Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
@@ -836,11 +900,15 @@ public final class SpaceComplexScreen extends SessionScreen {
             shapes.setTransformMatrix(batch.getTransformMatrix());
             shapes.translate(getX(), getY(), 0f);
             shapes.scale(scaleX, scaleY, 1f);
-            if (hover != null) {
+            for (Hub.Hotspot hover : hotspots) {
+                float strength = glowOf(hover.place());
+                if (strength <= 0f) {
+                    continue;
+                }
                 float[] v = hover.vertices();
                 short[] tri = hover.triangles();
                 shapes.begin(ShapeRenderer.ShapeType.Filled);
-                shapes.setColor(HIGHLIGHT);
+                shapes.setColor(HIGHLIGHT.r, HIGHLIGHT.g, HIGHLIGHT.b, HIGHLIGHT.a * strength);
                 for (int i = 0; i < tri.length; i += 3) {
                     shapes.triangle(v[2 * tri[i]], v[2 * tri[i] + 1], v[2 * tri[i + 1]], v[2 * tri[i + 1] + 1],
                         v[2 * tri[i + 2]], v[2 * tri[i + 2] + 1]);
@@ -848,17 +916,17 @@ public final class SpaceComplexScreen extends SessionScreen {
                 shapes.end();
                 Gdx.gl.glLineWidth(2f);
                 shapes.begin(ShapeRenderer.ShapeType.Line);
-                shapes.setColor(HIGHLIGHT);
+                shapes.setColor(HIGHLIGHT.r, HIGHLIGHT.g, HIGHLIGHT.b, HIGHLIGHT.a * strength);
                 shapes.polygon(v);
                 shapes.end();
                 Gdx.gl.glLineWidth(1f);
             }
             shapes.begin(ShapeRenderer.ShapeType.Filled);
             for (Hub.Hotspot spot : plain) {
-                boolean hot = spot.place() == hovered;
-                shapes.setColor(hot ? Color.WHITE : Theme.NAVY);
+                float hot = glowOf(spot.place());
+                shapes.setColor(blend(Theme.NAVY, Color.WHITE, hot));
                 shapes.circle(spot.labelX(), spot.labelY() + MARKER_RISE, IDLE_MARKER_RADIUS + 1.5f, 40);
-                shapes.setColor(hot ? Theme.NAVY : Color.WHITE);
+                shapes.setColor(blend(Color.WHITE, Theme.NAVY, hot));
                 shapes.circle(spot.labelX(), spot.labelY() + MARKER_RISE, IDLE_MARKER_RADIUS, 40);
             }
             shapes.end();
@@ -919,7 +987,7 @@ public final class SpaceComplexScreen extends SessionScreen {
             shapes.identity();
             batch.begin();
             for (Hub.Hotspot spot : plain) {
-                Color tint = spot.place() == hovered ? Color.WHITE : Theme.NAVY;
+                Color tint = blend(Theme.NAVY, Color.WHITE, glowOf(spot.place()));
                 batch.setColor(tint.r, tint.g, tint.b, parentAlpha);
                 Drawable icon = markerIcon(spot.place());
                 // Keep the icon's own proportions: the rocket is tall and narrow, and a square stretched it.
@@ -935,7 +1003,17 @@ public final class SpaceComplexScreen extends SessionScreen {
                     * scaleY, 24f * scaleX, 24f * scaleY);
             }
             batch.setColor(1f, 1f, 1f, parentAlpha);
-            if (hover != null) {
+            for (Hub.Hotspot hover : hotspots) {
+                float strength = glowOf(hover.place());
+                if (strength > 0f) {
+                    drawHoverLabels(batch, hover, scaleX, scaleY, parentAlpha * strength);
+                }
+            }
+        }
+
+        /** A hovered building's name and its lines under it, fading with its highlight. */
+        private void drawHoverLabels(Batch batch, Hub.Hotspot hover, float scaleX, float scaleY, float parentAlpha) {
+            {
                 String text = hover.place().label().toUpperCase(Locale.ROOT);
                 drawCentered(batch, shadow, text, hover.labelX() * scaleX + 1.5f, hover.labelY() * scaleY - 1.5f,
                     parentAlpha);

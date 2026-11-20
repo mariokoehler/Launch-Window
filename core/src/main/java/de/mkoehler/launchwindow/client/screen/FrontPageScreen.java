@@ -1,6 +1,7 @@
 package de.mkoehler.launchwindow.client.screen;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -110,6 +111,10 @@ public class FrontPageScreen extends SessionScreen {
     private final Runnable done;
     private final boolean reopened;
     private int index;
+    /** A First's page slides in on its first show (J3), one entrance per page, kept across rebuilds. */
+    private final java.util.Map<Integer, de.mkoehler.launchwindow.client.ui.Reveal> slides = new java.util.HashMap<>();
+    /** The paper's sound playing under the current slide, to stop if the player skips it. */
+    private long paperSound = -1L;
     /** 0 for the page itself, 1 for its continuation sheet. */
     private int sheet;
     /** What a follow-up's page couldn't hold, for its continuation sheet. */
@@ -132,7 +137,32 @@ public class FrontPageScreen extends SessionScreen {
         this.done = done;
         this.reopened = reopened;
         root.setBackground(ui.solid(Theme.NAVY));
+        stage.addCaptureListener(new com.badlogic.gdx.scenes.scene2d.InputListener() {
+            @Override
+            public boolean touchDown(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y, int pointer,
+                                     int button) {
+                skipSlide();
+                return false;
+            }
+        });
         rebuild();
+    }
+
+    /** How long a First's page takes to slide up and land, in seconds: the paper sound peaks then. Unconfirmed. */
+    private static final float SLIDE_SECONDS = 0.8f;
+    /** How far below its place a First's page starts. Unconfirmed. */
+    private static final float SLIDE_DISTANCE = 120f;
+    /** The game line and buttons under the page fade in as it lands. */
+    private static final float STRIP_DELAY = 0.6f;
+
+    /** A click lands the page at once and silences its sound. */
+    private void skipSlide() {
+        de.mkoehler.launchwindow.client.ui.Reveal slide = slides.get(index);
+        if (slide != null && slide.playing() && slide.progress(0f, SLIDE_SECONDS) < 1f) {
+            slide.skip();
+            de.mkoehler.launchwindow.client.ui.UiSounds.stop(de.mkoehler.launchwindow.client.ui.UiSounds.PAPER_LANDS,
+                paperSound);
+        }
     }
 
     @Override
@@ -243,15 +273,94 @@ public class FrontPageScreen extends SessionScreen {
 
         Table front = new Table();
         front.top();
-        front.add(sheet == 0 ? page(page) : page.memorialPage() ? mourning(continuation(page)) : continuation(page))
-            .size(PAGE_WIDTH, PAGE_HEIGHT).padTop(MARGIN).row();
-        front.add(strip(page)).width(PAGE_WIDTH).padTop(28f);
+        Actor sheetActor = sheet == 0 ? page(page) : page.memorialPage() ? mourning(continuation(page))
+            : continuation(page);
+        Actor stripActor = strip(page);
+        // A First's page, the first time it shows, slides up onto the desk and lands with the paper's thump (J3).
+        if (sheet == 0 && page.firstPage() && !reopened) {
+            de.mkoehler.launchwindow.client.ui.Reveal slide = slides.computeIfAbsent(index,
+                i -> de.mkoehler.launchwindow.client.ui.Reveal.play());
+            sheetActor = new SlideIn(sheetActor, slide);
+            slide.fadeIn(stripActor, STRIP_DELAY);
+            root.addActor(slide.starter());
+        }
+        front.add(sheetActor).size(PAGE_WIDTH, PAGE_HEIGHT).padTop(MARGIN).row();
+        front.add(stripActor).width(PAGE_WIDTH).padTop(28f);
 
         Stack stack = new Stack();
         stack.add(art);
         stack.add(scrim);
         stack.add(front);
         root.add(stack).grow();
+    }
+
+    /**
+     * A page sliding up into its place: it starts {@value #SLIDE_DISTANCE} below, faded, and speeds up
+     * into its landing, lifted by a shadow that shrinks to nothing as it lands. The paper's sound starts
+     * with it, its thump on the landing. Moves by whole units, so the text keeps its pixels.
+     */
+    private final class SlideIn extends com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup {
+        private final Actor child;
+        private final de.mkoehler.launchwindow.client.ui.Reveal slide;
+        private final Drawable shadow = ui.solid(Color.BLACK);
+
+        SlideIn(Actor child, de.mkoehler.launchwindow.client.ui.Reveal slide) {
+            this.child = child;
+            this.slide = slide;
+            addActor(child);
+            place();
+        }
+
+        private float progress() {
+            return slide.progress(0f, SLIDE_SECONDS);
+        }
+
+        private void place() {
+            float progress = progress();
+            float fall = com.badlogic.gdx.math.Interpolation.pow2In.apply(progress);
+            child.setBounds(0f, Math.round(-SLIDE_DISTANCE * (1f - fall)), getWidth(), getHeight());
+            child.getColor().a = Math.min(1f, progress / 0.3f);
+        }
+
+        @Override
+        public void act(float delta) {
+            super.act(delta);
+            if (slide.beat("paper", 0f)) {
+                paperSound = de.mkoehler.launchwindow.client.ui.UiSounds.play(
+                    de.mkoehler.launchwindow.client.ui.UiSounds.PAPER_LANDS);
+            }
+            place();
+        }
+
+        @Override
+        public void layout() {
+            place();
+        }
+
+        @Override
+        public float getPrefWidth() {
+            return child instanceof com.badlogic.gdx.scenes.scene2d.utils.Layout layout ? layout.getPrefWidth()
+                : child.getWidth();
+        }
+
+        @Override
+        public float getPrefHeight() {
+            return child instanceof com.badlogic.gdx.scenes.scene2d.utils.Layout layout ? layout.getPrefHeight()
+                : child.getHeight();
+        }
+
+        @Override
+        public void draw(com.badlogic.gdx.graphics.g2d.Batch batch, float parentAlpha) {
+            float lift = 1f - progress();
+            if (lift > 0f) {
+                Color old = batch.getColor().cpy();
+                batch.setColor(0f, 0f, 0f, 0.35f * lift * child.getColor().a * parentAlpha);
+                shadow.draw(batch, getX() + Math.round(14f * lift), getY() + child.getY() - Math.round(18f * lift),
+                    getWidth(), getHeight());
+                batch.setColor(old);
+            }
+            super.draw(batch, parentAlpha);
+        }
     }
 
     private Table page(FrontPage page) {

@@ -84,6 +84,9 @@ public final class UiKit implements Disposable {
     private TextButton.TextButtonStyle pageGhostButtonStyle;
     private String backdropPath;
     private Texture backdrop;
+    /** The backdrop before, kept for a crossfade ({@link #previousBackdrop}). */
+    private String previousBackdropPath;
+    private Texture previousBackdrop;
 
     /**
      * Loads the fonts and images and builds the shared styles.
@@ -263,23 +266,38 @@ public final class UiKit implements Disposable {
     }
 
     /**
-     * Returns a full-screen backdrop from {@code assets/}, such as the hub's art. Only one is kept:
-     * asking for another releases the previous one, so the 32 hub images never pile up, while
-     * returning to the hub with the same art loads nothing.
+     * Returns a full-screen backdrop from {@code assets/}, such as the hub's art. Two are kept, this
+     * one and the one before it (for the hub's crossfade between seasons): asking for another releases
+     * the oldest, so the 32 hub images never pile up, while returning to the hub with the same art
+     * loads nothing.
      *
      * @param path the path under {@code assets/}
      * @return the drawable, or {@code null} if there's no such file
      */
     public TextureRegionDrawable backdrop(String path) {
         if (!path.equals(backdropPath)) {
-            if (backdrop != null) {
-                backdrop.dispose();
+            if (previousBackdrop != null) {
+                previousBackdrop.dispose();
             }
+            previousBackdrop = backdrop;
+            previousBackdropPath = backdropPath;
             FileHandle file = assets.child(path);
             backdrop = file.exists() ? smoothTexture(file) : null;
             backdropPath = path;
         }
         return backdrop == null ? null : new TextureRegionDrawable(backdrop);
+    }
+
+    /**
+     * Returns the backdrop shown before the current one, for a crossfade, if it was the one at a path:
+     * kept until the next backdrop loads, so a crossfade must end before the screen loads another.
+     *
+     * @param path the path the caller showed before
+     * @return the drawable, or {@code null} if that isn't the one kept
+     */
+    public TextureRegionDrawable previousBackdrop(String path) {
+        return previousBackdrop == null || !path.equals(previousBackdropPath) ? null
+            : new TextureRegionDrawable(previousBackdrop);
     }
 
     /**
@@ -851,6 +869,9 @@ public final class UiKit implements Disposable {
         archetypeArt.values().forEach(Texture::dispose);
         icons.values().forEach(Texture::dispose);
         pictures.values().stream().filter(java.util.Objects::nonNull).forEach(Texture::dispose);
+        if (previousBackdrop != null) {
+            previousBackdrop.dispose();
+        }
         if (backdrop != null) {
             backdrop.dispose();
         }

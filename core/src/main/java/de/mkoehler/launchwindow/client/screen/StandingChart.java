@@ -72,6 +72,8 @@ public final class StandingChart extends WidgetGroup {
     private final List<float[]> leaders = new ArrayList<>();
 
     private Plot prestige;
+    /** How far the lines have drawn in, left to right (the game result's build-up, J3); {@code null} for all. */
+    private java.util.function.DoubleSupplier drawIn;
     private Plot funds;
     private long hovered = -1L;
     private Table tip;
@@ -447,17 +449,52 @@ public final class StandingChart extends WidgetGroup {
         return index < 0 ? Theme.NAVY : RIVALS[index % Standing.RIVAL_COLOURS];
     }
 
+    /**
+     * Draws the lines in from left to right as a progress runs from 0 to 1: the grid and the axes show
+     * at once, the lines, their marks and the leaders to their names as far as the progress has come.
+     *
+     * @param progress the progress, 0 to 1
+     * @return this chart
+     */
+    public StandingChart drawIn(java.util.function.DoubleSupplier progress) {
+        this.drawIn = progress;
+        return this;
+    }
+
+    /** A mark's reach past its line's end, so the clip doesn't cut the last dot. */
+    private static final float MARK_REACH = 8f;
+
     @Override
     public void draw(Batch batch, float parentAlpha) {
         validate();
         float ox = getX();
         float oy = getY();
+        float progress = drawIn == null ? 1f : (float) drawIn.getAsDouble();
         grid(batch, prestige, ox, oy);
         if (funds != null) {
             grid(batch, funds, ox, oy);
             debtFill(batch, ox, oy);
         }
         reviews(batch, ox, oy);
+        boolean clipped = false;
+        if (progress < 1f) {
+            if (progress <= 0f || getStage() == null) {
+                batch.setColor(Color.WHITE);
+                super.draw(batch, parentAlpha);
+                return;
+            }
+            batch.flush();
+            com.badlogic.gdx.math.Rectangle area = new com.badlogic.gdx.math.Rectangle(ox, oy,
+                prestige.left() + (prestige.right() - prestige.left()) * progress + MARK_REACH, getHeight());
+            com.badlogic.gdx.math.Rectangle scissor = new com.badlogic.gdx.math.Rectangle();
+            getStage().calculateScissors(area, scissor);
+            clipped = com.badlogic.gdx.scenes.scene2d.utils.ScissorStack.pushScissors(scissor);
+            if (!clipped) {
+                batch.setColor(Color.WHITE);
+                super.draw(batch, parentAlpha);
+                return;
+            }
+        }
         for (float[] leader : leaders) {
             ui.line(batch, ox + leader[0], oy + leader[1], ox + leader[2], oy + leader[3], 1f, Theme.CHART_AXIS, 0f);
         }
@@ -469,6 +506,10 @@ public final class StandingChart extends WidgetGroup {
         }
         for (Standing.Line line : shown()) {
             marks(batch, line, ox, oy);
+        }
+        if (clipped) {
+            batch.flush();
+            com.badlogic.gdx.scenes.scene2d.utils.ScissorStack.popScissors();
         }
         if (hovered >= 0) {
             crosshair(batch, ox, oy);

@@ -32,6 +32,9 @@ class RevealTest {
     @Test
     void partsPlayFromTheirDelays() {
         Reveal reveal = Reveal.play();
+        now += 3.0;
+        assertEquals(0f, reveal.progress(0.5f, 1f), 1e-6, "waits for its start");
+        reveal.begin();
         assertEquals(0f, reveal.progress(0.5f, 1f), 1e-6);
         now += 1.0;
         assertEquals(0.5f, reveal.progress(0.5f, 1f), 1e-6);
@@ -42,6 +45,7 @@ class RevealTest {
     @Test
     void aClickFinishesEverything() {
         Reveal reveal = Reveal.play();
+        reveal.begin();
         reveal.skip();
         assertEquals(1f, reveal.progress(0.5f, 1f), 1e-6);
         now += 1.0;
@@ -51,6 +55,7 @@ class RevealTest {
     @Test
     void aBeatComesOnce() {
         Reveal reveal = Reveal.play();
+        reveal.begin();
         assertFalse(reveal.beat("stamp", 0.5f));
         now += 0.6;
         assertTrue(reveal.beat("stamp", 0.5f));

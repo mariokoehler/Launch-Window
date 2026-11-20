@@ -4284,9 +4284,109 @@ public final class ScreenSnapshot {
                 });
             }
             juiceReportShots(folder, game, now);
+            juiceBigMomentShots(folder, game, now);
         } finally {
             de.mkoehler.launchwindow.client.ui.Juice.useClock(null);
             de.mkoehler.launchwindow.client.ui.Juice.freeze(true);
+        }
+    }
+
+    /**
+     * The big moments (J3) and the hub's hover fade: a building's highlight half in and half out, the season's
+     * crossfade midway and done, a First's page mid-slide and landed, the race won mid-build and done. Each end
+     * must match its plain shot in the full run (frontpage-orbit-rival, result-won).
+     */
+    private static void juiceBigMomentShots(File folder, LaunchWindowGame game, double[] now) {
+        String early = ContentPackHash.ofClasspath("content/early-era", ScreenSnapshot.class.getClassLoader());
+        PlayerSnapshot baltic = new PlayerSnapshot("Baltic Star Agency", Archetype.SOVIET, 25_000, 250, 3_000, 1);
+        baltic.setDirectorName("A. Reyes");
+        GameInfoResponse spring = GameInfoResponse.success("early-era", early, List.of(), 2, true,
+            6 * 3_600_000L + 12 * 60_000L + 30_000L, 0L, null, List.of(), List.of(), 0);
+        startSession(game, baltic, spring);
+        write(folder, "juice-hover-in.png", new SpaceComplexScreen(game), screen -> {
+            screen.hover(Hub.Place.HEADQUARTERS);
+            screen.render(0.075f);
+        });
+        write(folder, "juice-hover-out.png", new SpaceComplexScreen(game), screen -> {
+            screen.hover(Hub.Place.HEADQUARTERS);
+            screen.render(1f);
+            screen.hover(null);
+            screen.render(0.075f);
+        });
+        // A turn resolves while the player sits on the hub: spring fades into summer.
+        GameInfoResponse summer = GameInfoResponse.success("early-era", early, List.of(), 3, true,
+            6 * 3_600_000L + 12 * 60_000L + 30_000L, 0L, null, List.of(), List.of(), 0);
+        for (String step : List.of("half", "done")) {
+            startSession(game, baltic, spring);
+            write(folder, "juice-season-" + step + ".png", new SpaceComplexScreen(game), screen -> {
+                game.session().update(new de.mkoehler.launchwindow.client.connect.ServerResult(
+                    de.mkoehler.launchwindow.client.connect.ServerResult.Kind.OK, "", baltic,
+                    new GameInfo(summer, System.currentTimeMillis())));
+                try {
+                    java.lang.reflect.Method rebuild = SpaceComplexScreen.class.getDeclaredMethod("rebuild");
+                    rebuild.setAccessible(true);
+                    rebuild.invoke(screen);
+                } catch (ReflectiveOperationException e) {
+                    throw new IllegalStateException(e);
+                }
+                screen.render(0f);
+                now[0] += step.equals("half") ? 0.6 : 5;
+            });
+        }
+        startSession(game, baltic, summer);
+        write(folder, "juice-season-plain.png", new SpaceComplexScreen(game), null);
+
+        // A First's page, as frontPageShots shows it.
+        game.useFrontPageMarksInMemory(new java.util.HashSet<>());
+        String standard = ContentPackHash.ofClasspath("content/standard", ScreenSnapshot.class.getClassLoader());
+        GameInfoResponse info = GameInfoResponse.success("standard", standard, List.of(), 27, true,
+            6 * 3_600_000L, 0L, null, List.of(), List.of(), 0);
+        PlayerSnapshot me = new PlayerSnapshot("Baltic Star Agency", Archetype.SOVIET, 60_000, 2_140, 3_000, 27);
+        me.setDirectorName("A. Reyes");
+        startSession(game, me, info);
+        FrontPage.Achiever orion = new FrontPage.Achiever("Orion Spaceworks", "Ana Reyes", List.of("Daniel Hale"));
+        FrontPage.Achiever kestrel = new FrontPage.Achiever("Kestrel Aerospace", "Moses Okafor", List.of());
+        FrontPage.Achiever balticStar = new FrontPage.Achiever("Baltic Star Agency", "A. Reyes", List.of("Pavel Brandt"));
+        FrontPage satellite = new FrontPage("11-earth-orbit-satellite", "earth-orbit-satellite", 11, "sat-new-moon",
+            "Crisp, clear evening", List.of(), List.of(kestrel), List.of("Orion Spaceworks", "Baltic Star Agency"));
+        FrontPage space = new FrontPage("25-human-in-space", "human-in-space", 25, "space-first-flight",
+            "Snow flurries, bitter cold", List.of(), List.of(balticStar), List.of("Orion Spaceworks", "Kestrel Aerospace"));
+        FrontPage orbit = new FrontPage("26-human-in-orbit", "human-in-orbit", 26, "orbit-circles",
+            "Fair and cool tonight", List.of(), List.of(orion), List.of("Kestrel Aerospace", "Baltic Star Agency"));
+        game.session().keepFrontPages(List.of(satellite, space, orbit));
+        for (double at : new double[] {0.5, 5.0}) {
+            write(folder, String.format(java.util.Locale.ROOT, "juice-frontpage-%.1f.png", at),
+                new FrontPageScreen(game, List.of(orbit), () -> { }, false), screen -> {
+                    screen.render(0f);
+                    now[0] += at;
+                });
+        }
+
+        // The race won, as museumShots announces it.
+        PlayerSnapshot state = museumState();
+        GameInfoResponse won = GameInfoResponse.success("early-era", early, DECLARED, 25, true,
+            23 * 3_600_000L + 40 * 60_000L, 0L, "WON", List.of(state.getAgencyName()), List.of(state.getDirectorName()),
+            24);
+        startSession(game, state, won);
+        RivalSummary mine = RivalSummary.of(state.getAgencyName(), state.getDirectorName(), Archetype.SOVIET, true,
+            Map.of("earth-orbit-satellite", 12, "human-in-space", 24, "human-in-orbit", 24), "kMe", false,
+            state.getPrestige());
+        List<RivalSummary> rivals = List.of(mine,
+            RivalSummary.of("Orion Spaceworks", "Ana Reyes", Archetype.NASA, false, Map.of("earth-orbit-satellite", 11), "kOrion", false, 3880),
+            RivalSummary.of("Kestrel Aerospace", "Moses Okafor", Archetype.NASA, false,
+                Map.of("earth-orbit-satellite", 13), "kKestrel", false, 2140),
+            RivalSummary.of("Polar Star Bureau", "Vera Sedova", Archetype.SOVIET, false,
+                Map.of("earth-orbit-satellite", 14), "kPolar", false, 1760));
+        game.session().keepRivals(rivals);
+        game.session().keepStanding(rivals.stream().map(ScreenSnapshot::resultStanding).toList());
+        for (double at : new double[] {0.5, 2.0, 9.0}) {
+            write(folder, String.format(java.util.Locale.ROOT, "juice-result-%.1f.png", at), new SpaceComplexScreen(game),
+                screen -> {
+                    screen.showResult();
+                    screen.render(0f);
+                    screen.render(0f);
+                    now[0] += at;
+                });
         }
     }
 
@@ -4313,7 +4413,10 @@ public final class ScreenSnapshot {
         for (double at : new double[] {0.2, 0.5, 0.9, 5.0}) {
             game.useReportRevealedInMemory(0L);
             write(folder, String.format(java.util.Locale.ROOT, "juice-report-%.1f.png", at), new TurnReportScreen(game, report),
-                screen -> now[0] += at);
+                screen -> {
+                    screen.render(0f);
+                    now[0] += at;
+                });
         }
         game.useReportRevealedInMemory(null);
     }
@@ -4327,6 +4430,9 @@ public final class ScreenSnapshot {
         }
         FrameBuffer buffer = new FrameBuffer(Pixmap.Format.RGBA8888, width, height, false);
         buffer.begin();
+        // The buffer set the whole frame as the viewport; screens apply theirs only on a resize. Put the
+        // letterbox back, or a shot at another shape draws the stage stretched (nothing at 1920 x 1080).
+        applyViewport(screen);
         screen.render(0f);
         screen.render(0f);
         Gdx.gl.glPixelStorei(GL20.GL_PACK_ALIGNMENT, 1);
@@ -4340,6 +4446,16 @@ public final class ScreenSnapshot {
         buffer.dispose();
         screen.hide();
         screen.dispose();
+    }
+
+    private static void applyViewport(Screen screen) {
+        try {
+            java.lang.reflect.Method method = screen.getClass().getMethod("stage");
+            method.setAccessible(true); // declared on the package-private StageScreen
+            ((com.badlogic.gdx.scenes.scene2d.Stage) method.invoke(screen)).getViewport().apply();
+        } catch (ReflectiveOperationException e) {
+            // Not a stage screen: nothing to put back.
+        }
     }
 
     /** Every shot's text that doesn't fit ({@link TextFit}), one line a problem, in the order shot. */

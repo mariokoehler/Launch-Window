@@ -2995,6 +2995,8 @@ trait (§2.2(c)).
 - Juice J1: a number ticks 0.6 s and flashes 1 s; a dot pulses 3 times, 0.6 s each, growing by half; screens
   fade in 0.15 s (`client.ui.Juice`, `ScreenFade`, §5, Backlog).
 - Juice J2: the report's entrance beats, about 1.3 s in all (`TurnReportScreen`, `ui-spec.md` §4.4).
+- Juice J3: the season crossfade 1.2 s; a First's page 120 px in 0.8 s; the result's beats and the chart's 2.5 s;
+  the fanfare's 1.5 s fade and the winner only; the hover fade 0.15 s (`ui-spec.md` §4.3, §4.13, §4.18).
 
 ## 5. Implementation roadmap: milestones & slices
 
@@ -3491,7 +3493,9 @@ release-branch plan (§5, M6) it can ship during a live game. Durations and coun
   first-sight mark), the six headline tiles count up, the cards
   fade in one after another, the R&D reliability bars slide from the old value to the new one, and the
   mission step squares fill step by step. A goal won stamps its patch onto the card with a small settle.
-- **J3, the big moments:** a turn that resolves while the player is online shows a toast with the new season,
+- **J3, the big moments (built 2026-11-20; `ui-spec.md` §4.4, When it opens, §4.18, The entrance, §4.13; and the
+  hub's hover highlight fading, the user's request the same day, §4.3):** a turn that resolves while the player
+  is online shows a toast with the new season,
   pulses the Turn Report button's dot and crossfades the hub's art to the new season's. A First's front page
   slides up onto the screen with a shadow and lands on `paper-lands`' thump, about 0.75 s into the clip (its
   reverb tail plays on). Winning the race stamps the medal in (the icon only), draws the prestige chart's

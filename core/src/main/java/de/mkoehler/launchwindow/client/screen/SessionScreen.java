@@ -195,15 +195,23 @@ abstract class SessionScreen extends StageScreen {
                     // ended: the hub's report brings replays, pages and report in order (2026-10-27).
                     // Without, a new front page comes first (ui-spec.md section 4.18).
                     if (game.replaysFirst() == LaunchWindowGame.ReplaysFirst.NEVER) {
-                        withFrontPages(() -> toast("The turn resolved. Its report is waiting on the Space Complex.",
-                            Theme.NoticeKind.INFO));
+                        withFrontPages(this::newTurnToast);
                     } else {
-                        toast("The turn resolved. Its report is waiting on the Space Complex.",
-                            Theme.NoticeKind.INFO);
+                        newTurnToast();
                     }
                 }
             }
         });
+    }
+
+    /**
+     * Says a turn resolved while the player was here, naming the new season, with a chime (J3, {@code
+     * ui-spec.md} &sect;4.4). The chime is a sound, not an animation: it plays with Animations off too.
+     */
+    private void newTurnToast() {
+        de.mkoehler.launchwindow.client.ui.UiSounds.play(de.mkoehler.launchwindow.client.ui.UiSounds.NEW_TURN);
+        toast(session.gameInfo().response().date().label() + " has begun. The last turn's report is waiting on "
+            + "the Space Complex.", Theme.NoticeKind.INFO);
     }
 
     /**

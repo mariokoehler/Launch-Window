@@ -66,7 +66,8 @@ first live game starts in January 2027. Many numbers are still unconfirmed: the 
   how well people work; raise one person or a whole department (`design.md` §2.2(c), `ui-spec.md` §4.23).
 - Incident investigations: a failure's own investigation, led by an engineer, may win back part of the lost
   reliability; a lost crew's independent board reports on the paper (`design.md` §2.14, `ui-spec.md` §4.24).
-- Juice: small effects behind one switch (`client.ui.Juice`); J1 and J2 built, J3 planned (`design.md` §5, Backlog).
+- Juice: small effects behind one switch (`client.ui.Juice`), their sounds in `client.ui.UiSounds`; J1 to J3 built
+  (`design.md` §5, Backlog).
 
 ## How we work
 

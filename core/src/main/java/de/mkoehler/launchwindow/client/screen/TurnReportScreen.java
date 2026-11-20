@@ -68,7 +68,6 @@ public final class TurnReportScreen extends ChromeScreen {
     private final TextButton next;
     /** The report's entrance (J2), played on its first sight only. */
     private final Reveal reveal;
-    private com.badlogic.gdx.audio.Sound stamp;
     /** How much later the columns start for the cards above them, so their own beats wait too. */
     private float topShift;
 
@@ -115,8 +114,6 @@ public final class TurnReportScreen extends ChromeScreen {
     private static final float STAMPS_START = 0.8f;
     private static final float STAMP_STEP = 0.25f;
     private static final float STAMP_SECONDS = 0.3f;
-    /** The stamp's sound plays as the patch lands, this far into its motion. */
-    private static final float STAMP_LANDS = 0.6f;
     /** At most this many stamps sound; a cascade of goals stamps the rest silently. */
     private static final int STAMPS_HEARD = 3;
 
@@ -148,6 +145,7 @@ public final class TurnReportScreen extends ChromeScreen {
         content.clearChildren();
         content.top();
         content.defaults().growX();
+        content.addActor(reveal.starter());
         content.add(reveal.fadeIn(glance(catalog), 0f)).padBottom(Theme.SPACE_4).row();
         float topDelay = CARDS_START;
         // The press waits for a statement on a crew this turn lost (ui-spec.md 4.18.3, component 29).
@@ -589,58 +587,9 @@ public final class TurnReportScreen extends ChromeScreen {
         patch.setTransform(true);
         float delay = topShift + STAMPS_START + index * STAMP_STEP;
         boolean heard = index < STAMPS_HEARD;
-        com.badlogic.gdx.scenes.scene2d.Action stamping = new com.badlogic.gdx.scenes.scene2d.Action() {
-            @Override
-            public boolean act(float delta) {
-                float progress = reveal.progress(delay, STAMP_SECONDS);
-                float scale;
-                float alpha;
-                if (progress < STAMP_LANDS) {
-                    float fall = progress / STAMP_LANDS;
-                    scale = 1.5f - 0.5f * fall * fall;
-                    alpha = fall;
-                } else {
-                    float give = (progress - STAMP_LANDS) / (1f - STAMP_LANDS);
-                    scale = 1f - 0.06f * (float) Math.sin(Math.PI * give);
-                    alpha = 1f;
-                }
-                Table target = (Table) getActor();
-                target.setOrigin(Align.center);
-                target.setScale(scale);
-                target.getColor().a = alpha;
-                if (heard && reveal.beat("stamp:" + goalId, delay + STAMP_LANDS * STAMP_SECONDS)) {
-                    playStamp();
-                }
-                return false;
-            }
-        };
-        stamping.setActor(patch);
-        stamping.act(0f);
-        patch.addAction(stamping);
+        reveal.stampIn(patch, delay, STAMP_SECONDS, heard ? () -> de.mkoehler.launchwindow.client.ui.UiSounds.play(
+            de.mkoehler.launchwindow.client.ui.UiSounds.STAMP) : null);
         return patch;
-    }
-
-    private void playStamp() {
-        if (!LaunchWindowGame.soundOn()) {
-            return;
-        }
-        if (stamp == null) {
-            try {
-                stamp = com.badlogic.gdx.Gdx.audio.newSound(com.badlogic.gdx.Gdx.files.internal("audio/ui/stamp.ogg"));
-            } catch (RuntimeException e) {
-                com.badlogic.gdx.Gdx.app.error("Audio", "can't play the stamp", e);
-                return;
-            }
-        }
-        stamp.play(LaunchWindowGame.effectsVolume());
-    }
-
-    @Override
-    public void dispose() {
-        if (stamp != null) {
-            stamp.dispose();
-        }
-        super.dispose();
     }
 
     /**

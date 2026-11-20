@@ -6,7 +6,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Scaling;
 import de.mkoehler.launchwindow.client.LaunchWindowGame;
+import de.mkoehler.launchwindow.client.ui.Reveal;
 import de.mkoehler.launchwindow.client.ui.Theme;
+import de.mkoehler.launchwindow.client.ui.UiSounds;
 import de.mkoehler.launchwindow.client.ui.UiKit;
 import de.mkoehler.launchwindow.client.view.ContentNames;
 import de.mkoehler.launchwindow.client.view.Museum;
@@ -37,6 +39,19 @@ final class GameResultDialog {
     static final float WIDTH = 1280f;
 
     private static final float CHART_HEIGHT = 250f;
+
+    // The announcement's build-up (J3, ui-spec.md section 4.13), under the fanfare. Unconfirmed.
+    /** The trophy stamps down. */
+    private static final float TROPHY_DELAY = 0.3f;
+    private static final float TROPHY_SECONDS = 0.4f;
+    /** The race table fades in. */
+    private static final float TABLE_DELAY = 0.6f;
+    /** The prestige chart draws its lines in, left to right. */
+    private static final float CHART_DELAY = 0.9f;
+    private static final float CHART_SECONDS = 2.5f;
+
+    /** The announcement's build-up; over at once when reopened from the Museum. */
+    private Reveal reveal = Reveal.none();
 
     private static final String[] ORDINALS = {"1st", "2nd", "3rd", "4th", "5th", "6th", "7th", "8th"};
 
@@ -88,6 +103,15 @@ final class GameResultDialog {
 
         String title = tied ? "A tie: " + names : names + " wins the race";
         Table card = host.dialogCard("The race is decided", title);
+        // The announcement builds up; reopened from the Museum, it shows at once (J3).
+        boolean announced = !(host instanceof MuseumScreen);
+        reveal = announced ? Reveal.play() : Reveal.none();
+        card.addActor(reveal.starter());
+        // The fanfare under it, for the winner: a sound, so it plays with Animations off too. It fades out
+        // when the dialog closes or the screen changes (UiSounds). Unconfirmed: the winner only.
+        if (announced && (youWon || tied && winners.contains(mine))) {
+            UiSounds.playMusic(UiSounds.RACE_WON, card);
+        }
 
         Table lead = new Table();
         Table trophy = new Table();
@@ -95,6 +119,8 @@ final class GameResultDialog {
         Image star = new Image(ui.icon("prestige"), Scaling.fit);
         star.setColor(Theme.NAVY);
         trophy.add(star).size(26f);
+        trophy.setTransform(true);
+        reveal.stampIn(trophy, TROPHY_DELAY, TROPHY_SECONDS, null);
         lead.add(trophy).size(56f).padRight(Theme.SPACE_4);
         Table words = new Table();
         words.defaults().left().growX();
@@ -119,8 +145,8 @@ final class GameResultDialog {
 
         List<String> goalNames = declared.stream().map(ContentNames::of).toList();
         if (!rivals.isEmpty()) {
-            card.add(RaceTable.build(ui, Museum.race(rivals, declared), declared, false)).padBottom(Theme.SPACE_4)
-                .row();
+            card.add(reveal.fadeIn(RaceTable.build(ui, Museum.race(rivals, declared), declared, false), TABLE_DELAY))
+                .padBottom(Theme.SPACE_4).row();
             Container<Actor> slot = new Container<>();
             slot.fill();
             card.add(slot).padBottom(Theme.SPACE_4).row();
@@ -165,7 +191,8 @@ final class GameResultDialog {
         head.add(ui.label(Standing.date(model.from()) + " to " + Standing.date(model.to()) + " · every agency",
             Theme.TextStyle.CAPTION, Theme.INK_MUTED));
         block.add(head).padBottom(Theme.SPACE_2).row();
-        block.add(new StandingChart(ui, model, true, false, null, null)).height(CHART_HEIGHT);
+        block.add(new StandingChart(ui, model, true, false, null, null)
+            .drawIn(() -> reveal.progress(CHART_DELAY, CHART_SECONDS))).height(CHART_HEIGHT);
         slot.setActor(block);
     }
 

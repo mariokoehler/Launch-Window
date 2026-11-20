@@ -27,13 +27,51 @@ public final class Reveal {
 
     private static final Pattern NUMBER = Pattern.compile("\\d[\\d,]*(?:\\.(\\d+))?");
 
-    private final double start;
+    private double start = Double.NaN;
     private boolean skipped;
     private final Set<String> fired = new HashSet<>();
 
     private Reveal(boolean play) {
-        start = play && Juice.motion() ? Juice.now() : Double.NEGATIVE_INFINITY;
         skipped = !(play && Juice.motion());
+    }
+
+    /**
+     * Starts the clock, if it hasn't started: until then every part waits at its start.
+     */
+    public void begin() {
+        if (Double.isNaN(start)) {
+            start = Juice.now();
+        }
+    }
+
+    /**
+     * Returns an invisible actor that starts the clock on the second frame it draws: the first one
+     * loads the screen's pictures, which would otherwise eat the entrance's opening. Add it anywhere on
+     * the screen.
+     *
+     * @return the actor
+     */
+    public Actor starter() {
+        return new Actor() {
+            private boolean drawnOnce;
+
+            @Override
+            public void draw(com.badlogic.gdx.graphics.g2d.Batch batch, float parentAlpha) {
+                if (drawnOnce) {
+                    begin();
+                }
+                drawnOnce = true;
+            }
+        };
+    }
+
+    /**
+     * Returns whether the entrance is still to play or playing: started or not, not skipped.
+     *
+     * @return whether it plays
+     */
+    public boolean playing() {
+        return !skipped && Juice.motion();
     }
 
     /**
@@ -87,6 +125,9 @@ public final class Reveal {
         if (skipped || !Juice.motion()) {
             return 1f;
         }
+        if (Double.isNaN(start)) {
+            return 0f;
+        }
         return (float) Math.min(1.0, Math.max(0.0, (Juice.now() - start - delay) / seconds));
     }
 
@@ -99,7 +140,7 @@ public final class Reveal {
      * @return whether the beat has just come
      */
     public boolean beat(String key, float delay) {
-        if (skipped || !Juice.motion() || Juice.now() - start < delay) {
+        if (skipped || !Juice.motion() || Double.isNaN(start) || Juice.now() - start < delay) {
             return false;
         }
         return fired.add(key);
@@ -122,6 +163,53 @@ public final class Reveal {
                 return false;
             }
         });
+        return actor;
+    }
+
+    /** How far into a stamp's motion it lands, where its sound goes. */
+    public static final float STAMP_LANDS = 0.6f;
+
+    /**
+     * Stamps an actor down: it drops from half again its size as it fades in, lands {@value #STAMP_LANDS}
+     * of the way in, and gives a little. The actor must be a transform group or scale itself (an image).
+     *
+     * @param actor   the actor
+     * @param delay   when it starts
+     * @param seconds how long the whole motion takes
+     * @param landed  run once as it lands (a sound), or {@code null}; never once skipped
+     * @param <A>     the actor's type
+     * @return the actor
+     */
+    public <A extends Actor> A stampIn(A actor, float delay, float seconds, Runnable landed) {
+        String key = "stamp@" + System.identityHashCode(actor);
+        Action stamping = new Action() {
+            @Override
+            public boolean act(float delta) {
+                float progress = progress(delay, seconds);
+                float scale;
+                float alpha;
+                if (progress < STAMP_LANDS) {
+                    float fall = progress / STAMP_LANDS;
+                    scale = 1.5f - 0.5f * fall * fall;
+                    alpha = fall;
+                } else {
+                    float give = (progress - STAMP_LANDS) / (1f - STAMP_LANDS);
+                    scale = 1f - 0.06f * (float) Math.sin(Math.PI * give);
+                    alpha = 1f;
+                }
+                Actor target = getActor();
+                target.setOrigin(com.badlogic.gdx.utils.Align.center);
+                target.setScale(scale);
+                target.getColor().a = alpha;
+                if (landed != null && beat(key, delay + STAMP_LANDS * seconds)) {
+                    landed.run();
+                }
+                return false;
+            }
+        };
+        stamping.setActor(actor);
+        stamping.act(0f);
+        actor.addAction(stamping);
         return actor;
     }
 

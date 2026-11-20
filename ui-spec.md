@@ -1433,7 +1433,9 @@ click. The icon is one field per place (`Hub.Place.icon()`), easy to swap. Idle-
 decision dots sit on the markers (components 25, 26). A dot, and the Turn Report's unread dot, pulses
 three times (0.6 s each, growing by half) the first time it shows on the hub, then stays still; a dot that
 goes away pulses again when it comes back, and one whose pulse the player left before it finished plays it
-again next time (J1, 2026-11-20). The funds and prestige chips tick (§2, Motion).
+again next time (J1, 2026-11-20). The funds and prestige chips tick (§2, Motion). A building's hover
+highlight, its marker's colours and its labels fade in and out over 0.15 s (the user's request,
+2026-11-20; unconfirmed).
 
 ### 4.4 Turn report (automatic after a resolution, reopenable from the hub)
 **Purpose:** "what happened overnight", the async equivalent of BASPM's end-of-season news
@@ -1452,7 +1454,10 @@ the dev button "Resolve turn now". A read report opens at once.
 **When it opens** (confirmed, user, 2026-10-06): an unread report opens on entering the game. A
 turn that resolves while the player is in the game shows a toast and lights the hub's Turn Report
 dot, rather than taking over the screen. "Read" is remembered per device, in the client's
-preferences, per server and login.
+preferences, per server and login. The toast names the new season ("Fall 1960 has begun. The last
+turn's report is waiting on the Space Complex.") and plays the `new-turn` chime, with Animations off
+too; on the hub the dot pulses (§4.3) and the art crossfades to the new season over 1.2 s (J3,
+2026-11-20; unconfirmed).
 
 **The entrance** (J2, 2026-11-20; `client.ui.Reveal`, `design.md` §5, Backlog): the first time a report
 shows on the device (its own mark, `LaunchWindowGame.firstSightOfReport`, never for a report older than
@@ -2325,6 +2330,12 @@ race tab (the mockup's choices, unconfirmed).
 - **When it shows:** on any hub visit while the result is unseen, unless an unread turn report
   opened at the same time (then the next hub visit shows it). "Seen" is remembered per device, like
   the report's read mark, and set by Keep playing or Open the Museum.
+- **The announcement builds up** (J3, 2026-11-20; unconfirmed): the trophy stamps down (0.3 s), the race
+  table fades in (0.6 s), and the chart draws its lines in from left to right over 2.5 s (from 0.9 s),
+  the grid and names there from the start. Under it, for the winner (a shared win too), the `race-won`
+  fanfare plays like background music at the replay music's volume, with Animations off too; it fades
+  out over 1.5 s when the dialog closes or the screen changes (`client.ui.UiSounds`). Reopened from the
+  Museum, the dialog shows at once, silently. *Unconfirmed:* the fanfare for the winner only.
 
 ### 4.14 Person page *(for `design.md` §2.2(d), 2026-10-07)*
 **Purpose:** everything about one employee, so the player gets to know them
@@ -2624,6 +2635,13 @@ first (§4.4), the pages come after the replays, so a First isn't printed before
 2026-10-12). It's news, not a rules screen: the game facts go in one line under the page. Mocked up
 in Photocraft, not Claude Design (`assets-raw/frontpage/mockup/`, `frontpage_mockup.pcraft` with
 every layer named; its fonts are stand-ins). Server side: G14.
+
+**The entrance** (J3, 2026-11-20; unconfirmed): a First's page, the first time it shows (not reopened,
+not a follow-up, a memorial page or a continuation sheet), slides up onto the desk: it starts 120 px
+below, faded, and speeds up into its place over 0.8 s, lifted by a shadow that shrinks to nothing as it
+lands, the game line under it fading in as it does. The `paper-lands` sound starts with it, its rise under
+the motion and its thump (about 0.8 s in) on the landing, its reverb playing on. A click lands it at
+once and stops the sound. With Animations off the page is simply there, silently.
 
 **The Firsts** are listed in content, not code (`front-pages.json`, below), in race order. The standard
 pack's five: `earth-orbit-satellite`, `human-in-space`, `human-in-orbit`, `crewed-lunar-flyby`,

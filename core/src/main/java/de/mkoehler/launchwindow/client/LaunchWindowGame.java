@@ -1046,6 +1046,7 @@ public class LaunchWindowGame extends Game {
      */
     public void visit(Screen screen) {
         de.mkoehler.launchwindow.client.screen.ScreenFade.capture(getScreen());
+        de.mkoehler.launchwindow.client.ui.UiSounds.fadeMusic();
         super.setScreen(screen);
     }
 
@@ -1059,6 +1060,7 @@ public class LaunchWindowGame extends Game {
         Screen previous = getScreen();
         if (previous != screen) {
             de.mkoehler.launchwindow.client.screen.ScreenFade.capture(previous);
+            de.mkoehler.launchwindow.client.ui.UiSounds.fadeMusic();
         }
         super.setScreen(screen);
         if (previous != null && previous != screen) {
@@ -1093,6 +1095,7 @@ public class LaunchWindowGame extends Game {
             && System.currentTimeMillis() - lastResizeMillis >= FONT_REBUILD_DELAY_MS) {
             ui.fonts().regenerate(pendingFontScale);
         }
+        de.mkoehler.launchwindow.client.ui.UiSounds.update(Gdx.graphics.getDeltaTime());
         super.render();
     }
 
@@ -1111,6 +1114,7 @@ public class LaunchWindowGame extends Game {
         }
         ClickSound.dispose();
         de.mkoehler.launchwindow.client.screen.ScreenFade.dispose();
+        de.mkoehler.launchwindow.client.ui.UiSounds.dispose();
     }
 
     /**
