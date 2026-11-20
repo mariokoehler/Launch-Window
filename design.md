@@ -3465,6 +3465,35 @@ and the roads to the Moon (§2.3(d), (e)), the Sputnik shock and raises (§2.1(e
 - **More interactive events** beyond the R&D decisions, if the play test asks for them.
 - The console's mission times (above); the hands-on levers (above); the Sagan revisit (above).
 
+**Juice** (the user's idea, 2026-11-20; planned, not built): small feedback that makes the important moments
+feel good, kept restrained. Outside the hands-on reveal and the replay, the client barely moves: screens
+appear, numbers jump, and the hub swaps its season silently. Everything below is client-only, so under the
+release-branch plan (§5, M6) it can ship during a live game. Durations and counts are proposals, unconfirmed.
+- **No tweening library:** scene2d's `Actions` (fades, moves, sequences, `Interpolation`'s easings) and a
+  small float tween for count-ups cover all of it.
+- **Rules for every effect:** one global switch turns motion off, so `ScreenSnapshot` (no time passes) shows
+  the finished state, and it doubles as an "Animations" setting next to Sound. An effect plays once, on the
+  first show or a real change of value, never on a rebuild. Text only fades, changes colour or slides by
+  whole pixels; it never scales or rotates (glyphs are pixel-snapped). A click finishes a running sequence.
+  Effects stay under about a second.
+- **Left alone:** the memorial pages and lost crews; a failure gets no flourish beyond the red it has now;
+  no screen shake.
+- **J1, groundwork and the everyday:** the shared helper and its switch (the Settings toggle included).
+  The header's funds and prestige tick to a new value and flash green or red when an order changes them.
+  Attention markers (the gold dots: someone underpaid, an unread report) pulse a few times when they first
+  appear, then stay still. A 100 to 150 ms fade between screens at `LaunchWindowGame.setScreen` (kept only
+  if it doesn't feel sluggish).
+- **J2, the turn report:** once per report (the read marks), the six headline tiles count up, the cards
+  fade in one after another, the R&D reliability bars slide from the old value to the new one, and the
+  mission step squares fill step by step. A goal won stamps its patch onto the card with a small settle.
+- **J3, the big moments:** a turn that resolves while the player is online shows a toast with the new season,
+  pulses the Turn Report button's dot and crossfades the hub's art to the new season's. A First's front page
+  slides up onto the screen with a shadow. Winning the race stamps the medal in (the icon only), draws the
+  prestige chart's lines from left to right and plays a short fanfare.
+- **Sounds,** four at most, picked and credited by the user: a new-turn chime and the fanfare (J3), the
+  paper landing (J3) and the patch's stamp (J2). Until then each plays a synthesized `placeholder-*` take,
+  as the replay's sounds do. Nothing else gets a sound.
+
 ### Later
 
 - **M6 — Deployment: built 2026-10-06; releases `v0.0.1` and `v0.1.0` tagged.** The jpackage client
