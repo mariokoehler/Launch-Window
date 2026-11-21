@@ -14,15 +14,17 @@ The score carries the arc: a low pulse under the cold open, building through the
 the first big swell at Gagarin, a drive through the middle years, silence for 1967, a swell for
 Earthrise, a hard stop for the N1, and the long final build to the boot.
 
-## 1. Cold open: the announcements (summer 1955), about 14 s
+## 1. Cold open: the announcements (summer 1955), about 32 s
 
-| # | Shot | Len | Notes |
+| # | Shot | Len | Notes | Narration |
 |---|---|---|---|
-| 01 | **Washington, the White House press room.** Flashbulbs pop; a hand holds a typed statement; close on the words "small earth-circling satellites". Reporters' pencils move fast. | 3.0 | C: *Washington, 29 July 1955*. US look. |
-| 02 | **Moscow, a news-agency room.** A teleprinter hammers out a line in Russian; a hand tears the sheet off. | 2.5 | C: *Moscow*. S: *U.S. to launch an artificial Earth satellite*. (The tested shot, in Russian.) |
-| 03 | **Copenhagen, a crowded press conference.** Seen from behind a Soviet scientist at a bank of microphones: about fifty journalists, pencils stopping, then a rush for the door. | 3.0 | C: *Copenhagen, 2 August 1955*. Sedov answered the same day. |
-| 04 | **An American engineering office at night.** An engineer pins a newspaper clipping to a corkboard over a chalk sketch of an orbit. | 2.5 | Mirror of 05: same framing, same gesture. |
-| 05 | **A Soviet design bureau at night.** The same gesture: a clipping in English pinned over a sketch with Cyrillic labels. The desk lamp clicks on. | 2.5 | Mirror of 04. The race is on: first music hit. |
+| 01 | **Establishing shot: Washington** An aerial view of the White House with a slow pan | 4.0 | C: *Washington*. | "The year is 1955" |
+| 02 | **Washington, the White House press room.** Flashbulbs pop; a hand holds a typed statement; close on the words "small earth-circling satellites". Reporters' pencils move fast. | 7.0 | C: *29 July 1955*. US look. | "The United States announces its intention to launch an Earth satellite." |
+| 03 | **Establishing shot: Moscow** An aerial view of the Kremlin with a slow pan | 3.0 | C: *Moscow*. | "In Moscow, ..." |
+| 04 | **Moscow, a news-agency room.** A teleprinter hammers out a line in Russian saying "U.S. to launch an artificial Earth satellite" in Cyrillic; a hand tears the sheet off. | 5.0 | S: *U.S. to launch an artificial Earth satellite*. (The tested shot, in Russian.) | "... the news lands on the desks of men who have been dreaming of the same thing." |
+| 05 | **Moscow, a crowded press conference.** Seen from behind a Soviet scientist at a bank of microphones: about fifty journalists, pencils stopping, then a rush for the door. | 5.0 | C: *2 August 1955*. | "Only days later they respond in kind" |
+| 06 | **An American engineering office at night.** An engineer pins a newspaper clipping 'Soviets Plan Satellite Too' to a corkboard over a chalk sketch of an orbit. | 4.0 | American props make the setting clear | "And so the 'Space Race' is born ..." |
+| 07 | **A Soviet design bureau at night.** The same gesture: a clipping in Cyrillic pinned over a rocket sketch with Cyrillic labels. The desk lamp clicks on. | 4.0 | S: *U.S. to launch an artificial Earth satellite*. Mirror of 06, different office but same gesture with soviet props. The race is on: first music hit. | "...and what a race it was!" |
 
 ## 2. The first satellite (1957), about 17 s
 

@@ -53,14 +53,31 @@ def upload(image, name, host=HOST):
     return (answer['subfolder'] + '/' if answer.get('subfolder') else '') + answer['name']
 
 
-def run(graph, timeout=3600, host=HOST):
-    """Queues a graph, waits for it, and returns the bytes of every file it wrote (images or videos)."""
+def queue(graph, host=HOST):
+    """Queues a graph; returns its prompt id."""
     request = urllib.request.Request(host + '/prompt', data=json.dumps({'prompt': graph}).encode(),
                                      headers={'Content-Type': 'application/json'})
     answer = json.load(urllib.request.urlopen(request))
     if answer.get('node_errors'):
         raise RuntimeError(json.dumps(answer['node_errors'])[:2000])
-    prompt_id = answer['prompt_id']
+    return answer['prompt_id']
+
+
+def known(prompt_id, host=HOST):
+    """True if ComfyUI still knows this prompt (queued, running or in its history)."""
+    if prompt_id in json.load(urllib.request.urlopen(host + '/history/' + prompt_id)):
+        return True
+    q = json.load(urllib.request.urlopen(host + '/queue'))
+    return any(item[1] == prompt_id for item in q['queue_running'] + q['queue_pending'])
+
+
+def run(graph, timeout=3600, host=HOST):
+    """Queues a graph, waits for it, and returns the bytes of every file it wrote (images or videos)."""
+    return wait(queue(graph, host), timeout, host)
+
+
+def wait(prompt_id, timeout=3600, host=HOST):
+    """Waits for a queued prompt and returns the bytes of every file it wrote."""
     deadline = time.time() + timeout
     while time.time() < deadline:
         history = json.load(urllib.request.urlopen(host + '/history/' + prompt_id))

@@ -168,6 +168,7 @@ def main():
     parser.add_argument('--variants', type=int, default=2)
     parser.add_argument('--force', action='store_true')
     parser.add_argument('--review-only', action='store_true')
+    parser.add_argument('--beat')
     args = parser.parse_args()
 
     shots = read('shots.json')['shots']
@@ -176,8 +177,14 @@ def main():
     os.makedirs(os.path.join(CLIPS, args.profile), exist_ok=True)
     os.makedirs(REVIEW, exist_ok=True)
 
+    pending_path = os.path.join(CLIPS, 'pending.json')
+    pending = read(os.path.join('clips', 'pending.json')) if os.path.exists(pending_path) else {}
+
+    def chosen_shot(shot):
+        return (not args.only or shot['id'] in args.only) and (not args.beat or shot['beat'] == args.beat)
+
     for shot in shots:
-        if args.only and shot['id'] not in args.only:
+        if not chosen_shot(shot):
             continue
         if args.review_only:
             break
@@ -196,9 +203,21 @@ def main():
             seed = seed_for(shot['id'], args.profile, variant)
             graph, prompt = build(shot, args.profile, seed,
                                       f'video/lw_trailer_{args.profile}_{shot["id"]}_{variant}', chosen)
-            started = time.time()
-            name, data = comfy.run(graph)[0]
+            # A render outlives this script if the script is killed: its prompt id is kept in pending.json,
+            # and a rerun collects it from ComfyUI instead of queuing it again.
+            earlier = pending.get(file)
+            if earlier and comfy.known(earlier['id']):
+                prompt_id, started = earlier['id'], earlier['started']
+            else:
+                prompt_id, started = comfy.queue(graph), time.time()
+                pending[file] = {'id': prompt_id, 'started': started}
+                with open(pending_path, 'w', encoding='utf-8') as out:
+                    json.dump(pending, out, indent=1)
+            name, data = comfy.wait(prompt_id)[0]
             seconds = time.time() - started
+            pending.pop(file, None)
+            with open(pending_path, 'w', encoding='utf-8') as out:
+                json.dump(pending, out, indent=1)
             with open(path, 'wb') as out:
                 out.write(data)
             print(f'{file}  {seconds:.0f} s', flush=True)
@@ -210,8 +229,13 @@ def main():
 
     order = {s['id']: i for i, s in enumerate(shots)}
     manifest.sort(key=lambda e: (order.get(e['shot'], 999), e['profile'], e['variant']))
+    with open(MANIFEST, 'w', encoding='utf-8') as out:
+        json.dump(manifest, out, indent=1)
+    selected = {s['id'] for s in shots if chosen_shot(s)}
+    suffix = f'_{args.beat}' if args.beat else ('_selection' if args.only else '')
     for profile in PROFILES:
-        contact_sheet([e for e in manifest if e['profile'] == profile], f'clips_{profile}.png')
+        contact_sheet([e for e in manifest if e['profile'] == profile and e['shot'] in selected],
+                      f'clips_{profile}{suffix}.png')
 
 
 if __name__ == '__main__':

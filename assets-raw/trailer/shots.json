@@ -2,6 +2,199 @@
   "_comment": "The film's script (PLAN.md §3), in film order. Phase 1 holds the test shots only. keyframes.first/last are Qwen prompts (the shot's look is appended); video is H3's [Shot 1] text without the alignment line, which make_clips.py adds; facts name entries in FACTS.md.",
   "shots": [
     {
+      "id": "c01-washington",
+      "beat": "cold-open",
+      "look": "us-1955",
+      "duration": 5.0,
+      "trim": [
+        0.5,
+        4.5
+      ],
+      "mode": "i2v",
+      "keyframes": {
+        "first": "Aerial view of the White House in Washington, D.C., in the summer of 1955, filmed from a low-flying aircraft: the white mansion with its columned North Portico and curved driveway, the green North Lawn with its trees and round fountain, Pennsylvania Avenue in front with a few rounded 1950s cars, the Washington Monument rising in the hazy distance. Warm late-afternoon sun, long soft shadows. Wide aerial shot looking down at an angle."
+      },
+      "video": "Live-action, cinematic, 1955, an aerial shot. The camera glides slowly forward over the White House shown in <Picture 1> and pans gently to the right, the mansion turning slowly beneath it; a few rounded 1950s cars drive along Pennsylvania Avenue.",
+      "soundscape": "Wind over an aircraft, the distant hum of city traffic far below. Nobody speaks.",
+      "clipGainDb": -12,
+      "caption": {
+        "text": "Washington",
+        "at": 0.5,
+        "for": 3.0
+      },
+      "facts": [
+        "us-satellite-announcement-1955"
+      ]
+    },
+    {
+      "id": "c02a-press-room",
+      "beat": "cold-open",
+      "look": "us-1955",
+      "duration": 5.0,
+      "trim": [
+        0.3,
+        3.8
+      ],
+      "mode": "i2v",
+      "keyframes": {
+        "first": "The White House press room in July 1955: a small crowded room with wood panelling and a window with venetian blinds. In the left foreground, seen from behind and out of focus, a man in a dark suit holds up a typed sheet of paper. Facing him, a tight crowd of reporters in suits, ties and fedoras, notebooks and pencils in hand, and press photographers raising large press cameras with round flash reflectors, one flashbulb firing in a bright white burst. Medium-wide shot at eye level, 35mm lens."
+      },
+      "video": "Live-action, cinematic, 1955. In the press room shown in <Picture 1>, flashbulbs fire one after another in bright white bursts. The reporters scribble fast in their notebooks and lean in; one of them turns and hurries out of the room. The man in the foreground stays with his back to the camera, holding the typed sheet. The camera pushes in with small amplitude at slow speed.",
+      "soundscape": "The pops and clicks of flashbulbs and press cameras, pencils scratching, the shuffle of a crowded room, a door opening. Nobody speaks.",
+      "clipGainDb": -12,
+      "caption": {
+        "text": "29 July 1955",
+        "at": 0.4,
+        "for": 2.8
+      },
+      "facts": [
+        "us-satellite-announcement-1955"
+      ]
+    },
+    {
+      "id": "c02b-statement",
+      "beat": "cold-open",
+      "look": "us-1955",
+      "duration": 5.0,
+      "trim": [
+        0.5,
+        4.0
+      ],
+      "mode": "i2v",
+      "keyframes": {
+        "first": "Extreme close-up of a typed press statement held in a man's hand in 1955: a sheet of white paper typed on a typewriter, the line \"small earth-circling satellites\" sharp and clearly legible across the middle of the frame, the typed lines above and below it softly out of focus. The man's thumb and the cuff of a dark suit sleeve at the edge of the sheet. Warm light, a faint white glare of a flashbulb on the paper. Macro lens, very shallow depth of field."
+      },
+      "video": "Live-action, cinematic, 1955. The typed sheet shown in <Picture 1> trembles very slightly in the man's hand. A flashbulb flares white across the paper once. The camera pushes in with small amplitude at slow speed toward the typed line, which stays sharp and still.",
+      "soundscape": "A flashbulb popping, the rustle of paper, a murmuring room behind. Nobody speaks.",
+      "clipGainDb": -12,
+      "facts": [
+        "us-satellite-announcement-1955"
+      ]
+    },
+    {
+      "id": "c03-moscow",
+      "beat": "cold-open",
+      "look": "ussr-1955",
+      "duration": 5.0,
+      "trim": [
+        0.5,
+        3.5
+      ],
+      "mode": "i2v",
+      "keyframes": {
+        "first": "Aerial view of the Moscow Kremlin in the summer of 1955, filmed from a low-flying aircraft: the long red brick walls and towers crowned with red stars, the golden onion domes of the cathedrals inside the walls, the Moskva River running along the front with an embankment, Red Square at one side with the colourful domes of Saint Basil's Cathedral, the city of 1950s Moscow beyond under a pale hazy sky. Wide aerial shot looking down at an angle."
+      },
+      "video": "Live-action, cinematic, 1955, an aerial shot. The camera glides slowly along the river past the Kremlin shown in <Picture 1> and pans gently to the left, the towers and golden domes turning slowly beneath it.",
+      "soundscape": "Wind over an aircraft, the distant hum of the city far below. Nobody speaks.",
+      "clipGainDb": -12,
+      "caption": {
+        "text": "Moscow",
+        "at": 0.4,
+        "for": 2.4
+      },
+      "facts": [
+        "soviet-answer-1955"
+      ]
+    },
+    {
+      "id": "c04-teleprinter",
+      "beat": "cold-open",
+      "look": "ussr-1955",
+      "duration": 5.0,
+      "trim": [
+        0.1,
+        5.1
+      ],
+      "mode": "i2v",
+      "keyframes": {
+        "first": "Close-up of a 1950s news-agency teleprinter in a Moscow office, 1955: a bulky dark grey machine on a metal stand, its rounded sheet-metal hood with a small glass window over the printing mechanism, a wide continuous roll of pale yellow paper rising out of a slot in the top of the hood and curling over the back. The printed line \"США ЗАПУСТЯТ ИСКУССТВЕННЫЙ СПУТНИК ЗЕМЛИ\" in Russian typewriter capitals is clearly legible on the paper just above the slot. Behind it, more teleprinters in a row along the wall of a news room. Hard window light from the left, dust in the air, a glass of tea in a metal holder on a shelf beside the machine. 85mm lens, shallow depth of field, the paper in sharp focus."
+      },
+      "video": "Live-action, cinematic, 1955. The teleprinter shown in <Picture 1> clatters and the yellow paper rises slowly out of the hood. A man's hand in a white shirt sleeve enters the frame from the right, grips the paper above the printed line and tears it off sharply against the hood's edge. The camera holds a static shot.",
+      "soundscape": "The loud mechanical clatter of a teleprinter printing, a small bell ringing once, then the sharp rip of paper being torn. A quiet office around it. Nobody speaks.",
+      "clipGainDb": -6,
+      "subtitle": {
+        "text": "U.S. to launch an artificial Earth satellite",
+        "at": 1.4,
+        "for": 3.2
+      },
+      "facts": [
+        "us-satellite-announcement-1955",
+        "soviet-answer-1955"
+      ]
+    },
+    {
+      "id": "c05-press-conference",
+      "beat": "cold-open",
+      "look": "ussr-1955",
+      "duration": 5.0,
+      "trim": [
+        0.0,
+        5.0
+      ],
+      "mode": "i2v",
+      "keyframes": {
+        "first": "A crowded press conference in Moscow in August 1955, a high-ceilinged hall with tall windows and heavy curtains. In the foreground, seen from behind and slightly to the side, a Soviet scientist in a grey suit sits at a table covered with green cloth, a bank of old chrome microphones in front of him; only the back of his head and his shoulders are visible. Facing him across the room, about fifty journalists in suits sit and stand packed together, notebooks open, pencils raised, a few press photographers with cameras. Hard daylight from the windows. Wide shot from behind the scientist, 35mm lens."
+      },
+      "video": "Live-action, cinematic, 1955. In the hall shown in <Picture 1>, the scientist in the foreground stays with his back to the camera and leans toward the microphones. Across the room the journalists' pencils stop; they stare at him in silence. Then several of them jump up and push toward the door while others write furiously. The camera holds a static shot from behind the scientist.",
+      "soundscape": "A crowded hall falling silent, then chairs scraping, a rush of footsteps toward the door and an excited murmur of many voices, no words intelligible. Nobody speaks.",
+      "clipGainDb": -14,
+      "caption": {
+        "text": "2 August 1955",
+        "at": 0.4,
+        "for": 2.8
+      },
+      "facts": [
+        "soviet-answer-1955"
+      ]
+    },
+    {
+      "id": "c06-us-office",
+      "beat": "cold-open",
+      "look": "us-1955",
+      "duration": 5.0,
+      "trim": [
+        0.3,
+        4.3
+      ],
+      "mode": "i2v",
+      "keyframes": {
+        "first": "An American engineering office at night in 1955. On the right of the frame, a cork board on the wall covered with technical drawings, next to a blackboard with a chalk sketch of the Earth and an elliptical orbit around it. On the left, an engineer seen from behind, in a white short-sleeved shirt and a narrow dark tie, his raised hand pinning a newspaper clipping to the cork board; the clipping's headline \"SOVIETS PLAN SATELLITE TOO\" in bold newspaper type is clearly legible. A drafting table in the foreground with a green-shaded banker's lamp, a slide rule, a coffee mug and an ashtray. Warm lamp light, the windows dark. Medium shot, 50mm lens."
+      },
+      "video": "Live-action, cinematic, 1955. In the office shown in <Picture 1>, the engineer presses the pin into the clipping with his thumb, then lowers his hand and steps back to look at it, still with his back to the camera. The camera pushes in with small amplitude at slow speed toward the clipping.",
+      "soundscape": "A quiet office at night: a ticking wall clock, the soft press of a pin into cork. Nobody speaks.",
+      "clipGainDb": -10,
+      "facts": [
+        "soviet-answer-1955"
+      ]
+    },
+    {
+      "id": "c07-soviet-bureau",
+      "beat": "cold-open",
+      "look": "ussr-1955",
+      "duration": 5.0,
+      "trim": [
+        0.3,
+        4.3
+      ],
+      "mode": "i2v",
+      "keyframes": {
+        "first": "A Soviet design bureau at night in 1955. On the right of the frame, a large board on the wall covered with technical drawings and a big hand-drawn sketch of a rocket with labels in Russian Cyrillic letters. On the left, an engineer seen from behind, in a white shirt with rolled-up sleeves, his raised hand pinning a clipping from a Soviet newspaper to the board; the clipping's headline \"США ЗАПУСТЯТ ИСКУССТВЕННЫЙ СПУТНИК ЗЕМЛИ\" in bold Russian newspaper type. A heavy wooden desk in the foreground with an unlit metal desk lamp, a glass of tea in a metal holder and a slide rule. Cold blue moonlight from a tall window, the room dim. Medium shot, 50mm lens."
+      },
+      "video": "Live-action, cinematic, 1955. In the room shown in <Picture 1>, the engineer presses the pin into the clipping with his thumb, then reaches down and switches on the desk lamp: warm light floods the board and the rocket sketch. He stays with his back to the camera. The camera pushes in with small amplitude at slow speed toward the board.",
+      "soundscape": "A quiet room at night: the soft press of a pin, the click of a lamp switch. Nobody speaks.",
+      "clipGainDb": -10,
+      "subtitle": {
+        "text": "U.S. to launch an artificial Earth satellite",
+        "at": 0.6,
+        "for": 2.8
+      },
+      "facts": [
+        "soviet-answer-1955"
+      ]
+    }
+  ],
+  "tests": [
+    {
       "id": "t04-teletype",
       "beat": "cold-open",
       "look": "ussr-1955",

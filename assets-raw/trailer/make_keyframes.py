@@ -93,6 +93,7 @@ def main():
     parser.add_argument('--variants', type=int, default=3)
     parser.add_argument('--force', action='store_true')
     parser.add_argument('--review-only', action='store_true')
+    parser.add_argument('--beat')
     args = parser.parse_args()
 
     shots = read('shots.json')['shots']
@@ -103,7 +104,7 @@ def main():
     if not args.review_only:
         workflow = comfy.load(WORKFLOW)
         for shot in shots:
-            if args.only and shot['id'] not in args.only:
+            if (args.only and shot['id'] not in args.only) or (args.beat and shot['beat'] != args.beat):
                 continue
             for frame, text in shot['keyframes'].items():
                 if not text:
@@ -128,7 +129,9 @@ def main():
         manifest.sort(key=lambda e: (e['key'], e['variant']))
         with open(MANIFEST, 'w', encoding='utf-8') as out:
             json.dump(manifest, out, indent=1)
-    write_review(manifest)
+    selected = {s['id'] for s in shots if (not args.only or s['id'] in args.only)
+                and (not args.beat or s['beat'] == args.beat)}
+    write_review([e for e in manifest if e['key'].split('/')[0] in selected])
 
 
 if __name__ == '__main__':

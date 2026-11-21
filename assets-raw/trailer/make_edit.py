@@ -25,7 +25,9 @@ BUILD = os.path.join(HERE, 'build')
 FILMCRAFT = r'C:\Program Files\FilmCraft\filmcraft-cli.exe'
 TICKS = 254016000000  # FilmCraft's ticks per second
 FPS = 24
-CAPTION = {'font': 'Work Sans', 'size': 44, 'position': [110, 990], 'fade': 0.4}
+CAPTION = {'font': 'Work Sans', 'size': 44, 'position': [110, 990], 'align': 'left', 'fade': 0.4}
+SUBTITLE = {'font': 'Work Sans', 'size': 46, 'position': [960, 930], 'align': 'center', 'fade': 0.25,
+            'shadow': True}
 FADE_FRAMES = 12
 
 
@@ -61,6 +63,28 @@ def filmcraft(project, commands, save=True):
     return results
 
 
+def media_length(path):
+    return float(subprocess.run(['ffprobe', '-v', 'error', '-show_entries', 'format=duration', '-of', 'csv=p=0',
+                                 path], capture_output=True, text=True, check=True).stdout.strip())
+
+
+def overlay(project, begin, text, style):
+    """A caption or subtitle: a text graphic on its own clip, faded in and out with opacity keyframes."""
+    made = filmcraft(project, [{'id': 'graphics.newText', 'params': {
+        'text': text['text'], 'position': style['position'], 'size': style['size'], 'font': style['font'],
+        'seconds': text['for'], 'time': ticks(begin), 'newClip': True}}])[0]
+    props = {'align': style['align'], 'position': style['position']}
+    if style.get('shadow'):
+        props['shadow'] = True
+    fade, end = style['fade'], begin + text['for']
+    filmcraft(project, [{'id': 'graphics.set', 'params': {
+        'clip': made['clip'], 'layer': made['layer'], 'props': props}}] + [
+        {'id': 'graphics.set', 'params': {
+            'clip': made['clip'], 'layer': made['layer'], 'props': {'opacity': value},
+            'time': ticks(when), 'keyframe': True}}
+        for when, value in ((begin, 0), (begin + fade, 100), (end - fade, 100), (end - 0.01, 0))])
+
+
 def placeholder_beep(path):
     """Two short beeps a second, a stand-in until the real recording of Sputnik's signal is in."""
     subprocess.run(['ffmpeg', '-loglevel', 'error', '-y', '-f', 'lavfi', '-i',
@@ -71,6 +95,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--profile', default='draft')
     parser.add_argument('--frames', nargs='*', type=float, default=[])
+    parser.add_argument('--beat', nargs='*', help='only these beats')
     args = parser.parse_args()
 
     os.makedirs(BUILD, exist_ok=True)
@@ -81,27 +106,37 @@ def main():
     if os.path.exists(project):
         os.remove(project)
 
-    cut = [s for s in shots if f'{s["id"]}/{args.profile}' in picks]
+    def take(shot):
+        """The final take where one is picked (in a final cut), else the draft."""
+        for profile in ([args.profile, 'draft'] if args.profile != 'draft' else ['draft']):
+            if f'{shot["id"]}/{profile}' in picks:
+                return picks[f'{shot["id"]}/{profile}']
+        return None
+
+    cut = [s for s in shots if take(s) and (not args.beat or s['beat'] in args.beat)]
     if not cut:
         raise SystemExit(f'no picked {args.profile} clips')
+    ids = {s['id'] for s in cut}
+    audio = [t for t in audio if 'under' not in t or t['under'] in ids]
     for track in audio:
         path = os.path.join(HERE, track['file'])
         if os.path.basename(path).startswith('placeholder-beep') and not os.path.exists(path):
             placeholder_beep(path)
 
     # 1. The sequence and the media.
-    media = [os.path.join(HERE, picks[f'{s["id"]}/{args.profile}']) for s in cut]
+    media = [os.path.join(HERE, take(s)) for s in cut]
     media += [os.path.join(HERE, t['file']) for t in audio]
     sequence, imported = filmcraft(project, [
         {'id': 'file.newSequence', 'params': {'name': f'Launch Window trailer ({args.profile})',
                                               'width': 1920, 'height': 1080, 'fps': FPS}},
-        {'id': 'file.import', 'params': {'paths': [m.replace('\\', '/') for m in media]}},
+        {'id': 'file.import', 'params': {'paths': [m.replace(os.sep, '/') for m in media]}},
     ])
     if imported['errors']:
         raise RuntimeError(imported['errors'])
     items = imported['items']
 
-    # 2. The shots back to back on V1 (their sound on A1), audio.json on A2.
+    # 2. The shots back to back on V1 (their sound on A1); audio.json on its tracks (A2 effects, A3
+    #    narration), each for its file's own length.
     starts, at, places = {}, 0.0, []
     for shot, item in zip(cut, items):
         start, end = shot.get('trim', [0.0, shot['duration']])
@@ -113,44 +148,38 @@ def main():
     length = at
     for track, item in zip(audio, items[len(cut):]):
         when = starts[track['under']] + track.get('offset', 0.0) if 'under' in track else track['at']
-        if 'under' in track:
-            start, end = next(s for s in cut if s['id'] == track['under']).get('trim', [0.0, next(s for s in cut if s['id'] == track['under'])['duration']])
-            span = end - start
-        else:
-            span = track['for']
+        span = min(track.get('for', 1e9), media_length(os.path.join(HERE, track['file'])), length - when)
         places.append({'id': 'timeline.place', 'params': {
-            'item': item, 'track': 'A2', 'seconds': when, 'video': False,
-            'sourceIn': {'seconds': 0}, 'duration': {'seconds': span - track.get('offset', 0.0)}}})
+            'item': item, 'track': track.get('track', 'A2'), 'seconds': when, 'video': False,
+            'sourceIn': {'seconds': 0}, 'duration': {'seconds': span}}})
     placed = filmcraft(project, places)
     video_clips = [p['clips'][0] for p in placed[:len(cut)]]
+    sound_clips = [p['clips'][1] if len(p['clips']) > 1 else None for p in placed[:len(cut)]]
     audio_clips = [p['clips'][0] for p in placed[len(cut):]]
 
-    # 3. Frame filling, the fades from and to black, the gains, the captions.
+    # 3. Frame filling, the fades from and to black, the gains, the captions and subtitles.
     effects = [{'id': 'clip.fillFrame', 'params': {'clips': video_clips}},
                {'id': 'sequence.applyVideoTransition', 'params': {
-                   'clip': video_clips[0], 'effect': 'cross_dissolve', 'frames': FADE_FRAMES, 'edge': 'in', 'align': 'start'}},
+                   'clip': video_clips[0], 'effect': 'cross_dissolve', 'frames': FADE_FRAMES, 'edge': 'in',
+                   'align': 'start'}},
                {'id': 'sequence.applyVideoTransition', 'params': {
-                   'clip': video_clips[-1], 'effect': 'cross_dissolve', 'frames': FADE_FRAMES, 'edge': 'out', 'align': 'end'}}]
+                   'clip': video_clips[-1], 'effect': 'cross_dissolve', 'frames': FADE_FRAMES, 'edge': 'out',
+                   'align': 'end'}}]
     filmcraft(project, effects)
     gains = [{'id': 'effects.setParam', 'params': {'clip': clip, 'effect': 'volume', 'param': 'level',
                                                    'value': track['gainDb']}}
              for track, clip in zip(audio, audio_clips) if 'gainDb' in track]
+    gains += [{'id': 'effects.setParam', 'params': {'clip': clip, 'effect': 'volume', 'param': 'level',
+                                                    'value': shot['clipGainDb']}}
+              for shot, clip in zip(cut, sound_clips) if clip and 'clipGainDb' in shot]
     if gains:
         filmcraft(project, gains)
 
     for shot in cut:
-        caption = shot.get('caption')
-        if not caption:
-            continue
-        begin = starts[shot['id']] + caption['at']
-        made = filmcraft(project, [{'id': 'graphics.newText', 'params': {
-            'text': caption['text'], 'position': CAPTION['position'], 'size': CAPTION['size'],
-            'font': CAPTION['font'], 'seconds': caption['for'], 'time': ticks(begin), 'newClip': True}}])[0]
-        fade, end = CAPTION['fade'], begin + caption['for']
-        filmcraft(project, [{'id': 'graphics.set', 'params': {
-            'clip': made['clip'], 'layer': made['layer'], 'props': {'opacity': value},
-            'time': ticks(when), 'keyframe': True}}
-            for when, value in ((begin, 0), (begin + fade, 100), (end - fade, 100), (end - 0.01, 0))])
+        for kind, style in (('caption', CAPTION), ('subtitle', SUBTITLE)):
+            text = shot.get(kind)
+            if text:
+                overlay(project, starts[shot['id']] + text['at'], text, style)
 
     # 4. Export, and any frames asked for.
     movie = os.path.join(BUILD, f'trailer-{args.profile}.mp4')
