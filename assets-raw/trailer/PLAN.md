@@ -194,7 +194,10 @@ The film has about 20–25 shots. With 3–4 variants per shot that is 80–100 
   scribble and lean in") mostly stands and stares into the middle distance. Give at least two or three people
   their own action, each placed in the frame ("the reporter in the grey fedora on the left licks his pencil
   and writes"). Fewer, larger people also keep faces from turning uncanny: a face 20–30 px wide is a patch or
-  two in the model's compressed grid and shimmers from frame to frame (the c02a-press-room-small trial).
+  two in the model's compressed grid and shimmers from frame to frame (the c02a-press-room-small trial): its faces came out
+  clearly better (user), though the background stayed in focus despite "shallow depth of field" and its faces
+  still turn odd at times. Next try: a longer lens (85mm, wide open) and the background people described as
+  blurred shapes.
 - **A light lit in the first frame stays lit:** a flashbulb firing in the keyframe burned for 3 s in the clip.
   Keyframes show flashes dark; the video prompt makes each "a single blink of white light that is gone in a
   split second" (measured: 2–4 frames).
