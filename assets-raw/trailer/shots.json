@@ -52,6 +52,31 @@
       ]
     },
     {
+      "id": "c02a-press-room-small",
+      "beat": "trials",
+      "look": "us-1955",
+      "duration": 5.0,
+      "trim": [
+        0.3,
+        3.8
+      ],
+      "mode": "i2v",
+      "keyframes": {
+        "first": "The White House press room in July 1955: a small room with wood panelling and a window with venetian blinds. In the left foreground, seen from behind and out of focus, a man in a dark suit holds up a typed sheet of paper. Facing him, close to the camera, a small group of eight reporters in suits, ties and fedoras, notebooks and pencils in hand, their faces clearly visible and in sharp focus, and two press photographers raising large press cameras with round silver flash reflectors, the moment just before the first picture is taken: the room lit only by warm lamp light and the daylight through the blinds. Behind the group, the rest of the room falls off into soft, out-of-focus shadow. Medium shot at eye level, 50mm lens, shallow depth of field."
+      },
+      "video": "Live-action, cinematic, 1955. In the press room shown in <Picture 1>, the two photographers take their pictures: each flashbulb fires as a single blink of white light that is gone in a split second, one camera at a time, now here, now there, like flashes in an old newsreel. The reporters scribble fast in their notebooks and lean in; one of them turns and hurries out of the room. The man in the foreground stays with his back to the camera, holding the typed sheet. The camera pushes in with small amplitude at slow speed.",
+      "soundscape": "The pops and clicks of flashbulbs and press cameras, pencils scratching, the shuffle of a crowded room, a door opening. Nobody speaks.",
+      "clipGainDb": -12,
+      "caption": {
+        "text": "29 July 1955",
+        "at": 0.4,
+        "for": 2.8
+      },
+      "facts": [
+        "us-satellite-announcement-1955"
+      ]
+    },
+    {
       "id": "c02b-statement",
       "beat": "cold-open",
       "look": "us-1955",
