@@ -197,9 +197,9 @@ The film has about 20–25 shots. With 3–4 variants per shot that is 80–100 
 
 ## 8. Open points
 
-- The edit was only tested with dummy clips: phase 1's test shot also goes through `make_edit.py`
-  (transitions, the sound mix and fades still untried). The fallback is EffectCraft, proven headless
-  in this repo.
+- The edit works (2026-11-21): `make_edit.py` cut the four test shots into a 19 s rough cut with
+  captions faded in and out, fades from and to black, the clips' own sound and a placeholder beep
+  at −6 dB, exported in 13 s. Still untried: cuts between shots other than hard cuts, and the score.
 - The draft-to-final path (§4): settled in the test shot.
 - The upscaler for 1080p: chosen in the test shot.
 - Score: Music 3 or a curated track (credited either way).
