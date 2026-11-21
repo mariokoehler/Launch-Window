@@ -24,7 +24,7 @@ Decisions so far (user, 2026-11-21):
 |---|---|---|
 | Keyframes (stills) | Qwen Image 2.1 in ComfyUI (installed) | Always at exactly 1344×768, H3's native size: an off-aspect first frame is stretched, a last frame centre-cropped. 1344×768 is 1.75:1, a little taller than 16:9: the edit fills the 1920×1080 frame (`clip.fillFrame`), cropping about 1% top and bottom, so keyframes keep a small safe margin there. |
 | Clips | MiniMax H3 in ComfyUI | `fl2va` installed. Reference-to-video and Multiframe need the `ref2va` weights from `Comfy-Org/MiniMax-H3` (to download). |
-| Upscale to 1080p | to be chosen in the test (§5, phase 1) | H3 runs at about 1 MP locally; 2K is only the hosted service. |
+| Upscale to 1080p | FilmCraft's scaling for now | H3 runs at about 1 MP locally; 2K is only the hosted service. A separate upscale pass only if the projector shows the need. |
 | Score | MiniMax Music 3 in ComfyUI (installed), or a curated track | Decided after the rough cut. |
 | Edit, captions, end card, export | FilmCraft (`C:\Program Files\FilmCraft\filmcraft-cli.exe`) | Headless, tested 2026-11-21 with dummy clips: `run <script.jsonl>` with `--save-as`/`--project … --save`; `file.newSequence` (1920×1080, 24 fps), `file.import` (returns item ids), `timeline.place` (item, track, time, `sourceIn`, `duration`; returns clip ids), `clip.fillFrame`, `timeline.setTrack` (mute), `graphics.newText` (a caption as its own clip), `file.exportMedia` (h264). `render --seconds S --out f.png` checks a frame. |
 
@@ -64,7 +64,7 @@ The end card is the game's logo; the splash clip (`assets-raw/splash/`) may serv
 
 - **Real voices.** "That's one small step for [a] man…" is NASA's own Apollo 11 recording (public
   domain as a work of the US government: confirm and credit in `CREDITS.md` here). Never an AI voice of
-  Armstrong or anyone real.
+  Armstrong or anyone real. (Sputnik's beep, by contrast, is our own synthesized sound: §7.)
 - **Real faces.** Gagarin, Korolev, Armstrong and the rest appear behind visors, in silhouette, from
   behind or as hands. That is also the more cinematic choice.
 - **BASPM.** Nothing from it, as everywhere in the repo (`design.md` §1.2). The trailer needs none.
@@ -116,31 +116,28 @@ The film's single source. The generators read it and so does the edit. Sketch of
 
 ComfyUI workflows are the user's, built and tested in the GUI, exported in API format and flattened
 here like `blueprints_workflow_api.json` (Qwen keyframe; H3 image-to-video; H3 reference-to-video;
-H3 multiframe; the final refine and upscale).
+H3 multiframe).
 
 **Kept in git:** the scripts, the JSON files, `FACTS.md`, `CREDITS.md` and the picked keyframes
 (`git add -f`, as for the patches). **Not kept in git:** clips (large, and regenerable: that is the
 point of the overnight run), review sheets and `build/`. ComfyUI keeps its own copy of everything
 (`lw_trailer_*` in its output folder; never delete those). The final export lives outside the repo.
 
-### Draft and final: the open question
+### Draft and final: fresh finals, picked in the morning
 
-A seed does not give the same clip at another resolution or step count. So a draft we like at low
-resolution would *not* come back the same from a fresh high-resolution render. Two ways to handle it,
-to be settled in the test shot:
+A seed does not give the same clip at another resolution or step count, so a draft we like does not
+come back the same from a final render. Refining the approved draft instead (H3 has no video-to-video
+node here, so the draft was anchored as a guide through the multiframe workflow) was tried on
+2026-11-21 and gave terrible quality (user): dropped.
 
-1. **Refine the approved draft** (preferred if it works): the final pass takes the picked draft
-   clip, upscales it and re-noises it partly (a video "hires fix"), keeping its motion and timing and
-   adding detail. Then `final` means "the same takes, sharper". The refine would re-roll the sound, so
-   a shot's kept sound comes from its draft take (`make_edit.py` reads the audio from the draft clip
-   and the picture from the final).
-2. **Fresh finals, picked in the morning:** the overnight run renders 3–4 final variants per shot from
-   the approved keyframes and prompt; we pick again. The keyframes hold composition and look either
-   way, since they are full resolution from the start.
+So drafts settle each shot's keyframe, prompt, framing and timing; the overnight run renders 2–3 final
+takes per shot from them, and we pick again in the morning. The keyframes hold composition and look,
+since they are full resolution from the start. A shot whose draft sound was the point can take its
+sound from the draft take in the edit.
 
-Draft profile (to tune): 672×384, the Lightning LoRA (8 steps), 2–3 variants. Final: 1344×768,
-25 steps, no turbo, then the upscale to 1920×1080. The test shot measures the times, which size the
-overnight run (about 25 shots).
+Draft profile: 672×384, the Lightning LoRA (8 steps; reference-to-video runs at full steps), 2 takes.
+Final: 1344×768, 25 steps, no turbo; FilmCraft scales it to 1920×1080 (a separate upscale pass only if
+the projector shows the need). About 10 minutes a 5 s take: 25 shots × 2 takes fit in one night.
 
 ## 5. Phases
 
@@ -191,17 +188,24 @@ The film has about 20–25 shots. With 3–4 variants per shot that is 80–100 
   ("a single Earth fills the lower part of the frame") instead.
 - **Sound:** usable for rooms and machines, under a score (user). Space scenes come out near silent
   (peaks −30 to −45 dB) whatever the prompt says, and "the silence of space" makes it a hum. The
-  Sputnik beep goes in at the edit, from a recording of the real signal (licence to confirm).
+  Sputnik beep goes in at the edit (synthesized, below).
 - **World text** holds while the paper is still; newly printed lines become garble. Keep it short and
   cut before new text appears.
+- **Soviet text is in Russian** (user, 2026-11-21): the Moscow teleprinter prints Cyrillic (for
+  example "США ЗАПУСТЯТ ИСКУССТВЕННЫЙ СПУТНИК ЗЕМЛИ"), which nobody in the audience reads, so garble
+  doesn't matter; an English subtitle in the edit translates it ("U.S. to launch an artificial Earth
+  satellite"). The same goes for any Soviet sign, paper or panel. `make_edit.py` needs a subtitle
+  style (centred, lower third) beside the caption.
+- **The Sputnik beep is synthesized** (user, 2026-11-21): our own plausible beep, no recording needed.
+  The placeholder in `make_edit.py` becomes the real one once it sounds right (a radio-filtered tone,
+  short pulses, static under it).
 
 ## 8. Open points
 
 - The edit works (2026-11-21): `make_edit.py` cut the four test shots into a 19 s rough cut with
   captions faded in and out, fades from and to black, the clips' own sound and a placeholder beep
   at −6 dB, exported in 13 s. Still untried: cuts between shots other than hard cuts, and the score.
-- The draft-to-final path (§4): settled in the test shot.
-- The upscaler for 1080p: chosen in the test shot.
+- Whether finals need an upscale pass beyond FilmCraft's scaling (check on the projector).
 - Score: Music 3 or a curated track (credited either way).
 - Whether a beat for the Soviet N1 or the lunar race's end (the Soviets standing down) belongs in the
   film, or the landing alone closes it.
