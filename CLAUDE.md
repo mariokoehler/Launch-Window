@@ -209,6 +209,11 @@ first live game starts in January 2027. Many numbers are still unconfirmed: the 
   `outlineStroke`, and `convert IN OUT --outline-text`. The logo's fonts are in its own Fonts folder;
   for another font, `text.findFontFiles` then `text.addFontFiles`, in one MCP session
   (`mcp --headless`): the add takes only files a finished search found, and `run` ends first.
+- **FilmCraft** (an open-source Premiere, `C:\Program Files\FilmCraft\filmcraft-cli.exe`): `run X.jsonl`
+  (`{"id","params"}` per line) with `--save-as`/`--project … --save` edits headless; commands return the ids
+  later ones need (`file.import` items, `timeline.place` clips). `commands`/`describe <id>` list them.
+- **The trailer** (a live-action AI teaser for the January kick-off, not part of the game):
+  `assets-raw/trailer/PLAN.md` (Qwen keyframes, MiniMax H3 clips, a FilmCraft edit, all from one script).
 - **Other converters** in `assets-raw/`: `make_hub_art.py`, `make_content_art.py`,
   `svg/ui/make_ui_icons.py` (needs `pip install resvg-py`), `explainers/make_explainer_art.py`
   (the explainers' drawings: PNG without text plus a labels file, `ui-spec.md` component 18),
