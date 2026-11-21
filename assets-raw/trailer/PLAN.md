@@ -8,9 +8,14 @@ to the logo a moment before the boot touches the ground.
 Decisions so far (user, 2026-11-21):
 - **History as it happened.** No invented events and no improved arc: the real race is the story.
   Every depicted fact is checked and sourced in `FACTS.md` before its shot is final, as for the
-  game's history notes.
-- **No narrator.** Pictures, a music score and captions (place and date). The sound MiniMax H3
-  generates with each clip stays where it fits; we decide per shot once we have heard it.
+  game's history notes. Small liberties that make the story easier to follow are fine (user,
+  2026-11-21): Sedov's answer of 2 August 1955 is set in Moscow, not Copenhagen, so the cold open
+  doesn't jump between three cities.
+- **A narrator, at least for the context** (user, 2026-11-21, reversing "no narrator"): short lines
+  in the shot list's Narration column, a generated voice in our own pipeline (as the replay's radio
+  call-outs, `assets-raw/audio/chatter/`), never an imitation of a real person. Plus a music score and
+  captions. The sound MiniMax H3 generates with each clip stays where it fits; we decide per shot
+  once we have heard it.
 - **Captions in the edit** (§1), **no real faces** (§2), and the satellite beat built on the embassy
   reception of 4 October 1957 rather than an interrupted American countdown (§6: the reception is
   what happened; no American launch was imminent that night). Confirmed by the user, 2026-11-21.
