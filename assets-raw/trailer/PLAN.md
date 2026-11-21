@@ -215,6 +215,10 @@ The film has about 20–25 shots. With 3–4 variants per shot that is 80–100 
   queued and the script exits (`--queue`, then `--collect`), and the scripts ask ComfyUI to unload its
   models (`/free`) before they queue. Also suggested to the user: a larger page file, ComfyUI's
   `--cache-ram 8` (keep 8 GB free instead of about 3).
+- **A smaller H3 model** (2026-11-21): the community mixed INT4/INT8 `fl2va`
+  (`Abiray/Minimax-H3-nvfp4-INT4-INT8-Convrot` on Hugging Face, 15.9 GB against 21 GB) rendered c03 and c06 at
+  final settings with final's seeds (`--profile final-mixed`): the same detail and legible text, slightly
+  different motion, about the same time (9–11 min). The NVFP4 builds need an RTX 50 card; GGUF saves little.
 
 ## 8. Open points
 
