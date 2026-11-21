@@ -44,6 +44,10 @@ REVIEW = os.path.join(HERE, 'review')
 PROFILES = {
     'draft': {'size': (672, 384), 'turbo': True, 'steps': 20},
     'final': {'size': (1344, 768), 'turbo': False, 'steps': 25},
+    # A test of the community mixed INT4/INT8 model (PLAN.md §7, memory): final's size, steps and seeds, only
+    # the model swapped, so its takes compare one to one with final's.
+    'final-mixed': {'size': (1344, 768), 'turbo': False, 'steps': 25, 'seeds': 'final',
+                    'unet': {'i2v': 'MiniMax_H3_FL2VA_pruned_mixed_int4_int8_convrot.safetensors'}},
 }
 WORKFLOWS = {'i2v': 'h3_i2v_workflow_api.json', 'r2v': 'h3_r2v_workflow_api.json'}
 REFERENCE_SLOTS = 4  # Reference Image 0..3 in the r2v workflow
@@ -61,6 +65,7 @@ def frames(seconds):
 
 
 def seed_for(shot, profile, variant):
+    profile = PROFILES[profile].get('seeds', profile)
     return random.Random(f'launch-window-trailer-clip-{shot}-{profile}-{variant}').randrange(2 ** 48)
 
 
@@ -99,6 +104,8 @@ def i2v_graph(shot, profile, seed, prefix, chosen):
     graph[comfy.node(graph, 'PrimitiveInt', 'Int (Full)')]['inputs']['value'] = settings['steps']
     graph[comfy.node(graph, 'RandomNoise')]['inputs']['noise_seed'] = seed
     graph[comfy.node(graph, 'SaveVideo')]['inputs']['filename_prefix'] = prefix
+    if 'unet' in settings:
+        graph[comfy.node(graph, 'UNETLoader')]['inputs']['unet_name'] = settings['unet']['i2v']
     return graph, graph[h3]['inputs']['prompt']
 
 
