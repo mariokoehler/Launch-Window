@@ -11,9 +11,9 @@ Decisions so far (user, 2026-11-21):
   game's history notes.
 - **No narrator.** Pictures, a music score and captions (place and date). The sound MiniMax H3
   generates with each clip stays where it fits; we decide per shot once we have heard it.
-Proposals not yet confirmed: captions in the edit (§1); no real faces (§2); the satellite beat built
-on the embassy reception of 4 October 1957 rather than an interrupted American countdown (§6: the
-reception is what happened; no American launch was imminent that night).
+- **Captions in the edit** (§1), **no real faces** (§2), and the satellite beat built on the embassy
+  reception of 4 October 1957 rather than an interrupted American countdown (§6: the reception is
+  what happened; no American launch was imminent that night). Confirmed by the user, 2026-11-21.
 - **The whole film is scripted.** One script file describes every shot; tools in this folder generate
   keyframes and clips from it, cut the film in FilmCraft and export it. Draft quality while iterating,
   final quality in one overnight run.
