@@ -11,8 +11,14 @@ A seed gives a different clip at another size or step count, so a draft take doe
 Usage (ComfyUI running locally):
     python make_clips.py                                 # every shot with picked keyframes, draft, 2 variants
     python make_clips.py --only t03-sputnik-orbit --variants 4
-    python make_clips.py --profile final --variants 1
+    python make_clips.py --profile final --variants 1 --queue   # the overnight run: queue it all, exit at once
+    python make_clips.py --collect                       # in the morning: fetch what ComfyUI finished
     python make_clips.py --review-only
+
+Renders are queued in ComfyUI first and listed in clips/pending.json; ComfyUI works through its queue on its own.
+Without --queue the script then waits and collects them; if it is stopped, --collect (or a rerun) picks up
+where it left off, and a render ComfyUI lost (a restart) is queued again by a rerun. Before queuing, ComfyUI is
+asked to unload its models (comfy.free), so nothing left over from keyframes or another workflow holds RAM.
 
 Writes clips/<profile>/<shot>_<n>.mp4 and clips/manifest.json (prompt, seed, profile, render time), and contact
 sheets in review/ (four frames per take). The pick per shot goes in picks.json under "<shot>/<profile>". Clips are
@@ -169,6 +175,8 @@ def main():
     parser.add_argument('--force', action='store_true')
     parser.add_argument('--review-only', action='store_true')
     parser.add_argument('--beat')
+    parser.add_argument('--queue', action='store_true', help='queue the renders in ComfyUI and exit at once')
+    parser.add_argument('--collect', action='store_true', help='fetch finished renders (pending.json), queue nothing')
     args = parser.parse_args()
 
     shots = read('shots.json')['shots']
@@ -177,60 +185,91 @@ def main():
     os.makedirs(os.path.join(CLIPS, args.profile), exist_ok=True)
     os.makedirs(REVIEW, exist_ok=True)
 
+    # Every render queued and not yet collected, with what the manifest needs: ComfyUI renders on its own, so
+    # nothing has to wait on it, and a killed or closed script loses nothing.
     pending_path = os.path.join(CLIPS, 'pending.json')
     pending = read(os.path.join('clips', 'pending.json')) if os.path.exists(pending_path) else {}
+
+    def save_pending():
+        with open(pending_path, 'w', encoding='utf-8') as out:
+            json.dump(pending, out, indent=1)
+
+    def save_manifest():
+        with open(MANIFEST, 'w', encoding='utf-8') as out:
+            json.dump(manifest, out, indent=1)
 
     def chosen_shot(shot):
         return (not args.only or shot['id'] in args.only) and (not args.beat or shot['beat'] == args.beat)
 
+    # 1. Queue what is missing: every take of the chosen shots without a file and not already in ComfyUI.
+    jobs = []
     for shot in shots:
-        if not chosen_shot(shot):
+        if args.review_only or args.collect or not chosen_shot(shot):
             continue
-        if args.review_only:
-            break
         if shot['mode'] not in WORKFLOWS:
             print(f'{shot["id"]}: mode {shot["mode"]} not wired yet, skipped')
             continue
         if shot['mode'] == 'i2v' and f'{shot["id"]}/first' not in chosen:
             print(f'{shot["id"]}: no picked first frame, skipped')
             continue
-        build = i2v_graph if shot['mode'] == 'i2v' else r2v_graph
         for variant in range(1, args.variants + 1):
             file = f'clips/{args.profile}/{shot["id"]}_{variant}.mp4'
-            path = os.path.join(HERE, file)
-            if os.path.exists(path) and not args.force:
+            if os.path.exists(os.path.join(HERE, file)) and not args.force:
                 continue
-            seed = seed_for(shot['id'], args.profile, variant)
-            graph, prompt = build(shot, args.profile, seed,
-                                      f'video/lw_trailer_{args.profile}_{shot["id"]}_{variant}', chosen)
-            # A render outlives this script if the script is killed: its prompt id is kept in pending.json,
-            # and a rerun collects it from ComfyUI instead of queuing it again.
-            earlier = pending.get(file)
-            if earlier and comfy.known(earlier['id']):
-                prompt_id, started = earlier['id'], earlier['started']
-            else:
-                prompt_id, started = comfy.queue(graph), time.time()
-                pending[file] = {'id': prompt_id, 'started': started}
-                with open(pending_path, 'w', encoding='utf-8') as out:
-                    json.dump(pending, out, indent=1)
-            name, data = comfy.wait(prompt_id)[0]
-            seconds = time.time() - started
-            pending.pop(file, None)
-            with open(pending_path, 'w', encoding='utf-8') as out:
-                json.dump(pending, out, indent=1)
-            with open(path, 'wb') as out:
-                out.write(data)
-            print(f'{file}  {seconds:.0f} s', flush=True)
-            manifest = [e for e in manifest if e['file'] != file]
-            manifest.append({'shot': shot['id'], 'profile': args.profile, 'variant': variant, 'file': file,
-                             'seed': seed, 'duration': shot['duration'], 'seconds': round(seconds), 'prompt': prompt})
-            with open(MANIFEST, 'w', encoding='utf-8') as out:
-                json.dump(manifest, out, indent=1)
+            if file in pending and comfy.state(pending[file]['id']) != 'lost':
+                continue
+            jobs.append((shot, variant, file))
+    if jobs:
+        # Drop whatever ComfyUI still holds (Qwen Image after keyframes, the other H3 model), then queue the
+        # i2v takes before the r2v ones, so the batch switches models once.
+        comfy.free()
+        jobs.sort(key=lambda job: job[0]['mode'])
+    for shot, variant, file in jobs:
+        build = i2v_graph if shot['mode'] == 'i2v' else r2v_graph
+        seed = seed_for(shot['id'], args.profile, variant)
+        graph, prompt = build(shot, args.profile, seed, f'video/lw_trailer_{args.profile}_{shot["id"]}_{variant}',
+                              chosen)
+        pending[file] = {'id': comfy.queue(graph), 'queued': time.time(), 'shot': shot['id'],
+                         'profile': args.profile, 'variant': variant, 'seed': seed, 'duration': shot['duration'],
+                         'prompt': prompt}
+        save_pending()
+        print(f'{file}  queued', flush=True)
+
+    # 2. Collect: everything pending, finished or failed; without --queue/--collect, wait for the rest.
+    wait = not (args.queue or args.collect or args.review_only)
+    for file, entry in sorted(pending.items(), key=lambda item: item[1].get('queued', item[1].get('started', 0))):
+        if args.review_only:
+            break
+        state = comfy.state(entry['id'])
+        while wait and state in ('queued', 'running'):
+            time.sleep(5)
+            state = comfy.state(entry['id'])
+        if state in ('queued', 'running'):
+            print(f'{file}  {state}')
+            continue
+        del pending[file]
+        save_pending()
+        if state == 'lost':
+            print(f'{file}  lost (ComfyUI restarted?): run again to queue it again')
+            continue
+        try:
+            name, data = comfy.fetch(entry['id'])[0]
+        except RuntimeError as failure:
+            print(f'{file}  FAILED: {failure}')
+            continue
+        with open(os.path.join(HERE, file), 'wb') as out:
+            out.write(data)
+        seconds = comfy.render_seconds(entry['id'])
+        print(f'{file}  {seconds or 0:.0f} s', flush=True)
+        manifest = [e for e in manifest if e['file'] != file]
+        manifest.append({'shot': entry.get('shot'), 'profile': entry.get('profile'), 'variant': entry.get('variant'),
+                         'file': file, 'seed': entry.get('seed'), 'duration': entry.get('duration'),
+                         'seconds': round(seconds or 0), 'prompt': entry.get('prompt')})
+        save_manifest()
 
     order = {s['id']: i for i, s in enumerate(shots)}
     manifest.sort(key=lambda e: (order.get(e['shot'], 999), e['profile'], e['variant']))
-    with open(MANIFEST, 'w', encoding='utf-8') as out:
-        json.dump(manifest, out, indent=1)
+    save_manifest()
     selected = {s['id'] for s in shots if chosen_shot(s)}
     suffix = f'_{args.beat}' if args.beat else ('_selection' if args.only else '')
     for profile in PROFILES:

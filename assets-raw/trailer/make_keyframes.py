@@ -103,6 +103,7 @@ def main():
 
     if not args.review_only:
         workflow = comfy.load(WORKFLOW)
+        freed = False
         for shot in shots:
             if (args.only and shot['id'] not in args.only) or (args.beat and shot['beat'] != args.beat):
                 continue
@@ -119,6 +120,9 @@ def main():
                     path = os.path.join(HERE, file)
                     if os.path.exists(path) and not args.force:
                         continue
+                    if not freed:  # drop the H3 models a clip run left in RAM
+                        comfy.free()
+                        freed = True
                     started = time.time()
                     data = generate(workflow, prompt, seed, f'lw_trailer_key_{shot["id"]}_{frame}_{variant}')
                     with open(path, 'wb') as out:

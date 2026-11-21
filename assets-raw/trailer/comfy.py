@@ -63,12 +63,56 @@ def queue(graph, host=HOST):
     return answer['prompt_id']
 
 
-def known(prompt_id, host=HOST):
-    """True if ComfyUI still knows this prompt (queued, running or in its history)."""
-    if prompt_id in json.load(urllib.request.urlopen(host + '/history/' + prompt_id)):
-        return True
+def free(host=HOST):
+    """Asks ComfyUI to unload every model and drop its caches, from RAM as well as VRAM. ComfyUI does it
+    between prompts, so a render already running finishes first. The next prompt reloads what it needs."""
+    request = urllib.request.Request(host + '/free', data=json.dumps({'unload_models': True,
+                                                                      'free_memory': True}).encode(),
+                                     headers={'Content-Type': 'application/json'})
+    urllib.request.urlopen(request).read()
+
+
+def state(prompt_id, host=HOST):
+    """'done', 'error', 'running', 'queued' or 'lost' (ComfyUI no longer knows it: restarted, or history cleared)."""
+    history = json.load(urllib.request.urlopen(host + '/history/' + prompt_id))
+    if prompt_id in history:
+        return 'error' if history[prompt_id].get('status', {}).get('status_str') == 'error' else 'done'
     q = json.load(urllib.request.urlopen(host + '/queue'))
-    return any(item[1] == prompt_id for item in q['queue_running'] + q['queue_pending'])
+    if any(item[1] == prompt_id for item in q['queue_running']):
+        return 'running'
+    if any(item[1] == prompt_id for item in q['queue_pending']):
+        return 'queued'
+    return 'lost'
+
+
+def render_seconds(prompt_id, host=HOST):
+    """How long ComfyUI took on a finished prompt (from its own timestamps), or None."""
+    status = json.load(urllib.request.urlopen(host + '/history/' + prompt_id)).get(prompt_id, {}).get('status', {})
+    stamps = {name: data.get('timestamp') for name, data in status.get('messages', [])}
+    if stamps.get('execution_start') and stamps.get('execution_success'):
+        return (stamps['execution_success'] - stamps['execution_start']) / 1000
+    return None
+
+
+def fetch(prompt_id, host=HOST):
+    """The bytes of every file a finished prompt wrote; raises if it failed or wrote nothing."""
+    entry = json.load(urllib.request.urlopen(host + '/history/' + prompt_id))[prompt_id]
+    status = entry.get('status', {})
+    if status.get('status_str') == 'error':
+        raise RuntimeError(json.dumps(status)[:2000])
+    files = []
+    for output in entry['outputs'].values():
+        for kind in ('images', 'videos', 'gifs'):
+            for item in output.get(kind, []):
+                if item.get('type') != 'output':
+                    continue
+                query = urllib.parse.urlencode({'filename': item['filename'],
+                                                'subfolder': item.get('subfolder', ''),
+                                                'type': item['type']})
+                files.append((item['filename'], urllib.request.urlopen(host + '/view?' + query).read()))
+    if not files:
+        raise RuntimeError('no file in the output')
+    return files
 
 
 def run(graph, timeout=3600, host=HOST):
@@ -80,23 +124,7 @@ def wait(prompt_id, timeout=3600, host=HOST):
     """Waits for a queued prompt and returns the bytes of every file it wrote."""
     deadline = time.time() + timeout
     while time.time() < deadline:
-        history = json.load(urllib.request.urlopen(host + '/history/' + prompt_id))
-        if prompt_id in history:
-            status = history[prompt_id].get('status', {})
-            if status.get('status_str') == 'error':
-                raise RuntimeError(json.dumps(status)[:2000])
-            files = []
-            for output in history[prompt_id]['outputs'].values():
-                for kind in ('images', 'videos', 'gifs'):
-                    for item in output.get(kind, []):
-                        if item.get('type') != 'output':
-                            continue
-                        query = urllib.parse.urlencode({'filename': item['filename'],
-                                                        'subfolder': item.get('subfolder', ''),
-                                                        'type': item['type']})
-                        files.append((item['filename'], urllib.request.urlopen(host + '/view?' + query).read()))
-            if not files:
-                raise RuntimeError('no file in the output')
-            return files
+        if state(prompt_id, host) in ('done', 'error'):
+            return fetch(prompt_id, host)
         time.sleep(2)
     raise RuntimeError('timed out')

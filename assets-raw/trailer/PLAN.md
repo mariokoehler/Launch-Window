@@ -115,7 +115,7 @@ The film's single source. The generators read it and so does the edit. Sketch of
 | Script | Does |
 |---|---|
 | `make_keyframes.py` | Qwen keyframes for every shot (first and last frames, character sheets): fixed seeds, 3 variants, review sheets in `review/`, the pick per frame in `picks.json`. `--only <shot>`. |
-| `make_clips.py` | H3 clips from the picked keyframes and the shot's prompt. `--profile draft` or `final`, `--variants N`, `--only <shot>`, `--beat <beat>`. Writes `clips/<profile>/<shot>_<n>.mp4` and `manifest.json` (prompt, seed, profile, render time). The pick per shot goes in `picks.json`. Contact sheets (a few frames per variant) in `review/`. |
+| `make_clips.py` | H3 clips from the picked keyframes and the shot's prompt. `--profile draft` or `final`, `--variants N`, `--only <shot>`, `--beat <beat>`. `--queue` queues the takes in ComfyUI and exits; `--collect` fetches what is finished (`clips/pending.json` lists what is out). Writes `clips/<profile>/<shot>_<n>.mp4` and `manifest.json` (prompt, seed, profile, render time). The pick per shot goes in `picks.json`. Contact sheets (a few frames per variant) in `review/`. |
 | `make_edit.py` | Writes a FilmCraft JSONL from `shots.json`, `audio.json` and the picks: a 1920×1080 24 fps sequence, each picked clip trimmed and placed, its own sound on a track muted unless `keepAudio`, captions as text graphics, score and NASA audio, the end card. Runs it headless, saves `build/trailer.fcproj` and exports `build/trailer-<profile>.mp4`. The same script for draft and final: only the clip folder changes. |
 | `make_score.py` | Only if the score is generated (Music 3): the prompt and length from the rough cut. |
 
@@ -156,7 +156,8 @@ the projector shows the need). About 10 minutes a 5 s take: 25 shots × 2 takes 
 4. **Drafts and the rough cut.** Draft clips beat by beat; `make_edit.py --profile draft` after
    each, so the film is always watchable end to end.
 5. **The score.** Against the rough cut; then cuts tuned to its beats.
-6. **The overnight run.** `make_clips.py --profile final`, then `make_edit.py --profile final`.
+6. **The overnight run.** `make_clips.py --profile final --queue` (queues every take and exits), in the
+   morning `make_clips.py --collect`, then `make_edit.py --profile final`.
 7. **Polish.** Captions, the end card, the sound mix, a check on the meeting room's projector and
    speakers.
 
@@ -204,6 +205,16 @@ The film has about 20–25 shots. With 3–4 variants per shot that is 80–100 
 - **The Sputnik beep is synthesized** (user, 2026-11-21): our own plausible beep, no recording needed.
   The placeholder in `make_edit.py` becomes the real one once it sounds right (a radio-filtered tone,
   short pulses, static under it).
+
+- **Memory** (2026-11-21): one final H3 take needs about 40 GB of weights (the 21 GB `fl2va` model,
+  the 15.7 GB Qwen3-VL 32B text encoder, 3.4 GB of VAEs) on a 24 GB card with 32 GB of RAM. ComfyUI
+  keeps what doesn't fit in VRAM in RAM, and keeps models cached after use (Qwen Image after
+  keyframes, `ref2va` after `fl2va`). Its process held 48 GB committed, and Windows' commit limit was
+  67 of 70.5 GB used. Resolution and steps barely change this: weights dominate. ComfyUI never failed;
+  Claude Code's low-memory reaper killed the script waiting on it, three times. So the renders are
+  queued and the script exits (`--queue`, then `--collect`), and the scripts ask ComfyUI to unload its
+  models (`/free`) before they queue. Also suggested to the user: a larger page file, ComfyUI's
+  `--cache-ram 8` (keep 8 GB free instead of about 3).
 
 ## 8. Open points
 
