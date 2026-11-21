@@ -190,6 +190,14 @@ The film has about 20–25 shots. With 3–4 variants per shot that is 80–100 
   **reference-to-video reference** (`<Picture 1>` with a retention line "no more and no fewer"
   antennas; new framing and real camera motion). The user's pick was the reference take. Reference-to-
   video runs at full steps even in draft (`"turbo": false`): the 4-step turbo holds references weakly.
+- **Groups need individual actions** (user, 2026-11-21): a group given one shared action ("the reporters
+  scribble and lean in") mostly stands and stares into the middle distance. Give at least two or three people
+  their own action, each placed in the frame ("the reporter in the grey fedora on the left licks his pencil
+  and writes"). Fewer, larger people also keep faces from turning uncanny: a face 20–30 px wide is a patch or
+  two in the model's compressed grid and shimmers from frame to frame (the c02a-press-room-small trial).
+- **A light lit in the first frame stays lit:** a flashbulb firing in the keyframe burned for 3 s in the clip.
+  Keyframes show flashes dark; the video prompt makes each "a single blink of white light that is gone in a
+  split second" (measured: 2–4 frames).
 - **Naming what you don't want brings it in** (as Comfy's guide warns): describe the wanted state
   ("a single Earth fills the lower part of the frame") instead.
 - **Sound:** usable for rooms and machines, under a score (user). Space scenes come out near silent
