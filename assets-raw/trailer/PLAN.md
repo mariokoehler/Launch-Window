@@ -172,7 +172,30 @@ overnight run (about 25 shots).
 
 The film has about 20–25 shots. With 3–4 variants per shot that is 80–100 drafts.
 
-## 7. Open points
+## 7. Findings from the test shot (2026-11-21)
+
+- **Speed** (RTX 4090): a keyframe about 8 s; a 5 s draft clip (672×384, Lightning) about 40 s once the
+  model is loaded (90–135 s while models swap, 9 min cold); a 5 s final (1344×768, 25 steps) about
+  10 min. About 25 shots × 2 final takes fit in one night.
+- **The look works** (user): warm 1957 Kodachrome for the American side, cooler grain for Moscow.
+- **People and rooms** come out well from a Qwen keyframe and first-frame image-to-video (the whisper).
+  H3 overplays crowd emotion: an "awkward toast" became a cheering party facing the camera until the
+  prompt kept everyone's back to the camera and said what the mood was.
+- **Spacecraft:** image models only half know what Sputnik and its successors looked like (wrong
+  antenna counts and places). The user's mission configuration art (`assets-raw/Mission
+  Configuration/`) gets them right: as **the first frame** (kept exactly, little motion) or as a
+  **reference-to-video reference** (`<Picture 1>` with a retention line "no more and no fewer"
+  antennas; new framing and real camera motion). The user's pick was the reference take. Reference-to-
+  video runs at full steps even in draft (`"turbo": false`): the 4-step turbo holds references weakly.
+- **Naming what you don't want brings it in** (as Comfy's guide warns): describe the wanted state
+  ("a single Earth fills the lower part of the frame") instead.
+- **Sound:** usable for rooms and machines, under a score (user). Space scenes come out near silent
+  (peaks −30 to −45 dB) whatever the prompt says, and "the silence of space" makes it a hum. The
+  Sputnik beep goes in at the edit, from a recording of the real signal (licence to confirm).
+- **World text** holds while the paper is still; newly printed lines become garble. Keep it short and
+  cut before new text appears.
+
+## 8. Open points
 
 - The edit was only tested with dummy clips: phase 1's test shot also goes through `make_edit.py`
   (transitions, the sound mix and fades still untried). The fallback is EffectCraft, proven headless

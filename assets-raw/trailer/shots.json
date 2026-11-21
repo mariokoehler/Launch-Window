@@ -1,0 +1,85 @@
+{
+  "_comment": "The film's script (PLAN.md §3), in film order. Phase 1 holds the test shots only. keyframes.first/last are Qwen prompts (the shot's look is appended); video is H3's [Shot 1] text without the alignment line, which make_clips.py adds; facts name entries in FACTS.md.",
+  "shots": [
+    {
+      "id": "t01-embassy-whisper",
+      "beat": "satellite",
+      "look": "us-1957",
+      "duration": 5.0,
+      "mode": "i2v",
+      "keyframes": {
+        "first": "An evening reception in the ballroom of an embassy in Washington, October 1957. Crystal chandeliers, tall windows with heavy curtains, a long buffet table with white linen, waiters carrying silver trays of champagne coupes. In the middle ground a grey-haired American scientist in his fifties, in a dark suit and tie, holds a champagne coupe, while a younger man in a rumpled grey suit leans in close to whisper into his ear, one hand half raised. Around them small groups of men in dark suits and a few women in cocktail dresses talk, softly out of focus. Medium shot at eye level, 50mm lens."
+      },
+      "video": "Live-action, cinematic, 1957. In the embassy ballroom shown in <Picture 1>, the younger man in the grey suit whispers urgently into the grey-haired scientist's ear. The scientist's polite smile fades. He slowly lowers his champagne coupe and turns his head to look at the younger man, stunned, then glances across the room. Around them the reception carries on, unaware. The camera pushes in with small amplitude at slow speed toward the two men.",
+      "soundscape": "The murmur of a crowded evening reception, glasses clinking softly, distant polite laughter, no words intelligible. Nobody in frame speaks aloud.",
+      "caption": {"text": "Washington, 4 October 1957", "at": 0.3, "for": 2.5},
+      "facts": ["embassy-reception-1957"]
+    },
+    {
+      "id": "t02-embassy-toast",
+      "beat": "satellite",
+      "look": "us-1957",
+      "duration": 5.0,
+      "mode": "i2v",
+      "keyframes": {
+        "first": "The ballroom of an embassy in Washington during an evening reception, October 1957. Crystal chandeliers, wood panelling, red curtains. A grey-haired American scientist in a dark suit stands at the far end of the room, a champagne coupe raised in his right hand, addressing the guests. Between him and the camera, a crowd of men in dark suits and a few women in cocktail dresses has turned toward him, many seen from behind, several of them raising their own glasses. Wide shot from the back of the room, slightly above head height, 35mm lens."
+      },
+      "video": "Live-action, cinematic, 1957. In the ballroom shown in <Picture 1>, the grey-haired scientist at the far end of the room lifts his champagne coupe a little higher in a toast. The guests keep facing him with their backs to the camera, and slowly, reluctantly, raise their glasses to shoulder height. Nobody cheers: a few heads turn in profile to exchange uneasy glances, a man near the camera lowers his eyes. The mood is subdued and awkward, a polite toast to a rival's success. The camera holds a static shot.",
+      "soundscape": "A large room that has fallen quiet: a single glass being tapped, a few murmurs, the shuffle of feet, then sparse, hesitant applause from a few people. Nobody speaks.",
+      "facts": ["embassy-reception-1957"]
+    },
+    {
+      "id": "t03-sputnik-orbit",
+      "beat": "satellite",
+      "look": "orbit",
+      "duration": 5.0,
+      "mode": "i2v",
+      "keyframes": {
+        "first": "A small polished metal sphere, about half a metre across, with four long thin straight antennas sweeping back from it in a narrow V, in orbit high above the Earth. The sphere's mirror-bright surface catches the sun and reflects the planet below. Beneath it the curved Earth at the edge of night: on one side oceans and clouds in daylight, on the other the darkened hemisphere. The sphere sits in the left third of the frame, seen slightly from below and behind."
+      },
+      "video": "Live-action, cinematic. The polished satellite shown in <Picture 1> glides slowly across the frame from left to right high above the Earth, its four antennas trailing behind it, sunlight sliding across its mirror surface. Far below, the Earth turns slowly and the line between day and night creeps across the clouds. The camera tracks the satellite with small amplitude at slow speed.",
+      "soundscape": "Silence of space, broken only by a steady, thin electronic beep from a radio receiver, about two short beeps per second, slightly crackly.",
+      "facts": ["sputnik-1"]
+    },
+    {
+      "id": "t03b-sputnik-ref",
+      "beat": "satellite",
+      "look": "orbit",
+      "duration": 5.0,
+      "mode": "r2v",
+      "turbo": false,
+      "references": ["references/sputnik.png"],
+      "subjects": ["<Subject 1>: the satellite shown in <Picture 1>, a polished metal sphere with four long thin straight antennas that all sweep backward from one side of the sphere."],
+      "summary": "The target video shows <Subject 1> in orbit high above the Earth.",
+      "retention": ["<Picture 1> ([Shot 1]): partially_preserved - the satellite's shape is kept exactly: its mirror-polished sphere, its seams and its four swept-back antennas, no more and no fewer. The framing, the view of the Earth and the light are new."],
+      "video": "Live-action, cinematic, photorealistic, as if filmed by a camera in Earth orbit: pure black space with no stars, hard unfiltered sunlight. <Subject 1> flies forward from left to right across the upper half of the frame, the polished sphere leading and its four antennas trailing straight behind it to the left. A single Earth fills the lower part of the frame, its curved horizon steady: oceans and clouds in daylight, the night side darkening toward the right. The camera tracks alongside <Subject 1> at its own speed, so the satellite stays near the centre while the Earth's surface slides slowly past beneath it, and the sunlight glints across its mirror surface.",
+      "soundscape": "A loud, clear, steady electronic beep from a shortwave radio receiver, two short beeps per second, with a soft crackle of radio static between them. The beeping is the main sound and is clearly audible throughout.",
+      "facts": ["sputnik-1"]
+    },
+    {
+      "id": "t03c-sputnik-frame",
+      "beat": "satellite",
+      "look": "orbit",
+      "duration": 5.0,
+      "mode": "i2v",
+      "keyframes": {"first": null},
+      "_comment": "First frame: references/sputnik_frame.png (the user's mission configuration art, cropped), picked by hand.",
+      "video": "Live-action, cinematic, photorealistic. The polished satellite shown in <Picture 1> drifts slowly through orbit high above the Earth, its four antennas fixed rigidly in place. The camera arcs slowly around it with small amplitude, so the sunlight slides across its mirror surface and the Earth's horizon tilts gently behind it. The Earth below turns slowly, clouds drifting over the land.",
+      "soundscape": "Silence of space, broken only by a steady, thin electronic beep from a radio receiver, about two short beeps per second, slightly crackly.",
+      "facts": ["sputnik-1"]
+    },
+    {
+      "id": "t04-teletype",
+      "beat": "cold-open",
+      "look": "ussr-1955",
+      "duration": 5.0,
+      "mode": "i2v",
+      "keyframes": {
+        "first": "Close-up of a 1950s news-agency teleprinter in a Moscow office, 1955: a bulky dark grey machine on a metal stand, its rounded sheet-metal hood with a small glass window over the printing mechanism, a wide continuous roll of pale yellow paper rising out of a slot in the top of the hood and curling over the back. The printed line \"U.S. TO LAUNCH EARTH SATELLITE\" in typewriter capitals is clearly legible on the paper just above the slot. Behind it, more teleprinters in a row along the wall of a news room. Hard window light from the left, dust in the air, a cold glass of tea in a metal holder on a shelf beside the machine. 85mm lens, shallow depth of field, the paper in sharp focus."
+      },
+      "video": "Live-action, cinematic, 1955. The teleprinter shown in <Picture 1> clatters and the yellow paper rises slowly out of the hood. A man's hand in a white shirt sleeve enters the frame from the right, grips the paper above the printed line and tears it off sharply against the hood's edge. The camera holds a static shot.",
+      "soundscape": "The loud mechanical clatter of a teletype printing, a small bell ringing once, then the sharp rip of paper being torn. A quiet office around it. Nobody speaks.",
+      "facts": ["us-satellite-announcement-1955"]
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "t01-embassy-whisper/first": "keyframes/t01-embassy-whisper_first_2.png",
+  "t02-embassy-toast/first": "keyframes/t02-embassy-toast_first_2.png",
+  "t03-sputnik-orbit/first": "keyframes/t03-sputnik-orbit_first_3.png",
+  "t04-teletype/first": "keyframes/t04-teletype_first_2.png",
+  "t03c-sputnik-frame/first": "references/sputnik_frame.png",
+  "t03c-sputnik-frame/draft": "clips/draft/t03c-sputnik-frame_2.mp4",
+  "t03b-sputnik-ref/draft": "clips/draft/t03b-sputnik-ref_1.mp4"
+}

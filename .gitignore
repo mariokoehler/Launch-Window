@@ -77,6 +77,11 @@ assets-raw/frontpage/review/
 assets-raw/splash/build/
 # Mission step clips: layers, EffectCraft projects and renders (assets-raw/replay/README.md)
 assets-raw/replay/*/build/
+# The trailer: keyframe variants (only picks are committed, git add -f), clips, review sheets, the edit (PLAN.md)
+assets-raw/trailer/keyframes/*.png
+assets-raw/trailer/clips/
+assets-raw/trailer/review/
+assets-raw/trailer/build/
 
 # The archive's downloaded originals (some are 30 MB TIFFs): make_archive_assets.py fetches them again.
 assets-raw/archive/originals/
