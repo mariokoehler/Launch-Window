@@ -68,13 +68,14 @@ What beats 1 and 2 taught us, applied to 3–7 (details in PLAN.md §7):
 | 22a | **Houston, Rice Stadium.** From behind the lectern: the President's back and shoulders, papers on the lectern, the packed stands beyond him in a hot afternoon sun. | 6.5 | C: *Houston, 12 September 1962*. No face, as everywhere. Kennedy had set the Moon goal before Congress in May 1961; here he said why. Kennedy's sentence (8.6 s, the game's own `assets/audio/moon-speech.mp3`, NASA) starts after the narrator, near the end of this shot, and runs on over 22b. | "That September, the President told the world where the race would end." *(Kennedy: "We choose to go to the Moon …")* |
 | 22b | **The stands.** A few people in the heat, each with their own action: a man shading his eyes with his programme, a woman fanning herself, a student in shirtsleeves leaning forward. | 6.0 | Few, large people; the rest blurred shapes. Kennedy's sentence ends over it, and the beat with it. | *(Kennedy: "… in this decade and do the other things, not because they are easy, but because they are hard.")* |
 
-## 4. The middle years (1963–67), about 20 s
+## 4. The middle years (1963–67), about 24 s
 
 A fast montage under one running line, then a stop.
 
 | # | Shot | Len | Notes | Narration |
 |---|---|---|---|---|
-| 23 | **Outside Voskhod 2.** A cosmonaut drifts out of the airlock on a tether, the Earth huge below; his suit stiff and ballooned. | 4.0 | C: *Voskhod 2, 18 March 1965*. Reference to video from `voskhod_spacewalk.png`. The visor shows only the Earth. He had to let air out of his suit to get back in. | "The Firsts kept coming: the first woman in space, the first spacewalk ..." |
+| 23a | **The steppe, after landing.** A woman in an orange spacesuit seen from behind, her white helmet hanging from one hand, her short hair stirring in the wind; her parachute spread on the grass beside her. Ahead, a few villagers hurry across the field toward her; one waves his cap. | 3.5 | C: *Vostok 6, 16 June 1963*. Tereshkova, the first woman in space. Seen from behind (no real face): her hair and the helmet in her hand tell it. The landing details are creative licence (user, 2026-11-22). | "The Firsts kept coming: the first woman in space," |
+| 23 | **Outside Voskhod 2.** A cosmonaut drifts out of the airlock on a tether, the Earth huge below; his suit stiff and ballooned. | 4.0 | C: *Voskhod 2, 18 March 1965*. Reference to video from `voskhod_spacewalk.png`. The visor shows only the Earth. He had to let air out of his suit to get back in. | "the first spacewalk," |
 | 24 | **Gemini docking.** The nose of a Gemini capsule slides into the docking collar of an Agena target. | 3.5 | C: *Gemini 8, 16 March 1966*. Reference to video from `gemini_docking.png`; first and last frame if the reference won't make contact. | "... the first docking ..." |
 | 25 | **A test stand at night.** A huge engine fires into a flame trench, the ground shaking, white light. | 2.5 | Pure energy for the montage. Here the flame should stay lit: the first frame shows it firing. | "... and ever bigger rockets." |
 | 26 | **Mission control, at ease.** Two controllers in a calm room: one leans back in his chair, hands behind his head; the other lights a cigarette; a clock ticks on the wall. Then the green lamp on the console turns red, and the man leaning back sits bolt upright. | 4.5 | The foreshadowing (user): the calm before 1967. A green lamp, lit, is placed in the keyframe (so its place and size are fixed); the prompt turns it red near the end, and the cut lands right after. First frame only (user): a last frame too might make the people move unnaturally. The lamp is symbolic, not a depiction of a particular moment. The other people blurred shapes. | "For a while, it seemed nothing could go wrong." |
@@ -115,6 +116,6 @@ Total: about 165 s (about 160 s without the optional shots); beats 1–2 are cut
 - **Real voices:** NASA's Apollo 11 recordings carry the landing (33, 34, 36), and Kennedy's Rice speech gets a scene of its own
   (22a, 22b), in place of Glenn's parade.
 - **1967 stays:** the losses are marked (27).
-- **Tereshkova stays,** in 23's line.
+- **Tereshkova stays,** with a shot of her own (23a), seen from behind after landing.
 - Renders: about 21 shots at two takes each is about 7 hours, queued in rounds so a good first take saves
   its second.
