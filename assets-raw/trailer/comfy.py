@@ -53,9 +53,9 @@ def upload(image, name, host=HOST):
     return (answer['subfolder'] + '/' if answer.get('subfolder') else '') + answer['name']
 
 
-def queue(graph, host=HOST):
-    """Queues a graph; returns its prompt id."""
-    request = urllib.request.Request(host + '/prompt', data=json.dumps({'prompt': graph}).encode(),
+def queue(graph, host=HOST, front=False):
+    """Queues a graph (at the front of the queue if asked: quick jobs ahead of a long batch); returns its prompt id."""
+    request = urllib.request.Request(host + '/prompt', data=json.dumps({'prompt': graph, 'front': front}).encode(),
                                      headers={'Content-Type': 'application/json'})
     answer = json.load(urllib.request.urlopen(request))
     if answer.get('node_errors'):
@@ -115,9 +115,9 @@ def fetch(prompt_id, host=HOST):
     return files
 
 
-def run(graph, timeout=3600, host=HOST):
+def run(graph, timeout=3600, host=HOST, front=False):
     """Queues a graph, waits for it, and returns the bytes of every file it wrote (images or videos)."""
-    return wait(queue(graph, host), timeout, host)
+    return wait(queue(graph, host, front), timeout, host)
 
 
 def wait(prompt_id, timeout=3600, host=HOST):

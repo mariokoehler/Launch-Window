@@ -284,6 +284,26 @@
       "clipGainDb": -10
     },
     {
+      "id": "c10-embassy-toast-small",
+      "beat": "trials",
+      "look": "us-1957",
+      "duration": 5.0,
+      "mode": "i2v",
+      "keyframes": {
+        "first": "The ballroom of an embassy in Washington during an evening reception, October 1957. Over the shoulder of a grey-haired scientist in a dark suit, seen from behind and out of focus in the left foreground, his right hand raising a champagne coupe in a toast. Facing him, close to the camera and in sharp focus, a small group of six guests: in the middle, two Soviet diplomats in grey double-breasted suits with small red lapel badges, beaming, their champagne coupes raised high; on the left, a heavyset American official in a dark suit with empty hands and his arms folded, his jaw set, unsmiling; next to him a silver-haired American in a dark suit holding his coupe low at his chest, a thin, fixed smile; on the right, a young American engineer with horn-rimmed glasses and empty hands, his eyes lowered; beside him a woman in a dark cocktail dress, one gloved hand at her pearls, glancing uneasily at the men beside her. Behind them the rest of the ballroom is a soft, heavily blurred background of chandelier light and dark shapes. Medium shot at eye level, 85mm lens wide open, very shallow depth of field."
+      },
+      "video": "Live-action, cinematic, 1957. In the ballroom shown in <Picture 1>, the two Soviet diplomats lift their coupes high and drink, smiling broadly. The silver-haired American raises his coupe only a few inches, his smile thin and fixed, and takes a small sip. The heavyset American slowly unfolds his arms and claps twice, slowly, without smiling. The young engineer with glasses looks up and claps once, hesitantly, then lets his hands drop. The woman glances from one man to the other. The grey-haired scientist in the foreground keeps his glass raised. The background stays soft and blurred. The camera pushes in with small amplitude at slow speed.",
+      "soundscape": "A large room that has fallen quiet: two slow, isolated hand claps, then a single hesitant clap; a glass clinking once; a faint murmur far away. Nobody speaks.",
+      "facts": [
+        "embassy-reception-1957"
+      ],
+      "trim": [
+        0.0,
+        4.0
+      ],
+      "clipGainDb": -10
+    },
+    {
       "id": "c11-sputnik",
       "beat": "satellite",
       "look": "orbit",

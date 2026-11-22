@@ -48,14 +48,14 @@ def picks():
     return read('picks.json') if os.path.exists(PICKS) else {}
 
 
-def generate(workflow, prompt, seed, prefix):
+def graph_for(workflow, prompt, seed, prefix):
     graph = json.loads(json.dumps(workflow))
     graph['474']['inputs']['prompt'] = prompt
     graph['458']['inputs']['seed'] = seed
     graph['456']['inputs']['width'], graph['456']['inputs']['height'] = SIZE
     graph['468']['inputs']['switch'] = True  # the empty latent at our size, not the encoder's
     graph['461']['inputs']['filename_prefix'] = prefix
-    return comfy.run(graph, timeout=900)[0][1]
+    return graph
 
 
 def write_review(manifest, per_sheet=4, scale=0.5):
@@ -103,7 +103,7 @@ def main():
 
     if not args.review_only:
         workflow = comfy.load(WORKFLOW)
-        freed = False
+        jobs = []
         for shot in shots:
             if (args.only and shot['id'] not in args.only) or (args.beat and shot['beat'] != args.beat):
                 continue
@@ -120,16 +120,19 @@ def main():
                     path = os.path.join(HERE, file)
                     if os.path.exists(path) and not args.force:
                         continue
-                    if not freed:  # drop the H3 models a clip run left in RAM
-                        comfy.free()
-                        freed = True
-                    started = time.time()
-                    data = generate(workflow, prompt, seed, f'lw_trailer_key_{shot["id"]}_{frame}_{variant}')
-                    with open(path, 'wb') as out:
-                        out.write(data)
-                    print(f'{file}  {time.time() - started:.0f} s', flush=True)
-                    with open(MANIFEST, 'w', encoding='utf-8') as out:
-                        json.dump(manifest, out, indent=1)
+                    jobs.append((file, path, graph_for(workflow, prompt, seed,
+                                                       f'lw_trailer_key_{shot["id"]}_{frame}_{variant}')))
+        # All stills go in at once, at the front of ComfyUI's queue: they take seconds each, so they run ahead of
+        # any clip batch (one model swap, not one per still). The H3 models a clip run left in RAM are dropped first.
+        if jobs:
+            comfy.free()
+            started = time.time()
+            ids = [(file, path, comfy.queue(graph, front=True)) for file, path, graph in jobs]
+            for file, path, prompt_id in ids:
+                data = comfy.wait(prompt_id, timeout=1800)[0][1]
+                with open(path, 'wb') as out:
+                    out.write(data)
+                print(f'{file}  {time.time() - started:.0f} s', flush=True)
         manifest.sort(key=lambda e: (e['key'], e['variant']))
         with open(MANIFEST, 'w', encoding='utf-8') as out:
             json.dump(manifest, out, indent=1)
