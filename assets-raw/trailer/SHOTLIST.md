@@ -35,7 +35,7 @@ Earthrise, a hard stop for the N1, and the long final build to the boot.
 | 10 | **The toast, over the speaker's shoulder.** Glasses raised reluctantly, tight smiles, sparse applause. | 4.0 | (Tested.) | "All the Americans could do was raise a glass ..." |
 | 11 | **Sputnik in orbit.** It glides over the Earth. | 4.0 | Sound: our synthesized beep, from here into 12. (Tested.) | "... to the first satellite in orbit: Sputnik." |
 | 12 | **An American rooftop at dusk.** Neighbours look up; a man holds a radio up to the sky, the beep coming out of it; a small point of light crosses the sky. | 6.0 | What people saw was the rocket's core stage, brighter than the satellite: the point of light is right either way. | "That night, the whole world looked up, and listened." |
-| 13 | **Establishing shot, Calendar.** A tear-off calendar with pages rapidly torn off faster and faster and finally settling on 6 Dec. 1957 | 4.0 | C: *6 December 1957*. | "America had to answer, and fast. Two months later ..." |
+| 13 | **Establishing shot, Calendar.** A tear-off calendar with pages rapidly torn off faster and faster and finally settling on 6 Dec. 1957 | 4.5 | C: *6 December 1957*. | "America had to answer, and fast. Two months later ..." |
 | 14 | **Cape Canaveral, the Vanguard pad.** The slim rocket lifts a few feet, stalls, sinks back and bursts into a fireball. | 4.0 | C: *Cape Canaveral, Vanguard launch attempt*.  | "... its own satellite stood ready, on live television." |
 | 15 | **The scrub beside the pad.** Smoke drifting; in the bushes the little satellite lies on its side, still beeping. | 4.0 | True: it was thrown clear and kept transmitting. Sound: the beep, alone. | "The papers called it 'Flopnik'." |
 
