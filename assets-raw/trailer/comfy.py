@@ -72,6 +72,14 @@ def free(host=HOST):
     urllib.request.urlopen(request).read()
 
 
+def delete(prompt_ids, host=HOST):
+    """Takes prompts that have not started out of ComfyUI's queue (a running one is not touched)."""
+    if prompt_ids:
+        request = urllib.request.Request(host + '/queue', data=json.dumps({'delete': list(prompt_ids)}).encode(),
+                                         headers={'Content-Type': 'application/json'})
+        urllib.request.urlopen(request).read()
+
+
 def state(prompt_id, host=HOST):
     """'done', 'error', 'running', 'queued' or 'lost' (ComfyUI no longer knows it: restarted, or history cleared)."""
     history = json.load(urllib.request.urlopen(host + '/history/' + prompt_id))

@@ -13,9 +13,11 @@ Usage (ComfyUI running locally):
     python make_clips.py --only t03-sputnik-orbit --variants 4
     python make_clips.py --profile final --variants 1 --queue   # the overnight run: queue it all, exit at once
     python make_clips.py --collect                       # in the morning: fetch what ComfyUI finished
+    python make_clips.py --only c14-vanguard-pad --skip   # first take is good: drop its second before it starts
     python make_clips.py --review-only
 
-Renders are queued in ComfyUI first and listed in clips/pending.json; ComfyUI works through its queue on its own.
+Renders are queued in ComfyUI in rounds (every shot's first take, then every second; --takes N caps the new
+takes per shot) and listed in clips/pending.json; ComfyUI works through its queue on its own.
 Without --queue the script then waits and collects them; if it is stopped, --collect (or a rerun) picks up
 where it left off, and a render ComfyUI lost (a restart) is queued again by a rerun. Before queuing, ComfyUI is
 asked to unload its models (comfy.free), so nothing left over from keyframes or another workflow holds RAM.
@@ -188,6 +190,9 @@ def main():
     parser.add_argument('--beat')
     parser.add_argument('--queue', action='store_true', help='queue the renders in ComfyUI and exit at once')
     parser.add_argument('--collect', action='store_true', help='fetch finished renders (pending.json), queue nothing')
+    parser.add_argument('--takes', type=int, help='queue at most this many new takes per shot')
+    parser.add_argument('--skip', action='store_true',
+                        help='take the chosen shots\' takes that have not started out of the queue, queue nothing')
     args = parser.parse_args()
 
     shots = read('shots.json')['shots']
@@ -212,6 +217,19 @@ def main():
     def chosen_shot(shot):
         return (not args.only or shot['id'] in args.only) and (not args.beat or shot['beat'] == args.beat)
 
+    # 0. --skip: withdraw the chosen shots' takes still waiting in ComfyUI's queue (a running one finishes).
+    if args.skip:
+        withdrawn = [file for file, entry in pending.items()
+                     if chosen_shot({'id': entry.get('shot'), 'beat': next(
+                         (s['beat'] for s in shots if s['id'] == entry.get('shot')), None)})
+                     and comfy.state(entry['id']) == 'queued']
+        comfy.delete([pending[file]['id'] for file in withdrawn])
+        for file in withdrawn:
+            del pending[file]
+            print(f'{file}  skipped')
+        save_pending()
+        return
+
     # 1. Queue what is missing: every take of the chosen shots without a file and not already in ComfyUI.
     jobs = []
     for shot in shots:
@@ -229,13 +247,17 @@ def main():
                 continue
             if file in pending and comfy.state(pending[file]['id']) != 'lost':
                 continue
-            jobs.append((shot, variant, file))
+            new = sum(1 for job in jobs if job[0]['id'] == shot['id'])
+            if args.takes is not None and new >= args.takes:
+                break
+            jobs.append((shot, variant, file, new))
     if jobs:
-        # Drop whatever ComfyUI still holds (Qwen Image after keyframes, the other H3 model), then queue the
-        # i2v takes before the r2v ones, so the batch switches models once.
+        # Drop whatever ComfyUI still holds (Qwen Image after keyframes, the other H3 model), then queue in rounds:
+        # every shot's first new take, then every second one, so a shot whose first take is good can be skipped
+        # (--skip) before its second starts. Within a round i2v goes before r2v: at most one model switch a round.
         comfy.free()
-        jobs.sort(key=lambda job: job[0]['mode'])
-    for shot, variant, file in jobs:
+        jobs.sort(key=lambda job: (job[3], job[0]['mode']))
+    for shot, variant, file, _ in jobs:
         build = i2v_graph if shot['mode'] == 'i2v' else r2v_graph
         seed = seed_for(shot['id'], args.profile, variant)
         graph, prompt = build(shot, args.profile, seed, f'video/lw_trailer_{args.profile}_{shot["id"]}_{variant}',
