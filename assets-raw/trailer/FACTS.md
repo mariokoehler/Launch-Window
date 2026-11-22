@@ -24,11 +24,11 @@ final.
 - **vanguard-tv3.** On 6 December 1957 Vanguard TV3 rose a few feet at Cape Canaveral, lost thrust, fell
   back and exploded on its pad, on live television. Its satellite was thrown clear, landed in bushes near
   the pad and kept transmitting; it is in the National Air and Space Museum.
+  [Astronomy.com](https://www.astronomy.com/today-in-the-history-of-astronomy/dec-6-1957-vanguard-tv3-explodes/);
+  [Smithsonian, Satellite, Vanguard TV 3](https://si.edu/es/object/satellite-vanguard-tv-3:nasm_A19761857000).
 - **flopnik-1957.** After Vanguard TV3's failure the press mocked it with Sputnik puns: "Flopnik", "Kaputnik",
   "Stayputnik", "Dudnik". NASA, [60 years ago, Vanguard fails to reach orbit](https://www.nasa.gov/feature/60-years-ago-vanguard-fails-to-reach-orbit);
   [Science News, Sputnik + 50](https://www.sciencenews.org/article/sputnik-50).
-  [Astronomy.com](https://www.astronomy.com/today-in-the-history-of-astronomy/dec-6-1957-vanguard-tv3-explodes/);
-  [Smithsonian, Satellite, Vanguard TV 3](https://si.edu/es/object/satellite-vanguard-tv-3:nasm_A19761857000).
 - **n1-1969.** On 3 July 1969 (Moscow time; already the 4th at Baikonur) the second N1 rose about
   200 metres from Site 110, fell back onto its pad and exploded, destroying the launch complex; 13 days
   before Apollo 11. US intelligence detected it; it was kept secret publicly.
