@@ -622,6 +622,183 @@
       "facts": [
         "kennedy-rice-1962"
       ]
+    },
+    {
+      "id": "c23a-tereshkova",
+      "beat": "middle",
+      "look": "ussr-1961",
+      "duration": 5.0,
+      "trim": [
+        0.3,
+        4.8
+      ],
+      "mode": "i2v",
+      "keyframes": {
+        "first": "The open Kazakh steppe on a bright June day in 1963, flat grassland under a huge pale blue sky with a few white clouds. In the foreground on the right, seen from behind, a young woman cosmonaut stands in a bulky orange spacesuit; she has taken off her helmet and holds the white spherical helmet with the red letters \"СССР\" by her side in her right hand; her short dark wavy hair stirs in the wind. Beside her on the grass lies a large crumpled orange and white parachute. Ahead of her in the middle distance, a few villagers in simple work clothes and headscarves hurry across the grass toward her, small figures; one man raises his cap in greeting. Medium-wide shot from behind her shoulder, 50mm lens."
+      },
+      "video": "Live-action, cinematic, 1963. On the steppe shown in <Picture 1>, the woman in the orange spacesuit stays with her back to the camera and raises her free left hand high to wave to the villagers ahead, the white helmet still hanging from her right hand. The wind lifts her dark hair and ripples the parachute lying on the grass. The villagers hurry closer across the field, one of them waving his arm. The camera pushes in with small amplitude at slow speed toward her.",
+      "soundscape": "Wind across open grassland, the parachute fabric flapping, distant faint shouts of greeting. Nobody speaks close by.",
+      "clipGainDb": -12,
+      "facts": [
+        "vostok-6"
+      ],
+      "caption": {
+        "text": "Vostok 6, 16 June 1963",
+        "at": 0.4,
+        "for": 3.0
+      }
+    },
+    {
+      "id": "c23-voskhod-spacewalk",
+      "beat": "middle",
+      "look": "orbit",
+      "duration": 5.0,
+      "trim": [
+        0.4,
+        4.4
+      ],
+      "mode": "r2v",
+      "turbo": false,
+      "references": [
+        "references/voskhod-spacewalk.png"
+      ],
+      "subjects": [
+        "<Subject 1>: the cosmonaut shown in <Picture 1>, in a white spacesuit with a white helmet, joined by a long thin tether to the spacecraft shown in <Picture 1>, a metal sphere with a long cylindrical airlock tube sticking out of its side."
+      ],
+      "summary": "The target video shows <Subject 1> floating outside the spacecraft high above the Earth.",
+      "retention": [
+        "<Picture 1> ([Shot 1]): partially_preserved - the white spacesuit, the tether and the spacecraft's sphere and airlock tube are kept exactly. The framing, the view of the Earth and the light are new."
+      ],
+      "video": "Live-action, cinematic, photorealistic, as if filmed by a camera in Earth orbit: pure black space with no stars, hard unfiltered sunlight. <Subject 1> drifts slowly away from the end of the airlock tube, arms spread, the thin tether curving gently behind him back to the spacecraft. A single Earth fills the lower part of the frame, huge and blue with white clouds, its curved horizon steady. He turns slowly in the sunlight. The camera drifts slowly around him.",
+      "soundscape": "Slow, steady breathing inside a helmet and a soft electronic hum.",
+      "clipGainDb": -12,
+      "facts": [
+        "voskhod-2"
+      ],
+      "caption": {
+        "text": "Voskhod 2, 18 March 1965",
+        "at": 0.4,
+        "for": 3.0
+      }
+    },
+    {
+      "id": "c24-gemini-docking",
+      "beat": "middle",
+      "look": "orbit",
+      "duration": 5.0,
+      "trim": [
+        0.4,
+        4.4
+      ],
+      "mode": "r2v",
+      "turbo": false,
+      "references": [
+        "references/gemini-docking.png"
+      ],
+      "subjects": [
+        "<Subject 1>: the small dark cone-shaped spacecraft shown on the right of <Picture 1>.",
+        "<Subject 2>: the long silver cylindrical target vehicle shown on the left of <Picture 1>, with a round docking collar on its end."
+      ],
+      "summary": "The target video shows <Subject 1> docking with <Subject 2> in orbit high above the Earth.",
+      "retention": [
+        "<Picture 1> ([Shot 1]): partially_preserved - both spacecraft are kept exactly: the dark cone of <Subject 1> and the long silver cylinder and docking collar of <Subject 2>. In the first moment they are a few metres apart; the framing, the view of the Earth and the light are new."
+      ],
+      "video": "Live-action, cinematic, photorealistic, as if filmed by a camera in Earth orbit: pure black space with no stars, hard unfiltered sunlight. <Subject 1> approaches <Subject 2> slowly and steadily, nose first, from a few metres away, and its narrow nose slides gently into the docking collar on the end of <Subject 2> until the two spacecraft touch and lock together. A single Earth fills the lower part of the frame, blue and white, its curved horizon steady. The camera holds a steady view from the side.",
+      "soundscape": "A soft electronic hum, then a single dull metallic clunk as the two spacecraft lock together.",
+      "clipGainDb": -12,
+      "facts": [
+        "gemini-8"
+      ],
+      "caption": {
+        "text": "Gemini 8, 16 March 1966",
+        "at": 0.4,
+        "for": 3.0
+      }
+    },
+    {
+      "id": "c25-test-stand",
+      "beat": "middle",
+      "look": "us-1961",
+      "duration": 5.0,
+      "trim": [
+        0.4,
+        3.9
+      ],
+      "mode": "i2v",
+      "keyframes": {
+        "first": "An American rocket engine test stand at night in the mid-1960s: a towering steel test stand lit by floodlights, with a huge rocket engine bell mounted at its base firing straight down into a concrete flame trench. A blinding white column of flame roars out of the engine and billows out sideways in enormous clouds of white smoke and steam lit orange from within. In the foreground, a chain-link fence and a low concrete bunker. Wide shot from a distance, 85mm lens, the flame the brightest thing in the frame."
+      },
+      "video": "Live-action, cinematic, 1965. At the test stand shown in <Picture 1>, the huge engine bell held in the stand keeps firing straight down: the blinding flame hits the flame deflector at the foot of the stand and blasts out sideways in a long horizontal stream of fire and smoke across the ground, and the clouds of smoke and steam boil and billow outward faster and faster, lit orange from within. The stand stays fixed in place. The ground and the camera shake. The camera holds a static shot.",
+      "soundscape": "The deafening, crackling roar of a giant rocket engine at full thrust, a deep rumble that shakes everything. Nobody speaks.",
+      "clipGainDb": -8,
+      "facts": [
+        "f1-tests"
+      ]
+    },
+    {
+      "id": "c26-mission-control",
+      "beat": "middle",
+      "look": "us-1961",
+      "duration": 6.0,
+      "trim": [
+        0.3,
+        5.5
+      ],
+      "mode": "i2v",
+      "keyframes": {
+        "first": "An American mission control room in 1966, calm and quiet: rows of grey consoles with small screens and banks of switches, a soft haze of cigarette smoke under the ceiling lights, a big clock on the wall. In the foreground, two controllers in white short-sleeved shirts and thin dark ties at a console, seen from the side: on the left, one leans back in his chair with his hands clasped behind his head; on the right, the other holds a cigarette to his lips and a lit match in his other hand. On the console in front of them, a single round indicator lamp glows steady green. The rest of the room behind them is a soft blur of consoles and shapes. Medium shot, 85mm lens wide open."
+      },
+      "video": "Live-action, cinematic, 1966. In the control room shown in <Picture 1>, all is calm: the man leaning back keeps his hands behind his head; the other lights his cigarette and shakes out the match. The green lamp on the console glows steadily. Then, near the end, the lamp suddenly turns bright red, and the man leaning back sits bolt upright and stares at it. The camera holds a static shot.",
+      "soundscape": "A calm, quiet control room: the hum of equipment, a clock ticking, a match struck; then a single sharp electronic warning tone. Nobody speaks.",
+      "clipGainDb": -10,
+      "facts": [
+        "losses-1967"
+      ]
+    },
+    {
+      "id": "c27a-pad-us",
+      "beat": "middle",
+      "look": "us-1961",
+      "duration": 5.0,
+      "trim": [
+        0.5,
+        3.0
+      ],
+      "mode": "i2v",
+      "keyframes": {
+        "first": "Arlington National Cemetery, Virginia, on a grey winter afternoon in 1967: in the foreground, a round funeral wreath of white carnations and green leaves on a low stand before a plain white marble headstone seen from the side, its face turned away from the camera. Beyond it, rows and rows of identical white headstones run in straight lines across a gently sloping lawn of pale winter grass, softly out of focus, with bare trees on the hill. Soft grey light, very quiet and still, a moment of mourning. 85mm lens wide open, shallow depth of field, the wreath in sharp focus."
+      },
+      "video": "Live-action, cinematic, 1967. At the wreath shown in <Picture 1>, nothing moves but a light cold breeze stirring the petals and the bare branches far behind, as the grey light slowly dims. The camera holds a static shot.",
+      "soundscape": "Near silence: a soft cold wind, a few distant birds. Nobody speaks.",
+      "clipGainDb": -14,
+      "facts": [
+        "losses-1967"
+      ],
+      "caption": {
+        "text": "1967",
+        "at": 0.3,
+        "for": 4.2
+      }
+    },
+    {
+      "id": "c27b-pad-ussr",
+      "beat": "middle",
+      "look": "ussr-1961",
+      "duration": 5.0,
+      "trim": [
+        0.5,
+        3.0
+      ],
+      "mode": "i2v",
+      "keyframes": {
+        "first": "The foot of the Kremlin Wall on Red Square in Moscow, on an overcast spring day in 1967: in the foreground, a large round funeral wreath of red carnations and dark green fir branches with a red ribbon leans against the base of the tall dark red brick wall, filling the lower half of the frame. Small dark granite memorial plaques set into the wall above it are softly out of focus. Grey cobblestones in front. Soft grey light, very quiet and still, a moment of mourning. 85mm lens wide open, shallow depth of field, the wreath in sharp focus."
+      },
+      "video": "Live-action, cinematic, 1967. At the wreath shown in <Picture 1>, nothing moves but a light breeze stirring the red ribbon and the carnations against the old red wall. The camera holds a static shot.",
+      "soundscape": "Near silence: a soft wind, a faraway city murmur. Nobody speaks.",
+      "clipGainDb": -14,
+      "facts": [
+        "losses-1967"
+      ]
     }
   ],
   "tests": [

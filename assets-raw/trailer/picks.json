@@ -63,5 +63,11 @@
   "c22b-rice-stands/final": "clips/final/c22b-rice-stands_1.mp4",
   "c20-freedom-7/final": "clips/final/c20-freedom-7_1.mp4",
   "c16-calendar-1961/final": "clips/final/c16-calendar-1961_2.mp4",
-  "c17-vostok-helmet/final": "clips/final/c17-vostok-helmet_4.mp4"
+  "c17-vostok-helmet/final": "clips/final/c17-vostok-helmet_4.mp4",
+  "c23a-tereshkova/first": "keyframes/c23a-tereshkova_first_2.png",
+  "c25-test-stand/first": "keyframes/c25-test-stand_first_1.png",
+  "c26-mission-control/first": "keyframes/c26-mission-control_first_1.png",
+  "c23-voskhod-spacewalk/final": "clips/final/c23-voskhod-spacewalk_1.mp4",
+  "c27a-pad-us/first": "keyframes/c27a-pad-us_first_3.png",
+  "c27b-pad-ussr/first": "keyframes/c27b-pad-ussr_first_1.png"
 }

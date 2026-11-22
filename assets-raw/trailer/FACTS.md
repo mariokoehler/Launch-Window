@@ -53,14 +53,28 @@ final.
   [NTRS, NASA film of the speech](https://ntrs.nasa.gov/citations/19940010921).
 - **vostok-6.** Valentina Tereshkova launched on Vostok 6 on 16 June 1963, the first woman in space; she flew nearly
   three days. [ESA, First woman in space](https://esa.int/About_Us/ESA_history/50_years_of_humans_in_space/First_woman_in_space_Valentina).
+- **voskhod-2.** Alexei Leonov made the first spacewalk on 18 March 1965 from Voskhod 2, through an inflatable
+  airlock on a 7 m tether, about 12 minutes outside. His suit stiffened and swelled, and he let air out of it to get
+  back in (the suit's maker disputes "ballooned": say "stiffened"). White outer overalls; the helmet's markings are not
+  confirmed by a source. [Zvezda, The First Spacewalk](https://artsandculture.google.com/exhibit/the-first-spacewalk/owJyBQMvbQy2JQ);
+  [RussianSpaceWeb, Voskhod 2](https://www.russianspaceweb.com/voskhod2.html).
+- **gemini-8.** Gemini VIII (Armstrong, Scott) made the first docking of two spacecraft in orbit on 16 March 1966, its
+  nose into the docking collar of an uncrewed Agena; a stuck thruster then forced an emergency landing.
+  [NASA, Gemini VIII, the first docking in space](https://www.nasa.gov/history/55-years-ago-gemini-viii-the-first-docking-in-space/);
+  [NASM, Target Adapter, Agena](https://airandspace.si.edu/collection-objects/target-adapter-agena/nasm_A19690080000).
+- **losses-1967.** Apollo 1 burned on 27 January 1967 in a preflight test on the pad at Launch Complex 34, killing
+  Grissom, White and Chaffee; on 24 April 1967 Vladimir Komarov died when Soyuz 1's parachutes failed. "Both sides lost
+  a crew" is fair (a crew can be one). Grissom and Chaffee are buried at Arlington National Cemetery, White at West
+  Point; Komarov's ashes are in the Kremlin Wall (to confirm with a source). The lamp in shot 26 and the wreaths in 27 are symbolic.
+  [NASA, Apollo 1](https://www.nasa.gov/mission/apollo-1/); [RussianSpaceWeb, Soyuz-1](https://www.russianspaceweb.com/soyuz1.html).
+- **f1-tests.** The F-1 was test-fired at Edwards AFB from 1962 and at Marshall from 1965. Shot 25's night firing is
+  our choice, not a claim (no source gives a time of day).
+  [NASA, first full-thrust F-1 test, 26 May 1962](https://www.nasa.gov/image-article/this-week-nasa-history-1st-full-thrust-long-duration-f-1-engine-test-may-26-1962).
 
 ## To check
 
 - **sputnik-1** (4 October 1957; a polished sphere of 58 cm, four antennas; the beep; the core stage was
   what people saw with the naked eye).
-- **voskhod-2** (18 March 1965; the first spacewalk; the suit ballooned, pressure let out to re-enter).
-- **gemini-8** (16 March 1966; the first docking, with an Agena).
-- **losses-1967** (Apollo 1 fire, 27 January 1967; Soyuz 1, 24 April 1967).
 - **apollo-8** (launch 21 December 1968; Earthrise photographed 24 December).
 - **apollo-11** (launch 16 July 1969; landing 20 July; the step 20 July US time, 21 July UTC; "60 seconds",
   "The Eagle has landed", "That's one small step for [a] man"; he stepped off the footpad; the NASA
