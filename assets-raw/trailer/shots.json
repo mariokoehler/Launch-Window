@@ -404,8 +404,8 @@
       "look": "us-1957",
       "duration": 5.0,
       "trim": [
-        0.3,
-        4.3
+        1.0,
+        5.0
       ],
       "mode": "i2v",
       "keyframes": {
