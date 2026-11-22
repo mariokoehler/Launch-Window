@@ -199,6 +199,9 @@ The film has about 20–25 shots. With 3–4 variants per shot that is 80–100 
   clearly better (user), though the background stayed in focus despite "shallow depth of field" and its faces
   still turn odd at times. Next try: a longer lens (85mm, wide open) and the background people described as
   blurred shapes.
+- **The video prompt describes the picked keyframe, not the keyframe prompt:** the model rarely draws exactly
+  what was asked (two Soviets became one; an empty-handed man got a glass). After picking a first frame, rewrite
+  the video prompt for who is actually in it and what they hold (user).
 - **A light lit in the first frame stays lit:** a flashbulb firing in the keyframe burned for 3 s in the clip.
   Keyframes show flashes dark; the video prompt makes each "a single blink of white light that is gone in a
   split second" (measured: 2–4 frames).
