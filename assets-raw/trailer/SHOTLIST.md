@@ -30,12 +30,14 @@ Earthrise, a hard stop for the N1, and the long final build to the boot.
 
 | # | Shot | Len | Notes |
 |---|---|---|---|
-| 06 | **Washington, the Soviet embassy reception.** A reporter whispers into a scientist's ear; his smile fades. | 3.0 | C: *Washington, 4 October 1957*. (Tested.) |
-| 07 | **The toast, over the speaker's shoulder.** Glasses raised reluctantly, tight smiles, sparse applause. | 2.5 | (Tested.) |
-| 08 | **Sputnik in orbit.** It glides over the Earth. | 3.0 | Sound: our synthesized beep, from here into 09. (Tested.) |
-| 09 | **An American rooftop at dusk.** Neighbours look up; a man holds a radio up to the sky, the beep coming out of it; a small point of light crosses the sky. | 2.5 | What people saw was the rocket's core stage, brighter than the satellite: the point of light is right either way. |
-| 10 | **Cape Canaveral, the Vanguard pad.** The slim rocket lifts a few feet, stalls, sinks back and bursts into a fireball. | 3.0 | C: *Cape Canaveral, 6 December 1957*. Mission art as reference for the rocket. |
-| 11 | **The scrub beside the pad.** Smoke drifting; in the bushes the little satellite lies on its side, still beeping. *(optional)* | 2.5 | True: it was thrown clear and kept transmitting. Sound: the beep, alone. |
+| 08 | **Establishing shot, Calendar.** A tear off calendar with pages rapidly torn off faster and faster and finally settling on 4 Oct. 1957 | 3.0 | C: *2 years later...*. |
+| 09 | **Washington, the Soviet embassy reception.** A reporter whispers into an american scientists ear; his smile fades. | 3.0 | C: *Washington, Soviet embassy reception*. |
+| 10 | **The toast, over the speaker's shoulder.** Glasses raised reluctantly, tight smiles, sparse applause. | 2.5 | (Tested.) |
+| 11 | **Sputnik in orbit.** It glides over the Earth. | 3.0 | Sound: our synthesized beep, from here into 09. (Tested.) |
+| 12 | **An American rooftop at dusk.** Neighbours look up; a man holds a radio up to the sky, the beep coming out of it; a small point of light crosses the sky. | 2.5 | What people saw was the rocket's core stage, brighter than the satellite: the point of light is right either way. |
+| 13 | **Establishing shot, Calendar.** A tear off calendar with pages rapidly torn off faster and faster and finally settling on 6 Dec. 1957 | 3.0 | C: *6 December 1957*. |
+| 14 | **Cape Canaveral, the Vanguard pad.** The slim rocket lifts a few feet, stalls, sinks back and bursts into a fireball. | 3.0 | C: *Cape Canaveral, Vanguard launch attempt*.  |
+| 15 | **The scrub beside the pad.** Smoke drifting; in the bushes the little satellite lies on its side, still beeping. | 2.5 | True: it was thrown clear and kept transmitting. Sound: the beep, alone. |
 
 ## 3. The first humans (1961–62), about 15 s
 
