@@ -114,7 +114,9 @@ def main():
                 for variant in range(1, args.variants + 1):
                     key = f'{shot["id"]}/{frame}'
                     file = f'keyframes/{shot["id"]}_{frame}_{variant}.png'
-                    seed = seed_for(shot['id'], frame, variant)
+                    # "sameSeed": the last frame takes the first's seed, so the room and framing match and only the
+                    # page changes (a first and last frame of different rooms make H3 pan between them).
+                    seed = seed_for(shot['id'], 'first' if shot.get('sameSeed') else frame, variant)
                     manifest = [e for e in manifest if e['file'] != file]
                     manifest.append({'key': key, 'variant': variant, 'file': file, 'seed': seed, 'prompt': prompt})
                     path = os.path.join(HERE, file)

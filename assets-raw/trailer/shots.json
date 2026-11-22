@@ -442,7 +442,8 @@
         "text": "Wednesday, 12 April 1961",
         "at": 3.2,
         "for": 1.5
-      }
+      },
+      "sameSeed": true
     },
     {
       "id": "c17-vostok-helmet",

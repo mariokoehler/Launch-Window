@@ -202,6 +202,7 @@ The film has about 20–25 shots. With 3–4 variants per shot that is 80–100 
 - **The video prompt describes the picked keyframe, not the keyframe prompt:** the model rarely draws exactly
   what was asked (two Soviets became one; an empty-handed man got a glass). After picking a first frame, rewrite
   the video prompt for who is actually in it and what they hold (user).
+- **A first and a last frame must show the same room from the same place** (c16, 2026-11-22): a Soviet calendar's first and last keyframe with the window on opposite sides made H3 pan across the room. A shot's `"sameSeed"` renders the last frame with the first's seed, so the two match and only what the prompts change (the page) differs.
 - **A light lit in the first frame stays lit:** a flashbulb firing in the keyframe burned for 3 s in the clip.
   Keyframes show flashes dark; the video prompt makes each "a single blink of white light that is gone in a
   split second" (measured: 2–4 frames).
