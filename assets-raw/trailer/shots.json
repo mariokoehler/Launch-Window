@@ -524,8 +524,8 @@
       "look": "us-1961",
       "duration": 5.0,
       "trim": [
-        0.3,
-        4.8
+        0.2,
+        5.0
       ],
       "mode": "i2v",
       "keyframes": {
@@ -550,8 +550,8 @@
       "look": "orbit",
       "duration": 5.0,
       "trim": [
-        0.4,
-        4.4
+        0.3,
+        4.9
       ],
       "mode": "r2v",
       "turbo": false,
@@ -609,7 +609,7 @@
       "duration": 7.0,
       "trim": [
         0.3,
-        6.3
+        6.6
       ],
       "mode": "i2v",
       "keyframes": {

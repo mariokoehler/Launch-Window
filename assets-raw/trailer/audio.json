@@ -122,6 +122,65 @@
       "under": "c15-vanguard-scrub",
       "offset": 0.6,
       "track": "A3"
+    },
+    {
+      "id": "n-spring",
+      "file": "audio/in_the_spring_of_1961_moscow.ogg",
+      "under": "c16-calendar-1961",
+      "offset": 0.6,
+      "track": "A3"
+    },
+    {
+      "id": "n-gagarin",
+      "file": "audio/yuri_gagarin_flew_into_space.ogg",
+      "under": "c17-vostok-helmet",
+      "offset": 0.6,
+      "track": "A3"
+    },
+    {
+      "id": "n-once",
+      "file": "audio/once_around_the_world_in_108_minutes.ogg",
+      "under": "c18-vostok-orbit",
+      "offset": 0.3,
+      "track": "A3"
+    },
+    {
+      "id": "n-meanwhile",
+      "file": "audio/meanwhile_america_was_still_on_the_ground.ogg",
+      "under": "c19-hangar-newspaper",
+      "offset": 0.8,
+      "track": "A3"
+    },
+    {
+      "id": "n-shepard",
+      "file": "audio/three_weeks_later_alan_shephard.ogg",
+      "under": "c20-freedom-7",
+      "offset": 0.1,
+      "track": "A3",
+      "_comment": "\"up and down\" ends 4.5 s in, the shot 4.8 s."
+    },
+    {
+      "id": "n-glenn",
+      "file": "audio/and_in_1962_john_glenn.ogg",
+      "under": "c21-friendship-7",
+      "offset": 0.2,
+      "track": "A3"
+    },
+    {
+      "id": "n-september",
+      "file": "audio/that_september_the_president_told_the_world.ogg",
+      "under": "c22a-rice-lectern",
+      "offset": 0.4,
+      "track": "A3"
+    },
+    {
+      "id": "kennedy-rice",
+      "file": "../../assets/audio/moon-speech.mp3",
+      "under": "c22a-rice-lectern",
+      "offset": 4.2,
+      "gainDb": -6,
+      "track": "A3",
+      "_comment": "Kennedy at Rice Stadium, 12 September 1962 (NASA, public domain; the game's own copy, credited in assets/CREDITS.md). 8.6 s: it runs on over 22b."
     }
   ]
 }

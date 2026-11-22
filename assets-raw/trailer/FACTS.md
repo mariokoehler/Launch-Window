@@ -35,17 +35,29 @@ final.
   [The Space Review](https://thespacereview.com/article/3143/1);
   [Smithsonian Air & Space, Why the Soviets lost](https://www.smithsonianmag.com/air-space-magazine/apollo-why-the-soviets-lost-180972229/).
 
+- **vostok-1.** Yuri Gagarin flew Vostok 1 on Wednesday, 12 April 1961: one full orbit (apogee about 327 km), 108
+  minutes from launch to landing (106 also circulates). He wore an orange suit and a white helmet with "СССР" in red,
+  painted on the morning of launch (who painted it is disputed: name no one). [NASM, Gagarin vs. Shepard](https://airandspace.si.edu/explore/stories/gagarin-vs-shepard);
+  [RussianSpaceWeb, Vostok 1 launch](https://russianspaceweb.com/vostok1_launch.html).
+- **freedom-7.** Alan Shepard flew Freedom 7 (Mercury-Redstone 3) on 5 May 1961 from Launch Complex 5 at Cape
+  Canaveral, 23 days after Gagarin: suborbital, about 15 minutes. [NASA, Mercury-Redstone 3](https://nasa.gov/mission/mercury-redstone-3-freedom-7/);
+  [NASA History, Shepard becomes first American in space](https://www.nasa.gov/history/60-years-ago-alan-shepard-becomes-the-first-american-in-space/).
+- **friendship-7.** John Glenn flew Friendship 7 (Mercury-Atlas 6) on 20 February 1962: three orbits on an Atlas in
+  4 h 55 min; over the Pacific at sunrise he saw the "fireflies" (ice particles). [NASA History, Glenn orbits Earth](https://www.nasa.gov/history/60-years-ago-john-glenn-the-first-american-to-orbit-the-earth-aboard-friendship-7/);
+  [NASA Earth Observatory, What did John Glenn see?](https://science.nasa.gov/earth/earth-observatory/what-did-john-glenn-see-77201/).
+- **kennedy-rice-1962.** Kennedy spoke at Rice Stadium, Houston, on 12 September 1962, before about 40,000 people on a
+  hot day (he joked about the heat). He had set the Moon goal before Congress on 25 May 1961; here he reaffirmed it,
+  saying "We choose to go to the moon" twice in a row. NASA's recording is a US government work, public use permitted
+  (use NASA's or the JFK Library's copy, not a broadcaster's). [NASA, Kennedy reaffirms Moon goal at Rice](https://www.nasa.gov/feature/60-years-ago-president-kennedy-reaffirms-moon-landing-goal-in-rice-university-speech);
+  [American Presidency Project, Address at Rice University](https://www.presidency.ucsb.edu/documents/address-rice-university-houston-the-nations-space-effort);
+  [NTRS, NASA film of the speech](https://ntrs.nasa.gov/citations/19940010921).
+- **vostok-6.** Valentina Tereshkova launched on Vostok 6 on 16 June 1963, the first woman in space; she flew nearly
+  three days. [ESA, First woman in space](https://esa.int/About_Us/ESA_history/50_years_of_humans_in_space/First_woman_in_space_Valentina).
+
 ## To check
 
 - **sputnik-1** (4 October 1957; a polished sphere of 58 cm, four antennas; the beep; the core stage was
   what people saw with the naked eye).
-- **vostok-1** (12 April 1961; one orbit, 108 minutes; "СССР" on the helmet).
-- **freedom-7** (5 May 1961; suborbital, about 15 minutes; Redstone).
-- **friendship-7** (20 February 1962; three orbits; Atlas).
-- **kennedy-rice-1962** ("We choose to go to the Moon", Rice Stadium, Houston, 12 September 1962, said twice; a
-  hot afternoon and a crowd of about 35,000; the goal itself set before Congress on 25 May 1961; the recording's
-  public-domain status).
-- **vostok-6** (16 June 1963; Valentina Tereshkova, the first woman in space).
 - **voskhod-2** (18 March 1965; the first spacewalk; the suit ballooned, pressure let out to re-enter).
 - **gemini-8** (16 March 1966; the first docking, with an Agena).
 - **losses-1967** (Apollo 1 fire, 27 January 1967; Soyuz 1, 24 April 1967).
