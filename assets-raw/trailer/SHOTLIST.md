@@ -55,17 +55,17 @@ What beats 1 and 2 taught us, applied to 3–7 (details in PLAN.md §7):
 | 14 | **Cape Canaveral, the Vanguard pad.** The slim rocket lifts a few feet, stalls, sinks back and bursts into a fireball. | 4.5 | C: *Cape Canaveral, Vanguard launch attempt*.  | "... its own satellite stood ready, on live television." |
 | 15 | **The scrub beside the pad.** Smoke drifting; in the bushes the little satellite lies on its side, still beeping. | 4.0 | True: it was thrown clear and kept transmitting. Sound: the beep, alone. | "The papers called it 'Flopnik'." |
 
-## 3. The first humans (1961–62), about 25 s
+## 3. The first humans (1961–62), about 31 s
 
 | # | Shot | Len | Notes | Narration |
 |---|---|---|---|---|
 | 16 | **Establishing shot, a Soviet calendar.** The same tear-off device on a Soviet office wall, Cyrillic print, pages tearing off faster and faster until it settles on 12 April 1961. | 4.5 | S: *Wednesday, 12 April 1961* (the page reads "12 АПРЕЛЯ 1961 СРЕДА"). First and last frame, as 08 and 13; the first page is in 1957. The third and last calendar: the motif now marks a Soviet First. | "In the spring of 1961, Moscow did it again." |
-| 17 | **Inside Vostok 1.** A white helmet with "СССР" in red, seen from the side; the visor reflects the Earth through the porthole. | 4.0 | C: *Vostok 1*. The visor's reflection hides the face. First big swell. | "Yuri Gagarin became the first man to orbit the Earth ..." |
-| 18 | **Vostok in orbit.** The capsule glides over the Earth, the camera following it. | 4.0 | Reference to video from `vostok_orbital.png`, as Sputnik. Space comes out silent: the score carries it. | "... once around, in 108 minutes." |
-| 19 | **An American hangar.** A half-assembled Mercury capsule on a stand; in front of it an engineer holds up a newspaper, its headline "SOVIET MAN ORBITS EARTH". A second engineer looks over his shoulder. | 4.0 | The paper stays still in his hands (still text holds, moving text garbles); headline written by us. Each man his own hand action. Check the capsule's shape against `mercury_suborbital.png`. | "America was still on the ground." |
-| 20 | **Cape Canaveral, Freedom 7.** A slim Redstone with its Mercury capsule stands by its gantry; it ignites and climbs off the pad on a short, straight flame. | 4.5 | C: *Cape Canaveral, Freedom 7*. As Vanguard: the first frame before ignition (a lit engine in the first frame stays lit the same way through the clip), the gantry and a few figures for scale. | "Three weeks later, Alan Shepard flew: fifteen minutes, up and down." |
+| 17 | **Inside Vostok 1.** A white helmet with "СССР" in red, seen from the side; the visor reflects the Earth through the porthole. | 4.0 | C: *Vostok 1*. The visor's reflection hides the face. First big swell. | "Yuri Gagarin flew into space." |
+| 18 | **Vostok in orbit.** The capsule glides over the Earth, the camera following it. | 4.0 | Reference to video from `vostok_orbital.png`, as Sputnik. Space comes out silent: the score carries it. | "Once around the Earth ... in one hundred and eight minutes." |
+| 19 | **An American hangar.** A half-assembled Mercury capsule on a stand; in front of it an engineer holds up a newspaper, its headline "SOVIET MAN ORBITS EARTH". A second engineer looks over his shoulder. | 4.0 | The paper stays still in his hands (still text holds, moving text garbles); headline written by us. Each man his own hand action. Check the capsule's shape against `mercury_suborbital.png`. | "Meanwhile, America was still on the ground." |
+| 20 | **Cape Canaveral, Freedom 7.** A slim Redstone with its Mercury capsule stands by its gantry; it ignites and climbs off the pad on a short, straight flame. | 4.5 | C: *Cape Canaveral, Freedom 7*. As Vanguard: the first frame before ignition (a lit engine in the first frame stays lit the same way through the clip), the gantry and a few figures for scale. | "Three weeks later, Alan Shepard flew. Fifteen minutes, up and down." |
 | 21 | **Friendship 7 over the Pacific.** The Mercury capsule in orbit, sunlight flaring off its shingles, the ocean far below. | 4.0 | C: *Friendship 7, 20 February 1962*. Reference to video from `mercury_orbital.png`. | "And in 1962, John Glenn circled the Earth three times." |
-| 22 | **New York, ticker tape.** Paper streams down between office towers onto a parade street; in front, three people from behind: a man throwing a handful of tape, a woman waving a small flag, a boy on his father's shoulders. | 4.0 | Glenn's parade, 1 March 1962. Few, large people with their own actions, seen from behind: crowds of small faces shimmer. Sound: Kennedy at Rice University, 12 September 1962 (public domain, to confirm), from here into 23. | *(Kennedy: "We choose to go to the Moon …")* |
+| 22 | **New York, ticker tape.** Paper streams down between office towers onto a parade street; in front, three people from behind: a man throwing a handful of tape, a woman waving a small flag, a boy on his father's shoulders. | 6.5 | Glenn's parade, 1 March 1962. Few, large people with their own actions, seen from behind: crowds of small faces shimmer. Then Kennedy at Rice University, 12 September 1962 (public domain, to confirm), closing the beat. | "New York gave him ... a hero's welcome." *(Kennedy: "We choose to go to the Moon.")* |
 
 ## 4. The middle years (1963–67), about 18 s
 
@@ -112,7 +112,7 @@ Total: about 155 s (about 145 s without the optional shots); beats 1–2 are cut
 
 - **Length:** about 2:30 is fine.
 - **Real voices:** NASA's Apollo 11 recordings carry the landing (33, 34, 36), and Kennedy's "We choose to go
-  to the Moon" replaces the narrator's line under 22.
+  to the Moon" follows the narrator's line under 22.
 - **1967 stays:** the losses are marked (27).
 - **Tereshkova stays,** in 23's line.
 - Renders: about 21 shots at two takes each is about 7 hours, queued in rounds so a good first take saves
