@@ -205,6 +205,8 @@ The film has about 20–25 shots. With 3–4 variants per shot that is 80–100 
 - **A first and a last frame must show the same room from the same place** (c16, 2026-11-22): a Soviet calendar's first and last keyframe with the window on opposite sides made H3 pan across the room. A shot's `"sameSeed"` renders the last frame with the first's seed, so the two match and only what the prompts change (the page) differs.
 - **Weightlessness, one try** (c17, 2026-11-22): a strap meant to float in the Vostok helmet shot wobbled and read as come loose, so it was dropped from that shot. Not a rule (user): it may work elsewhere, worth trying again where the shot is about it.
 - **"As he speaks" makes H3 invent speech** (c22a, 2026-11-22): Kennedy at the lectern came with gibberish words on the clip's sound. When a real recording goes over a shot, its prompt keeps the person silent and the soundscape says so ("the man at the lectern is silent; no voices").
+- **Which hand does what** (c23a, 2026-11-22): told to wave with her empty hand, Tereshkova waved with the hand holding the helmet, twice, whether the hands were named as hers or by the side of the frame. Next try: she drops the helmet first, so either hand can wave. An action that needs a particular hand is a gamble.
+- **Order within a shot is loose** (c26, 2026-11-22): asked for a lamp to turn red and then a man to react, H3 had him react first. Take 2 says "only after the lamp has turned red does he sit up"; the result goes here.
 - **A light lit in the first frame stays lit:** a flashbulb firing in the keyframe burned for 3 s in the clip.
   Keyframes show flashes dark; the video prompt makes each "a single blink of white light that is gone in a
   split second" (measured: 2–4 frames).

@@ -181,6 +181,49 @@
       "gainDb": -6,
       "track": "A3",
       "_comment": "Kennedy at Rice Stadium, 12 September 1962 (NASA, public domain; the game's own copy, credited in assets/CREDITS.md). 8.6 s: it runs on over 22b."
+    },
+    {
+      "id": "n-successes",
+      "file": "audio/the_successes_kept_coming_the_first_woman_in_space.ogg",
+      "under": "c23a-tereshkova",
+      "offset": 0.3,
+      "track": "A3"
+    },
+    {
+      "id": "n-spacewalk",
+      "file": "audio/the_first_spacewalk.ogg",
+      "under": "c23-voskhod-spacewalk",
+      "offset": 0.8,
+      "track": "A3"
+    },
+    {
+      "id": "n-docking",
+      "file": "audio/the_first_docking.ogg",
+      "under": "c24-gemini-docking",
+      "offset": 1.0,
+      "track": "A3"
+    },
+    {
+      "id": "n-rocket",
+      "file": "audio/each_new_rocket_more_powerful_than_the_last.ogg",
+      "under": "c25-test-stand",
+      "offset": 0.2,
+      "track": "A3"
+    },
+    {
+      "id": "n-while",
+      "file": "audio/for_a_while_it_seemed_nothing_could_go_wrong.ogg",
+      "under": "c26-mission-control",
+      "offset": 0.5,
+      "track": "A3"
+    },
+    {
+      "id": "n-1967",
+      "file": "audio/until_in_1967_both_sides_lost_a_crew.ogg",
+      "under": "c27a-pad-us",
+      "offset": 0.3,
+      "track": "A3",
+      "_comment": "\"Until, in 1967,\" over Arlington; \"both sides lost a crew\" starts on the cut to the Kremlin Wall."
     }
   ]
 }
