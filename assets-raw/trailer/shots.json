@@ -417,6 +417,209 @@
       "facts": [
         "vanguard-tv3"
       ]
+    },
+    {
+      "id": "c16-calendar-1961",
+      "beat": "humans",
+      "look": "ussr-1961",
+      "duration": 5.0,
+      "trim": [
+        0.3,
+        4.8
+      ],
+      "mode": "i2v",
+      "keyframes": {
+        "first": "Close-up of a Soviet tear-off day calendar hanging on the plain painted wall of a Soviet office around 1960: a thick block of thin paper pages on a printed cardboard backing with a small red star. The top page shows the date in large bold print in Russian Cyrillic letters, clearly legible: \"ОКТЯБРЬ\" in red across the top, a huge red numeral \"4\" in the middle, \"1957\" and \"ПЯТНИЦА\" below it in black. Cold daylight from a window at the side, the wall softly out of focus around the calendar. The calendar fills the centre of the frame, 85mm lens, the page in sharp focus.",
+        "last": "Close-up of a Soviet tear-off day calendar hanging on the plain painted wall of a Soviet office around 1960: a thick block of thin paper pages on a printed cardboard backing with a small red star. The top page shows the date in large bold print in Russian Cyrillic letters, clearly legible: \"АПРЕЛЬ\" in red across the top, a huge red numeral \"12\" in the middle, \"1961\" and \"СРЕДА\" below it in black. Cold daylight from a window at the side, the wall softly out of focus around the calendar. The calendar fills the centre of the frame, 85mm lens, the page in sharp focus."
+      },
+      "video": "Live-action, cinematic, 1961. The pages of the calendar shown in <Picture 1> tear off by themselves one after another and fly away out of the frame, slowly at first, then faster and faster, a flutter of paper like a time-lapse in an old film, until the tearing stops and the calendar settles on the page shown in <Picture 2>. The camera holds a static shot.",
+      "soundscape": "Paper tearing and fluttering, slowly at first and then faster and faster, then it stops; a clock ticking in a quiet office. Nobody speaks.",
+      "clipGainDb": -10,
+      "facts": [
+        "vostok-1"
+      ],
+      "subtitle": {
+        "text": "Wednesday, 12 April 1961",
+        "at": 3.2,
+        "for": 1.5
+      }
+    },
+    {
+      "id": "c17-vostok-helmet",
+      "beat": "humans",
+      "look": "ussr-1961",
+      "duration": 5.0,
+      "trim": [
+        0.3,
+        4.3
+      ],
+      "mode": "i2v",
+      "keyframes": {
+        "first": "Inside the cramped capsule of the Vostok spacecraft in orbit, 1961. A cosmonaut seen in profile from the side, filling the right half of the frame: a white spherical pressure helmet with the four red Cyrillic letters \"СССР\" painted large across its forehead, its clear visor closed. In the visor, a bright reflection of the blue Earth and white clouds from a small round porthole beside him; behind the reflection his face is lost in shadow. The orange collar of his spacesuit, padded straps across his shoulder. Around him, the curved wall of the capsule with a few dials and switches in pale grey. Cold blue light from the porthole, deep shadows. Close-up, 50mm lens."
+      },
+      "video": "Live-action, cinematic, 1961. Inside the capsule shown in <Picture 1>, the cosmonaut in the white helmet slowly turns his head a little further toward the round porthole on the left. Through the porthole the curved blue horizon of the Earth drifts slowly upward as the capsule turns, and its blue light slides across his clear visor and the white helmet. A loose strap on his shoulder floats gently in weightlessness. The camera pushes in with small amplitude at slow speed toward the helmet.",
+      "soundscape": "The low hum of fans inside a small capsule, a faint crackle of radio static, the soft creak of a spacesuit. Nobody speaks.",
+      "clipGainDb": -10,
+      "facts": [
+        "vostok-1"
+      ],
+      "caption": {
+        "text": "Vostok 1",
+        "at": 0.4,
+        "for": 2.6
+      }
+    },
+    {
+      "id": "c18-vostok-orbit",
+      "beat": "humans",
+      "look": "orbit",
+      "duration": 5.0,
+      "trim": [
+        0.4,
+        4.4
+      ],
+      "mode": "r2v",
+      "turbo": false,
+      "references": [
+        "references/vostok.png"
+      ],
+      "subjects": [
+        "<Subject 1>: the spacecraft shown in <Picture 1>, a grey metal sphere joined to a ribbed cone-shaped equipment module, a ring of small round tanks around the joint between them and a few thin antennas."
+      ],
+      "summary": "The target video shows <Subject 1> in orbit high above the Earth.",
+      "retention": [
+        "<Picture 1> ([Shot 1]): partially_preserved - the spacecraft's shape is kept exactly: its grey sphere, the ring of round tanks, the ribbed cone and its thin antennas. The framing, the view of the Earth and the light are new."
+      ],
+      "video": "Live-action, cinematic, photorealistic, as if filmed by a camera in Earth orbit: pure black space with no stars, hard unfiltered sunlight. <Subject 1> flies forward from left to right across the upper half of the frame, its sphere leading and the ribbed cone trailing behind it. A single Earth fills the lower part of the frame, its curved horizon steady: oceans, land and clouds in daylight. The camera tracks alongside <Subject 1> at its own speed, so it stays near the centre while the Earth's surface slides slowly past beneath it, and the sunlight glints across the metal.",
+      "soundscape": "A soft, low electronic hum. Nobody speaks.",
+      "clipGainDb": -14,
+      "facts": [
+        "vostok-1"
+      ]
+    },
+    {
+      "id": "c19-hangar-newspaper",
+      "beat": "humans",
+      "look": "us-1961",
+      "duration": 5.0,
+      "trim": [
+        0.3,
+        4.3
+      ],
+      "mode": "i2v",
+      "keyframes": {
+        "first": "Inside a bright American aerospace hangar in April 1961, seen from just behind two engineers standing shoulder to shoulder, the camera looking over their shoulders. Together they hold an open newspaper up in front of them at chest height, the man on the left in a white short-sleeved shirt holding its left edge, the man on the right in a white lab coat holding its right edge; both their heads are bent over it, seen from behind. The front page faces the camera over their shoulders, its headline in huge bold black capitals: \"SOVIET MAN IN SPACE\". Beyond the newspaper, out of focus in the middle of the hangar, a half-assembled Mercury space capsule stands on a work stand: a small black cone-shaped capsule with ribbed metal shingles, panels open, cables hanging from it. Work lights overhead, a concrete floor. Over-the-shoulder medium close-up, 50mm lens, the headline in sharp focus."
+      },
+      "video": "Live-action, cinematic, 1961. In the hangar shown in <Picture 1>, the two engineers hold the newspaper perfectly still between them and read. The man on the right slowly shakes his head and rubs the back of his neck with his free hand. The man on the left slowly lifts his head from the paper and looks up at the unfinished capsule beyond it. The camera holds a static shot.",
+      "soundscape": "A large hangar: an electric drill whirring in the distance, the hum of overhead lights, a toolbox set down on concrete. Nobody speaks.",
+      "clipGainDb": -10,
+      "facts": [
+        "vostok-1"
+      ]
+    },
+    {
+      "id": "c20-freedom-7",
+      "beat": "humans",
+      "look": "us-1961",
+      "duration": 5.0,
+      "trim": [
+        0.3,
+        4.8
+      ],
+      "mode": "i2v",
+      "keyframes": {
+        "first": "Cape Canaveral, Florida, the clear morning of 5 May 1961, seen from a few hundred metres away: a Mercury-Redstone rocket stands upright on a small square steel launch stand on a flat concrete pad. The rocket is a plain white cylinder about twenty-five metres tall with the words \"UNITED STATES\" in black running down its side and four small fins at its base. On its top sits a small black cone-shaped Mercury capsule, and above the capsule a slim red steel lattice escape tower with a small rocket on its tip. Far off to the right, a tall red steel service gantry stands rolled away along its rails. Flat sandy ground with low green scrub, a pale blue morning sky. A telephoto newsreel view, 200mm lens, the whole rocket in the frame from the pad to the tip of its tower."
+      },
+      "video": "Live-action, cinematic, 1961, newsreel footage. The white rocket shown in <Picture 1>, with its black capsule and red escape tower on top, ignites: a bright flame and clouds of white smoke burst from its base, and it rises slowly off the launch stand and climbs straight up into the sky on a short, bright, steady flame. The camera tilts up slowly to follow it.",
+      "soundscape": "The roar of a rocket engine igniting and building, a long thundering rumble, wind. Nobody speaks.",
+      "clipGainDb": -6,
+      "facts": [
+        "freedom-7"
+      ],
+      "caption": {
+        "text": "Cape Canaveral, Freedom 7",
+        "at": 0.4,
+        "for": 3.0
+      },
+      "_comment": "Keyframe #1 came out reading \"UNITED STTAES\": its T and A were swapped by hand in the committed PNG (user's pick)."
+    },
+    {
+      "id": "c21-friendship-7",
+      "beat": "humans",
+      "look": "orbit",
+      "duration": 5.0,
+      "trim": [
+        0.4,
+        4.4
+      ],
+      "mode": "r2v",
+      "turbo": false,
+      "references": [
+        "references/mercury.png"
+      ],
+      "subjects": [
+        "<Subject 1>: the spacecraft shown in <Picture 1>, a small black cone-shaped capsule with ribbed metal shingles, \"UNITED STATES\" and an American flag painted on its side, a narrow cylinder on its nose and a round heat shield with a small rocket pack strapped to its wide end."
+      ],
+      "summary": "The target video shows <Subject 1> in orbit high above the Pacific Ocean.",
+      "retention": [
+        "<Picture 1> ([Shot 1]): partially_preserved - the capsule's shape is kept exactly: its black shingled cone, the lettering and flag, the nose cylinder and the rocket pack on its heat shield. The framing, the view of the Earth and the light are new."
+      ],
+      "video": "Live-action, cinematic, photorealistic, as if filmed by a camera in Earth orbit: pure black space with no stars, hard unfiltered sunlight. <Subject 1> drifts slowly across the upper half of the frame from right to left, its wide heat shield leading, and sunlight flares off its ribbed shingles. A single Earth fills the lower part of the frame: the deep blue Pacific Ocean with scattered white clouds, its curved horizon steady. The camera tracks alongside <Subject 1> at its own speed while the ocean slides slowly past far below.",
+      "soundscape": "A soft, low electronic hum. Nobody speaks.",
+      "clipGainDb": -14,
+      "facts": [
+        "friendship-7"
+      ],
+      "caption": {
+        "text": "Friendship 7, 20 February 1962",
+        "at": 0.4,
+        "for": 3.0
+      }
+    },
+    {
+      "id": "c22a-rice-lectern",
+      "beat": "humans",
+      "look": "us-1961",
+      "duration": 7.0,
+      "trim": [
+        0.3,
+        6.8
+      ],
+      "mode": "i2v",
+      "keyframes": {
+        "first": "Rice Stadium in Houston, Texas, on a hot sunny afternoon in September 1962, seen from behind the speaker's lectern on a stage at the edge of the field. In the foreground on the left, the back and shoulders of a man in a dark suit with short brown hair, standing at a wooden lectern with several microphones on it and a few typed pages on its top. Beyond him, the huge open stadium stands packed with thousands of people in light summer clothes, many in white shirts, some shading their eyes, under a bright blue sky with harsh sunlight. The crowd is a soft blur of white and pastel. Medium shot over the shoulder, 50mm lens, the man's back and the lectern in sharp focus."
+      },
+      "video": "Live-action, cinematic, 1962. In the stadium shown in <Picture 1>, the man in the dark suit at the wooden lectern on the left raises his right hand and brings it down firmly once for emphasis as he speaks, then rests it on the lectern. He stays with his back to the camera. The packed stands beyond him sit still and listen in the bright sun. The camera pushes in with small amplitude at slow speed toward the lectern.",
+      "soundscape": "A huge open-air stadium on a hot afternoon: the quiet murmur of a large attentive crowd, wind across the microphones, a public-address echo. Nobody in the crowd speaks.",
+      "clipGainDb": -14,
+      "facts": [
+        "kennedy-rice-1962"
+      ],
+      "caption": {
+        "text": "Houston, 12 September 1962",
+        "at": 0.4,
+        "for": 3.0
+      }
+    },
+    {
+      "id": "c22b-rice-stands",
+      "beat": "humans",
+      "look": "us-1961",
+      "duration": 7.0,
+      "trim": [
+        0.3,
+        6.3
+      ],
+      "mode": "i2v",
+      "keyframes": {
+        "first": "The stands of Rice Stadium in Houston on a hot sunny afternoon in September 1962, a few rows of people seated close to the camera, listening to a speech: on the left, a middle-aged man in a white short-sleeved shirt and a straw hat shading his eyes with a folded paper programme; in the middle, a woman in a light summer dress and sunglasses holding a paper fan; on the right, a young student in shirtsleeves, elbows on his knees, leaning forward. Behind them the rest of the crowd is a soft blur of white shirts and pastel colours. Harsh bright sunlight. Medium shot, 85mm lens wide open, the three people in sharp focus and the background blurred."
+      },
+      "video": "Live-action, cinematic, 1962. In the stands shown in <Picture 1>, the man in the straw hat on the left lifts the programme from his lap and slowly fans himself with it. The woman in sunglasses in the middle fans herself with her folded paper, then stops and holds it still in her lap. The young man on the right, elbows on his knees, clasps his hands together and leans further forward. The camera holds a static shot.",
+      "soundscape": "A huge open-air stadium on a hot afternoon: a large attentive crowd, quiet; a breeze; the rustle of paper fans. Nobody speaks.",
+      "clipGainDb": -14,
+      "facts": [
+        "kennedy-rice-1962"
+      ]
     }
   ],
   "tests": [
