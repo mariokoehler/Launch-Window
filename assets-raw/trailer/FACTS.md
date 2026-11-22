@@ -42,6 +42,8 @@ final.
 - **vostok-1** (12 April 1961; one orbit, 108 minutes; "СССР" on the helmet).
 - **freedom-7** (5 May 1961; suborbital, about 15 minutes; Redstone).
 - **friendship-7** (20 February 1962; three orbits; Atlas).
+- **glenn-parade-1962** (New York's ticker-tape parade for Glenn, 1 March 1962).
+- **vostok-6** (16 June 1963; Valentina Tereshkova, the first woman in space).
 - **voskhod-2** (18 March 1965; the first spacewalk; the suit ballooned, pressure let out to re-enter).
 - **gemini-8** (16 March 1966; the first docking, with an Agena).
 - **losses-1967** (Apollo 1 fire, 27 January 1967; Soyuz 1, 24 April 1967).
