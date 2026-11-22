@@ -377,16 +377,16 @@
       "id": "c14-vanguard-pad",
       "beat": "satellite",
       "look": "us-1957",
-      "duration": 5.0,
+      "duration": 6.0,
       "trim": [
-        0.3,
-        4.3
+        1.4,
+        5.4
       ],
       "mode": "i2v",
       "keyframes": {
-        "first": "Cape Canaveral, Florida, late morning on 6 December 1957: a very slim white rocket, the Vanguard, pencil-thin and about twenty metres tall, stands alone on its small concrete launch pad, its service tower rolled back, a thin wisp of white vapour venting from its side. Flat sandy scrubland with low palmetto bushes all around, a low concrete blockhouse to one side, a pale clear sky. Seen from a distance across the scrub, as by a newsreel camera, 135mm telephoto lens."
+        "first": "Cape Canaveral, Florida, late morning on 6 December 1957, Launch Complex 18A: the Vanguard rocket, a very slim white rocket about 22 metres tall, as tall as a seven-storey building, and only about a metre wide, stands upright on a steel launch stand on a concrete pad, a thin wisp of white vapour venting from its side. Just beside it a slender umbilical mast with cables running to the rocket; a short distance behind it a huge red-and-white steel service gantry, taller than the rocket, rolled back on rails. Two small figures of technicians in white coveralls walk away from the base of the rocket, their heads barely reaching the bottom of its first stage. Flat sandy scrubland with low palmetto bushes around the pad, a pale clear sky. Seen from a few hundred metres away across the scrub, as by a newsreel camera, 85mm telephoto lens, the whole rocket and gantry in frame."
       },
-      "video": "Live-action, cinematic, 1957, newsreel footage. The slim rocket shown in <Picture 1> ignites: fire and white smoke burst from its base and it rises slowly, about a metre off the pad, hesitates, loses its thrust and sinks back down; then it bursts into a huge orange fireball that swallows it from the bottom up, and its top section topples away from the flames. The camera holds a static shot.",
+      "video": "Live-action, cinematic, 1957, newsreel footage. At the launch pad shown in <Picture 1>, the two technicians in white coveralls walk briskly away to the right and out of the frame. Then the slim white rocket ignites: fire and white smoke burst from its base and it lifts only slightly, barely a metre off the launch stand, hesitates, loses its thrust and sinks back down; then it bursts into a huge orange fireball that swallows it from the bottom up, and its top section topples away from the flames. The red gantry and the mast stand untouched. The camera holds a static shot.",
       "soundscape": "The roar of a rocket engine igniting, sputtering, then a deep rolling explosion and debris falling, wind across the scrub. Nobody speaks.",
       "clipGainDb": -6,
       "facts": [
