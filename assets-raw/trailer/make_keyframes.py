@@ -107,7 +107,7 @@ def main():
         for shot in shots:
             if (args.only and shot['id'] not in args.only) or (args.beat and shot['beat'] != args.beat):
                 continue
-            for frame, text in shot['keyframes'].items():
+            for frame, text in shot.get('keyframes', {}).items():
                 if not text:
                     continue
                 prompt = f'{text}\n\n{looks[shot["look"]]}'
