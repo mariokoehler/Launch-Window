@@ -91,6 +91,18 @@ def placeholder_beep(path):
                     'aevalsrc=0.4*sin(2*PI*900*t)*lt(mod(t\\,0.5)\\,0.18):s=48000:d=10', path], check=True)
 
 
+def held(shot, path):
+    """A shot's "hold": its clip with the last frame held that many seconds longer (and silence under it), for a
+    static shot that ends too soon after it settles (a calendar on its date). Made once in build/."""
+    out = os.path.join(BUILD, f'hold-{shot["id"]}-{os.path.basename(path)}')
+    if not os.path.exists(out) or os.path.getmtime(out) < os.path.getmtime(path):
+        subprocess.run(['ffmpeg', '-loglevel', 'error', '-y', '-i', path, '-vf',
+                        f'tpad=stop_mode=clone:stop_duration={shot["hold"]}', '-af', f'apad=pad_dur={shot["hold"]}',
+                        '-c:v', 'libx264', '-crf', '12', '-preset', 'slow', '-c:a', 'aac', '-b:a', '256k', out],
+                       check=True)
+    return out
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--profile', default='draft')
@@ -124,7 +136,7 @@ def main():
             placeholder_beep(path)
 
     # 1. The sequence and the media.
-    media = [os.path.join(HERE, take(s)) for s in cut]
+    media = [held(s, os.path.join(HERE, take(s))) if s.get('hold') else os.path.join(HERE, take(s)) for s in cut]
     media += [os.path.join(HERE, t['file']) for t in audio]
     sequence, imported = filmcraft(project, [
         {'id': 'file.newSequence', 'params': {'name': f'Launch Window trailer ({args.profile})',

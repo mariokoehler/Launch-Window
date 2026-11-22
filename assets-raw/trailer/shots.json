@@ -424,8 +424,8 @@
       "look": "ussr-1961",
       "duration": 5.0,
       "trim": [
-        0.3,
-        4.8
+        0.8,
+        5.9
       ],
       "mode": "i2v",
       "keyframes": {
@@ -438,12 +438,13 @@
       "facts": [
         "vostok-1"
       ],
-      "subtitle": {
+      "sameSeed": true,
+      "hold": 1.0,
+      "caption": {
         "text": "Wednesday, 12 April 1961",
-        "at": 3.2,
-        "for": 1.5
-      },
-      "sameSeed": true
+        "at": 3.65,
+        "for": 1.35
+      }
     },
     {
       "id": "c17-vostok-helmet",
