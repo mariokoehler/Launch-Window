@@ -530,7 +530,7 @@
       "keyframes": {
         "first": "Cape Canaveral, Florida, the clear morning of 5 May 1961, seen from a few hundred metres away: a Mercury-Redstone rocket stands upright on a small square steel launch stand on a flat concrete pad. The rocket is a plain white cylinder about twenty-five metres tall with the words \"UNITED STATES\" in black running down its side and four small fins at its base. On its top sits a small black cone-shaped Mercury capsule, and above the capsule a slim red steel lattice escape tower with a small rocket on its tip. Far off to the right, a tall red steel service gantry stands rolled away along its rails. Flat sandy ground with low green scrub, a pale blue morning sky. A telephoto newsreel view, 200mm lens, the whole rocket in the frame from the pad to the tip of its tower."
       },
-      "video": "Live-action, cinematic, 1961, newsreel footage. The white rocket shown in <Picture 1>, with its black capsule and red escape tower on top, ignites: a bright flame and clouds of white smoke burst from its base, and it rises slowly off the launch stand and climbs straight up into the sky on a short, bright, steady flame. The camera tilts up slowly to follow it.",
+      "video": "Live-action, cinematic, 1961, newsreel footage. The slim white rocket shown in <Picture 1>, with its black and white capsule and red escape tower on top, stands on the pad beside the red service tower. It ignites: a bright flame and clouds of white smoke burst from its base and spread across the pad, and it rises slowly off the pad and climbs straight up into the blue sky on a short, bright, steady flame. The camera tilts up slowly to follow it.",
       "soundscape": "The roar of a rocket engine igniting and building, a long thundering rumble, wind. Nobody speaks.",
       "clipGainDb": -6,
       "facts": [
@@ -541,7 +541,7 @@
         "at": 0.4,
         "for": 3.0
       },
-      "_comment": "Keyframe #1 came out reading \"UNITED STTAES\": its T and A were swapped by hand in the committed PNG (user's pick)."
+      "_comment": "First frame: references/redstone_frame.png (the user's Redstone rocket program art, cropped to 16:9), picked by the user."
     },
     {
       "id": "c21-friendship-7",
