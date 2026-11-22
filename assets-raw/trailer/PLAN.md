@@ -192,8 +192,9 @@ The film has about 20–25 shots. With 3–4 variants per shot that is 80–100 
   video runs at full steps even in draft (`"turbo": false`): the 4-step turbo holds references weakly.
 - **Groups need individual actions** (user, 2026-11-21): a group given one shared action ("the reporters
   scribble and lean in") mostly stands and stares into the middle distance. Give at least two or three people
-  their own action, each placed in the frame ("the reporter in the grey fedora on the left licks his pencil
-  and writes"). Fewer, larger people also keep faces from turning uncanny: a face 20–30 px wide is a patch or
+  their own action, each placed in the frame ("the reporter in the grey fedora on the left taps his pencil
+  on his notebook, then writes"). Keep the actions to hands and bodies: a reporter told to lick his pencil
+  did strange things with his tongue (user). Fewer, larger people also keep faces from turning uncanny: a face 20–30 px wide is a patch or
   two in the model's compressed grid and shimmers from frame to frame (the c02a-press-room-small trial): its faces came out
   clearly better (user), though the background stayed in focus despite "shallow depth of field" and its faces
   still turn odd at times. Next try: a longer lens (85mm, wide open) and the background people described as
