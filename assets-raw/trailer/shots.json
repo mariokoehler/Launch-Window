@@ -379,8 +379,8 @@
       "look": "us-1957",
       "duration": 6.0,
       "trim": [
-        1.4,
-        5.4
+        0.0,
+        4.5
       ],
       "mode": "i2v",
       "keyframes": {

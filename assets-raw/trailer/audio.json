@@ -43,6 +43,85 @@
       "under": "c07-soviet-bureau",
       "offset": 1.0,
       "track": "A3"
+    },
+    {
+      "id": "n-work",
+      "file": "audio/for_2_years_both_sides.ogg",
+      "under": "c08-calendar-1957",
+      "offset": 0.8,
+      "track": "A3"
+    },
+    {
+      "id": "n-october",
+      "file": "audio/then_in_october_came_a_rude.ogg",
+      "under": "c09-embassy-whisper",
+      "offset": 0.6,
+      "track": "A3"
+    },
+    {
+      "id": "n-glass",
+      "file": "audio/all_the_americans_could_do.ogg",
+      "under": "c10-embassy-toast",
+      "offset": 0.3,
+      "track": "A3",
+      "_comment": "\"raise a glass\" ends 3.5 s into the toast; the line runs on into the Sputnik shot."
+    },
+    {
+      "id": "n-sputnik",
+      "file": "audio/to_the_first_satellite_in_orbit_sputnik.ogg",
+      "under": "c11-sputnik",
+      "offset": 0.2,
+      "track": "A3"
+    },
+    {
+      "id": "beep-sputnik",
+      "file": "build/placeholder-beep.wav",
+      "under": "c11-sputnik",
+      "offset": 0.0,
+      "for": 4.0,
+      "gainDb": -14,
+      "track": "A2",
+      "_comment": "Sputnik's signal; its own H3 sound is near silent. A placeholder until a real recording is in."
+    },
+    {
+      "id": "beep-rooftop",
+      "file": "build/placeholder-beep.wav",
+      "under": "c12-rooftop",
+      "offset": 0.0,
+      "for": 6.0,
+      "gainDb": -24,
+      "track": "A2",
+      "_comment": "The same signal, faint, from the little radio."
+    },
+    {
+      "id": "n-listened",
+      "file": "audio/that_night_the_whole_world_looked_up.ogg",
+      "under": "c12-rooftop",
+      "offset": 1.5,
+      "track": "A3"
+    },
+    {
+      "id": "n-answer",
+      "file": "audio/america_had_to_answer_and_fast.ogg",
+      "under": "c13-calendar-vanguard",
+      "offset": 0.3,
+      "track": "A3",
+      "_comment": "\"and fast\" ends 2.3 s in, the pages tear in the pause, \"two months later\" ends 3.9 s in."
+    },
+    {
+      "id": "n-ready",
+      "file": "audio/its_own_satellite_stood_ready.ogg",
+      "under": "c14-vanguard-pad",
+      "offset": 0.0,
+      "track": "A3",
+      "_comment": "\"on live television\" ends 2.8 s in; the fireball comes at 3.0 s."
+    },
+    {
+      "id": "n-flopnik",
+      "file": "audio/the_papers_called_it_flopnik.ogg",
+      "under": "c15-vanguard-scrub",
+      "offset": 0.6,
+      "track": "A3"
     }
   ]
 }
