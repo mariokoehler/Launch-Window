@@ -30,5 +30,15 @@
   "c06-us-office/final": "clips/final/c06-us-office_1.mp4",
   "c07-soviet-bureau/final": "clips/final/c07-soviet-bureau_1.mp4",
   "c01-washington/final": "clips/final/c01-washington_3.mp4",
-  "c02a-press-room-small/first": "keyframes/c02a-press-room-small_first_1.png"
+  "c02a-press-room-small/first": "keyframes/c02a-press-room-small_first_1.png",
+  "c09-embassy-whisper/first": "keyframes/t01-embassy-whisper_first_2.png",
+  "c10-embassy-toast/first": "keyframes/t02-embassy-toast_first_2.png",
+  "c08-calendar-1957/first": "keyframes/c08-calendar-1957_first_2.png",
+  "c08-calendar-1957/last": "keyframes/c08-calendar-1957_last_2.png",
+  "c13-calendar-vanguard/first": "keyframes/c08-calendar-1957_last_2.png",
+  "c13-calendar-vanguard/last": "keyframes/c13-calendar-vanguard_last_2.png",
+  "c12-rooftop/first": "keyframes/c12-rooftop_first_3.png",
+  "c14-vanguard-pad/first": "keyframes/c14-vanguard-pad_first_1.png",
+  "c15-vanguard-scrub/first": "keyframes/c15-vanguard-scrub_first_1.png",
+  "c09-embassy-whisper/final": "clips/final/t01-embassy-whisper_1.mp4"
 }

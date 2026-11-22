@@ -31,7 +31,7 @@ Earthrise, a hard stop for the N1, and the long final build to the boot.
 | # | Shot | Len | Notes | Narration |
 |---|---|---|---|
 | 08 | **Establishing shot, Calendar.** A tear-off calendar with pages rapidly torn off faster and faster and finally settling on 4 Oct. 1957 | 4.0 | | "For two years, both sides quietly got to work." |
-| 09 | **Washington, the Soviet embassy reception.** A reporter whispers into an American scientist's ear; his smile fades. | 3.0 | C: *Washington, Soviet embassy reception*. | "Then, in October 1957, came a rude awakening." |
+| 09 | **Washington, the Soviet embassy reception.** A reporter whispers into an American scientist's ear; his smile fades. | 4.5 | C: *Washington, Soviet embassy reception*. | "Then, in October 1957, came a rude awakening." |
 | 10 | **The toast, over the speaker's shoulder.** Glasses raised reluctantly, tight smiles, sparse applause. | 4.0 | (Tested.) | "All the Americans could do was raise a glass ..." |
 | 11 | **Sputnik in orbit.** It glides over the Earth. | 4.0 | Sound: our synthesized beep, from here into 12. (Tested.) | "... to the first satellite in orbit: Sputnik." |
 | 12 | **An American rooftop at dusk.** Neighbours look up; a man holds a radio up to the sky, the beep coming out of it; a small point of light crosses the sky. | 6.0 | What people saw was the rocket's core stage, brighter than the satellite: the point of light is right either way. | "That night, the whole world looked up, and listened." |

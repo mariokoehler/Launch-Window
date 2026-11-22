@@ -216,6 +216,187 @@
       "facts": [
         "soviet-answer-1955"
       ]
+    },
+    {
+      "id": "c08-calendar-1957",
+      "beat": "satellite",
+      "look": "us-1957",
+      "duration": 5.0,
+      "trim": [
+        0.3,
+        4.3
+      ],
+      "mode": "i2v",
+      "keyframes": {
+        "first": "Close-up of a tear-off day calendar hanging on the wood-panelled wall of an American office in the 1950s: a thick block of thin paper pages clipped to a printed cardboard backing. The top page shows the date in large bold black print, clearly legible: \"AUGUST\" across the top, a huge numeral \"2\" in the middle, \"1955\" and \"TUESDAY\" below it. Warm desk-lamp light from the side, the wall softly out of focus around the calendar. The calendar fills the centre of the frame, 85mm lens, the page in sharp focus.",
+        "last": "Close-up of a tear-off day calendar hanging on the wood-panelled wall of an American office in the 1950s: a thick block of thin paper pages clipped to a printed cardboard backing. The top page shows the date in large bold black print, clearly legible: \"OCTOBER\" across the top, a huge numeral \"4\" in the middle, \"1957\" and \"FRIDAY\" below it. Warm desk-lamp light from the side, the wall softly out of focus around the calendar. The calendar fills the centre of the frame, 85mm lens, the page in sharp focus."
+      },
+      "video": "Live-action, cinematic, 1957. The pages of the calendar shown in <Picture 1> tear off by themselves one after another and fly away out of the frame, slowly at first, then faster and faster, a flutter of paper like a time-lapse in an old film, until the tearing stops and the calendar settles on the page shown in <Picture 2>. The camera holds a static shot.",
+      "soundscape": "Paper tearing and fluttering, slowly at first and then faster and faster, then it stops; a clock ticking in a quiet office. Nobody speaks.",
+      "clipGainDb": -10,
+      "facts": [
+        "embassy-reception-1957"
+      ]
+    },
+    {
+      "id": "c09-embassy-whisper",
+      "beat": "satellite",
+      "look": "us-1957",
+      "duration": 5.0,
+      "mode": "i2v",
+      "keyframes": {
+        "first": "An evening reception in the ballroom of an embassy in Washington, October 1957. Crystal chandeliers, tall windows with heavy curtains, a long buffet table with white linen, waiters carrying silver trays of champagne coupes. In the middle ground a grey-haired American scientist in his fifties, in a dark suit and tie, holds a champagne coupe, while a younger man in a rumpled grey suit leans in close to whisper into his ear, one hand half raised. Around them small groups of men in dark suits and a few women in cocktail dresses talk, softly out of focus. Medium shot at eye level, 50mm lens."
+      },
+      "video": "Live-action, cinematic, 1957. In the embassy ballroom shown in <Picture 1>, the younger man in the grey suit whispers urgently into the grey-haired scientist's ear. The scientist's polite smile fades. He slowly lowers his champagne coupe and turns his head to look at the younger man, stunned, then glances across the room. Around them the reception carries on, unaware. The camera pushes in with small amplitude at slow speed toward the two men.",
+      "soundscape": "The murmur of a crowded evening reception, glasses clinking softly, distant polite laughter, no words intelligible. Nobody in frame speaks aloud.",
+      "facts": [
+        "embassy-reception-1957"
+      ],
+      "trim": [
+        0.0,
+        4.5
+      ],
+      "clipGainDb": -12,
+      "caption": {
+        "text": "Washington, Soviet embassy reception",
+        "at": 0.5,
+        "for": 3.0
+      }
+    },
+    {
+      "id": "c10-embassy-toast",
+      "beat": "satellite",
+      "look": "us-1957",
+      "duration": 5.0,
+      "mode": "i2v",
+      "keyframes": {
+        "first": "The ballroom of an embassy in Washington during an evening reception, October 1957. Over the shoulder of a grey-haired scientist in a dark suit, seen from behind and softly out of focus in the left foreground, his right hand raising a champagne coupe. Facing him and the camera, a crowd of guests in dark suits and a few women in cocktail dresses, glasses in hand, their faces lit warmly by the chandeliers. The Americans in the front rows look stiff and unsettled, mouths set in tight polite smiles; two Soviet diplomats in the middle of the crowd beam openly. Crystal chandeliers, wood panelling and red curtains behind them. Medium-wide shot at eye level, 50mm lens, the crowd's faces in sharp focus."
+      },
+      "video": "Live-action, cinematic, 1957. In the ballroom shown in <Picture 1>, the grey-haired scientist in the foreground lifts his champagne coupe a little higher in a toast. Facing him, the guests slowly raise their glasses in answer. The two Soviet diplomats smile broadly and lift their glasses high. The Americans raise theirs reluctantly, only to shoulder height, with tight, forced smiles; one of them glances sideways at his neighbour, another stares into his glass before drinking. The mood is subdued and awkward, a polite toast to a rival's success. The camera pushes in with small amplitude at slow speed toward the front row of faces.",
+      "soundscape": "A large room that has fallen quiet: a single glass being tapped, a few murmurs, the shuffle of feet, then sparse, hesitant applause from a few people. Nobody speaks.",
+      "facts": [
+        "embassy-reception-1957"
+      ],
+      "trim": [
+        0.0,
+        4.0
+      ],
+      "clipGainDb": -10
+    },
+    {
+      "id": "c11-sputnik",
+      "beat": "satellite",
+      "look": "orbit",
+      "duration": 5.0,
+      "mode": "r2v",
+      "turbo": false,
+      "references": [
+        "references/sputnik.png"
+      ],
+      "subjects": [
+        "<Subject 1>: the satellite shown in <Picture 1>, a polished metal sphere with four long thin straight antennas that all sweep backward from one side of the sphere."
+      ],
+      "summary": "The target video shows <Subject 1> in orbit high above the Earth.",
+      "retention": [
+        "<Picture 1> ([Shot 1]): partially_preserved - the satellite's shape is kept exactly: its mirror-polished sphere, its seams and its four swept-back antennas, no more and no fewer. The framing, the view of the Earth and the light are new."
+      ],
+      "video": "Live-action, cinematic, photorealistic, as if filmed by a camera in Earth orbit: pure black space with no stars, hard unfiltered sunlight. <Subject 1> flies forward from left to right across the upper half of the frame, the polished sphere leading and its four antennas trailing straight behind it to the left. A single Earth fills the lower part of the frame, its curved horizon steady: oceans and clouds in daylight, the night side darkening toward the right. The camera tracks alongside <Subject 1> at its own speed, so the satellite stays near the centre while the Earth's surface slides slowly past beneath it, and the sunlight glints across its mirror surface.",
+      "soundscape": "A loud, clear, steady electronic beep from a shortwave radio receiver, two short beeps per second, with a soft crackle of radio static between them. The beeping is the main sound and is clearly audible throughout.",
+      "facts": [
+        "sputnik-1"
+      ],
+      "trim": [
+        0.4,
+        4.4
+      ],
+      "clipGainDb": -6
+    },
+    {
+      "id": "c12-rooftop",
+      "beat": "satellite",
+      "look": "us-1957",
+      "duration": 7.0,
+      "trim": [
+        0.3,
+        6.3
+      ],
+      "mode": "i2v",
+      "keyframes": {
+        "first": "The flat tar-paper rooftop of an American apartment building at dusk, October 1957. A few neighbours in ordinary 1950s autumn clothes, everyone in long trousers or a long skirt, stand together near the parapet, looking up at the darkening sky: on the left, a man in a white shirt with rolled-up sleeves, long dark trousers and suspenders holds a small portable radio up toward the sky with both hands; next to him a woman in a cardigan, one hand at her throat; in front of them a boy in a striped T-shirt and long trousers pointing upward; on the right, an older man in a cardigan and grey slacks with a pipe, shading his eyes. Behind them rooftops, television aerials and a water tower against a deep blue evening sky, the last orange glow on the horizon and the first stars. Medium-wide shot from a low angle, 35mm lens."
+      },
+      "video": "Live-action, cinematic, 1957. On the rooftop shown in <Picture 1>, the man raises the little radio higher toward the sky. High above, a small bright point of light moves slowly and steadily across the darkening sky from left to right. The boy follows it with his pointing finger; the woman slowly lowers her hand from her throat; the older man takes the pipe out of his mouth and stares. The camera holds a static shot.",
+      "soundscape": "A small radio speaker playing a clear electronic beep, two short beeps per second, with crackling static; a quiet evening city far below, a dog barking in the distance. Nobody speaks.",
+      "clipGainDb": -8,
+      "facts": [
+        "sputnik-1"
+      ]
+    },
+    {
+      "id": "c13-calendar-vanguard",
+      "beat": "satellite",
+      "look": "us-1957",
+      "duration": 5.0,
+      "trim": [
+        0.3,
+        4.3
+      ],
+      "mode": "i2v",
+      "keyframes": {
+        "first": "",
+        "last": "Close-up of a tear-off day calendar hanging on the wood-panelled wall of an American office in the 1950s: a thick block of thin paper pages clipped to a printed cardboard backing. The top page shows the date in large bold black print, clearly legible: \"DECEMBER\" across the top, a huge numeral \"6\" in the middle, \"1957\" and \"FRIDAY\" below it. Warm desk-lamp light from the side, the wall softly out of focus around the calendar. The calendar fills the centre of the frame, 85mm lens, the page in sharp focus."
+      },
+      "firstFrom": "c08-calendar-1957/last",
+      "video": "Live-action, cinematic, 1957. The pages of the calendar shown in <Picture 1> tear off by themselves one after another and fly away out of the frame, slowly at first, then faster and faster, a flutter of paper like a time-lapse in an old film, until the tearing stops and the calendar settles on the page shown in <Picture 2>. The camera holds a static shot.",
+      "soundscape": "Paper tearing and fluttering, slowly at first and then faster and faster, then it stops; a clock ticking in a quiet office. Nobody speaks.",
+      "clipGainDb": -10,
+      "facts": [
+        "vanguard-tv3"
+      ]
+    },
+    {
+      "id": "c14-vanguard-pad",
+      "beat": "satellite",
+      "look": "us-1957",
+      "duration": 5.0,
+      "trim": [
+        0.3,
+        4.3
+      ],
+      "mode": "i2v",
+      "keyframes": {
+        "first": "Cape Canaveral, Florida, late morning on 6 December 1957: a very slim white rocket, the Vanguard, pencil-thin and about twenty metres tall, stands alone on its small concrete launch pad, its service tower rolled back, a thin wisp of white vapour venting from its side. Flat sandy scrubland with low palmetto bushes all around, a low concrete blockhouse to one side, a pale clear sky. Seen from a distance across the scrub, as by a newsreel camera, 135mm telephoto lens."
+      },
+      "video": "Live-action, cinematic, 1957, newsreel footage. The slim rocket shown in <Picture 1> ignites: fire and white smoke burst from its base and it rises slowly, about a metre off the pad, hesitates, loses its thrust and sinks back down; then it bursts into a huge orange fireball that swallows it from the bottom up, and its top section topples away from the flames. The camera holds a static shot.",
+      "soundscape": "The roar of a rocket engine igniting, sputtering, then a deep rolling explosion and debris falling, wind across the scrub. Nobody speaks.",
+      "clipGainDb": -6,
+      "facts": [
+        "vanguard-tv3"
+      ],
+      "caption": {
+        "text": "Cape Canaveral, Vanguard launch attempt",
+        "at": 0.4,
+        "for": 3.0
+      }
+    },
+    {
+      "id": "c15-vanguard-scrub",
+      "beat": "satellite",
+      "look": "us-1957",
+      "duration": 5.0,
+      "trim": [
+        0.3,
+        4.3
+      ],
+      "mode": "i2v",
+      "keyframes": {
+        "first": "Close to the ground in the sandy scrubland beside a launch pad at Cape Canaveral, December 1957. Black smoke drifts low across the frame from a fire burning in the background. In the foreground, among scorched palmetto bushes in the sand, lies a small dented metal sphere the size of a grapefruit with six thin straight antennas sticking out from it at odd angles, lying on its side. Low angle, 100mm lens, shallow depth of field, the little sphere in sharp focus."
+      },
+      "video": "Live-action, cinematic, 1957. In the scrub shown in <Picture 1>, black smoke drifts slowly across the frame, small flames flicker in the background and flakes of ash float down. The little sphere lies still on its side among the bushes. The camera pushes in with small amplitude at slow speed toward the sphere.",
+      "soundscape": "A faint, steady electronic beep, two short beeps per second, coming from the little sphere; wind through the bushes and the crackle of a distant fire. Nobody speaks.",
+      "clipGainDb": -8,
+      "facts": [
+        "vanguard-tv3"
+      ]
     }
   ],
   "tests": [
