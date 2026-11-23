@@ -907,28 +907,28 @@
   "variant": 1,
   "file": "keyframes/c31b-n1-morning_first_1.png",
   "seed": 157143466186680,
-  "prompt": "The morning after a disaster at the Baikonur launch site, July 1969: a grey dawn over the flat empty Kazakh steppe. In the middle distance, a wrecked rocket launch pad: twisted, blackened steel of a fallen service tower and scattered burnt debris, with thick black smoke still rising from it in a tall column into the pale grey sky. No people. Wide shot from a distance, 85mm lens, bleak and silent.\n\nShot on 35mm film in the late-1960s Soviet Union: a cool, slightly desaturated palette with muted greens and steel greys, visible film grain, hard light, the look of a Soviet feature film of the period. Period-accurate late-1960s machines, furniture and clothing. Cinematic composition, photorealistic, a still frame from a feature film."
+  "prompt": "The morning after a rocket exploded on its launch pad at Baikonur, July 1969, under a grey dawn sky: the huge concrete launch pad with its deep flame trench, and on it the collapsed, twisted, blackened steel of the giant launch tower and the torn, burnt remains of the rocket lying in a heap. Fires still burn in the wreckage and thick black smoke rises from it in a tall column into the pale sky. The flat empty steppe stretches away behind. No people. Wide shot from a distance, 85mm lens, bleak and silent.\n\nShot on 35mm film in the late-1960s Soviet Union: a cool, slightly desaturated palette with muted greens and steel greys, visible film grain, hard light, the look of a Soviet feature film of the period. Period-accurate late-1960s machines, furniture and clothing. Cinematic composition, photorealistic, a still frame from a feature film."
  },
  {
   "key": "c31b-n1-morning/first",
   "variant": 2,
   "file": "keyframes/c31b-n1-morning_first_2.png",
   "seed": 131353589503719,
-  "prompt": "The morning after a disaster at the Baikonur launch site, July 1969: a grey dawn over the flat empty Kazakh steppe. In the middle distance, a wrecked rocket launch pad: twisted, blackened steel of a fallen service tower and scattered burnt debris, with thick black smoke still rising from it in a tall column into the pale grey sky. No people. Wide shot from a distance, 85mm lens, bleak and silent.\n\nShot on 35mm film in the late-1960s Soviet Union: a cool, slightly desaturated palette with muted greens and steel greys, visible film grain, hard light, the look of a Soviet feature film of the period. Period-accurate late-1960s machines, furniture and clothing. Cinematic composition, photorealistic, a still frame from a feature film."
+  "prompt": "The morning after a rocket exploded on its launch pad at Baikonur, July 1969, under a grey dawn sky: the huge concrete launch pad with its deep flame trench, and on it the collapsed, twisted, blackened steel of the giant launch tower and the torn, burnt remains of the rocket lying in a heap. Fires still burn in the wreckage and thick black smoke rises from it in a tall column into the pale sky. The flat empty steppe stretches away behind. No people. Wide shot from a distance, 85mm lens, bleak and silent.\n\nShot on 35mm film in the late-1960s Soviet Union: a cool, slightly desaturated palette with muted greens and steel greys, visible film grain, hard light, the look of a Soviet feature film of the period. Period-accurate late-1960s machines, furniture and clothing. Cinematic composition, photorealistic, a still frame from a feature film."
  },
  {
   "key": "c31b-n1-morning/first",
   "variant": 3,
   "file": "keyframes/c31b-n1-morning_first_3.png",
   "seed": 226912454563554,
-  "prompt": "The morning after a disaster at the Baikonur launch site, July 1969: a grey dawn over the flat empty Kazakh steppe. In the middle distance, a wrecked rocket launch pad: twisted, blackened steel of a fallen service tower and scattered burnt debris, with thick black smoke still rising from it in a tall column into the pale grey sky. No people. Wide shot from a distance, 85mm lens, bleak and silent.\n\nShot on 35mm film in the late-1960s Soviet Union: a cool, slightly desaturated palette with muted greens and steel greys, visible film grain, hard light, the look of a Soviet feature film of the period. Period-accurate late-1960s machines, furniture and clothing. Cinematic composition, photorealistic, a still frame from a feature film."
+  "prompt": "The morning after a rocket exploded on its launch pad at Baikonur, July 1969, under a grey dawn sky: the huge concrete launch pad with its deep flame trench, and on it the collapsed, twisted, blackened steel of the giant launch tower and the torn, burnt remains of the rocket lying in a heap. Fires still burn in the wreckage and thick black smoke rises from it in a tall column into the pale sky. The flat empty steppe stretches away behind. No people. Wide shot from a distance, 85mm lens, bleak and silent.\n\nShot on 35mm film in the late-1960s Soviet Union: a cool, slightly desaturated palette with muted greens and steel greys, visible film grain, hard light, the look of a Soviet feature film of the period. Period-accurate late-1960s machines, furniture and clothing. Cinematic composition, photorealistic, a still frame from a feature film."
  },
  {
   "key": "c31b-n1-morning/first",
   "variant": 4,
   "file": "keyframes/c31b-n1-morning_first_4.png",
   "seed": 117411744262489,
-  "prompt": "The morning after a disaster at the Baikonur launch site, July 1969: a grey dawn over the flat empty Kazakh steppe. In the middle distance, a wrecked rocket launch pad: twisted, blackened steel of a fallen service tower and scattered burnt debris, with thick black smoke still rising from it in a tall column into the pale grey sky. No people. Wide shot from a distance, 85mm lens, bleak and silent.\n\nShot on 35mm film in the late-1960s Soviet Union: a cool, slightly desaturated palette with muted greens and steel greys, visible film grain, hard light, the look of a Soviet feature film of the period. Period-accurate late-1960s machines, furniture and clothing. Cinematic composition, photorealistic, a still frame from a feature film."
+  "prompt": "The morning after a rocket exploded on its launch pad at Baikonur, July 1969, under a grey dawn sky: the huge concrete launch pad with its deep flame trench, and on it the collapsed, twisted, blackened steel of the giant launch tower and the torn, burnt remains of the rocket lying in a heap. Fires still burn in the wreckage and thick black smoke rises from it in a tall column into the pale sky. The flat empty steppe stretches away behind. No people. Wide shot from a distance, 85mm lens, bleak and silent.\n\nShot on 35mm film in the late-1960s Soviet Union: a cool, slightly desaturated palette with muted greens and steel greys, visible film grain, hard light, the look of a Soviet feature film of the period. Period-accurate late-1960s machines, furniture and clothing. Cinematic composition, photorealistic, a still frame from a feature film."
  },
  {
   "key": "c31c-top-secret/first",
@@ -957,6 +957,90 @@
   "file": "keyframes/c31c-top-secret_first_4.png",
   "seed": 107838092364250,
   "prompt": "A Soviet office desk at night in 1969, close-up from above, lit by a single green-shaded desk lamp: a closed buff cardboard folder lies on the dark wooden desk, its front cover stamped in red with the words \"\u0421\u041e\u0412\u0415\u0420\u0428\u0415\u041d\u041d\u041e \u0421\u0415\u041a\u0420\u0415\u0422\u041d\u041e\" in large Russian Cyrillic capitals, clearly legible. Beside it lie a few black and white photographs of a burnt, wrecked rocket launch pad, and a man's hand in a dark suit sleeve rests on them. Close-up, 50mm lens, the stamp and the photographs in sharp focus.\n\nShot on 35mm film in the late-1960s Soviet Union: a cool, slightly desaturated palette with muted greens and steel greys, visible film grain, hard light, the look of a Soviet feature film of the period. Period-accurate late-1960s machines, furniture and clothing. Cinematic composition, photorealistic, a still frame from a feature film."
+ },
+ {
+  "key": "c34-eagle-landing/first",
+  "variant": 1,
+  "file": "keyframes/c34-eagle-landing_first_1.png",
+  "seed": 96900378046005,
+  "prompt": "The Apollo lunar module Eagle hovering a few metres above the grey surface of the Moon on 20 July 1969, seen from the side at low angle: its descent stage wrapped in crinkled gold and amber foil on four spidery legs with round dish-shaped footpads, the angular grey and black crew cabin on top with its small triangular windows. Its engine bell points down at the ground and blows the fine grey dust outward in long flat streaks. Its dark shadow lies on the ground beneath it. Black sky, hard sunlight from the side. Wide shot, 50mm lens.\n\nPhotorealistic, as if photographed in lunar orbit in 1968: pure black space with no stars, hard unfiltered sunlight, the grey cratered surface of the Moon in fine detail. Cinematic, sharp, a still frame from a feature film."
+ },
+ {
+  "key": "c34-eagle-landing/first",
+  "variant": 2,
+  "file": "keyframes/c34-eagle-landing_first_2.png",
+  "seed": 186969908496220,
+  "prompt": "The Apollo lunar module Eagle hovering a few metres above the grey surface of the Moon on 20 July 1969, seen from the side at low angle: its descent stage wrapped in crinkled gold and amber foil on four spidery legs with round dish-shaped footpads, the angular grey and black crew cabin on top with its small triangular windows. Its engine bell points down at the ground and blows the fine grey dust outward in long flat streaks. Its dark shadow lies on the ground beneath it. Black sky, hard sunlight from the side. Wide shot, 50mm lens.\n\nPhotorealistic, as if photographed in lunar orbit in 1968: pure black space with no stars, hard unfiltered sunlight, the grey cratered surface of the Moon in fine detail. Cinematic, sharp, a still frame from a feature film."
+ },
+ {
+  "key": "c34-eagle-landing/first",
+  "variant": 3,
+  "file": "keyframes/c34-eagle-landing_first_3.png",
+  "seed": 191678821331985,
+  "prompt": "The Apollo lunar module Eagle hovering a few metres above the grey surface of the Moon on 20 July 1969, seen from the side at low angle: its descent stage wrapped in crinkled gold and amber foil on four spidery legs with round dish-shaped footpads, the angular grey and black crew cabin on top with its small triangular windows. Its engine bell points down at the ground and blows the fine grey dust outward in long flat streaks. Its dark shadow lies on the ground beneath it. Black sky, hard sunlight from the side. Wide shot, 50mm lens.\n\nPhotorealistic, as if photographed in lunar orbit in 1968: pure black space with no stars, hard unfiltered sunlight, the grey cratered surface of the Moon in fine detail. Cinematic, sharp, a still frame from a feature film."
+ },
+ {
+  "key": "c34-eagle-landing/first",
+  "variant": 4,
+  "file": "keyframes/c34-eagle-landing_first_4.png",
+  "seed": 131474500104890,
+  "prompt": "The Apollo lunar module Eagle hovering a few metres above the grey surface of the Moon on 20 July 1969, seen from the side at low angle: its descent stage wrapped in crinkled gold and amber foil on four spidery legs with round dish-shaped footpads, the angular grey and black crew cabin on top with its small triangular windows. Its engine bell points down at the ground and blows the fine grey dust outward in long flat streaks. Its dark shadow lies on the ground beneath it. Black sky, hard sunlight from the side. Wide shot, 50mm lens.\n\nPhotorealistic, as if photographed in lunar orbit in 1968: pure black space with no stars, hard unfiltered sunlight, the grey cratered surface of the Moon in fine detail. Cinematic, sharp, a still frame from a feature film."
+ },
+ {
+  "key": "c35-ladder/first",
+  "variant": 1,
+  "file": "keyframes/c35-ladder_first_1.png",
+  "seed": 279439988304179,
+  "prompt": "On the Moon on 20 July 1969, looking up from the grey ground at the front leg of the lunar module: its gold-foil wrapped leg with a narrow ladder running down it, and at the bottom the wide round footpad resting on the dust, empty. Halfway up the ladder, high above the ground, an astronaut in a bulky white spacesuit and white backpack is climbing down backwards, both boots on a rung, both gloved hands on the rails, seen from below and behind, his gold visor closed. The black sky behind him, hard sunlight. Low angle from the ground, 35mm lens.\n\nPhotorealistic, as if photographed in lunar orbit in 1968: pure black space with no stars, hard unfiltered sunlight, the grey cratered surface of the Moon in fine detail. Cinematic, sharp, a still frame from a feature film."
+ },
+ {
+  "key": "c35-ladder/first",
+  "variant": 2,
+  "file": "keyframes/c35-ladder_first_2.png",
+  "seed": 97618488975160,
+  "prompt": "On the Moon on 20 July 1969, looking up from the grey ground at the front leg of the lunar module: its gold-foil wrapped leg with a narrow ladder running down it, and at the bottom the wide round footpad resting on the dust, empty. Halfway up the ladder, high above the ground, an astronaut in a bulky white spacesuit and white backpack is climbing down backwards, both boots on a rung, both gloved hands on the rails, seen from below and behind, his gold visor closed. The black sky behind him, hard sunlight. Low angle from the ground, 35mm lens.\n\nPhotorealistic, as if photographed in lunar orbit in 1968: pure black space with no stars, hard unfiltered sunlight, the grey cratered surface of the Moon in fine detail. Cinematic, sharp, a still frame from a feature film."
+ },
+ {
+  "key": "c35-ladder/first",
+  "variant": 3,
+  "file": "keyframes/c35-ladder_first_3.png",
+  "seed": 249030347966794,
+  "prompt": "On the Moon on 20 July 1969, looking up from the grey ground at the front leg of the lunar module: its gold-foil wrapped leg with a narrow ladder running down it, and at the bottom the wide round footpad resting on the dust, empty. Halfway up the ladder, high above the ground, an astronaut in a bulky white spacesuit and white backpack is climbing down backwards, both boots on a rung, both gloved hands on the rails, seen from below and behind, his gold visor closed. The black sky behind him, hard sunlight. Low angle from the ground, 35mm lens.\n\nPhotorealistic, as if photographed in lunar orbit in 1968: pure black space with no stars, hard unfiltered sunlight, the grey cratered surface of the Moon in fine detail. Cinematic, sharp, a still frame from a feature film."
+ },
+ {
+  "key": "c35-ladder/first",
+  "variant": 4,
+  "file": "keyframes/c35-ladder_first_4.png",
+  "seed": 87870792584916,
+  "prompt": "On the Moon on 20 July 1969, looking up from the grey ground at the front leg of the lunar module: its gold-foil wrapped leg with a narrow ladder running down it, and at the bottom the wide round footpad resting on the dust, empty. Halfway up the ladder, high above the ground, an astronaut in a bulky white spacesuit and white backpack is climbing down backwards, both boots on a rung, both gloved hands on the rails, seen from below and behind, his gold visor closed. The black sky behind him, hard sunlight. Low angle from the ground, 35mm lens.\n\nPhotorealistic, as if photographed in lunar orbit in 1968: pure black space with no stars, hard unfiltered sunlight, the grey cratered surface of the Moon in fine detail. Cinematic, sharp, a still frame from a feature film."
+ },
+ {
+  "key": "c36-boot/first",
+  "variant": 1,
+  "file": "keyframes/c36-boot_first_1.png",
+  "seed": 168975081466928,
+  "prompt": "Extreme close-up at ground level on the Moon on 20 July 1969: a big white lunar overshoe with a ribbed grey rubber sole hangs in the air a hand's breadth above the untouched, fine grey lunar dust, about to step down; the leg of the bulky white spacesuit rises above it out of the frame. Behind it, softly out of focus, the edge of the lunar module's round gold footpad. Black sky, hard sunlight from the side, deep black shadows, every grain of the grey dust sharp. 50mm lens, the boot in sharp focus.\n\nPhotorealistic, as if photographed in lunar orbit in 1968: pure black space with no stars, hard unfiltered sunlight, the grey cratered surface of the Moon in fine detail. Cinematic, sharp, a still frame from a feature film."
+ },
+ {
+  "key": "c36-boot/first",
+  "variant": 2,
+  "file": "keyframes/c36-boot_first_2.png",
+  "seed": 84071266547769,
+  "prompt": "Extreme close-up at ground level on the Moon on 20 July 1969: a big white lunar overshoe with a ribbed grey rubber sole hangs in the air a hand's breadth above the untouched, fine grey lunar dust, about to step down; the leg of the bulky white spacesuit rises above it out of the frame. Behind it, softly out of focus, the edge of the lunar module's round gold footpad. Black sky, hard sunlight from the side, deep black shadows, every grain of the grey dust sharp. 50mm lens, the boot in sharp focus.\n\nPhotorealistic, as if photographed in lunar orbit in 1968: pure black space with no stars, hard unfiltered sunlight, the grey cratered surface of the Moon in fine detail. Cinematic, sharp, a still frame from a feature film."
+ },
+ {
+  "key": "c36-boot/first",
+  "variant": 3,
+  "file": "keyframes/c36-boot_first_3.png",
+  "seed": 134883200304388,
+  "prompt": "Extreme close-up at ground level on the Moon on 20 July 1969: a big white lunar overshoe with a ribbed grey rubber sole hangs in the air a hand's breadth above the untouched, fine grey lunar dust, about to step down; the leg of the bulky white spacesuit rises above it out of the frame. Behind it, softly out of focus, the edge of the lunar module's round gold footpad. Black sky, hard sunlight from the side, deep black shadows, every grain of the grey dust sharp. 50mm lens, the boot in sharp focus.\n\nPhotorealistic, as if photographed in lunar orbit in 1968: pure black space with no stars, hard unfiltered sunlight, the grey cratered surface of the Moon in fine detail. Cinematic, sharp, a still frame from a feature film."
+ },
+ {
+  "key": "c36-boot/first",
+  "variant": 4,
+  "file": "keyframes/c36-boot_first_4.png",
+  "seed": 63494265408775,
+  "prompt": "Extreme close-up at ground level on the Moon on 20 July 1969: a big white lunar overshoe with a ribbed grey rubber sole hangs in the air a hand's breadth above the untouched, fine grey lunar dust, about to step down; the leg of the bulky white spacesuit rises above it out of the frame. Behind it, softly out of focus, the edge of the lunar module's round gold footpad. Black sky, hard sunlight from the side, deep black shadows, every grain of the grey dust sharp. 50mm lens, the boot in sharp focus.\n\nPhotorealistic, as if photographed in lunar orbit in 1968: pure black space with no stars, hard unfiltered sunlight, the grey cratered surface of the Moon in fine detail. Cinematic, sharp, a still frame from a feature film."
  },
  {
   "key": "t01-embassy-whisper/first",

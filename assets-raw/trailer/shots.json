@@ -968,9 +968,9 @@
       ],
       "mode": "i2v",
       "keyframes": {
-        "first": "The morning after a disaster at the Baikonur launch site, July 1969: a grey dawn over the flat empty Kazakh steppe. In the middle distance, a wrecked rocket launch pad: twisted, blackened steel of a fallen service tower and scattered burnt debris, with thick black smoke still rising from it in a tall column into the pale grey sky. No people. Wide shot from a distance, 85mm lens, bleak and silent."
+        "first": "The morning after a rocket exploded on its launch pad at Baikonur, July 1969, under a grey dawn sky: the huge concrete launch pad with its deep flame trench, and on it the collapsed, twisted, blackened steel of the giant launch tower and the torn, burnt remains of the rocket lying in a heap. Fires still burn in the wreckage and thick black smoke rises from it in a tall column into the pale sky. The flat empty steppe stretches away behind. No people. Wide shot from a distance, 85mm lens, bleak and silent."
       },
-      "video": "Live-action, cinematic, 1969. At the wrecked pad shown in <Picture 1>, the black smoke keeps rising slowly in its column and drifts away on the wind across the grey dawn sky; small fires still flicker in the twisted steel. The camera holds a static shot.",
+      "video": "Live-action, cinematic, 1969. At the wrecked launch pad shown in <Picture 1>, the black smoke keeps rising slowly in its column and drifts away on the wind across the grey dawn sky; fires flicker in the twisted steel. The camera holds a static shot.",
       "soundscape": "Wind across the empty steppe, a faint crackle of fire far away. Nobody speaks.",
       "clipGainDb": -14,
       "facts": [
@@ -1056,24 +1056,16 @@
         0.4,
         4.4
       ],
-      "mode": "r2v",
-      "turbo": false,
-      "references": [
-        "references/apollo-lm.png"
-      ],
-      "subjects": [
-        "<Subject 1>: the lunar module shown in <Picture 1>, its gold-foil-wrapped descent stage on four spidery legs with round footpads, and the angular grey and black crew cabin on top."
-      ],
-      "summary": "The target video shows <Subject 1> landing on the Moon.",
-      "retention": [
-        "<Picture 1> ([Shot 1]): partially_preserved - the lunar module's shape is kept exactly: its gold descent stage, four legs with round footpads and the angular cabin on top. The ground around it is untouched grey dust; the framing, the ground and the light are new."
-      ],
-      "video": "Live-action, cinematic, photorealistic, on the Moon in hard sunlight, black sky. <Subject 1> descends slowly the last few metres toward the grey lunar surface, its engine blowing the fine grey dust out sideways in long flat streaks across the ground, its dark shadow growing beneath it, until its footpads touch down gently and the dust settles. The camera holds a steady low shot.",
+      "mode": "i2v",
+      "video": "Live-action, cinematic, photorealistic, 1969. The lunar module shown in <Picture 1> sinks slowly the last few metres toward the grey ground, its engine blowing the dust out sideways in long flat streaks, its shadow growing beneath it, until its footpads touch down gently and the dust settles. The camera holds a steady low shot.",
       "soundscape": "Near silence: a muffled low rumble that fades away.",
       "clipGainDb": -20,
       "facts": [
         "apollo-11"
-      ]
+      ],
+      "keyframes": {
+        "first": "The Apollo lunar module Eagle hovering a few metres above the grey surface of the Moon on 20 July 1969, seen from the side at low angle: its descent stage wrapped in crinkled gold and amber foil on four spidery legs with round dish-shaped footpads, the angular grey and black crew cabin on top with its small triangular windows. Its engine bell points down at the ground and blows the fine grey dust outward in long flat streaks. Its dark shadow lies on the ground beneath it. Black sky, hard sunlight from the side. Wide shot, 50mm lens."
+      }
     },
     {
       "id": "c35-ladder",
@@ -1086,9 +1078,9 @@
       ],
       "mode": "i2v",
       "keyframes": {
-        "first": "On the Moon on 20 July 1969, looking up from the ground at the lunar module's gold-foil-wrapped leg and its narrow ladder: an astronaut in a bulky white spacesuit with a white backpack is climbing backwards down the ladder, seen from below and behind, his gold visor closed and reflecting the light. The black sky behind him, hard sunlight. Low angle from the ground, 35mm lens."
+        "first": "On the Moon on 20 July 1969, looking up from the grey ground at the front leg of the lunar module: its gold-foil wrapped leg with a narrow ladder running down it, and at the bottom the wide round footpad resting on the dust, empty. Halfway up the ladder, high above the ground, an astronaut in a bulky white spacesuit and white backpack is climbing down backwards, both boots on a rung, both gloved hands on the rails, seen from below and behind, his gold visor closed. The black sky behind him, hard sunlight. Low angle from the ground, 35mm lens."
       },
-      "video": "Live-action, cinematic, photorealistic, 1969. On the ladder shown in <Picture 1>, the astronaut slowly and carefully climbs down one rung after another, backwards, holding the rails with his thick gloves. The camera holds a steady low shot.",
+      "video": "Live-action, cinematic, photorealistic, 1969. On the ladder shown in <Picture 1>, the astronaut slowly and carefully climbs down backwards, one rung after another, holding the rails with his thick gloves, getting closer to the footpad below. The camera holds a steady low shot.",
       "soundscape": "Near silence: slow breathing inside a helmet, a faint radio hiss.",
       "clipGainDb": -20,
       "facts": [
@@ -1102,15 +1094,13 @@
       "duration": 5.0,
       "trim": [
         0.3,
-        4.8
+        4.3
       ],
       "mode": "i2v",
-      "sameSeed": true,
       "keyframes": {
-        "first": "Close-up on the Moon on 20 July 1969, low angle at ground level: the bottom of the lunar module's ladder and its wide round dish-shaped footpad in gold-coloured metal resting on the fine grey lunar dust, the black sky behind. A big white lunar overshoe with a ribbed grey sole stands on the footpad, the leg of the white spacesuit above it. Hard sunlight from the side, deep black shadows, every grain of the grey dust sharp. 50mm lens, the boot in sharp focus.",
-        "last": "Close-up on the Moon on 20 July 1969, low angle at ground level: the bottom of the lunar module's ladder and its wide round dish-shaped footpad in gold-coloured metal resting on the fine grey lunar dust, the black sky behind. A big white lunar overshoe with a ribbed grey sole hangs in the air just in front of the footpad, a hand's breadth above the untouched grey dust, about to step down, the leg of the white spacesuit above it. Hard sunlight from the side, deep black shadows, every grain of the grey dust sharp. 50mm lens, the boot in sharp focus."
+        "first": "Extreme close-up at ground level on the Moon on 20 July 1969: a big white lunar overshoe with a ribbed grey rubber sole hangs in the air a hand's breadth above the untouched, fine grey lunar dust, about to step down; the leg of the bulky white spacesuit rises above it out of the frame. Behind it, softly out of focus, the edge of the lunar module's round gold footpad. Black sky, hard sunlight from the side, deep black shadows, every grain of the grey dust sharp. 50mm lens, the boot in sharp focus."
       },
-      "video": "Live-action, cinematic, photorealistic, 1969. On the Moon shown in <Picture 1>, the boot slowly lifts off the footpad and moves forward over the grey dust, and comes to hang just above it as shown in <Picture 2>. The camera holds a steady low shot.",
+      "video": "Live-action, cinematic, photorealistic, 1969. On the Moon shown in <Picture 1>, the white boot lowers very slowly toward the untouched grey dust. The camera holds a steady low shot.",
       "soundscape": "Near silence: slow breathing inside a helmet.",
       "clipGainDb": -20,
       "facts": [
@@ -1120,7 +1110,8 @@
         "text": "Sea of Tranquility, 20 July 1969",
         "at": 0.4,
         "for": 3.0
-      }
+      },
+      "_comment": "Cut a frame before the sole touches the dust: set the trim once the clip is in."
     }
   ],
   "tests": [
