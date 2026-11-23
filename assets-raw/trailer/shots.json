@@ -32,33 +32,8 @@
       "look": "us-1955",
       "duration": 5.0,
       "trim": [
-        0.3,
-        3.8
-      ],
-      "mode": "i2v",
-      "keyframes": {
-        "first": "The White House press room in July 1955: a small crowded room with wood panelling and a window with venetian blinds. In the left foreground, seen from behind and out of focus, a man in a dark suit holds up a typed sheet of paper. Facing him, a tight crowd of reporters in suits, ties and fedoras, notebooks and pencils in hand, and press photographers raising large press cameras with round silver flash reflectors, the moment just before the first picture is taken: the room lit only by warm lamp light and the daylight through the blinds. Medium-wide shot at eye level, 35mm lens."
-      },
-      "video": "Live-action, cinematic, 1955. In the press room shown in <Picture 1>, the photographers take their pictures: each flashbulb fires as a single blink of white light that is gone in a split second, one camera at a time, now here, now there, like flashes in an old newsreel. The reporters scribble fast in their notebooks and lean in; one of them turns and hurries out of the room. The man in the foreground stays with his back to the camera, holding the typed sheet. The camera pushes in with small amplitude at slow speed.",
-      "soundscape": "The pops and clicks of flashbulbs and press cameras, pencils scratching, the shuffle of a crowded room, a door opening. Nobody speaks.",
-      "clipGainDb": -12,
-      "caption": {
-        "text": "29 July 1955",
-        "at": 0.4,
-        "for": 2.8
-      },
-      "facts": [
-        "us-satellite-announcement-1955"
-      ]
-    },
-    {
-      "id": "c02a-press-room-small",
-      "beat": "trials",
-      "look": "us-1955",
-      "duration": 5.0,
-      "trim": [
-        0.3,
-        3.8
+        1.4,
+        4.9
       ],
       "mode": "i2v",
       "keyframes": {
@@ -270,30 +245,10 @@
       "duration": 5.0,
       "mode": "i2v",
       "keyframes": {
-        "first": "The ballroom of an embassy in Washington during an evening reception, October 1957. Over the shoulder of a grey-haired scientist in a dark suit, seen from behind and softly out of focus in the left foreground, his right hand raising a champagne coupe. Facing him and the camera, a crowd of guests in dark suits and a few women in cocktail dresses, glasses in hand, their faces lit warmly by the chandeliers. The Americans in the front rows look stiff and unsettled, mouths set in tight polite smiles; two Soviet diplomats in the middle of the crowd beam openly. Crystal chandeliers, wood panelling and red curtains behind them. Medium-wide shot at eye level, 50mm lens, the crowd's faces in sharp focus."
-      },
-      "video": "Live-action, cinematic, 1957. In the ballroom shown in <Picture 1>, the grey-haired scientist in the foreground lifts his champagne coupe a little higher in a toast. Facing him, the guests slowly raise their glasses in answer. The two Soviet diplomats smile broadly and lift their glasses high. The Americans raise theirs reluctantly, only to shoulder height, with tight, forced smiles; one of them glances sideways at his neighbour, another stares into his glass before drinking. The mood is subdued and awkward, a polite toast to a rival's success. The camera pushes in with small amplitude at slow speed toward the front row of faces.",
-      "soundscape": "A large room that has fallen quiet: a single glass being tapped, a few murmurs, the shuffle of feet, then sparse, hesitant applause from a few people. Nobody speaks.",
-      "facts": [
-        "embassy-reception-1957"
-      ],
-      "trim": [
-        0.0,
-        4.0
-      ],
-      "clipGainDb": -10
-    },
-    {
-      "id": "c10-embassy-toast-small",
-      "beat": "trials",
-      "look": "us-1957",
-      "duration": 5.0,
-      "mode": "i2v",
-      "keyframes": {
         "first": "The ballroom of an embassy in Washington during an evening reception, October 1957. Over the shoulder of a grey-haired scientist in a dark suit, seen from behind and out of focus in the left foreground, his right hand raising a champagne coupe in a toast. Facing him, close to the camera and in sharp focus, a small group of six guests: in the middle, two Soviet diplomats in grey double-breasted suits with small red lapel badges, beaming, their champagne coupes raised high; on the left, a heavyset American official in a dark suit with empty hands and his arms folded, his jaw set, unsmiling; next to him a silver-haired American in a dark suit holding his coupe low at his chest, a thin, fixed smile; on the right, a young American engineer with horn-rimmed glasses and empty hands, his eyes lowered; beside him a woman in a dark cocktail dress, one gloved hand at her pearls, glancing uneasily at the men beside her. Behind them the rest of the ballroom is a soft, heavily blurred background of chandelier light and dark shapes. Medium shot at eye level, 85mm lens wide open, very shallow depth of field."
       },
       "video": "Live-action, cinematic, 1957. In the ballroom shown in <Picture 1>, the beaming Soviet diplomat in the grey double-breasted suit in the middle lifts his coupe high and drinks, smiling broadly. The silver-haired American behind him raises his coupe only a few inches, his smile thin and fixed, and takes a small sip. The heavyset American on the left slowly unfolds his arms and claps twice, slowly, without smiling. The young man with glasses on the right keeps his coupe low and does not drink, his face blank. The woman on the far right glances from one man to the other, her gloved hand at her pearls. The grey-haired man in the foreground keeps his glass raised. The background stays soft and blurred. The camera pushes in with small amplitude at slow speed.",
-      "soundscape": "A large room that has fallen quiet: two slow, isolated hand claps; a glass clinking once; a faint murmur far away. Nobody speaks.",
+      "soundscape": "A large room that has fallen quiet: a single glass being tapped, a few murmurs, the shuffle of feet, then sparse, hesitant applause from a few people. Nobody speaks.",
       "facts": [
         "embassy-reception-1957"
       ],

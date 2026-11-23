@@ -199,7 +199,7 @@ The film has about 20–25 shots. With 3–4 variants per shot that is 80–100 
   two in the model's compressed grid and shimmers from frame to frame (the c02a-press-room-small trial): its faces came out
   clearly better (user), though the background stayed in focus despite "shallow depth of field" and its faces
   still turn odd at times. Next try: a longer lens (85mm, wide open) and the background people described as
-  blurred shapes. Shot 05 (Moscow) was remade that way (2026-11-23, user): five journalists close up, 85mm wide open, the hall a blur, each with his own action; its faces hold.
+  blurred shapes. Shots 02 (the White House) and 10 (the toast) took their small trials' finals into the cut, and shot 05 (Moscow) was remade that way (2026-11-23, user): five journalists close up, 85mm wide open, the hall a blur, each with his own action; its faces hold.
 - **The video prompt describes the picked keyframe, not the keyframe prompt:** the model rarely draws exactly
   what was asked (two Soviets became one; an empty-handed man got a glass). After picking a first frame, rewrite
   the video prompt for who is actually in it and what they hold (user).
