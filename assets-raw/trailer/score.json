@@ -3,6 +3,106 @@
   "gainDb": -6.0,
   "cues": [
     {
+      "id": "open",
+      "_comment": "Beat 1: a low, mysterious pulse under the announcements, steady, no hit; it fades out into the first hit at c07.",
+      "seconds": 34,
+      "seeds": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "prompt": "Cinematic film score, instrumental, Cold War mystery and expectation: a low ticking pulse of muted staccato strings and a soft synth clock, sustained cellos and basses, a distant low brass note now and then. Quiet and restrained throughout, steady energy, never building, no drums. Modern space-film trailer music, 80 BPM, D minor.",
+      "from": {
+        "shot": "c01-washington",
+        "offset": 0.0,
+        "fade": 1.5
+      },
+      "to": {
+        "shot": "c07-soviet-bureau",
+        "offset": 0.5,
+        "fade": 1.5
+      }
+    },
+    {
+      "id": "race",
+      "_comment": "Beat 2: the race is on. Starts on a big hit at c07 (\"and what a race it was!\"), then a tense driving pulse that keeps building through Sputnik and Vanguard; it stops as the Vanguard burns, leaving the beep alone for Flopnik.",
+      "seconds": 42,
+      "seeds": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "prompt": "Cinematic orchestral film score, instrumental. It opens with one huge boom of drums and low brass, then a tense, driving ostinato of staccato strings and ticking percussion, Cold War suspense, slowly building with horns, snare and timpani, more and more urgent. Modern space-film trailer music, 80 BPM, D minor.",
+      "from": {
+        "shot": "c07-soviet-bureau",
+        "offset": 0.0,
+        "into": 0.0,
+        "fade": 0.0
+      },
+      "to": {
+        "shot": "c15-vanguard-scrub",
+        "offset": 0.2,
+        "fade": 0.6
+      }
+    },
+    {
+      "id": "gagarin",
+      "_comment": "Beat 3: rises under the Soviet calendar to the first big swell as Gagarin flies (c17), heroic through Shepard and Glenn, and swells again under Kennedy; it hands over to the drive at the beat's end. Take 1's swell arrives 6 s in (its loudest moment, 14 s, is later in that phrase).",
+      "seconds": 40,
+      "seeds": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "prompt": "Cinematic orchestral film score, instrumental, wonder and heroism. A short quiet rise of strings and a snare roll grows quickly into a huge soaring swell of the full orchestra with French horns, brass and cymbals, then carries on broad, proud and heroic with a noble horn theme over driving strings and timpani. Modern space-film trailer music, 80 BPM, D major.",
+      "hit": {
+        "shot": "c17-vostok-helmet",
+        "offset": 0.0
+      },
+      "from": {
+        "shot": "c16-calendar-1961",
+        "offset": 0.0,
+        "fade": 1.0
+      },
+      "to": {
+        "shot": "c22b-rice-stands",
+        "offset": 4.5,
+        "fade": 2.0
+      },
+      "peak": {
+        "music/takes/gagarin_1.ogg": 6.0
+      }
+    },
+    {
+      "id": "drive",
+      "_comment": "Beat 4: crossfades in under the end of Kennedy's sentence, builds to a hit as the montage of firsts begins (c23a) and drives it; the music stops dead on the memorials (c27a).",
+      "seconds": 47,
+      "seeds": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "prompt": "Cinematic orchestral film score, instrumental. It begins quietly with low strings and a heartbeat drum, building steadily for fifteen seconds to a big hit of the full orchestra, then an energetic, optimistic driving montage: pulsing strings, punchy brass, propulsive drums and timpani, confident and forward-moving at full power. Modern space-film trailer music, 80 BPM, D major.",
+      "hit": {
+        "shot": "c23a-tereshkova",
+        "offset": 0.0
+      },
+      "from": {
+        "shot": "c22b-rice-stands",
+        "offset": 3.0,
+        "fade": 2.0
+      },
+      "to": {
+        "shot": "c27a-pad-us",
+        "offset": 0.0,
+        "fade": 0.15
+      }
+    },
+    {
       "id": "moon",
       "_comment": "Beat 5: the music comes back after the black, rises under the rollout and the Apollo 8 launch, peaks on the photograph (the shutter click, the one moment without words), and fades out with the picture to black.",
       "seconds": 30,
@@ -29,13 +129,85 @@
         "offset": 6.0,
         "fade": 3.5
       }
+    },
+    {
+      "id": "suspense",
+      "_comment": "Beat 6: low, ticking suspense from the cut out of the black; it cuts out on the N1's flash.",
+      "seconds": 24,
+      "seeds": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "prompt": "Cinematic film score, instrumental, dark nervous suspense at night: a low ticking clock pulse, tremolo strings, a deep sustained bass drone, a quiet heartbeat drum, tension slowly rising. Restrained, no melody, no big hits. Modern space-film trailer music, 80 BPM, D minor.",
+      "from": {
+        "shot": "c31a-apollo11-waiting",
+        "offset": 0.0,
+        "into": 0.0,
+        "fade": 1.0
+      },
+      "to": {
+        "shot": "c31-n1",
+        "offset": 3.6,
+        "fade": 0.0
+      }
+    },
+    {
+      "id": "finale",
+      "_comment": "Beat 7: the long final build from the launch to the boot; at its peak as the boot comes down (c36), cut dead at the black.",
+      "seconds": 30,
+      "seeds": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "prompt": "Cinematic orchestral film score, instrumental, one long continuous crescendo full of hope and triumph: from quiet low strings and a heartbeat drum it grows steadily with ostinato strings, French horns, snare roll and timpani, rising higher and higher to an enormous, euphoric peak of the full orchestra with brass, choir-like pads and cymbals. Modern space-film trailer music, 80 BPM, D major.",
+      "hit": {
+        "shot": "c36-boot",
+        "offset": 0.5
+      },
+      "from": {
+        "shot": "c32-apollo11-beach",
+        "offset": 0.0,
+        "fade": 1.5
+      },
+      "to": {
+        "shot": "c37-endcard",
+        "offset": -1.0,
+        "fade": 0.0
+      }
+    },
+    {
+      "id": "logo",
+      "_comment": "The end card: one warm, held final chord as the logo builds.",
+      "seconds": 12,
+      "seeds": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "prompt": "Cinematic orchestral film score, instrumental: a single warm, glowing final chord of the full orchestra and soft brass in D major, swelling gently and ringing out with shimmering high strings and a soft cymbal, then fading to silence. A trailer logo ending.",
+      "from": {
+        "shot": "c37-endcard",
+        "offset": 0.0,
+        "into": 0.0,
+        "fade": 0.3
+      },
+      "to": {
+        "shot": "c37-endcard",
+        "offset": 6.5,
+        "fade": 2.0
+      }
     }
   ],
   "duck": {
     "margin": 10.0,
     "attack": 0.3,
     "release": 0.5,
-    "bridge": 1.5,
+    "bridge": 2.5,
     "rise": 15.0
   }
 }

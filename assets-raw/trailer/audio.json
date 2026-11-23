@@ -306,7 +306,8 @@
       "offset": 0.6,
       "track": "A3",
       "_comment": "Charlie Duke on the flight loop (NASA).",
-      "gainDb": -11
+      "gainDb": -11,
+      "duckMargin": 5.0
     },
     {
       "id": "nasa-eagle",
@@ -315,7 +316,8 @@
       "offset": 0.3,
       "track": "A3",
       "_comment": "Armstrong (NASA; the game's own copy, credited in assets/CREDITS.md).",
-      "gainDb": -13
+      "gainDb": -13,
+      "duckMargin": 5.0
     },
     {
       "id": "nasa-step",
@@ -325,7 +327,8 @@
       "for": 2.52,
       "track": "A3",
       "_comment": "Armstrong (NASA; the game's own copy). \"man\" fades out at 2.5 s (its level's dip; Whisper puts the word's end at 2.14, too early): placed so that lands on the shot's last frame, the cut to black.",
-      "gainDb": -6
+      "gainDb": -6,
+      "duckMargin": 5.0
     }
   ]
 }

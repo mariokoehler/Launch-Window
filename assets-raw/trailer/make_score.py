@@ -127,7 +127,8 @@ def mix(starts, length, picks, name):
     parts = []
     for cue in score['cues']:
         take = picks.get(f'score/{cue["id"]}')
-        if not take or cue['hit']['shot'] not in starts:
+        anchor = cue.get('hit') or cue.get('from')  # what places the take: it must be in this cut
+        if not take or anchor['shot'] not in starts:
             continue
         path = os.path.join(HERE, take)
 
@@ -172,14 +173,15 @@ def mix(starts, length, picks, name):
 
 
 def voices(starts, length):
-    """Every voice in the cut (audio.json's A3: the narration, Kennedy, NASA's loops): path, start, gain, length."""
+    """Every voice in the cut (audio.json's A3: the narration, Kennedy, NASA's loops): path, start, gain, length,
+    and its own duck margin if it has one."""
     found = []
     for track in read('audio.json')['tracks']:
         if track.get('track') != 'A3' or track.get('under') not in starts:
             continue
         at = starts[track['under']] + track.get('offset', 0.0)
         span = min(track.get('for', 1e9), media_length(os.path.join(HERE, track['file'])), length - at)
-        found.append((os.path.join(HERE, track['file']), at, track.get('gainDb', 0.0), span))
+        found.append((os.path.join(HERE, track['file']), at, track.get('gainDb', 0.0), span, track.get('duckMargin')))
     return found
 
 
@@ -204,12 +206,13 @@ def duck(raw, out, speech, gain_db, settings):
     margin, attack, release = settings.get('margin', 12.0), settings.get('attack', 0.3), settings.get('release', 0.6)
     music = level(raw) + gain_db
     ceiling = np.full(len(music), np.inf)
-    for path, at, voice_gain, span in speech:
+    for path, at, voice_gain, span, own in speech:
         voice = level(path)[:round(span * 100)] + voice_gain
         talking = voice > voice.max() - 20
         if not talking.any():
             continue
-        line = float(np.median(voice[talking])) - margin
+        # A track's own "duckMargin" (audio.json): NASA's radio voices cut through with less room.
+        line = float(np.median(voice[talking])) - (margin if own is None else own)
         first, last = np.flatnonzero(talking)[[0, -1]]
         begin = max(0, round(at * 100) + first - round(attack * 100))
         end = min(len(ceiling), round(at * 100) + last + round(release * 100))
@@ -242,7 +245,7 @@ def duck(raw, out, speech, gain_db, settings):
 def report(music, dip, speech):
     """Per voice line: how far the music sits below it, before and after the ducking (the loudest moment)."""
     import numpy as np
-    for path, at, voice_gain, span in speech:
+    for path, at, voice_gain, span, _ in speech:
         voice = level(path)[:round(span * 100)] + voice_gain
         talking = np.flatnonzero(voice > voice.max() - 20)
         if not len(talking):
