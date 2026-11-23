@@ -90,11 +90,17 @@ A fast montage under one running line, then a stop.
 | 29 | **Through the capsule window.** A bare hand raises a camera as the Earth rises over the grey lunar horizon. | 5.0 | Earthrise, 24 December. A held breath. "A single small blue Earth above the horizon": say what is wanted, never "no second Earth". | "On Christmas Eve, they saw the Earth rise over the Moon." |
 | 30 | **The Earth alone,** small and blue above the Moon's grey edge, as through the camera's viewfinder; a shutter click, and the picture freezes into the real Earthrise photograph. | 5.0 | The real photo (NASA AS08-14-2383, Bill Anders, 24 December 1968; public domain) holds about 2 s, in its famous orientation with the lunar horizon along the bottom: the film's only real image. The shutter click goes in at the edit. | "... and took one of the most famous photos in history." |
 
-## 6. The last turn (July 1969), about 6 s
+## 6. The last turn (July 1969), about 19 s
+
+The Soviets' last try, 13 days before Apollo 11 (user): Apollo 11 waiting first, so the viewer knows the clock;
+the N1's failure is the moment the race is lost; then the Soviet way, a secret.
 
 | # | Shot | Len | Notes | Narration |
 |---|---|---|---|---|
-| 31 | **Baikonur at night.** The N1 on its floodlit pad; its thirty engines light, it rises a few hundred metres, tilts, falls back; the explosion lights up the whole steppe. | 6.0 | C: *Baikonur, 3 July 1969*. The music cuts out on the flash. No reference art for the N1: try keyframes first, its tapered cone is the check; the first frame before ignition, the tower and floodlights for scale. | "In secret, the Soviet Moon rocket fell back onto its pad." |
+| 31a | **Cape Kennedy at night.** Apollo 11's Saturn V waits on Pad 39A, lit by searchlights, their beams reaching up into the dark; utterly still. | 4.5 | C: *Cape Kennedy, July 1969*. The rollout's rocket again, now waiting. | "July 1969. Apollo 11 was less than two weeks from launch." |
+| 31 | **Baikonur at night.** The N1 on its floodlit pad; its thirty engines light, it rises a few hundred metres, tilts, falls back; the explosion lights up the whole steppe. | 6.5 | C: *Baikonur, 3 July 1969*. The narration ends before ignition; the music cuts out on the flash, then nothing but the explosion. The first frame before ignition; the tower and floodlights for scale; the user's `n1.png` art as a reference if keyframes miss its shape. | "Half a world away, the Soviets made one last try." |
+| 31b | **The morning after.** Black smoke rising from the wrecked pad into a grey dawn over the empty steppe; twisted steel. | 3.5 | Silence but the wind. | "Their Moon rocket was gone, and with it, the race." |
+| 31c | **Top secret.** A desk lamp; a hand closes a cardboard folder stamped "СОВЕРШЕННО СЕКРЕТНО" over photographs of the wreck, ties its string and slides it into a drawer. | 4.0 | S: *Top secret*. The stamp is on the folder in the first frame (still text holds; newly printed text garbles). | "And Moscow kept it secret for twenty years." |
 
 ## 7. The landing (July 1969), about 22 s, then the logo
 
@@ -102,7 +108,7 @@ The narrator's last line is in 32; from there the real voices of Apollo 11 tell 
 
 | # | Shot | Len | Notes | Narration |
 |---|---|---|---|---|
-| 32 | **A beach near the Cape.** Three people from behind in the foreground (a man lowering his binoculars, a woman shading her eyes, a boy pointing); far off, a Saturn V lifts on a pillar of flame. | 4.0 | C: *Apollo 11, 16 July 1969*. Thirteen days after the N1. | "Thirteen days later, Apollo 11 lifted off." |
+| 32 | **A beach near the Cape.** Three people from behind in the foreground (a man lowering his binoculars, a woman shading her eyes, a boy pointing); far off, a Saturn V lifts on a pillar of flame. | 4.0 | C: *Apollo 11, 16 July 1969*. Thirteen days after the N1 (31a has said so). | "On the 16th of July, Apollo 11 lifted off." |
 | 33 | **Mission control, from behind.** Two controllers frozen at their consoles, one with a hand on his headset; a fuel gauge needle near empty. | 3.0 | Sound: "60 seconds" from the real flight loop (NASA, public domain, to confirm). | *(NASA: "60 seconds")* |
 | 34 | **The lunar module's descent.** Dust streaming out flat from under the engine bell, the LM's shadow on the ground, the probes touching. | 4.0 | Reference to video from `apollo_lunar_landing_type_g_h.png`. Sound: "The Eagle has landed" (`assets/audio/archive/apollo-11-eagle-has-landed.ogg`, NASA). | *(NASA: "The Eagle has landed")* |
 | 35 | **The ladder, from below.** A white-suited figure backs down the LM's ladder, the black sky behind. | 3.0 | The visor gold and closed. | |
