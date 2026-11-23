@@ -83,5 +83,9 @@
   "c27c-rollout/final": "clips/final/c27c-rollout_1.mp4",
   "c28-apollo8-launch/final": "clips/final/c28-apollo8-launch_1.mp4",
   "c29-earthrise-window/final": "clips/final/c29-earthrise-window_1.mp4",
-  "c30-earthrise/final": "clips/final/c30-earthrise_1.mp4"
+  "c30-earthrise/final": "clips/final/c30-earthrise_1.mp4",
+  "c31a-apollo11-waiting/first": "keyframes/c31a-apollo11-waiting_first_2.png",
+  "c31-n1/first": "keyframes/c31-n1_first_4.png",
+  "c31b-n1-morning/first": "keyframes/c31b-n1-morning_first_2.png",
+  "c31c-top-secret/first": "keyframes/c31c-top-secret_first_2.png"
 }

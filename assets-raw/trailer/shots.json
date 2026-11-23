@@ -906,6 +906,101 @@
         0.5625
       ],
       "_comment": "NASA AS08-14-2383, Earthrise, Bill Anders, 24 December 1968; public domain, from https://images-assets.nasa.gov/image/as08-14-2383/as08-14-2383~orig.jpg (3000x3000, the published orientation)."
+    },
+    {
+      "id": "c31a-apollo11-waiting",
+      "beat": "last-turn",
+      "look": "us-1968",
+      "duration": 5.0,
+      "trim": [
+        0.3,
+        4.8
+      ],
+      "mode": "i2v",
+      "keyframes": {
+        "first": "Launch Complex 39A at Cape Kennedy at night in July 1969: the gigantic white Saturn V rocket with black and white markings stands on its launch platform beside the red launch tower, brilliantly lit by powerful xenon searchlights from below, their white beams reaching up into the black night sky around it. Utterly still and quiet, the rocket glowing white against the darkness. Wide shot from a distance, low angle, 135mm lens, the whole rocket and tower in the frame."
+      },
+      "video": "Live-action, cinematic, 1969. The rocket shown in <Picture 1> stands perfectly still on its pad in the searchlights; a thin wisp of white vapour drifts from its side, and moths flicker through the light beams. The camera pushes in very slowly with small amplitude toward the rocket.",
+      "soundscape": "A warm Florida night: crickets, a faint hum of floodlights, a distant hiss of venting vapour. Nobody speaks.",
+      "clipGainDb": -14,
+      "facts": [
+        "apollo-11"
+      ],
+      "caption": {
+        "text": "Cape Kennedy, July 1969",
+        "at": 0.4,
+        "for": 3.0
+      }
+    },
+    {
+      "id": "c31-n1",
+      "beat": "last-turn",
+      "look": "ussr-1969",
+      "duration": 7.0,
+      "trim": [
+        0.3,
+        6.8
+      ],
+      "mode": "i2v",
+      "keyframes": {
+        "first": "The Baikonur launch site on the Kazakh steppe at night in July 1969: the Soviet N1 Moon rocket, a gigantic tapered cone a hundred and five metres tall: very wide at its base and narrowing steadily to a slim point, its lower stages dark grey with ribbed panels and open lattice rings between the stages, its upper stages pale grey and white, stands on its huge concrete launch pad, held by a tall steel service tower, lit from below by floodlights against the black night sky. Its engines are unlit and the pad is quiet. Flat dark steppe all around, a few distant lights. Seen from far away, the whole rocket and tower in the frame, wide shot, 135mm telephoto lens."
+      },
+      "video": "Live-action, cinematic, 1969, at night. The giant rocket shown in <Picture 1> ignites: a ring of dozens of bright engines flares at its base, flame and smoke burst out across the pad, and it rises slowly a short way into the night sky. Then it tilts to one side, its flames sputter, and it falls back down onto the pad and bursts into an enormous fireball that lights up the whole steppe in orange. The camera holds a static shot.",
+      "soundscape": "The roar of many rocket engines igniting, then sputtering, then a colossal explosion and a deep rolling blast wave across the steppe. Nobody speaks.",
+      "clipGainDb": -6,
+      "facts": [
+        "n1-secret"
+      ],
+      "caption": {
+        "text": "Baikonur, 3 July 1969",
+        "at": 0.4,
+        "for": 3.0
+      }
+    },
+    {
+      "id": "c31b-n1-morning",
+      "beat": "last-turn",
+      "look": "ussr-1969",
+      "duration": 5.0,
+      "trim": [
+        0.4,
+        3.9
+      ],
+      "mode": "i2v",
+      "keyframes": {
+        "first": "The morning after a disaster at the Baikonur launch site, July 1969: a grey dawn over the flat empty Kazakh steppe. In the middle distance, a wrecked rocket launch pad: twisted, blackened steel of a fallen service tower and scattered burnt debris, with thick black smoke still rising from it in a tall column into the pale grey sky. No people. Wide shot from a distance, 85mm lens, bleak and silent."
+      },
+      "video": "Live-action, cinematic, 1969. At the wrecked pad shown in <Picture 1>, the black smoke keeps rising slowly in its column and drifts away on the wind across the grey dawn sky; small fires still flicker in the twisted steel. The camera holds a static shot.",
+      "soundscape": "Wind across the empty steppe, a faint crackle of fire far away. Nobody speaks.",
+      "clipGainDb": -14,
+      "facts": [
+        "n1-secret"
+      ]
+    },
+    {
+      "id": "c31c-top-secret",
+      "beat": "last-turn",
+      "look": "ussr-1969",
+      "duration": 5.0,
+      "trim": [
+        0.3,
+        4.3
+      ],
+      "mode": "i2v",
+      "keyframes": {
+        "first": "A Soviet office desk at night in 1969, close-up from above, lit by a single green-shaded desk lamp: a closed buff cardboard folder lies on the dark wooden desk, its front cover stamped in red with the words \"СОВЕРШЕННО СЕКРЕТНО\" in large Russian Cyrillic capitals, clearly legible. Beside it lie a few black and white photographs of a burnt, wrecked rocket launch pad, and a man's hand in a dark suit sleeve rests on them. Close-up, 50mm lens, the stamp and the photographs in sharp focus."
+      },
+      "video": "Live-action, cinematic, 1969. On the desk shown in <Picture 1>, the man's hand gathers the photographs together and slides them under the cover of the folder, then pulls the folder's string tight. The stamped cover stays face up and still. The lamp light stays steady. The camera holds a static shot.",
+      "soundscape": "A quiet office at night: the soft slap of cardboard, a string being tied, a clock ticking. Nobody speaks.",
+      "clipGainDb": -12,
+      "facts": [
+        "n1-secret"
+      ],
+      "subtitle": {
+        "text": "Top secret",
+        "at": 0.6,
+        "for": 2.5
+      }
     }
   ],
   "tests": [

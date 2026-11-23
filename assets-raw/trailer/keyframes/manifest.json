@@ -847,6 +847,118 @@
   "prompt": "The view from lunar orbit on 24 December 1968: the grey, cratered, rugged horizon of the Moon runs across the bottom of the frame, sharp and bright in hard sunlight. Above it in pure black space, the small blue and white Earth is just rising over the lunar horizon, half in sunlight and half in shadow, its oceans blue and its clouds white. No stars. Telephoto view, as through a long camera lens.\n\nPhotorealistic, as if photographed in lunar orbit in 1968: pure black space with no stars, hard unfiltered sunlight, the grey cratered surface of the Moon in fine detail. Cinematic, sharp, a still frame from a feature film."
  },
  {
+  "key": "c31-n1/first",
+  "variant": 1,
+  "file": "keyframes/c31-n1_first_1.png",
+  "seed": 241933068715312,
+  "prompt": "The Baikonur launch site on the Kazakh steppe at night in July 1969: the Soviet N1 Moon rocket, a gigantic tapered cone a hundred and five metres tall: very wide at its base and narrowing steadily to a slim point, its lower stages dark grey with ribbed panels and open lattice rings between the stages, its upper stages pale grey and white, stands on its huge concrete launch pad, held by a tall steel service tower, lit from below by floodlights against the black night sky. Its engines are unlit and the pad is quiet. Flat dark steppe all around, a few distant lights. Seen from far away, the whole rocket and tower in the frame, wide shot, 135mm telephoto lens.\n\nShot on 35mm film in the late-1960s Soviet Union: a cool, slightly desaturated palette with muted greens and steel greys, visible film grain, hard light, the look of a Soviet feature film of the period. Period-accurate late-1960s machines, furniture and clothing. Cinematic composition, photorealistic, a still frame from a feature film."
+ },
+ {
+  "key": "c31-n1/first",
+  "variant": 2,
+  "file": "keyframes/c31-n1_first_2.png",
+  "seed": 132645467706421,
+  "prompt": "The Baikonur launch site on the Kazakh steppe at night in July 1969: the Soviet N1 Moon rocket, a gigantic tapered cone a hundred and five metres tall: very wide at its base and narrowing steadily to a slim point, its lower stages dark grey with ribbed panels and open lattice rings between the stages, its upper stages pale grey and white, stands on its huge concrete launch pad, held by a tall steel service tower, lit from below by floodlights against the black night sky. Its engines are unlit and the pad is quiet. Flat dark steppe all around, a few distant lights. Seen from far away, the whole rocket and tower in the frame, wide shot, 135mm telephoto lens.\n\nShot on 35mm film in the late-1960s Soviet Union: a cool, slightly desaturated palette with muted greens and steel greys, visible film grain, hard light, the look of a Soviet feature film of the period. Period-accurate late-1960s machines, furniture and clothing. Cinematic composition, photorealistic, a still frame from a feature film."
+ },
+ {
+  "key": "c31-n1/first",
+  "variant": 3,
+  "file": "keyframes/c31-n1_first_3.png",
+  "seed": 98619529025596,
+  "prompt": "The Baikonur launch site on the Kazakh steppe at night in July 1969: the Soviet N1 Moon rocket, a gigantic tapered cone a hundred and five metres tall: very wide at its base and narrowing steadily to a slim point, its lower stages dark grey with ribbed panels and open lattice rings between the stages, its upper stages pale grey and white, stands on its huge concrete launch pad, held by a tall steel service tower, lit from below by floodlights against the black night sky. Its engines are unlit and the pad is quiet. Flat dark steppe all around, a few distant lights. Seen from far away, the whole rocket and tower in the frame, wide shot, 135mm telephoto lens.\n\nShot on 35mm film in the late-1960s Soviet Union: a cool, slightly desaturated palette with muted greens and steel greys, visible film grain, hard light, the look of a Soviet feature film of the period. Period-accurate late-1960s machines, furniture and clothing. Cinematic composition, photorealistic, a still frame from a feature film."
+ },
+ {
+  "key": "c31-n1/first",
+  "variant": 4,
+  "file": "keyframes/c31-n1_first_4.png",
+  "seed": 182145139269680,
+  "prompt": "The Baikonur launch site on the Kazakh steppe at night in July 1969: the Soviet N1 Moon rocket, a gigantic tapered cone a hundred and five metres tall: very wide at its base and narrowing steadily to a slim point, its lower stages dark grey with ribbed panels and open lattice rings between the stages, its upper stages pale grey and white, stands on its huge concrete launch pad, held by a tall steel service tower, lit from below by floodlights against the black night sky. Its engines are unlit and the pad is quiet. Flat dark steppe all around, a few distant lights. Seen from far away, the whole rocket and tower in the frame, wide shot, 135mm telephoto lens.\n\nShot on 35mm film in the late-1960s Soviet Union: a cool, slightly desaturated palette with muted greens and steel greys, visible film grain, hard light, the look of a Soviet feature film of the period. Period-accurate late-1960s machines, furniture and clothing. Cinematic composition, photorealistic, a still frame from a feature film."
+ },
+ {
+  "key": "c31a-apollo11-waiting/first",
+  "variant": 1,
+  "file": "keyframes/c31a-apollo11-waiting_first_1.png",
+  "seed": 163510943175066,
+  "prompt": "Launch Complex 39A at Cape Kennedy at night in July 1969: the gigantic white Saturn V rocket with black and white markings stands on its launch platform beside the red launch tower, brilliantly lit by powerful xenon searchlights from below, their white beams reaching up into the black night sky around it. Utterly still and quiet, the rocket glowing white against the darkness. Wide shot from a distance, low angle, 135mm lens, the whole rocket and tower in the frame.\n\nShot on 35mm colour motion picture film in the late 1960s: a natural Ektachrome palette, soft natural film grain, gentle halation around bright lights. Period-accurate late-1960s machines, vehicles and clothing. Cinematic composition, photorealistic, a still frame from a feature film."
+ },
+ {
+  "key": "c31a-apollo11-waiting/first",
+  "variant": 2,
+  "file": "keyframes/c31a-apollo11-waiting_first_2.png",
+  "seed": 151299454180940,
+  "prompt": "Launch Complex 39A at Cape Kennedy at night in July 1969: the gigantic white Saturn V rocket with black and white markings stands on its launch platform beside the red launch tower, brilliantly lit by powerful xenon searchlights from below, their white beams reaching up into the black night sky around it. Utterly still and quiet, the rocket glowing white against the darkness. Wide shot from a distance, low angle, 135mm lens, the whole rocket and tower in the frame.\n\nShot on 35mm colour motion picture film in the late 1960s: a natural Ektachrome palette, soft natural film grain, gentle halation around bright lights. Period-accurate late-1960s machines, vehicles and clothing. Cinematic composition, photorealistic, a still frame from a feature film."
+ },
+ {
+  "key": "c31a-apollo11-waiting/first",
+  "variant": 3,
+  "file": "keyframes/c31a-apollo11-waiting_first_3.png",
+  "seed": 94777623251559,
+  "prompt": "Launch Complex 39A at Cape Kennedy at night in July 1969: the gigantic white Saturn V rocket with black and white markings stands on its launch platform beside the red launch tower, brilliantly lit by powerful xenon searchlights from below, their white beams reaching up into the black night sky around it. Utterly still and quiet, the rocket glowing white against the darkness. Wide shot from a distance, low angle, 135mm lens, the whole rocket and tower in the frame.\n\nShot on 35mm colour motion picture film in the late 1960s: a natural Ektachrome palette, soft natural film grain, gentle halation around bright lights. Period-accurate late-1960s machines, vehicles and clothing. Cinematic composition, photorealistic, a still frame from a feature film."
+ },
+ {
+  "key": "c31a-apollo11-waiting/first",
+  "variant": 4,
+  "file": "keyframes/c31a-apollo11-waiting_first_4.png",
+  "seed": 231819154400411,
+  "prompt": "Launch Complex 39A at Cape Kennedy at night in July 1969: the gigantic white Saturn V rocket with black and white markings stands on its launch platform beside the red launch tower, brilliantly lit by powerful xenon searchlights from below, their white beams reaching up into the black night sky around it. Utterly still and quiet, the rocket glowing white against the darkness. Wide shot from a distance, low angle, 135mm lens, the whole rocket and tower in the frame.\n\nShot on 35mm colour motion picture film in the late 1960s: a natural Ektachrome palette, soft natural film grain, gentle halation around bright lights. Period-accurate late-1960s machines, vehicles and clothing. Cinematic composition, photorealistic, a still frame from a feature film."
+ },
+ {
+  "key": "c31b-n1-morning/first",
+  "variant": 1,
+  "file": "keyframes/c31b-n1-morning_first_1.png",
+  "seed": 157143466186680,
+  "prompt": "The morning after a disaster at the Baikonur launch site, July 1969: a grey dawn over the flat empty Kazakh steppe. In the middle distance, a wrecked rocket launch pad: twisted, blackened steel of a fallen service tower and scattered burnt debris, with thick black smoke still rising from it in a tall column into the pale grey sky. No people. Wide shot from a distance, 85mm lens, bleak and silent.\n\nShot on 35mm film in the late-1960s Soviet Union: a cool, slightly desaturated palette with muted greens and steel greys, visible film grain, hard light, the look of a Soviet feature film of the period. Period-accurate late-1960s machines, furniture and clothing. Cinematic composition, photorealistic, a still frame from a feature film."
+ },
+ {
+  "key": "c31b-n1-morning/first",
+  "variant": 2,
+  "file": "keyframes/c31b-n1-morning_first_2.png",
+  "seed": 131353589503719,
+  "prompt": "The morning after a disaster at the Baikonur launch site, July 1969: a grey dawn over the flat empty Kazakh steppe. In the middle distance, a wrecked rocket launch pad: twisted, blackened steel of a fallen service tower and scattered burnt debris, with thick black smoke still rising from it in a tall column into the pale grey sky. No people. Wide shot from a distance, 85mm lens, bleak and silent.\n\nShot on 35mm film in the late-1960s Soviet Union: a cool, slightly desaturated palette with muted greens and steel greys, visible film grain, hard light, the look of a Soviet feature film of the period. Period-accurate late-1960s machines, furniture and clothing. Cinematic composition, photorealistic, a still frame from a feature film."
+ },
+ {
+  "key": "c31b-n1-morning/first",
+  "variant": 3,
+  "file": "keyframes/c31b-n1-morning_first_3.png",
+  "seed": 226912454563554,
+  "prompt": "The morning after a disaster at the Baikonur launch site, July 1969: a grey dawn over the flat empty Kazakh steppe. In the middle distance, a wrecked rocket launch pad: twisted, blackened steel of a fallen service tower and scattered burnt debris, with thick black smoke still rising from it in a tall column into the pale grey sky. No people. Wide shot from a distance, 85mm lens, bleak and silent.\n\nShot on 35mm film in the late-1960s Soviet Union: a cool, slightly desaturated palette with muted greens and steel greys, visible film grain, hard light, the look of a Soviet feature film of the period. Period-accurate late-1960s machines, furniture and clothing. Cinematic composition, photorealistic, a still frame from a feature film."
+ },
+ {
+  "key": "c31b-n1-morning/first",
+  "variant": 4,
+  "file": "keyframes/c31b-n1-morning_first_4.png",
+  "seed": 117411744262489,
+  "prompt": "The morning after a disaster at the Baikonur launch site, July 1969: a grey dawn over the flat empty Kazakh steppe. In the middle distance, a wrecked rocket launch pad: twisted, blackened steel of a fallen service tower and scattered burnt debris, with thick black smoke still rising from it in a tall column into the pale grey sky. No people. Wide shot from a distance, 85mm lens, bleak and silent.\n\nShot on 35mm film in the late-1960s Soviet Union: a cool, slightly desaturated palette with muted greens and steel greys, visible film grain, hard light, the look of a Soviet feature film of the period. Period-accurate late-1960s machines, furniture and clothing. Cinematic composition, photorealistic, a still frame from a feature film."
+ },
+ {
+  "key": "c31c-top-secret/first",
+  "variant": 1,
+  "file": "keyframes/c31c-top-secret_first_1.png",
+  "seed": 131105264833811,
+  "prompt": "A Soviet office desk at night in 1969, close-up from above, lit by a single green-shaded desk lamp: a closed buff cardboard folder lies on the dark wooden desk, its front cover stamped in red with the words \"\u0421\u041e\u0412\u0415\u0420\u0428\u0415\u041d\u041d\u041e \u0421\u0415\u041a\u0420\u0415\u0422\u041d\u041e\" in large Russian Cyrillic capitals, clearly legible. Beside it lie a few black and white photographs of a burnt, wrecked rocket launch pad, and a man's hand in a dark suit sleeve rests on them. Close-up, 50mm lens, the stamp and the photographs in sharp focus.\n\nShot on 35mm film in the late-1960s Soviet Union: a cool, slightly desaturated palette with muted greens and steel greys, visible film grain, hard light, the look of a Soviet feature film of the period. Period-accurate late-1960s machines, furniture and clothing. Cinematic composition, photorealistic, a still frame from a feature film."
+ },
+ {
+  "key": "c31c-top-secret/first",
+  "variant": 2,
+  "file": "keyframes/c31c-top-secret_first_2.png",
+  "seed": 61672388293132,
+  "prompt": "A Soviet office desk at night in 1969, close-up from above, lit by a single green-shaded desk lamp: a closed buff cardboard folder lies on the dark wooden desk, its front cover stamped in red with the words \"\u0421\u041e\u0412\u0415\u0420\u0428\u0415\u041d\u041d\u041e \u0421\u0415\u041a\u0420\u0415\u0422\u041d\u041e\" in large Russian Cyrillic capitals, clearly legible. Beside it lie a few black and white photographs of a burnt, wrecked rocket launch pad, and a man's hand in a dark suit sleeve rests on them. Close-up, 50mm lens, the stamp and the photographs in sharp focus.\n\nShot on 35mm film in the late-1960s Soviet Union: a cool, slightly desaturated palette with muted greens and steel greys, visible film grain, hard light, the look of a Soviet feature film of the period. Period-accurate late-1960s machines, furniture and clothing. Cinematic composition, photorealistic, a still frame from a feature film."
+ },
+ {
+  "key": "c31c-top-secret/first",
+  "variant": 3,
+  "file": "keyframes/c31c-top-secret_first_3.png",
+  "seed": 137597243148854,
+  "prompt": "A Soviet office desk at night in 1969, close-up from above, lit by a single green-shaded desk lamp: a closed buff cardboard folder lies on the dark wooden desk, its front cover stamped in red with the words \"\u0421\u041e\u0412\u0415\u0420\u0428\u0415\u041d\u041d\u041e \u0421\u0415\u041a\u0420\u0415\u0422\u041d\u041e\" in large Russian Cyrillic capitals, clearly legible. Beside it lie a few black and white photographs of a burnt, wrecked rocket launch pad, and a man's hand in a dark suit sleeve rests on them. Close-up, 50mm lens, the stamp and the photographs in sharp focus.\n\nShot on 35mm film in the late-1960s Soviet Union: a cool, slightly desaturated palette with muted greens and steel greys, visible film grain, hard light, the look of a Soviet feature film of the period. Period-accurate late-1960s machines, furniture and clothing. Cinematic composition, photorealistic, a still frame from a feature film."
+ },
+ {
+  "key": "c31c-top-secret/first",
+  "variant": 4,
+  "file": "keyframes/c31c-top-secret_first_4.png",
+  "seed": 107838092364250,
+  "prompt": "A Soviet office desk at night in 1969, close-up from above, lit by a single green-shaded desk lamp: a closed buff cardboard folder lies on the dark wooden desk, its front cover stamped in red with the words \"\u0421\u041e\u0412\u0415\u0420\u0428\u0415\u041d\u041d\u041e \u0421\u0415\u041a\u0420\u0415\u0422\u041d\u041e\" in large Russian Cyrillic capitals, clearly legible. Beside it lie a few black and white photographs of a burnt, wrecked rocket launch pad, and a man's hand in a dark suit sleeve rests on them. Close-up, 50mm lens, the stamp and the photographs in sharp focus.\n\nShot on 35mm film in the late-1960s Soviet Union: a cool, slightly desaturated palette with muted greens and steel greys, visible film grain, hard light, the look of a Soviet feature film of the period. Period-accurate late-1960s machines, furniture and clothing. Cinematic composition, photorealistic, a still frame from a feature film."
+ },
+ {
   "key": "t01-embassy-whisper/first",
   "variant": 1,
   "file": "keyframes/t01-embassy-whisper_first_1.png",
