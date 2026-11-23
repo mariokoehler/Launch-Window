@@ -609,8 +609,8 @@
       "look": "us-1961",
       "duration": 7.0,
       "trim": [
-        0.3,
-        7.0
+        0.375,
+        8.75
       ],
       "mode": "i2v",
       "keyframes": {
@@ -621,7 +621,8 @@
       "clipGainDb": -14,
       "facts": [
         "kennedy-rice-1962"
-      ]
+      ],
+      "stretch": 1.25
     },
     {
       "id": "c23a-tereshkova",
@@ -646,7 +647,10 @@
         "text": "Vostok 6, 16 June 1963",
         "at": 0.4,
         "for": 3.0
-      }
+      },
+      "blackBefore": 0.5,
+      "fadeBefore": 1.5,
+      "fadeIn": 0.0
     },
     {
       "id": "c23-voskhod-spacewalk",

@@ -5,7 +5,10 @@ a mood, not a timeline), so the fitting happens here, the way an editor cuts lib
 in score.json is one mood for one stretch of the film. Its picked take is slid so the moment its loudness
 arrives at its peak lands on the cue's "hit" (a shot's start plus an offset), then heard only from "from" to
 "to" (shots too), faded in and out over their "fade" seconds; a fade of 0 is a hard stop (the music cuts out
-for 1967 and on the N1's flash). make_edit.py calls mix() with its own timeline and lays the result on A4.
+on the N1's flash). A cue's "tail" lets the music ring on in a hall after it stops, the way an orchestra's last
+chord does: from the tail's mark (a shot plus an offset) a convolution reverb of what was just played rings for
+its "seconds", decaying with its "rt60", "db" below the music's level as it stops (tail()). make_edit.py calls
+mix() with its own timeline and lays the result on A4.
 
 Usage:
     python make_score.py --queue [cue ...]     # every seed of these cues (all if none) to ComfyUI
@@ -149,6 +152,9 @@ def mix(starts, length, picks, name):
         parts.append((path, heard_from - place, heard_from, heard_to, max(fade_in, 0.01), max(fade_out, 0.01)))
         print(f'score: {cue["id"]} ({os.path.basename(take)}) from {heard_from:.2f} s to {heard_to:.2f} s'
               + (f', its peak at {when(cue["hit"], 0.0):.2f} s' if cue.get('hit') else ''))
+        if cue.get('tail') and cue['tail']['shot'] in starts:
+            parts.append(tail(cue, path, place, heard_from, heard_to, max(fade_out, 0.01),
+                              when(cue['tail'], 0.0), length))
     if not parts:
         return None
     os.makedirs(BUILD, exist_ok=True)
@@ -170,6 +176,52 @@ def mix(starts, length, picks, name):
     subprocess.run(args + ['-filter_complex', ';'.join(chains), '-map', '[out]', '-ar', str(RATE), raw], check=True)
     duck(raw, out, voices(starts, length), score.get('gainDb', 0.0), score.get('duck', {}))
     return out
+
+
+def tail(cue, path, place, heard_from, heard_to, fade_out, at, length):
+    """A cue's reverb tail as a part of the mix: the last seconds of the cue as heard (its fade-out included), run
+    through a synthetic hall (decorrelated noise per channel, decaying by 60 dB over "rt60", darkened above
+    5 kHz), heard only from "at" on (faded in over the 0.3 s before it, so the room is there as the music stops),
+    matched to the music's level just before "at" plus "db", and faded to silence at at + "seconds"."""
+    import numpy as np
+    from scipy.signal import butter, fftconvolve, sosfilt
+    spec = cue['tail']
+    seconds, rt60, db = spec['seconds'], spec.get('rt60', spec['seconds']), spec.get('db', -6.0)
+    seconds = min(seconds, length - at)
+    begin = max(heard_from, at - 4.0)
+    raw = subprocess.run(['ffmpeg', '-v', 'error', '-ss', f'{begin - place:.4f}', '-t', f'{heard_to - begin:.4f}',
+                          '-i', path, '-ac', '2', '-ar', str(RATE), '-f', 'f32le', '-'],
+                         capture_output=True, check=True).stdout
+    dry = np.frombuffer(raw, dtype=np.float32).reshape(-1, 2).astype(np.float64)
+    n = len(dry)
+    t = np.arange(n) / RATE
+    fade_at = (heard_to - begin) - fade_out
+    dry *= np.where(t < fade_at, 1.0, np.sin(np.clip((heard_to - begin - t) / fade_out, 0, 1) * np.pi / 2))[:, None]
+    rng = np.random.default_rng(1969)
+    ir_t = np.arange(int((rt60 + 0.5) * RATE)) / RATE
+    ir = rng.standard_normal((len(ir_t), 2)) * np.exp(-6.91 * ir_t / rt60)[:, None]
+    ir[:int(0.02 * RATE)] = 0.0  # a 20 ms pre-delay: the hall's first reflections
+    ir = sosfilt(butter(2, 5000, fs=RATE, output='sos'), ir, axis=0)
+    wet = np.stack([fftconvolve(dry[:, c], ir[:, c]) for c in range(2)], axis=1)
+    stop = int((at - begin) * RATE)
+    window = slice(max(0, stop - RATE // 2), stop)
+    gain = np.sqrt(np.mean(dry[window] ** 2) / (np.mean(wet[window] ** 2) + 1e-20)) * 10 ** (db / 20)
+    start = stop - int(0.3 * RATE)
+    out = wet[start:stop + int(seconds * RATE)] * gain
+    k = np.arange(len(out)) / RATE
+    ramp = np.clip(k / 0.3, 0, 1)
+    end = np.cos(np.clip((k - 0.3 - (seconds - 1.0)) / 1.0, 0, 1) * np.pi / 2)  # the last second fades to silence
+    out *= (ramp * end)[:, None]
+    file = os.path.join(BUILD, f'tail-{cue["id"]}.wav')
+    os.makedirs(BUILD, exist_ok=True)
+    import wave
+    with wave.open(file, 'wb') as w:
+        w.setnchannels(2)
+        w.setsampwidth(2)
+        w.setframerate(RATE)
+        w.writeframes((np.clip(out, -1, 1) * 32767).astype('<i2').tobytes())
+    print(f'score: {cue["id"]} rings on from {at:.2f} s for {seconds:.2f} s (rt60 {rt60} s, {db} dB)')
+    return file, 0.0, at - 0.3, at - 0.3 + len(out) / RATE, 0.01, 0.01
 
 
 def voices(starts, length):

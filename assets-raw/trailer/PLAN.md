@@ -257,9 +257,14 @@ The film has about 20–25 shots. With 3–4 variants per shot that is 80–100 
 - Whether finals need an upscale pass beyond FilmCraft's scaling (check on the projector).
 - The score's cues, all in (2026-11-23), picked by their loudness curves for the user's ear: open (beat 1's
   pulse), race (from the hit at c07 to the Vanguard fire), gagarin (the swell at c17, on through Kennedy), drive
-  (the montage, stopped dead at 1967), moon, suspense (stopped on the N1's flash), finale (the build to the boot,
-  stopped at the black) and logo (one chord under the end card). Every cue is at 80 BPM in D, so the seams
-  (open into race, gagarin into drive) crossfade; the rest are stops the script wants or starts out of silence.
+  (the montage), moon, suspense (stopped on the N1's flash) and finale (the build to the boot). Every cue is at
+  80 BPM in D, so open crossfades into race; the rest are stops the script wants or starts out of silence.
+  The user's seams (2026-11-23, from the FilmCraft project): beat 3 ends like beat 5, Kennedy's stands slowed
+  (stretch 1.25) for a breath after his line, a 1.5 s fade to black, half a second of black, and the drive fades
+  in fresh on the cut to Tereshkova; gagarin_1 ends on its own chord under his last words, so that chord rings
+  on (a cue's "tail": a convolution reverb, the orchestra stopping in a hall). The drive's last swell carries
+  over the cut to Arlington (an L-cut), stops where its phrase breaks and rings for 3 s; the finale plays
+  through the black to its last chord, which rings over the end card until the film ends (the logo cue is gone).
   Other takes are in `music/takes/` with their curves; gagarin_1 drops out at Shepard (about 86 s) and comes
   back abruptly, a seam in the take itself to listen for.
 - Whether a beat for the Soviet N1 or the lunar race's end (the Soviets standing down) belongs in the

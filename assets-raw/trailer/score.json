@@ -49,7 +49,7 @@
     },
     {
       "id": "gagarin",
-      "_comment": "Beat 3: rises under the Soviet calendar to the first big swell as Gagarin flies (c17), heroic through Shepard and Glenn, and swells again under Kennedy; it hands over to the drive at the beat's end. Take 1's swell arrives 6 s in (its loudest moment, 14 s, is later in that phrase).",
+      "_comment": "Beat 3: rises under the Soviet calendar to the first big swell as Gagarin flies (c17), heroic through Shepard and Glenn, and swells again under Kennedy. Take 1 ends on its own last chord 2.6 s into c22b, under Kennedy's last words: the chord rings on in a hall through the fade to black (user: the beat ends with picture and music fading together). Take 1's swell arrives 6 s in (its loudest moment, 14 s, is later in that phrase).",
       "seconds": 40,
       "seeds": [
         1,
@@ -68,17 +68,24 @@
         "fade": 1.0
       },
       "to": {
-        "shot": "c22b-rice-stands",
-        "offset": 4.5,
+        "shot": "c23a-tereshkova",
+        "offset": -0.5,
         "fade": 2.0
       },
       "peak": {
         "music/takes/gagarin_1.ogg": 6.0
+      },
+      "tail": {
+        "shot": "c22b-rice-stands",
+        "offset": 2.6,
+        "seconds": 5.8,
+        "rt60": 7.0,
+        "db": -3.0
       }
     },
     {
       "id": "drive",
-      "_comment": "Beat 4: crossfades in under the end of Kennedy's sentence, builds to a hit as the montage of firsts begins (c23a) and drives it; the music stops dead on the memorials (c27a).",
+      "_comment": "Beat 4: fades in fresh out of the black after Kennedy (user), its swell on the montage of firsts (c23a), and drives it; its last swell carries over the cut to Arlington (an L-cut, user), stops where its phrase breaks and rings on in a hall for 3 s.",
       "seconds": 47,
       "seeds": [
         1,
@@ -92,14 +99,21 @@
         "offset": 0.0
       },
       "from": {
-        "shot": "c22b-rice-stands",
-        "offset": 3.0,
-        "fade": 2.0
+        "shot": "c23a-tereshkova",
+        "offset": 0.0,
+        "fade": 1.0
       },
       "to": {
         "shot": "c27a-pad-us",
-        "offset": 0.0,
-        "fade": 0.15
+        "offset": 0.78,
+        "fade": 0.12
+      },
+      "tail": {
+        "shot": "c27a-pad-us",
+        "offset": 0.78,
+        "seconds": 3.0,
+        "rt60": 4.0,
+        "db": -6.0
       }
     },
     {
@@ -155,7 +169,7 @@
     },
     {
       "id": "finale",
-      "_comment": "Beat 7: the long final build from the launch to the boot; at its peak as the boot comes down (c36), cut dead at the black.",
+      "_comment": "Beat 7: the long final build from the launch to the boot; at its peak as the boot comes down (c36), cut dead at the black. It plays on through the black to its own last chord, which rings on in a hall over the end card until the film ends (user).",
       "seconds": 30,
       "seeds": [
         1,
@@ -175,31 +189,15 @@
       },
       "to": {
         "shot": "c37-endcard",
-        "offset": -1.0,
-        "fade": 0.0
-      }
-    },
-    {
-      "id": "logo",
-      "_comment": "The end card: one warm, held final chord as the logo builds.",
-      "seconds": 12,
-      "seeds": [
-        1,
-        2,
-        3,
-        4
-      ],
-      "prompt": "Cinematic orchestral film score, instrumental: a single warm, glowing final chord of the full orchestra and soft brass in D major, swelling gently and ringing out with shimmering high strings and a soft cymbal, then fading to silence. A trailer logo ending.",
-      "from": {
-        "shot": "c37-endcard",
-        "offset": 0.0,
-        "into": 0.0,
-        "fade": 0.3
-      },
-      "to": {
-        "shot": "c37-endcard",
         "offset": 6.5,
-        "fade": 2.0
+        "fade": 0.5
+      },
+      "tail": {
+        "shot": "c37-endcard",
+        "offset": -0.45,
+        "seconds": 6.95,
+        "rt60": 9.0,
+        "db": -2.0
       }
     }
   ],
