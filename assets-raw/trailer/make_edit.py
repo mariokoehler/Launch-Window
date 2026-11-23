@@ -103,6 +103,24 @@ def held(shot, path):
     return out
 
 
+def still(shot):
+    """A shot's "still": a photograph (a path under this folder) as a clip of its duration, cropped to 16:9 by
+    "crop" ([x, y, w, h], fractions of the image) and pushed in slowly, with silence under it. Made once in build/."""
+    source = os.path.join(HERE, shot['still'])
+    out = os.path.join(BUILD, f'still-{shot["id"]}.mp4')
+    if not os.path.exists(out) or os.path.getmtime(out) < os.path.getmtime(source):
+        x, y, w, h = shot.get('crop', [0, 0, 1, 1])
+        frames = round(shot['duration'] * FPS)
+        push = shot.get('push', 0.04)  # how far it zooms in over the shot
+        video = (f'crop=iw*{w}:ih*{h}:iw*{x}:ih*{y},scale=3840:2160,'
+                 f"zoompan=z='1+{push}*on/{frames}':x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)':d=1:s=1920x1080:fps={FPS}")
+        subprocess.run(['ffmpeg', '-loglevel', 'error', '-y', '-loop', '1', '-i', source, '-f', 'lavfi', '-i',
+                        'anullsrc=r=48000:cl=stereo', '-vf', video, '-frames:v', str(frames), '-shortest',
+                        '-c:v', 'libx264', '-crf', '12', '-preset', 'slow', '-pix_fmt', 'yuv420p', '-c:a', 'aac',
+                        out], check=True)
+    return out
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--profile', default='draft')
@@ -119,7 +137,9 @@ def main():
         os.remove(project)
 
     def take(shot):
-        """The final take where one is picked (in a final cut), else the draft."""
+        """The final take where one is picked (in a final cut), else the draft; a still shot is always in."""
+        if shot.get('still'):
+            return still(shot)
         for profile in ([args.profile, 'draft'] if args.profile != 'draft' else ['draft']):
             if f'{shot["id"]}/{profile}' in picks:
                 return picks[f'{shot["id"]}/{profile}']
@@ -152,6 +172,7 @@ def main():
     starts, at, places = {}, 0.0, []
     for shot, item in zip(cut, items):
         start, end = shot.get('trim', [0.0, shot['duration']])
+        at += shot.get('blackBefore', 0.0)  # a pause in black, faded into and out of (the breather after 1967)
         starts[shot['id']] = at
         places.append({'id': 'timeline.place', 'params': {
             'item': item, 'track': 'V1', 'audioTrack': 'A1', 'seconds': at,
@@ -177,6 +198,14 @@ def main():
                {'id': 'sequence.applyVideoTransition', 'params': {
                    'clip': video_clips[-1], 'effect': 'cross_dissolve', 'frames': FADE_FRAMES, 'edge': 'out',
                    'align': 'end'}}]
+    for i, shot in enumerate(cut):
+        if shot.get('blackBefore') and i > 0:
+            effects += [{'id': 'sequence.applyVideoTransition', 'params': {
+                            'clip': video_clips[i - 1], 'effect': 'cross_dissolve', 'frames': FADE_FRAMES,
+                            'edge': 'out', 'align': 'end'}},
+                        {'id': 'sequence.applyVideoTransition', 'params': {
+                            'clip': video_clips[i], 'effect': 'cross_dissolve', 'frames': FADE_FRAMES * 2,
+                            'edge': 'in', 'align': 'start'}}]
     filmcraft(project, effects)
     gains = [{'id': 'effects.setParam', 'params': {'clip': clip, 'effect': 'volume', 'param': 'level',
                                                    'value': track['gainDb']}}

@@ -75,5 +75,8 @@
   "c27a-pad-us/final": "clips/final/c27a-pad-us_1.mp4",
   "c24-gemini-docking/final": "clips/final/c24-gemini-docking_1.mp4",
   "c27b-pad-ussr/final": "clips/final/c27b-pad-ussr_1.mp4",
-  "c23a-tereshkova/final": "clips/final/c23a-tereshkova_3.mp4"
+  "c23a-tereshkova/final": "clips/final/c23a-tereshkova_3.mp4",
+  "c27c-rollout/first": "keyframes/c27c-rollout_first_3.png",
+  "c28-apollo8-launch/first": "keyframes/c28-apollo8-launch_first_2.png",
+  "c30-earthrise/first": "keyframes/c30-earthrise_first_2.png"
 }

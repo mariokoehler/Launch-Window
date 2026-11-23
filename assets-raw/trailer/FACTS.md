@@ -70,12 +70,20 @@ final.
 - **f1-tests.** The F-1 was test-fired at Edwards AFB from 1962 and at Marshall from 1965. Shot 25's night firing is
   our choice, not a claim (no source gives a time of day).
   [NASA, first full-thrust F-1 test, 26 May 1962](https://www.nasa.gov/image-article/this-week-nasa-history-1st-full-thrust-long-duration-f-1-engine-test-may-26-1962).
+- **apollo-8.** Apollo 8's Saturn V rolled out to Pad 39A on 9 October 1968 on the crawler (six to eight hours;
+  no source gives the time of day: shot 27c's dawn is our choice). It launched on 21 December 1968 at 7:51 am EST under
+  thin cirrus; Borman, Lovell and Anders reached lunar orbit early on 24 December, the first humans to orbit the Moon.
+  They flew in coveralls, bare-handed. Anders took Earthrise (AS08-14-2383) on 24 December with a Hasselblad and a
+  250 mm lens; it is public domain (credit NASA), published turned so the lunar horizon runs along the bottom.
+  [NASA, Apollo 8 rolls out](https://www.nasa.gov/history/50-years-ago-apollo-8-rolls-out-to-the-pad/);
+  [NASA SP-4029, Apollo 8 summary](https://www.nasa.gov/wp-content/uploads/static/history/SP-4029/Apollo_08a_Summary.htm);
+  [National Archives, Earthrise](https://www.docsteach.org/documents/document/earthrise-apollo-8);
+  [NASA, Inside the Apollo 8 spacecraft](https://www.nasa.gov/image-article/inside-apollo-8-spacecraft-december-1968/).
 
 ## To check
 
 - **sputnik-1** (4 October 1957; a polished sphere of 58 cm, four antennas; the beep; the core stage was
   what people saw with the naked eye).
-- **apollo-8** (rollout of its Saturn V to Pad 39A on 9 October 1968; launch 21 December 1968; Earthrise photographed 24 December by Bill Anders, NASA AS08-14-2383, public domain).
 - **apollo-11** (launch 16 July 1969; landing 20 July; the step 20 July US time, 21 July UTC; "60 seconds",
   "The Eagle has landed", "That's one small step for [a] man"; he stepped off the footpad; the NASA
   recordings' public-domain status).

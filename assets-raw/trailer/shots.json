@@ -799,6 +799,113 @@
       "facts": [
         "losses-1967"
       ]
+    },
+    {
+      "id": "c27c-rollout",
+      "beat": "moon",
+      "look": "us-1968",
+      "duration": 6.0,
+      "trim": [
+        0.3,
+        5.3
+      ],
+      "mode": "i2v",
+      "blackBefore": 1.5,
+      "keyframes": {
+        "first": "Kennedy Space Center at dawn in October 1968: a gigantic white Saturn V rocket, a hundred and ten metres tall with black and white markings on its stages, stands upright on its grey mobile launch platform with the tall red launch tower beside it, all carried on a huge flat tracked crawler-transporter. It is slowly leaving the enormous open doors of the Vehicle Assembly Building behind it and moving along a wide gravel crawlerway. The first grey-blue light of dawn, a pale pink sky low on the horizon, floodlights still glowing on the tower. A few tiny figures of workers walk beside the crawler for scale. Wide shot from a distance, 85mm lens, the whole rocket in the frame."
+      },
+      "video": "Live-action, cinematic, 1968. The giant rocket shown in <Picture 1> moves forward very slowly on its crawler along the gravel road, at walking pace, the workers walking beside it, as the dawn light grows warmer over the horizon. The camera pans very slowly to follow it.",
+      "soundscape": "The deep, slow grinding and creaking of huge steel tracks on gravel, a low diesel rumble, dawn birds far away. Nobody speaks.",
+      "clipGainDb": -12,
+      "facts": [
+        "apollo-8"
+      ]
+    },
+    {
+      "id": "c28-apollo8-launch",
+      "beat": "moon",
+      "look": "us-1968",
+      "duration": 6.0,
+      "trim": [
+        0.3,
+        5.8
+      ],
+      "mode": "i2v",
+      "keyframes": {
+        "first": "Liftoff of a Saturn V rocket from Launch Complex 39A at Cape Kennedy on a clear morning in December 1968: the gigantic white rocket with black and white markings rises just past the top of the tall red launch tower beside it, its swing arms pulled back. A blinding white-orange flame and huge billowing clouds of smoke and steam pour out beneath it, and sheets of white frost and ice flake off its sides and tumble down. A pale blue sky. Seen from a distance, the whole rocket and the tower in the frame, low angle, 200mm telephoto lens."
+      },
+      "video": "Live-action, cinematic, 1968. The giant rocket shown in <Picture 1> rises slowly and steadily beside the red tower, clears its top and climbs on up into the clear sky on its blinding pillar of flame, ice and frost falling from its sides, the clouds of smoke billowing outward on both sides below. The camera tilts up slowly to follow it.",
+      "soundscape": "The overwhelming, crackling thunder of a giant rocket at liftoff, a deep rumble that shakes everything. Nobody speaks.",
+      "clipGainDb": -6,
+      "facts": [
+        "apollo-8"
+      ],
+      "caption": {
+        "text": "Apollo 8, 21 December 1968",
+        "at": 0.4,
+        "for": 3.0
+      }
+    },
+    {
+      "id": "c29-earthrise-window",
+      "beat": "moon",
+      "look": "moon",
+      "duration": 6.0,
+      "trim": [
+        0.3,
+        5.3
+      ],
+      "mode": "i2v",
+      "keyframes": {
+        "first": "Inside the cramped Apollo command module in lunar orbit, 24 December 1968, looking past an astronaut's shoulder toward a small square spacecraft window. In the foreground, his bare hands in the white sleeves of his flight coveralls hold up a big black and silver Hasselblad camera with a long telephoto lens toward the window. Through the window: black space and the grey cratered horizon of the Moon, with the top edge of the small blue and white Earth just appearing above it. Dim cabin, grey panels with switches around the window, the hands and camera lit softly by the light from outside. Close-up over the shoulder, 50mm lens, the window and camera in focus."
+      },
+      "video": "Live-action, cinematic, 1968. Inside the capsule shown in <Picture 1>, the astronaut slowly raises the camera to the window and holds it steady, aiming it. Through the window, the small blue and white Earth rises slowly above the grey lunar horizon into the black sky. The camera holds a steady shot over his shoulder.",
+      "soundscape": "The quiet hum of fans in a small cabin, a soft mechanical camera click. Nobody speaks.",
+      "clipGainDb": -14,
+      "facts": [
+        "apollo-8"
+      ]
+    },
+    {
+      "id": "c30-earthrise",
+      "beat": "moon",
+      "look": "moon",
+      "duration": 5.0,
+      "trim": [
+        0.3,
+        3.6
+      ],
+      "mode": "i2v",
+      "keyframes": {
+        "first": "The view from lunar orbit on 24 December 1968: the grey, cratered, rugged horizon of the Moon runs across the bottom of the frame, sharp and bright in hard sunlight. Above it in pure black space, the small blue and white Earth is just rising over the lunar horizon, half in sunlight and half in shadow, its oceans blue and its clouds white. No stars. Telephoto view, as through a long camera lens."
+      },
+      "video": "Live-action, photorealistic, 1968. In the view shown in <Picture 1>, the Earth rises slowly and steadily above the grey lunar horizon into the black sky, half in sunlight. The lunar horizon drifts slowly. The camera holds a steady shot, as through a long camera lens.",
+      "soundscape": "Near silence: a faint electronic hum. Nobody speaks.",
+      "clipGainDb": -20,
+      "facts": [
+        "apollo-8"
+      ]
+    },
+    {
+      "id": "c30b-earthrise-photo",
+      "beat": "moon",
+      "look": "moon",
+      "duration": 2.5,
+      "trim": [
+        0.0,
+        2.5
+      ],
+      "still": "references/earthrise.jpg",
+      "facts": [
+        "apollo-8"
+      ],
+      "crop": [
+        0.0,
+        0.34,
+        1.0,
+        0.5625
+      ],
+      "_comment": "NASA AS08-14-2383, Earthrise, Bill Anders, 24 December 1968; public domain, from https://images-assets.nasa.gov/image/as08-14-2383/as08-14-2383~orig.jpg (3000x3000, the published orientation)."
     }
   ],
   "tests": [

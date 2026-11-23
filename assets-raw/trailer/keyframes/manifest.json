@@ -735,6 +735,90 @@
   "prompt": "The foot of the Kremlin Wall on Red Square in Moscow, on an overcast spring day in 1967: in the foreground, a large round funeral wreath of red carnations and dark green fir branches with a red ribbon leans against the base of the tall dark red brick wall, filling the lower half of the frame. Small dark granite memorial plaques set into the wall above it are softly out of focus. Grey cobblestones in front. Soft grey light, very quiet and still, a moment of mourning. 85mm lens wide open, shallow depth of field, the wreath in sharp focus.\n\nShot on 35mm film in the early-1960s Soviet Union: a cool, slightly desaturated palette with muted greens and steel greys, visible film grain, hard light, the look of a Soviet feature film of the period. Period-accurate early-1960s clothing, furniture and machines. Cinematic composition, photorealistic, a still frame from a feature film."
  },
  {
+  "key": "c27c-rollout/first",
+  "variant": 1,
+  "file": "keyframes/c27c-rollout_first_1.png",
+  "seed": 119681490293545,
+  "prompt": "Kennedy Space Center at dawn in October 1968: a gigantic white Saturn V rocket, a hundred and ten metres tall with black and white markings on its stages, stands upright on its grey mobile launch platform with the tall red launch tower beside it, all carried on a huge flat tracked crawler-transporter. It is slowly leaving the enormous open doors of the Vehicle Assembly Building behind it and moving along a wide gravel crawlerway. The first grey-blue light of dawn, a pale pink sky low on the horizon, floodlights still glowing on the tower. A few tiny figures of workers walk beside the crawler for scale. Wide shot from a distance, 85mm lens, the whole rocket in the frame.\n\nShot on 35mm colour motion picture film in the late 1960s: a natural Ektachrome palette, soft natural film grain, gentle halation around bright lights. Period-accurate late-1960s machines, vehicles and clothing. Cinematic composition, photorealistic, a still frame from a feature film."
+ },
+ {
+  "key": "c27c-rollout/first",
+  "variant": 2,
+  "file": "keyframes/c27c-rollout_first_2.png",
+  "seed": 196687063890926,
+  "prompt": "Kennedy Space Center at dawn in October 1968: a gigantic white Saturn V rocket, a hundred and ten metres tall with black and white markings on its stages, stands upright on its grey mobile launch platform with the tall red launch tower beside it, all carried on a huge flat tracked crawler-transporter. It is slowly leaving the enormous open doors of the Vehicle Assembly Building behind it and moving along a wide gravel crawlerway. The first grey-blue light of dawn, a pale pink sky low on the horizon, floodlights still glowing on the tower. A few tiny figures of workers walk beside the crawler for scale. Wide shot from a distance, 85mm lens, the whole rocket in the frame.\n\nShot on 35mm colour motion picture film in the late 1960s: a natural Ektachrome palette, soft natural film grain, gentle halation around bright lights. Period-accurate late-1960s machines, vehicles and clothing. Cinematic composition, photorealistic, a still frame from a feature film."
+ },
+ {
+  "key": "c27c-rollout/first",
+  "variant": 3,
+  "file": "keyframes/c27c-rollout_first_3.png",
+  "seed": 82648778309149,
+  "prompt": "Kennedy Space Center at dawn in October 1968: a gigantic white Saturn V rocket, a hundred and ten metres tall with black and white markings on its stages, stands upright on its grey mobile launch platform with the tall red launch tower beside it, all carried on a huge flat tracked crawler-transporter. It is slowly leaving the enormous open doors of the Vehicle Assembly Building behind it and moving along a wide gravel crawlerway. The first grey-blue light of dawn, a pale pink sky low on the horizon, floodlights still glowing on the tower. A few tiny figures of workers walk beside the crawler for scale. Wide shot from a distance, 85mm lens, the whole rocket in the frame.\n\nShot on 35mm colour motion picture film in the late 1960s: a natural Ektachrome palette, soft natural film grain, gentle halation around bright lights. Period-accurate late-1960s machines, vehicles and clothing. Cinematic composition, photorealistic, a still frame from a feature film."
+ },
+ {
+  "key": "c27c-rollout/first",
+  "variant": 4,
+  "file": "keyframes/c27c-rollout_first_4.png",
+  "seed": 12643656320878,
+  "prompt": "Kennedy Space Center at dawn in October 1968: a gigantic white Saturn V rocket, a hundred and ten metres tall with black and white markings on its stages, stands upright on its grey mobile launch platform with the tall red launch tower beside it, all carried on a huge flat tracked crawler-transporter. It is slowly leaving the enormous open doors of the Vehicle Assembly Building behind it and moving along a wide gravel crawlerway. The first grey-blue light of dawn, a pale pink sky low on the horizon, floodlights still glowing on the tower. A few tiny figures of workers walk beside the crawler for scale. Wide shot from a distance, 85mm lens, the whole rocket in the frame.\n\nShot on 35mm colour motion picture film in the late 1960s: a natural Ektachrome palette, soft natural film grain, gentle halation around bright lights. Period-accurate late-1960s machines, vehicles and clothing. Cinematic composition, photorealistic, a still frame from a feature film."
+ },
+ {
+  "key": "c28-apollo8-launch/first",
+  "variant": 1,
+  "file": "keyframes/c28-apollo8-launch_first_1.png",
+  "seed": 262906013009384,
+  "prompt": "Liftoff of a Saturn V rocket from Launch Complex 39A at Cape Kennedy on a clear morning in December 1968: the gigantic white rocket with black and white markings rises just past the top of the tall red launch tower beside it, its swing arms pulled back. A blinding white-orange flame and huge billowing clouds of smoke and steam pour out beneath it, and sheets of white frost and ice flake off its sides and tumble down. A pale blue sky. Seen from a distance, the whole rocket and the tower in the frame, low angle, 200mm telephoto lens.\n\nShot on 35mm colour motion picture film in the late 1960s: a natural Ektachrome palette, soft natural film grain, gentle halation around bright lights. Period-accurate late-1960s machines, vehicles and clothing. Cinematic composition, photorealistic, a still frame from a feature film."
+ },
+ {
+  "key": "c28-apollo8-launch/first",
+  "variant": 2,
+  "file": "keyframes/c28-apollo8-launch_first_2.png",
+  "seed": 180346791565173,
+  "prompt": "Liftoff of a Saturn V rocket from Launch Complex 39A at Cape Kennedy on a clear morning in December 1968: the gigantic white rocket with black and white markings rises just past the top of the tall red launch tower beside it, its swing arms pulled back. A blinding white-orange flame and huge billowing clouds of smoke and steam pour out beneath it, and sheets of white frost and ice flake off its sides and tumble down. A pale blue sky. Seen from a distance, the whole rocket and the tower in the frame, low angle, 200mm telephoto lens.\n\nShot on 35mm colour motion picture film in the late 1960s: a natural Ektachrome palette, soft natural film grain, gentle halation around bright lights. Period-accurate late-1960s machines, vehicles and clothing. Cinematic composition, photorealistic, a still frame from a feature film."
+ },
+ {
+  "key": "c28-apollo8-launch/first",
+  "variant": 3,
+  "file": "keyframes/c28-apollo8-launch_first_3.png",
+  "seed": 71478892996506,
+  "prompt": "Liftoff of a Saturn V rocket from Launch Complex 39A at Cape Kennedy on a clear morning in December 1968: the gigantic white rocket with black and white markings rises just past the top of the tall red launch tower beside it, its swing arms pulled back. A blinding white-orange flame and huge billowing clouds of smoke and steam pour out beneath it, and sheets of white frost and ice flake off its sides and tumble down. A pale blue sky. Seen from a distance, the whole rocket and the tower in the frame, low angle, 200mm telephoto lens.\n\nShot on 35mm colour motion picture film in the late 1960s: a natural Ektachrome palette, soft natural film grain, gentle halation around bright lights. Period-accurate late-1960s machines, vehicles and clothing. Cinematic composition, photorealistic, a still frame from a feature film."
+ },
+ {
+  "key": "c28-apollo8-launch/first",
+  "variant": 4,
+  "file": "keyframes/c28-apollo8-launch_first_4.png",
+  "seed": 218233484664154,
+  "prompt": "Liftoff of a Saturn V rocket from Launch Complex 39A at Cape Kennedy on a clear morning in December 1968: the gigantic white rocket with black and white markings rises just past the top of the tall red launch tower beside it, its swing arms pulled back. A blinding white-orange flame and huge billowing clouds of smoke and steam pour out beneath it, and sheets of white frost and ice flake off its sides and tumble down. A pale blue sky. Seen from a distance, the whole rocket and the tower in the frame, low angle, 200mm telephoto lens.\n\nShot on 35mm colour motion picture film in the late 1960s: a natural Ektachrome palette, soft natural film grain, gentle halation around bright lights. Period-accurate late-1960s machines, vehicles and clothing. Cinematic composition, photorealistic, a still frame from a feature film."
+ },
+ {
+  "key": "c30-earthrise/first",
+  "variant": 1,
+  "file": "keyframes/c30-earthrise_first_1.png",
+  "seed": 62721885650812,
+  "prompt": "The view from lunar orbit on 24 December 1968: the grey, cratered, rugged horizon of the Moon runs across the bottom of the frame, sharp and bright in hard sunlight. Above it in pure black space, the small blue and white Earth is just rising over the lunar horizon, half in sunlight and half in shadow, its oceans blue and its clouds white. No stars. Telephoto view, as through a long camera lens.\n\nPhotorealistic, as if photographed in lunar orbit in 1968: pure black space with no stars, hard unfiltered sunlight, the grey cratered surface of the Moon in fine detail. Cinematic, sharp, a still frame from a feature film."
+ },
+ {
+  "key": "c30-earthrise/first",
+  "variant": 2,
+  "file": "keyframes/c30-earthrise_first_2.png",
+  "seed": 217361818305802,
+  "prompt": "The view from lunar orbit on 24 December 1968: the grey, cratered, rugged horizon of the Moon runs across the bottom of the frame, sharp and bright in hard sunlight. Above it in pure black space, the small blue and white Earth is just rising over the lunar horizon, half in sunlight and half in shadow, its oceans blue and its clouds white. No stars. Telephoto view, as through a long camera lens.\n\nPhotorealistic, as if photographed in lunar orbit in 1968: pure black space with no stars, hard unfiltered sunlight, the grey cratered surface of the Moon in fine detail. Cinematic, sharp, a still frame from a feature film."
+ },
+ {
+  "key": "c30-earthrise/first",
+  "variant": 3,
+  "file": "keyframes/c30-earthrise_first_3.png",
+  "seed": 147037816038232,
+  "prompt": "The view from lunar orbit on 24 December 1968: the grey, cratered, rugged horizon of the Moon runs across the bottom of the frame, sharp and bright in hard sunlight. Above it in pure black space, the small blue and white Earth is just rising over the lunar horizon, half in sunlight and half in shadow, its oceans blue and its clouds white. No stars. Telephoto view, as through a long camera lens.\n\nPhotorealistic, as if photographed in lunar orbit in 1968: pure black space with no stars, hard unfiltered sunlight, the grey cratered surface of the Moon in fine detail. Cinematic, sharp, a still frame from a feature film."
+ },
+ {
+  "key": "c30-earthrise/first",
+  "variant": 4,
+  "file": "keyframes/c30-earthrise_first_4.png",
+  "seed": 157963189765897,
+  "prompt": "The view from lunar orbit on 24 December 1968: the grey, cratered, rugged horizon of the Moon runs across the bottom of the frame, sharp and bright in hard sunlight. Above it in pure black space, the small blue and white Earth is just rising over the lunar horizon, half in sunlight and half in shadow, its oceans blue and its clouds white. No stars. Telephoto view, as through a long camera lens.\n\nPhotorealistic, as if photographed in lunar orbit in 1968: pure black space with no stars, hard unfiltered sunlight, the grey cratered surface of the Moon in fine detail. Cinematic, sharp, a still frame from a feature film."
+ },
+ {
   "key": "t01-embassy-whisper/first",
   "variant": 1,
   "file": "keyframes/t01-embassy-whisper_first_1.png",
