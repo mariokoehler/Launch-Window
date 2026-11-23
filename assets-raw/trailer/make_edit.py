@@ -106,6 +106,27 @@ def held(shot, path):
     return out
 
 
+def stretched(shot, path):
+    """A shot's "stretch": its clip slowed by that factor (a near-still shot given room for its line), the frames
+    repeated at the film's rate and its sound slowed alike. Made once in build/; "trim" is in the slowed time."""
+    out = os.path.join(BUILD, f'stretch-{shot["id"]}-{os.path.basename(path)}')
+    if not os.path.exists(out) or os.path.getmtime(out) < os.path.getmtime(path):
+        subprocess.run(['ffmpeg', '-loglevel', 'error', '-y', '-i', path, '-vf',
+                        f'setpts=PTS*{shot["stretch"]},fps={FPS}', '-af', f'atempo={1 / shot["stretch"]:.5f}',
+                        '-c:v', 'libx264', '-crf', '12', '-preset', 'slow', '-c:a', 'aac', '-b:a', '256k', out],
+                       check=True)
+    return out
+
+
+def prepared(shot, path):
+    """The clip as the edit uses it: held at its end or slowed, if the shot asks."""
+    if shot.get('hold'):
+        return held(shot, path)
+    if shot.get('stretch'):
+        return stretched(shot, path)
+    return path
+
+
 def still(shot):
     """A shot's "still": a photograph (a path under this folder) as a clip of its duration, cropped to 16:9 by
     "crop" ([x, y, w, h], fractions of the image) and pushed in slowly, with silence under it. Made once in build/."""
@@ -189,7 +210,7 @@ def main():
             placeholder_beep(path)
 
     # 1. The sequence and the media.
-    media = [held(s, os.path.join(HERE, take(s))) if s.get('hold') else os.path.join(HERE, take(s)) for s in cut]
+    media = [prepared(s, os.path.join(HERE, take(s))) for s in cut]
     media += [os.path.join(HERE, t['file']) for t in audio]
     sequence, imported = filmcraft(project, [
         {'id': 'file.newSequence', 'params': {'name': f'Launch Window trailer ({args.profile})',
@@ -229,8 +250,10 @@ def main():
                    'align': 'end'}}]
     for i, shot in enumerate(cut):
         if shot.get('blackBefore') and i > 0:
+            # "fadeBefore": how slowly the shot before goes to black, in seconds (a beat's end given room).
+            fade_out = round(shot['fadeBefore'] * FPS) if 'fadeBefore' in shot else FADE_FRAMES
             effects += [{'id': 'sequence.applyVideoTransition', 'params': {
-                            'clip': video_clips[i - 1], 'effect': 'cross_dissolve', 'frames': FADE_FRAMES,
+                            'clip': video_clips[i - 1], 'effect': 'cross_dissolve', 'frames': fade_out,
                             'edge': 'out', 'align': 'end'}},
                         {'id': 'sequence.applyVideoTransition', 'params': {
                             'clip': video_clips[i], 'effect': 'cross_dissolve', 'frames': FADE_FRAMES * 2,

@@ -890,10 +890,10 @@
       "id": "c30b-earthrise-photo",
       "beat": "moon",
       "look": "moon",
-      "duration": 3.5,
+      "duration": 4.0,
       "trim": [
         0.0,
-        3.5
+        4.0
       ],
       "still": "references/earthrise.jpg",
       "facts": [
@@ -914,7 +914,7 @@
       "duration": 5.0,
       "trim": [
         0.0,
-        5.0
+        6.25
       ],
       "mode": "i2v",
       "keyframes": {
@@ -930,7 +930,11 @@
         "text": "Cape Kennedy, July 1969",
         "at": 0.4,
         "for": 3.0
-      }
+      },
+      "stretch": 1.25,
+      "blackBefore": 0.75,
+      "fadeBefore": 1.5,
+      "_comment": "Beat 5 ends in a slow fade to black with its music (user); the shot fades in from black. Slowed by 1.25 (a still scene, the beams barely move) to hold \"In July of 1969 ... from launch\"."
     },
     {
       "id": "c31-n1",

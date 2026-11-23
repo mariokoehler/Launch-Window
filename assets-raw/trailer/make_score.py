@@ -197,9 +197,9 @@ def level(path):
 def duck(raw, out, speech, gain_db, settings):
     """The music ridden under the voices, the way a mixer rides it under dialogue: wherever a voice speaks, the
     music is held at least "margin" dB below that line's own level (its median while speaking), pulled down
-    only by as much as it rises above that, so a quiet stretch isn't touched and a swell is. The dip starts
-    "attack" seconds before the words and lets go "release" seconds after them. gain_db is the level the score
-    plays at in the edit, so the margin is what is heard."""
+    only by as much as it rises above that, so a quiet stretch isn't touched and a swell is. The dip is
+    reached "attack" seconds before the words and held "release" seconds after them, then lets go at "rise"
+    dB a second. gain_db is the level the score plays at in the edit, so the margin is what is heard."""
     import numpy as np
     margin, attack, release = settings.get('margin', 12.0), settings.get('attack', 0.3), settings.get('release', 0.6)
     music = level(raw) + gain_db
@@ -215,10 +215,20 @@ def duck(raw, out, speech, gain_db, settings):
         end = min(len(ceiling), round(at * 100) + last + round(release * 100))
         ceiling[begin:end] = np.minimum(ceiling[begin:end], line)
     cut = np.maximum(0.0, music - ceiling)  # dB to take off, frame by frame
-    # Hold each dip a little and ramp it in and out, so the music moves like a fader, not a compressor.
-    held = np.array([cut[max(0, i - 20):i + 21].max() for i in range(len(cut))])
-    ramp = np.ones(round(attack * 100)) / round(attack * 100)
-    smooth = np.convolve(held, ramp, mode='same')
+    # A short let-up between two dips is no let-up: a gap under "bridge" seconds keeps the smaller of the two
+    # (a half-second jump between two lines sounded like a bumped volume knob, user).
+    bridge = round(settings.get('bridge', 1.5) * 100)
+    dipped = np.flatnonzero(cut > 0)
+    for left, right in zip(dipped[:-1], dipped[1:]):
+        if 1 < right - left <= bridge:
+            cut[left + 1:right] = min(cut[left], cut[right])
+    # Then move like a fader: down before the words at up to 40 dB/s, back up after them at up to "rise" dB/s.
+    smooth = cut.copy()
+    rise = settings.get('rise', 12.0) / 100
+    for i in range(1, len(smooth)):
+        smooth[i] = max(smooth[i], smooth[i - 1] - rise)
+    for i in range(len(smooth) - 2, -1, -1):
+        smooth[i] = max(smooth[i], smooth[i + 1] - 0.4)
     samples = subprocess.run(['ffmpeg', '-v', 'error', '-i', raw, '-f', 'f32le', '-ac', '2', '-ar', str(RATE), '-'],
                              capture_output=True, check=True).stdout
     stereo = np.frombuffer(samples, dtype=np.float32).reshape(-1, 2)

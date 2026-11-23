@@ -51,6 +51,8 @@ card.bgColor = [0, 0, 0];
 var nested = card.layers.add(comp);
 nested.stretch = {SLOW * 100};
 nested.startTime = 0;
+// The patch overshoots to 108 % as it pops in, past the 800 px square: collapsed, it isn't cut at its edge.
+nested.collapseTransformation = true;
 nested.property("Transform").property("Position").setValue([960, 540]);
 nested.property("Transform").property("Scale").setValue([{SCALE}, {SCALE}]);
 writeLn("end card: " + card.width + "x" + card.height + ", " + card.duration + " s, stretch " + nested.stretch
