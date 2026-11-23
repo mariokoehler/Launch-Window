@@ -224,6 +224,42 @@
       "offset": 0.3,
       "track": "A3",
       "_comment": "\"Until, in 1967,\" over Arlington; \"both sides lost a crew\" starts on the cut to the Kremlin Wall."
+    },
+    {
+      "id": "n-surrendered",
+      "file": "audio/but_neither_side_surrendered.ogg",
+      "under": "c27c-rollout",
+      "offset": 1.0,
+      "track": "A3"
+    },
+    {
+      "id": "n-december",
+      "file": "audio/in_december_1968_three_americans_set_off.ogg",
+      "under": "c28-apollo8-launch",
+      "offset": 0.3,
+      "track": "A3"
+    },
+    {
+      "id": "n-christmas",
+      "file": "audio/on_christmas_eve_they_saw_the_earth_rise.ogg",
+      "under": "c29-earthrise-window",
+      "offset": 0.4,
+      "track": "A3"
+    },
+    {
+      "id": "n-photo",
+      "file": "audio/and_took_one_of_the_most_famous.ogg",
+      "under": "c30-earthrise",
+      "offset": 0.2,
+      "track": "A3"
+    },
+    {
+      "id": "shutter",
+      "file": "audio/shutter_click.ogg",
+      "under": "c30b-earthrise-photo",
+      "offset": -0.05,
+      "track": "A2",
+      "_comment": "The user's shutter click: the picture freezes into the real photograph on it."
     }
   ]
 }
