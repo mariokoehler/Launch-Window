@@ -791,6 +791,34 @@
   "prompt": "Liftoff of a Saturn V rocket from Launch Complex 39A at Cape Kennedy on a clear morning in December 1968: the gigantic white rocket with black and white markings rises just past the top of the tall red launch tower beside it, its swing arms pulled back. A blinding white-orange flame and huge billowing clouds of smoke and steam pour out beneath it, and sheets of white frost and ice flake off its sides and tumble down. A pale blue sky. Seen from a distance, the whole rocket and the tower in the frame, low angle, 200mm telephoto lens.\n\nShot on 35mm colour motion picture film in the late 1960s: a natural Ektachrome palette, soft natural film grain, gentle halation around bright lights. Period-accurate late-1960s machines, vehicles and clothing. Cinematic composition, photorealistic, a still frame from a feature film."
  },
  {
+  "key": "c29-earthrise-window/first",
+  "variant": 1,
+  "file": "keyframes/c29-earthrise-window_first_1.png",
+  "seed": 347765522996,
+  "prompt": "Inside the cramped Apollo command module in lunar orbit, 24 December 1968, looking past an astronaut's shoulder toward a small square spacecraft window. In the foreground, his bare hands in the white sleeves of his flight coveralls hold up a big black and silver Hasselblad camera with a long telephoto lens toward the window. Through the window: black space and the grey cratered horizon of the Moon, with the top edge of the small blue and white Earth just appearing above it. Dim cabin, grey panels with switches around the window, the hands and camera lit softly by the light from outside. Close-up over the shoulder, 50mm lens, the window and camera in focus.\n\nPhotorealistic, as if photographed in lunar orbit in 1968: pure black space with no stars, hard unfiltered sunlight, the grey cratered surface of the Moon in fine detail. Cinematic, sharp, a still frame from a feature film."
+ },
+ {
+  "key": "c29-earthrise-window/first",
+  "variant": 2,
+  "file": "keyframes/c29-earthrise-window_first_2.png",
+  "seed": 30192511478192,
+  "prompt": "Inside the cramped Apollo command module in lunar orbit, 24 December 1968, looking past an astronaut's shoulder toward a small square spacecraft window. In the foreground, his bare hands in the white sleeves of his flight coveralls hold up a big black and silver Hasselblad camera with a long telephoto lens toward the window. Through the window: black space and the grey cratered horizon of the Moon, with the top edge of the small blue and white Earth just appearing above it. Dim cabin, grey panels with switches around the window, the hands and camera lit softly by the light from outside. Close-up over the shoulder, 50mm lens, the window and camera in focus.\n\nPhotorealistic, as if photographed in lunar orbit in 1968: pure black space with no stars, hard unfiltered sunlight, the grey cratered surface of the Moon in fine detail. Cinematic, sharp, a still frame from a feature film."
+ },
+ {
+  "key": "c29-earthrise-window/first",
+  "variant": 3,
+  "file": "keyframes/c29-earthrise-window_first_3.png",
+  "seed": 9498253835981,
+  "prompt": "Inside the cramped Apollo command module in lunar orbit, 24 December 1968, looking past an astronaut's shoulder toward a small square spacecraft window. In the foreground, his bare hands in the white sleeves of his flight coveralls hold up a big black and silver Hasselblad camera with a long telephoto lens toward the window. Through the window: black space and the grey cratered horizon of the Moon, with the top edge of the small blue and white Earth just appearing above it. Dim cabin, grey panels with switches around the window, the hands and camera lit softly by the light from outside. Close-up over the shoulder, 50mm lens, the window and camera in focus.\n\nPhotorealistic, as if photographed in lunar orbit in 1968: pure black space with no stars, hard unfiltered sunlight, the grey cratered surface of the Moon in fine detail. Cinematic, sharp, a still frame from a feature film."
+ },
+ {
+  "key": "c29-earthrise-window/first",
+  "variant": 4,
+  "file": "keyframes/c29-earthrise-window_first_4.png",
+  "seed": 68013096267347,
+  "prompt": "Inside the cramped Apollo command module in lunar orbit, 24 December 1968, looking past an astronaut's shoulder toward a small square spacecraft window. In the foreground, his bare hands in the white sleeves of his flight coveralls hold up a big black and silver Hasselblad camera with a long telephoto lens toward the window. Through the window: black space and the grey cratered horizon of the Moon, with the top edge of the small blue and white Earth just appearing above it. Dim cabin, grey panels with switches around the window, the hands and camera lit softly by the light from outside. Close-up over the shoulder, 50mm lens, the window and camera in focus.\n\nPhotorealistic, as if photographed in lunar orbit in 1968: pure black space with no stars, hard unfiltered sunlight, the grey cratered surface of the Moon in fine detail. Cinematic, sharp, a still frame from a feature film."
+ },
+ {
   "key": "c30-earthrise/first",
   "variant": 1,
   "file": "keyframes/c30-earthrise_first_1.png",
