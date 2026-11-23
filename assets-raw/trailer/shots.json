@@ -741,8 +741,8 @@
       "look": "us-1961",
       "duration": 6.0,
       "trim": [
-        0.3,
-        5.5
+        0.8,
+        6.5
       ],
       "mode": "i2v",
       "keyframes": {
