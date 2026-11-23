@@ -113,7 +113,7 @@ The narrator's last line is in 32; from there the real voices of Apollo 11 tell 
 | 34 | **The lunar module's descent.** Dust streaming out flat from under the engine bell, the LM's shadow on the ground, the probes touching. | 4.0 | Reference to video from `apollo_lunar_landing_type_g_h.png`. Sound: "The Eagle has landed" (`assets/audio/archive/apollo-11-eagle-has-landed.ogg`, NASA). | *(NASA: "The Eagle has landed")* |
 | 35 | **The ladder, from below.** A white-suited figure backs down the LM's ladder, the black sky behind. | 3.0 | The visor gold and closed. | |
 | 36 | **The boot.** Close on a lunar overshoe on the LM's footpad; it lifts and moves forward over the grey dust. A frame before it touches: cut to black. | 4.5 | C: *Sea of Tranquility, 20 July 1969*. First and last frame (as the calendars): the last frame is the boot just above the dust, so the clip ends where we cut. Sound: `assets/audio/small-step.mp3` (NASA), which ends on "for man": the cut to black lands there. He stepped off the footpad, not the last rung. | *(NASA: "That's one small step for [a] man …")* |
-| 37 | **Black, then the logo.** "Launch Window", then the tagline: *Stay one small step ahead.* | 4.0 | The end card; the splash clip may serve. | |
+| 37 | **Black, then the logo.** "Launch Window", then the tagline: *Stay one small step ahead.* | 4.0 | The end card: the splash animation rebuilt for the film (`make_endcard.py`), after 1 s of black. | |
 
 Total: about 165 s (about 160 s without the optional shots); beats 1–2 are cut at 67.5 s.
 

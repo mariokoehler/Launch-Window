@@ -95,5 +95,11 @@
   "c31c-top-secret/final": "clips/final/c31c-top-secret_1.mp4",
   "c34-eagle-landing/first": "keyframes/c34-eagle-landing_first_2.png",
   "c35-ladder/first": "keyframes/c35-ladder_first_3.png",
-  "c36-boot/first": "keyframes/c36-boot_first_3.png"
+  "c36-boot/first": "keyframes/c36-boot_first_3.png",
+  "c31b-n1-morning/final": "clips/final/c31b-n1-morning_2.mp4",
+  "c32-apollo11-beach/final": "clips/final/c32-apollo11-beach_1.mp4",
+  "c33-mission-control-landing/final": "clips/final/c33-mission-control-landing_1.mp4",
+  "c34-eagle-landing/final": "clips/final/c34-eagle-landing_2.mp4",
+  "c35-ladder/final": "clips/final/c35-ladder_1.mp4",
+  "c36-boot/final": "clips/final/c36-boot_1.mp4"
 }

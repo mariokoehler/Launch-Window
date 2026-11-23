@@ -63,7 +63,7 @@ generated in the keyframe by Qwen, quoted verbatim in the prompt, and checked by
 pages. If H3 garbles it in motion, the shot stays short or nearly still, or the text is kept out of
 focus.
 
-The end card is the game's logo; the splash clip (`assets-raw/splash/`) may serve as its animation.
+The end card is the game's logo: the splash animation (`assets-raw/splash/splash.jsx`), rebuilt for the film by `make_endcard.py` (1920×1080, 24 fps, on black, 1.25× slower, the finished logo held).
 
 ## 2. Things that stay out of the generator
 
@@ -116,6 +116,7 @@ The film's single source. The generators read it and so does the edit. Sketch of
 |---|---|
 | `make_keyframes.py` | Qwen keyframes for every shot (first and last frames, character sheets): fixed seeds, 3 variants, review sheets in `review/`, the pick per frame in `picks.json`. `--only <shot>`. |
 | `make_clips.py` | H3 clips from the picked keyframes and the shot's prompt. `--profile draft` or `final`, `--variants N`, `--only <shot>`, `--beat <beat>`. `--queue` queues the takes in ComfyUI and exits; `--collect` fetches what is finished (`clips/pending.json` lists what is out). Takes are queued in rounds (every shot's first take, then every second), so a shot whose first take is good can drop its second with `--only <shot> --skip` before it starts (user); `--takes N` caps the new takes per shot. Writes `clips/<profile>/<shot>_<n>.mp4` and `manifest.json` (prompt, seed, profile, render time). The pick per shot goes in `picks.json`. Contact sheets (a few frames per variant) in `review/`. |
+| `make_endcard.py` | The end card (shot 37), `build/endcard.mp4`: runs a copy of the splash's `splash.jsx` with its header rewritten (24 fps, black), nests it in a 1920×1080 comp slowed by `SLOW` at `SCALE` percent, renders it in EffectCraft and adds a silent track. A shot's `"built"`/`"builder"` in `shots.json` makes `make_edit.py` run it when the file is missing (delete it to rebuild). |
 | `make_edit.py` | Writes a FilmCraft JSONL from `shots.json`, `audio.json` and the picks: a 1920×1080 24 fps sequence, each picked clip trimmed and placed, its own sound on a track muted unless `keepAudio`, captions as text graphics, score and NASA audio, the end card. Runs it headless, saves `build/trailer.fcproj` and exports `build/trailer-<profile>.mp4`. The same script for draft and final: only the clip folder changes. |
 | `make_score.py` | Only if the score is generated (Music 3): the prompt and length from the rough cut. |
 

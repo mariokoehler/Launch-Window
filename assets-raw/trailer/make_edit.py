@@ -19,6 +19,7 @@ import argparse
 import json
 import os
 import subprocess
+import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 BUILD = os.path.join(HERE, 'build')
@@ -137,9 +138,13 @@ def main():
         os.remove(project)
 
     def take(shot):
-        """The final take where one is picked (in a final cut), else the draft; a still shot is always in."""
+        """The final take where one is picked (in a final cut), else the draft; a still or built shot is always in."""
         if shot.get('still'):
             return still(shot)
+        if shot.get('built'):  # made by its own script (the end card), rebuilt when missing
+            if not os.path.exists(os.path.join(HERE, shot['built'])):
+                subprocess.run([sys.executable, os.path.join(HERE, shot['builder'])], check=True)
+            return shot['built']
         for profile in ([args.profile, 'draft'] if args.profile != 'draft' else ['draft']):
             if f'{shot["id"]}/{profile}' in picks:
                 return picks[f'{shot["id"]}/{profile}']

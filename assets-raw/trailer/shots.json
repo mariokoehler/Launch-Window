@@ -1094,7 +1094,7 @@
       "duration": 5.0,
       "trim": [
         0.3,
-        4.3
+        5.0
       ],
       "mode": "i2v",
       "keyframes": {
@@ -1111,7 +1111,20 @@
         "at": 0.4,
         "for": 3.0
       },
-      "_comment": "Cut a frame before the sole touches the dust: set the trim once the clip is in."
+      "_comment": "The boot hovers to the clip's end without touching (take 1): cut to black on \"for man\", set once the narration and the quote are placed."
+    },
+    {
+      "id": "c37-endcard",
+      "beat": "landing",
+      "duration": 7.0,
+      "trim": [
+        0.0,
+        6.5
+      ],
+      "blackBefore": 1.0,
+      "built": "build/endcard.mp4",
+      "builder": "make_endcard.py",
+      "_comment": "The splash animation at the film's size and pace (make_endcard.py); black, then the logo."
     }
   ],
   "tests": [
