@@ -260,6 +260,69 @@
       "offset": -0.05,
       "track": "A2",
       "_comment": "The user's shutter click: the picture freezes into the real photograph on it."
+    },
+    {
+      "id": "n-july",
+      "file": "audio/in_july_of_1969_apollo_11_was_less.ogg",
+      "under": "c30b-earthrise-photo",
+      "offset": 1.6,
+      "track": "A3",
+      "_comment": "\"In July of 1969,\" starts over the photograph (a pre-lap); the cut to the Cape falls in the pause before \"Apollo 11\"."
+    },
+    {
+      "id": "n-half",
+      "file": "audio/half_a_world_away_the_soviets.ogg",
+      "under": "c31-n1",
+      "offset": -0.5,
+      "track": "A3",
+      "_comment": "\"Half a world away\" starts just before the cut to Baikonur; \"one last try\" ends about a second before the flash, the engines lighting under it."
+    },
+    {
+      "id": "n-gone",
+      "file": "audio/within_seconds_their_moon_rocket_was_gone.ogg",
+      "under": "c31-n1",
+      "offset": 5.4,
+      "track": "A3",
+      "_comment": "After nearly two seconds of nothing but the explosion; it runs on over the morning after."
+    },
+    {
+      "id": "n-secret",
+      "file": "audio/and_moscow_kept_it_secret.ogg",
+      "under": "c31c-top-secret",
+      "offset": 0.4,
+      "track": "A3"
+    },
+    {
+      "id": "n-liftoff",
+      "file": "audio/on_the_16th_of_july_apollo_11_lifted_off.ogg",
+      "under": "c32-apollo11-beach",
+      "offset": 0.3,
+      "track": "A3"
+    },
+    {
+      "id": "nasa-60",
+      "file": "audio/nasa_60_seconds.ogg",
+      "under": "c33-mission-control-landing",
+      "offset": 0.6,
+      "track": "A3",
+      "_comment": "Charlie Duke on the flight loop (NASA)."
+    },
+    {
+      "id": "nasa-eagle",
+      "file": "../../assets/audio/archive/apollo-11-eagle-has-landed.ogg",
+      "under": "c34-eagle-landing",
+      "offset": 0.3,
+      "track": "A3",
+      "_comment": "Armstrong (NASA; the game's own copy, credited in assets/CREDITS.md)."
+    },
+    {
+      "id": "nasa-step",
+      "file": "../../assets/audio/small-step.mp3",
+      "under": "c36-boot",
+      "offset": 2.5,
+      "for": 2.2,
+      "track": "A3",
+      "_comment": "Armstrong (NASA; the game's own copy). \"for man\" ends 2.14 s in: placed so it ends on the shot's last frame, the cut to black."
     }
   ]
 }

@@ -890,10 +890,10 @@
       "id": "c30b-earthrise-photo",
       "beat": "moon",
       "look": "moon",
-      "duration": 2.5,
+      "duration": 3.5,
       "trim": [
         0.0,
-        2.5
+        3.5
       ],
       "still": "references/earthrise.jpg",
       "facts": [
@@ -913,8 +913,8 @@
       "look": "us-1968",
       "duration": 5.0,
       "trim": [
-        0.3,
-        4.8
+        0.0,
+        5.0
       ],
       "mode": "i2v",
       "keyframes": {
@@ -938,7 +938,7 @@
       "look": "ussr-1969",
       "duration": 7.0,
       "trim": [
-        0.3,
+        0.0,
         6.8
       ],
       "mode": "i2v",
@@ -955,7 +955,8 @@
         "text": "Baikonur, 3 July 1969",
         "at": 0.4,
         "for": 3.0
-      }
+      },
+      "_comment": "Take 1: ignition 0.75 s in, the fireball fills the frame at 3.6 s (the flash: the music stops there). The narration ends a second before it."
     },
     {
       "id": "c31b-n1-morning",

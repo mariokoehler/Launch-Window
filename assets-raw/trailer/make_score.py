@@ -134,8 +134,11 @@ def mix(starts, length, picks, name):
         def when(mark, default):
             return starts[mark['shot']] + mark.get('offset', 0.0) if mark and mark['shot'] in starts else default
 
-        peak = cue.get('peak', {}).get(take) if isinstance(cue.get('peak'), dict) else None
-        place = when(cue['hit'], 0.0) - (peak if peak is not None else peak_of(path))  # the take's start
+        if cue.get('hit'):
+            peak = cue.get('peak', {}).get(take) if isinstance(cue.get('peak'), dict) else None
+            place = when(cue['hit'], 0.0) - (peak if peak is not None else peak_of(path))  # the take's start
+        else:  # a steady cue (a pulse, a drive) has no peak worth aiming: it starts where it's first heard
+            place = when(cue.get('from'), 0.0) - cue.get('from', {}).get('into', 0.0)
         heard_from = max(when(cue.get('from'), 0.0), place, 0.0)
         heard_to = min(when(cue.get('to'), length), place + media_length(path), length)
         if heard_to <= heard_from:
@@ -143,12 +146,13 @@ def mix(starts, length, picks, name):
         fade_in = (cue.get('from') or {}).get('fade', 0.0) if heard_from > place + 0.01 else 0.0
         fade_out = (cue.get('to') or {}).get('fade', 0.0)
         parts.append((path, heard_from - place, heard_from, heard_to, max(fade_in, 0.01), max(fade_out, 0.01)))
-        print(f'score: {cue["id"]} ({os.path.basename(take)}) from {heard_from:.2f} s to {heard_to:.2f} s, '
-              f'its peak at {when(cue["hit"], 0.0):.2f} s')
+        print(f'score: {cue["id"]} ({os.path.basename(take)}) from {heard_from:.2f} s to {heard_to:.2f} s'
+              + (f', its peak at {when(cue["hit"], 0.0):.2f} s' if cue.get('hit') else ''))
     if not parts:
         return None
     os.makedirs(BUILD, exist_ok=True)
     out = os.path.join(BUILD, name + '.wav')
+    raw = os.path.join(BUILD, name + '-unducked.wav')
     args, chains = ['ffmpeg', '-v', 'error', '-y'], []
     for i, (path, source_in, begin, end, fade_in, fade_out) in enumerate(parts):
         args += ['-i', path]
@@ -156,12 +160,91 @@ def mix(starts, length, picks, name):
         delay = round(begin * 1000)
         chains.append(f'[{i}:a]aresample={RATE},aformat=channel_layouts=stereo,'
                       f'atrim=start={source_in:.4f}:duration={span:.4f},asetpts=PTS-STARTPTS,'
-                      f'afade=t=in:d={fade_in:.3f},afade=t=out:st={span - fade_out:.4f}:d={fade_out:.3f},'
+                      # Equal-power fades, so two cues crossfading don't sag in the middle.
+                      f'afade=t=in:d={fade_in:.3f}:curve=qsin,'
+                      f'afade=t=out:st={span - fade_out:.4f}:d={fade_out:.3f}:curve=qsin,'
                       f'adelay={delay}|{delay}[c{i}]')
     inputs = ''.join(f'[c{i}]' for i in range(len(parts)))
     chains.append(f'{inputs}amix=inputs={len(parts)}:normalize=0,apad,atrim=duration={length:.4f}[out]')
-    subprocess.run(args + ['-filter_complex', ';'.join(chains), '-map', '[out]', '-ar', str(RATE), out], check=True)
+    subprocess.run(args + ['-filter_complex', ';'.join(chains), '-map', '[out]', '-ar', str(RATE), raw], check=True)
+    duck(raw, out, voices(starts, length), score.get('gainDb', 0.0), score.get('duck', {}))
     return out
+
+
+def voices(starts, length):
+    """Every voice in the cut (audio.json's A3: the narration, Kennedy, NASA's loops): path, start, gain, length."""
+    found = []
+    for track in read('audio.json')['tracks']:
+        if track.get('track') != 'A3' or track.get('under') not in starts:
+            continue
+        at = starts[track['under']] + track.get('offset', 0.0)
+        span = min(track.get('for', 1e9), media_length(os.path.join(HERE, track['file'])), length - at)
+        found.append((os.path.join(HERE, track['file']), at, track.get('gainDb', 0.0), span))
+    return found
+
+
+def level(path):
+    """Absolute loudness in dBFS per 10 ms (not normalized), smoothed over 0.4 s."""
+    import numpy as np
+    raw = subprocess.run(['ffmpeg', '-v', 'error', '-i', path, '-ac', '1', '-ar', '8000', '-f', 'f32le', '-'],
+                         capture_output=True, check=True).stdout
+    y = np.frombuffer(raw, dtype=np.float32)
+    frames = len(y) // 80
+    db = 10 * np.log10(np.mean(y[:frames * 80].reshape(frames, 80) ** 2, axis=1) + 1e-12)
+    return np.convolve(db, np.ones(40) / 40, mode='same')
+
+
+def duck(raw, out, speech, gain_db, settings):
+    """The music ridden under the voices, the way a mixer rides it under dialogue: wherever a voice speaks, the
+    music is held at least "margin" dB below that line's own level (its median while speaking), pulled down
+    only by as much as it rises above that, so a quiet stretch isn't touched and a swell is. The dip starts
+    "attack" seconds before the words and lets go "release" seconds after them. gain_db is the level the score
+    plays at in the edit, so the margin is what is heard."""
+    import numpy as np
+    margin, attack, release = settings.get('margin', 12.0), settings.get('attack', 0.3), settings.get('release', 0.6)
+    music = level(raw) + gain_db
+    ceiling = np.full(len(music), np.inf)
+    for path, at, voice_gain, span in speech:
+        voice = level(path)[:round(span * 100)] + voice_gain
+        talking = voice > voice.max() - 20
+        if not talking.any():
+            continue
+        line = float(np.median(voice[talking])) - margin
+        first, last = np.flatnonzero(talking)[[0, -1]]
+        begin = max(0, round(at * 100) + first - round(attack * 100))
+        end = min(len(ceiling), round(at * 100) + last + round(release * 100))
+        ceiling[begin:end] = np.minimum(ceiling[begin:end], line)
+    cut = np.maximum(0.0, music - ceiling)  # dB to take off, frame by frame
+    # Hold each dip a little and ramp it in and out, so the music moves like a fader, not a compressor.
+    held = np.array([cut[max(0, i - 20):i + 21].max() for i in range(len(cut))])
+    ramp = np.ones(round(attack * 100)) / round(attack * 100)
+    smooth = np.convolve(held, ramp, mode='same')
+    samples = subprocess.run(['ffmpeg', '-v', 'error', '-i', raw, '-f', 'f32le', '-ac', '2', '-ar', str(RATE), '-'],
+                             capture_output=True, check=True).stdout
+    stereo = np.frombuffer(samples, dtype=np.float32).reshape(-1, 2)
+    gain = 10 ** (-np.interp(np.arange(len(stereo)) / RATE, np.arange(len(smooth)) / 100, smooth) / 20)
+    ducked = (stereo * gain[:, None]).astype(np.float32)
+    subprocess.run(['ffmpeg', '-v', 'error', '-y', '-f', 'f32le', '-ac', '2', '-ar', str(RATE), '-i', '-',
+                    '-c:a', 'pcm_s16le', out], input=ducked.tobytes(), check=True)
+    report(music, smooth, speech)
+
+
+def report(music, dip, speech):
+    """Per voice line: how far the music sits below it, before and after the ducking (the loudest moment)."""
+    import numpy as np
+    for path, at, voice_gain, span in speech:
+        voice = level(path)[:round(span * 100)] + voice_gain
+        talking = np.flatnonzero(voice > voice.max() - 20)
+        if not len(talking):
+            continue
+        frames = talking + round(at * 100)
+        frames = frames[frames < len(music)]
+        line = float(np.median(voice[talking]))
+        before = line - music[frames].max()
+        after = line - (music[frames] - dip[frames]).max()
+        if before < 30:
+            print(f'  {os.path.basename(path)[:44]:44} at {at:6.1f} s: music {before:5.1f} dB under, '
+                  f'now {after:5.1f} dB')
 
 
 def media_length(path):
