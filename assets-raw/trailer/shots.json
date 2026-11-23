@@ -1001,6 +1001,126 @@
         "at": 0.6,
         "for": 2.5
       }
+    },
+    {
+      "id": "c32-apollo11-beach",
+      "beat": "landing",
+      "look": "us-1968",
+      "duration": 5.0,
+      "trim": [
+        0.3,
+        4.3
+      ],
+      "mode": "i2v",
+      "keyframes": {
+        "first": "A beach near Cape Kennedy on the morning of 16 July 1969, crowded with spectators. In the foreground, seen from behind: on the left a man in a short-sleeved shirt holding binoculars to his eyes, in the middle a woman in a sundress shading her eyes with her hand, on the right a boy on tiptoe pointing at the sky. Far away across the water, a Saturn V rocket rises from the horizon on a brilliant pillar of flame and a long column of white smoke, into a hazy blue morning sky. Medium-wide shot, 85mm lens, the three people sharp, the crowd beyond them soft."
+      },
+      "video": "Live-action, cinematic, 1969. On the beach shown in <Picture 1>, far away the rocket climbs steadily higher on its pillar of flame, its smoke trail growing. The man slowly lowers his binoculars to look with his own eyes; the boy keeps pointing and bounces on his toes; the woman keeps her hand over her eyes. The camera holds a static shot.",
+      "soundscape": "A crowd on a beach, gasps and a cheer rising; then the deep, distant crackling rumble of the rocket rolling in across the water. Nobody speaks close by.",
+      "clipGainDb": -10,
+      "facts": [
+        "apollo-11"
+      ],
+      "caption": {
+        "text": "Apollo 11, 16 July 1969",
+        "at": 0.4,
+        "for": 3.0
+      }
+    },
+    {
+      "id": "c33-mission-control-landing",
+      "beat": "landing",
+      "look": "us-1968",
+      "duration": 5.0,
+      "trim": [
+        0.3,
+        3.8
+      ],
+      "mode": "i2v",
+      "keyframes": {
+        "first": "Mission control in Houston on 20 July 1969, seen from behind two flight controllers at their console, tense and still: on the left a man in a white short-sleeved shirt presses his headset to his ear with one hand; on the right a man leans forward with his elbows on the console, a pencil gripped in his fist. On the console in front of them, a small round gauge with its needle near the bottom of its dial, small screens with columns of numbers. A haze of cigarette smoke, rows of consoles beyond them softly out of focus. Medium shot over their shoulders, 85mm lens."
+      },
+      "video": "Live-action, cinematic, 1969. In the control room shown in <Picture 1>, the two controllers stay tense and still, watching. The man on the left presses his headset harder to his ear; the man on the right slowly tightens his grip on the pencil. The gauge needle sinks a little further. The camera pushes in with small amplitude at slow speed toward the gauge.",
+      "soundscape": "A tense, silent control room: the hum of equipment, faint radio static. Nobody speaks.",
+      "clipGainDb": -16,
+      "facts": [
+        "apollo-11"
+      ]
+    },
+    {
+      "id": "c34-eagle-landing",
+      "beat": "landing",
+      "look": "moon",
+      "duration": 5.0,
+      "trim": [
+        0.4,
+        4.4
+      ],
+      "mode": "r2v",
+      "turbo": false,
+      "references": [
+        "references/apollo-lm.png"
+      ],
+      "subjects": [
+        "<Subject 1>: the lunar module shown in <Picture 1>, its gold-foil-wrapped descent stage on four spidery legs with round footpads, and the angular grey and black crew cabin on top."
+      ],
+      "summary": "The target video shows <Subject 1> landing on the Moon.",
+      "retention": [
+        "<Picture 1> ([Shot 1]): partially_preserved - the lunar module's shape is kept exactly: its gold descent stage, four legs with round footpads and the angular cabin on top. The ground around it is untouched grey dust; the framing, the ground and the light are new."
+      ],
+      "video": "Live-action, cinematic, photorealistic, on the Moon in hard sunlight, black sky. <Subject 1> descends slowly the last few metres toward the grey lunar surface, its engine blowing the fine grey dust out sideways in long flat streaks across the ground, its dark shadow growing beneath it, until its footpads touch down gently and the dust settles. The camera holds a steady low shot.",
+      "soundscape": "Near silence: a muffled low rumble that fades away.",
+      "clipGainDb": -20,
+      "facts": [
+        "apollo-11"
+      ]
+    },
+    {
+      "id": "c35-ladder",
+      "beat": "landing",
+      "look": "moon",
+      "duration": 5.0,
+      "trim": [
+        0.3,
+        3.8
+      ],
+      "mode": "i2v",
+      "keyframes": {
+        "first": "On the Moon on 20 July 1969, looking up from the ground at the lunar module's gold-foil-wrapped leg and its narrow ladder: an astronaut in a bulky white spacesuit with a white backpack is climbing backwards down the ladder, seen from below and behind, his gold visor closed and reflecting the light. The black sky behind him, hard sunlight. Low angle from the ground, 35mm lens."
+      },
+      "video": "Live-action, cinematic, photorealistic, 1969. On the ladder shown in <Picture 1>, the astronaut slowly and carefully climbs down one rung after another, backwards, holding the rails with his thick gloves. The camera holds a steady low shot.",
+      "soundscape": "Near silence: slow breathing inside a helmet, a faint radio hiss.",
+      "clipGainDb": -20,
+      "facts": [
+        "apollo-11"
+      ]
+    },
+    {
+      "id": "c36-boot",
+      "beat": "landing",
+      "look": "moon",
+      "duration": 5.0,
+      "trim": [
+        0.3,
+        4.8
+      ],
+      "mode": "i2v",
+      "sameSeed": true,
+      "keyframes": {
+        "first": "Close-up on the Moon on 20 July 1969, low angle at ground level: the bottom of the lunar module's ladder and its wide round dish-shaped footpad in gold-coloured metal resting on the fine grey lunar dust, the black sky behind. A big white lunar overshoe with a ribbed grey sole stands on the footpad, the leg of the white spacesuit above it. Hard sunlight from the side, deep black shadows, every grain of the grey dust sharp. 50mm lens, the boot in sharp focus.",
+        "last": "Close-up on the Moon on 20 July 1969, low angle at ground level: the bottom of the lunar module's ladder and its wide round dish-shaped footpad in gold-coloured metal resting on the fine grey lunar dust, the black sky behind. A big white lunar overshoe with a ribbed grey sole hangs in the air just in front of the footpad, a hand's breadth above the untouched grey dust, about to step down, the leg of the white spacesuit above it. Hard sunlight from the side, deep black shadows, every grain of the grey dust sharp. 50mm lens, the boot in sharp focus."
+      },
+      "video": "Live-action, cinematic, photorealistic, 1969. On the Moon shown in <Picture 1>, the boot slowly lifts off the footpad and moves forward over the grey dust, and comes to hang just above it as shown in <Picture 2>. The camera holds a steady low shot.",
+      "soundscape": "Near silence: slow breathing inside a helmet.",
+      "clipGainDb": -20,
+      "facts": [
+        "apollo-11"
+      ],
+      "caption": {
+        "text": "Sea of Tranquility, 20 July 1969",
+        "at": 0.4,
+        "for": 3.0
+      }
     }
   ],
   "tests": [

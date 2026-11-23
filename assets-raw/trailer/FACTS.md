@@ -79,11 +79,25 @@ final.
   [NASA SP-4029, Apollo 8 summary](https://www.nasa.gov/wp-content/uploads/static/history/SP-4029/Apollo_08a_Summary.htm);
   [National Archives, Earthrise](https://www.docsteach.org/documents/document/earthrise-apollo-8);
   [NASA, Inside the Apollo 8 spacecraft](https://www.nasa.gov/image-article/inside-apollo-8-spacecraft-december-1968/).
+- **n1-secret.** The uncrewed N1 5L launched on 3 July 1969 at 23:18 Moscow time from Site 110 at Baikonur (after
+  midnight locally); an engine's oxygen pump exploded at liftoff, the rocket rose about 200 m, its engines shut down,
+  and it fell back onto the pad and exploded, wrecking it. It carried a modified Soyuz-type craft for lunar orbit
+  (don't mention a lander mockup). Thirteen days before Apollo 11 by Moscow date. The Soviet Union first acknowledged
+  its crewed Moon program in August 1989 (Izvestia): "twenty years" is fair. The CIA saw the failure and photographed
+  the wreck from orbit. [RussianSpaceWeb, N1 5L](https://russianspaceweb.com/n1_5l.html);
+  [Centennial of Flight, Soviet lunar program](https://centennialofflight.net/essay/SPACEFLIGHT/soviet_lunar/SP21.htm);
+  [The Space Review](https://thespacereview.com/article/3143/1).
+- **apollo-11.** Launched 16 July 1969 at 9:32 am EDT from Pad 39A, watched by about a million people on the beaches
+  and roads; landed 20 July in the Sea of Tranquility. During the descent CAPCOM Charlie Duke called "60 seconds" of
+  fuel left; then "Contact light" and "Houston, Tranquility Base here. The Eagle has landed." Armstrong stood on the
+  footpad and stepped down onto the surface at 10:56 pm EDT on 20 July (02:56 UTC on 21 July): "That's one small step
+  for (a) man; one giant leap for mankind." The "60 seconds" clip is cut from NASA's own landing excerpt
+  (62283main_landing.wav, via the Wayback Machine; public domain; edited, not continuous time).
+  [NASA, Apollo 11 overview](https://www.nasa.gov/history/apollo-11-mission-overview/);
+  [ALSJ, the landing](https://www.nasa.gov/wp-content/uploads/static/history/alsj/a11/a11.landing.html);
+  [ALSJ, the first step](https://www.nasa.gov/wp-content/uploads/static/history/alsj/a11/a11.step.html).
 
 ## To check
 
 - **sputnik-1** (4 October 1957; a polished sphere of 58 cm, four antennas; the beep; the core stage was
   what people saw with the naked eye).
-- **apollo-11** (launch 16 July 1969; landing 20 July; the step 20 July US time, 21 July UTC; "60 seconds",
-  "The Eagle has landed", "That's one small step for [a] man"; he stepped off the footpad; the NASA
-  recordings' public-domain status).
