@@ -75,7 +75,7 @@ final.
 
 - **sputnik-1** (4 October 1957; a polished sphere of 58 cm, four antennas; the beep; the core stage was
   what people saw with the naked eye).
-- **apollo-8** (launch 21 December 1968; Earthrise photographed 24 December).
+- **apollo-8** (rollout of its Saturn V to Pad 39A on 9 October 1968; launch 21 December 1968; Earthrise photographed 24 December).
 - **apollo-11** (launch 16 July 1969; landing 20 July; the step 20 July US time, 21 July UTC; "60 seconds",
   "The Eagle has landed", "That's one small step for [a] man"; he stepped off the footpad; the NASA
   recordings' public-domain status).
