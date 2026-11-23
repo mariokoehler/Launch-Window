@@ -30,7 +30,7 @@ Decisions so far (user, 2026-11-21):
 | Keyframes (stills) | Qwen Image 2.1 in ComfyUI (installed) | Always at exactly 1344×768, H3's native size: an off-aspect first frame is stretched, a last frame centre-cropped. 1344×768 is 1.75:1, a little taller than 16:9: the edit fills the 1920×1080 frame (`clip.fillFrame`), cropping about 1% top and bottom, so keyframes keep a small safe margin there. |
 | Clips | MiniMax H3 in ComfyUI | `fl2va` installed. Reference-to-video and Multiframe need the `ref2va` weights from `Comfy-Org/MiniMax-H3` (to download). |
 | Upscale to 1080p | FilmCraft's scaling for now | H3 runs at about 1 MP locally; 2K is only the hosted service. A separate upscale pass only if the projector shows the need. |
-| Score | MiniMax Music 3 in ComfyUI (installed), or a curated track | Decided after the rough cut. |
+| Score | Stable Audio 3 (medium) in ComfyUI, one cue per stretch of the film, fitted to the cut by `make_score.py` | Chosen by ear over MiniMax Music 3 (user, 2026-11-23). Local only: never upload the film to a video-to-music service (user). |
 | Edit, captions, end card, export | FilmCraft (`C:\Program Files\FilmCraft\filmcraft-cli.exe`) | Headless, tested 2026-11-21 with dummy clips: `run <script.jsonl>` with `--save-as`/`--project … --save`; `file.newSequence` (1920×1080, 24 fps), `file.import` (returns item ids), `timeline.place` (item, track, time, `sourceIn`, `duration`; returns clip ids), `clip.fillFrame`, `timeline.setTrack` (mute), `graphics.newText` (a caption as its own clip), `file.exportMedia` (h264). `render --seconds S --out f.png` checks a frame. |
 
 Fallback model: **LTX-2.5** (4K HDR, several shots in one generation, first and last frame; gated
@@ -118,7 +118,7 @@ The film's single source. The generators read it and so does the edit. Sketch of
 | `make_clips.py` | H3 clips from the picked keyframes and the shot's prompt. `--profile draft` or `final`, `--variants N`, `--only <shot>`, `--beat <beat>`. `--queue` queues the takes in ComfyUI and exits; `--collect` fetches what is finished (`clips/pending.json` lists what is out). Takes are queued in rounds (every shot's first take, then every second), so a shot whose first take is good can drop its second with `--only <shot> --skip` before it starts (user); `--takes N` caps the new takes per shot. Writes `clips/<profile>/<shot>_<n>.mp4` and `manifest.json` (prompt, seed, profile, render time). The pick per shot goes in `picks.json`. Contact sheets (a few frames per variant) in `review/`. |
 | `make_endcard.py` | The end card (shot 37), `build/endcard.mp4`: runs a copy of the splash's `splash.jsx` with its header rewritten (24 fps, black), nests it in a 1920×1080 comp slowed by `SLOW` at `SCALE` percent, renders it in EffectCraft and adds a silent track. A shot's `"built"`/`"builder"` in `shots.json` makes `make_edit.py` run it when the file is missing (delete it to rebuild). |
 | `make_edit.py` | Writes a FilmCraft JSONL from `shots.json`, `audio.json` and the picks: a 1920×1080 24 fps sequence, each picked clip trimmed and placed, its own sound on a track muted unless `keepAudio`, captions as text graphics, score and NASA audio, the end card. Runs it headless, saves `build/trailer.fcproj` and exports `build/trailer-<profile>.mp4`. The same script for draft and final: only the clip folder changes. |
-| `make_score.py` | Only if the score is generated (Music 3): the prompt and length from the rough cut. |
+| `make_score.py` | The score from `score.json`: queues each cue's seeds (Stable Audio 3), collects takes to `music/takes/` as OGG with a loudness curve each, and mixes the picked takes (`picks.json` "score/<cue>") into `build/score-<profile>.wav`: each slid so its peak lands on its hit, heard between two marks with fades or a hard stop. `make_edit.py` calls it and lays the result on A4 (`--no-score` leaves it out). |
 
 ComfyUI workflows are the user's, built and tested in the GUI, exported in API format and flattened
 here like `blueprints_workflow_api.json` (Qwen keyframe; H3 image-to-video; H3 reference-to-video;
@@ -240,6 +240,14 @@ The film has about 20–25 shots. With 3–4 variants per shot that is 80–100 
   (`Abiray/Minimax-H3-nvfp4-INT4-INT8-Convrot` on Hugging Face, 15.9 GB against 21 GB) rendered c03 and c06 at
   final settings with final's seeds (`--profile final-mixed`): the same detail and legible text, slightly
   different motion, about the same time (9–11 min). The NVFP4 builds need an RTX 50 card; GGUF saves little.
+- **Music** (2026-11-23): no model places a swell or a stop at a given second. MiniMax Music 3 takes a caption and
+  section tags ("generative control rather than strict symbolic guarantees", its README); asked for an arc in one
+  cue it gives several waves, it can end a cue early (26 s of 60), a 210 s piece came out loud throughout, and
+  words written under a section tag get sung. Its full-size audio decode crashed ComfyUI on a 210 s piece (the tiled
+  decode works). Stable Audio 3 keeps the tempo and length asked for, in two-bar phrases, and one take of a
+  "continuous crescendo" did build; the user preferred its sound. So the score is edited to picture: one mood per
+  cue, a few seeds, the peak slid onto the hit (`make_score.py`); stops are hard cuts in the mix. Whisper can't tell
+  instrumental music from singing (it hears captions like "Pomp and Circumstance"): the ear checks for vocals.
 
 ## 8. Open points
 
@@ -247,6 +255,7 @@ The film has about 20–25 shots. With 3–4 variants per shot that is 80–100 
   captions faded in and out, fades from and to black, the clips' own sound and a placeholder beep
   at −6 dB, exported in 13 s. Still untried: cuts between shots other than hard cuts, and the score.
 - Whether finals need an upscale pass beyond FilmCraft's scaling (check on the projector).
-- Score: Music 3 or a curated track (credited either way).
+- The rest of the score's cues (the arc in SHOTLIST.md): the cold open's pulse, Gagarin's swell, the middle
+  years' drive, beat 6's suspense with the stop on the N1's flash, the final build to the boot.
 - Whether a beat for the Soviet N1 or the lunar race's end (the Soviets standing down) belongs in the
   film, or the landing alone closes it.

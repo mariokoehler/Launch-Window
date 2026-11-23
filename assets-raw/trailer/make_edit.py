@@ -21,6 +21,8 @@ import os
 import subprocess
 import sys
 
+import make_score
+
 HERE = os.path.dirname(os.path.abspath(__file__))
 BUILD = os.path.join(HERE, 'build')
 FILMCRAFT = r'C:\Program Files\FilmCraft\filmcraft-cli.exe'
@@ -122,11 +124,42 @@ def still(shot):
     return out
 
 
+def take_for(shot, picks, profile):
+    """The final take where one is picked (in a final cut), else the draft; a still or built shot is always in."""
+    if shot.get('still'):
+        return still(shot)
+    if shot.get('built'):  # made by its own script (the end card), rebuilt when missing
+        if not os.path.exists(os.path.join(HERE, shot['built'])):
+            subprocess.run([sys.executable, os.path.join(HERE, shot['builder'])], check=True)
+        return shot['built']
+    for each in ([profile, 'draft'] if profile != 'draft' else ['draft']):
+        if f'{shot["id"]}/{each}' in picks:
+            return picks[f'{shot["id"]}/{each}']
+    return None
+
+
+def film_cut(shots, picks, profile, beats=None):
+    """The shots in the cut, in film order: those with a take, of the given beats only if any are given."""
+    return [s for s in shots if take_for(s, picks, profile) and (not beats or s['beat'] in beats)]
+
+
+def timeline(cut):
+    """Each shot's start on the timeline (its blackBefore included), and the film's length."""
+    starts, at = {}, 0.0
+    for shot in cut:
+        start, end = shot.get('trim', [0.0, shot['duration']])
+        at += shot.get('blackBefore', 0.0)  # a pause in black, faded into and out of (the breather after 1967)
+        starts[shot['id']] = at
+        at += end - start
+    return starts, at
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--profile', default='draft')
     parser.add_argument('--frames', nargs='*', type=float, default=[])
     parser.add_argument('--beat', nargs='*', help='only these beats')
+    parser.add_argument('--no-score', action='store_true', help='leave the score out')
     args = parser.parse_args()
 
     os.makedirs(BUILD, exist_ok=True)
@@ -138,23 +171,18 @@ def main():
         os.remove(project)
 
     def take(shot):
-        """The final take where one is picked (in a final cut), else the draft; a still or built shot is always in."""
-        if shot.get('still'):
-            return still(shot)
-        if shot.get('built'):  # made by its own script (the end card), rebuilt when missing
-            if not os.path.exists(os.path.join(HERE, shot['built'])):
-                subprocess.run([sys.executable, os.path.join(HERE, shot['builder'])], check=True)
-            return shot['built']
-        for profile in ([args.profile, 'draft'] if args.profile != 'draft' else ['draft']):
-            if f'{shot["id"]}/{profile}' in picks:
-                return picks[f'{shot["id"]}/{profile}']
-        return None
+        return take_for(shot, picks, args.profile)
 
-    cut = [s for s in shots if take(s) and (not args.beat or s['beat'] in args.beat)]
+    cut = film_cut(shots, picks, args.profile, args.beat)
     if not cut:
         raise SystemExit(f'no picked {args.profile} clips')
     ids = {s['id'] for s in cut}
     audio = [t for t in audio if 'under' not in t or t['under'] in ids]
+    starts, length = timeline(cut)
+    score = make_score.mix(starts, length, picks, f'score-{args.profile}')
+    if score and not args.no_score:
+        audio.append({'id': 'score', 'file': os.path.relpath(score, HERE), 'at': 0.0, 'track': 'A4',
+                      'gainDb': read('score.json').get('gainDb', 0.0)})
     for track in audio:
         path = os.path.join(HERE, track['file'])
         if os.path.basename(path).startswith('placeholder-beep') and not os.path.exists(path):
@@ -165,7 +193,7 @@ def main():
     media += [os.path.join(HERE, t['file']) for t in audio]
     sequence, imported = filmcraft(project, [
         {'id': 'file.newSequence', 'params': {'name': f'Launch Window trailer ({args.profile})',
-                                              'width': 1920, 'height': 1080, 'fps': FPS}},
+                                              'width': 1920, 'height': 1080, 'fps': FPS, 'audio': 4}},
         {'id': 'file.import', 'params': {'paths': [m.replace(os.sep, '/') for m in media]}},
     ])
     if imported['errors']:
@@ -173,17 +201,13 @@ def main():
     items = imported['items']
 
     # 2. The shots back to back on V1 (their sound on A1); audio.json on its tracks (A2 effects, A3
-    #    narration), each for its file's own length.
-    starts, at, places = {}, 0.0, []
+    #    narration), each for its file's own length; the score on A4.
+    places = []
     for shot, item in zip(cut, items):
         start, end = shot.get('trim', [0.0, shot['duration']])
-        at += shot.get('blackBefore', 0.0)  # a pause in black, faded into and out of (the breather after 1967)
-        starts[shot['id']] = at
         places.append({'id': 'timeline.place', 'params': {
-            'item': item, 'track': 'V1', 'audioTrack': 'A1', 'seconds': at,
+            'item': item, 'track': 'V1', 'audioTrack': 'A1', 'seconds': starts[shot['id']],
             'sourceIn': {'seconds': start}, 'duration': {'seconds': end - start}}})
-        at += end - start
-    length = at
     for track, item in zip(audio, items[len(cut):]):
         when = starts[track['under']] + track.get('offset', 0.0) if 'under' in track else track['at']
         span = min(track.get('for', 1e9), media_length(os.path.join(HERE, track['file'])), length - when)

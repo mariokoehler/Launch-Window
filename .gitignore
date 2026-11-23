@@ -82,6 +82,7 @@ assets-raw/trailer/keyframes/*.png
 assets-raw/trailer/clips/
 assets-raw/trailer/review/
 assets-raw/trailer/build/
+assets-raw/trailer/music/takes/
 
 # The archive's downloaded originals (some are 30 MB TIFFs): make_archive_assets.py fetches them again.
 assets-raw/archive/originals/

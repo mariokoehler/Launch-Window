@@ -1,0 +1,16 @@
+{
+  "_comment": "The score's cues (make_score.py): each one mood for one stretch of the film, generated with Stable Audio 3. A cue's picked take (picks.json \"score/<cue>\") is slid so its peak lands on \"hit\", and heard from \"from\" to \"to\" (a shot's start plus offset), faded over their \"fade\" seconds; 0 is a hard stop. \"peak\" maps a take to its peak in seconds when the ear disagrees with the measured one. gainDb is the whole score's level in the edit.",
+  "gainDb": -6.0,
+  "cues": [
+    {
+      "id": "moon",
+      "_comment": "Beat 5: the music comes back after the black, rises under the rollout and the Apollo 8 launch, peaks as the Earth rises, and falls away under the photograph.",
+      "seconds": 30,
+      "seeds": [1, 2, 3, 4, 5, 6],
+      "prompt": "Cinematic orchestral film score, instrumental, emotional and full of wonder. It begins very quietly with a low sustained string note and a soft heartbeat drum, grows steadily with ostinato strings, French horns and a timpani roll into a huge, soaring, triumphant peak of the full orchestra with brass and cymbals about two thirds of the way through, then falls away to shimmering high strings and a soft held chord. Modern space-film trailer music, 80 BPM, D major.",
+      "hit": {"shot": "c30-earthrise", "offset": 0.0},
+      "from": {"shot": "c27c-rollout", "offset": 0.0, "fade": 2.0},
+      "to": {"shot": "c30b-earthrise-photo", "offset": 2.5, "fade": 2.0}
+    }
+  ]
+}
