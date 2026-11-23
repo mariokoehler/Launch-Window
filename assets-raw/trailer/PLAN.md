@@ -263,7 +263,7 @@ The film has about 20–25 shots. With 3–4 variants per shot that is 80–100 
   (stretch 1.25) for a breath after his line, a 1.5 s fade to black, half a second of black, and the drive fades
   in fresh on the cut to Tereshkova; gagarin_1 ends on its own chord under his last words, so that chord rings
   on (a cue's "tail": a convolution reverb, the orchestra stopping in a hall). The drive's last swell carries
-  over the cut to Arlington (an L-cut), stops where its phrase breaks and rings for 3 s; the finale plays
+  over the cut to Arlington (an L-cut), stops where its phrase breaks and rings for 3 s; the line about 1967 waits until it has rung out, and the Kremlin Wall holds 2 s after it before its pan up into the black (both wreaths slowed, user); the finale plays
   through the black to its last chord, which rings over the end card until the film ends (the logo cue is gone).
   Other takes are in `music/takes/` with their curves; gagarin_1 drops out at Shepard (about 86 s) and comes
   back abruptly, a seam in the take itself to listen for.

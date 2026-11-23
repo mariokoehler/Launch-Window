@@ -765,8 +765,8 @@
       "look": "us-1961",
       "duration": 5.0,
       "trim": [
-        0.5,
-        3.0
+        0.15,
+        6.25
       ],
       "mode": "i2v",
       "keyframes": {
@@ -782,7 +782,8 @@
         "text": "1967",
         "at": 0.3,
         "for": 4.2
-      }
+      },
+      "stretch": 1.25
     },
     {
       "id": "c27b-pad-ussr",
@@ -790,8 +791,8 @@
       "look": "ussr-1961",
       "duration": 5.0,
       "trim": [
-        0.5,
-        3.0
+        0.0,
+        3.9
       ],
       "mode": "i2v",
       "keyframes": {
@@ -802,7 +803,8 @@
       "clipGainDb": -14,
       "facts": [
         "losses-1967"
-      ]
+      ],
+      "stretch": 1.3
     },
     {
       "id": "c27c-rollout",
