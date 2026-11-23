@@ -890,10 +890,10 @@
       "id": "c30b-earthrise-photo",
       "beat": "moon",
       "look": "moon",
-      "duration": 4.0,
+      "duration": 6.0,
       "trim": [
         0.0,
-        4.0
+        6.0
       ],
       "still": "references/earthrise.jpg",
       "facts": [
@@ -914,7 +914,7 @@
       "duration": 5.0,
       "trim": [
         0.0,
-        6.25
+        6.6
       ],
       "mode": "i2v",
       "keyframes": {
@@ -931,10 +931,11 @@
         "at": 0.4,
         "for": 3.0
       },
-      "stretch": 1.25,
-      "blackBefore": 0.75,
-      "fadeBefore": 1.5,
-      "_comment": "Beat 5 ends in a slow fade to black with its music (user); the shot fades in from black. Slowed by 1.25 (a still scene, the beams barely move) to hold \"In July of 1969 ... from launch\"."
+      "stretch": 1.32,
+      "blackBefore": 0.5,
+      "fadeBefore": 3.5,
+      "_comment": "Beat 5 ends in a slow fade to black (3.5 s) with its music, then half a second of black, then a cut to this shot (user). Slowed by 1.32 (a still scene, the beams barely move) to hold \"In July of 1969 ... from launch\" and run on 0.85 s after it before the cut to Baikonur (user).",
+      "fadeIn": 0.0
     },
     {
       "id": "c31-n1",

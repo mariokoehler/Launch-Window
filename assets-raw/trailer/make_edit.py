@@ -109,7 +109,7 @@ def held(shot, path):
 def stretched(shot, path):
     """A shot's "stretch": its clip slowed by that factor (a near-still shot given room for its line), the frames
     repeated at the film's rate and its sound slowed alike. Made once in build/; "trim" is in the slowed time."""
-    out = os.path.join(BUILD, f'stretch-{shot["id"]}-{os.path.basename(path)}')
+    out = os.path.join(BUILD, f'stretch{shot["stretch"]}-{shot["id"]}-{os.path.basename(path)}')
     if not os.path.exists(out) or os.path.getmtime(out) < os.path.getmtime(path):
         subprocess.run(['ffmpeg', '-loglevel', 'error', '-y', '-i', path, '-vf',
                         f'setpts=PTS*{shot["stretch"]},fps={FPS}', '-af', f'atempo={1 / shot["stretch"]:.5f}',
@@ -251,13 +251,16 @@ def main():
     for i, shot in enumerate(cut):
         if shot.get('blackBefore') and i > 0:
             # "fadeBefore": how slowly the shot before goes to black, in seconds (a beat's end given room).
+            # "fadeIn": how this shot comes out of the black, in seconds (0: a cut).
             fade_out = round(shot['fadeBefore'] * FPS) if 'fadeBefore' in shot else FADE_FRAMES
+            fade_in = round(shot['fadeIn'] * FPS) if 'fadeIn' in shot else FADE_FRAMES * 2
             effects += [{'id': 'sequence.applyVideoTransition', 'params': {
                             'clip': video_clips[i - 1], 'effect': 'cross_dissolve', 'frames': fade_out,
-                            'edge': 'out', 'align': 'end'}},
-                        {'id': 'sequence.applyVideoTransition', 'params': {
-                            'clip': video_clips[i], 'effect': 'cross_dissolve', 'frames': FADE_FRAMES * 2,
-                            'edge': 'in', 'align': 'start'}}]
+                            'edge': 'out', 'align': 'end'}}]
+            if fade_in:
+                effects += [{'id': 'sequence.applyVideoTransition', 'params': {
+                                'clip': video_clips[i], 'effect': 'cross_dissolve', 'frames': fade_in,
+                                'edge': 'in', 'align': 'start'}}]
     filmcraft(project, effects)
     gains = [{'id': 'effects.setParam', 'params': {'clip': clip, 'effect': 'volume', 'param': 'level',
                                                    'value': track['gainDb']}}

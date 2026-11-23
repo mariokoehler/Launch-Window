@@ -273,9 +273,9 @@
       "id": "n-half",
       "file": "audio/half_a_world_away_the_soviets.ogg",
       "under": "c31-n1",
-      "offset": -0.3,
+      "offset": 0.3,
       "track": "A3",
-      "_comment": "\"Half a world away\" starts just before the cut to Baikonur; \"one last try\" ends about a second before the flash, the engines lighting under it."
+      "_comment": "A beat after the cut to Baikonur; the engines light under \"the Soviets made one last try\", which ends about a quarter second before the flash."
     },
     {
       "id": "n-gone",

@@ -26,8 +26,8 @@
       },
       "to": {
         "shot": "c30b-earthrise-photo",
-        "offset": 4.0,
-        "fade": 1.5
+        "offset": 6.0,
+        "fade": 3.5
       }
     }
   ],
