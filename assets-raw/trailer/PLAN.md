@@ -129,6 +129,12 @@ H3 multiframe).
 point of the overnight run), review sheets and `build/`. ComfyUI keeps its own copy of everything
 (`lw_trailer_*` in its output folder; never delete those). The final export lives outside the repo.
 
+**Cleaned up after the finished film** (2026-11-24, user): only what re-renders it is kept. Locally: the
+picked final clip of every shot in `clips/final/` (plus `clips/manifest.json`), and in `build/` the film
+(`trailer-with-score.mp4`), its FilmCraft project, `endcard.mp4` and `placeholder-beep.wav`. Drafts, unpicked
+takes and keyframes, review sheets and build intermediates are gone (the intermediates come back on the next
+`make_edit.py --profile final`); `picks.json` holds only the cut's picks.
+
 ### Draft and final: fresh finals, picked in the morning
 
 A seed does not give the same clip at another resolution or step count, so a draft we like does not
@@ -265,7 +271,8 @@ The film has about 20–25 shots. With 3–4 variants per shot that is 80–100 
   on (a cue's "tail": a convolution reverb, the orchestra stopping in a hall). The drive's last swell carries
   over the cut to Arlington (an L-cut), stops where its phrase breaks and rings for 3 s; the line about 1967 waits until it has rung out, and the Kremlin Wall holds 2 s after it before its pan up into the black (both wreaths slowed, user); the finale plays
   through the black to its last chord, which rings over the end card until the film ends (the logo cue is gone).
-  Other takes are in `music/takes/` with their curves; gagarin_1 drops out at Shepard (about 86 s) and comes
+  Only the picked takes are kept in `music/takes/` (the others were deleted after the film was finished, and
+  ComfyUI's output folder still has every take); gagarin_1 drops out at Shepard (about 86 s) and comes
   back abruptly, a seam in the take itself to listen for.
 - Whether a beat for the Soviet N1 or the lunar race's end (the Soviets standing down) belongs in the
   film, or the landing alone closes it.
