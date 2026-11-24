@@ -133,7 +133,9 @@ point of the overnight run), review sheets and `build/`. ComfyUI keeps its own c
 picked final clip of every shot in `clips/final/` (plus `clips/manifest.json`), and in `build/` the film
 (`trailer-with-score.mp4`), its FilmCraft project, `endcard.mp4` and `placeholder-beep.wav`. Drafts, unpicked
 takes and keyframes, review sheets and build intermediates are gone (the intermediates come back on the next
-`make_edit.py --profile final`); `picks.json` holds only the cut's picks.
+`make_edit.py --profile final`); `picks.json` holds only the cut's picks. A copy of the whole folder as left
+then, clips and film included, is on the user's NAS (`\\nas-primary\Multimedia\Video\Launch Window Trailer`,
+in its backup): restore from there before re-rendering anything.
 
 ### Draft and final: fresh finals, picked in the morning
 
