@@ -145,7 +145,7 @@ SKILLS = ["rockets", "space_probes", "human_rated_rockets", "crewed_spacecraft",
           "propulsion", "trajectory_and_guidance", "spacecraft_systems", "crew_and_payload", "mission_operations",
           "flight_director"]
 
-# Brand logos downloaded from SVG Repo (assets/CREDITS.md), kept as they came in assets-raw/svg/ and rasterized white:
+# Brand logos from SVG Repo, MIT (assets/CREDITS.md), kept as they came in assets-raw/svg/ and rasterized white:
 # the links in Settings (ui-spec.md section 4.12, 2026-11-25).
 BRANDS = {"github": "github-svgrepo-com.svg", "youtube": "youtube-svgrepo-com.svg"}
 

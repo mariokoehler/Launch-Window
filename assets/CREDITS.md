@@ -516,9 +516,13 @@ cut from the variable fonts), for the Firsts' front pages, under the SIL Open Fo
 
 ## Icons
 
-- `ui/icons/github.png`, `ui/icons/youtube.png`: the GitHub and YouTube logos, from SVG Repo
-  (https://www.svgrepo.com/), under the open licence given there, rasterized white for the links in
-  Settings. GitHub and YouTube are trademarks of their owners; the buttons only link to their pages.
+- `ui/icons/github.png`: "Github" by etn-ccis (Brightlayer UI Icons, https://github.com/etn-ccis/blui-icons),
+  from SVG Repo, https://www.svgrepo.com/svg/503359/github, under the MIT License; see `ui/icons/MIT-logos.txt`.
+- `ui/icons/youtube.png`: "Youtube" by primefaces (PrimeNG Interface Icons,
+  https://www.primefaces.org/diamond/icons.xhtml), from SVG Repo, https://www.svgrepo.com/svg/506633/youtube,
+  under the MIT License; see `ui/icons/MIT-logos.txt`.
+- Both rasterized white for the links in Settings. GitHub and YouTube are trademarks of their owners; the
+  buttons only link to their pages.
 
 ## Photos
 
