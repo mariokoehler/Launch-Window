@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Launch Window 1.0 poster</title>
+<style>
+  @font-face { font-family: Archivo; font-weight: 700; src: url(../../../assets/fonts/Archivo-Bold.ttf); }
+  @font-face { font-family: Archivo; font-weight: 600; src: url(../../../assets/fonts/Archivo-SemiBold.ttf); }
+  @font-face { font-family: "Work Sans"; font-weight: 400; src: url(../../../assets/fonts/WorkSans-Regular.ttf); }
+  @font-face { font-family: "Work Sans"; font-weight: 500; src: url(../../../assets/fonts/WorkSans-Medium.ttf); }
+  @font-face { font-family: "Work Sans"; font-weight: 600; src: url(../../../assets/fonts/WorkSans-SemiBold.ttf); }
+  @font-face { font-family: "Work Sans"; font-weight: 600; font-style: italic; src: url(../../../assets/fonts/WorkSans-SemiBoldItalic.ttf); }
+
+  :root {
+    --navy: #16305c;
+    --deep: #071022;
+    --gold: #e0a72e;
+    --cream: #f5efe1;
+    --flame: #c6402b;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 2400px; height: 3600px; background: var(--deep); overflow: hidden; }
+  .poster { position: relative; width: 2400px; height: 3600px; overflow: hidden; font-family: "Work Sans", sans-serif; color: var(--cream); }
+
+  /* The launch, full height. */
+  .photo { position: absolute; left: 0; right: 0; top: var(--drop, 0px); height: 3600px; background: url(img/poster.png) center top / 100% auto no-repeat; }
+  /* The sky deepens into space above the rocket... */
+  .space { position: absolute; inset: 0;
+    background: linear-gradient(to bottom, var(--deep) 0%, rgba(7,16,34,.94) 16%, rgba(10,24,52,.62) 31%, rgba(14,32,66,0) 47%); }
+  .stars { position: absolute; left: 0; right: 0; top: 0; height: 900px; opacity: .85;
+    -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 55%, transparent 100%);
+            mask-image: linear-gradient(to bottom, #000 0%, #000 55%, transparent 100%); }
+  /* ...and the smoke settles into the deep blue at the foot. */
+  .foot { position: absolute; inset: 0;
+    background: linear-gradient(to top, var(--deep) 0%, rgba(7,16,34,.96) 13%, rgba(7,16,34,.55) 22%, rgba(7,16,34,0) 32%); }
+  .grain { position: absolute; inset: 0; opacity: .06; mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='300'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/></filter><rect width='300' height='300' filter='url(%23n)'/></svg>"); }
+
+  /* Top: the call. */
+  .top { position: absolute; left: 0; right: 0; top: 190px; text-align: center; }
+  .kicker { display: inline-flex; align-items: center; gap: 34px; font-family: Archivo; font-weight: 700;
+    font-size: 70px; letter-spacing: .26em; color: var(--gold); text-transform: uppercase; }
+  .kicker .rule { width: 150px; height: 5px; background: var(--gold); }
+  .kicker .version { color: var(--deep); background: var(--gold); padding: 10px 26px 8px 34px; border-radius: 8px; letter-spacing: .12em; }
+  h1 { margin-top: 70px; font-family: Archivo; font-weight: 700; text-transform: uppercase; line-height: .86;
+    letter-spacing: -.01em; text-shadow: 0 10px 60px rgba(0,0,0,.45); }
+  h1 .a { display: block; font-size: 300px; color: var(--cream); }
+  h1 .b { display: block; font-size: 380px; color: var(--gold); margin-left: -20px; }
+  .countdown { margin-top: 70px; font-family: Archivo; font-weight: 600; font-size: 46px; letter-spacing: .34em;
+    color: rgba(245,239,225,.78); font-variant-numeric: tabular-nums; }
+  .countdown b { color: var(--cream); font-weight: 700; }
+
+  /* Bottom: the game. */
+  .bottom { position: absolute; left: 170px; right: 170px; bottom: 170px; display: flex; align-items: center; gap: 80px; }
+  .patch { width: 400px; height: 400px; flex: none; filter: drop-shadow(0 18px 40px rgba(0,0,0,.55)); }
+  .name { font-family: Archivo; font-weight: 700; font-size: 176px; line-height: .92; text-transform: uppercase; letter-spacing: -.005em; }
+  .tagline { margin-top: 26px; font-weight: 600; font-style: italic; font-size: 70px; color: var(--gold); }
+  .pitch { margin-top: 30px; font-size: 46px; line-height: 1.35; color: rgba(245,239,225,.86); max-width: 1400px; }
+  .where { position: absolute; left: 170px; right: 170px; bottom: 80px; display: flex; justify-content: space-between;
+    font-family: Archivo; font-weight: 600; font-size: 36px; letter-spacing: .14em; text-transform: uppercase; color: rgba(245,239,225,.6); }
+  .where b { color: var(--cream); font-weight: 600; letter-spacing: .06em; text-transform: none; }
+</style>
+</head>
+<body>
+<div class="poster">
+  <div class="photo"></div>
+  <div class="space"></div>
+  <svg class="stars" viewBox="0 0 2400 900" preserveAspectRatio="none" id="stars"></svg>
+  <div class="foot"></div>
+  <div class="grain"></div>
+
+  <div class="top">
+    <div class="kicker"><span class="rule"></span><span class="version">1.0</span><span>Out now</span><span class="rule"></span></div>
+    <h1><span class="a">We have</span><span class="b">ignition!</span></h1>
+    <div class="countdown">T&thinsp;+&thinsp;<b>00:00:01</b> &nbsp;·&nbsp; Liftoff</div>
+  </div>
+
+  <div class="bottom">
+    <img class="patch" src="../../../assets/branding/logo-outlined.svg" alt="">
+    <div>
+      <div class="name">Launch Window</div>
+      <div class="tagline">Stay one small step ahead.</div>
+      <div class="pitch">Run a space agency in the race to the Moon: plan your moves whenever you like, and each day's turn plays out for every agency at once.</div>
+    </div>
+  </div>
+  <div class="where"><span>Free · for Windows</span><b>github.com/mariokoehler/Launch-Window</b></div>
+</div>
+<script>
+  // A fixed starfield (seeded, so every render is the same).
+  let s = 7;
+  const rnd = () => (s = (s * 16807) % 2147483647) / 2147483647;
+  const svg = document.getElementById('stars');
+  let out = '';
+  for (let i = 0; i < 260; i++) {
+    const x = rnd() * 2400, y = Math.pow(rnd(), 1.6) * 900, r = rnd() < .08 ? 3.2 : 1 + rnd() * 1.6;
+    out += `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${r.toFixed(2)}" fill="#f5efe1" opacity="${(.35 + rnd() * .65).toFixed(2)}"/>`;
+  }
+  svg.innerHTML = out;
+</script>
+</body>
+</html>

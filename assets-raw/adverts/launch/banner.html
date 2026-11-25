@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Launch Window 1.0 banner</title>
+<style>
+  @font-face { font-family: Archivo; font-weight: 700; src: url(../../../assets/fonts/Archivo-Bold.ttf); }
+  @font-face { font-family: Archivo; font-weight: 600; src: url(../../../assets/fonts/Archivo-SemiBold.ttf); }
+  @font-face { font-family: "Work Sans"; font-weight: 500; src: url(../../../assets/fonts/WorkSans-Medium.ttf); }
+  @font-face { font-family: "Work Sans"; font-weight: 600; font-style: italic; src: url(../../../assets/fonts/WorkSans-SemiBoldItalic.ttf); }
+
+  :root { --navy: #16305c; --deep: #05080f; --gold: #e0a72e; --cream: #f5efe1; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 1920px; height: 1080px; background: var(--deep); overflow: hidden; }
+  .banner { position: relative; width: 1920px; height: 1080px; overflow: hidden; font-family: "Work Sans", sans-serif; color: var(--cream); }
+
+  /* The boot, about to step down: large, on the right. */
+  .photo { position: absolute; top: -40px; left: 520px; width: 1960px; height: 1120px;
+    background: url(img/boot.png) center / cover no-repeat; }
+  .shade { position: absolute; inset: 0;
+    background:
+      linear-gradient(to right, var(--deep) 0%, var(--deep) 27%, rgba(5,8,15,.86) 38%, rgba(5,8,15,.25) 52%, rgba(5,8,15,0) 62%),
+      linear-gradient(to top, rgba(5,8,15,.7) 0%, rgba(5,8,15,0) 30%); }
+
+  .copy { position: absolute; left: 110px; top: 86px; width: 900px; }
+  .patch { width: 150px; height: 150px; filter: drop-shadow(0 10px 24px rgba(0,0,0,.6)); }
+  .name { margin-top: 34px; font-family: Archivo; font-weight: 700; font-size: 138px; line-height: .9; text-transform: uppercase; letter-spacing: -.005em; }
+  .out { margin-top: 42px; display: flex; align-items: center; gap: 22px; font-family: Archivo; font-weight: 700;
+    font-size: 54px; letter-spacing: .2em; text-transform: uppercase; color: var(--gold); }
+  .out .version { color: var(--deep); background: var(--gold); padding: 6px 16px 4px 22px; border-radius: 6px; letter-spacing: .1em; }
+  .ignition { margin-top: 26px; font-weight: 600; font-style: italic; font-size: 60px; color: var(--cream); }
+
+  /* The film strip: the journey up to that step. */
+  .strip { position: absolute; left: 110px; bottom: 84px; display: flex; align-items: flex-end; gap: 0; }
+  .frame { position: relative; width: 286px; background: #0c0c0c; padding: 26px 10px; border-right: 2px solid #000; }
+  .frame::before, .frame::after { content: ""; position: absolute; left: 0; right: 0; height: 14px;
+    background: repeating-linear-gradient(to right, transparent 0 9px, #e9e2d0 9px 23px, transparent 23px 32px);
+    opacity: .82; }
+  .frame::before { top: 6px; } .frame::after { bottom: 6px; }
+  .frame .pic { width: 266px; height: 152px; background-size: cover; background-position: center; filter: saturate(.92); }
+  .frame .label { position: absolute; left: 12px; bottom: -40px; font-family: Archivo; font-weight: 600; font-size: 19px;
+    letter-spacing: .2em; text-transform: uppercase; color: rgba(245,239,225,.72); white-space: nowrap; }
+  .frame .label b { color: var(--gold); font-weight: 700; margin-right: 8px; }
+  .next { align-self: center; margin-left: 26px; font-family: Archivo; font-weight: 700; font-size: 19px; letter-spacing: .2em;
+    text-transform: uppercase; color: var(--gold); display: flex; align-items: center; gap: 12px;
+    text-shadow: 0 2px 10px rgba(0,0,0,.95), 0 0 3px rgba(0,0,0,.9); }
+  .next::before { content: ""; width: 54px; height: 3px; background: var(--gold); }
+
+  .tagline { position: absolute; right: 90px; bottom: 74px; text-align: right; font-weight: 600; font-style: italic; font-size: 44px;
+    color: var(--cream); text-shadow: 0 4px 24px rgba(0,0,0,.7); }
+  .grain { position: absolute; inset: 0; opacity: .06; mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='300'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/></filter><rect width='300' height='300' filter='url(%23n)'/></svg>"); }
+</style>
+</head>
+<body>
+<div class="banner">
+  <div class="photo"></div>
+  <div class="shade"></div>
+  <div class="grain"></div>
+
+  <div class="copy">
+    <img class="patch" src="../../../assets/branding/logo-outlined.svg" alt="">
+    <div class="name">Launch<br>Window</div>
+    <div class="out"><span class="version">1.0</span><span>Out now</span></div>
+    <div class="ignition">We have ignition!</div>
+  </div>
+
+  <div class="strip">
+    <div class="frame"><div class="pic" style="background-image:url(img/launch.png)"></div><div class="label"><b>01</b>Ignition</div></div>
+    <div class="frame"><div class="pic" style="background-image:url(img/landing.png)"></div><div class="label"><b>02</b>Touchdown</div></div>
+    <div class="frame"><div class="pic" style="background-image:url(img/ladder.png)"></div><div class="label"><b>03</b>The ladder</div></div>
+    <div class="next">04 · Your step</div>
+  </div>
+
+  <div class="tagline">Stay one small step ahead.</div>
+</div>
+</body>
+</html>

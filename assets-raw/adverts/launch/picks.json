@@ -1,0 +1,9 @@
+{
+  "_comment": "role -> picture, relative to this folder; render.py copies each to img/<role>.png for the pages. _poster_drop lifts (negative) or lowers the poster's picture, in px.",
+  "poster": "out/poster_i2i_1.png",
+  "_poster_drop": -560,
+  "boot": "out/banner_c36-boot_1.png",
+  "launch": "out/banner_c28-apollo8-launch_1.png",
+  "landing": "out/banner_c34-eagle-landing_1.png",
+  "ladder": "out/banner_c35-ladder_1.png"
+}
