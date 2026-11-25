@@ -224,6 +224,25 @@ public final class Tips {
     }
 
     /**
+     * Returns the tooltip of Settings' GitHub button ({@code ui-spec.md} &sect;4.12).
+     *
+     * @return the tip
+     */
+    public static Tip wiki() {
+        return new Tip("The game's wiki", "Opens Launch Window's wiki on GitHub in your web browser: the help's "
+            + "topics, to read outside the game.");
+    }
+
+    /**
+     * Returns the tooltip of Settings' YouTube button ({@code ui-spec.md} &sect;4.12).
+     *
+     * @return the tip
+     */
+    public static Tip trailer() {
+        return new Tip("The trailer", "Opens Launch Window's trailer on YouTube in your web browser.");
+    }
+
+    /**
      * Returns the header date chip's tooltip.
      *
      * @return the tip

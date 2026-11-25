@@ -1,7 +1,9 @@
 package de.mkoehler.launchwindow.client.screen;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
@@ -16,6 +18,7 @@ import de.mkoehler.launchwindow.client.ui.FormField;
 import de.mkoehler.launchwindow.client.ui.Theme;
 import de.mkoehler.launchwindow.client.ui.UiKit;
 import de.mkoehler.launchwindow.client.view.Credits;
+import de.mkoehler.launchwindow.client.view.Tips;
 import de.mkoehler.launchwindow.net.AppVersion;
 import de.mkoehler.launchwindow.net.messages.GameInfoResponse;
 
@@ -35,6 +38,12 @@ final class SettingsDialog {
 
     /** The tallest the credits list grows before it scrolls. */
     private static final float CREDITS_HEIGHT = 520f;
+
+    /** The game's wiki, which mirrors the help (the user, 2026-11-25). */
+    static final String WIKI_URL = "https://github.com/mariokoehler/Launch-Window/wiki";
+
+    /** The trailer, an unlisted YouTube video (the user, 2026-11-25). */
+    static final String TRAILER_URL = "https://youtu.be/03KccVy4Ces";
 
     private final SessionScreen host;
     private final LaunchWindowGame game;
@@ -157,9 +166,29 @@ final class SettingsDialog {
         })).right();
         card.add(admin).padBottom(Theme.SPACE_4).row();
 
-        card.add(ChromeScreen.onClick(ui.button("Done", Theme.ButtonKind.PRIMARY), host::closeDialog)).right()
-            .fill(false, false).row();
+        Table bottom = new Table();
+        TextButton done = ChromeScreen.onClick(ui.button("Done", Theme.ButtonKind.PRIMARY), host::closeDialog);
+        float size = done.getPrefHeight();
+        bottom.add(host.tip(link("github", WIKI_URL, size), Tips.wiki())).size(size).padRight(Theme.SPACE_2);
+        bottom.add(host.tip(link("youtube", TRAILER_URL, size), Tips.trailer())).size(size);
+        bottom.add().expandX();
+        bottom.add(done);
+        card.add(bottom).row();
         return card;
+    }
+
+    /** An icon button that opens a web page in the player's browser. */
+    private Button link(String icon, String url, float size) {
+        Button button = ui.iconButton(icon, Theme.ButtonKind.SECONDARY, size);
+        button.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                if (!Gdx.net.openURI(url)) {
+                    host.toast("Couldn't open your web browser. The page is " + url, Theme.NoticeKind.DANGER);
+                }
+            }
+        });
+        return button;
     }
 
     /**

@@ -145,6 +145,10 @@ SKILLS = ["rockets", "space_probes", "human_rated_rockets", "crewed_spacecraft",
           "propulsion", "trajectory_and_guidance", "spacecraft_systems", "crew_and_payload", "mission_operations",
           "flight_director"]
 
+# Brand logos downloaded from SVG Repo (assets/CREDITS.md), kept as they came in assets-raw/svg/ and rasterized white:
+# the links in Settings (ui-spec.md section 4.12, 2026-11-25).
+BRANDS = {"github": "github-svgrepo-com.svg", "youtube": "youtube-svgrepo-com.svg"}
+
 CHROME_PX = 48
 SKILL_HEIGHT_PX = 64
 
@@ -176,7 +180,15 @@ def main():
         png = resvg_py.svg_to_bytes(svg_string=svg, width=width, height=SKILL_HEIGHT_PX)
         with open(os.path.join(OUT, "skill_" + skill + ".png"), "wb") as f:
             f.write(bytes(png))
-    print("wrote", len(CHROME) + len(FILLED), "chrome icons and", len(SKILLS), "skill icons to", OUT)
+    for name, source in BRANDS.items():
+        with open(os.path.join(REPO, "assets-raw", "svg", source), encoding="utf-8") as f:
+            svg = re.sub(r'fill="#000000"', 'fill="#ffffff"', f.read())
+        # The GitHub file has no fill on its path (black by default): make the root's default white.
+        svg = svg.replace('<path d=', '<path fill="#ffffff" d=') if 'fill="#ffffff"' not in svg else svg
+        png = resvg_py.svg_to_bytes(svg_string=svg, width=CHROME_PX, height=CHROME_PX)
+        with open(os.path.join(OUT, name + ".png"), "wb") as f:
+            f.write(bytes(png))
+    print("wrote", len(CHROME) + len(FILLED) + len(BRANDS), "chrome icons and", len(SKILLS), "skill icons to", OUT)
 
 
 if __name__ == "__main__":

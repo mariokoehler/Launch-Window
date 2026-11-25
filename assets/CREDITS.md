@@ -514,6 +514,12 @@ cut from the variable fonts), for the Firsts' front pages, under the SIL Open Fo
   ComfyUI, with brownian noise mixed under them and the Quindar tones (`assets-raw/audio/quindar/`,
   generated from scratch) at both ends. AI-generated speech, not recordings of real controllers.
 
+## Icons
+
+- `ui/icons/github.png`, `ui/icons/youtube.png`: the GitHub and YouTube logos, from SVG Repo
+  (https://www.svgrepo.com/), under the open licence given there, rasterized white for the links in
+  Settings. GitHub and YouTube are trademarks of their owners; the buttons only link to their pages.
+
 ## Photos
 
 - `ui/portraits/laika.jpg`: "Laika in 1957", Laika before her orbital flight. Photo: Museum of

@@ -8,7 +8,9 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Container;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -23,6 +25,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Disposable;
+import com.badlogic.gdx.utils.Scaling;
 import de.mkoehler.launchwindow.model.Archetype;
 
 import java.util.EnumMap;
@@ -642,6 +645,25 @@ public final class UiKit implements Disposable {
     public TextButton button(String text, Theme.ButtonKind kind) {
         TextButton button = new TextButton(text, buttonStyles.get(kind));
         button.pad(Theme.SPACE_2, Theme.SPACE_3, Theme.SPACE_2, Theme.SPACE_3);
+        return button;
+    }
+
+    /**
+     * Builds a square button holding an icon alone, styled as a button of the given kind: the
+     * icon is tinted the kind's label colour, so it reads as that kind's text would.
+     *
+     * @param icon the icon's name in {@code assets/ui/icons}
+     * @param kind the kind of button
+     * @param size the button's width and height
+     * @return the button
+     */
+    public Button iconButton(String icon, Theme.ButtonKind kind, float size) {
+        TextButton.TextButtonStyle style = buttonStyles.get(kind);
+        Button button = new Button(style);
+        Image glyph = new Image(icon(icon), Scaling.fit);
+        glyph.setColor(style.fontColor);
+        button.add(glyph).size(Math.round(size * 0.5f));
+        button.setSize(size, size);
         return button;
     }
 

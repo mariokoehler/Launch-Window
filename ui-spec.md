@@ -2313,6 +2313,11 @@ white gear at the end of the hub strip (icon-only, 32 px, like `IconButton`; dec
   archive's Russian name) is left out, since its English name stands next to it.
 - **Server settings…** (the user's idea, 2026-11-13): a row under About that opens the admin's unlock step and
   the server settings (§4.22).
+- **Links** (the user's request, 2026-11-25): two square icon buttons (secondary, Done's height) at the
+  left of Done's row: GitHub opens the game's wiki (`SettingsDialog.WIKI_URL`), YouTube the trailer, an
+  unlisted video (`TRAILER_URL`), each in the player's browser (`Gdx.net.openURI`; a failure toasts the
+  address), each with a tooltip (`Tips.wiki`, `Tips.trailer`). The logos are SVG Repo's, rasterized white
+  by `make_ui_icons.py` (`BRANDS`) and tinted as the button's label (`UiKit.iconButton`).
 
 ### 4.13 Game result
 **Purpose:** announce the winner (`client.screen.GameResultDialog`). **Shows:** a `Dialog` over the

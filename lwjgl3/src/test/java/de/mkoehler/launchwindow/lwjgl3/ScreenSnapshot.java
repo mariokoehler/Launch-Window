@@ -3624,6 +3624,10 @@ public final class ScreenSnapshot {
         write(folder, "museum-flights.png", new MuseumScreen(game, MuseumScreen.Tab.FLIGHTS), null);
         write(folder, "museum-memorial.png", new MuseumScreen(game, MuseumScreen.Tab.MEMORIAL), null);
         write(folder, "settings.png", new SpaceComplexScreen(game), SpaceComplexScreen::openSettings);
+        write(folder, "settings-wiki-tip.png", new SpaceComplexScreen(game), screen -> {
+            screen.openSettings();
+            showTooltip(screen.stage().getRoot(), "The game's wiki");
+        });
         write(folder, "settings-chrome.png", new MuseumScreen(game, MuseumScreen.Tab.FLIGHTS),
             MuseumScreen::openSettings);
         write(folder, "settings-credits.png", new SpaceComplexScreen(game), SpaceComplexScreen::openCredits);
